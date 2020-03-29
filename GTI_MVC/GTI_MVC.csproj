@@ -159,7 +159,6 @@
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImovelController.cs" />
-    <Compile Include="Controllers\proceso_bll.cs" />
     <Compile Include="Controllers\ProtocoloController.cs" />
     <Compile Include="Controllers\TributarioController.cs" />
     <Compile Include="Functions.cs" />

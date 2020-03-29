@@ -11,8 +11,6 @@ using System.Web.Mvc;
 using GTI_Bll.Classes;
 using GTI_Models.Models;
 using static GTI_Models.modelCore;
-using GTI_Models.ViewModels;
-using GTI_Models;
 using GTI_Mvc.ViewModels;
 
 namespace GTI_Mvc.Controllers {
@@ -26,7 +24,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Details")]
         [HttpGet]
         public ViewResult Details() {
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"]==null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -521,7 +519,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao_Pagamento")]
         [HttpGet]
         public ViewResult Certidao_Pagamento() {
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"]==null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {

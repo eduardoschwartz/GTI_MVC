@@ -1,10 +1,10 @@
-﻿using GTI_MVC.Views.Tributario.EditorTemplates;
+﻿using GTI_Mvc.Views.Tributario.EditorTemplates;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace GTI_MVC.ViewModels {
+namespace GTI_Mvc.ViewModels {
     public class DebitoSelectionViewModel {
         public List<SelectDebitoEditorViewModel> Debito { get; set; }
         [Display(Name = "Inscrição Municipal")]

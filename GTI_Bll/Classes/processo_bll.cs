@@ -558,6 +558,15 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public bool Tramite_Recebido(int Ano, int Numero, int Seq) {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Tramite_Recebido(Ano, Numero, Seq);
+        }
+
+        public bool Tramite_Enviado(int Ano, int Numero, int Seq) {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Tramite_Enviado(Ano, Numero, Seq);
+        }
 
     }
 }

@@ -1350,7 +1350,25 @@ namespace GTI_Dal.Classes {
             return null;
         }
 
+        public bool Tramite_Recebido(int Ano, int Numero, int Seq) {
+            bool _valido = false;
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var existingReg = db.Tramitacao.Count(a => a.Ano == Ano && a.Numero == Numero && a.Seq == Seq && a.Datahora != null);
+                if (existingReg > 0)
+                    _valido = true;
+                return _valido;
+            }
+        }
 
+        public bool Tramite_Enviado(int Ano, int Numero, int Seq) {
+            bool _valido = false;
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var existingReg = db.Tramitacao.Count(a => a.Ano == Ano && a.Numero == Numero && a.Seq == Seq && a.Dataenvio != null);
+                if (existingReg > 0)
+                    _valido = true;
+                return _valido;
+            }
+        }
 
 
     }

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GTI_MVC.Reports {
+namespace GTI_Mvc.Reports {
     using System;
     using System.ComponentModel;
     using CrystalDecisions.Shared;
@@ -41,7 +41,7 @@ namespace GTI_MVC.Reports {
         
         public override string FullResourceName {
             get {
-                return "GTI_MVC.Reports.Comprovante_Pagamento.rpt";
+                return "GTI_Mvc.Reports.Comprovante_Pagamento.rpt";
             }
             set {
                 // Do nothing

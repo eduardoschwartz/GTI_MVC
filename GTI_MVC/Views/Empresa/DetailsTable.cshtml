@@ -1,4 +1,4 @@
-﻿@model EmpresaDetailsViewModel
+﻿@model GTI_Mvc.ViewModels.EmpresaDetailsViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -13,7 +13,7 @@
 <br />
 
 
-<form asp-controller="Empresa" asp-action="Empresa_Details_Report" method="post"  class="mt-3" style="margin-left:18px">
+<form asp-controller="Empresa" asp-action="Empresa_Details_Report" method="post" class="mt-3" style="margin-left:18px">
     <table class="table table-sm" style="width:700px; border:double; border-color:#3a8dcc; ">
         <thead>
             <tr>
@@ -191,7 +191,7 @@
     <br />
     <div class="col-sm-10">
         @*&nbsp;&nbsp;<button type="button" class="green_button" onclick="location.href='@Url.Action("Empresa_Details_Report", "EmpresaDetails",new { Id=Model.EmpresaStruct.Codigo})'"> Imprimir</button>*@
-        <input type="submit" value="Imprimir" title="Imprimir ficha cadastral." style="margin-left:1px" class="green_button"  />
+        <input type="submit" value="Imprimir" title="Imprimir ficha cadastral." style="margin-left:1px" class="green_button" />
     </div>
     <br />
     @Html.ActionLink("Consultar outra empresa", "Details", "Empresa")<br />

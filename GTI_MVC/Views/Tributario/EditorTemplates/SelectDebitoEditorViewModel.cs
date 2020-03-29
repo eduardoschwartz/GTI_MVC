@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GTI_MVC.Views.Tributario.EditorTemplates {
+namespace GTI_Mvc.Views.Tributario.EditorTemplates {
     public class SelectDebitoEditorViewModel {
         public bool Selected { get; set; }
         public int Id { get; set; }

@@ -1,9 +1,9 @@
-﻿using GTI_MVC.Views.Tributario.EditorTemplates;
+﻿using GTI_Mvc.Views.Tributario.EditorTemplates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GTI_MVC.ViewModels {
+namespace GTI_Mvc.ViewModels {
     public class DebitoListViewModel {
         public List<ListDebitoEditorViewModel> Debito { get; set; }
         public int Inscricao { get; set; }

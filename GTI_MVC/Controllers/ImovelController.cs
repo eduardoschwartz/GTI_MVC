@@ -3,7 +3,7 @@ using CrystalDecisions.Shared;
 using GTI_Bll.Classes;
 using GTI_Models.Models;
 using GTI_Models.ReportModels;
-using GTI_MVC.ViewModels;
+using GTI_Mvc.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;

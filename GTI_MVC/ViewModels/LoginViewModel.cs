@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GTI_MVC.ViewModels {
+namespace GTI_Mvc.ViewModels {
     public class LoginViewModel {
         [Display(Name = "Usuário: ")]
         public string Usuario { get; set; }

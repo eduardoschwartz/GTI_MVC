@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace GTI_MVC.ViewModels {
+namespace GTI_Mvc.ViewModels {
     public class DebitoViewModel {
         [Display(Name = "Inscrição Municipal")]
         public string Inscricao { get; set; }

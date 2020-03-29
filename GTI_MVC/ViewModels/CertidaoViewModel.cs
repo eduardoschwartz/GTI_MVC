@@ -3,7 +3,7 @@ using GTI_Mvc;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace GTI_MVC.ViewModels {
+namespace GTI_Mvc.ViewModels {
     public class CertidaoViewModel {
         public ImovelStruct ImovelStruct { get; set; }
         public EmpresaStruct EmpresaStruct { get; set; }

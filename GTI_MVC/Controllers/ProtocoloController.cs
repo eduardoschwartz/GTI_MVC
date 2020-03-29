@@ -105,8 +105,8 @@ namespace GTI_Mvc.Controllers {
                 processoViewModel.Lista_Tramite = Lista_Tramite;
                 processoViewModel.Lista_CC = Lista_CC;
                 processoViewModel.Numero_Ano = Numero_Ano;
-                processoViewModel.ObsGeral = Lista_Tramite[0].ObsGeral;
-                processoViewModel.ObsInterna = Lista_Tramite[0].ObsInterna;
+              //  processoViewModel.ObsGeral = Lista_Tramite[0].ObsGeral;
+              //  processoViewModel.ObsInterna = Lista_Tramite[0].ObsInterna;
             } else {
                 ViewBag.Result = "Processo não cadastrado.";
             }
@@ -114,6 +114,7 @@ namespace GTI_Mvc.Controllers {
         }
      
         public ActionResult MoveUp(int Ano,int Numero,int Seq) {
+            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             Exception ex = protocoloRepository.Move_Sequencia_Tramite_Acima(Numero, Ano, Seq);
             if (ex != null)
                 ViewBag.Result = "Ocorreu um erro ao mover o trâmite";
@@ -126,6 +127,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         public ActionResult MoveDown(int Ano, int Numero, int Seq) {
+            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             Exception ex = protocoloRepository.Move_Sequencia_Tramite_Abaixo(Numero, Ano, Seq);
             if (ex != null)
                 ViewBag.Result = "Ocorreu um erro ao mover o trâmite";
@@ -161,6 +163,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Receive/{Ano}/{Numero}/{Seq}")]
         [HttpGet]
         public ViewResult Receive(int Ano, int Numero, int Seq) {
+            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
@@ -175,7 +178,7 @@ namespace GTI_Mvc.Controllers {
             ProcessoViewModel processoViewModel = Exibe_Tramite(Numero_Ano, Seq);
             processoViewModel.CCusto_Codigo = processoViewModel.Lista_Tramite[0].CentroCustoCodigo;
 
-            List<UsuariocentroCusto> _listaCC = protocoloRepository.ListaCentroCustoUsuario(Convert.ToInt32(ViewBag.UserId));
+            List<UsuariocentroCusto> _listaCC = protocoloRepository.ListaCentrocustoUsuario(Convert.ToInt32(ViewBag.UserId));
             bool _find = false;
             foreach (UsuariocentroCusto item in _listaCC) {
                 if (item.Codigo == processoViewModel.CCusto_Codigo) {
@@ -208,6 +211,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Receive/{Ano}/{Numero}/{Seq}")]
         [HttpPost]
         public ActionResult Receive(ProcessoViewModel model) {
+            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
@@ -235,7 +239,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Send/{Ano}/{Numero}/{Seq}")]
         [HttpGet]
         public ViewResult Send(int Ano, int Numero, int Seq) {
-
+            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
@@ -286,6 +290,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Send/{Ano}/{Numero}/{Seq}")]
         [HttpPost]
         public ActionResult Send(ProcessoViewModel model) {
+            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
@@ -319,6 +324,7 @@ namespace GTI_Mvc.Controllers {
         [Route("AddPlace/{Ano}/{Numero}/{Seq}/{CentroCustoCodigo}")]
         [HttpGet]
         public ViewResult AddPlace(int Ano, int Numero, int Seq) {
+            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
@@ -340,7 +346,7 @@ namespace GTI_Mvc.Controllers {
         [Route("AddPlace/{Ano}/{Numero}/{Seq}/{CentroCustoCodigo}")]
         [HttpPost]
         public ActionResult AddPlace(ProcessoViewModel model) {
-
+            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             Exception ex = protocoloRepository.Inserir_Local(model.Numero, model.Ano, model.Seq, (int)model.CCusto_Codigo);
             if (ex != null)
                 ViewBag.Result = "Ocorreu um erro ao inserir um local";
@@ -349,7 +355,8 @@ namespace GTI_Mvc.Controllers {
         }
 
         public ActionResult RemovePlace(ProcessoViewModel model) {
-            Exception ex = protocoloRepository.Remover_Local(model.Numero, model.Ano, model.Seq, (int)model.CCusto_Codigo);
+            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+            Exception ex = protocoloRepository.Remover_Local(model.Numero, model.Ano, model.Seq);
             if (ex != null)
                 ViewBag.Result = "Ocorreu um erro ao remover o local";
 
@@ -363,6 +370,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Obs/{Ano}/{Numero}/{Seq}")]
         [HttpGet]
         public ViewResult Obs(int Ano, int Numero, int Seq) {
+            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
@@ -377,7 +385,7 @@ namespace GTI_Mvc.Controllers {
             ProcessoViewModel processoViewModel = Exibe_Tramite(Numero_Ano, Seq);
             processoViewModel.CCusto_Codigo = processoViewModel.Lista_Tramite[0].CentroCustoCodigo;
 
-            List<UsuariocentroCusto> _listaCC = protocoloRepository.ListaCentroCustoUsuario(Convert.ToInt32(ViewBag.UserId));
+            List<UsuariocentroCusto> _listaCC = protocoloRepository.ListaCentrocustoUsuario(Convert.ToInt32(ViewBag.UserId));
             bool _find = false;
             foreach (UsuariocentroCusto item in _listaCC) {
                 if (item.Codigo == processoViewModel.CCusto_Codigo) {
@@ -399,6 +407,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Obs/{Ano}/{Numero}/{Seq}")]
         [HttpPost]
         public ActionResult Obs(ProcessoViewModel model) {
+            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
