@@ -1,8 +1,9 @@
 ﻿using GTI_Models.Models;
+using GTI_Mvc;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace GTI_Models.ViewModels {
+namespace GTI_MVC.ViewModels {
     public class CertidaoViewModel {
         public ImovelStruct ImovelStruct { get; set; }
         public EmpresaStruct EmpresaStruct { get; set; }

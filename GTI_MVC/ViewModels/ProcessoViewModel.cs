@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace GTI_Models.ViewModels {
+namespace GTI_MVC.ViewModels {
     public class ProcessoViewModel {
         public int Numero { get; set; }
         public int Ano { get; set; }

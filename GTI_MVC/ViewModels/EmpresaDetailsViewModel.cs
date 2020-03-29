@@ -1,7 +1,7 @@
 ﻿using GTI_Models.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace GTI_Models.ViewModels {
+namespace GTI_MVC.ViewModels {
     public class EmpresaDetailsViewModel {
         public EmpresaStruct EmpresaStruct { get; set; }
         [Display(Name = "Inscrição Municipal")]

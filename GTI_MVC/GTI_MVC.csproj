@@ -287,6 +287,14 @@
       <DependentUpon>Situacao_Pagamento.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="SelectListaItem.cs" />
+    <Compile Include="ViewModels\CertidaoViewModel.cs" />
+    <Compile Include="ViewModels\DebitoListViewModel.cs" />
+    <Compile Include="ViewModels\DebitoSelectionViewModel.cs" />
+    <Compile Include="ViewModels\DebitoViewModel.cs" />
+    <Compile Include="ViewModels\EmpresaDetailsViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\ProcessoViewModel.cs" />
     <Compile Include="Views\Tributario\EditorTemplates\ListDebitoEditorViewModel.cs" />
     <Compile Include="Views\Tributario\EditorTemplates\SelectDebitoEditorViewModel.cs" />
   </ItemGroup>
@@ -344,7 +352,6 @@
     <Content Include="Views\Empresa\Details.cshtml" />
     <Content Include="Views\Empresa\DetailsTable.cshtml" />
     <Content Include="Views\Home\Certidao.cshtml" />
-    <Content Include="Views\Home\Curso.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\sysMenu.cshtml" />
     <Content Include="Views\Imovel\Certidao_Endereco.cshtml" />

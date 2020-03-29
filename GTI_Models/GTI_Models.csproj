@@ -202,14 +202,6 @@
     <Compile Include="ReportModels\Certidao.cs" />
     <Compile Include="ReportModels\Comprovante_Inscricao.cs" />
     <Compile Include="ReportModels\Empresa_Detalhe.cs" />
-    <Compile Include="SelectListaItem.cs" />
-    <Compile Include="ViewModels\CertidaoViewModel.cs" />
-    <Compile Include="ViewModels\DebitoListViewModel.cs" />
-    <Compile Include="ViewModels\DebitoSelectionViewModel.cs" />
-    <Compile Include="ViewModels\DebitoViewModel.cs" />
-    <Compile Include="ViewModels\EmpresaDetailsViewModel.cs" />
-    <Compile Include="ViewModels\LoginViewModel.cs" />
-    <Compile Include="ViewModels\ProcessoViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

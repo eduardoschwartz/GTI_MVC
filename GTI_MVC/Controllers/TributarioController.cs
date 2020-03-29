@@ -1,10 +1,9 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
 using GTI_Bll.Classes;
-using GTI_Models;
 using GTI_Models.Models;
 using GTI_Models.ReportModels;
-using GTI_Models.ViewModels;
+using GTI_MVC.ViewModels;
 using GTI_MVC.Views.Tributario.EditorTemplates;
 using System;
 using System.Collections.Generic;
@@ -766,6 +765,11 @@ namespace GTI_Mvc.Controllers {
 
         [HttpPost]
         public ActionResult SubmitSelected(DebitoSelectionViewModel model) {
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+            Cidadao_bll requerenteRepository = new Cidadao_bll("GTIconnection");
+            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+
             int _codigo = model.Inscricao;
             string _endereco="",_complemento="",_cidade="",_uf="",_cep="";
             TipoCadastro _tipoCadastro = Tipo_Cadastro(_codigo);
@@ -778,7 +782,7 @@ namespace GTI_Mvc.Controllers {
                 _cep = _imovel.Cep;
             } else {
                 if (_tipoCadastro == TipoCadastro.Empresa) {
-                    EmpresaStruct _empresa = empresaRepository.Dados_Empresa(_codigo);
+                    EmpresaStruct _empresa = empresaRepository.Retorna_Empresa(_codigo);
                     _endereco = _empresa.Nome_logradouro + ", " + _empresa.Numero.ToString() + _empresa.Complemento == null ? "" : " " + _empresa.Complemento + " " + _empresa.Bairro_nome;
                     _cidade = _empresa.Cidade_nome;
                     _uf = _empresa.UF;
@@ -844,6 +848,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         public ActionResult Damd() {
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             var value = TempData["debito"];
             DebitoListViewModel model = value as DebitoListViewModel;
 
