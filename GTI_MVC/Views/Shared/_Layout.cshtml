@@ -2,12 +2,11 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
-    <script src="~/lib/jquery/jquery.js"></script>
-    <script src="~/lib/bootstrap/js/bootstrap.js"></script>
-    <script src="~/js/gti.js"></script>
-    <link href="~/css/gti.css" rel="stylesheet" />
-
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/gti.js"></script>
+    <link href="~/Content/gti.css" rel="stylesheet" />
     <title>@ViewBag.Title</title>
 
 
@@ -37,18 +36,19 @@
                     </td>
                 </tr>
             </table>
-
+            
         </div>
     </header>
+    <img src="~/Images/Separator.png" />
 
 
-
-
+    
     <div style="margin: 30px; width: auto">
         @RenderBody()
     </div>
     @RenderSection("scripts", required: false)
     <br />
+    <div><img src="~/Images/Separator.png" /></div>
     <div style=" margin-left:30px; font-family: Arial, Helvetica, sans-serif;font-size: 12px;font-weight: bold;">&copy;2019 - Gestão Tributária Integrada (G.T.I.)</div>
     <div style=" margin-left:30px; font-family: Arial, Helvetica, sans-serif;font-size: 11px;font-weight: bold;color:darkgreen">
         Logado como @ViewBag.FullName

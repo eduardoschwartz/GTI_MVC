@@ -2,8 +2,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Menu de Opções";
 }
-<link href="~/css/gti.css" rel="stylesheet" />
-
+<link href="~/Content/gti.css" rel="stylesheet" />
 <div style="width:650px">
     <ul>
         <li>@Html.ActionLink("Consulta e atualização de boletos vencidos para pagamento", "Dama", "Tributario")</li>
@@ -15,7 +14,7 @@
             <li>@Html.ActionLink("Consultar endereço da contribuição de iluminação pública (CIP)(2019)", "Details", "Empresa")</li>
             <li>@Html.ActionLink("Impressão dos detalhes de um boleto", "Details", "Empresa")</li>
             <li>@Html.ActionLink("Comprovante de inscrição e de situação cadastral", "Details", "Empresa")</li>*@
-        <li><a href="~/deca/DECA2018.pdf">Download da declaração cadastral (DECA)</a></li>
+        <li><a href="~/Files/DECA2018.pdf">Download da declaração cadastral (DECA)</a></li>
         @*<li>@Html.ActionLink("Importação de arquivos Via Rápida Empresa (VRE)", "Details", "Empresa")</li>
             <li>@Html.ActionLink("Renovação de alvará de funcionamento", "Details", "Empresa")</li>*@
         <li>@Html.ActionLink("Emissão de certidões/Verificar autenticidade ", "Certidao", "Home")</li>
