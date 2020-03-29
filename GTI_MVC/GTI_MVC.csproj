@@ -36,6 +36,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -153,7 +154,13 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Captcha.cs" />
+    <Compile Include="CaptchaResult.cs" />
+    <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ImovelController.cs" />
+    <Compile Include="Controllers\ProtocoloController.cs" />
+    <Compile Include="Controllers\TributarioController.cs" />
     <Compile Include="Functions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -359,6 +366,14 @@
     <Compile Include="Repository\RequerenteRepository.cs" />
     <Compile Include="Repository\SistemaRepository.cs" />
     <Compile Include="Repository\TributarioRepository.cs" />
+    <Compile Include="SelectListItem.cs" />
+    <Compile Include="ViewModels\CertidaoViewModel.cs" />
+    <Compile Include="ViewModels\DebitoListViewModel.cs" />
+    <Compile Include="ViewModels\DebitoSelectionViewModel.cs" />
+    <Compile Include="ViewModels\DebitoViewModel.cs" />
+    <Compile Include="ViewModels\EmpresaDetailsViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\ProcessoViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -424,6 +439,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Empresa\" />
+    <Folder Include="Views\Imovel\" />
+    <Folder Include="Views\Protocolo\" />
+    <Folder Include="Views\Tributario\EditorTemplates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
