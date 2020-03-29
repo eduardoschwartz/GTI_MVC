@@ -4,6 +4,7 @@ using GTI_Mvc.Interfaces;
 using GTI_Mvc.Models;
 using GTI_Mvc.Models.ReportModels;
 using GTI_Mvc.ViewModels;
+using GTI_Mvc.Views.Tributario.EditorTemplates;
 //using GTI_Mvc.Views.Tributario.EditorTemplates;
 using System;
 using System.Collections.Generic;
@@ -604,17 +605,16 @@ namespace GTI_Mvc.Controllers {
                 Data_Vencimento=Convert.ToDateTime(model.DataVencimento)
             };
 
-            TempData.Put("debito", modelt);
+            TempData["debito"]= modelt;
             return RedirectToAction("Damc");
         }
 
         [Route("Damc")]
         [HttpGet]
         public ActionResult Damc() {
-            var value = TempData.Get<DebitoSelectionViewModel>("debito");
-            DebitoSelectionViewModel model = value as DebitoSelectionViewModel;
+            var value = TempData["debito"];
 
-            if (model == null) {
+            if (!(value is DebitoSelectionViewModel model)) {
                 return RedirectToAction("Index", "Home");
             }
 
@@ -844,12 +844,12 @@ namespace GTI_Mvc.Controllers {
             modelt.Soma_Honorario = _somaH;
             modelt.Soma_Total = _somaP+_somaJ+_somaM+_somaC+_somaH;
             modelt.Valor_Boleto = Convert.ToInt32((_somaP + _somaJ + _somaM + _somaC + _somaH) * 100).ToString();
-            TempData.Put("debito", modelt);
+            TempData["debito"] = modelt;
             return RedirectToAction("Damd");
         }
 
         public ActionResult Damd() {
-            var value = TempData.Get<DebitoListViewModel>("debito");
+            var value = TempData["debito"];
             DebitoListViewModel model = value as DebitoListViewModel;
 
             //grava o documento
@@ -870,12 +870,12 @@ namespace GTI_Mvc.Controllers {
                     Seqlancamento=(short)_debitos.Seq,
                     Numparcela=(byte)_debitos.Parcela,
                     Codcomplemento=(byte)_debitos.Complemento,
-                    Plano=(short)value.Plano,
+                    Plano=Convert.ToInt16(value.ToString()),
                     Numdocumento=_documento
                 };
                 Exception ex = tributarioRepository.Insert_Parcela_Documento(parcReg);
             }
-            model.Data_Vencimento_String = value.Data_Vencimento.ToString("ddMMyyyy");
+            model.Data_Vencimento_String = Convert.ToDateTime(value.ToString()).ToString("ddMMyyyy");
             model.RefTran = "287353200" + _documento.ToString();
             if (model==null)
                 return RedirectToAction("Index","Home");

@@ -1,0 +1,134 @@
+﻿@model GTI_WebCore.ViewModels.ProcessoViewModel
+
+@inject IJsonHelper Json;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Observação";
+}
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/css/gti.css" rel="stylesheet" />
+
+<label style="color:brown;font-size:16px;font-style:italic">Observação</label>
+
+<style>
+    .tableContainer {
+        color: dodgerblue;
+        border-spacing: 10px;
+        empty-cells: show;
+        width: 100%;
+        text-align: left;
+        font-size: 12px;
+    }
+
+        .tableContainer tr td {
+            white-space: nowrap;
+            text-align: left;
+        }
+</style>
+
+<!--###########################-->
+<!--          HEADER           -->
+<!--###########################-->
+<form asp-controller="Protocolo" enctype="multipart/form-data" method="post" class="mt-3">
+    <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
+        <tr>
+            <td style="width:200px;padding: 1px 1px 1px 5px;">
+                Nº do processo:
+            </td>
+            <td style="color:black;font-weight:bold">
+                @Model.Numero_Ano
+            </td>
+        </tr>
+        <tr>
+            <td style="width:600px;padding: 1px 1px 1px 5px;">
+                Data do processo:
+            </td>
+            <td style="color:black;font-weight:bold">
+                @Model.Data_Processo
+            </td>
+        </tr>
+        <tr>
+            <td style="width:15%;padding: 1px 1px 1px 5px;">
+                Requerente:
+            </td>
+            <td style="color:black;font-weight:bold">
+                @Model.Requerente
+            </td>
+        </tr>
+        <tr>
+            <td style="width:15%;padding: 1px 1px 1px 5px;">
+                Assunto:
+            </td>
+            <td style="color:black;font-weight:bold">
+                @Model.Assunto_Nome
+            </td>
+        </tr>
+    </table>
+    <br />
+
+    <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
+        @foreach (var item in Model.Lista_Tramite) {
+            @Html.HiddenFor(m => m.Seq,new {item.Seq })
+            <tr>
+                <td style="width:200px;padding: 1px 1px 1px 5px;">
+                    Seq
+                </td>
+                <td style="color:black;font-weight:bold">
+                    @item.Seq
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width:15%;padding: 1px 1px 1px 5px;">
+                    Centro de custos:
+                </td>
+                <td style="color:black;font-weight:bold">
+                    @item.CentroCustoNome
+                </td>
+            </tr>
+
+        }
+    </table>
+    <br />
+
+    <!--###########################-->
+    <!--          FORMULÁRIO       -->
+    <!--###########################-->
+  
+         <label style="font-size:12px;color:Highlight">Observação geral: </label><br />
+         @Html.TextAreaFor(m => m.ObsGeral, new { style = "width: 600px; height: 100px;" })
+    
+    <br /><br />
+    
+        <label style="font-size:12px;color:Highlight">Observação interna: </label><br />
+         @Html.TextAreaFor(m => m.ObsInterna, new { style = "width: 600px; height: 100px;" })
+   
+    <br /><br />
+    <div >
+        <button type="submit" class="btn btn-primary" id="Obs_Save" formaction="Obs">Gravar</button>
+        <input type="button" class="btn btn-secondary" value="Cancelar" onclick="@("window.location.href='" + @Url.Action("Tramite_Processo2", "Protocolo") + "'");" />
+    </div>
+
+</form>
+
+<!--###########################-->
+<!--          FOOTER           -->
+<!--###########################-->
+<div class="form-group row" style="margin-left:-10px">
+    &nbsp;&nbsp;<label class="text-danger" id="errorLabel">@ViewBag.Result</label>
+</div>
+
+
+<!--###########################-->
+<!--          SCRIPTS          -->
+<!--###########################-->
+<script type="text/javascript">
+
+
+    function ClearError() {
+        document.getElementById('errorLabel').innerHTML = "";
+    }
+
+</script>

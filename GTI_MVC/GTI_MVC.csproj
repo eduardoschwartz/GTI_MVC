@@ -440,12 +440,26 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Tributario\EditorTemplates\ListDebitoEditorViewModel.cshtml" />
     <Content Include="Views\Tributario\EditorTemplates\SelectDebitoEditorViewModel.cshtml" />
+    <Content Include="Views\Empresa\Certidao_Inscricao.cshtml" />
+    <Content Include="Views\Empresa\Certidao_Pagamento.cshtml" />
+    <Content Include="Views\Empresa\Details.cshtml" />
+    <Content Include="Views\Empresa\DetailsTable.cshtml" />
+    <Content Include="Views\Home\Certidao.cshtml" />
+    <Content Include="Views\Home\Curso.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Home\sysMenu.cshtml" />
+    <Content Include="Views\Imovel\Certidao_Endereco.cshtml" />
+    <Content Include="Views\Imovel\Certidao_Isencao.cshtml" />
+    <Content Include="Views\Imovel\Certidao_Valor_Venal.cshtml" />
+    <Content Include="Views\Protocolo\AddPlace.cshtml" />
+    <Content Include="Views\Protocolo\Obs.cshtml" />
+    <Content Include="Views\Protocolo\Receive.cshtml" />
+    <Content Include="Views\Protocolo\Send.cshtml" />
+    <Content Include="Views\Protocolo\Tramite_Processo.cshtml" />
+    <Content Include="Views\Protocolo\Tramite_Processo2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Empresa\" />
-    <Folder Include="Views\Imovel\" />
-    <Folder Include="Views\Protocolo\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

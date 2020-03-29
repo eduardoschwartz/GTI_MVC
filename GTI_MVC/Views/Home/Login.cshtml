@@ -1,0 +1,71 @@
+﻿@model GTI_WebCore.ViewModels.LoginViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Login do Sistema";
+}
+<link href="~/css/gti.css" rel="stylesheet" />
+
+
+<label style="color:brown;font-size:16px;font-style:italic">Login do Sistema</label>
+<br />
+
+<form asp-controller="Home" enctype="multipart/form-data" method="post" onsubmit="return ValidateForm()" class="mt-3">
+
+    <table>
+        <tr>
+            <td style="width:70px;"><label asp-for="Usuario"> </label> </td>
+            <td ><input asp-for="Usuario" id="usuario" class="form-control" style="max-width:200px;max-height:25px;overflow:auto;" onchange="ClearError()"></td>
+        </tr>
+        <tr>
+            <td><label asp-for="Senha"> </label></td>
+            <td><input asp-for="Senha" id="senha" type="password" class="form-control" style="max-width:200px;max-height:25px;overflow:auto;" onchange="ClearError()"></td>
+        </tr>
+    </table>
+    <br />
+
+    <div class="form-group row align-items-lg-baseline" style="margin-left:1px">
+        <div>
+            <div class="input-group">
+                &nbsp;<button type="submit" title="Acessar o sistema" class="green_button" formaction="Login" formmethod="post"> Entrar</button>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<br />
+<div class="form-group row" style="margin-left:-10px">
+    &nbsp;&nbsp;<label class="text-danger" id="errorLabel">@ViewBag.Result</label>
+</div>
+
+
+@Html.ActionLink("Retornar ao menu principal", "Index", "Home")
+
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        function ValidateForm() {
+
+            var _cod = document.getElementById('codigo').value;
+            var _captcha = document.getElementById('captchaTxt').value;
+            var _chave = document.getElementById('chave').value;
+
+            if ((_cod == "" || parseInt(_cod) == 0) && _chave == "") {
+                document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal ou a chave de autenticação da certidão";
+                return false;
+            }
+
+            return true;
+        }
+
+        function ClearError() {
+            document.getElementById('errorLabel').innerHTML = "";
+        }
+
+
+    </script>
+}
+

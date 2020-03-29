@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Web.Configuration;
 
 namespace GTI_Mvc.Repository {
     public class ProtocoloRepository:IProtocoloRepository {
@@ -238,41 +239,41 @@ namespace GTI_Mvc.Repository {
                 return Lista;
         }
 
-        //public Exception Incluir_MovimentoCC(short Ano, int Numero, List<TramiteStruct> Lista) {
+        public Exception Incluir_MovimentoCC(short Ano, int Numero, List<TramiteStruct> Lista) {
 
-        //    var configuration = Functions.GetConfiguration();
-        //    SqlConnection con = new SqlConnection(configuration.GetSection("ConnectionStrings").GetSection("GTI_Connection").Value);
+            var connStr = WebConfigurationManager.ConnectionStrings["GTIconnection"].ConnectionString;
+            SqlConnection con = new SqlConnection(connStr);
 
-        //    string sql = $"DELETE FROM TRAMITACAOCC WHERE ANO = {Ano} AND NUMERO={Numero}";
-        //    using (SqlCommand command = new SqlCommand(sql, con)) {
-        //        con.Open();
-        //        try {
-        //            command.ExecuteNonQuery();
-        //        } catch (Exception ex) {
+            string sql = $"DELETE FROM TRAMITACAOCC WHERE ANO = {Ano} AND NUMERO={Numero}";
+            using (SqlCommand command = new SqlCommand(sql, con)) {
+                con.Open();
+                try {
+                    command.ExecuteNonQuery();
+                } catch (Exception ex) {
 
-        //            return ex;
-        //        }
-        //    }
+                    return ex;
+                }
+            }
 
-        //    short x = 1;
-        //    foreach (TramiteStruct item in Lista) {
-        //        Tramitacaocc NewReg = new Tramitacaocc {
-        //            Ano = Convert.ToInt16(Ano),
-        //            Numero = Numero,
-        //            Seq = x,
-        //            Ccusto = Convert.ToInt16(item.CentroCustoCodigo)
-        //        };
-        //        context.Tramitacaocc.Add(NewReg);
+            short x = 1;
+            foreach (TramiteStruct item in Lista) {
+                Tramitacaocc NewReg = new Tramitacaocc {
+                    Ano = Convert.ToInt16(Ano),
+                    Numero = Numero,
+                    Seq = x,
+                    Ccusto = Convert.ToInt16(item.CentroCustoCodigo)
+                };
+                context.Tramitacaocc.Add(NewReg);
 
-        //        try {
-        //            context.SaveChanges();
-        //        } catch (Exception ex) {
-        //            return ex.InnerException;
-        //        }
-        //        x++;
-        //    }
-        //    return null;
-        //}
+                try {
+                    context.SaveChanges();
+                } catch (Exception ex) {
+                    return ex.InnerException;
+                }
+                x++;
+            }
+            return null;
+        }
 
         public Exception Receber_Processo(Tramitacao Reg) {
             if (Existe_Tramite(Reg.Ano, Reg.Numero, Reg.Seq)) {
@@ -329,181 +330,179 @@ namespace GTI_Mvc.Repository {
             return _valido;
         }
 
-        //public Exception Move_Sequencia_Tramite_Acima(int Numero, int Ano, int Seq) {
-        //    var configuration = Functions.GetConfiguration();
-        //    SqlConnection con = new SqlConnection(configuration.GetSection("ConnectionStrings").GetSection("GTI_Connection").Value);
-        //    con.Open();
+        public Exception Move_Sequencia_Tramite_Acima(int Numero, int Ano, int Seq) {
+            var connStr = WebConfigurationManager.ConnectionStrings["GTIconnection"].ConnectionString;
+            SqlConnection con = new SqlConnection(connStr);
+            con.Open();
 
-        //    string sql = $"UPDATE TRAMITACAOCC SET SEQ=100 WHERE ANO = {Ano} AND NUMERO={Numero} AND SEQ={Seq}";
-        //    SqlCommand command = new SqlCommand(sql, con);
-        //    try {
-        //        command.ExecuteNonQuery();
-        //    } catch (Exception ex) {
+            string sql = $"UPDATE TRAMITACAOCC SET SEQ=100 WHERE ANO = {Ano} AND NUMERO={Numero} AND SEQ={Seq}";
+            SqlCommand command = new SqlCommand(sql, con);
+            try {
+                command.ExecuteNonQuery();
+            } catch (Exception ex) {
 
-        //        return ex;
-        //    }
+                return ex;
+            }
 
-        //    sql = $"UPDATE TRAMITACAOCC SET SEQ={Seq} WHERE ANO = {Ano} AND NUMERO={Numero} AND SEQ={Seq-1}";
-        //    command = new SqlCommand(sql, con);
-        //    try {
-        //        command.ExecuteNonQuery();
-        //    } catch (Exception ex) {
+            sql = $"UPDATE TRAMITACAOCC SET SEQ={Seq} WHERE ANO = {Ano} AND NUMERO={Numero} AND SEQ={Seq - 1}";
+            command = new SqlCommand(sql, con);
+            try {
+                command.ExecuteNonQuery();
+            } catch (Exception ex) {
 
-        //        return ex;
-        //    }
+                return ex;
+            }
 
-        //    sql = $"UPDATE TRAMITACAOCC SET SEQ={Seq-1} WHERE ANO = {Ano} AND NUMERO={Numero} AND SEQ=100";
-        //    command = new SqlCommand(sql, con);
-        //    try {
-        //        command.ExecuteNonQuery();
-        //    } catch (Exception ex) {
+            sql = $"UPDATE TRAMITACAOCC SET SEQ={Seq - 1} WHERE ANO = {Ano} AND NUMERO={Numero} AND SEQ=100";
+            command = new SqlCommand(sql, con);
+            try {
+                command.ExecuteNonQuery();
+            } catch (Exception ex) {
 
-        //        return ex;
-        //    }
-        //    con.Close();
-            
-        //    return null;
-        //}
+                return ex;
+            }
+            con.Close();
 
-        //public Exception Move_Sequencia_Tramite_Abaixo(int Numero, int Ano, int Seq) {
-        //    var configuration = Functions.GetConfiguration();
-        //    SqlConnection con = new SqlConnection(configuration.GetSection("ConnectionStrings").GetSection("GTI_Connection").Value);
-        //    con.Open();
+            return null;
+        }
 
-        //    string sql = $"UPDATE TRAMITACAOCC SET SEQ=100 WHERE ANO = {Ano} AND NUMERO={Numero} AND SEQ={Seq+1}";
-        //    SqlCommand command = new SqlCommand(sql, con);
-        //    try {
-        //        command.ExecuteNonQuery();
-        //    } catch (Exception ex) {
+        public Exception Move_Sequencia_Tramite_Abaixo(int Numero, int Ano, int Seq) {
+            var connStr = WebConfigurationManager.ConnectionStrings["GTIconnection"].ConnectionString;
+            SqlConnection con = new SqlConnection(connStr);
+            con.Open();
 
-        //        return ex;
-        //    }
+            string sql = $"UPDATE TRAMITACAOCC SET SEQ=100 WHERE ANO = {Ano} AND NUMERO={Numero} AND SEQ={Seq + 1}";
+            SqlCommand command = new SqlCommand(sql, con);
+            try {
+                command.ExecuteNonQuery();
+            } catch (Exception ex) {
 
-        //    sql = $"UPDATE TRAMITACAOCC SET SEQ={Seq+1} WHERE ANO = {Ano} AND NUMERO={Numero} AND SEQ={Seq }";
-        //    command = new SqlCommand(sql, con);
-        //    try {
-        //        command.ExecuteNonQuery();
-        //    } catch (Exception ex) {
+                return ex;
+            }
 
-        //        return ex;
-        //    }
+            sql = $"UPDATE TRAMITACAOCC SET SEQ={Seq + 1} WHERE ANO = {Ano} AND NUMERO={Numero} AND SEQ={Seq }";
+            command = new SqlCommand(sql, con);
+            try {
+                command.ExecuteNonQuery();
+            } catch (Exception ex) {
 
-        //    sql = $"UPDATE TRAMITACAOCC SET SEQ={Seq } WHERE ANO = {Ano} AND NUMERO={Numero} AND SEQ=100";
-        //    command = new SqlCommand(sql, con);
-        //    try {
-        //        command.ExecuteNonQuery();
-        //    } catch (Exception ex) {
+                return ex;
+            }
 
-        //        return ex;
-        //    }
-        //    con.Close();
+            sql = $"UPDATE TRAMITACAOCC SET SEQ={Seq } WHERE ANO = {Ano} AND NUMERO={Numero} AND SEQ=100";
+            command = new SqlCommand(sql, con);
+            try {
+                command.ExecuteNonQuery();
+            } catch (Exception ex) {
 
-        //    return null;
-        //}
+                return ex;
+            }
+            con.Close();
 
-        //public Exception Inserir_Local(int Numero, int Ano, int Seq,int CCusto_Codigo){
+            return null;
+        }
 
-        //    List<Tramitacaocc> _lista_atual = (from c in context.Tramitacaocc where c.Ano==Ano && c.Numero==Numero  orderby c.Seq select c).ToList();
-        //    List<Tramitacaocc> _lista_nova = new List<Tramitacaocc>();
+        public Exception Inserir_Local(int Numero, int Ano, int Seq, int CCusto_Codigo) {
 
-        //    int _pos=1,_seq=0;
-        //    foreach (Tramitacaocc item in _lista_atual) {
-        //        _seq = item.Seq;
-        //        if (_pos > Seq)
-        //            _seq = item.Seq + 1;
+            List<Tramitacaocc> _lista_atual = (from c in context.Tramitacaocc where c.Ano == Ano && c.Numero == Numero orderby c.Seq select c).ToList();
+            List<Tramitacaocc> _lista_nova = new List<Tramitacaocc>();
 
-        //        Tramitacaocc _newOrder = new Tramitacaocc() {
-        //            Ano=item.Ano,
-        //            Numero=item.Numero,
-        //            Seq=(byte)_seq,
-        //            Ccusto=item.Ccusto
-        //        };
+            int _pos = 1, _seq = 0;
+            foreach (Tramitacaocc item in _lista_atual) {
+                _seq = item.Seq;
+                if (_pos > Seq)
+                    _seq = item.Seq + 1;
 
-        //        _lista_nova.Add(_newOrder);
-        //        _pos++;
-        //    }
+                Tramitacaocc _newOrder = new Tramitacaocc() {
+                    Ano = item.Ano,
+                    Numero = item.Numero,
+                    Seq = (byte)_seq,
+                    Ccusto = item.Ccusto
+                };
 
-        //    Tramitacaocc _newItem = new Tramitacaocc() {
-        //        Ano = (short)Ano,
-        //        Numero = Numero,
-        //        Seq = (byte)(Seq+1),
-        //        Ccusto =(short) CCusto_Codigo
-        //    };
+                _lista_nova.Add(_newOrder);
+                _pos++;
+            }
 
-        //    _lista_nova.Add(_newItem);
+            Tramitacaocc _newItem = new Tramitacaocc() {
+                Ano = (short)Ano,
+                Numero = Numero,
+                Seq = (byte)(Seq + 1),
+                Ccusto = (short)CCusto_Codigo
+            };
 
+            _lista_nova.Add(_newItem);
 
-        //    var configuration = Functions.GetConfiguration();
-        //    SqlConnection con = new SqlConnection(configuration.GetSection("ConnectionStrings").GetSection("GTI_Connection").Value);
-        //    con.Open();
-        //    string sql = $"DELETE FROM TRAMITACAOCC WHERE ANO = {Ano} AND NUMERO={Numero}";
-        //    SqlCommand command = new SqlCommand(sql, con);
-        //    try {
-        //        command.ExecuteNonQuery();
-        //    } catch (Exception ex) {
+            var connStr = WebConfigurationManager.ConnectionStrings["GTIconnection"].ConnectionString;
+            SqlConnection con = new SqlConnection(connStr);
+            con.Open();
+            string sql = $"DELETE FROM TRAMITACAOCC WHERE ANO = {Ano} AND NUMERO={Numero}";
+            SqlCommand command = new SqlCommand(sql, con);
+            try {
+                command.ExecuteNonQuery();
+            } catch (Exception ex) {
 
-        //        return ex;
-        //    }
+                return ex;
+            }
 
-        //    foreach (Tramitacaocc item in _lista_nova.OrderBy(m=>m.Seq)) {
-        //        sql = $"INSERT TRAMITACAOCC VALUES({item.Ano},{item.Numero},{item.Seq},{item.Ccusto})";
-        //        command = new SqlCommand(sql, con);
-        //        try {
-        //            command.ExecuteNonQuery();
-        //        } catch (Exception ex) {
+            foreach (Tramitacaocc item in _lista_nova.OrderBy(m => m.Seq)) {
+                sql = $"INSERT TRAMITACAOCC VALUES({item.Ano},{item.Numero},{item.Seq},{item.Ccusto})";
+                command = new SqlCommand(sql, con);
+                try {
+                    command.ExecuteNonQuery();
+                } catch (Exception ex) {
 
-        //            return ex;
-        //        }
-        //    }
+                    return ex;
+                }
+            }
 
-        //    return null;
-        //}
+            return null;
+        }
 
-        //public Exception Remover_Local(int Numero, int Ano, int Seq, int CCusto_Codigo) {
+        public Exception Remover_Local(int Numero, int Ano, int Seq, int CCusto_Codigo) {
 
-        //    List<Tramitacaocc> _lista_atual = (from c in context.Tramitacaocc where c.Ano == Ano && c.Numero == Numero orderby c.Seq select c).ToList();
-        //    List<Tramitacaocc> _lista_nova = new List<Tramitacaocc>();
+            List<Tramitacaocc> _lista_atual = (from c in context.Tramitacaocc where c.Ano == Ano && c.Numero == Numero orderby c.Seq select c).ToList();
+            List<Tramitacaocc> _lista_nova = new List<Tramitacaocc>();
 
-        //    foreach (Tramitacaocc item in _lista_atual) {
-        //        if (item.Seq != Seq) {
-        //            Tramitacaocc _newOrder = new Tramitacaocc() {
-        //                Ano = item.Ano,
-        //                Numero = item.Numero,
-        //                Seq = item.Seq,
-        //                Ccusto = item.Ccusto
-        //            };
+            foreach (Tramitacaocc item in _lista_atual) {
+                if (item.Seq != Seq) {
+                    Tramitacaocc _newOrder = new Tramitacaocc() {
+                        Ano = item.Ano,
+                        Numero = item.Numero,
+                        Seq = item.Seq,
+                        Ccusto = item.Ccusto
+                    };
 
-        //            _lista_nova.Add(_newOrder);
-        //        }
-        //    }
+                    _lista_nova.Add(_newOrder);
+                }
+            }
+            var connStr = WebConfigurationManager.ConnectionStrings["GTIconnection"].ConnectionString;
+            SqlConnection con = new SqlConnection(connStr);
+            con.Open();
+            string sql = $"DELETE FROM TRAMITACAOCC WHERE ANO = {Ano} AND NUMERO={Numero}";
+            SqlCommand command = new SqlCommand(sql, con);
+            try {
+                command.ExecuteNonQuery();
+            } catch (Exception ex) {
 
-        //    var configuration = Functions.GetConfiguration();
-        //    SqlConnection con = new SqlConnection(configuration.GetSection("ConnectionStrings").GetSection("GTI_Connection").Value);
-        //    con.Open();
-        //    string sql = $"DELETE FROM TRAMITACAOCC WHERE ANO = {Ano} AND NUMERO={Numero}";
-        //    SqlCommand command = new SqlCommand(sql, con);
-        //    try {
-        //        command.ExecuteNonQuery();
-        //    } catch (Exception ex) {
+                return ex;
+            }
 
-        //        return ex;
-        //    }
+            int _pos = 1;
+            foreach (Tramitacaocc item in _lista_nova.OrderBy(m => m.Seq)) {
+                sql = $"INSERT TRAMITACAOCC VALUES({item.Ano},{item.Numero},{_pos},{item.Ccusto})";
+                command = new SqlCommand(sql, con);
+                try {
+                    command.ExecuteNonQuery();
+                } catch (Exception ex) {
 
-        //    int _pos = 1;
-        //    foreach (Tramitacaocc item in _lista_nova.OrderBy(m => m.Seq)) {
-        //        sql = $"INSERT TRAMITACAOCC VALUES({item.Ano},{item.Numero},{_pos},{item.Ccusto})";
-        //        command = new SqlCommand(sql, con);
-        //        try {
-        //            command.ExecuteNonQuery();
-        //        } catch (Exception ex) {
+                    return ex;
+                }
+                _pos++;
+            }
 
-        //            return ex;
-        //        }
-        //        _pos++;
-        //    }
-
-        //    return null;
-        //}
+            return null;
+        }
 
         public Exception Alterar_Obs(int Ano,int Numero,int Seq,string ObsGeral,string ObsInterna) {
             Tramitacao _sql = context.Tramitacao.First(t => t.Ano == Ano && t.Numero==Numero && t.Seq==Seq);

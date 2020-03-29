@@ -224,12 +224,12 @@ namespace GTI_Mvc.Repository {
                 return Sql;
         }
 
-        //public SpCalculo Calculo_IPTU(int Codigo, int Ano) {
-        //    var prmCodigo = new SqlParameter { ParameterName = "@Codigo", SqlDbType = SqlDbType.Int, SqlValue = Codigo };
-        //    var prmAno = new SqlParameter { ParameterName = "@Ano", SqlDbType = SqlDbType.Int, SqlValue = Ano };
-        //    SpCalculo result = context.SpCalculo.FromSql("EXEC spCalculo @Codigo,@Ano", prmCodigo, prmAno).FirstOrDefault();
-        //    return result;
-        //}
+        public SpCalculo Calculo_IPTU(int Codigo, int Ano) {
+            var prmCodigo = new SqlParameter { ParameterName = "@Codigo", SqlDbType = SqlDbType.Int, SqlValue = Codigo };
+            var prmAno = new SqlParameter { ParameterName = "@Ano", SqlDbType = SqlDbType.Int, SqlValue = Ano };
+            SpCalculo result = context.SpCalculo.SqlQuery("EXEC spCalculo @Codigo,@Ano", prmCodigo, prmAno).FirstOrDefault();
+            return result;
+        }
 
         public decimal Soma_Area(int Codigo) {
                 var sum = context.Areas.Where(x => x.Codreduzido == Codigo).Sum(x => x.Areaconstr);

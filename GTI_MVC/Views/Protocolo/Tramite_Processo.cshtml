@@ -1,0 +1,87 @@
+﻿@model GTI_WebCore.ViewModels.ProcessoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Trâmite de Processo";
+}
+<link href="~/css/gti.css" rel="stylesheet" />
+
+
+<label style="color:brown;font-size:16px;font-style:italic">Trâmite de Processo</label>
+<br />
+
+
+<form asp-controller="Protocolo" enctype="multipart/form-data" method="post" onsubmit="return ValidateForm()" class="mt-3">
+    <div class="form-group row align-items-lg-baseline" style="margin-left:1px">
+        <label>Digite o nº do processo: </label>
+        <div class="col-sm-10">
+            <input asp-for="Numero_Ano" id="numprocesso" class="form-control"  style="max-width:150px;max-height:25px;overflow:auto;" onchange="ClearError()">
+        </div>
+        <br />
+    </div>
+
+    <div class="form-group row align-items-lg-baseline" style="margin-left:1px">
+        <div>
+            <div class="input-group">
+                <img id="img-captcha" src="~/Empresa/get-captcha-image" title="Clique para atualizar" />
+                &nbsp;<input type="text" class="form-control" asp-for="CaptchaCode" maxlength="4" id="captchaTxt" style="width:100px" />
+                &nbsp;<button type="submit" title="Consultar o trâmite do processo" class="green_button" formaction="Tramite_Processo" formmethod="post"> Consultar</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<br />
+<div class="form-group row" style="margin-left:-10px">
+    &nbsp;&nbsp;<label class="text-danger" id="errorLabel">@ViewBag.Result</label>
+</div>
+
+
+@Html.ActionLink("Retornar ao menu de opções", "SysMenu", "Home")<br />
+@Html.ActionLink("Retornar ao menu principal", "Index", "Home")
+
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        function ValidateForm() {
+            var _numero = document.getElementById('numprocesso').value.trim();
+            var _captcha = document.getElementById('captchaTxt').value;
+
+            var _error = Valida_Numero_Processo(_numero);
+            if (_error != "") {
+                document.getElementById('errorLabel').innerHTML = _error;
+                return false;
+            }
+
+            if (_captcha == "") {
+                document.getElementById('errorLabel').innerHTML = "Digite o código de validação!";
+                return false;
+            } else {
+                return true;
+            }
+
+            return true;
+        }
+
+        function ClearError() {
+            document.getElementById('errorLabel').innerHTML = "";
+        }
+
+        $("#img-captcha").click(function () {
+            resetCaptchaImage();
+        });
+
+        function resetCaptchaImage() {
+            d = new Date();
+            /**/
+            $("#img-captcha").attr("src", "/Empresa/get-captcha-image?" + d.getTime());
+            /**/
+        }
+
+    </script>}
+
+
+
+
