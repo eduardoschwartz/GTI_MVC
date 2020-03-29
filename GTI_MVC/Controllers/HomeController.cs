@@ -10,12 +10,11 @@ namespace GTI_Mvc.Controllers {
     public class HomeController : Controller {
         private readonly ISistemaRepository sistemaRepository;
 
-        public HomeController(ISistemaRepository sistemaRepository) {
-            this.sistemaRepository = sistemaRepository;
+        public HomeController() {
         }
 
         public ViewResult Index() {
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"]==null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {

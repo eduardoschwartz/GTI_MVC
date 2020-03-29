@@ -9,12 +9,12 @@ namespace GTI_Mvc {
         private static readonly byte[] key = new byte[8] { 1, 2, 3, 4, 5, 6, 7, 8 };
         private static readonly byte[] iv = new byte[8] { 1, 2, 3, 4, 5, 6, 7, 8 };
         
-        public enum TipoCertidao { Endereco, ValorVenal, Isencao, Debito, Comprovante_Pagamento, Alvara, Debito_Doc }
-        public enum TipoCadastro { Imovel, Empresa, Cidadao }
-        public enum RetornoCertidaoDebito { Negativa, Positiva, NegativaPositiva }
-        public enum TipoEndereco { Local, Proprietario, Entrega }
-        public enum TipoDocumento { Cpf, Cnpj }
-        public enum TipoCarne { Iptu = 1, Iss_Taxa = 2, Iss_Estimado_Variavel = 3, Taxa = 4, Vigilancia = 5, Cip = 6 }
+        //public enum TipoCertidao { Endereco, ValorVenal, Isencao, Debito, Comprovante_Pagamento, Alvara, Debito_Doc }
+        //public enum TipoCadastro { Imovel, Empresa, Cidadao }
+        //public enum RetornoCertidaoDebito { Negativa, Positiva, NegativaPositiva }
+        //public enum TipoEndereco { Local, Proprietario, Entrega }
+        //public enum TipoDocumento { Cpf, Cnpj }
+        //public enum TipoCarne { Iptu = 1, Iss_Taxa = 2, Iss_Estimado_Variavel = 3, Taxa = 4, Vigilancia = 5, Cip = 6 }
 
         public static bool ValidaCpf(string cpf) {
 

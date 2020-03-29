@@ -559,6 +559,16 @@
   <ItemGroup>
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GTI_Bll\GTI_Bll.csproj">
+      <Project>{9b7b83db-4417-4143-b465-52fe4870d2e0}</Project>
+      <Name>GTI_Bll</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GTI_Models\GTI_Models.csproj">
+      <Project>{859b188d-0d59-418e-af77-5235b79087f4}</Project>
+      <Name>GTI_Models</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

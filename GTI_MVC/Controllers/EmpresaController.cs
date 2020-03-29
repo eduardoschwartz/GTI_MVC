@@ -1,7 +1,7 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
-using GTI_Mvc.Interfaces;
-using GTI_Mvc.Models;
+using GTI_Mvc.Repository;
+//using GTI_Mvc.Models;
 using GTI_Mvc.Models.ReportModels;
 using GTI_Mvc.ViewModels;
 using System;
@@ -11,19 +11,16 @@ using System.IO;
 using System.Linq;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using GTI_Bll.Classes;
+using GTI_Models.Models;
+using static GTI_Models.modelCore;
 
 namespace GTI_Mvc.Controllers {
 
     [Route("Empresa")]
     public class EmpresaController : Controller {
-        private readonly IEmpresaRepository empresaRepository;
-        private readonly ITributarioRepository tributarioRepository;
-        private readonly HostingEnvironment hostingEnvironment;
 
-        public EmpresaController( IEmpresaRepository empresaRepository, ITributarioRepository tributarioRepository,HostingEnvironment hostingEnvironment) {
-                this.empresaRepository = empresaRepository;
-            this.tributarioRepository = tributarioRepository;
-            this.hostingEnvironment = hostingEnvironment;
+        public EmpresaController( ) {
         }
 
         [Route("Details")]
@@ -39,11 +36,12 @@ namespace GTI_Mvc.Controllers {
             }
             return View();
         }
-
+        
        
         [Route("Details")]
         [HttpPost]
         public ViewResult Details(EmpresaDetailsViewModel model) {
+            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection"); 
             int _codigo = 0;
             bool _existeCod = false;
             EmpresaDetailsViewModel empresaDetailsViewModel = new EmpresaDetailsViewModel();
@@ -60,13 +58,13 @@ namespace GTI_Mvc.Controllers {
             if (model.Inscricao != null) {
                 _codigo = Convert.ToInt32(model.Inscricao);
                 if (_codigo >= 100000 && _codigo < 210000) //Se estiver fora deste intervalo nem precisa checar se a empresa existe
-                    _existeCod = empresaRepository.Existe_Empresa_Codigo(_codigo);
+                    _existeCod = empresaRepository.Existe_Empresa(_codigo);
             } else {
                 if (model.CnpjValue != null) {
                     string _cnpj = model.CnpjValue;
                     bool _valida = Functions.ValidaCNPJ(_cnpj); //CNPJ válido?
                     if (_valida) {
-                        _codigo = empresaRepository.Existe_Empresa_Cnpj(_cnpj);
+                        _codigo = empresaRepository.ExisteEmpresaCnpj(_cnpj);
                         if (_codigo > 0)
                             _existeCod = true;
                     } else {
@@ -78,7 +76,7 @@ namespace GTI_Mvc.Controllers {
                         string _cpf = model.CpfValue;
                         bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
                         if (_valida) {
-                            _codigo = empresaRepository.Existe_Empresa_Cpf(_cpf);
+                            _codigo = empresaRepository.ExisteEmpresaCpf(_cpf);
                             if (_codigo > 0)
                                 _existeCod = true;
 
@@ -96,7 +94,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             if (_existeCod) {
-                EmpresaStruct empresa = empresaRepository.Dados_Empresa(_codigo);
+                EmpresaStruct empresa = empresaRepository.Retorna_Empresa(_codigo);
                 empresaDetailsViewModel.EmpresaStruct = empresa;
                 empresaDetailsViewModel.TaxaLicenca = empresaRepository.Empresa_tem_TL(_codigo) ? "Sim" : "Não";
                 empresaDetailsViewModel.Vigilancia_Sanitaria = empresaRepository.Empresa_tem_VS(_codigo) ? "Sim" : "Não";
@@ -108,7 +106,7 @@ namespace GTI_Mvc.Controllers {
                     sCnae += cnae.CNAE + "-" + cnae.Descricao + "; ";
                 }
                 empresaDetailsViewModel.Cnae = sCnae;
-                string sRegime = empresaRepository.Regime_Empresa(_codigo);
+                string sRegime = empresaRepository.RegimeEmpresa(_codigo);
                 if (sRegime == "F")
                     sRegime = "ISS FIXO";
                 else {
@@ -167,7 +165,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Retorna_Codigos")]
         [Route("Certidao/Retorna_Codigos")]
         public ActionResult Retorna_Codigos(CertidaoViewModel model) {
-
+            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
             if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
@@ -208,6 +206,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Validate_CI")]
         [Route("Certidao/Validate_CI")]
         public ActionResult Validate_CI(CertidaoViewModel model) {
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             int _codigo , _ano ,_numero;
             string _chave = model.Chave;
 
@@ -235,7 +234,7 @@ namespace GTI_Mvc.Controllers {
                     _numero = _chaveStruct.Numero;
                     _ano = _chaveStruct.Ano;
                     List<Comprovante_Inscricao> certidao = new List<Comprovante_Inscricao>();
-                    Certidao_Inscricao _dados = tributarioRepository.Retorna_Certidao_Inscricao(_ano, _numero);
+                    Certidao_inscricao _dados = tributarioRepository.Retorna_Certidao_Inscricao(_ano, _numero,_codigo);
                     if (_dados != null) {
                         Comprovante_Inscricao reg = new Comprovante_Inscricao() {
                             Codigo = _codigo,
@@ -253,7 +252,7 @@ namespace GTI_Mvc.Controllers {
                             Controle = _chave,
                             Atividade = _dados.Atividade,
                             Atividade2 = _dados.Atividade_secundaria,
-                            Atividade_Extenso=_dados.Atividade_Extenso,
+                            //Atividade_Extenso=_dados.Atividade_Extenso,
                             Cpf_Cnpj = _dados.Documento,
                             Data_Abertura = (DateTime)_dados.Data_abertura,
                             Processo_Abertura = _dados.Processo_abertura,
@@ -299,7 +298,9 @@ namespace GTI_Mvc.Controllers {
             int _codigo;
             bool _valida = false;
             int _numero;
-            _numero = tributarioRepository.Retorna_Codigo_Certidao(Functions.TipoCertidao.Debito);
+            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Debito);
             if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
@@ -341,7 +342,7 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
-            EmpresaStruct _dados = empresaRepository.Dados_Empresa(_codigo);
+            EmpresaStruct _dados = empresaRepository.Retorna_Empresa(_codigo);
             string _sufixo = model.Extrato ? _dados.Data_Encerramento == null ? "XA" : "XE" : "IE";
             List<CnaeStruct> ListaCnae = empresaRepository.Lista_Cnae_Empresa(_codigo);
             string _cnae = "", _cnae2 = "";
@@ -386,7 +387,7 @@ namespace GTI_Mvc.Controllers {
             if (_dados.Data_Encerramento != null)
                 reg.Data_Encerramento = (DateTime)_dados.Data_Encerramento;
 
-            Certidao_Inscricao reg2 = new Certidao_Inscricao() {
+            Certidao_inscricao reg2 = new Certidao_inscricao() {
                 Cadastro = reg.Codigo,
                 Data_emissao=reg.Data_Emissao,
                 Data_encerramento=reg.Data_Encerramento,
@@ -403,7 +404,7 @@ namespace GTI_Mvc.Controllers {
                 Numero = _numero,
                 Atividade = _cnae??"",
                 Atividade_secundaria = _cnae2??"",
-                Atividade_Extenso=reg.Atividade_Extenso,
+              //  Atividade_Extenso=reg.Atividade_Extenso,
                 Rg = reg.Rg ?? "",
                 Documento = reg.Cpf_Cnpj,
                 Data_abertura = (DateTime)reg.Data_Abertura,
@@ -431,7 +432,7 @@ namespace GTI_Mvc.Controllers {
                 Certidao regCert = new Certidao();
 
                 foreach (SpExtrato item in ListaParcela.Where(x => (x.Codlancamento == 2 || x.Codlancamento == 6 || x.Codlancamento == 14) && x.Statuslanc < 3)) {
-                    Certidao_Inscricao_Extrato regExt = new Certidao_Inscricao_Extrato {
+                    Certidao_inscricao_extrato regExt = new Certidao_inscricao_extrato {
                         Id = reg.Controle,
                         Numero_certidao = reg.Numero,
                         Ano_certidao = (short)reg.Ano,
@@ -454,14 +455,14 @@ namespace GTI_Mvc.Controllers {
                     regCert.Codigo = _codigo;
                     regCert.Razao_Social = reg2.Nome;
                     regCert.Nome_Requerente = reg2.Nome;
-                    regCert.Data_Abertura = reg2.Data_abertura;
+                    regCert.Data_Abertura = Convert.ToDateTime(reg2.Data_abertura);
                     regCert.Processo_Encerramento = reg2.Processo_encerramento;
                     regCert.Endereco = reg2.Endereco;
                     regCert.Endereco_Numero = reg2.Numero;
                     regCert.Endereco_Complemento = reg2.Complemento;
                     regCert.Bairro = reg2.Bairro;
                     regCert.Cidade = reg2.Cidade ;
-                    regCert.Atividade_Extenso = reg2.Atividade_Extenso;
+                    //regCert.Atividade_Extenso = reg2.Atividade_Extenso;
                     regCert.Rg = reg2.Rg;
                     regCert.Cpf_Cnpj = reg2.Documento;
                     regCert.Exercicio = regExt.Ano;
@@ -470,7 +471,7 @@ namespace GTI_Mvc.Controllers {
                     regCert.Sequencia_Lancamento = regExt.Sequencia;
                     regCert.Complemento = regExt.Complemento;
                     regCert.Data_Vencimento = regExt.Data_Vencimento;
-                    regCert.Data_Pagamento = regExt.Data_Pagamento;
+                    regCert.Data_Pagamento = Convert.ToDateTime(regExt.Data_Pagamento);
                     regCert.Valor_Pago = regExt.Valor_Pago;
                     regCert.Processo_Abertura = reg2.Processo_abertura;
                     regCert.Numero_Ano = regExt.Numero_certidao.ToString("00000") + "/" + regExt.Ano_certidao;
@@ -543,7 +544,7 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Certidao_Pagamento(CertidaoViewModel model) {
             int _codigo;
-
+            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
             if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
@@ -580,13 +581,13 @@ namespace GTI_Mvc.Controllers {
 
             if (model.Inscricao != null) {
                 _codigo = Convert.ToInt32(model.Inscricao);
-                bool _existe = empresaRepository.Existe_Empresa_Codigo(_codigo);
+                bool _existe = empresaRepository.Existe_Empresa(_codigo);
                 if (!_existe) {
                     ViewBag.Result = "Empresa não cadastrada.";
                     return View(model);
 
                 }
-                EmpresaStruct _dados = empresaRepository.Dados_Empresa(_codigo);
+                EmpresaStruct _dados = empresaRepository.Retorna_Empresa(_codigo);
                 string _cpf = _dados.Cpf;
                 string _cnpj = _dados.Cnpj;
 
@@ -617,6 +618,7 @@ namespace GTI_Mvc.Controllers {
                 }
 
                 //se chegou até aqui então a empresa esta ok para verificar os débitos
+                Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
                 List<SpExtrato> ListaTributo = tributarioRepository.Lista_Extrato_Tributo(_codigo, (short)DateTime.Now.Year, (short)DateTime.Now.Year, 0, 99, 0, 99, 0, 999, 0, 99, 0, 99, DateTime.Now, "Web");
                 List<SpExtrato> ListaParcela = tributarioRepository.Lista_Extrato_Parcela(ListaTributo);
 
@@ -625,7 +627,7 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 }
 
-                int _numero_certidao = tributarioRepository.Retorna_Codigo_Certidao(Functions.TipoCertidao.Comprovante_Pagamento);
+                int _numero_certidao = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Comprovante_Pagamento);
 
                 List<Certidao> certidao = new List<Certidao>();
                 foreach (SpExtrato item in ListaParcela) {
