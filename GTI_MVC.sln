@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTI_MVC", "GTI_MVC\GTI_MVC.csproj", "{9E1DBBFA-12E5-4BDE-AB60-7837EE5803F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTI_Mvc", "GTI_MVC\GTI_Mvc.csproj", "{9E1DBBFA-12E5-4BDE-AB60-7837EE5803F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

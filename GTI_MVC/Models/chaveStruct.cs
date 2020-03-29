@@ -1,4 +1,4 @@
-﻿namespace GTI_MVC.Models {
+﻿namespace GTI_Mvc.Models {
     public class chaveStruct {
         public int Codigo { get; set; }
         public int Ano { get; set; }

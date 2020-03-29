@@ -54,9 +54,31 @@
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Extensions.Configuration, Version=3.1.3.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.3.1.3\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=3.1.3.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.3.1.3\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=3.1.3.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.3.1.3\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.2\lib\netstandard2.0\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.4.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.1\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -129,9 +151,17 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Functions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IEmpresaRepository.cs" />
+    <Compile Include="Interfaces\IEnderecoRepository.cs" />
+    <Compile Include="Interfaces\IImovelRepository.cs" />
+    <Compile Include="Interfaces\IProtocoloRepository.cs" />
+    <Compile Include="Interfaces\IRequerenteRepository.cs" />
+    <Compile Include="Interfaces\ISistemaRepository.cs" />
+    <Compile Include="Interfaces\ITributarioRepository.cs" />
     <Compile Include="Models\anexo.cs" />
     <Compile Include="Models\anexo_log.cs" />
     <Compile Include="Models\AppDbContext.cs" />
@@ -185,6 +215,9 @@
     <Compile Include="Models\processoend.cs" />
     <Compile Include="Models\processoGTI.cs" />
     <Compile Include="Models\proprietario.cs" />
+    <Compile Include="Models\ReportModels\Certidao.cs" />
+    <Compile Include="Models\ReportModels\Comprovante_Inscricao.cs" />
+    <Compile Include="Models\ReportModels\Empresa_Detalhe.cs" />
     <Compile Include="Models\situacao.cs" />
     <Compile Include="Models\spCalculo.cs" />
     <Compile Include="Models\spExtrato.cs" />
@@ -196,6 +229,13 @@
     <Compile Include="Models\usuariocc.cs" />
     <Compile Include="Models\vwproprietarioduplicado.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\EmpresaRepository.cs" />
+    <Compile Include="Repository\EnderecoRepository.cs" />
+    <Compile Include="Repository\ImovelRepository.cs" />
+    <Compile Include="Repository\ProtocoloRepository.cs" />
+    <Compile Include="Repository\RequerenteRepository.cs" />
+    <Compile Include="Repository\SistemaRepository.cs" />
+    <Compile Include="Repository\TributarioRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -217,8 +257,20 @@
     <Content Include="Images\observacao.png" />
     <Content Include="Images\receber.png" />
     <Content Include="Images\remover_local.png" />
+    <Content Include="Models\ReportModels\Certidao.xml" />
+    <Content Include="Models\ReportModels\Comprovante_Inscricao.xml" />
+    <Content Include="Models\ReportModels\Empresa_Detalhe.xml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Models\ReportModels\Certidao.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\ReportModels\Comprovante_Inscricao.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\ReportModels\Empresa_Detalhe.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -242,8 +294,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>

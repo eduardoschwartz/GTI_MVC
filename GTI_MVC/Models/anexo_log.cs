@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace GTI_MVC.Models {
+namespace GTI_Mvc.Models {
     public class Anexo_log {
         [Key]
         public int Sid { get; set; }

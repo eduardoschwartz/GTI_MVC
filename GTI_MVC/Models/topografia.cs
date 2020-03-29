@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GTI_MVC.Models {
+namespace GTI_Mvc.Models {
     public class Topografia {
         [Key]
         public short Codtopografia { get; set; }

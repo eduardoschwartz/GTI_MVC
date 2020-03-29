@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
 
-namespace GTI_MVC.Models {
+namespace GTI_Mvc.Models {
     public class AppDbContext : DbContext {
         public AppDbContext(string Connection_Name) : base(Connection_Name) {
 

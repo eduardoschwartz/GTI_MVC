@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GTI_MVC.Models {
+namespace GTI_Mvc.Models {
     public class Certidao_Inscricao {
         [Key]
         [Column(Order = 1)]

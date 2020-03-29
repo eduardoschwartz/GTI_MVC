@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GTI_MVC.Models {
+namespace GTI_Mvc.Models {
     public class Processogti {
         [Key]
         [Column(Order = 1)]
