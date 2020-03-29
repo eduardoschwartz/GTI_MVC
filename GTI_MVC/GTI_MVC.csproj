@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -46,6 +47,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -125,6 +132,69 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\anexo.cs" />
+    <Compile Include="Models\anexo_log.cs" />
+    <Compile Include="Models\AppDbContext.cs" />
+    <Compile Include="Models\areas.cs" />
+    <Compile Include="Models\assunto.cs" />
+    <Compile Include="Models\assuntocc.cs" />
+    <Compile Include="Models\atividade.cs" />
+    <Compile Include="Models\bairro.cs" />
+    <Compile Include="Models\banco.cs" />
+    <Compile Include="Models\benfeitoria.cs" />
+    <Compile Include="Models\cadimob.cs" />
+    <Compile Include="Models\categprop.cs" />
+    <Compile Include="Models\centrocusto.cs" />
+    <Compile Include="Models\cep.cs" />
+    <Compile Include="Models\certidao_debito.cs" />
+    <Compile Include="Models\certidao_debito_doc.cs" />
+    <Compile Include="Models\certidao_endereco.cs" />
+    <Compile Include="Models\certidao_inscricao.cs" />
+    <Compile Include="Models\certidao_inscricao_extrato.cs" />
+    <Compile Include="Models\certidao_isencao.cs" />
+    <Compile Include="Models\certidao_valor_venal.cs" />
+    <Compile Include="Models\chaveStruct.cs" />
+    <Compile Include="Models\cidadao.cs" />
+    <Compile Include="Models\cidade.cs" />
+    <Compile Include="Models\cnae.cs" />
+    <Compile Include="Models\cnaesubclasse.cs" />
+    <Compile Include="Models\condominio.cs" />
+    <Compile Include="Models\debitopago.cs" />
+    <Compile Include="Models\debitoparcela.cs" />
+    <Compile Include="Models\debitotributo.cs" />
+    <Compile Include="Models\despacho.cs" />
+    <Compile Include="Models\documento.cs" />
+    <Compile Include="Models\endentrega.cs" />
+    <Compile Include="Models\facequadra.cs" />
+    <Compile Include="Models\horario_funcionamento.cs" />
+    <Compile Include="Models\isencao.cs" />
+    <Compile Include="Models\laseriptu.cs" />
+    <Compile Include="Models\logradouro.cs" />
+    <Compile Include="Models\Mobiliario.cs" />
+    <Compile Include="Models\mobiliarioatividadeiss.cs" />
+    <Compile Include="Models\mobiliariocnae.cs" />
+    <Compile Include="Models\mobiliarioevento.cs" />
+    <Compile Include="Models\mobiliarioproprietario.cs" />
+    <Compile Include="Models\mobiliariovs.cs" />
+    <Compile Include="Models\Numdocumento.cs" />
+    <Compile Include="Models\parametros.cs" />
+    <Compile Include="Models\parceladocumento.cs" />
+    <Compile Include="Models\pedologia.cs" />
+    <Compile Include="Models\periodomei.cs" />
+    <Compile Include="Models\processodoc.cs" />
+    <Compile Include="Models\processoend.cs" />
+    <Compile Include="Models\processoGTI.cs" />
+    <Compile Include="Models\proprietario.cs" />
+    <Compile Include="Models\situacao.cs" />
+    <Compile Include="Models\spCalculo.cs" />
+    <Compile Include="Models\spExtrato.cs" />
+    <Compile Include="Models\topografia.cs" />
+    <Compile Include="Models\tramitacao.cs" />
+    <Compile Include="Models\tramitacaocc.cs" />
+    <Compile Include="Models\usoterreno.cs" />
+    <Compile Include="Models\usuario.cs" />
+    <Compile Include="Models\usuariocc.cs" />
+    <Compile Include="Models\vwproprietarioduplicado.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -132,10 +202,21 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Css\gti.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\abaixo.gif" />
+    <Content Include="Images\acima.gif" />
+    <Content Include="Images\alterar.gif" />
+    <Content Include="Images\brasaocor.png" />
+    <Content Include="Images\enviar.png" />
+    <Content Include="Images\inserir_local.png" />
+    <Content Include="Images\logopratico.jpg" />
+    <Content Include="Images\observacao.png" />
+    <Content Include="Images\receber.png" />
+    <Content Include="Images\remover_local.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
@@ -167,7 +248,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -215,7 +295,10 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.0\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.0\build\EntityFramework.targets'))" />
   </Target>
+  <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
