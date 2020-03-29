@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace GTI_Mvc.Interfaces {
     public interface IImovelRepository {
-    //    SpCalculo Calculo_IPTU(int Codigo, int Ano);
+        SpCalculo Calculo_IPTU(int Codigo, int Ano);
         Laseriptu Dados_IPTU(int Codigo, int Ano);
         List<Laseriptu> Dados_IPTU(int Codigo);
         ImovelStruct Dados_Imovel(int nCodigo);

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -24,12 +23,10 @@ namespace GTI_Mvc {
             return sb.ToString();
         }
 
-        public static bool ValidateCaptchaCode(string userInputCaptcha, HttpContext context) {
-            if (context.Session.GetString("CaptchaCode") == null || userInputCaptcha==null)
+        public static bool ValidateCaptchaCode(string userInputCaptcha, string CaptchaCode) {
+            if (CaptchaCode == null || userInputCaptcha==null)
                 return false;
-            var isValid = userInputCaptcha.ToUpper() == context.Session.GetString("CaptchaCode").ToUpper();
-            context.Session.Remove("CaptchaCode");
-            return isValid;
+            return userInputCaptcha.ToUpper() == CaptchaCode.ToUpper();
         }
 
         public static CaptchaResult GenerateCaptchaImage(int width, int height, string captchaCode) {

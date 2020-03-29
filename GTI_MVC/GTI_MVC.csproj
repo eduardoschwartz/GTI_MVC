@@ -374,6 +374,8 @@
     <Compile Include="ViewModels\EmpresaDetailsViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\ProcessoViewModel.cs" />
+    <Compile Include="Views\Tributario\EditorTemplates\ListDebitoEditorViewModel.cs" />
+    <Compile Include="Views\Tributario\EditorTemplates\SelectDebitoEditorViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -436,13 +438,14 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Tributario\EditorTemplates\ListDebitoEditorViewModel.cshtml" />
+    <Content Include="Views\Tributario\EditorTemplates\SelectDebitoEditorViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Empresa\" />
     <Folder Include="Views\Imovel\" />
     <Folder Include="Views\Protocolo\" />
-    <Folder Include="Views\Tributario\EditorTemplates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
