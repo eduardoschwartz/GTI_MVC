@@ -1,17 +1,12 @@
-﻿using GTI_Mvc.Interfaces;
-using GTI_Mvc.Models;
+﻿using GTI_Bll.Classes;
+using GTI_Models.Models;
 using GTI_Mvc.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Web;
 using System.Web.Mvc;
 
 namespace GTI_Mvc.Controllers {
     public class HomeController : Controller {
-        private readonly ISistemaRepository sistemaRepository;
 
-        public HomeController() {
-        }
+    
 
         public ViewResult Index() {
             if (HttpContext.Session["gti_V3id"]==null) {
@@ -95,6 +90,7 @@ namespace GTI_Mvc.Controllers {
             //}
             LoginViewModel loginViewModel = new LoginViewModel();
 
+            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
             int _userId = sistemaRepository.Retorna_User_LoginId(model.Usuario);
             if (_userId == 0) {
                 ViewBag.Result = "Usuário/Senha inválido.";

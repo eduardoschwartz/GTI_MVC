@@ -1,11 +1,11 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
-using GTI_Mvc.Interfaces;
-using GTI_Mvc.Models;
-using GTI_Mvc.Models.ReportModels;
-using GTI_Mvc.ViewModels;
-using GTI_Mvc.Views.Tributario.EditorTemplates;
-//using GTI_Mvc.Views.Tributario.EditorTemplates;
+using GTI_Bll.Classes;
+using GTI_Models;
+using GTI_Models.Models;
+using GTI_Models.ReportModels;
+using GTI_Models.ViewModels;
+using GTI_MVC.Views.Tributario.EditorTemplates;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,27 +13,14 @@ using System.IO;
 using System.Linq;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using static GTI_Models.modelCore;
 using static GTI_Mvc.Functions;
 
 namespace GTI_Mvc.Controllers {
     [Route("Tributario")]
     public class TributarioController : Controller
     {
-        private readonly ITributarioRepository tributarioRepository;
-        private readonly IImovelRepository imovelRepository;
-        private readonly IEmpresaRepository empresaRepository;
-        private readonly IRequerenteRepository requerenteRepository;
-        private readonly HostingEnvironment hostingEnvironment;
-        private readonly IEnderecoRepository enderecoRepository;
-
-        public TributarioController(ITributarioRepository tributarioRepository,IImovelRepository imovelRepository,IEmpresaRepository empresaRepository,IRequerenteRepository requerenteRepository,HostingEnvironment hostingEnvironment,IEnderecoRepository enderecoRepository) {
-            this.tributarioRepository = tributarioRepository;
-            this.imovelRepository = imovelRepository;
-            this.empresaRepository = empresaRepository;
-            this.requerenteRepository = requerenteRepository;
-            this.hostingEnvironment = hostingEnvironment;
-            this.enderecoRepository = enderecoRepository;
-        }
+       
 
         [Route("Certidao/Certidao_Debito_Codigo")]
         [HttpGet]
@@ -42,9 +29,9 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Decrypt(HttpContext.Session["gti_V3login"].ToString());
+                ViewBag.FullName = Decrypt(HttpContext.Session["gti_V3full"].ToString());
+                ViewBag.UserId = Decrypt(HttpContext.Session["gti_V3id"].ToString());
             }
             return View();
         }
@@ -54,33 +41,35 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Certidao_Debito_Codigo(CertidaoViewModel model) {
             int _codigo = 0;
             short _ret =0;
-            int _numero = tributarioRepository.Retorna_Codigo_Certidao(Functions.TipoCertidao.Debito);
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            int _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Debito);
             bool _existeCod = false;
             string _tipoCertidao = "",_nao="", _sufixo = "XX",_reportName="", _numProcesso = "9222-3/2012", _dataProcesso = "18/04/2012",_cpf,_cnpj; 
-            Functions.TipoCadastro _tipoCadastro=new Functions.TipoCadastro();
+            TipoCadastro _tipoCadastro=new TipoCadastro();
 
             if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Decrypt(HttpContext.Session["gti_V3login"].ToString());
+                ViewBag.FullName = Decrypt(HttpContext.Session["gti_V3full"].ToString());
+                ViewBag.UserId = Decrypt(HttpContext.Session["gti_V3id"].ToString());
             }
             CertidaoViewModel certidaoViewModel = new CertidaoViewModel();
             ViewBag.Result = "";
-
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
             if (model.Inscricao != null) {
                 _codigo = Convert.ToInt32(model.Inscricao);
                 if (_codigo < 100000) {
                     _existeCod = imovelRepository.Existe_Imovel(_codigo);
-                    _tipoCadastro = Functions.TipoCadastro.Imovel;
+                    _tipoCadastro = TipoCadastro.Imovel;
                 } else {
                     if (_codigo >= 100000 && _codigo < 500000) {
-                        _existeCod = empresaRepository.Existe_Empresa_Codigo(_codigo);
-                        _tipoCadastro = Functions.TipoCadastro.Empresa;
+                        _existeCod = empresaRepository.Existe_Empresa(_codigo);
+                        _tipoCadastro = TipoCadastro.Empresa;
                     } else {
-//                        _tipoCadastro = Functions.TipoCadastro.Cidadao;
+                        _tipoCadastro = TipoCadastro.Cidadao;
                         ViewBag.Result = "Inscrição inválida.";
                         return View(certidaoViewModel);
                     }
@@ -103,12 +92,12 @@ namespace GTI_Mvc.Controllers {
             Certidao_debito_detalhe dadosCertidao = tributarioRepository.Certidao_Debito(_codigo);
             string _tributo = dadosCertidao.Descricao_Lancamentos;
 
-            if (dadosCertidao.Tipo_Retorno == Functions.RetornoCertidaoDebito.Negativa) {
+            if (dadosCertidao.Tipo_Retorno == RetornoCertidaoDebito.Negativa) {
                 _tipoCertidao = "NEGATIVA";
                 _nao = "não ";
                 _ret = 3;
                 _sufixo = "CN";
-                if (_tipoCadastro == Functions.TipoCadastro.Imovel)
+                if (_tipoCadastro == TipoCadastro.Imovel)
                     _reportName = "Certidao_Debito_Imovel.rpt";
                 else
                     _reportName = "Certidao_Debito_Empresa.rpt";
@@ -117,7 +106,7 @@ namespace GTI_Mvc.Controllers {
                     _tipoCertidao = "POSITIVA";
                     _ret = 4;
                     _sufixo = "CP";
-                    if (_tipoCadastro == Functions.TipoCadastro.Imovel)
+                    if (_tipoCadastro == TipoCadastro.Imovel)
                         _reportName = "Certidao_Debito_Imovel.rpt";
                     else
                         _reportName = "Certidao_Debito_Empresa.rpt";
@@ -126,7 +115,7 @@ namespace GTI_Mvc.Controllers {
                         _ret = 5;
                         _tipoCertidao = "POSITIVA COM EFEITO NEGATIVA";
                         _sufixo = "PN";
-                        if (_tipoCadastro == Functions.TipoCadastro.Imovel)
+                        if (_tipoCadastro == TipoCadastro.Imovel)
                             _reportName = "Certidao_Debito_Imovel_PN.rpt";
                         else
                             _reportName = "Certidao_Debito_Empresa_PN.rpt";
@@ -165,14 +154,14 @@ namespace GTI_Mvc.Controllers {
             //}
             
 
-            int _numero_certidao =tributarioRepository.Retorna_Codigo_Certidao(Functions.TipoCertidao.Debito);
+            int _numero_certidao =tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Debito);
             int _ano_certidao = DateTime.Now.Year;
             List<Certidao> certidao = new List<Certidao>();
             Certidao reg = new Certidao();
-            if (_tipoCadastro == Functions.TipoCadastro.Imovel) {
+            if (_tipoCadastro == TipoCadastro.Imovel) {
                 List<ProprietarioStruct> listaProp = imovelRepository.Lista_Proprietario(_codigo, true);
                 _cpf = listaProp[0].CPF;
-                _cnpj = listaProp[0].CNPJ;
+//                _cnpj = listaProp[0].CNPJ;
                 ImovelStruct _dados = imovelRepository.Dados_Imovel(_codigo);
                 reg.Codigo = _dados.Codigo;
                 reg.Inscricao = _dados.Inscricao;
@@ -193,7 +182,7 @@ namespace GTI_Mvc.Controllers {
                 reg.Nao = _nao;
                 reg.Tributo = _tributo;
             } else {
-                EmpresaStruct _dados = empresaRepository.Dados_Empresa(_codigo);
+                EmpresaStruct _dados = empresaRepository.Retorna_Empresa(_codigo);
                 _cpf = _dados.Cpf ?? "";
                 _cnpj = _dados.Cnpj ?? "";
                 reg.Codigo = _dados.Codigo;
@@ -234,7 +223,7 @@ namespace GTI_Mvc.Controllers {
                 Dataprocesso = Convert.ToDateTime(_dataProcesso),
                 Atendente = "GTI.Web",
                 Cpf = _cpf,
-                Cnpj = _cnpj,
+//                Cnpj = _cnpj,
                 Atividade = reg.Atividade_Extenso,
                 Suspenso="",
                 Lancamento = dadosCertidao.Descricao_Lancamentos
@@ -264,14 +253,14 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Decrypt(HttpContext.Session["gti_V3login"].ToString());
+                ViewBag.FullName = Decrypt(HttpContext.Session["gti_V3full"].ToString());
+                ViewBag.UserId = Decrypt(HttpContext.Session["gti_V3id"].ToString());
             }
             CertidaoViewModel model = new CertidaoViewModel {
-                OptionList = new List<SelectListItem> {
-                new SelectListItem { Text = " CPF", Value = "cpfCheck", Selected = true },
-                new SelectListItem { Text = " CNPJ", Value = "cnpjCheck", Selected = false }
+                OptionList = new List<SelectListaItem> {
+                new SelectListaItem { Text = " CPF", Value = "cpfCheck", Selected = true },
+                new SelectListaItem { Text = " CNPJ", Value = "cnpjCheck", Selected = false }
             },
                 SelectedValue = "cpfCheck"
             };
@@ -285,9 +274,9 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Decrypt(HttpContext.Session["gti_V3login"].ToString());
+                ViewBag.FullName = Decrypt(HttpContext.Session["gti_V3full"].ToString());
+                ViewBag.UserId = Decrypt(HttpContext.Session["gti_V3id"].ToString());
             }
 
             return View();
@@ -310,9 +299,9 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Decrypt(HttpContext.Session["gti_V3login"].ToString());
+                ViewBag.FullName = Decrypt(HttpContext.Session["gti_V3full"].ToString());
+                ViewBag.UserId = Decrypt(HttpContext.Session["gti_V3id"].ToString());
             }
             ViewBag.Result = "";
 
@@ -322,7 +311,10 @@ namespace GTI_Mvc.Controllers {
             }
 
             TipoCadastro _tipoCadastro = Tipo_Cadastro(_codigo);
-
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+            Cidadao_bll requerenteRepository = new Cidadao_bll("GTIconnection");
             if (_tipoCadastro == TipoCadastro.Imovel) {
                 _existe = imovelRepository.Existe_Imovel(_codigo);
                 if (!_existe) {
@@ -333,22 +325,22 @@ namespace GTI_Mvc.Controllers {
                     ImovelStruct _dadosImovel = imovelRepository.Dados_Imovel(_codigo);
                     _nome = _dadosImovel.Proprietario_Nome;
                     List<ProprietarioStruct> listaProp = imovelRepository.Lista_Proprietario(_codigo, true);
-                    _cpfcnpj = listaProp[0].CPF ?? listaProp[0].CNPJ;
+//                    _cpfcnpj = listaProp[0].CPF ?? listaProp[0].CNPJ;
                 }
             } else {
                 if (_tipoCadastro == TipoCadastro.Empresa) {
-                    _existe = empresaRepository.Existe_Empresa_Codigo(_codigo);
+                    _existe = empresaRepository.Existe_Empresa(_codigo);
                     if (!_existe) {
                         ViewBag.Result = "Inscrição não cadastrada.";
                         return View(model);
 
                     } else {
-                        EmpresaStruct _dadosEmpresa = empresaRepository.Dados_Empresa(_codigo);
+                        EmpresaStruct _dadosEmpresa = empresaRepository.Retorna_Empresa(_codigo);
                         _nome = _dadosEmpresa.Razao_social;
                         _cpfcnpj = _dadosEmpresa.Cpf_cnpj;
                     }
                 } else {
-                    _existe = requerenteRepository.Existe_Cidadao_Codigo(_codigo);
+                    _existe = requerenteRepository.ExisteCidadao(_codigo);
                     if (!_existe) {
                         ViewBag.Result = "Inscrição não cadastrada.";
                         return View(model);
@@ -380,7 +372,7 @@ namespace GTI_Mvc.Controllers {
                 Ano = DateTime.Now.Year,
                 Numero = _numero_certidao,
                 Banco_Nome = regPag.Banco_Nome + " Agência: " + regPag.Codigo_Agencia ?? "",
-                Cpf_Cnpj = _cpfcnpj,
+//                Cpf_Cnpj = _cpfcnpj,
                 Data_Geracao = DateTime.Now,
                 Data_Pagamento = regPag.Data_Pagamento,
                 Numero_Documento = _documento,
@@ -410,9 +402,9 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Decrypt(HttpContext.Session["gti_V3login"].ToString());
+                ViewBag.FullName = Decrypt(HttpContext.Session["gti_V3full"].ToString());
+                ViewBag.UserId = Decrypt(HttpContext.Session["gti_V3id"].ToString());
             }
 
             return View();
@@ -425,9 +417,9 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Decrypt(HttpContext.Session["gti_V3login"].ToString());
+                ViewBag.FullName = Decrypt(HttpContext.Session["gti_V3full"].ToString());
+                ViewBag.UserId = Decrypt(HttpContext.Session["gti_V3id"].ToString());
             }
 
             bool _isdate = Functions.IsDate(model.DataVencimento);
@@ -469,14 +461,14 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Decrypt(HttpContext.Session["gti_V3login"].ToString());
+                ViewBag.FullName = Decrypt(HttpContext.Session["gti_V3full"].ToString());
+                ViewBag.UserId = Decrypt(HttpContext.Session["gti_V3id"].ToString());
             }
             CertidaoViewModel modelt = new CertidaoViewModel {
-                OptionList = new List<SelectListItem> {
-                new SelectListItem { Text = " CPF", Value = "cpfCheck", Selected = true },
-                new SelectListItem { Text = " CNPJ", Value = "cnpjCheck", Selected = false }
+                OptionList = new List<SelectListaItem> {
+                new SelectListaItem { Text = " CPF", Value = "cpfCheck", Selected = true },
+                new SelectListaItem { Text = " CNPJ", Value = "cnpjCheck", Selected = false }
             },
                 SelectedValue = "cpfCheck"
             };
@@ -493,9 +485,9 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Decrypt(HttpContext.Session["gti_V3login"].ToString());
+                ViewBag.FullName = Decrypt(HttpContext.Session["gti_V3full"].ToString());
+                ViewBag.UserId = Decrypt(HttpContext.Session["gti_V3id"].ToString());
             }
            
 
@@ -516,7 +508,9 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.Result = "Código de verificação inválido.";
                 return View(model);
             }
-
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+            Cidadao_bll requerenteRepository = new Cidadao_bll("GTIconnection");
             bool _existeCod;
             string _nome,_cpfcnpj;
             int _codigo = Convert.ToInt32(model.Inscricao);
@@ -543,24 +537,24 @@ namespace GTI_Mvc.Controllers {
                     }
                     List<ProprietarioStruct> _prop = imovelRepository.Lista_Proprietario(_codigo, true);
                     _nome = _prop[0].Nome;
-                    _cpfcnpj = _prop[0].CPF ?? _prop[0].CNPJ;
+                    //_cpfcnpj = _prop[0].CPF ?? _prop[0].CNPJ;
                 }
             } else  {
                 if (_codigo >= 100000 && _codigo < 500000) {
-                    _existeCod = empresaRepository.Existe_Empresa_Codigo(_codigo);
+                    _existeCod = empresaRepository.Existe_Empresa(_codigo);
                     if (!_existeCod) {
                         ViewBag.Result = "Inscrição não cadastrada.";
                         return View(model);
                     } else {
                         if (model.CpfValue != null) {
-                            _existeCod = empresaRepository.Existe_Empresa_Cpf(_codigo, Functions.RetornaNumero(model.CpfValue));
+                            _existeCod = empresaRepository.ExisteEmpresaCpf(RetornaNumero(model.CpfValue))>0?true:false;
                             if (!_existeCod) {
                                 ViewBag.Result = "CPF não pertence a esta inscrição.";
                                 return View(model);
                             }
                         } else {
                             if (model.CnpjValue != null) {
-                                _existeCod = empresaRepository.Existe_Empresa_Cnpj(_codigo, Functions.RetornaNumero(model.CnpjValue));
+                                _existeCod = empresaRepository.ExisteEmpresaCnpj(RetornaNumero(model.CnpjValue))>0?true:false;
                                 if (!_existeCod) {
                                     ViewBag.Result = "CNPJ não pertence a esta inscrição.";
                                     return View(model);
@@ -568,11 +562,11 @@ namespace GTI_Mvc.Controllers {
                             }
                         }
                     }
-                    EmpresaStruct _empresa = empresaRepository.Dados_Empresa(_codigo);
+                    EmpresaStruct _empresa = empresaRepository.Retorna_Empresa(_codigo);
                     _nome = _empresa.Razao_social;
                     _cpfcnpj = _empresa.Cpf_cnpj;
                 } else {
-                    _existeCod = requerenteRepository.Existe_Cidadao_Codigo(_codigo);
+                    _existeCod = requerenteRepository.ExisteCidadao(_codigo);
                     if (!_existeCod) {
                         ViewBag.Result = "Inscrição não cadastrada.";
                         return View(model);
@@ -601,7 +595,7 @@ namespace GTI_Mvc.Controllers {
             DebitoSelectionViewModel modelt = new DebitoSelectionViewModel() {
                 Inscricao=_codigo,
                 Nome=_nome,
-                CpfCnpjLabel=_cpfcnpj,
+                //CpfCnpjLabel=_cpfcnpj,
                 Data_Vencimento=Convert.ToDateTime(model.DataVencimento)
             };
 
@@ -612,6 +606,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Damc")]
         [HttpGet]
         public ActionResult Damc() {
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             var value = TempData["debito"];
 
             if (!(value is DebitoSelectionViewModel model)) {
@@ -622,9 +617,9 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Decrypt(HttpContext.Session["gti_V3login"].ToString());
+                ViewBag.FullName = Decrypt(HttpContext.Session["gti_V3full"].ToString());
+                ViewBag.UserId = Decrypt(HttpContext.Session["gti_V3id"].ToString());
             }
 
             DateTime _dataVencto = model.Data_Vencimento;
@@ -683,7 +678,7 @@ namespace GTI_Mvc.Controllers {
                         Soma_Multa = item.Valormulta,
                         Soma_Correcao = item.Valorcorrecao,
                         Soma_Total = item.Valortotal,
-                        Soma_Honorario = item.Valortotal * (decimal)0.1,
+//                        Soma_Honorario = item.Valortotal * (decimal)0.1,
                         Data_Ajuizamento = item.Dataajuiza,
                         Data_Inscricao = item.Datainscricao
                     };
@@ -702,7 +697,7 @@ namespace GTI_Mvc.Controllers {
                 nSomaMulta += item.Soma_Multa;
                 nSomaCorrecao += item.Soma_Correcao;
                 nSomaTotal += item.Soma_Total;
-                nSomaHonorario += item.Soma_Honorario;
+  //              nSomaHonorario += item.Soma_Honorario;
             }
 
             int _linha = 1;
@@ -722,7 +717,7 @@ namespace GTI_Mvc.Controllers {
                     Soma_Multa = item.Soma_Multa.ToString("#0.00"),
                     Soma_Correcao = item.Soma_Correcao.ToString("#0.00"),
                     Soma_Total = item.Soma_Total.ToString("#0.00"),
-                    Soma_Honorario = item.Data_Ajuizamento == null ? "0,00" : item.Soma_Honorario.ToString("#0.00"),
+    //                Soma_Honorario = item.Data_Ajuizamento == null ? "0,00" : item.Soma_Honorario.ToString("#0.00"),
                     AJ = item.Data_Ajuizamento == null ? "N" : "S",
                     DA = item.Data_Inscricao == null ? "N" : "S"
                 };
@@ -755,7 +750,7 @@ namespace GTI_Mvc.Controllers {
                     Soma_Multa=_debitos.Soma_Multa,
                     Soma_Correcao=_debitos.Soma_Correcao,
                     Soma_Total=_debitos.Soma_Total,
-                    Soma_Honorario=_debitos.Soma_Honorario
+//                    Soma_Honorario=_debitos.Soma_Honorario
                 };
                 _linha++;
                 model.Debito.Add(editorViewModel);

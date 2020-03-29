@@ -160,5 +160,15 @@ namespace GTI_Bll.Classes {
             return obj.Dados_Cidadao(_codigo);
         }
 
+        public bool Existe_Cidadao_Cpf(int Codigo, string Cpf) {
+            Cidadao_Data obj = new Cidadao_Data(_connection);
+            return obj.Existe_Cidadao_Cpf(Codigo,Cpf);
+        }
+
+        public bool Existe_Cidadao_Cnpj(int Codigo, string Cnpj) {
+            Cidadao_Data obj = new Cidadao_Data(_connection);
+            return obj.Existe_Cidadao_Cnpj(Codigo, Cnpj);
+        }
+
     }
 }

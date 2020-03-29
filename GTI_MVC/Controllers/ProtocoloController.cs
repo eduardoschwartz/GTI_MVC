@@ -1,5 +1,5 @@
-﻿using GTI_Mvc.Interfaces;
-using GTI_Mvc.Models;
+﻿using GTI_Bll.Classes;
+using GTI_Models.Models;
 using GTI_Mvc.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -8,11 +8,6 @@ using System.Web.Mvc;
 
 namespace GTI_Mvc.Controllers {
     public class ProtocoloController : Controller {
-        private readonly IProtocoloRepository protocoloRepository;
-
-        public ProtocoloController(IProtocoloRepository protocoloRepository ) {
-            this.protocoloRepository = protocoloRepository;
-        }
 
         [Route("Tramite_Processo")]
         [HttpGet]
@@ -77,10 +72,11 @@ namespace GTI_Mvc.Controllers {
         }
                
         private ProcessoViewModel Exibe_Tramite(string Numero_Ano,int Seq=0) {
+            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             ProcessoViewModel processoViewModel = new ProcessoViewModel();
             int _userId = Convert.ToInt32(Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString()));
 
-            List<UsuariocentroCusto> _listaCC = protocoloRepository.ListaCentroCustoUsuario(_userId);
+            List<UsuariocentroCusto> _listaCC = protocoloRepository.ListaCentrocustoUsuario(_userId);
             string Lista_CC = "";
             foreach (UsuariocentroCusto item in _listaCC) {
                 Lista_CC += item.Codigo + ",";
@@ -88,7 +84,7 @@ namespace GTI_Mvc.Controllers {
             Lista_CC = Lista_CC.Substring(0, Lista_CC.Length - 1);
             
 
-            List<Centrocusto> Lista_CentroCusto = protocoloRepository.Lista_CentroCusto();
+            List<Centrocusto> Lista_CentroCusto = protocoloRepository.Lista_Local(true,false);
             ViewBag.Lista_CentroCusto = new SelectList(Lista_CentroCusto, "Codigo", "Descricao");
 
             ProcessoNumero processoNumero = Functions.Split_Processo_Numero(Numero_Ano);

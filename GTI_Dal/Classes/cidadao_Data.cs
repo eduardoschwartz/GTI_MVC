@@ -398,6 +398,26 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public bool Existe_Cidadao_Cpf(int Codigo, string Cpf) {
+            bool bRet = false;
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var existingReg = db.Cidadao.Count(a => a.Codcidadao == Codigo && a.Cpf == Cpf);
+                var reg = (from m in db.Cidadao where m.Codcidadao == Codigo && m.Cpf == Cpf select m.Codcidadao);
+                if (existingReg != 0)
+                    bRet = true;
+                return bRet;
+            }
+        }
 
+        public bool Existe_Cidadao_Cnpj(int Codigo, string Cnpj) {
+            bool bRet = false;
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var existingReg = db.Cidadao.Count(a => a.Codcidadao == Codigo && a.Cnpj == Cnpj);
+                var reg = (from m in db.Cidadao where m.Codcidadao == Codigo && m.Cnpj == Cnpj select m.Codcidadao);
+                if (existingReg != 0)
+                    bRet = true;
+                return bRet;
+            }
+        }
     }
 }

@@ -491,6 +491,15 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public bool Existe_Imovel_Cpf(int Codigo, string Cpf) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Existe_Imovel_Cpf(Codigo,Cpf);
+        }
+
+        public bool Existe_Imovel_Cnpj(int Codigo, string Cnpj) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Existe_Imovel_Cnpj(Codigo, Cnpj);
+        }
 
     }//end class
 }

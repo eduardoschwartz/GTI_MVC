@@ -1,4 +1,5 @@
-﻿using GTI_Mvc.Models;
+﻿using GTI_Models;
+using GTI_Models.Models;
 using System;
 using System.ComponentModel;
 using System.Security.Cryptography;
@@ -8,13 +9,7 @@ namespace GTI_Mvc {
     public static class Functions {
         private static readonly byte[] key = new byte[8] { 1, 2, 3, 4, 5, 6, 7, 8 };
         private static readonly byte[] iv = new byte[8] { 1, 2, 3, 4, 5, 6, 7, 8 };
-        
-        //public enum TipoCertidao { Endereco, ValorVenal, Isencao, Debito, Comprovante_Pagamento, Alvara, Debito_Doc }
-        //public enum TipoCadastro { Imovel, Empresa, Cidadao }
-        //public enum RetornoCertidaoDebito { Negativa, Positiva, NegativaPositiva }
-        //public enum TipoEndereco { Local, Proprietario, Entrega }
-        //public enum TipoDocumento { Cpf, Cnpj }
-        //public enum TipoCarne { Iptu = 1, Iss_Taxa = 2, Iss_Estimado_Variavel = 3, Taxa = 4, Vigilancia = 5, Cip = 6 }
+       
 
         public static bool ValidaCpf(string cpf) {
 
@@ -358,15 +353,15 @@ namespace GTI_Mvc {
             }
         }
 
-        public static TipoCadastro Tipo_Cadastro(int Codigo) {
-            TipoCadastro _tipo_cadastro;
+        public static modelCore.TipoCadastro Tipo_Cadastro(int Codigo) {
+            modelCore.TipoCadastro _tipo_cadastro;
             if (Codigo < 100000)
-                _tipo_cadastro = TipoCadastro.Imovel;
+                _tipo_cadastro = modelCore.TipoCadastro.Imovel;
             else {
                 if (Codigo >= 100000 && Codigo < 500000)
-                    _tipo_cadastro = TipoCadastro.Empresa;
+                    _tipo_cadastro = modelCore.TipoCadastro.Empresa;
                 else
-                    _tipo_cadastro = TipoCadastro.Cidadao;
+                    _tipo_cadastro = modelCore.TipoCadastro.Cidadao;
             }
             return _tipo_cadastro;
         }

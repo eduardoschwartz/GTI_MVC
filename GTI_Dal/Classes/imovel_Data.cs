@@ -1317,5 +1317,33 @@ namespace GTI_Dal.Classes {
                 return null;
             }
         }
+
+
+        public bool Existe_Imovel_Cpf(int Codigo, string Cpf) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from p in db.Proprietario
+                           join c in db.Cidadao on p.Codcidadao equals c.Codcidadao into pc from c in pc.DefaultIfEmpty()
+                           where p.Codreduzido == Codigo && c.Cpf == Cpf select c.Nomecidadao).FirstOrDefault();
+                if (string.IsNullOrEmpty(reg))
+                    return false;
+                else
+                    return true;
+            }
+        }
+
+        public bool Existe_Imovel_Cnpj(int Codigo, string Cnpj) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from p in db.Proprietario
+                           join c in db.Cidadao on p.Codcidadao equals c.Codcidadao into pc from c in pc.DefaultIfEmpty()
+                           where p.Codreduzido == Codigo && c.Cnpj == Cnpj select c.Nomecidadao).FirstOrDefault();
+                if (string.IsNullOrEmpty(reg))
+                    return false;
+                else
+                    return true;
+            }
+        }
+
+
+
     }//end class
 }

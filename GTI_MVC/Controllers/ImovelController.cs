@@ -1,7 +1,9 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
-using GTI_Mvc.Interfaces;
-using GTI_Mvc.Models;
+using GTI_Bll.Classes;
+using GTI_Models.Models;
+using GTI_Models.ReportModels;
+using GTI_Models.ViewModels;
 using GTI_Mvc.Models.ReportModels;
 using GTI_Mvc.ViewModels;
 using System;
@@ -9,20 +11,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using static GTI_Models.modelCore;
 
 namespace GTI_Mvc.Controllers {
 
     [Route("Imovel")]
     public class ImovelController : Controller {
-        private readonly IImovelRepository _imovelRepository;
-        private readonly HostingEnvironment hostingEnvironment;
-        private readonly ITributarioRepository tributarioRepository;
-
-        public ImovelController(IImovelRepository imovelRepository, HostingEnvironment hostingEnvironment, ITributarioRepository tributarioRepository) {
-            _imovelRepository = imovelRepository;
-            this.hostingEnvironment = hostingEnvironment;
-            this.tributarioRepository = tributarioRepository;
-        }
 
         [Route("get-captcha-image")]
         public ActionResult GetCaptchaImage() {
@@ -54,7 +48,9 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Certidao_Endereco(CertidaoViewModel model) {
             int _codigo = 0;
-            int _numero = tributarioRepository.Retorna_Codigo_Certidao(Functions.TipoCertidao.Endereco);
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            int _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Endereco);
             bool _existeCod = false;
             CertidaoViewModel certidaoViewModel = new CertidaoViewModel();
             if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
@@ -70,7 +66,7 @@ namespace GTI_Mvc.Controllers {
             if (model.Inscricao != null) {
                 _codigo = Convert.ToInt32(model.Inscricao);
                 if (_codigo < 100000)
-                    _existeCod = _imovelRepository.Existe_Imovel(_codigo);
+                    _existeCod = imovelRepository.Existe_Imovel(_codigo);
             }
 
             if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, HttpContext.Session["CaptchaCode"].ToString())) {
@@ -84,8 +80,8 @@ namespace GTI_Mvc.Controllers {
             }
 
             List<Certidao> certidao = new List<Certidao>();
-            List<ProprietarioStruct> listaProp = _imovelRepository.Lista_Proprietario(_codigo, true);
-            ImovelStruct _dados = _imovelRepository.Dados_Imovel(_codigo);
+            List<ProprietarioStruct> listaProp = imovelRepository.Lista_Proprietario(_codigo, true);
+            ImovelStruct _dados = imovelRepository.Dados_Imovel(_codigo);
             Certidao reg = new Certidao() {
                 Codigo = _dados.Codigo,
                 Inscricao = _dados.Inscricao,
@@ -104,7 +100,7 @@ namespace GTI_Mvc.Controllers {
             reg.Numero_Ano = reg.Numero.ToString("00000") + "/" + reg.Ano;
             certidao.Add(reg);
 
-            Models.Certidao_endereco regCert = new Certidao_endereco() {
+            Certidao_endereco regCert = new Certidao_endereco() {
                 Ano = reg.Ano,
                 Codigo = reg.Codigo,
                 Data = DateTime.Now,
@@ -151,6 +147,7 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
             }
             if (model.Chave != null) {
+                Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
                 Certidao reg = new Certidao();
                 List<Certidao> certidao = new List<Certidao>();
                 chaveStruct _chaveStruct = tributarioRepository.Valida_Certidao(_chave);
@@ -218,7 +215,8 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Certidao_Valor_Venal(CertidaoViewModel model) {
             int _codigo;
-            int _numero = tributarioRepository.Retorna_Codigo_Certidao(Functions.TipoCertidao.ValorVenal);
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            int _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.ValorVenal);
             bool _existeCod = false;
             CertidaoViewModel certidaoViewModel = new CertidaoViewModel();
             if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
@@ -230,10 +228,10 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
             }
             ViewBag.Result = "";
-
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             _codigo = Convert.ToInt32(model.Inscricao);
             if (_codigo < 100000)
-                _existeCod = _imovelRepository.Existe_Imovel(_codigo);
+                _existeCod =imovelRepository.Existe_Imovel(_codigo);
 
             if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, HttpContext.Session["CaptchaCode"].ToString())) {
                 ViewBag.Result = "Código de verificação inválido.";
@@ -245,8 +243,8 @@ namespace GTI_Mvc.Controllers {
                 return View(certidaoViewModel);
             }
 
-            List<ProprietarioStruct> listaProp = _imovelRepository.Lista_Proprietario(_codigo, true);
-            ImovelStruct _dados = _imovelRepository.Dados_Imovel(_codigo);
+            List<ProprietarioStruct> listaProp = imovelRepository.Lista_Proprietario(_codigo, true);
+            ImovelStruct _dados = imovelRepository.Dados_Imovel(_codigo);
             Certidao reg = new Certidao() {
                 Codigo = _dados.Codigo,
                 Inscricao = _dados.Inscricao,
@@ -262,7 +260,7 @@ namespace GTI_Mvc.Controllers {
                 Controle = _numero.ToString("00000") + DateTime.Now.Year.ToString("0000") + "/" + _codigo.ToString() + "-VV"
             };
 
-            SpCalculo RegCalculo = _imovelRepository.Calculo_IPTU(_dados.Codigo, DateTime.Now.Year);
+            SpCalculo RegCalculo = tributarioRepository.Calculo_IPTU(_dados.Codigo, DateTime.Now.Year);
             if (RegCalculo == null) {
                 ViewBag.Result = "Erro ao processar a certidão.";
                 return View(certidaoViewModel);
@@ -274,7 +272,7 @@ namespace GTI_Mvc.Controllers {
                 reg.Numero_Ano = reg.Numero.ToString("00000") + "/" + reg.Ano;
             }
 
-            Models.Certidao_valor_venal regCert = new Certidao_valor_venal() {
+            Certidao_valor_venal regCert = new Certidao_valor_venal() {
                 Ano = reg.Ano,
                 Codigo = reg.Codigo,
                 Data = DateTime.Now,
@@ -293,7 +291,7 @@ namespace GTI_Mvc.Controllers {
                 Vvi = RegCalculo.Vvi
             };
 
-            Exception ex = tributarioRepository.Insert_Certidao_Valor_Venal(regCert);
+            Exception ex = tributarioRepository.Insert_Certidao_ValorVenal(regCert);
             if (ex != null) {
                 ViewBag.Result = "Ocorreu um erro no processamento das informações.";
                 return View(certidaoViewModel);
@@ -318,6 +316,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Validate_VV")]
         [Route("Certidao/Validate_VV")]
         public ActionResult Validate_VV(CertidaoViewModel model) {
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             int _codigo, _ano, _numero;
             string _chave = model.Chave;
             if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
@@ -340,7 +339,7 @@ namespace GTI_Mvc.Controllers {
                     _numero = _chaveStruct.Numero;
                     _ano = _chaveStruct.Ano;
 
-                    Certidao_valor_venal certidaoGerada = tributarioRepository.Retorna_Certidao_Valor_Venal(_ano, _numero, _codigo);
+                    Certidao_valor_venal certidaoGerada = tributarioRepository.Retorna_Certidao_ValorVenal(_ano, _numero, _codigo);
                     if (certidaoGerada != null) {
                         reg.Codigo = _codigo;
                         reg.Ano = _ano;
@@ -400,7 +399,9 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Certidao_Isencao(CertidaoViewModel model) {
             int _codigo = 0;
-            int _numero = tributarioRepository.Retorna_Codigo_Certidao(Functions.TipoCertidao.Isencao);
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            int _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Isencao);
             bool _existeCod = false;
             string _numero_processo="";
             CertidaoViewModel certidaoViewModel = new CertidaoViewModel();
@@ -417,7 +418,7 @@ namespace GTI_Mvc.Controllers {
                 if (model.Inscricao != null) {
                     _codigo = Convert.ToInt32(model.Inscricao);
                     if (_codigo < 100000)
-                        _existeCod = _imovelRepository.Existe_Imovel(_codigo);
+                        _existeCod = imovelRepository.Existe_Imovel(_codigo);
                 }
 
             if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, HttpContext.Session["CaptchaCode"].ToString())) {
@@ -430,21 +431,21 @@ namespace GTI_Mvc.Controllers {
                 return View(certidaoViewModel);
             }
 
-            decimal SomaArea = _imovelRepository.Soma_Area(_codigo);
+            decimal SomaArea = imovelRepository.Soma_Area(_codigo);
 
-            bool bImune = _imovelRepository.Verifica_Imunidade(_codigo);
+            bool bImune = imovelRepository.Verifica_Imunidade(_codigo);
             bool bIsentoProcesso = false;
             List<IsencaoStruct> ListaIsencao = null;
             if (!bImune) {
-                ListaIsencao = _imovelRepository.Lista_Imovel_Isencao(_codigo, DateTime.Now.Year);
+                ListaIsencao = imovelRepository.Lista_Imovel_Isencao(_codigo, DateTime.Now.Year);
                 if (ListaIsencao.Count > 0) {
                     bIsentoProcesso = true;
                     _numero_processo = ListaIsencao[0].Numprocesso ?? "";
                 }
             }
 
-            List<ProprietarioStruct> listaProp = _imovelRepository.Lista_Proprietario(_codigo, true);
-            ImovelStruct _dados = _imovelRepository.Dados_Imovel(_codigo);
+            List<ProprietarioStruct> listaProp = imovelRepository.Lista_Proprietario(_codigo, true);
+            ImovelStruct _dados = imovelRepository.Dados_Imovel(_codigo);
             Certidao reg = new Certidao() {
                 Codigo = _dados.Codigo,
                 Inscricao = _dados.Inscricao,
@@ -478,7 +479,7 @@ namespace GTI_Mvc.Controllers {
                 } else {
                     if (SomaArea <= 65) {
                         //Se tiver área < 65m² mas tiver mais de 1 imóvel, perde a isenção.
-                        int nQtdeImovel = _imovelRepository.Qtde_Imovel_Cidadao(_codigo);
+                        int nQtdeImovel = imovelRepository.Qtde_Imovel_Cidadao(_codigo);
                         if (nQtdeImovel > 1) {
                             ViewBag.Result = "Este imóvel não esta isento da cobrança de IPTU no ano atual.";
                             return View(certidaoViewModel);
@@ -493,7 +494,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             List<Certidao> certidao = new List<Certidao>();
-                Models.Certidao_isencao regCert = new Certidao_isencao() {
+                Certidao_isencao regCert = new Certidao_isencao() {
                     Ano = reg.Ano,
                     Codigo = reg.Codigo,
                     Data = DateTime.Now,
@@ -545,7 +546,7 @@ namespace GTI_Mvc.Controllers {
             }
             int _codigo, _ano, _numero;
             string _chave = model.Chave;
-
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             if (model.Chave != null) {
                 Certidao reg = new Certidao();
                 List<Certidao> certidao = new List<Certidao>();

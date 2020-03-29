@@ -159,85 +159,13 @@
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImovelController.cs" />
+    <Compile Include="Controllers\proceso_bll.cs" />
     <Compile Include="Controllers\ProtocoloController.cs" />
     <Compile Include="Controllers\TributarioController.cs" />
     <Compile Include="Functions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\IEmpresaRepository.cs" />
-    <Compile Include="Interfaces\IEnderecoRepository.cs" />
-    <Compile Include="Interfaces\IImovelRepository.cs" />
-    <Compile Include="Interfaces\IProtocoloRepository.cs" />
-    <Compile Include="Interfaces\IRequerenteRepository.cs" />
-    <Compile Include="Interfaces\ISistemaRepository.cs" />
-    <Compile Include="Interfaces\ITributarioRepository.cs" />
-    <Compile Include="Models\anexo.cs" />
-    <Compile Include="Models\anexo_log.cs" />
-    <Compile Include="Models\AppDbContext.cs" />
-    <Compile Include="Models\areas.cs" />
-    <Compile Include="Models\assunto.cs" />
-    <Compile Include="Models\assuntocc.cs" />
-    <Compile Include="Models\atividade.cs" />
-    <Compile Include="Models\bairro.cs" />
-    <Compile Include="Models\banco.cs" />
-    <Compile Include="Models\benfeitoria.cs" />
-    <Compile Include="Models\cadimob.cs" />
-    <Compile Include="Models\categprop.cs" />
-    <Compile Include="Models\centrocusto.cs" />
-    <Compile Include="Models\cep.cs" />
-    <Compile Include="Models\certidao_debito.cs" />
-    <Compile Include="Models\certidao_debito_doc.cs" />
-    <Compile Include="Models\certidao_endereco.cs" />
-    <Compile Include="Models\certidao_inscricao.cs" />
-    <Compile Include="Models\certidao_inscricao_extrato.cs" />
-    <Compile Include="Models\certidao_isencao.cs" />
-    <Compile Include="Models\certidao_valor_venal.cs" />
-    <Compile Include="Models\chaveStruct.cs" />
-    <Compile Include="Models\cidadao.cs" />
-    <Compile Include="Models\cidade.cs" />
-    <Compile Include="Models\cnae.cs" />
-    <Compile Include="Models\cnaesubclasse.cs" />
-    <Compile Include="Models\condominio.cs" />
-    <Compile Include="Models\debitopago.cs" />
-    <Compile Include="Models\debitoparcela.cs" />
-    <Compile Include="Models\debitotributo.cs" />
-    <Compile Include="Models\despacho.cs" />
-    <Compile Include="Models\documento.cs" />
-    <Compile Include="Models\endentrega.cs" />
-    <Compile Include="Models\facequadra.cs" />
-    <Compile Include="Models\horario_funcionamento.cs" />
-    <Compile Include="Models\isencao.cs" />
-    <Compile Include="Models\laseriptu.cs" />
-    <Compile Include="Models\logradouro.cs" />
-    <Compile Include="Models\Mobiliario.cs" />
-    <Compile Include="Models\mobiliarioatividadeiss.cs" />
-    <Compile Include="Models\mobiliariocnae.cs" />
-    <Compile Include="Models\mobiliarioevento.cs" />
-    <Compile Include="Models\mobiliarioproprietario.cs" />
-    <Compile Include="Models\mobiliariovs.cs" />
-    <Compile Include="Models\Numdocumento.cs" />
-    <Compile Include="Models\parametros.cs" />
-    <Compile Include="Models\parceladocumento.cs" />
-    <Compile Include="Models\pedologia.cs" />
-    <Compile Include="Models\periodomei.cs" />
-    <Compile Include="Models\processodoc.cs" />
-    <Compile Include="Models\processoend.cs" />
-    <Compile Include="Models\processoGTI.cs" />
-    <Compile Include="Models\proprietario.cs" />
-    <Compile Include="Models\ReportModels\Certidao.cs" />
-    <Compile Include="Models\ReportModels\Comprovante_Inscricao.cs" />
-    <Compile Include="Models\ReportModels\Empresa_Detalhe.cs" />
-    <Compile Include="Models\situacao.cs" />
-    <Compile Include="Models\spCalculo.cs" />
-    <Compile Include="Models\spExtrato.cs" />
-    <Compile Include="Models\topografia.cs" />
-    <Compile Include="Models\tramitacao.cs" />
-    <Compile Include="Models\tramitacaocc.cs" />
-    <Compile Include="Models\usoterreno.cs" />
-    <Compile Include="Models\usuario.cs" />
-    <Compile Include="Models\usuariocc.cs" />
-    <Compile Include="Models\vwproprietarioduplicado.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\CertidaoInscricaoExtratoAtiva.cs">
       <AutoGen>True</AutoGen>
@@ -359,21 +287,6 @@
       <DependentUpon>Situacao_Pagamento.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Repository\EmpresaRepository.cs" />
-    <Compile Include="Repository\EnderecoRepository.cs" />
-    <Compile Include="Repository\ImovelRepository.cs" />
-    <Compile Include="Repository\ProtocoloRepository.cs" />
-    <Compile Include="Repository\RequerenteRepository.cs" />
-    <Compile Include="Repository\SistemaRepository.cs" />
-    <Compile Include="Repository\TributarioRepository.cs" />
-    <Compile Include="SelectListItem.cs" />
-    <Compile Include="ViewModels\CertidaoViewModel.cs" />
-    <Compile Include="ViewModels\DebitoListViewModel.cs" />
-    <Compile Include="ViewModels\DebitoSelectionViewModel.cs" />
-    <Compile Include="ViewModels\DebitoViewModel.cs" />
-    <Compile Include="ViewModels\EmpresaDetailsViewModel.cs" />
-    <Compile Include="ViewModels\LoginViewModel.cs" />
-    <Compile Include="ViewModels\ProcessoViewModel.cs" />
     <Compile Include="Views\Tributario\EditorTemplates\ListDebitoEditorViewModel.cs" />
     <Compile Include="Views\Tributario\EditorTemplates\SelectDebitoEditorViewModel.cs" />
   </ItemGroup>
@@ -398,21 +311,9 @@
     <Content Include="Images\receber.png" />
     <Content Include="Images\remover_local.png" />
     <Content Include="Images\Separator.png" />
-    <Content Include="Models\ReportModels\Certidao.xml" />
-    <Content Include="Models\ReportModels\Comprovante_Inscricao.xml" />
-    <Content Include="Models\ReportModels\Empresa_Detalhe.xml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Files\DECA2018.pdf" />
-    <None Include="Models\ReportModels\Certidao.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Models\ReportModels\Comprovante_Inscricao.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Models\ReportModels\Empresa_Detalhe.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\gti.js" />
@@ -438,8 +339,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Tributario\EditorTemplates\ListDebitoEditorViewModel.cshtml" />
-    <Content Include="Views\Tributario\EditorTemplates\SelectDebitoEditorViewModel.cshtml" />
     <Content Include="Views\Empresa\Certidao_Inscricao.cshtml" />
     <Content Include="Views\Empresa\Certidao_Pagamento.cshtml" />
     <Content Include="Views\Empresa\Details.cshtml" />
@@ -457,6 +356,8 @@
     <Content Include="Views\Protocolo\Send.cshtml" />
     <Content Include="Views\Protocolo\Tramite_Processo.cshtml" />
     <Content Include="Views\Protocolo\Tramite_Processo2.cshtml" />
+    <Content Include="Views\Tributario\EditorTemplates\ListDebitoEditorViewModel.cshtml" />
+    <Content Include="Views\Tributario\EditorTemplates\SelectDebitoEditorViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,9 +1,6 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
-using GTI_Mvc.Repository;
-//using GTI_Mvc.Models;
-using GTI_Mvc.Models.ReportModels;
-using GTI_Mvc.ViewModels;
+using GTI_Models.ReportModels;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,6 +11,9 @@ using System.Web.Mvc;
 using GTI_Bll.Classes;
 using GTI_Models.Models;
 using static GTI_Models.modelCore;
+using GTI_Models.ViewModels;
+using GTI_Models;
+using GTI_Mvc.ViewModels;
 
 namespace GTI_Mvc.Controllers {
 
@@ -153,9 +153,9 @@ namespace GTI_Mvc.Controllers {
             }
 
             CertidaoViewModel model = new CertidaoViewModel {
-                OptionList = new List<SelectListItem> {
-                new SelectListItem { Text = " CPF", Value = "cpfCheck", Selected = true },
-                new SelectListItem { Text = " CNPJ", Value = "cnpjCheck", Selected = false }
+                OptionList = new List<SelectListaItem> {
+                new SelectListaItem { Text = " CPF", Value = "cpfCheck", Selected = true },
+                new SelectListaItem { Text = " CNPJ", Value = "cnpjCheck", Selected = false }
             },
                 SelectedValue = "cpfCheck"
             };
@@ -177,9 +177,9 @@ namespace GTI_Mvc.Controllers {
 
             if (model.CpfValue!=null || model.CnpjValue != null) {
 
-                model.OptionList = new List<SelectListItem> {
-                    new SelectListItem { Text = " CPF", Value = "cpfCheck", Selected = model.SelectedValue == "cpfCheck" },
-                    new SelectListItem { Text = " CNPJ", Value = "cnpjCheck", Selected = model.SelectedValue == "cnpjCheck" }
+                model.OptionList = new List<SelectListaItem> {
+                    new SelectListaItem { Text = " CPF", Value = "cpfCheck", Selected = model.SelectedValue == "cpfCheck" },
+                    new SelectListaItem { Text = " CNPJ", Value = "cnpjCheck", Selected = model.SelectedValue == "cnpjCheck" }
                 };
 
                 List<int> _lista = new List<int>();
@@ -219,9 +219,9 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
             }
 
-            model.OptionList = new List<SelectListItem> {
-                new SelectListItem { Text = " CPF", Value = "cpfCheck", Selected = model.SelectedValue == "cpfCheck" },
-                new SelectListItem { Text = " CNPJ", Value = "cnpjCheck", Selected = model.SelectedValue == "cnpjCheck" }
+            model.OptionList = new List<SelectListaItem> {
+                new SelectListaItem { Text = " CPF", Value = "cpfCheck", Selected = model.SelectedValue == "cpfCheck" },
+                new SelectListaItem { Text = " CNPJ", Value = "cnpjCheck", Selected = model.SelectedValue == "cnpjCheck" }
             };
 
             if (model.Chave != null) {
@@ -311,9 +311,9 @@ namespace GTI_Mvc.Controllers {
             }
             ViewBag.Result = "";
 
-            model.OptionList = new List<SelectListItem> {
-                new SelectListItem { Text = " CPF", Value = "cpfCheck", Selected = model.SelectedValue == "cpfCheck" },
-                new SelectListItem { Text = " CNPJ", Value = "cnpjCheck", Selected = model.SelectedValue == "cnpjCheck" }
+            model.OptionList = new List<SelectListaItem> {
+                new SelectListaItem { Text = " CPF", Value = "cpfCheck", Selected = model.SelectedValue == "cpfCheck" },
+                new SelectListaItem { Text = " CNPJ", Value = "cnpjCheck", Selected = model.SelectedValue == "cnpjCheck" }
             };
 
             if (model.CpfValue != null || model.CnpjValue != null) {
@@ -531,9 +531,9 @@ namespace GTI_Mvc.Controllers {
             }
 
             CertidaoViewModel model = new CertidaoViewModel {
-                OptionList = new List<SelectListItem> {
-                new SelectListItem { Text = " CPF", Value = "cpfCheck", Selected = true },
-                new SelectListItem { Text = " CNPJ", Value = "cnpjCheck", Selected = false }
+                OptionList = new List<SelectListaItem> {
+                new SelectListaItem { Text = " CPF", Value = "cpfCheck", Selected = true },
+                new SelectListaItem { Text = " CNPJ", Value = "cnpjCheck", Selected = false }
             },
                 SelectedValue = "cpfCheck"
             };
@@ -555,9 +555,9 @@ namespace GTI_Mvc.Controllers {
             }
             ViewBag.Result = "";
 
-            model.OptionList = new List<SelectListItem> {
-                new SelectListItem { Text = " CPF", Value = "cpfCheck", Selected = model.SelectedValue == "cpfCheck" },
-                new SelectListItem { Text = " CNPJ", Value = "cnpjCheck", Selected = model.SelectedValue == "cnpjCheck" }
+            model.OptionList = new List<SelectListaItem> {
+                new SelectListaItem { Text = " CPF", Value = "cpfCheck", Selected = model.SelectedValue == "cpfCheck" },
+                new SelectListaItem { Text = " CNPJ", Value = "cnpjCheck", Selected = model.SelectedValue == "cnpjCheck" }
             };
 
             if (model.CpfValue != null || model.CnpjValue != null) {

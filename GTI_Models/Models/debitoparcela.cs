@@ -83,5 +83,27 @@ namespace GTI_Models.Models {
         public bool? Registrado { get; set; }
     }
 
+    public class DebitoStructureWeb {
+        public int Row { get; set; }
+        public int Codigo_Reduzido { get; set; }
+        public int Ano_Exercicio { get; set; }
+        public int Codigo_Lancamento { get; set; }
+        public string Descricao_Lancamento { get; set; }
+        public int Sequencia_Lancamento { get; set; }
+        public short? Numero_Parcela { get; set; }
+        public short Complemento { get; set; }
+        public string Data_Vencimento { get; set; }
+        public int Codigo_Situacao { get; set; }
+        public string Nome_Situacao { get; set; }
+        public string Soma_Principal { get; set; }
+        public string Soma_Multa { get; set; }
+        public string Soma_Juros { get; set; }
+        public string Soma_Correcao { get; set; }
+        public string Soma_Total { get; set; }
+        public string Soma_Honorario { get; set; }
+        public string DA { get; set; }
+        public string AJ { get; set; }
+        public bool Selected { get; set; }
+    }
 
 }

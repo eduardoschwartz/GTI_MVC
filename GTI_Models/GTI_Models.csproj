@@ -199,10 +199,30 @@
     <Compile Include="Models\vre_socio.cs" />
     <Compile Include="Models\vwproprietarioduplicado.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportModels\Certidao.cs" />
+    <Compile Include="ReportModels\Comprovante_Inscricao.cs" />
+    <Compile Include="ReportModels\Empresa_Detalhe.cs" />
+    <Compile Include="SelectListaItem.cs" />
+    <Compile Include="ViewModels\CertidaoViewModel.cs" />
+    <Compile Include="ViewModels\DebitoListViewModel.cs" />
+    <Compile Include="ViewModels\DebitoSelectionViewModel.cs" />
+    <Compile Include="ViewModels\DebitoViewModel.cs" />
+    <Compile Include="ViewModels\EmpresaDetailsViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\ProcessoViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="ReportModels\Certidao.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ReportModels\Comprovante_Inscricao.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ReportModels\Empresa_Detalhe.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
