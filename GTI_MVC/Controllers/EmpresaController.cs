@@ -44,7 +44,7 @@ namespace GTI_Mvc.Controllers {
             bool _existeCod = false;
             EmpresaDetailsViewModel empresaDetailsViewModel = new EmpresaDetailsViewModel();
 
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"]==null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
