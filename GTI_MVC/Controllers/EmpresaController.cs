@@ -279,7 +279,7 @@ namespace GTI_Mvc.Controllers {
                     }
 
                     ReportDocument rd = new ReportDocument();
-                    rd.Load(HostingEnvironment.ApplicationVirtualPath + "\\reports\\Comprovante_Inscricao_Valida.rpt");
+                    rd.Load(Server.MapPath("~/Reports/Comprovante_Inscricao_Valida.rpt"));
 
                     try {
                         rd.SetDataSource(certidao);
@@ -409,21 +409,21 @@ namespace GTI_Mvc.Controllers {
                 Numero = _numero,
                 Atividade = _cnae??"",
                 Atividade_secundaria = _cnae2??"",
-              //  Atividade_Extenso=reg.Atividade_Extenso,
+                Atividade_extenso=reg.Atividade_Extenso,
                 Rg = reg.Rg ?? "",
                 Documento = reg.Cpf_Cnpj,
-                Data_abertura = (DateTime)reg.Data_Abertura,
+                Data_abertura = reg.Data_Abertura,
                 Processo_abertura = reg.Processo_Abertura??"",
                 Processo_encerramento = reg.Processo_Encerramento??"",
                 Situacao = reg.Situacao,
                 Telefone = reg.Telefone??"",
-                Area = (decimal)reg.Area,
+                Area = reg.Area,
                 Mei = reg.Mei,
                 Vigilancia_sanitaria = reg.Vigilancia_Sanitaria,
                 Taxa_licenca = reg.Taxa_Licenca
             };
             if (reg.Data_Encerramento != null && reg.Data_Encerramento!=DateTime.MinValue)
-                reg2.Data_encerramento = (DateTime)reg.Data_Encerramento;
+                reg2.Data_encerramento =reg.Data_Encerramento;
 
             Exception ex = tributarioRepository.Insert_Certidao_Inscricao(reg2);
             if (ex != null)
@@ -467,7 +467,7 @@ namespace GTI_Mvc.Controllers {
                     regCert.Endereco_Complemento = reg2.Complemento;
                     regCert.Bairro = reg2.Bairro;
                     regCert.Cidade = reg2.Cidade ;
-                    //regCert.Atividade_Extenso = reg2.Atividade_Extenso;
+                    regCert.Atividade_Extenso = reg2.Atividade_extenso;
                     regCert.Rg = reg2.Rg;
                     regCert.Cpf_Cnpj = reg2.Documento;
                     regCert.Exercicio = regExt.Ano;
@@ -481,7 +481,7 @@ namespace GTI_Mvc.Controllers {
                     regCert.Processo_Abertura = reg2.Processo_abertura;
                     regCert.Numero_Ano = regExt.Numero_certidao.ToString("00000") + "/" + regExt.Ano_certidao;
                     if (reg2.Data_encerramento != null)
-                        regCert.Data_Encerramento = (DateTime)reg.Data_Encerramento;
+                        regCert.Data_Encerramento = reg.Data_Encerramento;
 
                     Lista_Certidao.Add(regCert);
 
@@ -669,7 +669,7 @@ namespace GTI_Mvc.Controllers {
                 }
 
                 ReportDocument rd = new ReportDocument();
-                rd.Load(HostingEnvironment.ApplicationVirtualPath + "\\reports\\Situacao_Pagamento.rpt");
+                rd.Load(Server.MapPath("~/Reports/Situacao_Pagamento.rpt"));
                 try {
                     rd.SetDataSource(certidao);
                     Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);

@@ -60,7 +60,7 @@
 
     <br />
     <div class="form-group" style="margin-left:1px">
-        <input type="checkbox" asp-for="@Model.Extrato" title="Marque esta opção para exibir o resumo dos pagamentos na certidão" />
+        @Html.CheckBoxFor(m => m.Extrato)
         <label>Exibir o resumo dos pagamentos na certidão</label>
     </div>
 
@@ -70,16 +70,8 @@
     <br />
     <br />
     <br />
-   @*<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline" ;>Autenticar a Certidão</label>*@
     <br />
     <br />
-    @*<table width="370px">
-        <tr>
-            <td style="width:70px"><label style="font-weight:normal">Chave</label></td>
-            <td style="width:225px"><input asp-for="Chave" id="chave" class="textBoxBlue" style="max-width:220px;max-height:25px;" onchange="ClearError()"></td>
-            <td style="width:70px"><button class="green_button" type="submit" title="Validar a certidão." formaction="Validate_CI" formmethod="post">Validar</button></td>
-        </tr>
-    </table>*@
     <div style="border:1px solid black;width:400px;margin-left:1px">
         <br />
         <label style="color:brown;font-size:16px;font-style:italic;margin-left:10px;font-weight:normal;text-decoration:underline">Autenticar a Certidão</label>
@@ -87,7 +79,8 @@
         <div class="form-group row align-items-lg-baseline">
             <div class="input-group">
                 <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chave</label>
-                &nbsp;<input asp-for="Chave" id="chave" class="textBoxBlue" style="max-width:160px;max-height:25px;" onchange="ClearError()">
+                &nbsp;&nbsp;@Html.TextBoxFor(m => m.Chave, new { @id = "chave", @class = "textBoxBlue", @style = "max-width:110px;" })
+
                 &nbsp;<button class="green_button" type="submit" title="Validar a certidão." formaction="Validate_CI" formmethod="post">Validar</button>
             </div>
         </div>

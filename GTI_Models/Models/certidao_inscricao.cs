@@ -25,6 +25,7 @@ namespace GTI_Models.Models {
         public string Processo_encerramento { get; set; }
         public string Inscricao_estadual { get; set; }
         public string Nome_fantasia { get; set; }
+        public string Atividade_extenso { get; set; }
         public string Atividade_secundaria { get; set; }
         public string Complemento { get; set; }
         public string Cep { get; set; }
