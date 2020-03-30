@@ -13,7 +13,7 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult Tramite_Processo() {
 
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return View("../Home/Login");
@@ -53,7 +53,7 @@ namespace GTI_Mvc.Controllers {
             if (Ano == 0)
                 return View();
 
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return View("../Home/Login");
@@ -164,7 +164,7 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult Receive(int Ano, int Numero, int Seq) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return View("../Home/Login");
@@ -212,7 +212,7 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Receive(ProcessoViewModel model) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return Json(Url.Action("Tramite_Processo2", "Protocolo", new { model.Ano, model.Numero}));
@@ -240,7 +240,7 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult Send(int Ano, int Numero, int Seq) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return View("../Home/Login");
@@ -291,7 +291,7 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Send(ProcessoViewModel model) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return RedirectToAction("Index", "Home");
@@ -325,7 +325,7 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult AddPlace(int Ano, int Numero, int Seq) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return View("../Home/Login");
@@ -371,7 +371,7 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult Obs(int Ano, int Numero, int Seq) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return View("../Home/Login");
@@ -408,7 +408,7 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Obs(ProcessoViewModel model) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return Json(Url.Action( "Index", "Home"));

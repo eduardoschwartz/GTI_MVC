@@ -12,6 +12,7 @@ using GTI_Bll.Classes;
 using GTI_Models.Models;
 using static GTI_Models.modelCore;
 using GTI_Mvc.ViewModels;
+using GTI_MVC;
 
 namespace GTI_Mvc.Controllers {
 
@@ -127,6 +128,12 @@ namespace GTI_Mvc.Controllers {
 
         }
 
+        public CaptchaResultNew GetCaptcha() {
+            string captchaText = CaptchaNew.GenerateRandomCode();
+            HttpContext.Session.Add("CaptchaCode", captchaText);
+            return new CaptchaResultNew(captchaText);
+        }
+
         [Route("get-captcha-image")]
         public ActionResult GetCaptchaImage() {
             int width = 100;
@@ -141,7 +148,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Inscricao")]
         [HttpGet]
         public ViewResult Certidao_Inscricao() {
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -164,7 +171,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Retorna_Codigos")]
         public ActionResult Retorna_Codigos(CertidaoViewModel model) {
             Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -208,7 +215,7 @@ namespace GTI_Mvc.Controllers {
             int _codigo , _ano ,_numero;
             string _chave = model.Chave;
 
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -299,7 +306,7 @@ namespace GTI_Mvc.Controllers {
             Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Debito);
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -543,7 +550,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Certidao_Pagamento(CertidaoViewModel model) {
             int _codigo;
             Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {

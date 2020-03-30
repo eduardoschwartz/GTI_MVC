@@ -31,7 +31,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Endereco")]
         [HttpGet]
         public ViewResult Certidao_Endereco() {
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -51,7 +51,7 @@ namespace GTI_Mvc.Controllers {
             int _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Endereco);
             bool _existeCod = false;
             CertidaoViewModel certidaoViewModel = new CertidaoViewModel();
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -136,7 +136,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Validate_CE(CertidaoViewModel model) {
             int _codigo, _ano, _numero;
             string _chave = model.Chave;
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -198,7 +198,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Valor_Venal")]
         [HttpGet]
         public ViewResult Certidao_Valor_Venal() {
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -217,7 +217,7 @@ namespace GTI_Mvc.Controllers {
             int _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.ValorVenal);
             bool _existeCod = false;
             CertidaoViewModel certidaoViewModel = new CertidaoViewModel();
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -317,7 +317,7 @@ namespace GTI_Mvc.Controllers {
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             int _codigo, _ano, _numero;
             string _chave = model.Chave;
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -382,7 +382,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Isencao")]
         [HttpGet]
         public ViewResult Certidao_Isencao() {
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -403,7 +403,7 @@ namespace GTI_Mvc.Controllers {
             bool _existeCod = false;
             string _numero_processo="";
             CertidaoViewModel certidaoViewModel = new CertidaoViewModel();
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -534,7 +534,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Validate_CS")]
         [Route("Certidao/Validate_CS")]
         public ActionResult Validate_CS(CertidaoViewModel model) {
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {

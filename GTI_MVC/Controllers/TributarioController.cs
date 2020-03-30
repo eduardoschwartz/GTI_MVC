@@ -24,7 +24,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Debito_Codigo")]
         [HttpGet]
         public ViewResult Certidao_Debito_Codigo() {
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -46,7 +46,7 @@ namespace GTI_Mvc.Controllers {
             string _tipoCertidao = "",_nao="", _sufixo = "XX",_reportName="", _numProcesso = "9222-3/2012", _dataProcesso = "18/04/2012",_cpf,_cnpj; 
             TipoCadastro _tipoCadastro=new TipoCadastro();
 
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -248,7 +248,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Debito_Doc")]
         [HttpGet]
         public ViewResult Certidao_Debito_Doc() {
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -269,7 +269,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Comprovante_Pagamento")]
         [HttpGet]
         public ViewResult Comprovante_Pagamento() {
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -294,7 +294,7 @@ namespace GTI_Mvc.Controllers {
             } else
                 _documento = Convert.ToInt32(model.Documento.Substring(model.Documento.Length - 8, 8));
 
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -397,7 +397,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Dama")]
         [HttpGet]
         public ViewResult Dama() {
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -412,7 +412,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Dama")]
         [HttpPost]
         public ActionResult Dama(CertidaoViewModel model) {
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -456,7 +456,7 @@ namespace GTI_Mvc.Controllers {
             if (model.Inscricao == null) {
                 return RedirectToAction("Index", "Home");
             }
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -480,7 +480,7 @@ namespace GTI_Mvc.Controllers {
 #pragma warning disable IDE0060 // Remove unused parameter
         public ActionResult Damb(CertidaoViewModel model,int Codigo) {
 #pragma warning restore IDE0060 // Remove unused parameter
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -612,7 +612,7 @@ namespace GTI_Mvc.Controllers {
                 return RedirectToAction("Index", "Home");
             }
 
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {

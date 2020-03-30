@@ -15,8 +15,6 @@ namespace GTI_Mvc.ViewModels {
         public string Mei { get; set; }
         public string Cnae { get; set; }
         public string ErrorMessage { get; set; }
-        [Required]
-        [StringLength(4)]
         public string CaptchaCode { get; set; }
     }
 }

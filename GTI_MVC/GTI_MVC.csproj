@@ -159,7 +159,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Captcha.cs" />
+    <Compile Include="CaptchaNew.cs" />
     <Compile Include="CaptchaResult.cs" />
+    <Compile Include="CaptchaResultNew.cs" />
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImovelController.cs" />

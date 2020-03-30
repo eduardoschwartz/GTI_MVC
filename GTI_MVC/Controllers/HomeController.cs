@@ -22,7 +22,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Certidao")]
         public ViewResult Certidao() {
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -36,7 +36,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Login")]
         [HttpGet]
         public ViewResult Login() {
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
@@ -61,7 +61,7 @@ namespace GTI_Mvc.Controllers {
         [Route("SysMenu")]
         [HttpGet]
         public ViewResult SysMenu() {
-            if (string.IsNullOrWhiteSpace(HttpContext.Session["gti_V3id"].ToString())) {
+            if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return View("Login");
