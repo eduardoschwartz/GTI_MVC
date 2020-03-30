@@ -396,14 +396,13 @@ namespace GTI_Mvc.Controllers {
             Certidao_inscricao reg2 = new Certidao_inscricao() {
                 Cadastro = reg.Codigo,
                 Data_emissao=reg.Data_Emissao,
-                Data_encerramento=reg.Data_Encerramento,
                 Nome = reg.Razao_Social,
                 Nome_fantasia = reg.Nome_Fantasia??"",
                 Cep = reg.Cep??"",
                 Cidade = reg.Cidade??"",
                 Email = reg.Email??"",
                 Inscricao_estadual = reg.Inscricao_Estadual??"",
-                Endereco = reg.Endereco + ", " + reg.Numero,
+                Endereco = reg.Endereco ,
                 Complemento = reg.Complemento??"",
                 Bairro = reg.Bairro ?? "",
                 Ano = DateTime.Now.Year,
@@ -423,7 +422,7 @@ namespace GTI_Mvc.Controllers {
                 Vigilancia_sanitaria = reg.Vigilancia_Sanitaria,
                 Taxa_licenca = reg.Taxa_Licenca
             };
-            if (reg.Data_Encerramento != null)
+            if (reg.Data_Encerramento != null && reg.Data_Encerramento!=DateTime.MinValue)
                 reg2.Data_encerramento = (DateTime)reg.Data_Encerramento;
 
             Exception ex = tributarioRepository.Insert_Certidao_Inscricao(reg2);
@@ -501,15 +500,15 @@ namespace GTI_Mvc.Controllers {
             ReportDocument rd = new ReportDocument();
             if (model.Extrato) {
                 if (_dados.Data_Encerramento != null) {
-                    rd.Load(HostingEnvironment.ApplicationVirtualPath + "\\reports\\CertidaoInscricaoExtratoEncerrada.rpt");
+                    rd.Load(Server.MapPath("~/Reports/CertidaoInscricaoExtratoEncerrada.rpt"));
                 } else {
-                    rd.Load(HostingEnvironment.ApplicationVirtualPath + "\\reports\\CertidaoInscricaoExtratoAtiva.rpt");
+                    rd.Load(Server.MapPath("~/Reports/CertidaoInscricaoExtratoAtiva.rpt"));
                 }
             } else {
                 if (_valida) {
-                    rd.Load(HostingEnvironment.ApplicationVirtualPath + "\\reports\\Comprovante_InscricaoValida.rpt");
+                    rd.Load(Server.MapPath("~/Reports/Comprovante_InscricaoValida.rpt"));
                 } else
-                    rd.Load(HostingEnvironment.ApplicationVirtualPath + "\\reports\\Comprovante_Inscricao.rpt");
+                    rd.Load(Server.MapPath("~/Reports/Comprovante_Inscricao.rpt"));
             }
             try {
                 if (model.Extrato)

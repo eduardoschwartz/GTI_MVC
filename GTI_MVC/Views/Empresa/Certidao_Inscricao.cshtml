@@ -21,154 +21,165 @@
 <br />
 <br />
 
-@using (Html.BeginForm("PrintDetalhes", "Empresa", FormMethod.Post)) {
-  
+@using (Html.BeginForm("Certidao_Inscricao", "Empresa", FormMethod.Post)) {
 
-        <table width="500px">
-            <tr style="height:40px">
-                <td style="width:150px">
-                    CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
-                    &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
-                </td>
-                <td style="width:300px">
-                    @Html.TextBoxFor(m => m.CpfValue, new { @id = "cpfTxt", @class = "textBoxBlue", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CPF" })
-                    @Html.TextBoxFor(m => m.CnpjValue, new { @id = "cnpjTxt", @class = "textBoxBlue", @style = "max-width:200px;display:none", @onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CNPJ" })
-                </td>
-            </tr>
-            <tr style="height:40px">
-                <td>
-                    Códigos disponíveis
-                    @{ List<int> _lista_codigos = new List<int>();
-                        if (ViewBag.Lista_Codigo != null) {
-                            _lista_codigos = ViewBag.Lista_Codigo;
-                        }
+
+    <table width="500px">
+        <tr style="height:40px">
+            <td style="width:150px">
+                CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
+                &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
+            </td>
+            <td style="width:300px">
+                @Html.TextBoxFor(m => m.CpfValue, new { @id = "cpfTxt", @class = "textBoxBlue", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CPF" })
+                @Html.TextBoxFor(m => m.CnpjValue, new { @id = "cnpjTxt", @class = "textBoxBlue", @style = "max-width:200px;display:none", @onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CNPJ" })
+            </td>
+        </tr>
+        <tr style="height:40px">
+            <td>
+                Códigos disponíveis
+                @{ List<int> _lista_codigos = new List<int>();
+                    if (ViewBag.Lista_Codigo != null) {
+                        _lista_codigos = ViewBag.Lista_Codigo;
                     }
-                </td>
-                <td>
-                    @Html.DropDownListFor(m => m.Inscricao, new SelectList(_lista_codigos), new { @class = "textBoxBlue", style = "width:100px;height:25px" })
-                </td>
-            </tr>
-            <tr>
-                <td style="width:150px" valign="middle">
-                    <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                </td>
-                <td style="width:150px" valign="middle">
-                    @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:110px;" })
-                </td>
-            </tr>
-        </table>
+                }
+            </td>
+            <td>
+                @Html.DropDownListFor(m => m.Inscricao, new SelectList(_lista_codigos), new { @class = "textBoxBlue", style = "width:100px;height:25px" })  <input type="submit" value="Verificar" title="Retorna as incrições municipais atreladas ao CPF/CNPJ informado." style="margin-left:1px" class="green_button" formaction="Retorna_Codigos" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width:150px" valign="middle">
+                <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+            </td>
+            <td style="width:150px" valign="middle">
+                @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:110px;" })
+            </td>
+        </tr>
+    </table>
 
+    <br />
+    <div class="form-group" style="margin-left:1px">
+        <input type="checkbox" asp-for="@Model.Extrato" title="Marque esta opção para exibir o resumo dos pagamentos na certidão" />
+        <label>Exibir o resumo dos pagamentos na certidão</label>
+    </div>
+
+    <button type="submit" title="Imprimir a certidão" class="green_button" formaction="Certidao_Inscricao" formmethod="post"> Consultar</button>
+
+
+    <br />
+    <br />
+    <br />
+   @*<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline" ;>Autenticar a Certidão</label>*@
+    <br />
+    <br />
+    @*<table width="370px">
+        <tr>
+            <td style="width:70px"><label style="font-weight:normal">Chave</label></td>
+            <td style="width:225px"><input asp-for="Chave" id="chave" class="textBoxBlue" style="max-width:220px;max-height:25px;" onchange="ClearError()"></td>
+            <td style="width:70px"><button class="green_button" type="submit" title="Validar a certidão." formaction="Validate_CI" formmethod="post">Validar</button></td>
+        </tr>
+    </table>*@
+    <div style="border:1px solid black;width:400px;margin-left:1px">
         <br />
-        <div class="form-group" style="margin-left:1px">
-            <input type="checkbox" asp-for="@Model.Extrato" title="Marque esta opção para exibir o resumo dos pagamentos na certidão" />
-            <label>Exibir o resumo dos pagamentos na certidão</label>
+        <label style="color:brown;font-size:16px;font-style:italic;margin-left:10px;font-weight:normal;text-decoration:underline">Autenticar a Certidão</label>
+        <br />
+        <div class="form-group row align-items-lg-baseline">
+            <div class="input-group">
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chave</label>
+                &nbsp;<input asp-for="Chave" id="chave" class="textBoxBlue" style="max-width:160px;max-height:25px;" onchange="ClearError()">
+                &nbsp;<button class="green_button" type="submit" title="Validar a certidão." formaction="Validate_CI" formmethod="post">Validar</button>
+            </div>
         </div>
+    </div>
+}
 
-        <input type="submit" value="Verificar" title="Retorna as incrições municipais atreladas ao CPF/CNPJ informado." style="margin-left:1px" class="green_button" formaction="Retorna_Codigos" />
+
+<br />
+<div class="form-group row">
+    <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+</div>
+<br />
+
+@Html.ActionLink("Consultar outro tipo de certidão", "Certidao", "Home")
+<br />
+@Html.ActionLink("Retornar ao menu principal", "Index", "Home")
 
 
-        <br />
-        <br />
-        <br />
-        <label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline" ;>Autenticar a Certidão</label>
-        <br />
-        <br />
-        <table width="370px">
-            <tr>
-                <td style="width:70px"><label style="font-weight:normal">Chave</label></td>
-                <td style="width:225px"><input asp-for="Chave" id="chave" class="textBoxBlue" style="max-width:220px;max-height:25px;" onchange="ClearError()"></td>
-                <td style="width:70px"><button class="green_button" type="submit" title="Validar a certidão." formaction="Validate_CI" formmethod="post">Validar</button></td>
-            </tr>
-        </table>
-         
+@section scripts{
+
+    <script type="text/javascript">
+        function radioCheck() {
+            document.getElementById('cnpjTxt').value = "";
+            document.getElementById('cpfTxt').value = "";
+            if (document.getElementById('cpfCheck').checked) {
+                document.getElementById('cpfTxt').style.display = 'block';
+            }
+            else {
+                document.getElementById('cpfTxt').style.display = 'none';
+            }
+            if (document.getElementById('cnpjCheck').checked) {
+                document.getElementById('cnpjTxt').style.display = 'block';
+            }
+            else {
+                document.getElementById('cnpjTxt').style.display = 'none';
+            }
         }
-      
 
-        <br />
-        <div class="form-group row">
-            &nbsp;&nbsp;<label class="text-danger" id="errorLabel">@ViewBag.Result</label>
-        </div>
-        <br />
+        function ValidateForm() {
+            var _cpf = document.getElementById('cpfTxt').value;
+            var _cnpj = document.getElementById('cnpjTxt').value;
+            var _captcha = document.getElementById('captchaTxt').value;
+            var _chave = document.getElementById('chave').value;
+            var _inscricao = document.getElementById('Inscricao').value;
 
-        @Html.ActionLink("Consultar outro tipo de certidão", "Certidao", "Home")
-        <br />
-        @Html.ActionLink("Retornar ao menu principal", "Index", "Home")
+            var _buscar_codigos = false;
+            var _consultar = false;
+            var _autenticar = false;
 
+            if ((_cpf != "" || _cnpj != "") && _inscricao == "")
+                _buscar_codigos = true;
 
-        @section scripts{
+            if ((_cpf != "" || _cnpj != "") && _inscricao != "")
+                _consultar = true;
 
-            <script type="text/javascript">
-                function radioCheck() {
-                    document.getElementById('cnpjTxt').value = "";
-                    document.getElementById('cpfTxt').value = "";
-                    if (document.getElementById('cpfCheck').checked) {
-                        document.getElementById('cpfTxt').style.display = 'block';
-                    }
-                    else {
-                        document.getElementById('cpfTxt').style.display = 'none';
-                    }
-                    if (document.getElementById('cnpjCheck').checked) {
-                        document.getElementById('cnpjTxt').style.display = 'block';
-                    }
-                    else {
-                        document.getElementById('cnpjTxt').style.display = 'none';
-                    }
+            if (_chave != "")
+                _autenticar = true;
+
+            if (_buscar_codigos == false && _consultar == false && _autenticar == false) {
+                document.getElementById('errorLabel').innerHTML = "Informe o nº de CPF ou CNPJ.";
+                return false;
+            }
+
+            if (_consultar == true && _captcha == "") {
+                document.getElementById('errorLabel').innerHTML = "Digite o código de validação.";
+                return false;
+            }
+
+            if (_autenticar == true && _chave == "") {
+                document.getElementById('errorLabel').innerHTML = "Digite a chave de autenticação.";
+                return false;
+            }
+
+            if (_chave.length > 8) {
+                var _sufixo = _chave.substring(_chave.length - 3, _chave.length);
+                if (_sufixo != "-XA" && _sufixo != "-XE" && _sufixo != "-IE") {
+                    document.getElementById('errorLabel').innerHTML = "Chave de autenticação inválida!";
+                    return false;
                 }
-
-                function ValidateForm() {
-                    var _cpf = document.getElementById('cpfTxt').value;
-                    var _cnpj = document.getElementById('cnpjTxt').value;
-                    var _captcha = document.getElementById('captchaTxt').value;
-                    var _chave = document.getElementById('chave').value;
-                    var _inscricao = document.getElementById('Inscricao').value;
-
-                    var _buscar_codigos = false;
-                    var _consultar = false;
-                    var _autenticar = false;
-
-                    if ((_cpf != "" || _cnpj != "") && _inscricao == "")
-                        _buscar_codigos = true;
-
-                    if ((_cpf != "" || _cnpj != "") && _inscricao != "")
-                        _consultar = true;
-
-                    if (_chave != "")
-                        _autenticar = true;
-
-                    if (_buscar_codigos == false && _consultar == false && _autenticar == false) {
-                        document.getElementById('errorLabel').innerHTML = "Informe o nº de CPF ou CNPJ.";
-                        return false;
-                    }
-
-                    if (_consultar == true && _captcha == "") {
-                        document.getElementById('errorLabel').innerHTML = "Digite o código de validação.";
-                        return false;
-                    }
-
-                    if (_autenticar == true && _chave == "") {
-                        document.getElementById('errorLabel').innerHTML = "Digite a chave de autenticação.";
-                        return false;
-                    }
-
-                    if (_chave.length > 8) {
-                        var _sufixo = _chave.substring(_chave.length - 3, _chave.length);
-                        if (_sufixo != "-XA" && _sufixo != "-XE" && _sufixo != "-IE") {
-                            document.getElementById('errorLabel').innerHTML = "Chave de autenticação inválida!";
-                            return false;
-                        }
-                    } else {
-                        if (_chave.length != "") {
-                            document.getElementById('errorLabel').innerHTML = "Chave de autenticação inválida!";
-                            return false;
-                        }
-                    }
-                    return true;
+            } else {
+                if (_chave.length != "") {
+                    document.getElementById('errorLabel').innerHTML = "Chave de autenticação inválida!";
+                    return false;
                 }
-
-                function ClearError() {
-                    document.getElementById('Inscricao').options.length = 0;
-                    document.getElementById('errorLabel').innerHTML = "";
-                }
-
-            </script>
+            }
+            return true;
         }
+
+        function ClearError() {
+            document.getElementById('Inscricao').options.length = 0;
+            document.getElementById('errorLabel').innerHTML = "";
+        }
+
+    </script>
+}
