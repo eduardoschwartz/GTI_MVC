@@ -344,7 +344,7 @@ namespace GTI_Mvc.Controllers {
             if (model.Inscricao != null) {
                 _codigo = Convert.ToInt32(model.Inscricao);
             } else {
-                ViewBag.Result = "Erro ao recuperar as informações.";
+                ViewBag.Result = "Nenhum código selecionado ou não disponível.";
                 return View(model);
             }
 

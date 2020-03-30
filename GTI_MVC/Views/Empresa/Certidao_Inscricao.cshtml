@@ -21,7 +21,7 @@
 <br />
 <br />
 
-@using (Html.BeginForm("Certidao_Inscricao", "Empresa", FormMethod.Post)) {
+@using (Html.BeginForm("Certidao_Inscricao", "Empresa", FormMethod.Post, new { @id = "MainForm" })) {
 
 
     <table width="500px">
@@ -102,6 +102,13 @@
 @section scripts{
 
     <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+        });
+
         function radioCheck() {
             document.getElementById('cnpjTxt').value = "";
             document.getElementById('cpfTxt').value = "";

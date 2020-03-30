@@ -119,7 +119,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             ReportDocument rd = new ReportDocument();
-            rd.Load(HostingEnvironment.ApplicationVirtualPath + "\\reports\\Certidao_Endereco.rpt");
+            rd.Load(Server.MapPath("~/Reports/Certidao_Endereco.rpt"));
 
             try {
                 rd.SetDataSource(certidao);
@@ -179,7 +179,7 @@ namespace GTI_Mvc.Controllers {
                 certidao.Add(reg);
 
                 ReportDocument rd = new ReportDocument();
-                rd.Load(HostingEnvironment.ApplicationVirtualPath + "\\reports\\Certidao_Endereco_Valida.rpt");
+                rd.Load(Server.MapPath("~/Reports/Certidao_Endereco_Valida.rpt"));
 
                 try {
                     rd.SetDataSource(certidao);
@@ -299,7 +299,7 @@ namespace GTI_Mvc.Controllers {
             };
 
             ReportDocument rd = new ReportDocument();
-            rd.Load(HostingEnvironment.ApplicationVirtualPath + "\\reports\\Certidao_Valor_Venal.rpt");
+            rd.Load(Server.MapPath("~/Reports/Certidao_Valor_Venal.rpt"));
 
             try {
                 rd.SetDataSource(certidao);
@@ -363,7 +363,7 @@ namespace GTI_Mvc.Controllers {
                 certidao.Add(reg);
 
                 ReportDocument rd = new ReportDocument();
-                rd.Load(HostingEnvironment.ApplicationVirtualPath + "\\reports\\Certidao_Valor_venal_Valida.rpt");
+                rd.Load(Server.MapPath("~/Reports/Certidao_Valor_venal_Valida.rpt"));
 
                 try {
                     rd.SetDataSource(certidao);
@@ -519,7 +519,7 @@ namespace GTI_Mvc.Controllers {
                 }
 
             ReportDocument rd = new ReportDocument();
-                rd.Load(HostingEnvironment.ApplicationVirtualPath + "\\reports\\" + reportName);
+            rd.Load(Server.MapPath("~/Reports/" + reportName));
 
             try {
                 rd.SetDataSource(certidao);
@@ -584,7 +584,7 @@ namespace GTI_Mvc.Controllers {
                 certidao.Add(reg);
 
                 ReportDocument rd = new ReportDocument();
-                rd.Load(HostingEnvironment.ApplicationVirtualPath + "\\reports\\Certidao_Isencao_Valida.rpt");
+                rd.Load(Server.MapPath("~/Reports/Certidao_Isencao_Valida.rpt"));
 
                 try {
                     rd.SetDataSource(certidao);
