@@ -39,7 +39,8 @@ namespace GTI_Mvc.Controllers {
        
         [Route("Details")]
         [HttpPost]
-        public ViewResult Details(EmpresaDetailsViewModel model) {
+        public ActionResult Details(EmpresaDetailsViewModel model) {
+        
             Empresa_bll empresaRepository = new Empresa_bll("GTIconnection"); 
             int _codigo = 0;
             bool _existeCod = false;
@@ -123,7 +124,7 @@ namespace GTI_Mvc.Controllers {
                 return View("DetailsTable", empresaDetailsViewModel);
             } else {
                 empresaDetailsViewModel.ErrorMessage = "Empresa não cadastrada.";
-                return View(empresaDetailsViewModel);
+                return View( empresaDetailsViewModel);
             }
 
         }
@@ -683,9 +684,7 @@ namespace GTI_Mvc.Controllers {
             }
         }
 
-        [Route("Empresa_Details_Report")]
-        [HttpPost]
-        public ActionResult Empresa_Details_Report(EmpresaDetailsViewModel model) {
+        public ActionResult PrintDetalhes(EmpresaDetailsViewModel model) {
             if (model.EmpresaStruct.Codigo > 0) {
                 List<Empresa_Detalhe> _lista_Dados = new List<Empresa_Detalhe>();
                 Empresa_Detalhe _dados = new Empresa_Detalhe() {
@@ -714,7 +713,7 @@ namespace GTI_Mvc.Controllers {
                 };
                 _lista_Dados.Add(_dados);
                 ReportDocument rd = new ReportDocument();
-                rd.Load(HostingEnvironment.ApplicationVirtualPath + "\\reports\\Empresa_Detalhe.rpt");
+                rd.Load(Server.MapPath("~/Reports/Empresa_Detalhe.rpt")) ;
                 try {
                     rd.SetDataSource(_lista_Dados);
                     Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
@@ -728,9 +727,7 @@ namespace GTI_Mvc.Controllers {
                 return View();
             }
 
-
         }
-
     }
 }
 
