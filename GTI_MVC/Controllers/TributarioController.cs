@@ -633,7 +633,7 @@ namespace GTI_Mvc.Controllers {
             if (IsRefis) {
                 foreach (var item in ListaParcela) {
                     if (Convert.ToDateTime(item.Datavencimento) <= Convert.ToDateTime("30/06/2019")) {
-                        Int16 CodLanc = item.Codlancamento;
+                        short CodLanc = item.Codlancamento;
                         if (CodLanc != 48 || CodLanc != 69 || CodLanc != 78) {
 
                             if (_dataVencto <= Convert.ToDateTime("18/10/2019")) {
@@ -676,8 +676,8 @@ namespace GTI_Mvc.Controllers {
                         Soma_Juros = item.Valorjuros,
                         Soma_Multa = item.Valormulta,
                         Soma_Correcao = item.Valorcorrecao,
-                        Soma_Total = item.Valortotal,
-//                        Soma_Honorario = item.Valortotal * (decimal)0.1,
+                        Soma_Total = Math.Round(item.Valortributo, 2,MidpointRounding.AwayFromZero)+ Math.Round(item.Valorjuros, 2, MidpointRounding.AwayFromZero)+ Math.Round(item.Valormulta, 2, MidpointRounding.AwayFromZero)+ Math.Round(item.Valorcorrecao, 2, MidpointRounding.AwayFromZero),
+                        Soma_Honorario = item.Valortotal * (decimal)0.1,
                         Data_Ajuizamento = item.Dataajuiza,
                         Data_Inscricao = item.Datainscricao
                     };
@@ -696,7 +696,7 @@ namespace GTI_Mvc.Controllers {
                 nSomaMulta += item.Soma_Multa;
                 nSomaCorrecao += item.Soma_Correcao;
                 nSomaTotal += item.Soma_Total;
-  //              nSomaHonorario += item.Soma_Honorario;
+                nSomaHonorario += item.Soma_Honorario;
             }
 
             int _linha = 1;
@@ -716,7 +716,7 @@ namespace GTI_Mvc.Controllers {
                     Soma_Multa = item.Soma_Multa.ToString("#0.00"),
                     Soma_Correcao = item.Soma_Correcao.ToString("#0.00"),
                     Soma_Total = item.Soma_Total.ToString("#0.00"),
-    //                Soma_Honorario = item.Data_Ajuizamento == null ? "0,00" : item.Soma_Honorario.ToString("#0.00"),
+                    Soma_Honorario = item.Data_Ajuizamento == null ? "0,00" : item.Soma_Honorario.ToString("#0.00"),
                     AJ = item.Data_Ajuizamento == null ? "N" : "S",
                     DA = item.Data_Inscricao == null ? "N" : "S"
                 };
@@ -749,7 +749,7 @@ namespace GTI_Mvc.Controllers {
                     Soma_Multa=_debitos.Soma_Multa,
                     Soma_Correcao=_debitos.Soma_Correcao,
                     Soma_Total=_debitos.Soma_Total,
-//                    Soma_Honorario=_debitos.Soma_Honorario
+                    Soma_Honorario=_debitos.Soma_Honorario
                 };
                 _linha++;
                 model.Debito.Add(editorViewModel);
@@ -875,6 +875,52 @@ namespace GTI_Mvc.Controllers {
                 };
                 Exception ex = tributarioRepository.Insert_Parcela_Documento(parcReg);
             }
+
+
+            if (model.Soma_Honorario > 0) {
+                short _seqHon = tributarioRepository.Retorna_Ultima_Seq_Honorario(model.Inscricao, DateTime.Now.Year);
+                _seqHon++;
+                Debitoparcela regParcela = new Debitoparcela {
+                    Codreduzido = model.Inscricao,
+                    Anoexercicio = (short)DateTime.Now.Year,
+                    Codlancamento = 41,
+                    Seqlancamento = _seqHon,
+                    Numparcela = 1,
+                    Codcomplemento = 0,
+                    Statuslanc = 3,
+                    Datavencimento = model.Data_Vencimento,
+                    Datadebase = DateTime.Now,
+                    Userid = 236
+                };
+                Exception ex = tributarioRepository.Insert_Debito_Parcela(regParcela);
+                if (ex == null) {
+                    Debitotributo regTributo = new Debitotributo {
+                        Codreduzido = model.Inscricao,
+                        Anoexercicio = (short)DateTime.Now.Year,
+                        Codlancamento = 41,
+                        Seqlancamento = _seqHon,
+                        Numparcela = 1,
+                        Codcomplemento = 0,
+                        Codtributo = 90,
+                        Valortributo = model.Soma_Honorario
+                    };
+                    Exception ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
+                    Parceladocumento parcReg = new Parceladocumento() {
+                        Codreduzido = model.Inscricao,
+                        Anoexercicio = (short)DateTime.Now.Year,
+                        Codlancamento = 41,
+                        Seqlancamento = _seqHon,
+                        Numparcela = 1,
+                        Codcomplemento = 0,
+                        Plano = Convert.ToInt16(value.Plano.ToString()),
+                        Numdocumento = _documento
+                    };
+                    ex2 = tributarioRepository.Insert_Parcela_Documento(parcReg);
+                }
+            }
+
+
+
             model.Data_Vencimento_String = Convert.ToDateTime(value.Data_Vencimento.ToString()).ToString("ddMMyyyy");
             model.RefTran = "287353200" + _documento.ToString();
             if (model==null)

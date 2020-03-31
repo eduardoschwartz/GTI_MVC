@@ -283,7 +283,7 @@
 
             var table = $(this).closest('table'),
                 checked = table.find('input[type=checkbox]:checked'),
-            valP = checked.closest('tr').find('td:nth-child(12)'),
+                valP = checked.closest('tr').find('td:nth-child(12)'),
                 sumP = valP.map(function () { return parseFloat(this.textContent.replace(',', '.').trim()) || 0; }).get().reduce(function (a, b) {
                     return a + b;
                 });

@@ -62,11 +62,12 @@ namespace GTI_Models.Models {
         public int Codigo_Tributo { get; set; }
         public string Descricao_Tributo { get; set; }
         public string Abreviatura_Tributo { get; set; }
-        public Decimal Soma_Principal { get; set; }
-        public Decimal Soma_Multa { get; set; }
-        public Decimal Soma_Juros { get; set; }
-        public Decimal Soma_Correcao { get; set; }
-        public Decimal Soma_Total { get; set; }
+        public decimal Soma_Principal { get; set; }
+        public decimal Soma_Multa { get; set; }
+        public decimal Soma_Juros { get; set; }
+        public decimal Soma_Correcao { get; set; }
+        public decimal Soma_Total { get; set; }
+        public decimal Soma_Honorario { get; set; }
         public DateTime? Data_Inscricao { get; set; }
         public DateTime? Data_Ajuizamento { get; set; }
         public int? Numero_Livro { get; set; }
@@ -75,8 +76,8 @@ namespace GTI_Models.Models {
         public bool Notificado { get; set; }
         public DateTime? Data_Pagamento { get; set; }
         public double Numero_Documento { get; set; }
-        public Decimal Valor_Pago { get; set; }
-        public Decimal Valor_Pago_Real { get; set; }
+        public decimal Valor_Pago { get; set; }
+        public decimal Valor_Pago_Real { get; set; }
         public int? Numero_Execucao { get; set; }
         public int? Ano_execucao { get; set; }
         public string Processo_CNJ { get; set; }
