@@ -1,0 +1,159 @@
+﻿@model GTI_Mvc.ViewModels.DebitoListViewModel
+@using System.Text.RegularExpressions
+@{
+    ViewBag.Title = "Gerar Boleto";
+}
+
+<span style="color:brown;font-size:14px">
+    Emissão de Documento de Arrecadação Municipal (D.A.M.)<br />
+    Confirme os dados antes de imprimir<br />
+</span>
+<br />
+
+@using (@Html.BeginForm(null, null, FormMethod.Post, new { @action = "https://mpag.bb.com.br/site/mpag/" })) {
+    @Html.Hidden("msgLoja", " RECEBER SOMENTE ATE O VENCIMENTO, APOS ATUALIZAR O BOLETO NO SITE www.jaboticabal.sp.gov.br")
+    @Html.Hidden("cep", Convert.ToInt64(Regex.Replace(@Model.Cep, " [^.0-9]", "")))
+    @Html.Hidden("uf", @Model.UF)
+    @Html.Hidden("cidade", @Model.Cidade)
+    @Html.Hidden("endereco", @Model.Endereco)
+    @Html.Hidden("nome", @Model.Nome)
+    @Html.Hidden("cidade", @Model.Cidade)
+    @Html.Hidden("urlInforma", "sistemas.jaboticabal.sp.gov.br/gti")
+    @Html.Hidden("urlRetorno", "sistemas.jaboticabal.sp.gov.br/gti")
+    @Html.Hidden("tpDuplicata", "DS")
+    @Html.Hidden("dataLimiteDesconto", 0)
+    @Html.Hidden("valorDesconto", 0)
+    @Html.Hidden("indicadorPessoa", @Model.CpfCnpjLabel.Length == 14 ? 2 : 1)
+    @Html.Hidden("cpfCnpj", Regex.Replace(@Model.CpfCnpjLabel, " [^0-9]", ""))
+    @Html.Hidden("tpPagamento", 2)
+    @Html.Hidden("dtVenc",@Model.Data_Vencimento_String)
+    @Html.Hidden("qtdPontos", 0)
+    @Html.Hidden("valor", Convert.ToInt64(Model.Valor_Boleto))
+    @Html.Hidden("refTran", String.IsNullOrEmpty(@Model.RefTran)?0: Convert.ToInt64(@Model.RefTran))
+    @Html.Hidden("idConv", 317203)
+
+    <table id="tblHeader" style="font-size:13px">
+        <tr>
+            <td>Data de vencimento:</td>
+            <td style="font-weight:bold">@Model.Data_Vencimento.ToString("dd/MM/yyyy")</td>
+        </tr>
+        <tr>
+            <td>Inscrição Municipal:</td>
+            <td style="font-weight:bold">@Model.Inscricao</td>
+        </tr>
+        <tr>
+            <td>Nome/Razão Social:</td>
+            <td style="font-weight:bold">@Model.Nome</td>
+        </tr>
+        <tr>
+            <td>Nº do CPF/CNPJ:</td>
+            <td style="font-weight:bold">@Model.CpfCnpjLabel</td>
+        </tr>
+        <tr>
+            <td>Endereco:</td>
+            <td style="font-weight:bold">@Model.Endereco</td>
+        </tr>
+        <tr>
+            <td>Cidade/UF/Cep:</td>
+            <td style="font-weight:bold">@Model.Cidade/@Model.UF Cep: @Model.Cep</td>
+        </tr>
+    </table>
+    <br />
+
+    <div id="DebitoTable" style="height: auto;max-height:342px; overflow: auto;width:750px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;border-left-color:cadetblue;border-left-style:solid;border-left-width:1px;border-right-color:cadetblue;border-right-style:solid;border-right-width:1px">
+        <table id="tblMain" style="font-size:12px;">
+            <tr>
+                <th style="display:none">
+                    Id
+                </th>
+                <th style="width:50px;text-align:center">
+                    Ano
+                </th>
+                <th style="display:none">
+                    Lanc
+                </th>
+                <th style="width:220px">
+                    Lancamento
+                </th>
+                <th style="display:none">
+                    Seq
+                </th>
+                <th style="display:none">
+                    Parc
+                </th>
+                <th style="display:none">
+                    Compl
+                </th>
+                <th style="width:60px;text-align:center">
+                    Dt.Vencto
+                </th>
+                <th style="width:25px;text-align:center">
+                    Da
+                </th>
+                <th style="width:25px;text-align:center">
+                    Aj
+                </th>
+                <th style="width:60px;text-align:right">
+                    Principal
+                </th>
+                <th style="width:60px;text-align:right">
+                    Juros
+                </th>
+                <th style="width:60px;text-align:right">
+                    Multa
+                </th>
+                <th style="width:60px;text-align:right">
+                    Correção
+                </th>
+                <th style="width:70px;text-align:right">
+                    Total
+                </th>
+                <th style="display:none">
+                    Honorário
+                </th>
+            </tr>
+            <tbody class="item-model-number">
+                @Html.EditorFor(model => model.Debito)
+            </tbody>
+        </table>
+        <hr />
+    </div>
+
+    <br />
+    <table id="ResumoTable" style="font-size:14px;border:solid;border-width:thin;border-color:brown">
+        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+            <td>Total Principal:</td>
+            <td style="width:100px;color:green" align="right">@Model.Soma_Principal.ToString("#0.00")</td>
+        </tr>
+        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+            <td>Total Juros:</td>
+            <td style="width:100px;color:green" align="right">@Model.Soma_Juros.ToString("#0.00")</td>
+        </tr>
+        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+            <td>Total Multa:</td>
+            <td style="width:100px;color:green" align="right">@Model.Soma_Multa.ToString("#0.00")</td>
+        </tr>
+        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+            <td>Total Correção:</td>
+            <td style="width:100px;color:green" align="right">@Model.Soma_Correcao.ToString("#0.00")</td>
+        </tr>
+        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+            <td>Total Honorário:</td>
+            <td style="width:100px;color:green" align="right">@Model.Soma_Honorario.ToString("#0.00")</td>
+        </tr>
+        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+            <td>Valor do Boleto:</td>
+            <td style="width:100px;color:red" align="right">@Model.Soma_Total.ToString("#0.00")</td>
+        </tr>
+
+    </table>
+
+    <br />
+    <div class="form-group row align-items-lg-baseline" style="margin-left:1px">
+        <div>
+            <div class="input-group">
+                <button type="submit" id="enviar" title="Imprimir o boleto" class="green_button">Gerar Boleto</button>
+            </div>
+        </div>
+    </div>
+}

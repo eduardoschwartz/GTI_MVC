@@ -19,7 +19,6 @@ namespace GTI_Mvc.Controllers {
     [Route("Tributario")]
     public class TributarioController : Controller
     {
-       
 
         [Route("Certidao/Certidao_Debito_Codigo")]
         [HttpGet]
@@ -234,7 +233,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             ReportDocument rd = new ReportDocument();
-            rd.Load(HostingEnvironment.ApplicationVirtualPath + "\\reports\\" + _reportName);
+            rd.Load(Server.MapPath("~/Reports/" + _reportName));
 
             try {
                 rd.SetDataSource(certidao);
@@ -324,7 +323,8 @@ namespace GTI_Mvc.Controllers {
                     ImovelStruct _dadosImovel = imovelRepository.Dados_Imovel(_codigo);
                     _nome = _dadosImovel.Proprietario_Nome;
                     List<ProprietarioStruct> listaProp = imovelRepository.Lista_Proprietario(_codigo, true);
-//                    _cpfcnpj = listaProp[0].CPF ?? listaProp[0].CNPJ;
+                    _nome = listaProp[0].Nome;
+                    _cpfcnpj = listaProp[0].CPF ?? listaProp[0].CPF;
                 }
             } else {
                 if (_tipoCadastro == TipoCadastro.Empresa) {
@@ -371,7 +371,7 @@ namespace GTI_Mvc.Controllers {
                 Ano = DateTime.Now.Year,
                 Numero = _numero_certidao,
                 Banco_Nome = regPag.Banco_Nome + " Agência: " + regPag.Codigo_Agencia ?? "",
-//                Cpf_Cnpj = _cpfcnpj,
+                Cpf_Cnpj = _cpfcnpj,
                 Data_Geracao = DateTime.Now,
                 Data_Pagamento = regPag.Data_Pagamento,
                 Numero_Documento = _documento,
@@ -383,7 +383,7 @@ namespace GTI_Mvc.Controllers {
             certidao.Add(reg);
 
             ReportDocument rd = new ReportDocument();
-            rd.Load(HostingEnvironment.ApplicationVirtualPath + "\\reports\\Comprovante_Pagamento.rpt");
+            rd.Load(Server.MapPath("~/Reports/Comprovante_Pagamento.rpt" ));
             try {
                 rd.SetDataSource(certidao);
                 Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);

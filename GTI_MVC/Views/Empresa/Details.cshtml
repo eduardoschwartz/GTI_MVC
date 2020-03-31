@@ -68,7 +68,7 @@
 @if (Model != null) {
     if (Model.EmpresaStruct == null) {
         <div class="form-group row">
-            <label class="text-danger" id="errorLabel">@Model.ErrorMessage</label>
+            <label style="font-weight:normal;color:red" id="errorLabel">@Model.ErrorMessage</label>
         </div>
     } 
 }
@@ -77,6 +77,13 @@
 @section scripts{
 
     <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+        });
+
         function radioCheck() {
             document.getElementById('cnpjTxt').value = "";
             document.getElementById('cpfTxt').value = "";
@@ -95,6 +102,7 @@
         }
 
         function ValidateForm() {
+            ClearError();
             var _cod = document.getElementById('codigo').value;
             var _cpf = document.getElementById('cpfTxt').value;
             var _cnpj = document.getElementById('cnpjTxt').value;

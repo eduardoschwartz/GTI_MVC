@@ -2,9 +2,8 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Certidão de situação cadastral";
+    ViewBag.Title = "Certidão de Débito";
 }
-
 
 <style>
     .textBoxBlue {
@@ -18,17 +17,14 @@
     }
 </style>
 
-<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline" ;>Certidão de Situação Cadastral</label>
+<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline" ;>Certidão de Débito</label>
 <br />
 <br />
 
-@using (Html.BeginForm("Certidao_Pagamento", "Empresa", FormMethod.Post, new { @id = "MainForm" })) {
+@using (Html.BeginForm("Certidao_Debito_Doc", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
+
 
     <table width="500px">
-        <tr>
-            <td style="width:150px">@Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })</td>
-            <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)", @onchange = "ClearError()" })</td>
-        </tr>
         <tr style="height:40px">
             <td style="width:150px">
                 CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
@@ -39,7 +35,7 @@
                 @Html.TextBoxFor(m => m.CnpjValue, new { @id = "cnpjTxt", @class = "textBoxBlue", @style = "max-width:200px;display:none", @onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CNPJ" })
             </td>
         </tr>
-        <tr>
+         <tr>
             <td style="width:150px" valign="middle">
                 <img id="img-captcha" src="~/Empresa/GetCaptcha" />
             </td>
@@ -50,24 +46,47 @@
     </table>
 
     <br />
-    <div class="col-sm-10">
-        &nbsp;&nbsp;<button type="submit" class="green_button"> Consultar</button>
-    </div>
-    <br />
-    <br />
-    <div class="form-group row">
-        <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
-    </div>
-    <br />
 
+    <button type="submit" title="Imprimir a certidão" class="green_button"  formmethod="post"> Consultar</button>
+
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <div style="border:1px solid black;width:400px;margin-left:1px">
+        <br />
+        <label style="color:brown;font-size:16px;font-style:italic;margin-left:10px;font-weight:normal;text-decoration:underline">Autenticar a Certidão</label>
+        <br />
+        <div class="form-group row align-items-lg-baseline">
+            <div class="input-group">
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chave</label>
+                &nbsp;&nbsp;@Html.TextBoxFor(m => m.Chave, new { @id = "chave", @class = "textBoxBlue", @style = "max-width:110px;" })
+
+                &nbsp;<button class="green_button" type="submit" title="Validar a certidão." formaction="Validate_CI" formmethod="post">Validar</button>
+            </div>
+        </div>
+    </div>
 }
 
 
+<br />
+<div class="form-group row">
+    <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+</div>
+<br />
+
+
+
+@Html.ActionLink("Consultar outro tipo de certidão", "Certidao", "Home")
+<br />
 @Html.ActionLink("Retornar ao menu principal", "Index", "Home")
+
+
 @section scripts{
 
     <script type="text/javascript">
-
         $(document).ready(function () {
             $("#MainForm").submit(function () {
                 return ValidateForm();
@@ -93,34 +112,55 @@
 
         function ValidateForm() {
             ClearError();
-            var _cod = document.getElementById('codigo').value;
             var _cpf = document.getElementById('cpfTxt').value;
             var _cnpj = document.getElementById('cnpjTxt').value;
             var _captcha = document.getElementById('captchaTxt').value;
+            var _chave = document.getElementById('chave').value;
+      
+            var _consultar = false;
+            var _autenticar = false;
 
-            if (_cod == "" || parseInt(_cod) == 0) {
-                document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal";
+            if ((_cpf != "" || _cnpj != "") )
+                _consultar = true;
+
+            if (_chave != "")
+                _autenticar = true;
+
+            if ( _consultar == false && _autenticar == false) {
+                document.getElementById('errorLabel').innerHTML = "Informe o nº de CPF ou CNPJ.";
                 return false;
             }
-            else {
-                if (parseInt(_cod) > 0 && _cpf == "" && _cnpj == "") {
-                    document.getElementById('errorLabel').innerHTML = "Digite o Cpf ou o CNPJ!";
+
+            if (_consultar == true && _captcha == "") {
+                document.getElementById('errorLabel').innerHTML = "Digite o código de validação.";
+                return false;
+            }
+
+            if (_autenticar == true && _chave == "") {
+                document.getElementById('errorLabel').innerHTML = "Digite a chave de autenticação.";
+                return false;
+            }
+
+            if (_chave.length > 8) {
+                var _sufixo = _chave.substring(_chave.length - 3, _chave.length);
+                if (_sufixo != "-XA" && _sufixo != "-XE" && _sufixo != "-IE") {
+                    document.getElementById('errorLabel').innerHTML = "Chave de autenticação inválida!";
                     return false;
-                } else {
-                    if (_captcha == "") {
-                        document.getElementById('errorLabel').innerHTML = "Digite o código de validação!";
-                        return false;
-                    } else {
-                        return true;
-                    }
+                }
+            } else {
+                if (_chave.length != "") {
+                    document.getElementById('errorLabel').innerHTML = "Chave de autenticação inválida!";
+                    return false;
                 }
             }
+            return true;
         }
 
         function ClearError() {
+            document.getElementById('Inscricao').options.length = 0;
             document.getElementById('errorLabel').innerHTML = "";
         }
-              
 
+       
     </script>
 }

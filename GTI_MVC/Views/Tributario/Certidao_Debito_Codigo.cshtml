@@ -2,9 +2,8 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Certidão de Endereço";
+    ViewBag.Title = "Certidão de Débito";
 }
-
 
 <style>
     .textBoxBlue {
@@ -18,11 +17,11 @@
     }
 </style>
 
-<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline" ;>Certidão de Endereço</label>
+<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline" ;>Certidão de Débito</label>
 <br />
 <br />
 
-@using (Html.BeginForm("Certidao_Endereco", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+@using (Html.BeginForm("Certidao_Debito_Codigo", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
 
     <table width="500px">
         <tr style="height:40px">
@@ -56,7 +55,7 @@
                 <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chave</label>
                 &nbsp;&nbsp;@Html.TextBoxFor(m => m.Chave, new { @id = "chave", @class = "textBoxBlue", @style = "max-width:110px;" })
 
-                &nbsp;<button class="green_button" type="submit" title="Validar a certidão." formaction="Validate_CE" formmethod="post">Validar</button>
+                &nbsp;<button class="green_button" type="submit" title="Validar a certidão."  formaction="Validate_DB" formmethod="post">Validar</button>
             </div>
         </div>
     </div>
@@ -70,7 +69,6 @@
 }
 
 
-
 @Html.ActionLink("Consultar outro tipo de certidão", "Certidao", "Home")
 <br />
 @Html.ActionLink("Retornar ao menu principal", "Index", "Home")
@@ -79,7 +77,6 @@
 @section scripts{
 
     <script type="text/javascript">
-
         $(document).ready(function () {
             $("#MainForm").submit(function () {
                 return ValidateForm();
@@ -123,6 +120,7 @@
             document.getElementById('errorLabel').innerHTML = "";
         }
 
-     
+       
+
     </script>
 }

@@ -1,0 +1,106 @@
+﻿@model GTI_Mvc.ViewModels.CertidaoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Comprovante de Pagamento";
+}
+
+<style>
+    .textBoxBlue {
+        height: 25px;
+        position: relative;
+        border: 1px solid #0094ff;
+        border-color: rgba(0, 0, 0, .14);
+        background-color: white;
+        font-size: 14px;
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
+    }
+</style>
+
+<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline" ;>Comprovante de Pagamento</label>
+<br />
+<br />
+
+@using (Html.BeginForm("Comprovante_Pagamento", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
+
+<table width="500px">
+    <tr style="height:40px">
+        <td style="width:150px">@Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })</td>
+        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
+    </tr>
+    <tr style="height:40px">
+        <td style="width:150px">@Html.LabelFor(m => m.Documento, new { @style = "font-weight:normal" })</td>
+        <td style="width:300px">@Html.TextBoxFor(m => m.Documento, new { @id = "documento", @class = "textBoxBlue", @style = "max-width:250px", @onKeyPress = "return formata(this, '§§§§§§§§§§§§§§§§§', event)" })</td>
+    </tr>
+
+    <tr style="height:40px">
+        <td style="width:150px" valign="middle">
+            <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+        </td>
+        <td style="width:150px" valign="middle">
+            @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
+        </td>
+    </tr>
+</table>
+
+    <br />
+    <div class="col-sm-10">
+        &nbsp;&nbsp;<button type="submit" class="green_button"> Consultar</button>
+    </div>
+    <br />
+    <br />
+
+
+    <br />
+    <div class="form-group row">
+        <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+    </div>
+    <br />
+
+}
+
+
+
+
+@Html.ActionLink("Retornar ao menu principal", "Index", "Home")
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+        });
+
+        function ValidateForm() {
+            ClearError();
+            var _cod = document.getElementById('codigo').value;
+            var _doc = document.getElementById('documento').value;
+            var _captcha = document.getElementById('captchaTxt').value;
+
+            if (_cod == "" || parseInt(_cod) == 0) {
+                document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal";
+                return false;
+            }
+            else {
+                if (_doc == "" || parseInt(_doc) == 0) {
+                    document.getElementById('errorLabel').innerHTML = "Digite o nº do documento confome consta no boleto";
+                    return false;
+                } else {
+                    if (_captcha == "") {
+                        document.getElementById('errorLabel').innerHTML = "Digite o código de validação!";
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        function ClearError() {
+            document.getElementById('errorLabel').innerHTML = "";
+        }
+
+
+    </script>
+}

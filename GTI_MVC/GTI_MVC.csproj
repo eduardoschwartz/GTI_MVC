@@ -370,6 +370,13 @@
     <Content Include="Views\Protocolo\Tramite_Processo2.cshtml" />
     <Content Include="Views\Tributario\EditorTemplates\ListDebitoEditorViewModel.cshtml" />
     <Content Include="Views\Tributario\EditorTemplates\SelectDebitoEditorViewModel.cshtml" />
+    <Content Include="Views\Tributario\Certidao_Debito_Codigo.cshtml" />
+    <Content Include="Views\Tributario\Certidao_Debito_Doc.cshtml" />
+    <Content Include="Views\Tributario\Comprovante_Pagamento.cshtml" />
+    <Content Include="Views\Tributario\Dama.cshtml" />
+    <Content Include="Views\Tributario\Damb.cshtml" />
+    <Content Include="Views\Tributario\Damc.cshtml" />
+    <Content Include="Views\Tributario\Damd.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
