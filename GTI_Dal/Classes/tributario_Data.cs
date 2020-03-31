@@ -953,7 +953,7 @@ namespace GTI_Dal.Classes {
                         new SqlParameter("@valorguia", Reg.Valorguia),
                         new SqlParameter("@emissor", Reg.Emissor),
                         new SqlParameter("@registrado", Reg.Registrado),
-                        new SqlParameter("@percisencao", Reg.Percisencao));
+                        new SqlParameter("@percisencao", Reg.Percisencao==null?0:Reg.Percisencao));
                 } catch (Exception ex) {
                     throw (ex.InnerException);
                 }

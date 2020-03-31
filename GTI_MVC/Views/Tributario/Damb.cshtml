@@ -5,45 +5,118 @@
     ViewBag.Title = "Emissão de DAM";
 }
 
-<span style="color:brown;font-size:14px">
-    Consulta e atualização de débitos não pagos<br />
-    Emissão de Documento de Arrecadação Municipal (D.A.M.)<br />
-</span>
 
-<form asp-controller="Tributario" enctype="multipart/form-data" method="post" onsubmit="return ValidateForm()" asp-action="Damb" class="mt-3">
-    @Html.HiddenFor(m => m.DataVencimento)
+<style>
+    .textBoxBlue {
+        height: 25px;
+        position: relative;
+        border: 1px solid #0094ff;
+        border-color: rgba(0, 0, 0, .14);
+        background-color: white;
+        font-size: 14px;
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
+    }
+</style>
 
-    <table style="font-size:14px">
-        <tr>
-            <td style="vertical-align:baseline"><label>Data de Vencimento:</label></td>
-            <td style="vertical-align:baseline"><label asp-for="DataVencimento"><span style="font-weight:bold">@Model.DataVencimento</span></label></td>
-        </tr>
-        <tr>
-            <td style="vertical-align:baseline"><label>Inscrição Municipal:</label></td>
-            <td style="vertical-align:baseline"><input asp-for="Inscricao" id="codigo" class="form-control" style="max-width:100px;max-height:25px;overflow:auto;" onKeyPress="return formata(this, '§§§§§§', event)" onchange="ClearError()"></td>
-        </tr>
-    </table>
-    <div class="form-group row align-items-lg-baseline" style="margin-left:1px;font-size:14px">
-        <label>Cpf:</label>&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
-        &nbsp;<label>Cnpj:</label>&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
-        &nbsp;<input asp-for="CpfValue" id="cpfTxt" class="form-control" style="max-width:200px;max-height:25px;" onKeyPress="return formata(this, '§§§.§§§.§§§-§§', event)" onchange="ClearError()" placeholder="Digite o nº do CPF">
-        &nbsp;<input asp-for="CnpjValue" id="cnpjTxt" class="form-control" style="max-width:200px;max-height:25px;display:none" onKeyPress="return formata(this, '§§.§§§.§§§/§§§§-§§', event)" onchange="ClearError()" placeholder="Digite o nº do CNPJ">
-    </div>
+<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline" ;>Consulta e atualização de débitos vencidos</label>
+<br />
+<br />
 
-    <div class="form-group row align-items-lg-baseline" style="margin-left:1px">
-        <div>
-            <div class="input-group">
-                <img id="img-captcha" src="~/Empresa/get-captcha-image" title="Clique para atualizar" />
-                &nbsp;<input type="text" class="form-control" asp-for="CaptchaCode" maxlength="4" id="captchaTxt" style="width:100px" onchange="ClearError()" />
-                &nbsp;<button type="submit" title="Imprimir a certidão" class="green_button" formmethod="post"> Consultar</button>
+@using (Html.BeginForm("Damb", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
+
+
+<table width="500px">
+    <tr style="height:40px">
+        <td style="width:150px">
+            <label style="font-weight:normal">Data de Vencimento:</label>
+        </td>
+        <td style="width:300px">
+            @Html.DisplayFor(m => Model.DataVencimento, new { @style = "font-weight:bold" })
+            @Html.HiddenFor(m => Model.DataVencimento)
+        </td>
+    </tr>
+    <tr style="height:40px">
+        <td style="width:150px">@Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })</td>
+        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "Codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
+    </tr>
+
+    <tr style="height:40px">
+        <td style="width:150px">
+            CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
+            &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
+        </td>
+        <td style="width:300px">
+            @Html.TextBoxFor(m => m.CpfValue, new { @id = "cpfTxt", @class = "textBoxBlue", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CPF" })
+            @Html.TextBoxFor(m => m.CnpjValue, new { @id = "cnpjTxt", @class = "textBoxBlue", @style = "max-width:200px;display:none", @onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CNPJ" })
+        </td>
+    </tr>
+
+    <tr>
+        <td style="width:150px" valign="middle">
+            <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+        </td>
+        <td style="width:150px;" valign="middle">
+            @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:110px;" })
+        </td>
+    </tr>
+</table>
+
+    <br />
+   
+
+    <button type="submit" title="Imprimir a certidão" class="green_button"> Consultar</button>
+
+    
+}
+
+
+<br />
+<div class="form-group row">
+    <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+</div>
+<br />
+
+
+
+@*<span style="color:brown;font-size:14px">
+        Consulta e atualização de débitos não pagos<br />
+        Emissão de Documento de Arrecadação Municipal (D.A.M.)<br />
+    </span>
+
+    <form asp-controller="Tributario" enctype="multipart/form-data" method="post" onsubmit="return ValidateForm()" asp-action="Damb" class="mt-3">
+        @Html.HiddenFor(m => m.DataVencimento)
+
+        <table style="font-size:14px">
+            <tr>
+                <td style="vertical-align:baseline"><label>Data de Vencimento:</label></td>
+                <td style="vertical-align:baseline"><label asp-for="DataVencimento"><span style="font-weight:bold">@Model.DataVencimento</span></label></td>
+            </tr>
+            <tr>
+                <td style="vertical-align:baseline"><label>Inscrição Municipal:</label></td>
+                <td style="vertical-align:baseline"><input asp-for="Inscricao" id="codigo" class="form-control" style="max-width:100px;max-height:25px;overflow:auto;" onKeyPress="return formata(this, '§§§§§§', event)" onchange="ClearError()"></td>
+            </tr>
+        </table>
+        <div class="form-group row align-items-lg-baseline" style="margin-left:1px;font-size:14px">
+            <label>Cpf:</label>&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
+            &nbsp;<label>Cnpj:</label>&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
+            &nbsp;<input asp-for="CpfValue" id="cpfTxt" class="form-control" style="max-width:200px;max-height:25px;" onKeyPress="return formata(this, '§§§.§§§.§§§-§§', event)" onchange="ClearError()" placeholder="Digite o nº do CPF">
+            &nbsp;<input asp-for="CnpjValue" id="cnpjTxt" class="form-control" style="max-width:200px;max-height:25px;display:none" onKeyPress="return formata(this, '§§.§§§.§§§/§§§§-§§', event)" onchange="ClearError()" placeholder="Digite o nº do CNPJ">
+        </div>
+
+        <div class="form-group row align-items-lg-baseline" style="margin-left:1px">
+            <div>
+                <div class="input-group">
+                    <img id="img-captcha" src="~/Empresa/get-captcha-image" title="Clique para atualizar" />
+                    &nbsp;<input type="text" class="form-control" asp-for="CaptchaCode" maxlength="4" id="captchaTxt" style="width:100px" onchange="ClearError()" />
+                    &nbsp;<button type="submit" title="Imprimir a certidão" class="green_button" formmethod="post"> Consultar</button>
+                </div>
             </div>
         </div>
-    </div>
 
 
-</form>
+    </form>
 
-<label class="text-danger" id="errorLabel">@ViewBag.Result</label>
+    <label class="text-danger" id="errorLabel">@ViewBag.Result</label>*@
 
 <br />
 @Html.ActionLink("Retornar ao menu principal", "Index", "Home")
@@ -51,7 +124,14 @@
 @section scripts{
 
     <script type="text/javascript">
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+        });
+
         function ValidateForm() {
+            ClearError();
             var _cod = document.getElementById('codigo').value;
             var _cpf = document.getElementById('cpfTxt').value;
             var _cnpj = document.getElementById('cnpjTxt').value;
@@ -97,15 +177,7 @@
             document.getElementById('errorLabel').innerHTML = "";
         }
 
-        $("#img-captcha").click(function () {
-            resetCaptchaImage();
-        });
 
-        function resetCaptchaImage() {
-            d = new Date();
-            /**/
-            $("#img-captcha").attr("src", "/Empresa/get-captcha-image?" + d.getTime());
-            /**/
-        }
 
-    </script>}
+    </script>
+}

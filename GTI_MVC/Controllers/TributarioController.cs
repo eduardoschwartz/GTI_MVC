@@ -478,7 +478,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Damb")]
         [HttpPost]
 #pragma warning disable IDE0060 // Remove unused parameter
-        public ActionResult Damb(CertidaoViewModel model,int Codigo) {
+        public ActionResult Damb(CertidaoViewModel model,int Codigo=0) {
 #pragma warning restore IDE0060 // Remove unused parameter
             if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
@@ -536,7 +536,7 @@ namespace GTI_Mvc.Controllers {
                     }
                     List<ProprietarioStruct> _prop = imovelRepository.Lista_Proprietario(_codigo, true);
                     _nome = _prop[0].Nome;
-                    //_cpfcnpj = _prop[0].CPF ?? _prop[0].CNPJ;
+                    _cpfcnpj = _prop[0].CPF ?? _prop[0].CPF;
                 }
             } else  {
                 if (_codigo >= 100000 && _codigo < 500000) {
@@ -594,7 +594,7 @@ namespace GTI_Mvc.Controllers {
             DebitoSelectionViewModel modelt = new DebitoSelectionViewModel() {
                 Inscricao=_codigo,
                 Nome=_nome,
-                //CpfCnpjLabel=_cpfcnpj,
+                CpfCnpjLabel=_cpfcnpj,
                 Data_Vencimento=Convert.ToDateTime(model.DataVencimento)
             };
 
@@ -849,7 +849,7 @@ namespace GTI_Mvc.Controllers {
 
         public ActionResult Damd() {
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
-            var value = TempData["debito"];
+            DebitoListViewModel value =(DebitoListViewModel) TempData["debito"];
             DebitoListViewModel model = value as DebitoListViewModel;
 
             //grava o documento
@@ -870,12 +870,12 @@ namespace GTI_Mvc.Controllers {
                     Seqlancamento=(short)_debitos.Seq,
                     Numparcela=(byte)_debitos.Parcela,
                     Codcomplemento=(byte)_debitos.Complemento,
-                    Plano=Convert.ToInt16(value.ToString()),
+                    Plano=Convert.ToInt16(value.Plano.ToString()),
                     Numdocumento=_documento
                 };
                 Exception ex = tributarioRepository.Insert_Parcela_Documento(parcReg);
             }
-            model.Data_Vencimento_String = Convert.ToDateTime(value.ToString()).ToString("ddMMyyyy");
+            model.Data_Vencimento_String = Convert.ToDateTime(value.Data_Vencimento.ToString()).ToString("ddMMyyyy");
             model.RefTran = "287353200" + _documento.ToString();
             if (model==null)
                 return RedirectToAction("Index","Home");

@@ -9,7 +9,7 @@
     Emissão de Documento de Arrecadação Municipal (D.A.M.)<br />
 </span>
 
-
+<br />
 @using (Html.BeginForm("SubmitSelected", "Tributario", FormMethod.Post, new { id = "formField", encType = "multipart/form-data", name = "frmExtrato", @Class = "mt-3" })) {
 
     <table id="tblHeader" style="font-size:13px">
@@ -185,9 +185,16 @@
 @Html.ActionLink("Retornar ao menu principal", "Index", "Home")
 
 <script>
-    $('#submit').click(function () {
-        $('#formfield').submit();
+
+    $(document).ready(function () {
+        $("#MainForm").submit(function () {
+            return Verifica_Ajuizado();
+        });
     });
+
+    //$('#submit').click(function () {
+    //    $('#formfield').submit();
+    //});
 
     function Verifica_Ajuizado() {
             ClearError();
