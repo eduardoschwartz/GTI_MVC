@@ -22,5 +22,7 @@ namespace GTI_Mvc.Views.Tributario.EditorTemplates {
         public decimal Soma_Correcao { get; set; }
         public decimal Soma_Total { get; set; }
         public decimal Soma_Honorario { get; set; }
+        public string Pt { get; set; }
+        public string Ep { get; set; }
     }
 }

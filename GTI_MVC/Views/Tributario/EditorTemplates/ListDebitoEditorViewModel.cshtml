@@ -1,68 +1,76 @@
 ﻿@model GTI_Mvc.Views.Tributario.EditorTemplates.ListDebitoEditorViewModel
-<tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-    <td style="display:none">
-        @Html.HiddenFor(model => model.Id)
-    </td>
-    <td style="width:50px;text-align:center">
-        @Html.DisplayFor(model => model.Exercicio)
-        @Html.HiddenFor(model => model.Exercicio)
-    </td>
-    <td style="display:none">
-        @Html.DisplayFor(model => model.Lancamento)
-        @Html.HiddenFor(model => model.Lancamento)
-    </td>
-    <td style="width:220px">
-        @Html.DisplayFor(model => model.Lancamento_Nome)
-        @Html.HiddenFor(model => model.Lancamento_Nome)
-    </td>
-    <td style="display:none">
-        @Html.DisplayFor(model => model.Seq)
-        @Html.HiddenFor(model => model.Seq)
-    </td>
-    <td style="display:none">
-        @Html.DisplayFor(model => model.Parcela)
-        @Html.HiddenFor(model => model.Parcela)
-    </td>
-    <td style="display:none">
-        @Html.DisplayFor(model => model.Complemento)
-        @Html.HiddenFor(model => model.Complemento)
-    </td>
-    <td style="width:60px" align="center">
-        @Html.DisplayFor(model => model.Data_Vencimento)
-        @Html.HiddenFor(model => model.Data_Vencimento)
-    </td>
-    <td style="width:25px" align="center">
-        @Html.DisplayFor(model => model.Da)
-        @Html.HiddenFor(model => model.Da)
-    </td>
-    <td style="width:25px" align="center">
-        @Html.DisplayFor(model => model.Aj)
-        @Html.HiddenFor(model => model.Aj)
-    </td>
-    <td style="width:60px" align="right">
-        @Html.DisplayFor(model => model.Soma_Principal)
-        @Html.HiddenFor(model => model.Soma_Principal)
-    </td>
-    <td style="width:60px" align="right">
-        @Html.DisplayFor(model => model.Soma_Juros)
-        @Html.HiddenFor(model => model.Soma_Juros)
-    </td>
-    <td style="width:60px" align="right">
-        @Html.DisplayFor(model => model.Soma_Multa)
-        @Html.HiddenFor(model => model.Soma_Multa)
-    </td>
-    <td style="width:60px" align="right">
-        @Html.DisplayFor(model => model.Soma_Correcao)
-        @Html.HiddenFor(model => model.Soma_Correcao)
-    </td>
-    <td style="width:70px" align="right">
-        @Html.DisplayFor(model => model.Soma_Total)
-        @Html.HiddenFor(model => model.Soma_Total)
-    </td>
-    <td style="display:none">
-        @Html.DisplayFor(model => model.Soma_Honorario)
-        @Html.HiddenFor(model => model.Soma_Honorario)
-    </td>
+    <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+        <td style="display:none">
+            @Html.HiddenFor(model => model.Id)
+        </td>
+        <td style="width:50px;text-align:center">
+            @Html.DisplayFor(model => model.Exercicio)
+            @Html.HiddenFor(model => model.Exercicio)
+        </td>
+        <td style="display:none">
+            @Html.DisplayFor(model => model.Lancamento)
+            @Html.HiddenFor(model => model.Lancamento)
+        </td>
+        <td style="width:220px">
+            @Html.DisplayFor(model => model.Lancamento_Nome)
+            @Html.HiddenFor(model => model.Lancamento_Nome)
+        </td>
+        <td style="display:none">
+            @Html.DisplayFor(model => model.Seq)
+            @Html.HiddenFor(model => model.Seq)
+        </td>
+        <td style="display:none">
+            @Html.DisplayFor(model => model.Parcela)
+            @Html.HiddenFor(model => model.Parcela)
+        </td>
+        <td style="display:none">
+            @Html.DisplayFor(model => model.Complemento)
+            @Html.HiddenFor(model => model.Complemento)
+        </td>
+        <td style="width:60px" align="center">
+            @Html.DisplayFor(model => model.Data_Vencimento)
+            @Html.HiddenFor(model => model.Data_Vencimento)
+        </td>
+        <td style="width:25px" align="center">
+            @Html.DisplayFor(model => model.Da)
+            @Html.HiddenFor(model => model.Da)
+        </td>
+        <td style="width:25px" align="center">
+            @Html.DisplayFor(model => model.Aj)
+            @Html.HiddenFor(model => model.Aj)
+        </td>
+        <td style="width:60px" align="right">
+            @Html.DisplayFor(model => model.Soma_Principal)
+            @Html.HiddenFor(model => model.Soma_Principal)
+        </td>
+        <td style="width:60px" align="right">
+            @Html.DisplayFor(model => model.Soma_Juros)
+            @Html.HiddenFor(model => model.Soma_Juros)
+        </td>
+        <td style="width:60px" align="right">
+            @Html.DisplayFor(model => model.Soma_Multa)
+            @Html.HiddenFor(model => model.Soma_Multa)
+        </td>
+        <td style="width:60px" align="right">
+            @Html.DisplayFor(model => model.Soma_Correcao)
+            @Html.HiddenFor(model => model.Soma_Correcao)
+        </td>
+        <td style="width:70px" align="right">
+            @Html.DisplayFor(model => model.Soma_Total)
+            @Html.HiddenFor(model => model.Soma_Total)
+        </td>
+        <td style="display:none">
+            @Html.DisplayFor(model => model.Soma_Honorario)
+            @Html.HiddenFor(model => model.Soma_Honorario)
+        </td>
+        <td style="width:25px" align="center">
+            @Html.DisplayFor(model => model.Pt)
+            @Html.HiddenFor(model => model.Pt)
+        </td>
+        <td style="width:25px" align="center">
+            @Html.DisplayFor(model => model.Ep)
+            @Html.HiddenFor(model => model.Ep)
+        </td>
 
 
-</tr>
+    </tr>
