@@ -25,7 +25,7 @@
 
     <table width="500px">
         <tr >
-            <td style="width:150px">@Html.LabelFor(m => m.DataVencimento, new { @style = "font-weight:normal" })</td>
+            <td style="padding-top:7px; width:150px">@Html.LabelFor(m => m.DataVencimento, new { @style = "font-weight:normal" })</td>
             <td style="width:300px">@Html.TextBoxFor(m => m.DataVencimento, new { @id = "vencto", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })</td>
         </tr>
     </table>

@@ -106,51 +106,93 @@
     </div>
 
     <br />
-    <table id="ResumoTable" style="font-size:14px;border:solid;border-width:thin;border-color:brown">
-        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-            <td></td>
-            <td style="width:100px;color:red;" align="right">Devidos</td>
-            <td style="width:100px;color:green;" align="right">Selecionados</td>
-        </tr>
-        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-            <td>Total Principal:</td>
-            <td style="width:100px;color:red" align="right">@Model.Soma_Principal.ToString("#0.00")</td>
-            <td id="somaPrincipal" style="width:100px;color:green" align="right">0,00</td>
-        </tr>
-        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-            <td>Total Juros:</td>
-            <td style="width:100px;color:red" align="right">@Model.Soma_Juros.ToString("#0.00")</td>
-            <td id="somaJuros" style="width:100px;color:green" align="right">0,00</td>
-        </tr>
-        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-            <td>Total Multa:</td>
-            <td style="width:100px;color:red" align="right">@Model.Soma_Multa.ToString("#0.00")</td>
-            <td id="somaMulta" style="width:100px;color:green" align="right">0,00</td>
-        </tr>
-        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-            <td>Total Correção:</td>
-            <td style="width:100px;color:red" align="right">@Model.Soma_Correcao.ToString("#0.00")</td>
-            <td id="somaCorrecao" style="width:100px;color:green" align="right">0,00</td>
-        </tr>
-        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-            <td>Total Honorário:</td>
-            <td style="width:100px;color:red" align="right">N/A</td>
-            <td id="somaHonorario" style="width:100px;color:green" align="right">0,00</td>
-        </tr>
-        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-            <td>Total Geral:</td>
-            <td style="width:100px;color:red" align="right">@Model.Soma_Total.ToString("#0.00")</td>
-            <td id="somaTotal" style="width:100px;color:green" align="right">0,00</td>
-        </tr>
 
-    </table>
+    <div style="width: 100%; overflow: hidden;">
+        <div style="width: 400px; float: left;">
+            <table id="ResumoTable" style="font-size:14px;border:solid;border-width:thin;border-color:brown">
+                <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                    <td></td>
+                    <td style="width:100px;color:red;" align="right">Devidos</td>
+                    <td style="width:100px;color:green;" align="right">Selecionados</td>
+                </tr>
+                <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                    <td>Total Principal:</td>
+                    <td style="width:100px;color:red" align="right">@Model.Soma_Principal.ToString("#0.00")</td>
+                    <td id="somaPrincipal" style="width:100px;color:green" align="right">0,00</td>
+                </tr>
+                <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                    <td>Total Juros:</td>
+                    <td style="width:100px;color:red" align="right">@Model.Soma_Juros.ToString("#0.00")</td>
+                    <td id="somaJuros" style="width:100px;color:green" align="right">0,00</td>
+                </tr>
+                <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                    <td>Total Multa:</td>
+                    <td style="width:100px;color:red" align="right">@Model.Soma_Multa.ToString("#0.00")</td>
+                    <td id="somaMulta" style="width:100px;color:green" align="right">0,00</td>
+                </tr>
+                <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                    <td>Total Correção:</td>
+                    <td style="width:100px;color:red" align="right">@Model.Soma_Correcao.ToString("#0.00")</td>
+                    <td id="somaCorrecao" style="width:100px;color:green" align="right">0,00</td>
+                </tr>
+                <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                    <td>Total Honorário:</td>
+                    <td style="width:100px;color:red" align="right">N/A</td>
+                    <td id="somaHonorario" style="width:100px;color:green" align="right">0,00</td>
+                </tr>
+                <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                    <td>Total Geral:</td>
+                    <td style="width:100px;color:red" align="right">@Model.Soma_Total.ToString("#0.00")</td>
+                    <td id="somaTotal" style="width:100px;color:green" align="right">0,00</td>
+                </tr>
+
+            </table>
+        </div>
+
+        <div style="margin-left: 420px;">
+            <table style="border: 1px">
+                <tr>
+                    <td style="font-weight:bold;color:brown;font-size:small" width="25px">
+                        Aj
+                    </td>
+                    <td style="font-size:small">
+                        - Débito Ajuizado
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;color:brown;font-size:small"  width="25px">
+                        Da
+                    </td>
+
+                    <td style="font-size:small">
+                        - Débito em Divida Ativa
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;color:brown;font-size:small" width="25px">
+                        Pt
+                    </td>
+                    <td style="font-size:small">
+                        - Débito Protestado
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;color:brown;font-size:small" width="25px">
+                        Ev
+                    </td>
+                    <td style="font-size:small">
+                        - Débito Enviado para Protesto
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 
     <br />
     <div class="form-group row align-items-lg-baseline" style="margin-left:1px">
         <div>
             <div class="input-group">
                 <button type="submit" id="enviar" title="Exibir o resumo do boleto" class="green_button" onclick="return Verifica_Ajuizado()">Próximo</button>
-                @*<button type="button" class="green_button" id="submit" data-toggle="modal" data-target="#confirm-submit" onsubmit="return VerificaAjuizado()"> Próximo >></button>*@
             </div>
         </div>
     </div>
@@ -214,7 +256,7 @@
                 var dateParts2 = _datarefis.split("/");
                 var dataRefis = new Date(+dateParts2[2], dateParts2[1] - 1, +dateParts2[0]);
 
-                
+
                 if (@Model.Plano> 0) {
 
                     _refis = true;
@@ -248,7 +290,7 @@
                     }
                 }
 
-               
+
                 if (_count == 0) {
                     document.getElementById('errorLabel').innerHTML = "Selecione o(s) débito(s) à pagar.";
                     return false;
@@ -309,7 +351,7 @@
                 sumH = valH.map(function () { return (parseFloat(this.textContent.replace(',', '.').trim())) || 0; }).get().reduce(function (a, b) {
                     return a + b;
                 });
-   
+
             sumT = sumP + sumJ + sumM + sumC + sumH;
 
             $('#ResumoTable').find(somaPrincipal).html(sumP.toFixed(2).replace('.', ','));

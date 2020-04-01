@@ -105,6 +105,8 @@ namespace GTI_Models.Models {
         public string DA { get; set; }
         public string AJ { get; set; }
         public bool Selected { get; set; }
+        public string Pt { get; set; }
+        public string Ev { get; set; }
     }
 
 }
