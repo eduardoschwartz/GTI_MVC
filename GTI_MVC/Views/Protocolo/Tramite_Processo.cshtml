@@ -4,40 +4,58 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Trâmite de Processo";
 }
-<link href="~/css/gti.css" rel="stylesheet" />
 
+<style>
+    .textBoxBlue {
+        height: 25px;
+        position: relative;
+        border: 1px solid #0094ff;
+        border-color: rgba(0, 0, 0, .14);
+        background-color: white;
+        font-size: 14px;
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
+    }
+</style>
 
-<label style="color:brown;font-size:16px;font-style:italic">Trâmite de Processo</label>
+<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline">Trâmite de Processo</label>
+<br />
 <br />
 
+@using (Html.BeginForm("Tramite_Processo", "Protocolo", FormMethod.Post, new { @id = "MainForm" })) {
 
-<form asp-controller="Protocolo" enctype="multipart/form-data" method="post" onsubmit="return ValidateForm()" class="mt-3">
-    <div class="form-group row align-items-lg-baseline" style="margin-left:1px">
-        <label>Digite o nº do processo: </label>
-        <div class="col-sm-10">
-            <input asp-for="Numero_Ano" id="numprocesso" class="form-control"  style="max-width:150px;max-height:25px;overflow:auto;" onchange="ClearError()">
-        </div>
-        <br />
+    <table width="500px">
+        <tr style="height:40px">
+            <td style="width:150px"><label style="font-weight:normal">Nº do Processo: </label></td>
+            <td style="width:300px">@Html.TextBoxFor(m => m.Numero_Ano, new { @id = "numprocesso", @class = "textBoxBlue", @style = "max-width:150px" })</td>
+        </tr>
+
+        <tr style="height:40px">
+            <td style="width:150px" valign="middle">
+                <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+            </td>
+            <td style="width:150px" valign="middle">
+                @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
+            </td>
+        </tr>
+    </table>
+
+    <br />
+    <div class="col-sm-10">
+        &nbsp;&nbsp;<button type="submit" class="green_button"> Consultar</button>
     </div>
-
-    <div class="form-group row align-items-lg-baseline" style="margin-left:1px">
-        <div>
-            <div class="input-group">
-                <img id="img-captcha" src="~/Empresa/get-captcha-image" title="Clique para atualizar" />
-                &nbsp;<input type="text" class="form-control" asp-for="CaptchaCode" maxlength="4" id="captchaTxt" style="width:100px" />
-                &nbsp;<button type="submit" title="Consultar o trâmite do processo" class="green_button" formaction="Tramite_Processo" formmethod="post"> Consultar</button>
-            </div>
-        </div>
+    <br />
+    <br />
+        
+    <div class="form-group row">
+        <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
     </div>
-</form>
+    <br />
 
+}
+
+
+@Html.ActionLink("Retornar ao menu de opções", "SysMenu", "Home")
 <br />
-<div class="form-group row" style="margin-left:-10px">
-    &nbsp;&nbsp;<label class="text-danger" id="errorLabel">@ViewBag.Result</label>
-</div>
-
-
-@Html.ActionLink("Retornar ao menu de opções", "SysMenu", "Home")<br />
 @Html.ActionLink("Retornar ao menu principal", "Index", "Home")
 
 
@@ -45,7 +63,14 @@
 
     <script type="text/javascript">
 
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+        });
+
         function ValidateForm() {
+            ClearError();
             var _numero = document.getElementById('numprocesso').value.trim();
             var _captcha = document.getElementById('captchaTxt').value;
 
@@ -69,18 +94,8 @@
             document.getElementById('errorLabel').innerHTML = "";
         }
 
-        $("#img-captcha").click(function () {
-            resetCaptchaImage();
-        });
-
-        function resetCaptchaImage() {
-            d = new Date();
-            /**/
-            $("#img-captcha").attr("src", "/Empresa/get-captcha-image?" + d.getTime());
-            /**/
-        }
-
-    </script>}
+    </script>
+}
 
 
 

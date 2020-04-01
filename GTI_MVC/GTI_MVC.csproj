@@ -293,6 +293,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SelectListaItem.cs" />
+    <Compile Include="TAcesso.cs" />
     <Compile Include="ViewModels\CertidaoViewModel.cs" />
     <Compile Include="ViewModels\DebitoListViewModel.cs" />
     <Compile Include="ViewModels\DebitoSelectionViewModel.cs" />

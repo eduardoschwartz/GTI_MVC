@@ -1,6 +1,6 @@
 ﻿@model GTI_Mvc.ViewModels.ProcessoViewModel
 
-@inject IJsonHelper Json;
+@*@inject IJsonHelper Json;*@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -35,7 +35,7 @@
     <!--###########################-->
     <!--      DADOS DO PROCESSO    -->
     <!--###########################-->
-    <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
+    <table title="Dados do Processo" style="font-size:12px;background-color:White;border-color:#CCCCCC; ">
         <tr>
             <td style="width:200px;padding: 1px 1px 1px 5px;">
                 Nº do processo:
@@ -53,7 +53,7 @@
             </td>
         </tr>
         <tr>
-            <td style="width:15%;padding: 1px 1px 1px 5px;">
+            <td style="width: 15%; padding: 1px 1px 1px 5px;">
                 Requerente:
             </td>
             <td style="color:black;font-weight:bold">
@@ -73,9 +73,9 @@
     <!--###########################-->
     <!--   TABELA DE TRAMITAÇÃO    -->
     <!--###########################-->
-    <div id="TramitacaoTable" style="max-height: 200px; overflow: auto;">
-        <table id="tblMain" class="tableContainer">
-            <thead>
+    <div id="TramitacaoTable" style="max-height: 247px; overflow: auto;">
+        <table id="tblMain" class="tableContainer" style="font-size:9px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+            <thead style="background-color:#337ab7;color:white;font-size:9px;font-weight:normal">
                 <tr style="height:12px;">
                     <th>
                         Seq
@@ -107,13 +107,20 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody style="color: #333333">
                 @foreach (var item in Model.Lista_Tramite) {
-                    <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                    <tr style="        height: 15px;
+        border-bottom-color: cadetblue;
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+        border-top-color: cadetblue;
+        border-top-style: solid;
+        border-top-width: 1px
+">
                         <td>
                             @Html.DisplayFor(modelItem => item.Seq)
                         </td>
-                        <td>
+                        <td style="width:180px">
                             @Html.DisplayFor(modelItem => item.CentroCustoNome)
                         </td>
                         <td>
@@ -155,7 +162,7 @@
 <!--###########################-->
 <!--          FOOTER           -->
 <!--###########################-->
-<br />
+
 <div class="form-group row" style="margin-left:-10px">
     &nbsp;&nbsp;<label class="text-danger" id="errorLabel">@ViewBag.Result</label>
 </div>

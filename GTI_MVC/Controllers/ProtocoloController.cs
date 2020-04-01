@@ -48,10 +48,8 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Tramite_Processo2/{Ano}/{Numero}")]
         [HttpGet]
-        public ActionResult Tramite_Processo2(int Ano,int Numero) {
+        public ActionResult Tramite_Processo2(int Ano=0,int Numero=0) {
             ModelState.Clear();
-            if (Ano == 0)
-                return View();
 
             if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
@@ -62,6 +60,9 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
                 ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
             }
+
+            if (Ano == 0)
+                return View();
 
             string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
             ProcessoViewModel modelt = Exibe_Tramite(Numero_Ano);
@@ -105,8 +106,8 @@ namespace GTI_Mvc.Controllers {
                 processoViewModel.Lista_Tramite = Lista_Tramite;
                 processoViewModel.Lista_CC = Lista_CC;
                 processoViewModel.Numero_Ano = Numero_Ano;
-              //  processoViewModel.ObsGeral = Lista_Tramite[0].ObsGeral;
-              //  processoViewModel.ObsInterna = Lista_Tramite[0].ObsInterna;
+                processoViewModel.ObsGeral = Lista_Tramite[0].ObsGeral;
+                processoViewModel.ObsInterna = Lista_Tramite[0].ObsInterna;
             } else {
                 ViewBag.Result = "Processo não cadastrado.";
             }
