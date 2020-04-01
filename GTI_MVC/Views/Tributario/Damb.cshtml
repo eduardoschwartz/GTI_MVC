@@ -27,21 +27,22 @@
 
 <table width="500px">
     <tr style="height:40px">
-        <td style="width:150px">
+        <td style="style="padding-top:15px;width:150px">
             <label style="font-weight:normal">Data de Vencimento:</label>
         </td>
-        <td style="width:300px">
-            @Html.DisplayFor(m => Model.DataVencimento, new { @style = "font-weight:bold" })
+        <td style="width: 300px;font-weight:bold">
+            @Html.DisplayFor(m => Model.DataVencimento)
             @Html.HiddenFor(m => Model.DataVencimento)
         </td>
     </tr>
     <tr style="height:40px">
-        <td style="width:150px">@Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })</td>
+        <td style="        style =
+"padding-top:15px;width:150px">@Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })</td>
         <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "Codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
     </tr>
 
     <tr style="height:40px">
-        <td style="width:150px">
+        <td style="width: 150px">
             CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
             &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
         </td>
@@ -52,7 +53,7 @@
     </tr>
 
     <tr>
-        <td style="width:150px" valign="middle">
+        <td style="style="padding-top:15px;width:150px" valign="middle">
             <img id="img-captcha" src="~/Empresa/GetCaptcha" />
         </td>
         <td style="width:150px;" valign="middle">

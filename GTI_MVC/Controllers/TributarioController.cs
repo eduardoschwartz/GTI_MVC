@@ -679,7 +679,7 @@ namespace GTI_Mvc.Controllers {
                         Soma_Total = Math.Round(item.Valortributo, 2,MidpointRounding.AwayFromZero)+ Math.Round(item.Valorjuros, 2, MidpointRounding.AwayFromZero)+ Math.Round(item.Valormulta, 2, MidpointRounding.AwayFromZero)+ Math.Round(item.Valorcorrecao, 2, MidpointRounding.AwayFromZero),
                         Soma_Honorario = item.Valortotal * (decimal)0.1,
                         Data_Ajuizamento = item.Dataajuiza,
-                        Data_Inscricao = item.Datainscricao
+                        Data_Inscricao = item.Datainscricao,
                     };
                     Lista_debitos.Add(reg);
                 }
@@ -718,7 +718,9 @@ namespace GTI_Mvc.Controllers {
                     Soma_Total = item.Soma_Total.ToString("#0.00"),
                     Soma_Honorario = item.Data_Ajuizamento == null ? "0,00" : item.Soma_Honorario.ToString("#0.00"),
                     AJ = item.Data_Ajuizamento == null ? "N" : "S",
-                    DA = item.Data_Inscricao == null ? "N" : "S"
+                    DA = item.Data_Inscricao == null ? "N" : "S",
+                    Pt=item.Codigo_Situacao==38?"S":"N",
+                    Ev=item.Codigo_Situacao==39?"S":"N"
                 };
                 ListaWeb.Add(reg);
                 _linha++;
@@ -749,7 +751,9 @@ namespace GTI_Mvc.Controllers {
                     Soma_Multa=_debitos.Soma_Multa,
                     Soma_Correcao=_debitos.Soma_Correcao,
                     Soma_Total=_debitos.Soma_Total,
-                    Soma_Honorario=_debitos.Soma_Honorario
+                    Soma_Honorario=_debitos.Soma_Honorario,
+                    Pt=_debitos.Codigo_Situacao==38?"S":"N",
+                    Ep=_debitos.Codigo_Situacao==39?"S":"N"
                 };
                 _linha++;
                 model.Debito.Add(editorViewModel);
