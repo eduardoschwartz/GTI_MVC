@@ -7,26 +7,26 @@ namespace GTI_Mvc.Controllers {
     public class HomeController : Controller {
 
         public ViewResult Index() {
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
             }
             return View();
         }
 
         [Route("Certidao")]
         public ViewResult Certidao() {
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
             }
             return View();
         }
@@ -34,13 +34,13 @@ namespace GTI_Mvc.Controllers {
         [Route("Login")]
         [HttpGet]
         public ViewResult Login() {
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
             }
             return View();
         }
@@ -49,7 +49,7 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult Logout() {
             ViewBag.UserId = null;
-            HttpContext.Session.Clear();
+            Session.Clear();
             ViewBag.FullName = "Visitante";
             ViewBag.LoginName = "";
             return View("Index");
@@ -59,14 +59,14 @@ namespace GTI_Mvc.Controllers {
         [Route("SysMenu")]
         [HttpGet]
         public ViewResult SysMenu() {
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return View("Login");
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
                 return View();
             }
         }
@@ -112,9 +112,9 @@ namespace GTI_Mvc.Controllers {
                 return View(loginViewModel);
             } else {
 
-                HttpContext.Session["gti_V3id"] = Functions.Encrypt(UserId.ToString("00000"));
-                HttpContext.Session["gti_V3login"] = Functions.Encrypt(_user.Nome_login);
-                HttpContext.Session["gti_V3full"] = Functions.Encrypt(_user.Nome_completo);
+                Session["gti_V3id"] = Functions.Encrypt(UserId.ToString("00000"));
+                Session["gti_V3login"] = Functions.Encrypt(_user.Nome_login);
+                Session["gti_V3full"] = Functions.Encrypt(_user.Nome_completo);
                 ViewBag.LoginName = _user.Nome_login;
                 ViewBag.FullName = _user.Nome_completo;
                 return View("../Home/SysMenu");

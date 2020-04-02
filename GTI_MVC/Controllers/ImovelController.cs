@@ -22,7 +22,7 @@ namespace GTI_Mvc.Controllers {
             int height = 36;
             var captchaCode = Captcha.GenerateCaptchaCode();
             var result = Captcha.GenerateCaptchaImage(width, height, captchaCode);
-            HttpContext.Session["CaptchaCode"] = result.CaptchaCode;
+            Session["CaptchaCode"] = result.CaptchaCode;
             Stream s = new MemoryStream(result.CaptchaByteData);
             return new FileStreamResult(s, "image/png");
         }
@@ -31,13 +31,13 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Endereco")]
         [HttpGet]
         public ViewResult Certidao_Endereco() {
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
             }
             return View();
         }
@@ -51,13 +51,13 @@ namespace GTI_Mvc.Controllers {
             int _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Endereco);
             bool _existeCod = false;
             CertidaoViewModel certidaoViewModel = new CertidaoViewModel();
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
             }
             ViewBag.Result = "";
 
@@ -67,7 +67,7 @@ namespace GTI_Mvc.Controllers {
                     _existeCod = imovelRepository.Existe_Imovel(_codigo);
             }
 
-            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, HttpContext.Session["CaptchaCode"].ToString())) {
+            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
                 ViewBag.Result = "Código de verificação inválido.";
                 return View(certidaoViewModel);
             }
@@ -136,13 +136,13 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Validate_CE(CertidaoViewModel model) {
             int _codigo, _ano, _numero;
             string _chave = model.Chave;
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
             }
             if (model.Chave != null) {
                 Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
@@ -198,13 +198,13 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Valor_Venal")]
         [HttpGet]
         public ViewResult Certidao_Valor_Venal() {
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
             }
             return View();
         }
@@ -217,13 +217,13 @@ namespace GTI_Mvc.Controllers {
             int _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.ValorVenal);
             bool _existeCod = false;
             CertidaoViewModel certidaoViewModel = new CertidaoViewModel();
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
             }
             ViewBag.Result = "";
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
@@ -231,7 +231,7 @@ namespace GTI_Mvc.Controllers {
             if (_codigo < 100000)
                 _existeCod =imovelRepository.Existe_Imovel(_codigo);
 
-            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, HttpContext.Session["CaptchaCode"].ToString())) {
+            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
                 ViewBag.Result = "Código de verificação inválido.";
                 return View(certidaoViewModel);
             }
@@ -317,13 +317,13 @@ namespace GTI_Mvc.Controllers {
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             int _codigo, _ano, _numero;
             string _chave = model.Chave;
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
             }
             if (model.Chave != null) {
                 Certidao reg = new Certidao();
@@ -382,13 +382,13 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Isencao")]
         [HttpGet]
         public ViewResult Certidao_Isencao() {
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
             }
             return View();
         }
@@ -403,13 +403,13 @@ namespace GTI_Mvc.Controllers {
             bool _existeCod = false;
             string _numero_processo="";
             CertidaoViewModel certidaoViewModel = new CertidaoViewModel();
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
             }
             ViewBag.Result = "";
 
@@ -419,7 +419,7 @@ namespace GTI_Mvc.Controllers {
                         _existeCod = imovelRepository.Existe_Imovel(_codigo);
                 }
 
-            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, HttpContext.Session["CaptchaCode"].ToString())) {
+            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
                 ViewBag.Result = "Código de verificação inválido.";
                 return View(certidaoViewModel);
             }
@@ -534,13 +534,13 @@ namespace GTI_Mvc.Controllers {
         [Route("Validate_CS")]
         [Route("Certidao/Validate_CS")]
         public ActionResult Validate_CS(CertidaoViewModel model) {
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
             }
             int _codigo, _ano, _numero;
             string _chave = model.Chave;

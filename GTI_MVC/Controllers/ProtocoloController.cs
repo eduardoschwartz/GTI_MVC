@@ -13,14 +13,14 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult Tramite_Processo() {
 
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return View("../Home/Login");
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
                 return View();
             }
         }
@@ -28,13 +28,13 @@ namespace GTI_Mvc.Controllers {
         [Route("Tramite_Processo")]
         [HttpPost]
         public ActionResult Tramite_Processo(ProcessoViewModel model) {
-            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, HttpContext.Session["CaptchaCode"].ToString())) {
+            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
                 ViewBag.Result = "Código de verificação inválido.";
                 return View(model);
             }
-            ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-            ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-            ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+            ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+            ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+            ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
 
             ProcessoViewModel processoViewModel = new ProcessoViewModel();
             ProcessoNumero processoNumero = Functions.Split_Processo_Numero(model.Numero_Ano);
@@ -51,14 +51,14 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Tramite_Processo2(int Ano,int Numero) {
      //       ModelState.Clear();
 
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return View("../Home/Login");
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
             }
 
             if (Ano == 0)
@@ -75,7 +75,7 @@ namespace GTI_Mvc.Controllers {
         private ProcessoViewModel Exibe_Tramite(string Numero_Ano,int Seq=0) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             ProcessoViewModel processoViewModel = new ProcessoViewModel();
-            int _userId = Convert.ToInt32(Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString()));
+            int _userId = Convert.ToInt32(Functions.Decrypt(Session["gti_V3id"].ToString()));
 
             List<UsuariocentroCusto> _listaCC = protocoloRepository.ListaCentrocustoUsuario(_userId);
             string Lista_CC = "";
@@ -140,7 +140,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         //public ActionResult Inserir_Save(ProcessoViewModel model) {
-        //    int _user_Id = Convert.ToInt32(Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString()));
+        //    int _user_Id = Convert.ToInt32(Functions.Decrypt(Session["gti_V3id"].ToString()));
         //    Exception ex = protocoloRepository.Inserir_Local(model.Numero, model.Ano, model.Seq,(int)model.CCusto_Codigo);
         //    model.Numero_Ano = model.Numero.ToString() + "-" + Functions.RetornaDvProcesso(model.Numero) + "/" + model.Ano.ToString();
         //    ProcessoViewModel processoViewModel = new ProcessoViewModel() {
@@ -165,14 +165,14 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult Receive(int Ano=0, int Numero=0, int Seq=0) {
 
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return View("../Home/Login");
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
             }
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
@@ -197,7 +197,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             if (!_find || _recebido || !_enviado) {
-                HttpContext.Session.Clear();
+                Session.Clear();
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return View("../Home/Login");
@@ -213,7 +213,7 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Receive(ProcessoViewModel model) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return Json(Url.Action("Tramite_Processo2", "Protocolo", new { model.Ano, model.Numero}));
@@ -224,7 +224,7 @@ namespace GTI_Mvc.Controllers {
                 return null;
             }
 
-            int _user_Id = Convert.ToInt32(Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString()));
+            int _user_Id = Convert.ToInt32(Functions.Decrypt(Session["gti_V3id"].ToString()));
             Tramitacao reg = new Tramitacao() {
                 Ano = (short)model.Ano,
                 Numero = model.Numero,
@@ -246,14 +246,14 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult Send(int Ano, int Numero, int Seq) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return View("../Home/Login");
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
             }
 
             string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
@@ -278,7 +278,7 @@ namespace GTI_Mvc.Controllers {
             //}
 
             //if (!_find || !_recebido || _enviado) {
-            //    HttpContext.Session.Clear();
+            //    Session.Clear();
             //    ViewBag.LoginName = "";
             //    ViewBag.FullName = "Visitante";
             //    return View("../Home/Login");
@@ -297,13 +297,13 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Send(ProcessoViewModel model) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return RedirectToAction("Index", "Home");
             }
 
-            int _user_Id = Convert.ToInt32(Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString()));
+            int _user_Id = Convert.ToInt32(Functions.Decrypt(Session["gti_V3id"].ToString()));
 
 
             List<TramiteStruct> _regOld = protocoloRepository.DadosTramite((short)model.Ano, model.Numero, model.Seq);
@@ -331,14 +331,14 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult AddPlace(int Ano, int Numero, int Seq) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return View("../Home/Login");
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
             }
 
             string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
@@ -377,14 +377,14 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult Obs(int Ano, int Numero, int Seq) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return View("../Home/Login");
             } else {
-                ViewBag.LoginName = Functions.Decrypt(HttpContext.Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
+                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
+                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
+                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
             }
 
             string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
@@ -401,7 +401,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             if (!_find) {
-                HttpContext.Session.Clear();
+                Session.Clear();
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return View("../Home/Login");
@@ -414,7 +414,7 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Obs(ProcessoViewModel model) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            if (HttpContext.Session["gti_V3id"] == null) {
+            if (Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return Json(Url.Action( "Index", "Home"));
