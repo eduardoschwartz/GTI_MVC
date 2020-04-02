@@ -1,6 +1,5 @@
 ﻿@model GTI_Mvc.ViewModels.ProcessoViewModel
 
-@inject IJsonHelper Json;
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -34,7 +33,7 @@
 <form asp-controller="Protocolo" enctype="multipart/form-data" method="post" onsubmit="return ValidateForm()" class="mt-3">
     <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
         <tr>
-            <td style="width:200px;padding: 1px 1px 1px 5px;">
+            <td style="width:200px;padding: 1px 1px 1px 5px;font-weight:normal">
                 Nº do processo:
             </td>
             <td style="color:black;font-weight:bold">
@@ -42,7 +41,7 @@
             </td>
         </tr>
         <tr>
-            <td style="width:600px;padding: 1px 1px 1px 5px;">
+            <td style="width:600px;padding: 1px 1px 1px 5px;font-weight:normal;">
                 Data do processo:
             </td>
             <td style="color:black;font-weight:bold">
@@ -50,7 +49,7 @@
             </td>
         </tr>
         <tr>
-            <td style="width:15%;padding: 1px 1px 1px 5px;">
+            <td style="width:15%;padding: 1px 1px 1px 5px;font-weight:normal">
                 Requerente:
             </td>
             <td style="color:black;font-weight:bold">
@@ -58,10 +57,10 @@
             </td>
         </tr>
         <tr>
-            <td style="width:15%;padding: 1px 1px 1px 5px;">
+            <td style="width:15%;padding: 1px 1px 1px 5px;font-weight:normal">
                 Assunto:
             </td>
-            <td style="color:black;font-weight:bold">
+            <td style="color: black; font-weight: bold">
                 @Model.Assunto_Nome
             </td>
         </tr>
@@ -71,7 +70,7 @@
     <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
         @foreach (var item in Model.Lista_Tramite) {
             <tr>
-                <td style="width:200px;padding: 1px 1px 1px 5px;">
+                <td style="width: 200px; padding: 1px 1px 1px 5px;">
                     Seq
                 </td>
                 <td style="color:black;font-weight:bold">
@@ -120,17 +119,19 @@
     </div>
     <div class="col-sm-10">
         <button type="submit" class="btn btn-primary" id="Enviar_Save">Gravar</button>
-        <input type="button" class="btn btn-secondary" value="Cancelar" onclick="@("window.location.href='" + @Url.Action("Tramite_Processo2", "Protocolo") + "'");" />
+        <input type="button" class="btn btn-secondary" value="Cancelar" onclick="@("window.location.href='" + @Url.Action("Tramite_Processo2", "Protocolo",new { @Ano=Model.Ano,@Numero=Model.Numero}) + "'");" />
     </div>
 
 </form>
-
+<br />
+<br />
 <!--###########################-->
 <!--          FOOTER           -->
 <!--###########################-->
-<div class="form-group row" style="margin-left:-10px">
-    &nbsp;&nbsp;<label class="text-danger" id="errorLabel">@ViewBag.Result</label>
+<div class="form-group row">
+    <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
 </div>
+<br />
 
 
 <!--###########################-->

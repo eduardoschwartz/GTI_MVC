@@ -101,7 +101,7 @@
                     <th style="width:30px">
                         Enviado por
                     </th>
-                    
+
                     <th>
 
                     </th>
@@ -148,7 +148,7 @@
                             <a href="#" title="Mover trâmite para cima"> <img src="@Url.Content("~/images/acima.gif")" data-value="@item.Seq" onclick="MoveUp('@Model.Ano',@Model.Numero,@item.Seq)"></a>
                             <a href="@Url.Action("AddPlace","Protocolo",new {Ano=@Model.Ano,Numero=@Model.Numero, Seq=item.Seq,@item.CentroCustoCodigo})" title="Incluir um local de trâmite"> <img src="@Url.Content("~/images/inserir_local.png")" onclick="return Validar_AddPlace('@Model.Ano',@Model.Numero,@item.Seq,@item.CentroCustoCodigo)" /></a>
                             <a href="#" title="Remover local de trâmite"> <img src="@Url.Content("~/images/remover_local.png")" data-value="@item.Seq" onclick="Usuario_CC_Remover('@Model.Lista_CC',@item.Seq,@item.CentroCustoCodigo)"></a>
-                            <a href="@Url.Action("Obs","Protocolo",new {Ano=@Model.Ano,Numero=@Model.Numero, Seq=item.Seq})" title="Observação"> <img src="@Url.Content("~/images/observacao.png")"  onclick="return Validar_Obs('@Model.Lista_CC',@item.Seq,'@item.ObsGeral','@item.ObsInterna')" /></a>
+                            <a href="@Url.Action("Obs","Protocolo",new {Ano=@Model.Ano,Numero=@Model.Numero, Seq=item.Seq})" title="Observação"> <img src="@Url.Content("~/images/observacao.png")" onclick="return Validar_Obs('@Model.Lista_CC',@item.Seq,'@item.ObsGeral','@item.ObsInterna')" /></a>
                         </td>
 
                     </tr>
@@ -162,13 +162,18 @@
 <!--###########################-->
 <!--          FOOTER           -->
 <!--###########################-->
-
-<div class="form-group row" style="margin-left:-10px">
-    &nbsp;&nbsp;<label class="text-danger" id="errorLabel">@ViewBag.Result</label>
+<br />
+<br />
+<div class="form-group row">
+    <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
 </div>
 
-@Html.ActionLink("Consultar outro processo", "Tramite_Processo", "Protocolo")<br />
-@Html.ActionLink("Retornar ao menu de opções", "SysMenu", "Home")<br />
+
+
+@Html.ActionLink("Consultar outro processo", "Tramite_Processo", "Protocolo")
+<br />
+@Html.ActionLink("Retornar ao menu de opções", "SysMenu", "Home")
+<br />
 @Html.ActionLink("Retornar ao menu principal", "Index", "Home")
 
 

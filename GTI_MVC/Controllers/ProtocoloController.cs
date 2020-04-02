@@ -48,8 +48,8 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Tramite_Processo2/{Ano}/{Numero}")]
         [HttpGet]
-        public ActionResult Tramite_Processo2(int Ano=0,int Numero=0) {
-            ModelState.Clear();
+        public ActionResult Tramite_Processo2(int Ano,int Numero) {
+     //       ModelState.Clear();
 
             if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
@@ -163,8 +163,8 @@ namespace GTI_Mvc.Controllers {
          * **************************************************************/
         [Route("Receive/{Ano}/{Numero}/{Seq}")]
         [HttpGet]
-        public ViewResult Receive(int Ano, int Numero, int Seq) {
-            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+        public ViewResult Receive(int Ano=0, int Numero=0, int Seq=0) {
+
             if (HttpContext.Session["gti_V3id"] == null) {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
@@ -174,7 +174,7 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.FullName = Functions.Decrypt(HttpContext.Session["gti_V3full"].ToString());
                 ViewBag.UserId = Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString());
             }
-
+            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
             ProcessoViewModel processoViewModel = Exibe_Tramite(Numero_Ano, Seq);
             processoViewModel.CCusto_Codigo = processoViewModel.Lista_Tramite[0].CentroCustoCodigo;
@@ -217,6 +217,11 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.LoginName = "";
                 ViewBag.FullName = "Visitante";
                 return Json(Url.Action("Tramite_Processo2", "Protocolo", new { model.Ano, model.Numero}));
+            }
+
+            if (model.Despacho_Codigo == null) {
+                ViewBag.Result = "Selecione o despacho";
+                return null;
             }
 
             int _user_Id = Convert.ToInt32(Functions.Decrypt(HttpContext.Session["gti_V3id"].ToString()));
