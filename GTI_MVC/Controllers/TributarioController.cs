@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Web.Hosting;
 using System.Web.Mvc;
 using static GTI_Models.modelCore;
 using static GTI_Mvc.Functions;
@@ -23,14 +22,6 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Debito_Codigo")]
         [HttpGet]
         public ViewResult Certidao_Debito_Codigo() {
-            if (Session["gti_V3id"] == null) {
-                ViewBag.LoginName = "";
-                ViewBag.FullName = "Visitante";
-            } else {
-                ViewBag.LoginName = Decrypt(Session["gti_V3login"].ToString());
-                ViewBag.FullName = Decrypt(Session["gti_V3full"].ToString());
-                ViewBag.UserId = Decrypt(Session["gti_V3id"].ToString());
-            }
             return View();
         }
 
@@ -44,15 +35,6 @@ namespace GTI_Mvc.Controllers {
             bool _existeCod = false;
             string _tipoCertidao = "",_nao="", _sufixo = "XX",_reportName="", _numProcesso = "9222-3/2012", _dataProcesso = "18/04/2012",_cpf,_cnpj; 
             TipoCadastro _tipoCadastro=new TipoCadastro();
-
-            if (Session["gti_V3id"] == null) {
-                ViewBag.LoginName = "";
-                ViewBag.FullName = "Visitante";
-            } else {
-                ViewBag.LoginName = Decrypt(Session["gti_V3login"].ToString());
-                ViewBag.FullName = Decrypt(Session["gti_V3full"].ToString());
-                ViewBag.UserId = Decrypt(Session["gti_V3id"].ToString());
-            }
             CertidaoViewModel certidaoViewModel = new CertidaoViewModel();
             ViewBag.Result = "";
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
@@ -247,14 +229,6 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Debito_Doc")]
         [HttpGet]
         public ViewResult Certidao_Debito_Doc() {
-            if (Session["gti_V3id"] == null) {
-                ViewBag.LoginName = "";
-                ViewBag.FullName = "Visitante";
-            } else {
-                ViewBag.LoginName = Decrypt(Session["gti_V3login"].ToString());
-                ViewBag.FullName = Decrypt(Session["gti_V3full"].ToString());
-                ViewBag.UserId = Decrypt(Session["gti_V3id"].ToString());
-            }
             CertidaoViewModel model = new CertidaoViewModel {
                 OptionList = new List<SelectListaItem> {
                 new SelectListaItem { Text = " CPF", Value = "cpfCheck", Selected = true },
@@ -268,15 +242,6 @@ namespace GTI_Mvc.Controllers {
         [Route("Comprovante_Pagamento")]
         [HttpGet]
         public ViewResult Comprovante_Pagamento() {
-            if (Session["gti_V3id"] == null) {
-                ViewBag.LoginName = "";
-                ViewBag.FullName = "Visitante";
-            } else {
-                ViewBag.LoginName = Decrypt(Session["gti_V3login"].ToString());
-                ViewBag.FullName = Decrypt(Session["gti_V3full"].ToString());
-                ViewBag.UserId = Decrypt(Session["gti_V3id"].ToString());
-            }
-
             return View();
         }
 
@@ -293,14 +258,6 @@ namespace GTI_Mvc.Controllers {
             } else
                 _documento = Convert.ToInt32(model.Documento.Substring(model.Documento.Length - 8, 8));
 
-            if (Session["gti_V3id"] == null) {
-                ViewBag.LoginName = "";
-                ViewBag.FullName = "Visitante";
-            } else {
-                ViewBag.LoginName = Decrypt(Session["gti_V3login"].ToString());
-                ViewBag.FullName = Decrypt(Session["gti_V3full"].ToString());
-                ViewBag.UserId = Decrypt(Session["gti_V3id"].ToString());
-            }
             ViewBag.Result = "";
 
             if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
@@ -397,30 +354,12 @@ namespace GTI_Mvc.Controllers {
         [Route("Dama")]
         [HttpGet]
         public ViewResult Dama() {
-            if (Session["gti_V3id"] == null) {
-                ViewBag.LoginName = "";
-                ViewBag.FullName = "Visitante";
-            } else {
-                ViewBag.LoginName = Decrypt(Session["gti_V3login"].ToString());
-                ViewBag.FullName = Decrypt(Session["gti_V3full"].ToString());
-                ViewBag.UserId = Decrypt(Session["gti_V3id"].ToString());
-            }
-
             return View();
         }
 
         [Route("Dama")]
         [HttpPost]
         public ActionResult Dama(CertidaoViewModel model) {
-            if (Session["gti_V3id"] == null) {
-                ViewBag.LoginName = "";
-                ViewBag.FullName = "Visitante";
-            } else {
-                ViewBag.LoginName = Decrypt(Session["gti_V3login"].ToString());
-                ViewBag.FullName = Decrypt(Session["gti_V3full"].ToString());
-                ViewBag.UserId = Decrypt(Session["gti_V3id"].ToString());
-            }
-
             bool _isdate = Functions.IsDate(model.DataVencimento);
             if (!_isdate) {
                 ViewBag.Result = "Data de vencimento inválida.";
@@ -456,14 +395,6 @@ namespace GTI_Mvc.Controllers {
             if (model.Inscricao == null) {
                 return RedirectToAction("Index", "Home");
             }
-            if (Session["gti_V3id"] == null) {
-                ViewBag.LoginName = "";
-                ViewBag.FullName = "Visitante";
-            } else {
-                ViewBag.LoginName = Decrypt(Session["gti_V3login"].ToString());
-                ViewBag.FullName = Decrypt(Session["gti_V3full"].ToString());
-                ViewBag.UserId = Decrypt(Session["gti_V3id"].ToString());
-            }
             CertidaoViewModel modelt = new CertidaoViewModel {
                 OptionList = new List<SelectListaItem> {
                 new SelectListaItem { Text = " CPF", Value = "cpfCheck", Selected = true },
@@ -480,16 +411,6 @@ namespace GTI_Mvc.Controllers {
 #pragma warning disable IDE0060 // Remove unused parameter
         public ActionResult Damb(CertidaoViewModel model,int Codigo=0) {
 #pragma warning restore IDE0060 // Remove unused parameter
-            if (Session["gti_V3id"] == null) {
-                ViewBag.LoginName = "";
-                ViewBag.FullName = "Visitante";
-            } else {
-                ViewBag.LoginName = Decrypt(Session["gti_V3login"].ToString());
-                ViewBag.FullName = Decrypt(Session["gti_V3full"].ToString());
-                ViewBag.UserId = Decrypt(Session["gti_V3id"].ToString());
-            }
-           
-
             if (model.CpfValue != null) {
                 if (!Functions.ValidaCpf(model.CpfValue)) {
                     ViewBag.Result = "CPF inválido.";
@@ -610,15 +531,6 @@ namespace GTI_Mvc.Controllers {
 
             if (!(value is DebitoSelectionViewModel model)) {
                 return RedirectToAction("Index", "Home");
-            }
-
-            if (Session["gti_V3id"] == null) {
-                ViewBag.LoginName = "";
-                ViewBag.FullName = "Visitante";
-            } else {
-                ViewBag.LoginName = Decrypt(Session["gti_V3login"].ToString());
-                ViewBag.FullName = Decrypt(Session["gti_V3full"].ToString());
-                ViewBag.UserId = Decrypt(Session["gti_V3id"].ToString());
             }
 
             DateTime _dataVencto = model.Data_Vencimento;

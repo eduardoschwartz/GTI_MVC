@@ -25,18 +25,9 @@ namespace GTI_Mvc.Controllers {
         [Route("Details")]
         [HttpGet]
         public ViewResult Details() {
-            if (Session["gti_V3id"]==null) {
-                ViewBag.LoginName = "";
-                ViewBag.FullName = "Visitante";
-            } else {
-                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
-            }
             return View();
         }
-        
-       
+               
         [Route("Details")]
         [HttpPost]
         public ActionResult Details(EmpresaDetailsViewModel model) {
@@ -45,15 +36,6 @@ namespace GTI_Mvc.Controllers {
             int _codigo = 0;
             bool _existeCod = false;
             EmpresaDetailsViewModel empresaDetailsViewModel = new EmpresaDetailsViewModel();
-
-            if (Session["gti_V3id"]==null) {
-                ViewBag.LoginName = "";
-                ViewBag.FullName = "Visitante";
-            } else {
-                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
-            }
 
             if (model.Inscricao != null) {
                 _codigo = Convert.ToInt32(model.Inscricao);
@@ -102,7 +84,6 @@ namespace GTI_Mvc.Controllers {
                 List<CnaeStruct> ListaCnae = empresaRepository.Lista_Cnae_Empresa(_codigo);
                 string sCnae = "";
                 foreach (CnaeStruct cnae in ListaCnae) {
-                    //sCnae += cnae.CNAE + "-" + cnae.Descricao + System.Environment.NewLine;
                     sCnae += cnae.CNAE + "-" + cnae.Descricao + "; ";
                 }
                 empresaDetailsViewModel.Cnae = sCnae;
@@ -149,15 +130,6 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Inscricao")]
         [HttpGet]
         public ViewResult Certidao_Inscricao() {
-            if (Session["gti_V3id"] == null) {
-                ViewBag.LoginName = "";
-                ViewBag.FullName = "Visitante";
-            } else {
-                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
-            }
-
             CertidaoViewModel model = new CertidaoViewModel {
                 OptionList = new List<SelectListaItem> {
                 new SelectListaItem { Text = " CPF", Value = "cpfCheck", Selected = true },
@@ -172,15 +144,6 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Retorna_Codigos")]
         public ActionResult Retorna_Codigos(CertidaoViewModel model) {
             Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
-            if (Session["gti_V3id"] == null) {
-                ViewBag.LoginName = "";
-                ViewBag.FullName = "Visitante";
-            } else {
-                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
-            }
-
             if (model.CpfValue!=null || model.CnpjValue != null) {
 
                 model.OptionList = new List<SelectListaItem> {
@@ -215,15 +178,6 @@ namespace GTI_Mvc.Controllers {
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             int _codigo , _ano ,_numero;
             string _chave = model.Chave;
-
-            if (Session["gti_V3id"] == null) {
-                ViewBag.LoginName = "";
-                ViewBag.FullName = "Visitante";
-            } else {
-                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
-            }
 
             model.OptionList = new List<SelectListaItem> {
                 new SelectListaItem { Text = " CPF", Value = "cpfCheck", Selected = model.SelectedValue == "cpfCheck" },
@@ -307,14 +261,6 @@ namespace GTI_Mvc.Controllers {
             Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Debito);
-            if (Session["gti_V3id"] == null) {
-                ViewBag.LoginName = "";
-                ViewBag.FullName = "Visitante";
-            } else {
-                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
-            }
             ViewBag.Result = "";
 
             model.OptionList = new List<SelectListaItem> {
@@ -526,15 +472,6 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao_Pagamento")]
         [HttpGet]
         public ViewResult Certidao_Pagamento() {
-            if (Session["gti_V3id"]==null) {
-                ViewBag.LoginName = "";
-                ViewBag.FullName = "Visitante";
-            } else {
-                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
-            }
-
             CertidaoViewModel model = new CertidaoViewModel {
                 OptionList = new List<SelectListaItem> {
                 new SelectListaItem { Text = " CPF", Value = "cpfCheck", Selected = true },
@@ -550,14 +487,6 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Certidao_Pagamento(CertidaoViewModel model) {
             int _codigo;
             Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
-            if (Session["gti_V3id"] == null) {
-                ViewBag.LoginName = "";
-                ViewBag.FullName = "Visitante";
-            } else {
-                ViewBag.LoginName = Functions.Decrypt(Session["gti_V3login"].ToString());
-                ViewBag.FullName = Functions.Decrypt(Session["gti_V3full"].ToString());
-                ViewBag.UserId = Functions.Decrypt(Session["gti_V3id"].ToString());
-            }
             ViewBag.Result = "";
 
             model.OptionList = new List<SelectListaItem> {
