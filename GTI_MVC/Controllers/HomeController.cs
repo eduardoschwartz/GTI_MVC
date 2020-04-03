@@ -61,10 +61,11 @@ namespace GTI_Mvc.Controllers {
                 sOldPwd2 = tacesso_Class.DecryptGTI(sOldPwd);
                 if (sOldPwd2 != sNewPwd) {
                     ViewBag.Result = "Usuário/Senha inválido!";
+                    Functions.pUserId = 0;
                     return View(loginViewModel);
                 } else {
                     ViewBag.Result = "";
-                    Functions.pUserId = 0;
+                    Functions.pUserId = UserId;
                 }
             }
 
@@ -79,7 +80,6 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.Result = "Usuário inativo.";
                 return View(loginViewModel);
             } else {
-                Functions.pUserId = UserId;
                 Functions.pUserLoginName = _user.Nome_login;
                 Functions.pUserFullName = _user.Nome_completo;
                 return View("../Home/SysMenu");

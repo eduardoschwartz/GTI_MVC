@@ -171,11 +171,13 @@ namespace GTI_Mvc.Controllers {
                 return Json(Url.Action("Tramite_Processo2", "Protocolo", new { model.Ano, model.Numero }));
 
             if (model.Despacho_Codigo == null) {
-                ViewBag.Result = "Selecione o despacho";
-                return null;
+                model.Despacho_Codigo = 998;
+            //    ViewBag.Result = "Selecione o despacho";
+            //    return null;
             }
 
-            int _user_Id = Functions.pUserId;
+            int 
+                _user_Id = Functions.pUserId;
             Tramitacao reg = new Tramitacao() {
                 Ano = (short)model.Ano,
                 Numero = model.Numero,
