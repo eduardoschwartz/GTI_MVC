@@ -114,6 +114,9 @@
         <div class="col-sm-10">
             <label>Despacho: </label>
             @Html.HiddenFor(m => m.CCusto_Codigo)
+       
+            
+            
             @Html.DropDownListFor(m => m.Despacho_Codigo, ViewBag.Lista_Despacho as SelectList, "-Selecione um Despacho-", new { @id = "EnviarDropDown", style = "width:330px;height:25px" })
         </div>
     </div>
