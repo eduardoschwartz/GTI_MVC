@@ -59,40 +59,42 @@ namespace GTI_Mvc.Controllers {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             ProcessoViewModel processoViewModel = new ProcessoViewModel();
             int _userId = Functions.pUserId;
+            if (_userId > 0) {
 
-            List<UsuariocentroCusto> _listaCC = protocoloRepository.ListaCentrocustoUsuario(_userId);
-            string Lista_CC = "";
-            foreach (UsuariocentroCusto item in _listaCC) {
-                Lista_CC += item.Codigo + ",";
-            }
-            Lista_CC = Lista_CC.Substring(0, Lista_CC.Length - 1);
-            
-
-            List<Centrocusto> Lista_CentroCusto = protocoloRepository.Lista_Local(true,false);
-            ViewBag.Lista_CentroCusto = new SelectList(Lista_CentroCusto, "Codigo", "Descricao");
-
-            ProcessoNumero processoNumero = Functions.Split_Processo_Numero(Numero_Ano);
-            ProcessoStruct _dados = protocoloRepository.Dados_Processo(processoNumero.Ano, processoNumero.Numero);
-            if (_dados != null) {
-                List<TramiteStruct> Lista_Tramite = protocoloRepository.DadosTramite((short)processoNumero.Ano, processoNumero.Numero, (int)_dados.CodigoAssunto);
-                if (Seq > 0) {
-                    Lista_Tramite = Lista_Tramite.Where(m => m.Seq == Seq).ToList();
-
+                List<UsuariocentroCusto> _listaCC = protocoloRepository.ListaCentrocustoUsuario(_userId);
+                string Lista_CC = "";
+                foreach (UsuariocentroCusto item in _listaCC) {
+                    Lista_CC += item.Codigo + ",";
                 }
-                processoViewModel.Despacho_Codigo = Lista_Tramite[0].DespachoCodigo;
-                processoViewModel.Ano = processoNumero.Ano;
-                processoViewModel.Numero = processoNumero.Numero;
-                processoViewModel.User_Id = Convert.ToInt32(ViewBag.UserId);
-                processoViewModel.Data_Processo = Convert.ToDateTime(_dados.DataEntrada).ToString("dd/MM/yyyy");
-                processoViewModel.Requerente = _dados.NomeCidadao;
-                processoViewModel.Assunto_Nome = _dados.Assunto;
-                processoViewModel.Lista_Tramite = Lista_Tramite;
-                processoViewModel.Lista_CC = Lista_CC;
-                processoViewModel.Numero_Ano = Numero_Ano;
-                processoViewModel.ObsGeral = Lista_Tramite[0].ObsGeral;
-                processoViewModel.ObsInterna = Lista_Tramite[0].ObsInterna;
-            } else {
-                ViewBag.Result = "Processo não cadastrado.";
+                Lista_CC = Lista_CC.Substring(0, Lista_CC.Length - 1);
+
+
+                List<Centrocusto> Lista_CentroCusto = protocoloRepository.Lista_Local(true, false);
+                ViewBag.Lista_CentroCusto = new SelectList(Lista_CentroCusto, "Codigo", "Descricao");
+
+                ProcessoNumero processoNumero = Functions.Split_Processo_Numero(Numero_Ano);
+                ProcessoStruct _dados = protocoloRepository.Dados_Processo(processoNumero.Ano, processoNumero.Numero);
+                if (_dados != null) {
+                    List<TramiteStruct> Lista_Tramite = protocoloRepository.DadosTramite((short)processoNumero.Ano, processoNumero.Numero, (int)_dados.CodigoAssunto);
+                    if (Seq > 0) {
+                        Lista_Tramite = Lista_Tramite.Where(m => m.Seq == Seq).ToList();
+
+                    }
+                    processoViewModel.Despacho_Codigo = Lista_Tramite[0].DespachoCodigo;
+                    processoViewModel.Ano = processoNumero.Ano;
+                    processoViewModel.Numero = processoNumero.Numero;
+                    processoViewModel.User_Id = Convert.ToInt32(ViewBag.UserId);
+                    processoViewModel.Data_Processo = Convert.ToDateTime(_dados.DataEntrada).ToString("dd/MM/yyyy");
+                    processoViewModel.Requerente = _dados.NomeCidadao;
+                    processoViewModel.Assunto_Nome = _dados.Assunto;
+                    processoViewModel.Lista_Tramite = Lista_Tramite;
+                    processoViewModel.Lista_CC = Lista_CC;
+                    processoViewModel.Numero_Ano = Numero_Ano;
+                    processoViewModel.ObsGeral = Lista_Tramite[0].ObsGeral;
+                    processoViewModel.ObsInterna = Lista_Tramite[0].ObsInterna;
+                } else {
+                    ViewBag.Result = "Processo não cadastrado.";
+                }
             }
             return processoViewModel;
         }
@@ -122,15 +124,17 @@ namespace GTI_Mvc.Controllers {
             return Json(Url.Action("Tramite_Processo2", "Protocolo", new { Ano,Numero }));
         }
 
-        //public ActionResult Inserir_Save(ProcessoViewModel model) {
-        //    int _user_Id = Convert.ToInt32(Functions.Decrypt(Session["gti_V3id"].ToString()));
-        //    Exception ex = protocoloRepository.Inserir_Local(model.Numero, model.Ano, model.Seq,(int)model.CCusto_Codigo);
-        //    model.Numero_Ano = model.Numero.ToString() + "-" + Functions.RetornaDvProcesso(model.Numero) + "/" + model.Ano.ToString();
-        //    ProcessoViewModel processoViewModel = new ProcessoViewModel() {
-        //        Numero_Ano=model.Numero_Ano
-        //    };
-        //    return RedirectToAction("Tramite_Processo2", new { processoViewModel.Ano, processoViewModel.Numero });
-        //}
+        public ActionResult Inserir_Save(ProcessoViewModel model) {
+//            int _user_Id = Convert.ToInt32(Functions.Decrypt(Session["gti_V3id"].ToString()));
+            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+            Exception ex = protocoloRepository.Inserir_Local(model.Numero, model.Ano, model.Seq, (int)model.CCusto_Codigo);
+            model.Numero_Ano = model.Numero.ToString() + "-" + Functions.RetornaDvProcesso(model.Numero) + "/" + model.Ano.ToString();
+            ProcessoViewModel processoViewModel = new ProcessoViewModel() {
+                Numero_Ano = model.Numero_Ano
+            };
+            //return RedirectToAction("Tramite_Processo2", new { processoViewModel.Ano, processoViewModel.Numero });
+            return Json(Url.Action("Tramite_Processo2", "Protocolo", new { processoViewModel.Ano, processoViewModel.Numero }));
+        }
 
 
         //public ActionResult Alterar_Obs(ProcessoViewModel model) {
@@ -194,14 +198,11 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult Send(int Ano=0, int Numero=0, int Seq=0) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            //if (Functions.pUserId == 0)
-            //    return View("../Home/Login");
 
             string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
             ProcessoViewModel processoViewModel = Exibe_Tramite(Numero_Ano, Seq);
             processoViewModel.CCusto_Codigo = processoViewModel.Lista_Tramite[0].CentroCustoCodigo;
 
-            //List<UsuariocentroCusto> _listaCC = protocoloRepository.ListaCentrocustoUsuario(Convert.ToInt32(ViewBag.UserId));
             List<Despacho> Lista_Despacho = protocoloRepository.Lista_Despacho();
             ViewBag.Lista_Despacho = new SelectList(Lista_Despacho, "Codigo", "Descricao",processoViewModel.Lista_Tramite[0].DespachoCodigo);
 
@@ -238,13 +239,11 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult AddPlace(int Ano=0, int Numero=0, int Seq=0) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            //if (Functions.pUserId == 0)
-            //    return View("../Home/Login");
 
             string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
             ProcessoViewModel processoViewModel = Exibe_Tramite(Numero_Ano, Seq);
-            List<Despacho> Lista_Despacho = protocoloRepository.Lista_Despacho();
-            ViewBag.Lista_Despacho = new SelectList(Lista_Despacho, "Codigo", "Descricao", processoViewModel.Lista_Tramite[0].DespachoCodigo);
+//            List<Despacho> Lista_Despacho = protocoloRepository.Lista_Despacho();
+  //          ViewBag.Lista_Despacho = new SelectList(Lista_Despacho, "Codigo", "Descricao", processoViewModel.Lista_Tramite[0].DespachoCodigo);
 
             return View(processoViewModel);
         }
@@ -257,7 +256,8 @@ namespace GTI_Mvc.Controllers {
             if (ex != null)
                 ViewBag.Result = "Ocorreu um erro ao inserir um local";
             model.Numero_Ano = model.Numero.ToString() + "-" + Functions.RetornaDvProcesso(model.Numero) + "/" + model.Ano.ToString();
-            return Json(Url.Action("Tramite_Processo2", "Protocolo", new { model.Ano, model.Numero }));
+            //return Json(Url.Action("Tramite_Processo2", "Protocolo", new { model.Ano, model.Numero }));
+            return RedirectToAction("Tramite_Processo2", new { model.Ano, model.Numero });
         }
 
         public ActionResult RemovePlace(ProcessoViewModel model) {
