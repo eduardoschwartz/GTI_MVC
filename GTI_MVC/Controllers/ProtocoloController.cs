@@ -242,8 +242,6 @@ namespace GTI_Mvc.Controllers {
 
             string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
             ProcessoViewModel processoViewModel = Exibe_Tramite(Numero_Ano, Seq);
-//            List<Despacho> Lista_Despacho = protocoloRepository.Lista_Despacho();
-  //          ViewBag.Lista_Despacho = new SelectList(Lista_Despacho, "Codigo", "Descricao", processoViewModel.Lista_Tramite[0].DespachoCodigo);
 
             return View(processoViewModel);
         }
@@ -251,26 +249,22 @@ namespace GTI_Mvc.Controllers {
         [Route("AddPlace/{Ano}/{Numero}/{Seq}/{CentroCustoCodigo}")]
         [HttpPost]
         public ActionResult AddPlace(ProcessoViewModel model) {
-            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            Exception ex = protocoloRepository.Inserir_Local(model.Numero, model.Ano, model.Seq, (int)model.CCusto_Codigo);
-            if (ex != null)
-                ViewBag.Result = "Ocorreu um erro ao inserir um local";
-            model.Numero_Ano = model.Numero.ToString() + "-" + Functions.RetornaDvProcesso(model.Numero) + "/" + model.Ano.ToString();
-            //return Json(Url.Action("Tramite_Processo2", "Protocolo", new { model.Ano, model.Numero }));
+            if (model.CCusto_Codigo != null) {
+                Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+                Exception ex = protocoloRepository.Inserir_Local(model.Numero, model.Ano, model.Seq, (int)model.CCusto_Codigo);
+                if (ex != null)
+                    ViewBag.Result = "Ocorreu um erro ao inserir um local";
+                model.Numero_Ano = model.Numero.ToString() + "-" + Functions.RetornaDvProcesso(model.Numero) + "/" + model.Ano.ToString();
+            }
             return RedirectToAction("Tramite_Processo2", new { model.Ano, model.Numero });
         }
 
-        public ActionResult RemovePlace(ProcessoViewModel model) {
+        public ActionResult RemovePlace(int Ano,int Numero,int Seq) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            Exception ex = protocoloRepository.Remover_Local(model.Numero, model.Ano, model.Seq);
+            Exception ex = protocoloRepository.Remover_Local(Numero, Ano, Seq);
             if (ex != null)
                 ViewBag.Result = "Ocorreu um erro ao remover o local";
-
-            model.Numero_Ano = model.Numero.ToString() + "-" + Functions.RetornaDvProcesso(model.Numero) + "/" + model.Ano.ToString();
-            ProcessoViewModel processoViewModel = new ProcessoViewModel() {
-                Numero_Ano = model.Numero_Ano
-            };
-            return Json(Url.Action("Tramite_Processo2", "Protocolo", new { model.Ano, model.Numero }));
+            return RedirectToAction("Tramite_Processo2", new {Ano, Numero });
         }
 
         [Route("Obs/{Ano}/{Numero}/{Seq}")]

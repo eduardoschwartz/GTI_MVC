@@ -147,7 +147,8 @@
                             <a href="#" title="Mover trâmite para baixo"> <img src="@Url.Content("~/images/abaixo.gif")" data-value="@item.Seq" onclick="MoveDown('@Model.Ano',@Model.Numero,@item.Seq)"></a>
                             <a href="#" title="Mover trâmite para cima"> <img src="@Url.Content("~/images/acima.gif")" data-value="@item.Seq" onclick="MoveUp('@Model.Ano',@Model.Numero,@item.Seq)"></a>
                             <a href="@Url.Action("AddPlace","Protocolo",new {Ano=@Model.Ano,Numero=@Model.Numero, Seq=item.Seq,@item.CentroCustoCodigo})" title="Incluir um local de trâmite"> <img src="@Url.Content("~/images/inserir_local.png")" onclick="return Validar_AddPlace('@Model.Ano',@Model.Numero,@item.Seq,@item.CentroCustoCodigo)" /></a>
-                            <a href="#" title="Remover local de trâmite"> <img src="@Url.Content("~/images/remover_local.png")" data-value="@item.Seq" onclick="Usuario_CC_Remover('@Model.Lista_CC',@item.Seq,@item.CentroCustoCodigo)"></a>
+                            <a href="@Url.Action("RemovePlace","Protocolo",new {Ano=@Model.Ano,Numero=@Model.Numero, Seq=item.Seq})" title="Remover um local de trâmite"> <img src="@Url.Content("~/images/remover_local.png")" onclick="return Usuario_CC_Remover('@Model.Lista_CC',@item.Seq,@item.CentroCustoCodigo)" /></a>
+                            @*<a href="#" title="Remover local de trâmite"> <img src="@Url.Content("~/images/remover_local.png")" data-value="@item.Seq" onclick="return Usuario_CC_Remover('@Model.Lista_CC',@item.Seq,@item.CentroCustoCodigo)"></a>*@
                             <a href="@Url.Action("Obs","Protocolo",new {Ano=@Model.Ano,Numero=@Model.Numero, Seq=item.Seq})" title="Observação"> <img src="@Url.Content("~/images/observacao.png")" onclick="return Validar_Obs('@Model.Lista_CC',@item.Seq,'@item.ObsGeral','@item.ObsInterna')" /></a>
                         </td>
 
@@ -404,9 +405,10 @@
         return true;
     }
 
-    function Remover_Local(Ano, Numero, Seq, CCusto) {
+    @*function Remover_Local(Ano, Numero, Seq) {
         var tbl = document.getElementById("tblMain");
         var _texto = tbl.rows[Seq].cells[2].innerHTML;
+
         if (elementIsEmpty(_texto) == false) {
             alert("Este local já foi tramitado.");
             window.location.href = window.location.href;
@@ -420,31 +422,34 @@
                         window.location.href = data;
                     },
                 data: {
-                    Ano: Ano,
-                    Numero: Numero,
-                    Seq: Seq,
-                    CCusto_Codigo:CCusto
+                    Ano: @Model.Ano,
+                    Numero: @Model.Numero,
+                    Seq: Seq
                 }
             });
         }
         window.location.href = window.location.href;
         return true;
-    }
+    }*@
 
     function Usuario_CC_Remover(Prm ,Seq, CCusto) {
         var _find = false;
         var _lista = Prm.split(",");
-        for (i = 0; i < _lista.length; i++) {
-            if (_lista[i] == CCusto) {
-                _find = true;
-                break;
+        if (Seq > 0) {
+            for (i = 0; i < _lista.length; i++) {
+                if (_lista[i] == CCusto) {
+                    _find = true;
+                    break;
+                }
             }
-        }
-        ClearError();
-        if (_find) {
-                Remover_Local(@Model.Ano,@Model.Numero, Seq, CCusto);
-        }   else {
-            alert( "Você não tem permissão para remover este local.");
+            ClearError();
+            if (_find) {
+                return true;
+                @*Remover_Local(@Model.Ano,@Model.Numero, Seq);*@
+            } else {
+                alert("Você não tem permissão para remover este local.");
+                return false;
+            }
         }
     }
 
@@ -453,7 +458,7 @@
     //*************************
 
         function Validar_Obs(Prm, Seq, ObsGeral, ObsInterna) {
-        var tbl = document.getElementById("tblMain");
+        @*var tbl = document.getElementById("tblMain");
         var _texto = tbl.rows[Seq].cells[2].innerHTML;
         if (elementIsEmpty(_texto) == true) {
             document.getElementById('errorLabel').innerHTML = "O processo ainda não foi recebido neste local.";
@@ -489,7 +494,7 @@
             document.getElementById('errorLabel').innerHTML ="Você não tem permissão para comentar neste local.";
             return false;
         }
-        return true;
+        return true;*@
     }
 
 
