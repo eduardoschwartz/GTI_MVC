@@ -554,7 +554,7 @@ namespace GTI_Bll.Classes {
 
         public Exception Alterar_Obs(int Ano, int Numero, int Seq, string ObsGeral, string ObsInterna) {
             Processo_Data obj = new Processo_Data(_connection);
-            Exception ex = obj.Alterar_Obs(Numero, Ano, Seq, ObsGeral,ObsInterna);
+            Exception ex = obj.Alterar_Obs(Ano, Numero, Seq, ObsGeral,ObsInterna);
             return ex;
         }
 

@@ -704,7 +704,7 @@ namespace GTI_Dal.Classes {
                                 join d in db.Despacho on t.Despacho equals d.Codigo into td from d in td.DefaultIfEmpty()
                                 join u in db.Usuario on t.Userid equals u.Id into tu from u in tu.DefaultIfEmpty()
                                 where t.Ano == Ano && t.Numero == Numero && t.Seq == Seq
-                                select new { t.Seq, t.Ccusto, t.Datahora, t.Dataenvio, d.Codigo,d.Descricao, t.Userid, t.Userid2, Usuario1 = u.Nomelogin, t.Obs });
+                                select new { t.Seq, t.Ccusto, t.Datahora, t.Dataenvio, d.Codigo,d.Descricao, t.Userid, t.Userid2, Usuario1 = u.Nomelogin, t.Obs,t.Obsinterna });
 
                     foreach (var query in reg4) {
                         Lista[i].DataEntrada = query.Datahora.ToString() == "" ? "" : DateTime.Parse(query.Datahora.ToString()).ToString("dd/MM/yyyy");
@@ -723,6 +723,8 @@ namespace GTI_Dal.Classes {
                         } else
                             Lista[i].Usuario2 = "";
                         Lista[i].Obs = String.IsNullOrEmpty(query.Obs) ? "" : query.Obs;
+                        Lista[i].ObsGeral = String.IsNullOrEmpty(query.Obs) ? "" : query.Obs;
+                        Lista[i].ObsInterna = String.IsNullOrEmpty(query.Obsinterna) ? "" : query.Obsinterna;
                     }
                 }
             }

@@ -269,7 +269,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Obs/{Ano}/{Numero}/{Seq}")]
         [HttpGet]
-        public ViewResult Obs(int Ano=0, int Numero=0, int Seq=0) {
+        public ViewResult Obs(int Ano, int Numero, int Seq=0) {
             //Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             if (Functions.pUserId == 0)
                 return View("../Home/Login");
@@ -277,22 +277,8 @@ namespace GTI_Mvc.Controllers {
             string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
             ProcessoViewModel processoViewModel = Exibe_Tramite(Numero_Ano, Seq);
             processoViewModel.CCusto_Codigo = processoViewModel.Lista_Tramite[0].CentroCustoCodigo;
-
-            //List<UsuariocentroCusto> _listaCC = protocoloRepository.ListaCentrocustoUsuario(Convert.ToInt32(ViewBag.UserId));
-            //bool _find = false;
-            //foreach (UsuariocentroCusto item in _listaCC) {
-            //    if (item.Codigo == processoViewModel.CCusto_Codigo) {
-            //        _find = true;
-            //        break;
-            //    }
-            //}
-
-            //if (!_find) {
-            //    Session.Clear();
-            //    ViewBag.LoginName = "";
-            //    ViewBag.FullName = "Visitante";
-            //    return View("../Home/Login");
-            //}
+            processoViewModel.ObsGeral = processoViewModel.ObsGeral ?? "";
+            processoViewModel.ObsInterna = processoViewModel.ObsInterna ?? "";
 
             return View(processoViewModel);
         }

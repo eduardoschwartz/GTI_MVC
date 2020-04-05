@@ -343,11 +343,6 @@ namespace GTI_Mvc {
             return _reg;
         }
 
-        //public static IConfigurationRoot GetConfiguration() {
-        //    var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-        //    return builder.Build();
-        //}
-
         private static readonly Random getrandom = new Random();
         private static readonly object syncLock = new object();
         public static int GetRandomNumber() {

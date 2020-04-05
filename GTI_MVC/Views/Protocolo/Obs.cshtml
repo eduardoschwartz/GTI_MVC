@@ -69,7 +69,9 @@
 
     <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
         @foreach (var item in Model.Lista_Tramite) {
-            @Html.HiddenFor(m => m.Seq,new {item.Seq })
+            @Html.HiddenFor(m => m.Ano, new { item.Ano })
+            @Html.HiddenFor(m => m.Numero, new { item.Numero })
+            @Html.HiddenFor(m => m.Seq, new { item.Seq })
             <tr>
                 <td style="width:200px;padding: 1px 1px 1px 5px;">
                     Seq
@@ -107,7 +109,7 @@
     <br /><br />
     <div >
         <button type="submit" class="btn btn-primary" id="Obs_Save" formaction="Obs">Gravar</button>
-        <input type="button" class="btn btn-secondary" value="Cancelar" onclick="@("window.location.href='" + @Url.Action("Tramite_Processo2", "Protocolo") + "'");" />
+        <input type="button" class="btn btn-secondary" value="Cancelar" onclick="@("window.location.href='" + @Url.Action("Tramite_Processo2", "Protocolo",new { @Ano=Model.Ano,@Numero=Model.Numero}) + "'");" />
     </div>
 
 </form>
