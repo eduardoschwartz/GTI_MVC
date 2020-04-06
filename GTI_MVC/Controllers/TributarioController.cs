@@ -273,7 +273,7 @@ namespace GTI_Mvc.Controllers {
             Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
 
             bool bEmpresa = false, bCidadao = false, bImovel = false;
-            List<int> _codigos = sistemaRepository.Lista_Codigos_Documento(model.CpfValue != "" ? model.CpfValue : model.CnpjValue, model.CpfValue != "" ? TipoDocumento.Cpf : TipoDocumento.Cnpj);
+            List<int> _codigos = sistemaRepository.Lista_Codigos_Documento(!string.IsNullOrWhiteSpace( model.CpfValue)  ? model.CpfValue : model.CnpjValue, !string.IsNullOrWhiteSpace( model.CpfValue)  ? TipoDocumento.Cpf : TipoDocumento.Cnpj);
 
             foreach (int _codigo in _codigos) {
                 TipoCadastro _tipo_cadastro = _codigo < 100000 ? TipoCadastro.Imovel : _codigo >= 100000 && _codigo < 500000 ? TipoCadastro.Empresa : TipoCadastro.Cidadao;
@@ -353,34 +353,30 @@ namespace GTI_Mvc.Controllers {
                 _tributo = _tributo.Substring(0, _tributo.Length - 1);
             int _numero_certidao = tributario_Class.Retorna_Codigo_Certidao(TipoCertidao.Debito_Doc);
             int _ano_certidao = DateTime.Now.Year;
-            certidao_debito_doc cert = new certidao_debito_doc();
+            Certidao cert = new Certidao();
             cert.Ano = (short)_ano_certidao;
 
             cert.Numero = _numero_certidao;
-            cert.Data_emissao = DateTime.Now;
-            cert.Nome = _lista_certidao[0]._Nome;
-            cert.Cpf_cnpj = model.CpfCnpjLabel;
+            cert.Nome_Requerente = _lista_certidao[0]._Nome;
+            cert.Cpf_Cnpj = !string.IsNullOrWhiteSpace( model.CpfValue)?model.CpfValue:model.CnpjValue;
 
             if (_tipo_Certidao == RetornoCertidaoDebito.Negativa) {
-                cert.Validacao = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "-IN";
+                cert.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "-IN";
                 cert.Tributo = "Não consta débito apurado contra o(a) mesmo(a).";
-                cert.Ret = 1;
             } else {
                 if (_tipo_Certidao == RetornoCertidaoDebito.Positiva) {
-                    cert.Validacao = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "-IP";
+                    cert.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "-IP";
                     cert.Tributo = "Consta débito apurado contra o(a) mesmo(a) com referência a: " + _tributo;
-                    cert.Ret = 2;
                 } else {
                     if (_tipo_Certidao == RetornoCertidaoDebito.NegativaPositiva) {
-                        cert.Validacao = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "-IS";
+                        cert.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "-IS";
                         cert.Tributo = "Consta débito apurado contra o(a) mesmo(a) com referência a: " + _tributo + " que se encontram em sua exigibilidade suspensa, em razão de parcelamento dos débitos";
-                        cert.Ret = 3;
                     }
                 }
             }
 
-            Exception ex = tributario_Class.Insert_Certidao_Debito_Doc(cert);
-
+            //Exception ex = tributario_Class.Insert_Certidao_Debito_Doc(cert);
+            Exception ex = null;
             if (ex != null) {
                 throw ex;
             } else {

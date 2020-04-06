@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GTI_Mvc.Reports {
+namespace GTI_MVC.Reports {
     using System;
     using System.ComponentModel;
     using CrystalDecisions.Shared;
@@ -41,7 +41,7 @@ namespace GTI_Mvc.Reports {
         
         public override string FullResourceName {
             get {
-                return "GTI_Mvc.Reports.Certidao_Isencao_Processo.rpt";
+                return "GTI_MVC.Reports.Certidao_Isencao_Processo.rpt";
             }
             set {
                 // Do nothing
