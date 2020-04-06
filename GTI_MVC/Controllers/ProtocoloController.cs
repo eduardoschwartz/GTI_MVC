@@ -125,25 +125,24 @@ namespace GTI_Mvc.Controllers {
         }
 
         public ActionResult Inserir_Save(ProcessoViewModel model) {
-//            int _user_Id = Convert.ToInt32(Functions.Decrypt(Session["gti_V3id"].ToString()));
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             Exception ex = protocoloRepository.Inserir_Local(model.Numero, model.Ano, model.Seq, (int)model.CCusto_Codigo);
             model.Numero_Ano = model.Numero.ToString() + "-" + Functions.RetornaDvProcesso(model.Numero) + "/" + model.Ano.ToString();
             ProcessoViewModel processoViewModel = new ProcessoViewModel() {
                 Numero_Ano = model.Numero_Ano
             };
-            //return RedirectToAction("Tramite_Processo2", new { processoViewModel.Ano, processoViewModel.Numero });
             return Json(Url.Action("Tramite_Processo2", "Protocolo", new { processoViewModel.Ano, processoViewModel.Numero }));
         }
 
 
-        //public ActionResult Alterar_Obs(ProcessoViewModel model) {
-        //    Exception ex = protocoloRepository.Alterar_Obs( model.Ano,model.Numero, model.Seq,model.Obs);
-        //    ProcessoViewModel processoViewModel = new ProcessoViewModel {
-        //        Numero_Ano = model.Numero.ToString() + "-" + Functions.RetornaDvProcesso(model.Numero) + "/" + model.Ano.ToString()
-        //    };
-        //    return RedirectToAction("Tramite_Processo2", new { processoViewModel.Ano, processoViewModel.Numero });
-        //}
+        public ActionResult Alterar_Obs(ProcessoViewModel model) {
+            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+            Exception ex = protocoloRepository.Alterar_Obs(model.Ano, model.Numero, model.Seq, model.ObsGeral,model.ObsInterna);
+            ProcessoViewModel processoViewModel = new ProcessoViewModel {
+                Numero_Ano = model.Numero.ToString() + "-" + Functions.RetornaDvProcesso(model.Numero) + "/" + model.Ano.ToString()
+            };
+            return RedirectToAction("Tramite_Processo2", new { processoViewModel.Ano, processoViewModel.Numero });
+        }
 
         /****************************************************************
          * 
@@ -270,7 +269,6 @@ namespace GTI_Mvc.Controllers {
         [Route("Obs/{Ano}/{Numero}/{Seq}")]
         [HttpGet]
         public ViewResult Obs(int Ano, int Numero, int Seq=0) {
-            //Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             if (Functions.pUserId == 0)
                 return View("../Home/Login");
 

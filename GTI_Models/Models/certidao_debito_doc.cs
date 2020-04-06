@@ -20,4 +20,13 @@ namespace GTI_Models.Models {
         public string Validacao { get; set; }
         public string Tributo { get; set; }
     }
+
+    public class Certidao_debito_documento {
+        public int _Codigo { get; set; }
+        public string _Nome { get; set; }
+        public int _Ret { get; set; }
+        public string _Tributo { get; set; }
+    }
+
+
 }

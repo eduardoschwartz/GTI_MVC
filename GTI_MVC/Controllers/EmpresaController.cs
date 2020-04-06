@@ -271,10 +271,18 @@ namespace GTI_Mvc.Controllers {
             if (model.CpfValue != null || model.CnpjValue != null) {
                 List<int> _lista = new List<int>();
                 if (model.CpfValue != null) {
-                    _lista = empresaRepository.Retorna_Codigo_por_CPF(Functions.RetornaNumero(model.CpfValue));
+                    if (!Functions.ValidaCpf(model.CpfValue)) {
+                        ViewBag.Result = "CPF inválido.";
+                        return View(model);
+                    } else
+                        _lista = empresaRepository.Retorna_Codigo_por_CPF(Functions.RetornaNumero(model.CpfValue));
                 } else {
                     if (model.CnpjValue != null) {
-                        _lista = empresaRepository.Retorna_Codigo_por_CNPJ(Functions.RetornaNumero(model.CnpjValue));
+                        if (!Functions.ValidaCNPJ(model.CnpjValue)) {
+                            ViewBag.Result = "CNPJ inválido.";
+                            return View(model);
+                        } else
+                            _lista = empresaRepository.Retorna_Codigo_por_CNPJ(Functions.RetornaNumero(model.CnpjValue));
                     }
                 }
                 if (_lista.Count > 0) {
