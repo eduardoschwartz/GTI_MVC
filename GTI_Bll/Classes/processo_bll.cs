@@ -512,7 +512,7 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
-        public Tramitacao Dados_Tramite(int Ano, int Numero, int Seq) {
+        public TramiteStruct Dados_Tramite(int Ano, int Numero, int Seq) {
             Processo_Data obj = new Processo_Data(_connection);
             return obj.Dados_Tramite(Ano, Numero, Seq);
         }

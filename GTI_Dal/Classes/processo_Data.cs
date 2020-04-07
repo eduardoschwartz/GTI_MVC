@@ -1155,10 +1155,36 @@ namespace GTI_Dal.Classes {
             return null;
         }
 
-        public Tramitacao Dados_Tramite(int Ano, int Numero, int Seq) {
+        public TramiteStruct Dados_Tramite(int Ano, int Numero, int Seq) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                Tramitacao Sql = (from t in db.Tramitacao where t.Ano == Ano && t.Numero == Numero && t.Seq == Seq select t).FirstOrDefault();
-                return Sql;
+                Sistema_Data clsSistema = new Sistema_Data(_connection);
+                var sql = (from t in db.Tramitacao
+                            join d in db.Despacho on t.Despacho equals d.Codigo into td from d in td.DefaultIfEmpty()
+                            join u in db.Usuario on t.Userid equals u.Id into tu from u in tu.DefaultIfEmpty()
+                            where t.Ano == Ano && t.Numero == Numero && t.Seq == Seq
+                            select new { t.Seq, t.Ccusto, t.Datahora, t.Dataenvio, t.Despacho, d.Descricao, t.Userid, t.Userid2, Usuario1 = u.Nomelogin, t.Obs, t.Obsinterna });
+
+                TramiteStruct reg = new TramiteStruct();
+                foreach (var query in sql) {
+                    reg.DataEntrada = query.Datahora.ToString() == "" ? "" : DateTime.Parse(query.Datahora.ToString()).ToString("dd/MM/yyyy");
+                    reg.HoraEntrada = query.Datahora.ToString() == "" ? "" : DateTime.Parse(query.Datahora.ToString()).ToString("hh:mm");
+                    reg.Usuario1 = String.IsNullOrEmpty(query.Usuario1) ? "" : clsSistema.Retorna_User_FullName(query.Usuario1);
+                    reg.Userid1 = query.Userid;
+                    reg.DespachoCodigo = (short)query.Despacho;
+                    reg.DespachoNome = String.IsNullOrEmpty(query.Descricao) ? "" : query.Descricao;
+                    reg.DataEnvio = query.Dataenvio == null ? "" : DateTime.Parse(query.Dataenvio.ToString()).ToString("dd/MM/yyyy");
+                    reg.Userid2 = query.Userid2;
+                    if (query.Userid2 != null) {
+                        string NomeLogin = clsSistema.Retorna_User_LoginName((int)query.Userid2);
+                        reg.Usuario2 = clsSistema.Retorna_User_FullName(NomeLogin);
+                    } else
+                        reg.Usuario2 = "";
+                    reg.Obs = String.IsNullOrEmpty(query.Obs) ? "" : query.Obs;
+                    reg.ObsGeral = String.IsNullOrEmpty(query.Obs) ? "" : query.Obs;
+                    reg.ObsInterna = String.IsNullOrEmpty(query.Obsinterna) ? "" : query.Obsinterna;
+                }
+
+                return reg;
             }
         }
 
