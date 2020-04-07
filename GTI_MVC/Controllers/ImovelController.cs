@@ -31,7 +31,8 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Endereco")]
         [HttpGet]
         public ViewResult Certidao_Endereco() {
-            return View();
+            CertidaoViewModel model = new CertidaoViewModel();
+            return View(model);
         }
 
         [Route("Certidao/Certidao_Endereco")]
@@ -174,7 +175,8 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Valor_Venal")]
         [HttpGet]
         public ViewResult Certidao_Valor_Venal() {
-            return View();
+            CertidaoViewModel model = new CertidaoViewModel();
+            return View(model);
         }
 
         [Route("Certidao/Certidao_Valor_Venal")]
@@ -334,7 +336,8 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Isencao")]
         [HttpGet]
         public ViewResult Certidao_Isencao() {
-            return View();
+            CertidaoViewModel model = new CertidaoViewModel();
+            return View(model);
         }
 
         [Route("Certidao/Certidao_Isencao")]

@@ -25,7 +25,8 @@ namespace GTI_Mvc.Controllers {
         [Route("Details")]
         [HttpGet]
         public ViewResult Details() {
-            return View();
+            EmpresaDetailsViewModel model = new EmpresaDetailsViewModel();
+            return View(model);
         }
                
         [Route("Details")]

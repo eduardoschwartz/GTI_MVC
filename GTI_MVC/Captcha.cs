@@ -141,30 +141,30 @@ namespace GTI_Mvc {
                     IntPtr scan0 = bitmapData.Scan0;
                     IntPtr srcScan0 = bmSrc.Scan0;
 
-                    unsafe {
-                        byte* p = (byte*)(void*)scan0;
-                        byte* pSrc = (byte*)(void*)srcScan0;
+                    //unsafe {
+                    //    byte* p = (byte*)(void*)scan0;
+                    //    byte* pSrc = (byte*)(void*)srcScan0;
 
-                        int nOffset = bitmapData.Stride - baseMap.Width * 3;
+                    //    int nOffset = bitmapData.Stride - baseMap.Width * 3;
 
-                        for (int y = 0; y < nHeight; ++y) {
-                            for (int x = 0; x < nWidth; ++x) {
-                                var xOffset = pt[x, y].X;
-                                var yOffset = pt[x, y].Y;
+                    //    for (int y = 0; y < nHeight; ++y) {
+                    //        for (int x = 0; x < nWidth; ++x) {
+                    //            var xOffset = pt[x, y].X;
+                    //            var yOffset = pt[x, y].Y;
 
-                                if (yOffset >= 0 && yOffset < nHeight && xOffset >= 0 && xOffset < nWidth) {
-                                    if (pSrc != null) {
-                                        p[0] = pSrc[yOffset * scanline + xOffset * 3];
-                                        p[1] = pSrc[yOffset * scanline + xOffset * 3 + 1];
-                                        p[2] = pSrc[yOffset * scanline + xOffset * 3 + 2];
-                                    }
-                                }
+                    //            if (yOffset >= 0 && yOffset < nHeight && xOffset >= 0 && xOffset < nWidth) {
+                    //                if (pSrc != null) {
+                    //                    p[0] = pSrc[yOffset * scanline + xOffset * 3];
+                    //                    p[1] = pSrc[yOffset * scanline + xOffset * 3 + 1];
+                    //                    p[2] = pSrc[yOffset * scanline + xOffset * 3 + 2];
+                    //                }
+                    //            }
 
-                                p += 3;
-                            }
-                            p += nOffset;
-                        }
-                    }
+                    //            p += 3;
+                    //        }
+                    //        p += nOffset;
+                    //    }
+                    //}
 
                     baseMap.UnlockBits(bitmapData);
                     bSrc.UnlockBits(bmSrc);

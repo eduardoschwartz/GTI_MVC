@@ -22,7 +22,8 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Debito_Codigo")]
         [HttpGet]
         public ViewResult Certidao_Debito_Codigo() {
-            return View();
+            CertidaoViewModel model = new CertidaoViewModel();
+            return View(model);
         }
 
         [Route("Certidao/Certidao_Debito_Codigo")]
@@ -441,7 +442,8 @@ namespace GTI_Mvc.Controllers {
         [Route("Comprovante_Pagamento")]
         [HttpGet]
         public ViewResult Comprovante_Pagamento() {
-            return View();
+            CertidaoViewModel model = new CertidaoViewModel();
+            return View(model);
         }
 
         [Route("Comprovante_Pagamento")]
@@ -553,7 +555,8 @@ namespace GTI_Mvc.Controllers {
         [Route("Dama")]
         [HttpGet]
         public ViewResult Dama() {
-            return View();
+            CertidaoViewModel model = new CertidaoViewModel();
+            return View(model);
         }
 
         [Route("Dama")]

@@ -704,7 +704,7 @@ namespace GTI_Dal.Classes {
                                 join d in db.Despacho on t.Despacho equals d.Codigo into td from d in td.DefaultIfEmpty()
                                 join u in db.Usuario on t.Userid equals u.Id into tu from u in tu.DefaultIfEmpty()
                                 where t.Ano == Ano && t.Numero == Numero && t.Seq == Seq
-                                select new { t.Seq, t.Ccusto, t.Datahora, t.Dataenvio, d.Codigo,d.Descricao, t.Userid, t.Userid2, Usuario1 = u.Nomelogin, t.Obs,t.Obsinterna });
+                                select new { t.Seq, t.Ccusto, t.Datahora, t.Dataenvio, t.Despacho,d.Descricao, t.Userid, t.Userid2, Usuario1 = u.Nomelogin, t.Obs,t.Obsinterna });
 
                     foreach (var query in reg4) {
                         Lista[i].DataEntrada = query.Datahora.ToString() == "" ? "" : DateTime.Parse(query.Datahora.ToString()).ToString("dd/MM/yyyy");
@@ -712,7 +712,7 @@ namespace GTI_Dal.Classes {
                         sFullName = String.IsNullOrEmpty(query.Usuario1) ? "" : clsSistema.Retorna_User_FullName(query.Usuario1);
                         Lista[i].Userid1 = query.Userid;
                         Lista[i].Usuario1 = sFullName;
-                        Lista[i].DespachoCodigo = query.Codigo;
+                        Lista[i].DespachoCodigo = (short)query.Despacho;
                         Lista[i].DespachoNome = String.IsNullOrEmpty(query.Descricao) ? "" : query.Descricao;
                         Lista[i].DataEnvio = query.Dataenvio == null ? "" : DateTime.Parse(query.Dataenvio.ToString()).ToString("dd/MM/yyyy");
                         Lista[i].Userid2 = query.Userid2;

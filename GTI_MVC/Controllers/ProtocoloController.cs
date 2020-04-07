@@ -12,10 +12,11 @@ namespace GTI_Mvc.Controllers {
         [Route("Tramite_Processo")]
         [HttpGet]
         public ViewResult Tramite_Processo() {
+            ProcessoViewModel model = new ProcessoViewModel();
             if (Functions.pUserId == 0) 
                 return View("../Home/Login");
             else 
-                return View();
+                return View(model);
         }
 
         [Route("Tramite_Processo")]

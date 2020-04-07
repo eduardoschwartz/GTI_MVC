@@ -6,18 +6,12 @@ using System.Web.Mvc;
 namespace GTI_Mvc.Controllers {
     public class HomeController : Controller {
 
-        //public ViewResult Index() {
-        //    if (Functions.pUserId==0) {
-        //        Functions.pUserFullName = "Visitante";
-        //    }
-        //    return View("Login_gti");
-        //}
-
-        public ViewResult Login_gti() {
+          public ViewResult Login_gti() {
+            LoginViewModel model = new LoginViewModel();
             if (Functions.pUserId == 0) {
                 Functions.pUserFullName = "Visitante";
             }
-            return View();
+            return View(model);
         }
 
         [Route("Certidao")]
@@ -28,7 +22,8 @@ namespace GTI_Mvc.Controllers {
         [Route("Login")]
         [HttpGet]
         public ViewResult Login() {
-            return View();
+            LoginViewModel model = new LoginViewModel();
+            return View(model);
         }
 
         [Route("Logout")]
@@ -43,6 +38,7 @@ namespace GTI_Mvc.Controllers {
         [Route("SysMenu")]
         [HttpGet]
         public ViewResult SysMenu() {
+
             if (Functions.pUserId == 0) { 
                 return View("Login");
             } else {
