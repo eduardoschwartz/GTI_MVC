@@ -1364,7 +1364,7 @@ namespace GTI_Bll.Classes {
                                     return reg;
                                 }
                             } else if (sTipo == "IE" || sTipo == "XE" || sTipo == "XA") {
-                                Certidao_inscricao dados = Retorna_Certidao_Inscricao(nAno, nNumero,nCodigo);
+                                Certidao_inscricao dados = Retorna_Certidao_Inscricao(nAno, nNumero, nCodigo);
                                 if (dados != null) {
                                     chaveStruct reg = new chaveStruct {
                                         Codigo = nCodigo,
@@ -1374,6 +1374,20 @@ namespace GTI_Bll.Classes {
                                         Valido = true
                                     };
                                     return reg;
+                                } 
+                            } else {
+                                if (sTipo == "IN" || sTipo == "IP" || sTipo == "IS") {
+                                    certidao_debito_doc dadosCDB = Retorna_Certidao_Debito_Doc(Chave);
+                                    if (dadosCDB != null) {
+                                        chaveStruct reg = new chaveStruct {
+                                            Codigo = nCodigo,
+                                            Ano = nAno,
+                                            Numero = nNumero,
+                                            Tipo = sTipo,
+                                            Valido = true
+                                        };
+                                        return reg;
+                                    }
                                 } else
                                     goto fim;
                             }

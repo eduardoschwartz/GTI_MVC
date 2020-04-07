@@ -286,7 +286,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Obs(ProcessoViewModel model) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             if (Functions.pUserId == 0)
-                return Json(Url.Action( "Index", "Home"));
+                return Json(Url.Action("Login_gti", "Home"));
 
             Tramitacao reg = new Tramitacao() {
                 Ano = (short)model.Ano,

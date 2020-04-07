@@ -6,8 +6,15 @@ using System.Web.Mvc;
 namespace GTI_Mvc.Controllers {
     public class HomeController : Controller {
 
-        public ViewResult Index() {
-            if (Functions.pUserId==0) {
+        //public ViewResult Index() {
+        //    if (Functions.pUserId==0) {
+        //        Functions.pUserFullName = "Visitante";
+        //    }
+        //    return View("Login_gti");
+        //}
+
+        public ViewResult Login_gti() {
+            if (Functions.pUserId == 0) {
                 Functions.pUserFullName = "Visitante";
             }
             return View();
@@ -30,7 +37,7 @@ namespace GTI_Mvc.Controllers {
             Functions.pUserFullName = "Visitante";
             Functions.pUserLoginName = "";
             Functions.pUserId = 0;
-            return View("Index");
+            return View("Login_gti");
         }
 
         [Route("SysMenu")]

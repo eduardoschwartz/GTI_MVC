@@ -589,7 +589,7 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ActionResult Damb(CertidaoViewModel model) {
             if (model.Inscricao == null) {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Login_gti", "Home");
             }
             CertidaoViewModel modelt = new CertidaoViewModel {
                 OptionList = new List<SelectListaItem> {
@@ -726,7 +726,7 @@ namespace GTI_Mvc.Controllers {
             var value = TempData["debito"];
 
             if (!(value is DebitoSelectionViewModel model)) {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Login_gti", "Home");
             }
 
             DateTime _dataVencto = model.Data_Vencimento;
@@ -1033,7 +1033,7 @@ namespace GTI_Mvc.Controllers {
             model.Data_Vencimento_String = Convert.ToDateTime(value.Data_Vencimento.ToString()).ToString("ddMMyyyy");
             model.RefTran = "287353200" + _documento.ToString();
             if (model==null)
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Login_gti","Home");
             else
                 return View( model);
         }
@@ -1047,9 +1047,69 @@ namespace GTI_Mvc.Controllers {
         //        Inscricao = model.Inscricao,
         //        CpfCnpjLabel = model.CpfCnpjLabel
         //    };
-        //    return RedirectToAction("Index","Home");
+        //    return RedirectToAction("Login_gti","Home");
         //}
+         
+        [HttpPost]
+        [Route("Validate_CDoc")]
+        [Route("Certidao/Validate_CDoc")]
+        public ActionResult Validate_CDoc(CertidaoViewModel model) {
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            int _codigo, _ano, _numero;
+            string _chave = model.Chave;
 
+            model.OptionList = new List<SelectListaItem> {
+                new SelectListaItem { Text = " CPF", Value = "cpfCheck", Selected = model.SelectedValue == "cpfCheck" },
+                new SelectListaItem { Text = " CNPJ", Value = "cnpjCheck", Selected = model.SelectedValue == "cnpjCheck" }
+            };
+
+            if (model.Chave != null) {
+                chaveStruct _chaveStruct = tributarioRepository.Valida_Certidao(_chave);
+                if (!_chaveStruct.Valido) {
+                    ViewBag.Result = "Chave de autenticação da certidão inválida.";
+                    return View("Certidao_Debito_Doc", model);
+                } else {
+                    _codigo = _chaveStruct.Codigo;
+                    _numero = _chaveStruct.Numero;
+                    _ano = _chaveStruct.Ano;
+                    List<Certidao> certidao = new List<Certidao>();
+                    certidao_debito_doc _dados = tributarioRepository.Retorna_Certidao_Debito_Doc(model.Chave);
+                    if (_dados != null) {
+                        Certidao reg = new Certidao() {
+                            Codigo = _codigo,
+                            Nome_Requerente = _dados.Nome,
+                            Ano = _ano,
+                            Numero = _numero,
+                            Numero_Ano = _dados.Numero.ToString("00000") + "/" + _dados.Ano.ToString(),
+                            Controle = _chave,
+                            Tributo=_dados.Tributo,
+                            Cpf_Cnpj = _dados.Cpf_cnpj,
+                            Data_Geracao=_dados.Data_emissao,
+                            Tipo_Certidao=_dados.Ret==1?"Negativa":_dados.Ret==2?"Positiva":"Positiva com Efeito Negativa"
+                        };
+                        certidao.Add(reg);
+                    } else {
+                        ViewBag.Result = "Ocorreu um erro ao processar as informações.";
+                        return View("Certidao_Inscricao", model);
+                    }
+
+                    ReportDocument rd = new ReportDocument();
+                    rd.Load(Server.MapPath("~/Reports/CertidaoDebitoDocValida.rpt"));
+
+                    try {
+                        rd.SetDataSource(certidao);
+                        Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                        return File(stream, "application/pdf", "Certidao_Debito.pdf");
+                    } catch {
+
+                        throw;
+                    }
+                }
+            } else {
+                ViewBag.Result = "Chave de validação inválida.";
+                return View("Certidao_Inscricao", model);
+            }
+        }
 
 
 

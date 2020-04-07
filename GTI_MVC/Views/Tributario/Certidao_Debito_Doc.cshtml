@@ -64,7 +64,7 @@
                 <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chave</label>
                 &nbsp;&nbsp;@Html.TextBoxFor(m => m.Chave, new { @id = "chave", @class = "textBoxBlue", @style = "max-width:110px;" })
 
-                &nbsp;<button class="green_button" type="submit" title="Validar a certidão." formaction="Validate_CI" formmethod="post">Validar</button>
+                &nbsp;<button class="green_button" type="submit" title="Validar a certidão." formaction="Validate_CDoc" formmethod="post">Validar</button>
             </div>
         </div>
     </div>
@@ -81,7 +81,7 @@
 
 @Html.ActionLink("Consultar outro tipo de certidão", "Certidao", "Home")
 <br />
-@Html.ActionLink("Retornar ao menu principal", "Index", "Home")
+@Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home")
 
 
 @section scripts{
