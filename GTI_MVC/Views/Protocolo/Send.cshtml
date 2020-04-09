@@ -30,131 +30,139 @@
 <!--###########################-->
 <!--          HEADER           -->
 <!--###########################-->
-<form asp-controller="Protocolo" enctype="multipart/form-data" method="post" onsubmit="return ValidateForm()" class="mt-3">
-    <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
-        <tr>
-            <td style="width:200px;padding: 1px 1px 1px 5px;font-weight:normal">
-                Nº do processo:
-            </td>
-            <td style="color:black;font-weight:bold">
-                @Model.Numero_Ano
-            </td>
-        </tr>
-        <tr>
-            <td style="width:600px;padding: 1px 1px 1px 5px;font-weight:normal;">
-                Data do processo:
-            </td>
-            <td style="color:black;font-weight:bold">
-                @Model.Data_Processo
-            </td>
-        </tr>
-        <tr>
-            <td style="width:15%;padding: 1px 1px 1px 5px;font-weight:normal">
-                Requerente:
-            </td>
-            <td style="color:black;font-weight:bold">
-                @Model.Requerente
-            </td>
-        </tr>
-        <tr>
-            <td style="width:15%;padding: 1px 1px 1px 5px;font-weight:normal">
-                Assunto:
-            </td>
-            <td style="color: black; font-weight: bold">
-                @Model.Assunto_Nome
-            </td>
-        </tr>
-    </table>
-    <br />
-
-    <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
-        @foreach (var item in Model.Lista_Tramite) {
+@using (Html.BeginForm("Send", "Protocolo", FormMethod.Post, new { @id = "MainForm" })) {
+        <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
             <tr>
-                <td style="width: 200px; padding: 1px 1px 1px 5px;">
-                    Seq
+                <td style="width:200px;padding: 1px 1px 1px 5px;font-weight:normal">
+                    Nº do processo:
                 </td>
                 <td style="color:black;font-weight:bold">
-                    @item.Seq
-                </td>
-            </tr>
-
-            <tr>
-                <td style="width:15%;padding: 1px 1px 1px 5px;">
-                    Centro de custos:
-                </td>
-                <td style="color:black;font-weight:bold">
-                    @item.CentroCustoNome
+                    @Model.Numero_Ano
                 </td>
             </tr>
             <tr>
-                <td style="width:15%;padding: 1px 1px 1px 5px;">
-                    Data de envio:
+                <td style="width:600px;padding: 1px 1px 1px 5px;font-weight:normal;">
+                    Data do processo:
                 </td>
                 <td style="color:black;font-weight:bold">
-                    @item.DataEntrada às @item.HoraEntrada
+                    @Model.Data_Processo
                 </td>
             </tr>
             <tr>
-                <td style="width:15%;padding: 1px 1px 1px 5px;">
-                    Enviado por:
+                <td style="width:15%;padding: 1px 1px 1px 5px;font-weight:normal">
+                    Requerente:
                 </td>
                 <td style="color:black;font-weight:bold">
-                    @item.Usuario1
+                    @Model.Requerente
                 </td>
             </tr>
+            <tr>
+                <td style="width:15%;padding: 1px 1px 1px 5px;font-weight:normal">
+                    Assunto:
+                </td>
+                <td style="color: black; font-weight: bold">
+                    @Model.Assunto_Nome
+                </td>
+            </tr>
+        </table>
+        <br />
 
-        }
-    </table>
-    <br />
+        <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
+            @foreach (var item in Model.Lista_Tramite) {
+                <tr>
+                    <td style="width: 200px; padding: 1px 1px 1px 5px;">
+                        Seq
+                    </td>
+                    <td style="color:black;font-weight:bold">
+                        @item.Seq
+                    </td>
+                </tr>
 
-    <!--###########################-->
-    <!--          FORMULÁRIO       -->
-    <!--###########################-->
-    <div class="form-group row align-items-lg-baseline" style="margin-left:1px">
-        <div class="col-sm-10">
-            <label>Despacho: </label>
-            @Html.HiddenFor(m => m.CCusto_Codigo)
-       
-            
-            
-            @Html.DropDownListFor(m => m.Despacho_Codigo, ViewBag.Lista_Despacho as SelectList, "-Selecione um Despacho-", new { @id = "EnviarDropDown", style = "width:330px;height:25px" })
+                <tr>
+                    <td style="width:15%;padding: 1px 1px 1px 5px;">
+                        Centro de custos:
+                    </td>
+                    <td style="color:black;font-weight:bold">
+                        @item.CentroCustoNome
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:15%;padding: 1px 1px 1px 5px;">
+                        Data de envio:
+                    </td>
+                    <td style="color:black;font-weight:bold">
+                        @item.DataEntrada às @item.HoraEntrada
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:15%;padding: 1px 1px 1px 5px;">
+                        Enviado por:
+                    </td>
+                    <td style="color:black;font-weight:bold">
+                        @item.Usuario1
+                    </td>
+                </tr>
+
+            }
+        </table>
+        <br />
+
+        <!--###########################-->
+        <!--          FORMULÁRIO       -->
+        <!--###########################-->
+        <div class="form-group row align-items-lg-baseline" style="margin-left:1px">
+            <div class="col-sm-10">
+                <label>Despacho: </label>
+                @Html.HiddenFor(m => m.Ano)
+                @Html.HiddenFor(m => m.Numero)
+                @Html.HiddenFor(m => m.CCusto_Codigo)
+                @Html.HiddenFor(m => m.Seq)
+                @Html.HiddenFor(m=>m.Lista_Tramite)
+
+                @Html.DropDownListFor(m => m.Despacho_Codigo, ViewBag.Lista_Despacho as SelectList,  new { @id = "EnviarDropDown", style = "width:330px;height:25px" })
+            </div>
         </div>
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary" id="Enviar_Save" formaction="Send" formmethod="post">Gravar</button>
+            <input type="button" class="btn btn-secondary" value="Cancelar" onclick="@("window.location.href='" + @Url.Action("Tramite_Processo2", "Protocolo", new { @Ano = Model.Ano, @Numero = Model.Numero }) + "'");" />
+        </div>
+
+}
+    <br />
+    <br />
+    <!--###########################-->
+    <!--          FOOTER           -->
+    <!--###########################-->
+    <div class="form-group row">
+        <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
     </div>
-    <div class="col-sm-10">
-        <button type="submit" class="btn btn-primary" id="Enviar_Save">Gravar</button>
-        <input type="button" class="btn btn-secondary" value="Cancelar" onclick="@("window.location.href='" + @Url.Action("Tramite_Processo2", "Protocolo",new { @Ano=Model.Ano,@Numero=Model.Numero}) + "'");" />
-    </div>
-
-</form>
-<br />
-<br />
-<!--###########################-->
-<!--          FOOTER           -->
-<!--###########################-->
-<div class="form-group row">
-    <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
-</div>
-<br />
+    <br />
 
 
-<!--###########################-->
-<!--          SCRIPTS          -->
-<!--###########################-->
-<script type="text/javascript">
+    <!--###########################-->
+    <!--          SCRIPTS          -->
+    <!--###########################-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+        });
 
-    function ValidateForm() {
-        var value = $("#EnviarDropDown option:selected").val();
-        var x = document.getElementById("EnviarDropDown").selectedIndex;
-        var y = document.getElementById("EnviarDropDown").options;
-        if (y[x].text == "-Selecione um Despacho-") {
-            document.getElementById('errorLabel').innerHTML = "Despacho não selecionado!";
-            return false;
+        function ValidateForm() {
+            
+            var value = $("#EnviarDropDown option:selected").val();
+            var x = document.getElementById("EnviarDropDown").selectedIndex;
+            
+            if (x<1) {
+                document.getElementById('errorLabel').innerHTML = "Despacho não selecionado!";
+                return false;
+            }
+            return true;
         }
-        return true;
-    }
 
-    function ClearError() {
-        document.getElementById('errorLabel').innerHTML = "";
-    }
+        function ClearError() {
+            document.getElementById('errorLabel').innerHTML = "";
+        }
 
-</script>
+    </script>

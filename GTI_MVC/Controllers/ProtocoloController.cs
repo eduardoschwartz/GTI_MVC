@@ -49,7 +49,7 @@ namespace GTI_Mvc.Controllers {
                 RedirectToAction("Login", "Home");
 
             string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
-            ProcessoViewModel modelt = Exibe_Tramite(Numero_Ano);
+            ProcessoViewModel modelt = Exibe_Tramite(Numero_Ano,0);
             if (modelt.Lista_Tramite == null)
                 return View("Tramite_Processo");
             else
@@ -77,11 +77,14 @@ namespace GTI_Mvc.Controllers {
                 ProcessoStruct _dados = protocoloRepository.Dados_Processo(processoNumero.Ano, processoNumero.Numero);
                 if (_dados != null) {
                     List<TramiteStruct> Lista_Tramite = protocoloRepository.DadosTramite((short)processoNumero.Ano, processoNumero.Numero, (int)_dados.CodigoAssunto);
+
                     if (Seq > 0) {
                         Lista_Tramite = Lista_Tramite.Where(m => m.Seq == Seq).ToList();
-
                     }
-                    processoViewModel.Despacho_Codigo = Lista_Tramite[0].DespachoCodigo;
+                    TramiteStruct TramiteAtual = protocoloRepository.Dados_Tramite(processoNumero.Ano, processoNumero.Numero, Seq);
+
+
+                    processoViewModel.Despacho_Codigo = TramiteAtual.DespachoCodigo;
                     processoViewModel.Ano = processoNumero.Ano;
                     processoViewModel.Numero = processoNumero.Numero;
                     processoViewModel.User_Id = Convert.ToInt32(ViewBag.UserId);
@@ -162,8 +165,9 @@ namespace GTI_Mvc.Controllers {
             List<UsuariocentroCusto> _listaCC = protocoloRepository.ListaCentrocustoUsuario(Convert.ToInt32(ViewBag.UserId));
  
             List<Despacho> Lista_Despacho = protocoloRepository.Lista_Despacho();
-            ViewBag.Lista_Despacho = new SelectList(Lista_Despacho, "Codigo", "Descricao");
 
+            ViewBag.Lista_Despacho = new SelectList(Lista_Despacho, "Codigo", "Descricao");
+            
             return View(processoViewModel);
         }
 
@@ -173,22 +177,24 @@ namespace GTI_Mvc.Controllers {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
 
             if (model.Despacho_Codigo == null) {
-                model.Despacho_Codigo = 998;
+                model.Despacho_Codigo = 0;
             }
 
             if (Functions.pUserId > 0) {
-                Tramitacao reg = new Tramitacao() {
-                    Ano = (short)model.Ano,
-                    Numero = model.Numero,
-                    Seq = (byte)model.Seq,
-                    Despacho = (short)model.Despacho_Codigo,
-                    Userid = Functions.pUserId,
-                    Datahora = DateTime.Now,
-                    Ccusto = (short)model.CCusto_Codigo
-                };
-                Exception ex = protocoloRepository.Receber_Processo(reg);
-                if (ex != null)
-                    ViewBag.Result = "Ocorreu um erro no recebimento do processo";
+                if (model.Despacho_Codigo > 0) {
+                    Tramitacao reg = new Tramitacao() {
+                        Ano = (short)model.Ano,
+                        Numero = model.Numero,
+                        Seq = (byte)model.Seq,
+                        Despacho = (short)model.Despacho_Codigo,
+                        Userid = Functions.pUserId,
+                        Datahora = DateTime.Now,
+                        Ccusto = (short)model.CCusto_Codigo
+                    };
+                    Exception ex = protocoloRepository.Receber_Processo(reg);
+                    if (ex != null)
+                        ViewBag.Result = "Ocorreu um erro no recebimento do processo";
+                }
             }
             model.Numero_Ano = model.Numero.ToString() + "-" + Functions.RetornaDvProcesso(model.Numero) + "/" + model.Ano.ToString();
             return RedirectToAction("Tramite_Processo2", new { model.Ano, model.Numero });
@@ -214,13 +220,17 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Send(ProcessoViewModel model) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
 
-            if (Functions.pUserId > 0) {
+            if (Functions.pUserId > 0 ) {
+                //if (model.Despacho_Codigo == 998) {
+                //    ViewBag.Result = "Selecione um despacho!";
+                //    return View(model);
+                //}
                 List<TramiteStruct> _regOld = protocoloRepository.DadosTramite((short)model.Ano, model.Numero, model.Seq);
                 Tramitacao reg = new Tramitacao() {
                     Ano = (short)model.Ano,
                     Numero = model.Numero,
                     Seq = (byte)model.Seq,
-                    Despacho = model.Despacho_Codigo == null ? _regOld[0].DespachoCodigo : (short)model.Despacho_Codigo,
+                    Despacho = (short)model.Despacho_Codigo ,
                     Userid = _regOld[0].Userid1,
                     Datahora = Convert.ToDateTime(_regOld[0].DataEntrada + " " + _regOld[0].HoraEntrada),
                     Ccusto = _regOld[0].CentroCustoCodigo,

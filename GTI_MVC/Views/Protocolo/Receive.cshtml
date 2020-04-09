@@ -30,112 +30,124 @@
 <!--###########################-->
 <!--          HEADER           -->
 <!--###########################-->
-<form asp-controller="Protocolo" enctype="multipart/form-data" method="post" onsubmit="return ValidateForm()" class="mt-3">
-    <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
-        <tr>
-            <td style="width:200px;padding: 1px 1px 1px 5px;">
-                Nº do processo:
-            </td>
-            <td style="color:black;font-weight:bold">
-                @Model.Numero_Ano
-            </td>
-        </tr>
-        <tr>
-            <td style="width:600px;padding: 1px 1px 1px 5px;">
-                Data do processo:
-            </td>
-            <td style="color:black;font-weight:bold">
-                @Model.Data_Processo
-            </td>
-        </tr>
-        <tr>
-            <td style="width:15%;padding: 1px 1px 1px 5px;">
-                Requerente:
-            </td>
-            <td style="color:black;font-weight:bold">
-                @Model.Requerente
-            </td>
-        </tr>
-        <tr>
-            <td style="width:15%;padding: 1px 1px 1px 5px;">
-                Assunto:
-            </td>
-            <td style="color:black;font-weight:bold">
-                @Model.Assunto_Nome
-            </td>
-        </tr>
-    </table>
-    <br />
-
-    <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
-        @foreach (var item in Model.Lista_Tramite) {
+@using (Html.BeginForm("Receive", "Protocolo", FormMethod.Post, new { @id = "MainForm" })) {
+    @*<form asp-controller="Protocolo" enctype="multipart/form-data" method="post" onsubmit="return ValidateForm()" class="mt-3">*@
+        <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
             <tr>
                 <td style="width:200px;padding: 1px 1px 1px 5px;">
-                    Seq
+                    Nº do processo:
                 </td>
                 <td style="color:black;font-weight:bold">
-                    @item.Seq
+                    @Model.Numero_Ano
                 </td>
             </tr>
-
+            <tr>
+                <td style="width:600px;padding: 1px 1px 1px 5px;">
+                    Data do processo:
+                </td>
+                <td style="color:black;font-weight:bold">
+                    @Model.Data_Processo
+                </td>
+            </tr>
             <tr>
                 <td style="width:15%;padding: 1px 1px 1px 5px;">
-                    Centro de Custos:
+                    Requerente:
                 </td>
                 <td style="color:black;font-weight:bold">
-                    @item.CentroCustoNome
+                    @Model.Requerente
                 </td>
             </tr>
-        }
-    </table>
+            <tr>
+                <td style="width:15%;padding: 1px 1px 1px 5px;">
+                    Assunto:
+                </td>
+                <td style="color:black;font-weight:bold">
+                    @Model.Assunto_Nome
+                </td>
+            </tr>
+        </table>
+        <br />
+
+        <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
+            @foreach (var item in Model.Lista_Tramite) {
+                <tr>
+                    <td style="width:200px;padding: 1px 1px 1px 5px;">
+                        Seq
+                    </td>
+                    <td style="color:black;font-weight:bold">
+                        @item.Seq
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="width:15%;padding: 1px 1px 1px 5px;">
+                        Centro de Custos:
+                    </td>
+                    <td style="color:black;font-weight:bold">
+                        @item.CentroCustoNome
+                    </td>
+                </tr>
+            }
+        </table>
+        <br />
+
+        <!--###########################-->
+        <!--          FORMULÁRIO       -->
+        <!--###########################-->
+        <div class="form-group row align-items-lg-baseline" style="margin-left:1px">
+            <div class="col-sm-10">
+                <label>Despacho: </label>
+                @Html.HiddenFor(m => m.Ano)
+                @Html.HiddenFor(m => m.Numero)
+                @Html.HiddenFor(m => m.CCusto_Codigo)
+                @Html.HiddenFor(m => m.Seq)
+                @Html.HiddenFor(m => m.Lista_Tramite)
+
+                @Html.DropDownListFor(m => m.Despacho_Codigo, ViewBag.Lista_Despacho as SelectList,"(Selecione um Despacho)", new { @id = "ReceberDropDown", style = "width:330px;height:25px", rows = 10 })
+            </div>
+        </div>
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary" id="Enviar_Save" formaction="Receive" formmethod="post">Gravar</button>
+            <input type="button" class="btn btn-secondary" value="Cancelar" onclick="@("window.location.href='" + @Url.Action("Tramite_Processo2", "Protocolo", new { @Ano = Model.Ano, @Numero = Model.Numero }) + "'");" />
+        </div>
+}
+    @*</form>*@
+    <br />
+    <br />
+    <!--###########################-->
+    <!--          FOOTER           -->
+    <!--###########################-->
+    <div class="form-group row">
+        <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+    </div>
     <br />
 
+
+
     <!--###########################-->
-    <!--          FORMULÁRIO       -->
+    <!--          SCRIPTS          -->
     <!--###########################-->
-    <div class="form-group row align-items-lg-baseline" style="margin-left:1px">
-        <div class="col-sm-10">
-            <label>Despacho: </label>
-            @Html.HiddenFor(m => m.CCusto_Codigo)
-            @Html.DropDownListFor(m => m.Despacho_Codigo, ViewBag.Lista_Despacho as SelectList, "-Selecione um Despacho-", new { @id = "ReceberDropDown", style = "width:330px;height:25px", rows = 10 })
-        </div>
-    </div>
-    <div class="col-sm-10">
-        <button type="submit" class="btn btn-primary" id="Receber_Save">Gravar</button>
-        <input type="button" class="btn btn-secondary" value="Cancelar" onclick="@("window.location.href='" + @Url.Action("Tramite_Processo2", "Protocolo",new { @Ano=Model.Ano,@Numero=Model.Numero}) + "'");" />
-    </div>
+    <script type="text/javascript">
 
-</form>
-<br />
-<br />
-<!--###########################-->
-<!--          FOOTER           -->
-<!--###########################-->
-<div class="form-group row">
-    <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
-</div>
-<br />
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+        });
 
-
-
-<!--###########################-->
-<!--          SCRIPTS          -->
-<!--###########################-->
-<script type="text/javascript">
-
-    function ValidateForm() {
-        var value = $("#ReceberDropDown option:selected").val();
-        var x = document.getElementById("ReceberDropDown").selectedIndex;
-        var y = document.getElementById("ReceberDropDown").options;
-        if (y[x].text == "-Selecione um Despacho-") {
-            document.getElementById('errorLabel').innerHTML = "Despacho não selecionado!";
-            return false;
+        function ValidateForm() {
+            var value = $("#ReceberDropDown option:selected").val();
+            var x = document.getElementById("ReceberDropDown").selectedIndex;
+            var y = document.getElementById("ReceberDropDown").options;
+            if (x < 1) {
+                document.getElementById('errorLabel').innerHTML = "Despacho não selecionado!";
+                return false;
+            }
+            return true;
         }
-        return true;
-    }
 
-    function ClearError() {
-        document.getElementById('errorLabel').innerHTML = "";
-    }
+        function ClearError() {
+            document.getElementById('errorLabel').innerHTML = "";
+        }
 
-</script>
+    </script>

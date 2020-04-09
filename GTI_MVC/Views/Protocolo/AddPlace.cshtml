@@ -120,6 +120,12 @@
 <!--###########################-->
 <script type="text/javascript">
 
+    $(document).ready(function () {
+        $("#MainForm").submit(function () {
+            return ValidateForm();
+        });
+    });
+
     function ValidateForm() {
         var value = $("#AddPlaceDropDown option:selected").val();
         var x = document.getElementById("AddPlaceDropDown").selectedIndex;
