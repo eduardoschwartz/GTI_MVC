@@ -264,7 +264,6 @@
                         var value = cols[0].getElementsByTagName('input')[0].checked == true;
                         if (value) {
                             _count++;
-//                            var _aj = table.rows[i].cells[10].innerHTML.replace(/(\r\n|\n|\r)/gm, "").trim();
                             var _aj = table.rows[i].cells[10].textContent.trim();
                             if (_aj == "S") {
                                 _ajuizado = true;
@@ -361,7 +360,6 @@
 
      function ClearError() {
             document.getElementById('errorLabel').innerHTML = "";
-        }
-
+     }
 
 </script>
