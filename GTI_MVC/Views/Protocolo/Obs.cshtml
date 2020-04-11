@@ -109,7 +109,7 @@
     <br /><br />
     <div >
         <button type="submit" class="btn btn-primary" id="Obs_Save" formaction="Obs">Gravar</button>
-        <input type="button" class="btn btn-secondary" value="Cancelar" onclick="@("window.location.href='" + @Url.Action("Tramite_Processo2", "Protocolo",new { @Ano=Model.Ano,@Numero=Model.Numero}) + "'");" />
+        <input type="button" class="btn btn-secondary" value="Cancelar" onclick="@("window.location.href='" + @Url.Action("Tramite_Processo2", "Protocolo",new { @Ano=Functions.Encrypt(Model.Ano.ToString()),@Numero=Functions.Encrypt(Model.Numero.ToString())}) + "'");" />
     </div>
 
 </form>

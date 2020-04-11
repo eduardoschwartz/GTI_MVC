@@ -1,6 +1,7 @@
 ﻿using GTI_Bll.Classes;
 using GTI_Models.Models;
 using GTI_Mvc.ViewModels;
+using GTI_MVC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,21 +35,28 @@ namespace GTI_Mvc.Controllers {
             processoViewModel.Ano = processoNumero.Ano;
             processoViewModel.User_Id = Convert.ToInt32(ViewBag.UserId);
 
-            return RedirectToAction("Tramite_Processo2", new { processoViewModel.Ano, processoViewModel.Numero });
+            return RedirectToAction("Tramite_Processo2", new {Ano=Functions.Encrypt( processoViewModel.Ano.ToString()),Numero=Functions.Encrypt( processoViewModel.Numero.ToString()) });
         }
 
         [Route("Tramite_Processo2/{Ano}/{Numero}")]
         [HttpGet]
-        public ActionResult Tramite_Processo2(int Ano=0,int Numero=0) {
+        public ActionResult Tramite_Processo2(string Ano="0",string Numero="0") {
+            int _ano = 0,_numero=0;
+            try {
+                _ano = Convert.ToInt32(Functions.Decrypt(Ano));
+                _numero = Convert.ToInt32(Functions.Decrypt(Numero));
+            } catch (Exception) {
+                RedirectToAction("Login", "Home");
+            }
             ModelState.Clear();
 
             if (Functions.pUserId == 0)
                 return View("../Home/Login");
 
-            if (Ano == 0) 
+            if (_ano == 0) 
                 RedirectToAction("Login", "Home");
 
-            string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
+            string Numero_Ano = _numero.ToString() + "-" + Functions.RetornaDvProcesso(_numero) + "/" + _ano.ToString();
             ProcessoViewModel modelt = Exibe_Tramite(Numero_Ano,0);
             if (modelt.Lista_Tramite == null)
                 return View("Tramite_Processo");
@@ -113,7 +121,7 @@ namespace GTI_Mvc.Controllers {
             ProcessoViewModel processoViewModel = new ProcessoViewModel {
                 Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString()
             };
-            return Json(Url.Action("Tramite_Processo2", "Protocolo", new { Ano, Numero }));
+            return Json(Url.Action("Tramite_Processo2", "Protocolo", new { Ano = Functions.Encrypt(Ano.ToString()), Numero = Functions.Encrypt(Numero.ToString()) }));
         }
 
         public ActionResult MoveDown(int Ano, int Numero, int Seq) {
@@ -125,7 +133,7 @@ namespace GTI_Mvc.Controllers {
             ProcessoViewModel processoViewModel = new ProcessoViewModel {
                 Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString()
             };
-            return Json(Url.Action("Tramite_Processo2", "Protocolo", new { Ano,Numero }));
+            return Json(Url.Action("Tramite_Processo2", "Protocolo", new { Ano = Functions.Encrypt(Ano.ToString()), Numero = Functions.Encrypt(Numero.ToString()) }));
         }
 
         public ActionResult Inserir_Save(ProcessoViewModel model) {
@@ -137,7 +145,6 @@ namespace GTI_Mvc.Controllers {
             };
             return Json(Url.Action("Tramite_Processo2", "Protocolo", new { processoViewModel.Ano, processoViewModel.Numero }));
         }
-
 
         public ActionResult Alterar_Obs(ProcessoViewModel model) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
@@ -197,7 +204,7 @@ namespace GTI_Mvc.Controllers {
                 }
             }
             model.Numero_Ano = model.Numero.ToString() + "-" + Functions.RetornaDvProcesso(model.Numero) + "/" + model.Ano.ToString();
-            return RedirectToAction("Tramite_Processo2", new { model.Ano, model.Numero });
+            return RedirectToAction("Tramite_Processo2", new { Ano = Functions.Encrypt(model.Ano.ToString()), Numero = Functions.Encrypt(model.Numero.ToString()) });
         }
 
         [Route("Send/{Ano}/{Numero}/{Seq}")]
@@ -221,10 +228,7 @@ namespace GTI_Mvc.Controllers {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
 
             if (Functions.pUserId > 0 ) {
-                //if (model.Despacho_Codigo == 998) {
-                //    ViewBag.Result = "Selecione um despacho!";
-                //    return View(model);
-                //}
+            
                 List<TramiteStruct> _regOld = protocoloRepository.DadosTramite((short)model.Ano, model.Numero, model.Seq);
                 Tramitacao reg = new Tramitacao() {
                     Ano = (short)model.Ano,
@@ -242,7 +246,7 @@ namespace GTI_Mvc.Controllers {
                     ViewBag.Result = "Ocorreu um erro no envio do processo";
             }
             model.Numero_Ano = model.Numero.ToString() + "-" + Functions.RetornaDvProcesso(model.Numero) + "/" + model.Ano.ToString();
-            return RedirectToAction("Tramite_Processo2", new { model.Ano, model.Numero });
+            return RedirectToAction("Tramite_Processo2", new { Ano = Functions.Encrypt(model.Ano.ToString()), Numero = Functions.Encrypt(model.Numero.ToString()) });
         }
 
         [Route("AddPlace/{Ano}/{Numero}/{Seq}/{CentroCustoCodigo}")]
@@ -266,7 +270,7 @@ namespace GTI_Mvc.Controllers {
                     ViewBag.Result = "Ocorreu um erro ao inserir um local";
                 model.Numero_Ano = model.Numero.ToString() + "-" + Functions.RetornaDvProcesso(model.Numero) + "/" + model.Ano.ToString();
             }
-            return RedirectToAction("Tramite_Processo2", new { model.Ano, model.Numero });
+            return RedirectToAction("Tramite_Processo2", new { Ano = Functions.Encrypt(model.Ano.ToString()), Numero = Functions.Encrypt(model.Numero.ToString()) });
         }
 
         public ActionResult RemovePlace(int Ano,int Numero,int Seq) {
@@ -274,7 +278,7 @@ namespace GTI_Mvc.Controllers {
             Exception ex = protocoloRepository.Remover_Local(Numero, Ano, Seq);
             if (ex != null)
                 ViewBag.Result = "Ocorreu um erro ao remover o local";
-            return RedirectToAction("Tramite_Processo2", new {Ano, Numero });
+            return RedirectToAction("Tramite_Processo2", new { Ano = Functions.Encrypt(Ano.ToString()), Numero = Functions.Encrypt(Numero.ToString()) });
         }
 
         [Route("Obs/{Ano}/{Numero}/{Seq}")]
@@ -311,7 +315,7 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.Result = "Ocorreu um erro na observação do trâmite";
 
             model.Numero_Ano = model.Numero.ToString() + "-" + Functions.RetornaDvProcesso(model.Numero) + "/" + model.Ano.ToString();
-            return RedirectToAction("Tramite_Processo2", new { model.Ano, model.Numero });
+            return RedirectToAction("Tramite_Processo2", new { Ano = Functions.Encrypt(model.Ano.ToString()), Numero = Functions.Encrypt(model.Numero.ToString()) });
         }
 
     }

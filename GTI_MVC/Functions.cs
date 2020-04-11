@@ -331,9 +331,13 @@ namespace GTI_Mvc {
         }
 
         public static ProcessoNumero Split_Processo_Numero(string Numero) {
-            int _dv = Convert.ToInt32( Numero.Substring(Numero.IndexOf("-") + 1, 1));
-            int _numero = Convert.ToInt32( Numero.Substring(0, Numero.IndexOf("-")));
-            int _ano = Convert.ToInt32( (Numero.Substring(Numero.Length - 4)));
+            int _dv = 0, _numero = 0,_ano=0;
+            try {
+                _dv = Convert.ToInt32(Numero.Substring(Numero.IndexOf("-") + 1, 1));
+                _numero = Convert.ToInt32(Numero.Substring(0, Numero.IndexOf("-")));
+                _ano = Convert.ToInt32((Numero.Substring(Numero.Length - 4)));
+            } catch  {
+            }
 
             ProcessoNumero _reg = new ProcessoNumero {
                 Ano=_ano,
