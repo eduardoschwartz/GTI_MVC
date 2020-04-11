@@ -788,10 +788,13 @@ namespace GTI_Mvc.Controllers {
                         Soma_Multa = item.Valormulta,
                         Soma_Correcao = item.Valorcorrecao,
                         Soma_Total = Math.Round(item.Valortributo, 2,MidpointRounding.AwayFromZero)+ Math.Round(item.Valorjuros, 2, MidpointRounding.AwayFromZero)+ Math.Round(item.Valormulta, 2, MidpointRounding.AwayFromZero)+ Math.Round(item.Valorcorrecao, 2, MidpointRounding.AwayFromZero),
-                        Soma_Honorario = item.Valortotal * (decimal)0.1,
                         Data_Ajuizamento = item.Dataajuiza,
                         Data_Inscricao = item.Datainscricao,
                     };
+                    if (item.Dataajuiza != null)
+                        reg.Soma_Honorario = item.Valortotal * (decimal)0.1;
+                    else
+                        reg.Soma_Honorario = 0;
                     Lista_debitos.Add(reg);
                 }
             }

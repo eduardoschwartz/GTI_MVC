@@ -404,6 +404,7 @@
     <Content Include="Views\Tributario\Damc.cshtml" />
     <Content Include="Views\Tributario\Damd.cshtml" />
     <Content Include="Views\Home\Login_gti.cshtml" />
+    <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
