@@ -30,7 +30,7 @@
     </tr>
     <tr style="height:40px">
         <td style="width:80px">@Html.LabelFor(m => m.Senha, new { @style = "font-weight:normal" })</td>
-        <td style="width:300px">@Html.TextBoxFor(m => m.Senha, new {@type="password", @id = "codigo", @class = "textBoxBlue", @style = "max-width:200px" })</td>
+        <td style="width:300px">@Html.TextBoxFor(m => m.Senha, new {@type="password", @id = "senha", @class = "textBoxBlue", @style = "max-width:200px" })</td>
     </tr>
 </table>
 
@@ -53,12 +53,6 @@
 
 
 
-<br />
-<div class="form-group row" style="margin-left:-10px">
-    &nbsp;&nbsp;<label class="text-danger" id="errorLabel">@ViewBag.Result</label>
-</div>
-
-
 @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home")
 
 
@@ -74,11 +68,10 @@
         function ValidateForm() {
             ClearError();
             var _cod = document.getElementById('codigo').value;
-            var _captcha = document.getElementById('captchaTxt').value;
-            var _chave = document.getElementById('chave').value;
+            var _senha = document.getElementById('senha').value;
 
-            if ((_cod == "" || parseInt(_cod) == 0) && _chave == "") {
-                document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal ou a chave de autenticação da certidão";
+            if (_cod == "" ||  _senha == "") {
+                document.getElementById('errorLabel').innerHTML = "Digite o login e a senha";
                 return false;
             }
 
