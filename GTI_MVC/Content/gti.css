@@ -40,7 +40,7 @@ li {
         -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
         transition: font-size 0.3s ease, background-color 0.3s ease;
         display: block;
-        width: auto;
+        width: 600px;
     }
 
         li a:hover {

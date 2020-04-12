@@ -6,14 +6,18 @@
 <link href="~/css/gti.css" rel="stylesheet" />
 
 
-<label style="color:brown;font-size:16px;font-style:italic;font-weight:normal;text-decoration:underline">Menu do Sistema</label>
 <br />
 <br />
 
-<div style="width:650px">
-    <ul>
-        <li>@Html.ActionLink("Tramitação de processos", "Tramite_Processo", "Protocolo")</li>
-    </ul>
+
+
+<div style="width: 100%; overflow: hidden;">
+    <div style="width: 400px; float: left;">
+        <span style="color:saddlebrown;font-weight:bold;font-style:italic">Menu de sistema</span><br />
+        @Html.ActionLink("Tramitação de processos", "Tramite_Processo", "Protocolo")
+    </div>
 </div>
+
+
 <br />
 <br />
