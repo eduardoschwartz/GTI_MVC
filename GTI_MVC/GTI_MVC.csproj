@@ -380,7 +380,6 @@
     <Content Include="Views\Empresa\Certidao_Pagamento.cshtml" />
     <Content Include="Views\Empresa\Details.cshtml" />
     <Content Include="Views\Empresa\DetailsTable.cshtml" />
-    <Content Include="Views\Home\Certidao.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\sysMenu.cshtml" />
     <Content Include="Views\Imovel\Certidao_Endereco.cshtml" />

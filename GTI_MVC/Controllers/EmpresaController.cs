@@ -234,7 +234,7 @@ namespace GTI_Mvc.Controllers {
                     }
 
                     ReportDocument rd = new ReportDocument();
-                    rd.Load(Server.MapPath("~/Reports/Comprovante_Inscricao_Valida.rpt"));
+                    rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Comprovante_Inscricao_Valida.rpt"));
 
                     try {
                         rd.SetDataSource(certidao);
@@ -455,15 +455,15 @@ namespace GTI_Mvc.Controllers {
             ReportDocument rd = new ReportDocument();
             if (model.Extrato) {
                 if (_dados.Data_Encerramento != null) {
-                    rd.Load(Server.MapPath("~/Reports/CertidaoInscricaoExtratoEncerrada.rpt"));
+                    rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/CertidaoInscricaoExtratoEncerrada.rpt"));
                 } else {
-                    rd.Load(Server.MapPath("~/Reports/CertidaoInscricaoExtratoAtiva.rpt"));
+                    rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/CertidaoInscricaoExtratoAtiva.rpt"));
                 }
             } else {
                 if (_valida) {
-                    rd.Load(Server.MapPath("~/Reports/Comprovante_InscricaoValida.rpt"));
+                    rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Comprovante_InscricaoValida.rpt"));
                 } else
-                    rd.Load(Server.MapPath("~/Reports/Comprovante_Inscricao.rpt"));
+                    rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Comprovante_Inscricao.rpt"));
             }
             try {
                 if (model.Extrato)
@@ -607,7 +607,7 @@ namespace GTI_Mvc.Controllers {
                 }
 
                 ReportDocument rd = new ReportDocument();
-                rd.Load(Server.MapPath("~/Reports/Situacao_Pagamento.rpt"));
+                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Situacao_Pagamento.rpt"));
                 try {
                     rd.SetDataSource(certidao);
                     Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
@@ -650,7 +650,7 @@ namespace GTI_Mvc.Controllers {
                 };
                 _lista_Dados.Add(_dados);
                 ReportDocument rd = new ReportDocument();
-                rd.Load(Server.MapPath("~/Reports/Empresa_Detalhe.rpt")) ;
+                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Empresa_Detalhe.rpt")) ;
                 try {
                     rd.SetDataSource(_lista_Dados);
                     Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);

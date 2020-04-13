@@ -199,7 +199,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             ReportDocument rd = new ReportDocument();
-            rd.Load(Server.MapPath("~/Reports/" + _reportName));
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/" + _reportName));
 
             try {
                 rd.SetDataSource(certidao);
@@ -397,7 +397,7 @@ namespace GTI_Mvc.Controllers {
             } else {
                 if (_tipo_Certidao == RetornoCertidaoDebito.Negativa) {
                     ReportDocument rd = new ReportDocument();
-                    rd.Load(Server.MapPath("~/Reports/CertidaoDebitoDocumentoN.rpt"));
+                    rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/CertidaoDebitoDocumentoN.rpt"));
 
                     try {
                         rd.SetDataSource(ListaCertidao);
@@ -409,7 +409,7 @@ namespace GTI_Mvc.Controllers {
                 } else {
                     if (_tipo_Certidao == RetornoCertidaoDebito.Positiva) {
                         ReportDocument rd = new ReportDocument();
-                        rd.Load(Server.MapPath("~/Reports/CertidaoDebitoDocumentoP.rpt"));
+                        rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/CertidaoDebitoDocumentoP.rpt"));
 
                         try {
                             rd.SetDataSource(ListaCertidao);
@@ -421,7 +421,7 @@ namespace GTI_Mvc.Controllers {
                     } else {
                         if (_tipo_Certidao == RetornoCertidaoDebito.NegativaPositiva) {
                             ReportDocument rd = new ReportDocument();
-                            rd.Load(Server.MapPath("~/Reports/CertidaoDebitoDocumentoPN.rpt"));
+                            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/CertidaoDebitoDocumentoPN.rpt"));
 
                             try {
                                 rd.SetDataSource(ListaCertidao);
@@ -541,7 +541,7 @@ namespace GTI_Mvc.Controllers {
             certidao.Add(reg);
 
             ReportDocument rd = new ReportDocument();
-            rd.Load(Server.MapPath("~/Reports/Comprovante_Pagamento.rpt" ));
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Comprovante_Pagamento.rpt" ));
             try {
                 rd.SetDataSource(certidao);
                 Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
@@ -1100,7 +1100,7 @@ namespace GTI_Mvc.Controllers {
                     }
 
                     ReportDocument rd = new ReportDocument();
-                    rd.Load(Server.MapPath("~/Reports/CertidaoDebitoDocValida.rpt"));
+                    rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/CertidaoDebitoDocValida.rpt"));
 
                     try {
                         rd.SetDataSource(certidao);

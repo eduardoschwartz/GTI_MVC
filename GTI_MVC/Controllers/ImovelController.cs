@@ -104,7 +104,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             ReportDocument rd = new ReportDocument();
-            rd.Load(Server.MapPath("~/Reports/Certidao_Endereco.rpt"));
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Certidao_Endereco.rpt"));
 
             try {
                 rd.SetDataSource(certidao);
@@ -156,7 +156,7 @@ namespace GTI_Mvc.Controllers {
                 certidao.Add(reg);
 
                 ReportDocument rd = new ReportDocument();
-                rd.Load(Server.MapPath("~/Reports/Certidao_Endereco_Valida.rpt"));
+                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Certidao_Endereco_Valida.rpt"));
 
                 try {
                     rd.SetDataSource(certidao);
@@ -260,15 +260,15 @@ namespace GTI_Mvc.Controllers {
                 reg
             };
 
-            ReportDocument rd = new ReportDocument();
-            rd.Load(Server.MapPath("~/Reports/Certidao_Valor_Venal.rpt"));
-
             try {
+                ReportDocument rd = new ReportDocument();
+                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Certidao_Valor_Venal.rpt"));
                 rd.SetDataSource(certidao);
                 Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
                 return File(stream, "application/pdf", "Certidao_VVenal.pdf");
-            } catch {
-                throw;
+            } catch (Exception ex2)  {
+                ViewBag.Result = ex2.InnerException;
+                return View(certidaoViewModel);
             }
         }
 
@@ -317,7 +317,7 @@ namespace GTI_Mvc.Controllers {
                 certidao.Add(reg);
 
                 ReportDocument rd = new ReportDocument();
-                rd.Load(Server.MapPath("~/Reports/Certidao_Valor_venal_Valida.rpt"));
+                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Certidao_Valor_venal_Valida.rpt"));
 
                 try {
                     rd.SetDataSource(certidao);
@@ -458,7 +458,7 @@ namespace GTI_Mvc.Controllers {
                 }
 
             ReportDocument rd = new ReportDocument();
-            rd.Load(Server.MapPath("~/Reports/" + reportName));
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/" + reportName));
 
             try {
                 rd.SetDataSource(certidao);
@@ -515,7 +515,7 @@ namespace GTI_Mvc.Controllers {
                 certidao.Add(reg);
 
                 ReportDocument rd = new ReportDocument();
-                rd.Load(Server.MapPath("~/Reports/Certidao_Isencao_Valida.rpt"));
+                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Certidao_Isencao_Valida.rpt"));
 
                 try {
                     rd.SetDataSource(certidao);
