@@ -202,6 +202,7 @@
     <Compile Include="ReportModels\Certidao.cs" />
     <Compile Include="ReportModels\Comprovante_Inscricao.cs" />
     <Compile Include="ReportModels\Empresa_Detalhe.cs" />
+    <Compile Include="ReportModels\Imovel_Detalhe.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -213,6 +214,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="ReportModels\Empresa_Detalhe.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ReportModels\Imovel_Detalhe.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

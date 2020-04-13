@@ -1,0 +1,19 @@
+﻿using GTI_Models.Models;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
+
+namespace GTI_Mvc.ViewModels {
+    public class ImovelDetailsViewModel {
+        public ImovelStruct ImovelStruct { get; set; }
+        [Display(Name = "Inscrição Municipal")]
+        public string Inscricao { get; set; }
+        public string CpfCnpjLabel { get; set; }
+        public string CpfValue { get; set; }
+        public string CnpjValue { get; set; }
+        public string ErrorMessage { get; set; }
+        public string CaptchaCode { get; set; }
+    }
+}

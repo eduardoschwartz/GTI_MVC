@@ -922,7 +922,7 @@ namespace GTI_Mvc.Controllers {
                 Endereco=_endereco,
                 Cidade=_cidade,
                 UF=_uf,
-                Cep=_cep
+                Cep=Functions.RetornaNumero( _cep)
             };
             decimal _somaP = 0,_somaJ=0,_somaM=0,_somaC=0,_somaT=0,_somaH=0;
             foreach (SelectDebitoEditorViewModel _debitos in model.Debito.Where(m=>m.Selected==true)) {

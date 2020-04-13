@@ -533,6 +533,86 @@ namespace GTI_Mvc.Controllers {
 
         #endregion
 
+        [Route("Dados_Imovel")]
+        [HttpGet]
+        public ViewResult Dados_Imovel() {
+            ImovelDetailsViewModel model = new ImovelDetailsViewModel();
+            return View(model);
+        }
+
+        [Route("Dados_Imovel")]
+        [HttpPost]
+        public ActionResult Dados_Imovel(ImovelDetailsViewModel model) {
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            int _codigo = 0;
+            bool _existeCod = false;
+            ImovelDetailsViewModel imovelDetailsViewModel = new ImovelDetailsViewModel();
+
+            if (model.Inscricao != null) {
+                _codigo = Convert.ToInt32(model.Inscricao);
+                if (_codigo >= 100000 && _codigo < 210000) //Se estiver fora deste intervalo nem precisa checar se a empresa existe
+                    _existeCod = imovelRepository.Existe_Imovel(_codigo);
+            } else {
+                if (model.CnpjValue != null) {
+                    string _cnpj = model.CnpjValue;
+                    bool _valida = Functions.ValidaCNPJ(_cnpj); //CNPJ válido?
+                    if (_valida) {
+                        _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo, _cnpj);
+                    } else {
+                        imovelDetailsViewModel.ErrorMessage = "Cnpj inválido.";
+                        return View(imovelDetailsViewModel);
+                    }
+                } else {
+                    if (model.CpfValue != null) {
+                        string _cpf = model.CpfValue;
+                        bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
+                        if (_valida) {
+                            _existeCod = imovelRepository.Existe_Imovel_Cpf(_codigo, _cpf);
+                        } else {
+                            imovelDetailsViewModel.ErrorMessage = "Cpf inválido.";
+                            return View(imovelDetailsViewModel);
+                        }
+                    }
+                }
+            }
+
+            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+                imovelDetailsViewModel.ErrorMessage = "Código de verificação inválido.";
+                return View(imovelDetailsViewModel);
+            }
+
+            if (model.ImovelStruct.Codigo > 0) {
+                List<Imovel_Detalhe> _lista_Dados = new List<Imovel_Detalhe>();
+                List<ProprietarioStruct> listaProp = imovelRepository.Lista_Proprietario(_codigo, true);
+
+                Imovel_Detalhe _dados = new Imovel_Detalhe() {
+                    Codigo = model.ImovelStruct.Codigo,
+                    Bairro = model.ImovelStruct.NomeBairro,
+                    Cidade = "JABOTICABAL",
+                    Endereco = model.ImovelStruct.NomeLogradouroAbreviado + ", " + model.ImovelStruct.Numero.ToString() + " " + model.ImovelStruct.Complemento,
+                    Cep = model.ImovelStruct.Cep,
+                    Cpf_Cnpj = listaProp[0].CPF,
+                    Proprietario = model.ImovelStruct.Proprietario_Nome,
+                    Uf = "SP"
+                };
+                _lista_Dados.Add(_dados);
+                ReportDocument rd = new ReportDocument();
+                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Imovel_Detalhe.rpt"));
+                try {
+                    rd.SetDataSource(_lista_Dados);
+                    Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                    return File(stream, "application/pdf", "Ficha_Cadastral.pdf");
+                } catch {
+                    throw;
+                }
+
+            } else {
+                ViewBag.Result = "Ocorreu um erro ao gerar o relatório.";
+                return View();
+            }
+
+        }
+
 
 
     }

@@ -324,6 +324,7 @@
     <Compile Include="ViewModels\DebitoSelectionViewModel.cs" />
     <Compile Include="ViewModels\DebitoViewModel.cs" />
     <Compile Include="ViewModels\EmpresaDetailsViewModel.cs" />
+    <Compile Include="ViewModels\ImovelDetailsViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\ProcessoViewModel.cs" />
     <Compile Include="Views\Tributario\EditorTemplates\ListDebitoEditorViewModel.cs" />
@@ -402,6 +403,7 @@
     <Content Include="Views\Tributario\Damd.cshtml" />
     <Content Include="Views\Home\Login_gti.cshtml" />
     <Content Include="Views\Web.config" />
+    <Content Include="Views\Imovel\Dados_Imovel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
