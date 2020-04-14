@@ -581,39 +581,79 @@ namespace GTI_Mvc.Controllers {
                 return View(imovelDetailsViewModel);
             }
 
-            if (model.ImovelStruct.Codigo > 0) {
-                List<Imovel_Detalhe> _lista_Dados = new List<Imovel_Detalhe>();
-                List<ProprietarioStruct> listaProp = imovelRepository.Lista_Proprietario(_codigo, true);
+            Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
+            int _numero_certidao = tributario_Class.Retorna_Codigo_Certidao(TipoCertidao.Ficha_Imovel);
+            int _ano_certidao = DateTime.Now.Year;
+            string _controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _codigo.ToString() + "-FI";
 
-                Imovel_Detalhe _dados = new Imovel_Detalhe() {
-                    Codigo = model.ImovelStruct.Codigo,
-                    Bairro = model.ImovelStruct.NomeBairro,
-                    Cidade = "JABOTICABAL",
-                    Endereco = model.ImovelStruct.NomeLogradouroAbreviado + ", " + model.ImovelStruct.Numero.ToString() + " " + model.ImovelStruct.Complemento,
-                    Cep = model.ImovelStruct.Cep,
-                    Cpf_Cnpj = listaProp[0].CPF,
-                    Proprietario = model.ImovelStruct.Proprietario_Nome,
-                    Uf = "SP"
-                };
-                _lista_Dados.Add(_dados);
-                ReportDocument rd = new ReportDocument();
-                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Imovel_Detalhe.rpt"));
-                try {
-                    rd.SetDataSource(_lista_Dados);
-                    Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
-                    return File(stream, "application/pdf", "Ficha_Cadastral.pdf");
-                } catch {
-                    throw;
-                }
 
-            } else {
-                ViewBag.Result = "Ocorreu um erro ao gerar o relatório.";
-                return View();
+            string _prop1 = "", _prop2 = "";
+            List<ProprietarioStruct> listaProp = imovelRepository.Lista_Proprietario(_codigo, false);
+            foreach (ProprietarioStruct _prop in listaProp) {
+                if (_prop.Tipo == "P" && _prop.Principal)
+                    _prop1 = _prop.Nome;
+                else
+                    _prop2 +=  _prop.Nome + ";";
+            }
+            if (_prop2.Length > 0)
+                _prop2 = _prop2.Substring(0, _prop2.Length - 1);
+
+            List<AreaStruct> areas = imovelRepository.Lista_Area(_codigo);
+
+            ImovelStruct _dados = imovelRepository.Dados_Imovel(_codigo);
+            Laseriptu _calc = imovelRepository.Dados_IPTU(_codigo, DateTime.Now.Year);
+
+            Imovel_Detalhe _reg = new Imovel_Detalhe() {
+                Codigo = _codigo,
+                Inscricao = _dados.Inscricao,
+                Situacao_Imovel = _dados.Inativo == true ? "INATIVO" : "ATIVO",
+                MT = _dados.NumMatricula.ToString(),
+                Proprietario = _prop1,
+                Proprietario2 = _prop2,
+                Endereco = _dados.NomeLogradouroAbreviado,
+                Numero = (int)_dados.Numero,
+                Complemento = _dados.Complemento,
+                Bairro = _dados.NomeBairro,
+                Cep = _dados.Cep,
+                Quadra_Original = _dados.QuadraOriginal ?? "",
+                Lote_Original = _dados.LoteOriginal ?? "",
+                Area_Terreno = (decimal)_dados.Area_Terreno,
+                Fracao_Ideal = (decimal)_dados.FracaoIdeal,
+                Testada = (decimal)_calc.Testadaprinc,
+                Agrupamento = (decimal)_calc.Agrupamento,
+                Soma_Fatores = (decimal)(_calc.Fatorgle * _calc.Fatorped * _calc.Fatorpro * _calc.Fatorsit * _calc.Fatortop),
+                Area_Predial=(decimal)_calc.Areaconstrucao,
+                Benfeitoria=_dados.Benfeitoria_Nome,
+                Categoria=_dados.Categoria_Nome,
+                Pedologia=_dados.Pedologia_Nome,
+                Topografia=_dados.Topografia_Nome,
+                Situacao=_dados.Situacao_Nome,
+                Uso_Terreno=_dados.Uso_terreno_Nome,
+                Condominio=_dados.NomeCondominio=="NÃO CADASTRADO"?"":_dados.NomeCondominio,
+                Iptu=_calc.Impostopredial==0?(decimal)_calc.Impostoterritorial:(decimal)_calc.Impostopredial,
+                Qtde_Edif=areas.Count,
+                Vvt=(decimal)_calc.Vvt,
+                Vvp=(decimal)_calc.Vvc,
+                Vvi=(decimal)_calc.Vvi,
+                Isento_Cip=_dados.Cip==true?"Sim":"Não",
+                Reside_Imovel=_dados.ResideImovel==true?"Sim":"Não",
+                Imunidade=_dados.Imunidade==true?"Sim":"Não",
+                Controle=_controle
+            };
+
+            List<Imovel_Detalhe> _lista_Dados = new List<Imovel_Detalhe>();
+            _lista_Dados.Add(_reg);
+            ReportDocument rd = new ReportDocument();
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Imovel_Detalhe.rpt"));
+            try {
+                rd.SetDataSource(_lista_Dados);
+                Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                return File(stream, "application/pdf", "Ficha_Cadastral.pdf");
+            } catch {
+                throw;
             }
 
         }
-
-
 
     }
 }

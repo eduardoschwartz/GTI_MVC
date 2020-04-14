@@ -16,14 +16,14 @@ namespace GTI_MVC.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class Dados_Imovel : ReportClass {
+    public class Imovel_Detalhe : ReportClass {
         
-        public Dados_Imovel() {
+        public Imovel_Detalhe() {
         }
         
         public override string ResourceName {
             get {
-                return "Dados_Imovel.rpt";
+                return "Imovel_Detalhe.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace GTI_MVC.Reports {
         
         public override string FullResourceName {
             get {
-                return "GTI_MVC.Reports.Dados_Imovel.rpt";
+                return "GTI_MVC.Reports.Imovel_Detalhe.rpt";
             }
             set {
                 // Do nothing
@@ -90,9 +90,9 @@ namespace GTI_MVC.Reports {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedDados_Imovel : Component, ICachedReport {
+    public class CachedImovel_Detalhe : Component, ICachedReport {
         
-        public CachedDados_Imovel() {
+        public CachedImovel_Detalhe() {
         }
         
         [Browsable(false)]
@@ -129,7 +129,7 @@ namespace GTI_MVC.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            Dados_Imovel rpt = new Dados_Imovel();
+            Imovel_Detalhe rpt = new Imovel_Detalhe();
             rpt.Site = this.Site;
             return rpt;
         }

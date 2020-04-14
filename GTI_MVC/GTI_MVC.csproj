@@ -305,10 +305,10 @@
       <DependentUpon>Comprovante_Pagamento.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Reports\Dados_Imovel.cs">
+    <Compile Include="Reports\Imovel_Detalhe.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Dados_Imovel.rpt</DependentUpon>
+      <DependentUpon>Imovel_Detalhe.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Empresa_Detalhe.cs">
@@ -516,9 +516,9 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Comprovante_Pagamento.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Dados_Imovel.rpt">
+    <EmbeddedResource Include="Reports\Imovel_Detalhe.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>Dados_Imovel.cs</LastGenOutput>
+      <LastGenOutput>Imovel_Detalhe.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Empresa_Detalhe.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
