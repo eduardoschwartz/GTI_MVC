@@ -6,27 +6,40 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element name="Codigo" type="xs:int"></xs:element>
-        <xs:element name="Razao_Social" type="xs:string"></xs:element>
-        <xs:element name="Cpf_Cnpj" type="xs:string"></xs:element>
-        <xs:element name="Inscricao_Estadual" type="xs:int"></xs:element>
-        <xs:element name="Endereco" type="xs:string"></xs:element>
-        <xs:element name="Bairro" type="xs:string"></xs:element>
-        <xs:element name="Cidade" type="xs:string"></xs:element>
-        <xs:element name="UF" type="xs:string"></xs:element>
-        <xs:element name="Cep" type="xs:int"></xs:element>
-        <xs:element name="Data_Abertura" type="xs:dateTime"></xs:element>
-        <xs:element name="Data_Encerramento" type="xs:dateTime"></xs:element>
-        <xs:element name="Atividade" type="xs:string"></xs:element>
-        <xs:element name="Situacao" type="xs:string"></xs:element>
-        <xs:element name="Email" type="xs:string"></xs:element>
-        <xs:element name="Telefone" type="xs:string"></xs:element>
-        <xs:element name="RegimeISS" type="xs:string"></xs:element>
-        <xs:element name="Taxa_Licenca" type="xs:string"></xs:element>
-        <xs:element name="Vigilancia_Sanitaria" type="xs:string"></xs:element>
-        <xs:element name="Cnae" type="xs:string"></xs:element>
-        <xs:element name="Mei" type="xs:string"></xs:element>
-        <xs:element name="Area" type="xs:string"></xs:element>
+        <xs:element name="Inscricao" type="xs:string"></xs:element>
+        <xs:element name="Situacao_Imovel" type="xs:string"></xs:element>
+        <xs:element name="MT" type="xs:string"></xs:element>
         <xs:element name="Proprietario" type="xs:string"></xs:element>
+        <xs:element name="Proprietario2" type="xs:string"></xs:element>
+        <xs:element name="Endereco" type="xs:string"></xs:element>
+        <xs:element name="Numero" type="xs:int"></xs:element>
+        <xs:element name="Complemento" type="xs:string"></xs:element>
+        <xs:element name="Bairro" type="xs:string"></xs:element>
+        <xs:element name="Cep" type="xs:string"></xs:element>
+        <xs:element name="Quadra_Original" type="xs:string"></xs:element>
+        <xs:element name="Lote_Original" type="xs:string"></xs:element>
+        <xs:element name="Area_Terreno" type="xs:decimal"></xs:element>
+        <xs:element name="Fracao_Ideal" type="xs:decimal"></xs:element>
+        <xs:element name="Testada" type="xs:decimal"></xs:element>
+        <xs:element name="Agrupamento" type="xs:decimal"></xs:element>
+        <xs:element name="Soma_Fatores" type="xs:decimal"></xs:element>
+        <xs:element name="Area_Predial" type="xs:decimal"></xs:element>
+        <xs:element name="Imunidade" type="xs:string"></xs:element>
+        <xs:element name="Reside_Imovel" type="xs:string"></xs:element>
+        <xs:element name="Qtde_Edif" type="xs:int"></xs:element>
+        <xs:element name="Isento_cip" type="xs:string"></xs:element>
+        <xs:element name="Topografia" type="xs:string"></xs:element>
+        <xs:element name="Pedologia" type="xs:string"></xs:element>
+        <xs:element name="Situacao" type="xs:string"></xs:element>
+        <xs:element name="Uso_Terreno" type="xs:string"></xs:element>
+        <xs:element name="Benfeitoria" type="xs:string"></xs:element>
+        <xs:element name="Categoria" type="xs:string"></xs:element>
+        <xs:element name="Condominio" type="xs:string"></xs:element>
+        <xs:element name="Vvt" type="xs:decimal"></xs:element>
+        <xs:element name="Vvp" type="xs:decimal"></xs:element>
+        <xs:element name="Vvi" type="xs:decimal"></xs:element>
+        <xs:element name="Iptu" type="xs:decimal"></xs:element>
+        <xs:element name="Controle" type="xs:string"></xs:element>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
