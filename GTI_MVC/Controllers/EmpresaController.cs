@@ -665,6 +665,225 @@ namespace GTI_Mvc.Controllers {
             }
 
         }
+
+        [Route("Alvara_Funcionamento")]
+        [HttpGet]
+        public ViewResult Alvara_Funcionamento() {
+            CertidaoViewModel model = new CertidaoViewModel {
+                OptionList = new List<SelectListaItem> {
+                new SelectListaItem { Text = " CPF", Value = "cpfCheck", Selected = true },
+                new SelectListaItem { Text = " CNPJ", Value = "cnpjCheck", Selected = false }
+            },
+                SelectedValue = "cpfCheck"
+            };
+            return View(model);
+        }
+
+        [Route("Alvara_Funcionamento")]
+        [HttpPost]
+        public ActionResult Alvara_Funcionamento(CertidaoViewModel model) {
+
+            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+            int _codigo = 0;
+            bool _existeCod = false;
+            CertidaoViewModel certidaoViewModel = new CertidaoViewModel();
+
+            if (model.Inscricao != null) {
+                _codigo = Convert.ToInt32(model.Inscricao);
+                if (_codigo >= 100000 && _codigo < 210000) //Se estiver fora deste intervalo nem precisa checar se a empresa existe
+                    _existeCod = empresaRepository.Existe_Empresa(_codigo);
+            } else {
+                if (model.CnpjValue != null) {
+                    string _cnpj = model.CnpjValue;
+                    bool _valida = Functions.ValidaCNPJ(_cnpj); //CNPJ válido?
+                    if (_valida) {
+                        _codigo = empresaRepository.ExisteEmpresaCnpj(_cnpj);
+                        if (_codigo > 0)
+                            _existeCod = true;
+                        else {
+
+                        }
+                    } else {
+                        certidaoViewModel.ErrorMessage = "Cnpj inválido.";
+                        return View(certidaoViewModel);
+                    }
+                } else {
+                    if (model.CpfValue != null) {
+                        string _cpf = model.CpfValue;
+                        bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
+                        if (_valida) {
+                            _codigo = empresaRepository.ExisteEmpresaCpf(_cpf);
+                            if (_codigo > 0)
+                                _existeCod = true;
+
+                        } else {
+                            certidaoViewModel.ErrorMessage = "Cpf inválido.";
+                            return View(certidaoViewModel);
+                        }
+                    }
+                }
+            }
+
+            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+                certidaoViewModel.ErrorMessage = "Código de verificação inválido.";
+                return View(certidaoViewModel);
+            }
+
+            if (_existeCod) {
+                int _ano_certidao = DateTime.Now.Year;
+                int _numero_certidao = empresaRepository.Retorna_Alvara_Disponivel(_ano_certidao);
+                string controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _codigo.ToString() + "-AF";
+
+                EmpresaStruct empresa = empresaRepository.Retorna_Empresa(_codigo);
+
+                if (empresaRepository.EmpresaSuspensa(_codigo)) {
+                    certidaoViewModel.ErrorMessage = "A empresa encontra-se suspensa.";
+                    return View(certidaoViewModel);
+                }
+                if (empresa.Data_Encerramento!=null) {
+                    certidaoViewModel.ErrorMessage = "A empresa encontra-se encerrada.";
+                    return View(certidaoViewModel);
+                }
+                if (Convert.ToDateTime(empresa.Data_abertura).Year == DateTime.Now.Year) {
+                    certidaoViewModel.ErrorMessage = "Empresa aberta este ano não pode renovar o alvará.";
+                    return View(certidaoViewModel);
+                }
+                int _atividade_codigo = (int)empresa.Atividade_codigo;
+                bool bAtividadeAlvara = empresaRepository.Atividade_tem_Alvara(_atividade_codigo);
+                if (!bAtividadeAlvara) {
+                    certidaoViewModel.ErrorMessage = "Atividade da empresa não permite renovar o alvará .";
+                    return View(certidaoViewModel);
+                }
+                bool bIsentoTaxa;
+                if (empresa.Isento_taxa == 1)
+                    bIsentoTaxa = true;
+                else
+                    bIsentoTaxa = false;
+
+                if (!bIsentoTaxa) {
+                    int _qtde = empresaRepository.Qtde_Parcelas_TLL_Vencidas(_codigo);
+                    if (_qtde > 0) {
+                        certidaoViewModel.ErrorMessage = "A taxa de licença não esta paga, favor dirigir-se à Prefeitura para regularizar.";
+                        return View(certidaoViewModel);
+                    } else {
+                        if (empresa.Endereco_codigo == 123 && empresa.Numero == 146) {
+                            certidaoViewModel.ErrorMessage = "O endereço desta empresa não permite a emissão de alvará automático.";
+                            return View(certidaoViewModel);
+                        }
+                    }
+                }
+
+                Certidao reg = new Certidao() {
+                    Codigo = _codigo,
+                    Razao_Social = empresa.Razao_social,
+                    Endereco = empresa.Endereco_nome,
+                    Endereco_Numero = (int)empresa.Numero,
+                    Endereco_Complemento = empresa.Complemento,
+                    Bairro = empresa.Bairro_nome,
+                    Atividade_Extenso = empresa.Atividade_extenso,
+                    Horario = empresa.Horario_extenso,
+                    Controle=controle
+                };
+
+                List<Certidao> _lista_Dados = new List<Certidao>();
+                _lista_Dados.Add(reg);
+                ReportDocument rd = new ReportDocument();
+                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Alvara_Funcionamento.rpt"));
+                try {
+                    rd.SetDataSource(_lista_Dados);
+                    Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                    return File(stream, "application/pdf", "Alvara.pdf");
+                } catch {
+                    throw;
+                }
+
+            } else {
+                certidaoViewModel.ErrorMessage = "Empresa não cadastrada.";
+                return View(certidaoViewModel);
+            }
+
+        }
+
+        [HttpPost]
+        [Route("Validate_AF")]
+        public ActionResult Validate_AF(CertidaoViewModel model) {
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            int _codigo, _ano, _numero;
+            string _chave = model.Chave;
+
+            model.OptionList = new List<SelectListaItem> {
+                new SelectListaItem { Text = " CPF", Value = "cpfCheck", Selected = model.SelectedValue == "cpfCheck" },
+                new SelectListaItem { Text = " CNPJ", Value = "cnpjCheck", Selected = model.SelectedValue == "cnpjCheck" }
+            };
+
+            if (model.Chave != null) {
+                chaveStruct _chaveStruct = tributarioRepository.Valida_Certidao(_chave);
+                if (!_chaveStruct.Valido) {
+                    ViewBag.Result = "Chave de autenticação da certidão inválida.";
+                    return View("Certidao_Inscricao", model);
+                } else {
+                    _codigo = _chaveStruct.Codigo;
+                    _numero = _chaveStruct.Numero;
+                    _ano = _chaveStruct.Ano;
+                    List<Comprovante_Inscricao> certidao = new List<Comprovante_Inscricao>();
+                    Certidao_inscricao _dados = tributarioRepository.Retorna_Certidao_Inscricao(_ano, _numero, _codigo);
+                    if (_dados != null) {
+                        Comprovante_Inscricao reg = new Comprovante_Inscricao() {
+                            Codigo = _codigo,
+                            Razao_Social = _dados.Nome,
+                            Nome_Fantasia = _dados.Nome_fantasia,
+                            Cep = _dados.Cep,
+                            Cidade = _dados.Cidade,
+                            Email = _dados.Email,
+                            Inscricao_Estadual = _dados.Inscricao_estadual,
+                            Endereco = _dados.Endereco + ", " + _dados.Numero,
+                            Complemento = _dados.Complemento,
+                            Bairro = _dados.Bairro ?? "",
+                            Ano = _ano,
+                            Numero = _numero,
+                            Controle = _chave,
+                            Atividade = _dados.Atividade,
+                            Atividade2 = _dados.Atividade_secundaria,
+                            //Atividade_Extenso=_dados.Atividade_Extenso,
+                            Cpf_Cnpj = _dados.Documento,
+                            Data_Abertura = (DateTime)_dados.Data_abertura,
+                            Processo_Abertura = _dados.Processo_abertura,
+                            Processo_Encerramento = _dados.Processo_encerramento,
+                            Situacao = _dados.Situacao,
+                            Telefone = _dados.Telefone,
+                            Area = (decimal)_dados.Area,
+                            Mei = _dados.Mei,
+                            Vigilancia_Sanitaria = _dados.Vigilancia_sanitaria,
+                            Taxa_Licenca = _dados.Taxa_licenca
+                        };
+                        if (_dados.Data_encerramento != null)
+                            reg.Data_Encerramento = (DateTime)_dados.Data_encerramento;
+                        certidao.Add(reg);
+                    } else {
+                        ViewBag.Result = "Ocorreu um erro ao processar as informações.";
+                        return View("Certidao_Inscricao", model);
+                    }
+
+                    ReportDocument rd = new ReportDocument();
+                    rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Comprovante_Inscricao_Valida.rpt"));
+
+                    try {
+                        rd.SetDataSource(certidao);
+                        Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                        return File(stream, "application/pdf", "Certidao_Endereco.pdf");
+                    } catch {
+
+                        throw;
+                    }
+                }
+            } else {
+                ViewBag.Result = "Chave de validação inválida.";
+                return View("Certidao_Inscricao", model);
+            }
+        }
+
+
+
     }
 }
 

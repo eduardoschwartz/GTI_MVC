@@ -57,6 +57,7 @@
         <xsd:element name="Situacao_Nome" type="xsd:string"></xsd:element>
         <xsd:element name="Numero_Documento" type="xsd:int"></xsd:element>
         <xsd:element name="Banco_Nome" type="xsd:string"></xsd:element>
+        <xsd:element name="Horario" type="xsd:string"></xsd:element>
       </xsd:sequence>
     </xsd:complexType>
   </xsd:element>

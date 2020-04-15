@@ -54,5 +54,6 @@ namespace GTI_Models.ReportModels {
         public string Situacao_Nome { get; set; }
         public int Numero_Documento { get; set; }
         public string Banco_Nome { get; set; }
+        public string Horario { get; set; }
     }
 }

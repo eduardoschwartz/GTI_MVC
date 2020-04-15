@@ -20,7 +20,8 @@
         <span style="color:saddlebrown;font-weight:bold;font-style:italic">Para sua empresa</span><br />
         @Html.ActionLink("Dados cadastrais de uma empresa", "Details", "Empresa")<br />
         <a href="~/Files/DECA2018.pdf">Download da declaração cadastral (DECA)</a><br />
-        <a href="http://sistemas.jaboticabal.sp.gov.br/gti/Pages/alvara_funcionamento.aspx?d=gti">Renovação de alvará de funcionamento</a><br />
+        @Html.ActionLink("Renovação de alvará de funcionamento", "Alvara_Funcionamento", "Empresa")<br />
+        @*<a href="http://sistemas.jaboticabal.sp.gov.br/gti/Pages/alvara_funcionamento.aspx?d=gti">Renovação de alvará de funcionamento</a><br />*@
         @Html.ActionLink("Comprovante de inscrição e situação cadastral", "Certidao_Inscricao", "Empresa")<br />
         @Html.ActionLink("Situação dos débitos ref. a ISS Fixo, Taxa de Licença e Vig. Sanitária", "Certidao_Pagamento", "Empresa")
     </div>
