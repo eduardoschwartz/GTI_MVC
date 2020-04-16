@@ -910,7 +910,13 @@ namespace GTI_Mvc.Controllers {
                     _endereco = _cidadao.EnderecoR + ", " + _cidadao.NumeroR.ToString() + _cidadao.ComplementoR == null ? "" : " " + _cidadao.ComplementoR + " " + _cidadao.NomeBairroR;
                     _cidade = _cidadao.NomeCidadeR;
                     _uf = _cidadao.UfR;
-                    _cep = (enderecoRepository.RetornaCep((int)_cidadao.CodigoLogradouroR, (short)_cidadao.NumeroR)).ToString();
+                    if (_cidadao.CodigoCidadeR == 413)
+                        _cep = (enderecoRepository.RetornaCep((int)_cidadao.CodigoLogradouroR, (short)_cidadao.NumeroR)).ToString();
+                    else {
+                        _cep = _cidadao.CepR.ToString();
+                        if (_cidadao.CepR == 0)
+                            _cep = "14870000";
+                    }
                 }
             }
 

@@ -423,6 +423,8 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Imovel\Dados_Imovel.cshtml" />
     <Content Include="Views\Empresa\Alvara_Funcionamento.cshtml" />
+    <Content Include="Views\Protocolo\Consulta_Processo.cshtml" />
+    <Content Include="Views\Protocolo\Consulta_Processo2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -85,7 +85,9 @@ namespace GTI_Dal.Classes {
                     UfC=Sql.Siglauf2,
                     CodigoProfissao=Sql.Codprofissao,
                     NomeBairroR=Sql.Bairro_NomeR,
-                    NomeBairroC=Sql.Bairro_NomeC
+                    NomeBairroC=Sql.Bairro_NomeC,
+                    CepR=Sql.Cep,
+                    CepC=Sql.Cep2
                 };
                 if (Sql.Codlogradouro > 0)
                     reg.EnderecoR = Sql.Endereco_NomeR;

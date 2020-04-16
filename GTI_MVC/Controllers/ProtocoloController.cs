@@ -318,5 +318,92 @@ namespace GTI_Mvc.Controllers {
             return RedirectToAction("Tramite_Processo2", new { Ano = Functions.Encrypt(model.Ano.ToString()), Numero = Functions.Encrypt(model.Numero.ToString()) });
         }
 
+        [Route("Consulta_Processo")]
+        [HttpGet]
+        public ViewResult Consulta_Processo() {
+            ProcessoViewModel model = new ProcessoViewModel();
+            return View(model);
+        }
+
+        [Route("Consulta_Processo")]
+        [HttpPost]
+        public ActionResult Consulta_Processo(ProcessoViewModel model) {
+            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+                ViewBag.Result = "Código de verificação inválido.";
+                return View(model);
+            }
+
+            ProcessoViewModel processoViewModel = new ProcessoViewModel();
+            ProcessoNumero processoNumero = Functions.Split_Processo_Numero(model.Numero_Ano);
+            processoViewModel.Numero_Ano = model.Numero_Ano;
+            processoViewModel.Numero = processoNumero.Numero;
+            processoViewModel.Ano = processoNumero.Ano;
+            processoViewModel.User_Id = Convert.ToInt32(ViewBag.UserId);
+
+            return RedirectToAction("Consulta_Processo2", new { Ano = Functions.Encrypt(processoViewModel.Ano.ToString()), Numero = Functions.Encrypt(processoViewModel.Numero.ToString()) });
+        }
+
+        [Route("Consulta_Processo2/{Ano}/{Numero}")]
+        [HttpGet]
+        public ActionResult Consulta_Processo2(string Ano = "0", string Numero = "0") {
+            int _ano = 0, _numero = 0;
+            try {
+                _ano = Convert.ToInt32(Functions.Decrypt(Ano));
+                _numero = Convert.ToInt32(Functions.Decrypt(Numero));
+            } catch  {
+               
+            }
+
+            if (_ano == 0)
+                return View("Consulta_Processo");
+
+            string Numero_Ano = _numero.ToString() + "-" + Functions.RetornaDvProcesso(_numero) + "/" + _ano.ToString();
+            ProcessoViewModel modelt = Exibe_Tramite2(Numero_Ano);
+            modelt.Numero_Ano = Numero_Ano;
+            if (modelt.Lista_Tramite == null)
+                return View("Consulta_Processo");
+            else { 
+
+                return View(modelt);
+            }
+                
+        }
+
+        private ProcessoViewModel Exibe_Tramite2(string Numero_Ano, int Seq = 0) {
+            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+            ProcessoViewModel processoViewModel = new ProcessoViewModel();
+
+
+            List<Centrocusto> Lista_CentroCusto = protocoloRepository.Lista_Local(true, false);
+            ViewBag.Lista_CentroCusto = new SelectList(Lista_CentroCusto, "Codigo", "Descricao");
+
+            ProcessoNumero processoNumero = Functions.Split_Processo_Numero(Numero_Ano);
+            ProcessoStruct _dados = protocoloRepository.Dados_Processo(processoNumero.Ano, processoNumero.Numero);
+            if (_dados != null) {
+                List<TramiteStruct> Lista_Tramite = protocoloRepository.DadosTramite((short)processoNumero.Ano, processoNumero.Numero, (int)_dados.CodigoAssunto);
+
+                if (Seq > 0) {
+                    Lista_Tramite = Lista_Tramite.Where(m => m.Seq == Seq).ToList();
+                }
+                TramiteStruct TramiteAtual = protocoloRepository.Dados_Tramite(processoNumero.Ano, processoNumero.Numero, Seq);
+
+
+                processoViewModel.Despacho_Codigo = TramiteAtual.DespachoCodigo;
+                processoViewModel.Ano = processoNumero.Ano;
+                processoViewModel.Numero = processoNumero.Numero;
+                processoViewModel.User_Id = Convert.ToInt32(ViewBag.UserId);
+                processoViewModel.Data_Processo = Convert.ToDateTime(_dados.DataEntrada).ToString("dd/MM/yyyy");
+                processoViewModel.Requerente = _dados.NomeCidadao;
+                processoViewModel.Assunto_Nome = _dados.Assunto;
+                processoViewModel.Lista_Tramite = Lista_Tramite;
+                processoViewModel.Numero_Ano = Numero_Ano;
+                processoViewModel.ObsGeral = Lista_Tramite[0].ObsGeral;
+                processoViewModel.ObsInterna = Lista_Tramite[0].ObsInterna;
+            } else {
+                ViewBag.Result = "Processo não cadastrado.";
+            }
+            return processoViewModel;
+        }
+
     }
 }

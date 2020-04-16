@@ -1,0 +1,100 @@
+﻿@model GTI_Mvc.ViewModels.ProcessoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Consulta de Processo";
+}
+
+<style>
+    .textBoxBlue {
+        height: 25px;
+        position: relative;
+        border: 1px solid #0094ff;
+        border-color: rgba(0, 0, 0, .14);
+        background-color: white;
+        font-size: 14px;
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
+    }
+</style>
+
+<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline">Consulta de Processo</label>
+<br />
+<br />
+
+@using (Html.BeginForm("Consulta_Processo", "Protocolo", FormMethod.Post, new { @id = "MainForm" })) {
+    <table width="500px">
+        <tr style="height:40px">
+            <td style="width:150px"><label style="font-weight:normal">Nº do Processo: </label></td>
+            <td style="width:300px">@Html.TextBoxFor(m => m.Numero_Ano, new { @id = "numprocesso", @class = "textBoxBlue", @style = "max-width:150px" })</td>
+        </tr>
+
+        <tr style="height:40px">
+            <td style="width:150px" valign="middle">
+                <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+            </td>
+            <td style="width:150px" valign="middle">
+                @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
+            </td>
+        </tr>
+    </table>
+
+    <br />
+    <div class="col-sm-10">
+        &nbsp;&nbsp;<button type="submit" class="green_button"> Consultar</button>
+    </div>
+    <br />
+    <br />
+
+    <div class="form-group row">
+        <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+    </div>
+    <br />
+}
+
+
+@Html.ActionLink("Retornar ao menu de opções", "SysMenu", "Home")
+<br />
+@Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home")
+
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+        });
+
+        function ValidateForm() {
+            ClearError();
+            var _numero = document.getElementById('numprocesso').value.trim();
+            var _captcha = document.getElementById('captchaTxt').value;
+
+            var _error = Valida_Numero_Processo(_numero);
+            if (_error != "") {
+                document.getElementById('errorLabel').innerHTML = _error;
+                return false;
+            }
+
+            if (_captcha == "") {
+                document.getElementById('errorLabel').innerHTML = "Digite o código de validação!";
+                return false;
+            } else {
+                return true;
+            }
+
+            return true;
+        }
+
+        function ClearError() {
+            document.getElementById('errorLabel').innerHTML = "";
+        }
+
+    </script>
+}
+
+
+
+

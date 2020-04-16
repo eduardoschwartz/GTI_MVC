@@ -187,6 +187,7 @@ namespace GTI_Dal.Classes {
         }
 
         public int Existe_EmpresaCnpj(string sCNPJ) {
+            sCNPJ = dalCore.RetornaNumero(sCNPJ);
             int nCodigo = 0;
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var existingReg = db.Mobiliario.Count(a => a.Cnpj == sCNPJ);
@@ -199,6 +200,7 @@ namespace GTI_Dal.Classes {
         }
 
         public int Existe_EmpresaCpf(string sCPF) {
+            sCPF = dalCore.RetornaNumero(sCPF);
             int nCodigo = 0;
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var existingReg = db.Mobiliario.Count(a => a.Cpf == sCPF);

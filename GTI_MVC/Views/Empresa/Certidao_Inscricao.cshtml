@@ -45,7 +45,7 @@
                 }
             </td>
             <td>
-                @Html.DropDownListFor(m => m.Inscricao, new SelectList(_lista_codigos), new { @class = "textBoxBlue", style = "width:100px;height:25px" })  <input type="submit" value="Verificar" title="Retorna as incrições municipais atreladas ao CPF/CNPJ informado." style="margin-left:1px" class="green_button" formaction="Retorna_Codigos" />
+                @Html.DropDownListFor(m=>m.Inscricao, new SelectList(_lista_codigos), new {@id="inscricao",  @class = "textBoxBlue", style = "width:100px;height:25px" })  <input type="submit" value="Verificar" title="Retorna as incrições municipais atreladas ao CPF/CNPJ informado." style="margin-left:1px" class="green_button" formaction="Retorna_Codigos" />
             </td>
         </tr>
         <tr>
@@ -130,8 +130,7 @@
             var _cnpj = document.getElementById('cnpjTxt').value;
             var _captcha = document.getElementById('captchaTxt').value;
             var _chave = document.getElementById('chave').value;
-            var _inscricao = document.getElementById('Inscricao').value;
-
+            var _inscricao = document.getElementById('inscricao').value;
             var _buscar_codigos = false;
             var _consultar = false;
             var _autenticar = false;

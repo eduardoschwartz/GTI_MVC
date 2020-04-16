@@ -217,7 +217,8 @@ namespace GTI_Mvc.Controllers {
                 Numero = _numero,
                 Quadra_Original = _dados.QuadraOriginal ?? "",
                 Lote_Original = _dados.LoteOriginal ?? "",
-                Controle = _numero.ToString("00000") + DateTime.Now.Year.ToString("0000") + "/" + _codigo.ToString() + "-VV"
+                Controle = _numero.ToString("00000") + DateTime.Now.Year.ToString("0000") + "/" + _codigo.ToString() + "-VV",
+                Data_Geracao=DateTime.Now
             };
 
             SpCalculo RegCalculo = tributarioRepository.Calculo_IPTU(_dados.Codigo, DateTime.Now.Year);

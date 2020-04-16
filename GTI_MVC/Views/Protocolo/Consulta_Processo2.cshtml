@@ -1,0 +1,483 @@
+﻿@model GTI_Mvc.ViewModels.ProcessoViewModel
+
+@*@inject IJsonHelper Json;*@
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Consulta de Processo";
+}
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/css/gti.css" rel="stylesheet" />
+
+<label style="color:brown;font-size:16px;font-style:italic">Consulta de Processo</label>
+
+<style>
+    .tableContainer {
+        color: dodgerblue;
+        border-spacing: 10px;
+        empty-cells: show;
+        width: 100%;
+        text-align: left;
+        font-size: 12px;
+    }
+
+        .tableContainer tr td {
+            white-space: nowrap;
+            text-align: left;
+        }
+</style>
+
+<!--###########################-->
+<!--          HEADER           -->
+<!--###########################-->
+<form asp-controller="Protocolo" enctype="multipart/form-data" method="post" class="mt-3">
+    <!--###########################-->
+    <!--      DADOS DO PROCESSO    -->
+    <!--###########################-->
+    <table title="Dados do Processo" style="font-size:12px;background-color:White;border-color:#CCCCCC; ">
+        <tr>
+            <td style="width:200px;padding: 1px 1px 1px 5px;">
+                Nº do processo:
+            </td>
+            <td style="color:black;font-weight:bold">
+                @Model.Numero_Ano
+            </td>
+        </tr>
+        <tr>
+            <td style="width:600px;padding: 1px 1px 1px 5px;">
+                Data do processo:
+            </td>
+            <td style="color:black;font-weight:bold">
+                @Model.Data_Processo
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 15%; padding: 1px 1px 1px 5px;">
+                Requerente:
+            </td>
+            <td style="color:black;font-weight:bold">
+                @Model.Requerente
+            </td>
+        </tr>
+        <tr>
+            <td style="width:15%;padding: 1px 1px 1px 5px;">
+                Assunto:
+            </td>
+            <td style="color:black;font-weight:bold">
+                @Model.Assunto_Nome
+            </td>
+        </tr>
+    </table>
+    <br />
+    <!--###########################-->
+    <!--   TABELA DE TRAMITAÇÃO    -->
+    <!--###########################-->
+    <div id="TramitacaoTable" style="max-height: 247px; overflow: auto;width:800px">
+        <table id="tblMain" class="tableContainer" style="font-size:9px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+            <thead style="background-color:#337ab7;color:white;font-size:9px;font-weight:normal">
+                <tr style="height:12px;">
+                    <th>
+                        Seq
+                    </th>
+                    <th style="width:30px">
+                        Centro de Custos
+                    </th>
+                    <th style="width:60px;text-align:center">
+                        Dt.Entrada
+                    </th>
+                    <th style="width:40px;text-align:center">
+                        Hora
+                    </th>
+                    <th style="width:30px">
+                        Recebido por
+                    </th>
+                    <th style="width:30px">
+                        Despacho
+                    </th>
+                    <th style="width:60px;text-align:center">
+                        Dt.Envio
+                    </th>
+
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody style="color: #333333">
+                @foreach (var item in Model.Lista_Tramite) {
+                    <tr style="        height: 15px;
+        border-bottom-color: cadetblue;
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+        border-top-color: cadetblue;
+        border-top-style: solid;
+        border-top-width: 1px
+">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Seq)
+                        </td>
+                        <td style="width:180px">
+                            @Html.DisplayFor(modelItem => item.CentroCustoNome)
+                        </td>
+                        <td style="width:50px;text-align:center">
+                            @Html.DisplayFor(modelItem => item.DataEntrada)
+                        </td>
+                        <td style="width:40px;text-align:center">
+                            @Html.DisplayFor(modelItem => item.HoraEntrada)
+                        </td>
+                        <td style="min-width:150px">
+                            @Html.DisplayFor(modelItem => item.Usuario1)
+                        </td>
+                        <td style="color:brown">
+                            @Html.DisplayFor(modelItem => item.DespachoNome)
+                        </td>
+                        <td style="width:60px;text-align:center">
+                            @Html.DisplayFor(modelItem => item.DataEnvio)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</form>
+
+<!--###########################-->
+<!--          FOOTER           -->
+<!--###########################-->
+<br />
+<br />
+<div class="form-group row">
+    <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+</div>
+
+
+
+@Html.ActionLink("Consultar outro processo", "Consulta_Processo", "Protocolo")
+<br />
+@Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home")
+
+
+<!--##########################-->
+<!--Formulário Inserir Local  -->
+<!--##########################-->
+<div class="modal" tabindex="-1" role="dialog" id="InserirModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalTitleInserir">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formInserir" onsubmit="return ValidaInserir()">
+                    <fieldset id="SubmitFormInserir">
+                        @Html.HiddenFor(m => m.Ano)
+                        @Html.HiddenFor(m => m.Numero)
+                        @Html.HiddenFor(m => m.User_Id)
+                        @Html.HiddenFor(m => m.Seq)
+                        @Html.DropDownListFor(m => m.CCusto_Codigo, ViewBag.Lista_CentroCusto as SelectList, "-Selecione um Local-", new { @id = "InserirDropDown", style = "width:330px;height:25px", rows = 10 })
+                        <label class="text-danger" id="errorMsgInserir"></label>
+                    </fieldset>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="Inserir_Save">Gravar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    <script>
+
+    //*************************************
+    //Scripts para recebimento de processo
+    //*************************************
+    function Validar_Receber(Prm, Seq, CCusto) {
+        var tbl = document.getElementById("tblMain");
+        var _texto = tbl.rows[Seq].cells[2].innerHTML;
+        if (elementIsEmpty(_texto) == false) {
+            document.getElementById('errorLabel').innerHTML = "O processo já foi recebido neste local.";
+            return false;
+        } else {
+            var _anterior = Seq - 1;
+            _texto = tbl.rows[_anterior].cells[6].innerHTML;
+            if (elementIsEmpty(_texto) == true) {
+                document.getElementById('errorLabel').innerHTML = "O local anterior ainda não enviou o processo.";
+                return false;
+            }
+        }
+
+        var _find = false;
+        var _lista = Prm.split(",");
+        for (i = 0; i < _lista.length; i++) {
+            if (_lista[i] == CCusto) {
+                _find = true;
+                break;
+            }
+        }
+        ClearError();
+        if (_find) {
+             $.ajax({
+                    type: "Post",
+                 url: "/Protocolo/Receive",
+                    dataType: 'json',
+                    success: function (data) {
+                        window.location.href = data;
+                    },
+                    data: {
+                        Ano: @Model.Ano,
+                        Numero: @Model.Numero,
+                        Seq: Seq,
+                        CCusto_Codigo: CCusto
+                    }
+                });
+        }   else {
+            document.getElementById('errorLabel').innerHTML ="Você não tem permissão para tramitar neste local.";
+            return false;
+        }
+        return true;
+    }
+
+    //*******************************
+    //Scripts para envio de processo
+    //*******************************
+
+    function Validar_Enviar(Prm, Seq, CCusto) {
+        var tbl = document.getElementById("tblMain");
+        var _texto = tbl.rows[Seq].cells[2].innerHTML;
+        if (elementIsEmpty(_texto) == true) {
+            document.getElementById('errorLabel').innerHTML = "O processo ainda não foi recebido neste local.";
+            return false;
+        } else {
+            _texto = tbl.rows[Seq].cells[6].innerHTML;
+            if (elementIsEmpty(_texto) == false) {
+                document.getElementById('errorLabel').innerHTML = "O processo já foi enviado.";
+                return false;
+            }
+        }
+
+        var _find = false;
+        var _lista = Prm.split(",");
+        for (i = 0; i < _lista.length; i++) {
+            if (_lista[i] == CCusto) {
+                _find = true;
+                break;
+            }
+        }
+        ClearError();
+        if (_find) {
+             $.ajax({
+                    type: "Post",
+                    url: "/Protocolo/Send",
+                    dataType: 'json',
+                    success: function (data) {
+                        window.location.href = data;
+                    },
+                    data: {
+                        Ano: @Model.Ano,
+                        Numero: @Model.Numero,
+                        Seq: Seq,
+                        CCusto_Codigo: CCusto
+                    }
+                });
+        }   else {
+            document.getElementById('errorLabel').innerHTML ="Você não tem permissão para tramitar neste local.";
+            return false;
+        }
+        return true;
+    }
+
+
+    //***************************
+    //Scripts para Mover trâmite
+    //***************************
+    function MoveUp(Ano, Numero, Seq) {
+        var tbl = document.getElementById("tblMain");
+        var _texto = tbl.rows[Seq-1].cells[2].innerHTML;
+        if (Seq == 1) {
+            alert( "Não é possível mover para cima o primeiro local.");
+        }
+        else {
+            ClearError();
+            if (elementIsEmpty(_texto) == false) {
+                alert( "O local acima já foi tramitado.");
+            } else {
+                $.ajax({
+                    type: "Post",
+                    url: "/Protocolo/MoveUp",
+                    dataType: 'json',
+                    success: function (data) {
+                        window.location.href = data;
+                    },
+                    data: {
+                        Ano: Ano,
+                        Numero: Numero,
+                        Seq: Seq
+                    }
+                });
+            }
+        }
+        window.location.href = window.location.href;
+        return true;
+    }
+
+      function MoveDown(Ano, Numero, Seq) {
+          var tbl = document.getElementById("tblMain");
+          var _texto = tbl.rows[Seq].cells[2].innerHTML;
+          var rows = document.getElementById("tblMain").getElementsByTagName("tr").length;
+          if (Seq == rows-1) {
+              alert( "Não é possível mover para baixo o último local.");
+          } else {
+              ClearError();
+              if (elementIsEmpty(_texto) == false) {
+                  alert("Este local já foi tramitado.");
+              } else {
+                  $.ajax({
+                      type: "Post",
+                      url: "/Protocolo/MoveDown",
+                      dataType: 'json',
+                      success: function (data) {
+                          window.location.href = data;
+                      },
+                      data: {
+                          Ano: Ano,
+                          Numero: Numero,
+                          Seq: Seq
+                      }
+                  });
+              }
+          }
+        window.location.href = window.location.href;
+        return true;
+    }
+
+    //***********************************
+    //Scripts para inserir/remover local
+    //***********************************
+    function Validar_AddPlace(Ano, Numero, SeqId, CCusto) {
+        var tbl = document.getElementById("tblMain");
+        var _texto = tbl.rows[SeqId + 1].cells[2].innerHTML;
+        if (elementIsEmpty(_texto) == false) {
+            document.getElementById('errorLabel').innerHTML = "O local abaixo já foi tramitado.";
+            return false;
+        }
+         $.ajax({
+                    type: "Post",
+             url: "/Protocolo/AddPlace",
+                     dataType: 'json',
+                    success: function (data) {
+                        window.location.href = data;
+                    },
+                    data: {
+                        Ano: @Model.Ano,
+                        Numero: @Model.Numero,
+                        Seq: SeqId
+                    }
+                });
+        return true;
+    }
+
+
+    function Usuario_CC_Remover(Prm ,Seq, CCusto) {
+        var _find = false;
+        var _lista = Prm.split(",");
+        if (Seq > 0) {
+            for (i = 0; i < _lista.length; i++) {
+                if (_lista[i] == CCusto) {
+                    _find = true;
+                    break;
+                }
+            }
+            ClearError();
+            if (_find) {
+                return true;
+            } else {
+                alert("Você não tem permissão para remover este local.");
+                return false;
+            }
+        }
+    }
+
+    //*************************
+    //Scripts para Observação
+    //*************************
+
+        function Validar_Obs(Ano,Numero,Prm, Seq, ObsGeral, ObsInterna) {
+        var tbl = document.getElementById("tblMain");
+        var _texto = tbl.rows[Seq].cells[2].innerHTML;
+        if (elementIsEmpty(_texto) == true) {
+            document.getElementById('errorLabel').innerHTML = "O processo ainda não foi recebido neste local.";
+            return false;
+        }
+
+        var _find = false;
+        var _lista = Prm.split(",");
+        for (i = 0; i < _lista.length; i++) {
+            if (_lista[i] == CCusto) {
+                _find = true;
+                break;
+            }
+        }
+        ClearError();
+        if (_find) {
+             $.ajax({
+                    type: "Post",
+                 url: "/Protocolo/Obs",
+                     dataType: 'json',
+                    success: function (data) {
+                        window.location.href = data;
+                    },
+                    data: {
+                        Ano: Ano,
+                        Numero: Numero,
+                        Seq: Seq,
+                        ObsGeral: ObsGeral,
+                        ObsInterna: ObsInterna
+                    }
+                });
+        }   else {
+            document.getElementById('errorLabel').innerHTML ="Você não tem permissão para comentar neste local.";
+            return false;
+        }
+        return true;
+    }
+
+
+    //***************
+    //Scripts outros
+    //***************
+    function elementIsEmpty(el) {
+        return (/^(\s|&nbsp;)*$/.test(el));
+    }
+
+    function ClearError() {
+       document.getElementById('errorLabel').innerHTML = "";
+    }
+
+    function htmlEncode(value){
+    if (value) {
+        return jQuery('<div />').text(value).html();
+    } else {
+        return '';
+    }
+}
+
+function htmlDecode(value) {
+    if (value) {
+        return $('<div />').html(value).text();
+    } else {
+        return '';
+    }
+}
+
+    </script>
+}
