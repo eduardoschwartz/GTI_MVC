@@ -737,7 +737,7 @@ namespace GTI_Mvc.Controllers {
             List<SpExtrato> ListaParcela = tributarioRepository.Lista_Extrato_Parcela(ListaTributo);
             List<DebitoStructure> Lista_debitos = new List<DebitoStructure>();
 
-            bool IsRefis = true;
+            bool IsRefis = false;
             int nIndex = 0, nPlano = 0;
             decimal nPerc=0, nSomaPrincipal = 0, nSomaJuros = 0, nSomaMulta = 0, nSomaCorrecao = 0, nSomaTotal = 0, nSomaHonorario = 0;
 

@@ -291,10 +291,10 @@
                     return false;
                 }
 
-                if (_ano_anterior && _ano_atual) {
-                    document.getElementById('errorLabel').innerHTML = "Não é possível pagar débitos anteriores a 30/06/2019 com débitos posteriores durante Refis.";
-                    return false;
-                }
+                //if (_ano_anterior && _ano_atual) {
+                //    document.getElementById('errorLabel').innerHTML = "Não é possível pagar débitos anteriores a 30/06/2019 com débitos posteriores durante Refis.";
+                //    return false;
+                //}
 
                 if (_parc_unica && _parc_normal) {
                     document.getElementById('errorLabel').innerHTML = "Parcela única não pode ser paga junto com outras parcelas.";

@@ -431,6 +431,7 @@
     <Content Include="Views\Empresa\Alvara_Funcionamento.cshtml" />
     <Content Include="Views\Protocolo\Consulta_Processo.cshtml" />
     <Content Include="Views\Protocolo\Consulta_Processo2.cshtml" />
+    <Content Include="Views\Imovel\Carne_Iptu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

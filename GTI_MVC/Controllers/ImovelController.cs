@@ -656,5 +656,13 @@ namespace GTI_Mvc.Controllers {
 
         }
 
+        [Route("Carne_Iptu")]
+        [HttpGet]
+        public ViewResult Carne_Iptu() {
+            CertidaoViewModel model = new CertidaoViewModel();
+            return View(model);
+        }
+
+
     }
 }

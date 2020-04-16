@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" >
+  <!-- XML Schema Generated from XML Document on Tue Aug 13 2019 14:13:53 GMT-0300 (Horário Padrão de Brasília) -->
+  <!-- with XmlGrid.net Free Online Service http://xmlgrid.net -->
+  <xsd:element name="Boleto">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Codigo" type="xsd:int"></xsd:element>
+        <xsd:element name="Nome" type="xsd:string"></xsd:element>
+        <xsd:element name="Cpf_Cnpj" type="xsd:string"></xsd:element>
+        <xsd:element name="Endereco" type="xsd:string"></xsd:element>
+        <xsd:element name="Bairro" type="xsd:string"></xsd:element>
+        <xsd:element name="Cidade" type="xsd:string"></xsd:element>
+        <xsd:element name="Cep" type="xsd:string"></xsd:element>
+        <xsd:element name="Quadra" type="xsd:string"></xsd:element>
+        <xsd:element name="Lote" type="xsd:string"></xsd:element>
+        <xsd:element name="Inscricao" type="xsd:string"></xsd:element>
+        <xsd:element name="Fracao_Ideal" type="xsd:decimal"></xsd:element>
+        <xsd:element name="Natureza" type="xsd:string"></xsd:element>
+        <xsd:element name="Area_Territorial" type="xsd:decimal"></xsd:element>
+        <xsd:element name="Area_Predial" type="xsd:decimal"></xsd:element>
+        <xsd:element name="Testada" type="xsd:decimal"></xsd:element>
+        <xsd:element name="Vvt" type="xsd:decimal"></xsd:element>
+        <xsd:element name="Vvc" type="xsd:decimal"></xsd:element>
+        <xsd:element name="Vvi" type="xsd:decimal"></xsd:element>
+        <xsd:element name="Valor_Iptu" type="xsd:decimal"></xsd:element>
+        <xsd:element name="Valor_Itu" type="xsd:decimal"></xsd:element>
+        <xsd:element name="Total_Parcela" type="xsd:decimal"></xsd:element>
+        <xsd:element name="Valor_Unica1" type="xsd:decimal"></xsd:element>
+        <xsd:element name="Valor_Unica2" type="xsd:decimal"></xsd:element>
+        <xsd:element name="Valor_Unica3" type="xsd:decimal"></xsd:element>
+        <xsd:element name="Parcela_Label" type="xsd:string"></xsd:element>
+        <xsd:element name="Data_Vencimento" type="xsd:dateTime"></xsd:element>
+        <xsd:element name="Valor_Guia" type="xsd:decimal"></xsd:element>
+        <xsd:element name="Nosso_Numero" type="xsd:string"></xsd:element>
+        <xsd:element name="NUmero_Documento" type="xsd:int"></xsd:element>
+        <xsd:element name="Data_Documento" type="xsd:dateTime"></xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>
