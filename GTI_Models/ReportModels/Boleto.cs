@@ -32,5 +32,7 @@ namespace GTI_Models.ReportModels {
         public string Nosso_Numero { get; set; }
         public int Numero_Documento { get; set; }
         public DateTime Data_Documento { get; set; }
+        public string Codigo_Barra { get; set; }
+        public string Digitavel { get; set; }
     }
 }

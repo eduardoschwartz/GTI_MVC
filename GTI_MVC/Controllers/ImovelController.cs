@@ -10,6 +10,7 @@ using System.IO;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using static GTI_Models.modelCore;
+using Boleto = GTI_Models.ReportModels.Boleto;
 
 namespace GTI_Mvc.Controllers {
 
@@ -551,7 +552,7 @@ namespace GTI_Mvc.Controllers {
 
             if (model.Inscricao != null) {
                 _codigo = Convert.ToInt32(model.Inscricao);
-                if (_codigo >= 100000 && _codigo < 210000) //Se estiver fora deste intervalo nem precisa checar se a empresa existe
+                if (_codigo  < 50000)
                     _existeCod = imovelRepository.Existe_Imovel(_codigo);
             } else {
                 if (model.CnpjValue != null) {
@@ -661,6 +662,73 @@ namespace GTI_Mvc.Controllers {
         public ViewResult Carne_Iptu() {
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);
+        }
+
+        [Route("Carne_Iptu")]
+        [HttpPost]
+        public ActionResult Carne_Iptu(CertidaoViewModel model) {
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            int _codigo = 0;
+            bool _existeCod = false;
+            ImovelDetailsViewModel imovelDetailsViewModel = new ImovelDetailsViewModel();
+
+            if (model.Inscricao != null) {
+                _codigo = Convert.ToInt32(model.Inscricao);
+                if (_codigo < 50000)
+                    _existeCod = imovelRepository.Existe_Imovel(_codigo);
+            } else {
+                if (model.CnpjValue != null) {
+                    string _cnpj = model.CnpjValue;
+                    bool _valida = Functions.ValidaCNPJ(_cnpj); //CNPJ válido?
+                    if (_valida) {
+                        _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo, _cnpj);
+                    } else {
+                        imovelDetailsViewModel.ErrorMessage = "Cnpj inválido.";
+                        return View(imovelDetailsViewModel);
+                    }
+                } else {
+                    if (model.CpfValue != null) {
+                        string _cpf = model.CpfValue;
+                        bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
+                        if (_valida) {
+                            _existeCod = imovelRepository.Existe_Imovel_Cpf(_codigo, _cpf);
+                        } else {
+                            imovelDetailsViewModel.ErrorMessage = "Cpf inválido.";
+                            return View(imovelDetailsViewModel);
+                        }
+                    }
+                }
+            }
+
+            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+                imovelDetailsViewModel.ErrorMessage = "Código de verificação inválido.";
+                return View(imovelDetailsViewModel);
+            }
+
+            Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
+            List<AreaStruct> areas = imovelRepository.Lista_Area(_codigo);
+
+            ImovelStruct _dados = imovelRepository.Dados_Imovel(_codigo);
+            Laseriptu _calc = imovelRepository.Dados_IPTU(_codigo, DateTime.Now.Year);
+
+            Boleto reg = new Boleto() {
+                Codigo = _codigo,
+                Nome=_dados.Proprietario_Nome,
+                Inscricao=_dados.Inscricao
+
+            };
+
+            List<Boleto> _lista_Dados = new List<Boleto>();
+            _lista_Dados.Add(reg);
+            ReportDocument rd = new ReportDocument();
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Carne_Iptu.rpt"));
+            try {
+                rd.SetDataSource(_lista_Dados);
+                Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                return File(stream, "application/pdf", "CarneIptu.pdf");
+            } catch {
+                throw;
+            }
         }
 
 

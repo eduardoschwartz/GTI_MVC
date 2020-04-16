@@ -35,6 +35,8 @@
         <xsd:element name="Nosso_Numero" type="xsd:string"></xsd:element>
         <xsd:element name="NUmero_Documento" type="xsd:int"></xsd:element>
         <xsd:element name="Data_Documento" type="xsd:dateTime"></xsd:element>
+        <xsd:element name="Codigo_Barra" type="xsd:string"></xsd:element>
+        <xsd:element name="Digitavel" type="xsd:string"></xsd:element>
       </xsd:sequence>
     </xsd:complexType>
   </xsd:element>
