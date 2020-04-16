@@ -773,6 +773,34 @@ namespace GTI_Mvc.Controllers {
                     }
                 }
 
+
+                Alvara_funcionamento alvara = new Alvara_funcionamento();
+                alvara.Ano = (short)_ano_certidao;
+                alvara.Numero = _numero_certidao;
+                alvara.Controle = controle;
+                alvara.Codigo = _codigo;
+                alvara.Razao_social = empresa.Razao_social;
+                string sDoc = "";
+                if (empresa.Cpf_cnpj.Length == 11)
+                    sDoc = Convert.ToInt64(Functions.RetornaNumero(empresa.Cpf_cnpj)).ToString(@"000\.000\.000\-00");
+                else
+                    sDoc = Convert.ToInt64(Functions.RetornaNumero(empresa.Cpf_cnpj)).ToString(@"00\.000\.000\/0000\-00");
+
+                alvara.Documento = sDoc;
+                alvara.Endereco = empresa.Endereco_nome + ", " + empresa.Numero.ToString() + " " + empresa.Complemento;
+                alvara.Bairro = empresa.Bairro_nome;
+                alvara.Atividade = empresa.Atividade_extenso;
+                alvara.Horario = string.IsNullOrWhiteSpace(empresa.Horario_extenso) ? empresa.Horario_Nome : empresa.Horario_extenso;
+                alvara.Validade = Convert.ToDateTime("30/06/2019");
+                alvara.Data_Gravada = DateTime.Now;
+
+                Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+                Exception ex = tributarioRepository.Insert_Alvara_Funcionamento(alvara);
+                if (ex != null){
+                    certidaoViewModel.ErrorMessage = ex.InnerException.ToString();
+                    return View(certidaoViewModel);
+                }
+
                 Certidao reg = new Certidao() {
                     Codigo = _codigo,
                     Razao_Social = empresa.Razao_social,
@@ -781,8 +809,8 @@ namespace GTI_Mvc.Controllers {
                     Endereco_Complemento = empresa.Complemento,
                     Bairro = empresa.Bairro_nome,
                     Atividade_Extenso = empresa.Atividade_extenso,
-                    Horario = empresa.Horario_extenso,
-                    Controle=controle
+                    Horario = string.IsNullOrWhiteSpace(empresa.Horario_extenso) ? empresa.Horario_Nome : empresa.Horario_extenso,
+                    Controle =controle
                 };
 
                 List<Certidao> _lista_Dados = new List<Certidao>();
@@ -819,58 +847,41 @@ namespace GTI_Mvc.Controllers {
             if (model.Chave != null) {
                 chaveStruct _chaveStruct = tributarioRepository.Valida_Certidao(_chave);
                 if (!_chaveStruct.Valido) {
-                    ViewBag.Result = "Chave de autenticação da certidão inválida.";
-                    return View("Certidao_Inscricao", model);
+                    ViewBag.Result = "Chave de autenticação inválida.";
+                    return View("Alvara_Funcionamento", model);
                 } else {
                     _codigo = _chaveStruct.Codigo;
                     _numero = _chaveStruct.Numero;
                     _ano = _chaveStruct.Ano;
-                    List<Comprovante_Inscricao> certidao = new List<Comprovante_Inscricao>();
-                    Certidao_inscricao _dados = tributarioRepository.Retorna_Certidao_Inscricao(_ano, _numero, _codigo);
+                    List<Certidao> certidao = new List<Certidao>();
+                    Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+                    Alvara_funcionamento _dados = empresaRepository.Alvara_Funcionamento_gravado(_chave);
                     if (_dados != null) {
-                        Comprovante_Inscricao reg = new Comprovante_Inscricao() {
+                        Certidao reg = new Certidao() {
                             Codigo = _codigo,
-                            Razao_Social = _dados.Nome,
-                            Nome_Fantasia = _dados.Nome_fantasia,
-                            Cep = _dados.Cep,
-                            Cidade = _dados.Cidade,
-                            Email = _dados.Email,
-                            Inscricao_Estadual = _dados.Inscricao_estadual,
-                            Endereco = _dados.Endereco + ", " + _dados.Numero,
-                            Complemento = _dados.Complemento,
+                            Razao_Social = _dados.Razao_social,
+                            Endereco = _dados.Endereco + ", " + _dados.Numero, 
                             Bairro = _dados.Bairro ?? "",
                             Ano = _ano,
                             Numero = _numero,
                             Controle = _chave,
-                            Atividade = _dados.Atividade,
-                            Atividade2 = _dados.Atividade_secundaria,
-                            //Atividade_Extenso=_dados.Atividade_Extenso,
+                            Atividade_Extenso=_dados.Atividade,
                             Cpf_Cnpj = _dados.Documento,
-                            Data_Abertura = (DateTime)_dados.Data_abertura,
-                            Processo_Abertura = _dados.Processo_abertura,
-                            Processo_Encerramento = _dados.Processo_encerramento,
-                            Situacao = _dados.Situacao,
-                            Telefone = _dados.Telefone,
-                            Area = (decimal)_dados.Area,
-                            Mei = _dados.Mei,
-                            Vigilancia_Sanitaria = _dados.Vigilancia_sanitaria,
-                            Taxa_Licenca = _dados.Taxa_licenca
+                            Horario = _dados.Horario
                         };
-                        if (_dados.Data_encerramento != null)
-                            reg.Data_Encerramento = (DateTime)_dados.Data_encerramento;
                         certidao.Add(reg);
                     } else {
                         ViewBag.Result = "Ocorreu um erro ao processar as informações.";
-                        return View("Certidao_Inscricao", model);
+                        return View("Alvara_Funcionamento", model);
                     }
 
                     ReportDocument rd = new ReportDocument();
-                    rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Comprovante_Inscricao_Valida.rpt"));
+                    rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Alvara_Funcionamento_Valida.rpt"));
 
                     try {
                         rd.SetDataSource(certidao);
                         Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
-                        return File(stream, "application/pdf", "Certidao_Endereco.pdf");
+                        return File(stream, "application/pdf", "AlvaraValida.pdf");
                     } catch {
 
                         throw;
@@ -878,7 +889,7 @@ namespace GTI_Mvc.Controllers {
                 }
             } else {
                 ViewBag.Result = "Chave de validação inválida.";
-                return View("Certidao_Inscricao", model);
+                return View("Alvara_Funcionamento", model);
             }
         }
 

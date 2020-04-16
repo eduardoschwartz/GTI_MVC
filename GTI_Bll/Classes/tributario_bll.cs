@@ -1389,6 +1389,20 @@ namespace GTI_Bll.Classes {
                                         return reg;
                                     }
                                 } else
+                                    if (sTipo == "AF") {
+                                    Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+                                    Alvara_funcionamento dados = empresaRepository.Alvara_Funcionamento_gravado(Chave);
+                                    if (dados != null) {
+                                        chaveStruct reg = new chaveStruct {
+                                            Codigo = nCodigo,
+                                            Ano = nAno,
+                                            Numero = nNumero,
+                                            Tipo = sTipo,
+                                            Valido = true
+                                        };
+                                        return reg;
+                                    }
+                                } else
                                     goto fim;
                             }
                         }

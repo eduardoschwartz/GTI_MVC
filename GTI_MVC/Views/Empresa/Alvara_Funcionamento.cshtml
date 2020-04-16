@@ -63,7 +63,7 @@
         <div class="form-group row align-items-lg-baseline">
             <div class="input-group">
                 <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chave</label>
-                &nbsp;&nbsp;@Html.TextBoxFor(m => m.Chave, new { @id = "chave", @class = "textBoxBlue", @style = "max-width:110px;" })
+                &nbsp;&nbsp;@Html.TextBoxFor(m => m.Chave, new { @id = "chave", @class = "textBoxBlue", @style = "max-width:190px;" })
 
                 &nbsp;<button class="green_button" type="submit" title="Validar a certidão." formaction="Validate_AF" formmethod="post">Validar</button>
             </div>
@@ -109,28 +109,53 @@
 
         function ValidateForm() {
             ClearError();
-            var _cod = document.getElementById('codigo').value;
             var _cpf = document.getElementById('cpfTxt').value;
             var _cnpj = document.getElementById('cnpjTxt').value;
             var _captcha = document.getElementById('captchaTxt').value;
+            var _chave = document.getElementById('chave').value;
+            var _inscricao = document.getElementById('Inscricao').value;
 
-            if ((_cod == "" || parseInt(_cod) == 0) && _cpf == "" && _cnpj == "") {
-                document.getElementById('errorLabel').innerHTML = "Digite ao menos um dos campos!";
+            var _buscar_codigos = false;
+            var _consultar = false;
+            var _autenticar = false;
+
+            if ((_cpf != "" || _cnpj != "") && _inscricao == "")
+                _buscar_codigos = true;
+
+            if ((_cpf != "" || _cnpj != "") && _inscricao != "")
+                _consultar = true;
+
+            if (_chave != "")
+                _autenticar = true;
+
+            if (_buscar_codigos == false && _consultar == false && _autenticar == false) {
+                document.getElementById('errorLabel').innerHTML = "Informe o nº de CPF ou CNPJ.";
                 return false;
             }
-            else {
-                if (parseInt(_cod) > 0 && (_cpf != "" || _cnpj != "")) {
-                    document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal ou o Cpf ou o CNPJ!";
+
+            if (_consultar == true && _captcha == "") {
+                document.getElementById('errorLabel').innerHTML = "Digite o código de validação.";
+                return false;
+            }
+
+            if (_autenticar == true && _chave == "") {
+                document.getElementById('errorLabel').innerHTML = "Digite a chave de autenticação.";
+                return false;
+            }
+
+            if (_chave.length > 8) {
+                var _sufixo = _chave.substring(_chave.length - 3, _chave.length);
+                if (_sufixo != "-AF") {
+                    document.getElementById('errorLabel').innerHTML = "Chave de autenticação inválida!";
                     return false;
-                } else {
-                    if (_captcha == "") {
-                        document.getElementById('errorLabel').innerHTML = "Digite o código de validação!";
-                        return false;
-                    } else {
-                        return true;
-                    }
+                }
+            } else {
+                if (_chave.length != "") {
+                    document.getElementById('errorLabel').innerHTML = "Chave de autenticação inválida!";
+                    return false;
                 }
             }
+            return true;
         }
 
         function ClearError() {
