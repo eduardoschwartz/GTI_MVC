@@ -145,7 +145,7 @@
 
             if (_chave.length > 8) {
                 var _sufixo = _chave.substring(_chave.length - 3, _chave.length);
-                if (_sufixo != "-AF") {
+                if (_sufixo != "-AF" || _sufixo != "-AN") {
                     document.getElementById('errorLabel').innerHTML = "Chave de autenticação inválida!";
                     return false;
                 }

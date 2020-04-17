@@ -1389,7 +1389,7 @@ namespace GTI_Bll.Classes {
                                         return reg;
                                     }
                                 } else
-                                    if (sTipo == "AF") {
+                                    if (sTipo == "AF" || sTipo=="AN") {
                                     Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
                                     Alvara_funcionamento dados = empresaRepository.Alvara_Funcionamento_gravado(Chave);
                                     if (dados != null) {
