@@ -10,6 +10,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using static GTI_Models.modelCore;
 using static GTI_Mvc.Functions;
@@ -1123,7 +1126,48 @@ namespace GTI_Mvc.Controllers {
             }
         }
 
+        [Route("GateBank")]
+        [HttpGet]
+        public ViewResult GateBank(DebitoViewModel model) {
+            return View(model);
+        }
 
+        [Route("GateBank")]
+        [HttpPost]
+        public ViewResult GateBank(DebitoViewModel model,int Codigo=0) {
+            return View(model);
+        }
+
+
+
+
+        //public async Task<HttpResponseMessage> GateBank(DebitoViewModel model, int Codigo = 0) {
+        //    HttpClient client = new HttpClient();
+        //    var content = new FormUrlEncodedContent(new[]{
+        //        new KeyValuePair<string, string>("msgLoja", "RECEBER SOMENTE ATE O VENCIMENTO, APOS ATUALIZAR O BOLETO NO SITE www.jaboticabal.sp.gov.br"),
+        //        new KeyValuePair<string, string>("cep", "15990450"),
+        //        new KeyValuePair<string, string>("uf", "SP"),
+        //        new KeyValuePair<string, string>("cidade", "JABOTICABAL"),
+        //        new KeyValuePair<string, string>("endereco", "av. rua 1"),
+        //        new KeyValuePair<string, string>("nome", "DEBORA FARINELLI"),
+        //        new KeyValuePair<string, string>("urlInforma", "www.google.com"),
+        //        new KeyValuePair<string, string>("urlRetorno", "www.google.com"),
+        //        new KeyValuePair<string, string>("tpDuplicata", "DS"),
+        //        new KeyValuePair<string, string>("dataLimiteDesconto", "0"),
+        //        new KeyValuePair<string, string>("valorDesconto", "0"),
+        //        new KeyValuePair<string, string>("indicadorPessoa", "1"),
+        //        new KeyValuePair<string, string>("cpfCnpj", "15172927867"),
+        //        new KeyValuePair<string, string>("tpPagamento", "2"),
+        //        new KeyValuePair<string, string>("dtVenc", "24042020"),
+        //        new KeyValuePair<string, string>("qtdPontos", "0"),
+        //        new KeyValuePair<string, string>("valor", "5321"),
+        //        new KeyValuePair<string, string>("refTran", "28735320016301528"),
+        //        new KeyValuePair<string, string>("idConv", "317203")
+        //    });
+        //    content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+
+        //    return await client.PostAsync("https://mpag.bb.com.br/site/mpag/", content);
+        //}
 
     }
 }

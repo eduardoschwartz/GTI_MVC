@@ -1,0 +1,32 @@
+﻿@model GTI_Mvc.ViewModels.DebitoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Certidão de Débito";
+}
+
+<style>
+    .textBoxBlue {
+        height: 25px;
+        position: relative;
+        border: 1px solid #0094ff;
+        border-color: rgba(0, 0, 0, .14);
+        background-color: white;
+        font-size: 14px;
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
+    }
+</style>
+
+<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline" ;>Certidão de Débito</label>
+<br />
+<br />
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @action = "https://mpag.bb.com.br/site/mpag/" })) {
+
+    @Html.Hidden("cep", "15990450");
+<button type="submit" class="green_button">Emitir Boleto</button>
+}
+
+
+
+@Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home")

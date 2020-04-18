@@ -432,6 +432,7 @@
     <Content Include="Views\Protocolo\Consulta_Processo.cshtml" />
     <Content Include="Views\Protocolo\Consulta_Processo2.cshtml" />
     <Content Include="Views\Imovel\Carne_Iptu.cshtml" />
+    <Content Include="Views\Tributario\GateBank.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
