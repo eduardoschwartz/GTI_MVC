@@ -1,4 +1,4 @@
-@model GTI_Mvc.ViewModels.DebitoViewModel
+@model GTI_Mvc.ViewModels.BoletoViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -24,25 +24,24 @@
 
 @using (Html.BeginForm(null, null, FormMethod.Post, new { @action = "https://mpag.bb.com.br/site/mpag/" })) {
 
-    <input type="hidden" name="msgLoja" value=" RECEBER SOMENTE ATE O VENCIMENTO, APOS ATUALIZAR O BOLETO NO SITE www.jaboticabal.sp.gov.br" %>
-
-    @Html.Hidden("cep", "15990450");
+    @Html.Hidden("cep", @Model.Cep);
     @Html.Hidden("uf", "SP");
     @Html.Hidden("cidade", "JABOTICABAL");
-    @Html.Hidden("endereco", Functions.RemoveDiacritics( "RUA SÃO JOSÉ, 356"));
-    @Html.Hidden("nome", Functions.RemoveDiacritics("BRUNA DÉBORA FARINELLI"));
+    @Html.Hidden("endereco", Functions.RemoveDiacritics(@Model.Endereco));
+    @Html.Hidden("nome", Functions.RemoveDiacritics(@Model.Nome));
     @Html.Hidden("urlInforma", "sistemas.jaboticabal.sp.gov.br/gti/");
     @Html.Hidden("urlRetorno", "sistemas.jaboticabal.sp.gov.br/gti/");
+    @Html.Hidden("msgLoja", " RECEBER SOMENTE ATE O VENCIMENTO, APOS ATUALIZAR O BOLETO NO SITE www.jaboticabal.sp.gov.br");
     @Html.Hidden("tpDuplicata", "DS");
     @Html.Hidden("dataLimiteDesconto", "0");
     @Html.Hidden("valorDesconto", "0");
-    @Html.Hidden("indicadorPessoa", "1");
-    @Html.Hidden("cpfCnpj", "15172927867");
+    @Html.Hidden("indicadorPessoa", @Model.TipoDoc);
+    @Html.Hidden("cpfCnpj", @Model.CpfCnpj);
     @Html.Hidden("tpPagamento", "2");
-    @Html.Hidden("dtVenc", "20042020");
+    @Html.Hidden("dtVenc", @Model.Data_Vencimento);
     @Html.Hidden("qtdPontos", "0");
-    @Html.Hidden("valor", "5123");
-    @Html.Hidden("refTran", "28735320015301560");
+    @Html.Hidden("valor", @Model.Valor_Boleto);
+    @Html.Hidden("refTran", "28735320015301564");
     @Html.Hidden("idConv", "317203");
 
     <button type="submit" class="green_button">Emitir Boleto</button>

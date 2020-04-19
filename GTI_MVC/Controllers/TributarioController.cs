@@ -1128,17 +1128,20 @@ namespace GTI_Mvc.Controllers {
 
         [Route("GateBank")]
         [HttpGet]
-        public ViewResult GateBank(DebitoViewModel model) {
+        public ViewResult GateBank(string p1,string p2,string p3,string p4,string p5,string p6) {
+            string _cpf = Decrypt(p2);
+            string _tipodoc= _cpf.Length == 11 ? "1" : "2";
+            BoletoViewModel model = new BoletoViewModel {
+                Nome = Decrypt( p1),
+                CpfCnpj= _cpf,
+                TipoDoc=_tipodoc,
+                Endereco = Decrypt(p3),
+                Cep = Decrypt(p4),
+                Data_Vencimento = Decrypt(p5),
+                Valor_Boleto = Decrypt(p6)
+            };
             return View(model);
         }
-
-        [Route("GateBank")]
-        [HttpPost]
-        public ViewResult GateBank(DebitoViewModel model,int Codigo=0) {
-            return View(model);
-        }
-
-
 
 
         //public async Task<HttpResponseMessage> GateBank(DebitoViewModel model, int Codigo = 0) {

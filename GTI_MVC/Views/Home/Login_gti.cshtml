@@ -45,7 +45,14 @@
         <span style="color:saddlebrown;font-weight:bold;font-style:italic">Outras opções</span><br />
         @Html.ActionLink("Consulta de Processos", "Consulta_Processo", "Protocolo")<br />
         @Html.ActionLink("Acesso ao Sistema", "Login", "Home")<br />
-        @Html.ActionLink("BB Link", "GateBank", "Tributario")
+        @Html.ActionLink("BB Link", "GateBank", "Tributario",new {
+       p1=Functions.Encrypt( "EDUARDO SCHWARTZ"),
+       p2=Functions.Encrypt("15172927867"),
+       p3=Functions.Encrypt("AV. DEBORA MARÍLIA, 543 - JD. MOURÃO"),
+       p4=Functions.Encrypt("19875655"),
+       p5 = Functions.Encrypt("22042020"),
+       p6 = Functions.Encrypt("3521")
+   }, htmlAttributes: null)
     </div>
 </div>
 
