@@ -8,8 +8,8 @@
 <div style="width: 100%; overflow: hidden;">
     <div style="width: 400px; float: left;">
         <span style="color:saddlebrown;font-weight:bold;font-style:italic">Para seu imóvel</span><br />
-        @*<a href="http://sistemas.jaboticabal.sp.gov.br/gti/Pages/SegundaViaIPTU.aspx?d=gti">Emissão de 2ª via do carnê de IPTU (2020)</a><br />*@
-        @Html.ActionLink("Emissão de 2ª via do carnê de IPTU (2020)", "Carne_Iptu", "Imovel")<br />
+        <a href="http://sistemas.jaboticabal.sp.gov.br/gti/Pages/SegundaViaIPTU.aspx?d=gti">Emissão de 2ª via do carnê de IPTU (2020)</a><br />
+        @*@Html.ActionLink("Emissão de 2ª via do carnê de IPTU (2020)", "Carne_Iptu", "Imovel")<br />*@
         @Html.ActionLink("Dados cadastrais de um imóvel", "Dados_Imovel", "Imovel")<br />
         @Html.ActionLink("Certidão de endereço atualizado", "Certidao_Endereco", "Imovel")<br />
         @Html.ActionLink("Certidão de valor venal", "Certidao_Valor_Venal", "Imovel")<br />
@@ -45,14 +45,6 @@
         <span style="color:saddlebrown;font-weight:bold;font-style:italic">Outras opções</span><br />
         @Html.ActionLink("Consulta de Processos", "Consulta_Processo", "Protocolo")<br />
         @Html.ActionLink("Acesso ao Sistema", "Login", "Home")<br />
-        @Html.ActionLink("BB Link", "GateBank", "Tributario",new {
-       p1=Functions.Encrypt( "EDUARDO SCHWARTZ"),
-       p2=Functions.Encrypt("15172927867"),
-       p3=Functions.Encrypt("AV. DEBORA MARÍLIA, 543 - JD. MOURÃO"),
-       p4=Functions.Encrypt("19875655"),
-       p5 = Functions.Encrypt("22042020"),
-       p6 = Functions.Encrypt("3521")
-   }, htmlAttributes: null)
     </div>
 </div>
 

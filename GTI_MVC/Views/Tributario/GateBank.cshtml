@@ -17,16 +17,70 @@
     }
 </style>
 
-<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline" ;>Certidão de Débito</label>
+<br />
+<img src="~/Images/logobb.png" />
 <br />
 <br />
+<table title="Dados do Boleto" style="font-size:12px;background-color:White;border-color:#CCCCCC; ">
+    <tr>
+        <td style="width:20%;padding: 1px 1px 1px 5px;">
+            Requerente:
+        </td>
+        <td style="color:black;font-weight:bold">
+            @Model.Nome
+        </td>
+    </tr>
+    <tr>
+        <td style="width:20%;padding: 1px 1px 1px 5px;">
+            Nº de Documento :
+        </td>
+        <td style="color:black;font-weight:bold">
+            @Model.CpfCnpj
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 20%; padding: 1px 1px 1px 5px;">
+            Endereço:
+        </td>
+        <td style="color:black;font-weight:bold">
+            @Model.Endereco
+        </td>
+    </tr>
+    <tr>
+        <td style="width:20%;padding: 1px 1px 1px 5px;">
+            Cidade/UF/Cep:
+        </td>
+        <td style="color:black;font-weight:bold">
+            @Model.Cidade /@Model.Uf &nbsp; - &nbsp;@Model.Cep
+        </td>
+
+    </tr>
+    <tr>
+        <td style="width: 20%; padding: 1px 1px 1px 5px;">
+            Data de vencimento:
+        </td>
+        <td style="color:black;font-weight:bold">
+            @Model.Data_Vencimento.Substring(0, 2)/@Model.Data_Vencimento.Substring(2, 2)/@Model.Data_Vencimento.Substring(4, 4)
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 20%; padding: 1px 1px 1px 5px;">
+            Valor do Boleto:
+        </td>
+        <td style="color:black;font-weight:bold">
+            R$ @Model.Valor_Boleto_Full
+        </td>
+    </tr>
+</table>
+<br />
+
 
 
 @using (Html.BeginForm(null, null, FormMethod.Post, new { @action = "https://mpag.bb.com.br/site/mpag/" })) {
 
     @Html.Hidden("cep", @Model.Cep);
-    @Html.Hidden("uf", "SP");
-    @Html.Hidden("cidade", "JABOTICABAL");
+    @Html.Hidden("uf", @Model.Uf);
+    @Html.Hidden("cidade", @Model.Cidade);
     @Html.Hidden("endereco", Functions.RemoveDiacritics(@Model.Endereco));
     @Html.Hidden("nome", Functions.RemoveDiacritics(@Model.Nome));
     @Html.Hidden("urlInforma", "sistemas.jaboticabal.sp.gov.br/gti/");
@@ -41,7 +95,7 @@
     @Html.Hidden("dtVenc", @Model.Data_Vencimento);
     @Html.Hidden("qtdPontos", "0");
     @Html.Hidden("valor", @Model.Valor_Boleto);
-    @Html.Hidden("refTran", "28735320015301564");
+    @Html.Hidden("refTran", @Model.Nosso_Numero);
     @Html.Hidden("idConv", "317203");
 
     <button type="submit" class="green_button">Emitir Boleto</button>

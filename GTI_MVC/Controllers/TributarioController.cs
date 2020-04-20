@@ -246,12 +246,12 @@ namespace GTI_Mvc.Controllers {
                 List<int> _lista = new List<int>();
                 
                 if (model.CpfValue != null) {
-                    sNome = sistemaRepository.Nome_por_Cpf(Functions.RetornaNumero(model.CpfValue));
-                    _lista = empresaRepository.Retorna_Codigo_por_CPF(Functions.RetornaNumero(model.CpfValue));
+                    sNome = sistemaRepository.Nome_por_Cpf(RetornaNumero(model.CpfValue));
+                    _lista = empresaRepository.Retorna_Codigo_por_CPF(RetornaNumero(model.CpfValue));
                 } else {
                     if (model.CnpjValue != null) {
-                        sNome = sistemaRepository.Nome_por_Cnpj(Functions.RetornaNumero(model.CnpjValue));
-                        _lista = empresaRepository.Retorna_Codigo_por_CNPJ(Functions.RetornaNumero(model.CnpjValue));
+                        sNome = sistemaRepository.Nome_por_Cnpj(RetornaNumero(model.CnpjValue));
+                        _lista = empresaRepository.Retorna_Codigo_por_CNPJ(RetornaNumero(model.CnpjValue));
                     }
                 }
                 if (_lista.Count == 0) {
@@ -565,7 +565,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Dama")]
         [HttpPost]
         public ActionResult Dama(CertidaoViewModel model) {
-            bool _isdate = Functions.IsDate(model.DataVencimento);
+            bool _isdate = IsDate(model.DataVencimento);
             if (!_isdate) {
                 ViewBag.Result = "Data de vencimento inválida.";
                 return View(model);
@@ -614,13 +614,13 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Damb(CertidaoViewModel model,int Codigo=0) {
 #pragma warning restore IDE0060 // Remove unused parameter
             if (model.CpfValue != null) {
-                if (!Functions.ValidaCpf(model.CpfValue)) {
+                if (!ValidaCpf(model.CpfValue)) {
                     ViewBag.Result = "CPF inválido.";
                     return View(model);
                 }
             }
             if (model.CnpjValue != null) {
-                if (!Functions.ValidaCNPJ(model.CnpjValue)) {
+                if (!ValidaCNPJ(model.CnpjValue)) {
                     ViewBag.Result = "CNPJ inválido.";
                     return View(model);
                 }
@@ -643,14 +643,14 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 } else {
                     if (model.CpfValue != null) {
-                        _existeCod = imovelRepository.Existe_Imovel_Cpf(_codigo, Functions.RetornaNumero(model.CpfValue));
+                        _existeCod = imovelRepository.Existe_Imovel_Cpf(_codigo, RetornaNumero(model.CpfValue));
                         if (!_existeCod) {
                             ViewBag.Result = "CPF não pertence a esta inscrição.";
                             return View(model);
                         }
                     } else {
                         if (model.CnpjValue != null) {
-                            _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo, Functions.RetornaNumero( model.CnpjValue));
+                            _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo, RetornaNumero( model.CnpjValue));
                             if (!_existeCod) {
                                 ViewBag.Result = "CNPJ não pertence a esta inscrição.";
                                 return View(model);
@@ -694,14 +694,14 @@ namespace GTI_Mvc.Controllers {
                         return View(model);
                     } else {
                         if (model.CpfValue != null) {
-                            _existeCod = requerenteRepository.Existe_Cidadao_Cpf(_codigo, Functions.RetornaNumero(model.CpfValue));
+                            _existeCod = requerenteRepository.Existe_Cidadao_Cpf(_codigo, RetornaNumero(model.CpfValue));
                             if (!_existeCod) {
                                 ViewBag.Result = "CPF não pertence a esta inscrição.";
                                 return View(model);
                             }
                         } else {
                             if (model.CnpjValue != null) {
-                                _existeCod = requerenteRepository.Existe_Cidadao_Cnpj(_codigo, Functions.RetornaNumero(model.CnpjValue));
+                                _existeCod = requerenteRepository.Existe_Cidadao_Cnpj(_codigo, RetornaNumero(model.CnpjValue));
                                 if (!_existeCod) {
                                     ViewBag.Result = "CNPJ não pertence a esta inscrição.";
                                     return View(model);
@@ -931,7 +931,7 @@ namespace GTI_Mvc.Controllers {
                 Endereco=_endereco,
                 Cidade=_cidade,
                 UF=_uf,
-                Cep=Functions.RetornaNumero( _cep)
+                Cep=RetornaNumero( _cep)
             };
             decimal _somaP = 0,_somaJ=0,_somaM=0,_somaC=0,_somaT=0,_somaH=0;
             foreach (SelectDebitoEditorViewModel _debitos in model.Debito.Where(m=>m.Selected==true)) {
@@ -1045,26 +1045,16 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
+
             model.Data_Vencimento_String = Convert.ToDateTime(value.Data_Vencimento.ToString()).ToString("ddMMyyyy");
             model.RefTran = "287353200" + _documento.ToString();
-            if (model==null)
-                return RedirectToAction("Login_gti","Home");
+            if (model == null)
+                return RedirectToAction("Login_gti", "Home");
             else
-                return View( model);
+                return View(model);
         }
 
-        //[Route("PrintDam")]
-        //[HttpPost]
-        //public ActionResult PrintDam(DebitoSelectionViewModel model) {
-        //    var selectedIds = model.getSelectedIds();
-        //    var modelt = new DebitoListViewModel() {
-        //        Nome = model.Nome,
-        //        Inscricao = model.Inscricao,
-        //        CpfCnpjLabel = model.CpfCnpjLabel
-        //    };
-        //    return RedirectToAction("Login_gti","Home");
-        //}
-         
+        
         [HttpPost]
         [Route("Validate_CDoc")]
         [Route("Certidao/Validate_CDoc")]
@@ -1128,7 +1118,13 @@ namespace GTI_Mvc.Controllers {
 
         [Route("GateBank")]
         [HttpGet]
-        public ViewResult GateBank(string p1,string p2,string p3,string p4,string p5,string p6) {
+        public ActionResult GateBank(string p1,string p2,string p3,string p4,string p5,string p6,string p7,string p8,string p9) {
+            if (string.IsNullOrWhiteSpace(p1)) {
+                return RedirectToAction("Login_gti", "Home");
+            }
+            string _nosso_numero = "287353200" +  Decrypt(p7);
+            string _valor_boleto = Decrypt(p6);
+            string _valor_boleto_full = (Convert.ToDecimal(_valor_boleto) / 100).ToString("#0.00");
             string _cpf = Decrypt(p2);
             string _tipodoc= _cpf.Length == 11 ? "1" : "2";
             BoletoViewModel model = new BoletoViewModel {
@@ -1138,11 +1134,14 @@ namespace GTI_Mvc.Controllers {
                 Endereco = Decrypt(p3),
                 Cep = Decrypt(p4),
                 Data_Vencimento = Decrypt(p5),
-                Valor_Boleto = Decrypt(p6)
+                Valor_Boleto = _valor_boleto,
+                Nosso_Numero=_nosso_numero,
+                Cidade=Decrypt(p8),
+                Uf=Decrypt(p9),
+                Valor_Boleto_Full=_valor_boleto_full
             };
             return View(model);
         }
-
 
         //public async Task<HttpResponseMessage> GateBank(DebitoViewModel model, int Codigo = 0) {
         //    HttpClient client = new HttpClient();

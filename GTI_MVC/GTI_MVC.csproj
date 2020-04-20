@@ -371,6 +371,7 @@
     <Content Include="Images\brasaocor.png" />
     <Content Include="Images\enviar.png" />
     <Content Include="Images\inserir_local.png" />
+    <Content Include="Images\logobb.png" />
     <Content Include="Images\logopratico.jpg" />
     <Content Include="Images\observacao.png" />
     <Content Include="Images\receber.png" />
