@@ -710,11 +710,19 @@ namespace GTI_Mvc.Controllers {
 
             ImovelStruct _dados = imovelRepository.Dados_Imovel(_codigo);
             Laseriptu _calc = imovelRepository.Dados_IPTU(_codigo, DateTime.Now.Year);
+            List<ProprietarioStruct> _prop = imovelRepository.Lista_Proprietario(_codigo, true);
 
             Boleto reg = new Boleto() {
                 Codigo = _codigo,
                 Nome=_dados.Proprietario_Nome,
-                Inscricao=_dados.Inscricao
+                Inscricao=_dados.Inscricao,
+                Area_Predial=(decimal)_calc.Areaconstrucao,
+                Area_Territorial=(decimal)_calc.Areaterreno,
+                Bairro=_dados.NomeBairro,
+                Cep=_dados.Cep,
+                Cidade="JABOICABAL",
+                Cpf_Cnpj=_prop[0].CPF,
+                Data_Documento=DateTime.Now
 
             };
 
