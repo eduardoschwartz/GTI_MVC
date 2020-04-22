@@ -22,7 +22,7 @@ namespace GTI_Models.ReportModels {
         public decimal Vvi { get; set; }
         public decimal Valor_Iptu { get; set; }
         public decimal Valor_Itu { get; set; }
-        public decimal Total_Parcela { get; set; }
+        public int Total_Parcela { get; set; }
         public decimal Valor_Unica1 { get; set; }
         public decimal Valor_Unica2 { get; set; }
         public decimal Valor_Unica3 { get; set; }

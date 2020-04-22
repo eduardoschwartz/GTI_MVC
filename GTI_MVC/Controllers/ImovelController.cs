@@ -4,8 +4,10 @@ using GTI_Bll.Classes;
 using GTI_Models.Models;
 using GTI_Models.ReportModels;
 using GTI_Mvc.ViewModels;
+using Microsoft.Reporting.WebForms;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Web.Hosting;
 using System.Web.Mvc;
@@ -712,33 +714,138 @@ namespace GTI_Mvc.Controllers {
             Laseriptu _calc = imovelRepository.Dados_IPTU(_codigo, DateTime.Now.Year);
             List<ProprietarioStruct> _prop = imovelRepository.Lista_Proprietario(_codigo, true);
 
-            Boleto reg = new Boleto() {
-                Codigo = _codigo,
-                Nome=_dados.Proprietario_Nome,
-                Inscricao=_dados.Inscricao,
-                Area_Predial=(decimal)_calc.Areaconstrucao,
-                Area_Territorial=(decimal)_calc.Areaterreno,
-                Bairro=_dados.NomeBairro,
-                Cep=_dados.Cep,
-                Cidade="JABOICABAL",
-                Cpf_Cnpj=_prop[0].CPF,
-                Data_Documento=DateTime.Now
-
-            };
-
-            List<Boleto> _lista_Dados = new List<Boleto>();
-            _lista_Dados.Add(reg);
-            ReportDocument rd = new ReportDocument();
-            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Carne_Iptu.rpt"));
-            try {
-                rd.SetDataSource(_lista_Dados);
-                Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
-                return File(stream, "application/pdf", "CarneIptu.pdf");
-            } catch {
-                throw;
+            List<DebitoStructure> Extrato_Lista = tributario_Class.Lista_Parcelas_IPTU(_codigo, DateTime.Now.Year);
+            if (Extrato_Lista.Count == 0) {
+                imovelDetailsViewModel.ErrorMessage = "Não é possível emitir 2ª via de IPTU para este contribuinte.";
+                return View(imovelDetailsViewModel);
             }
+
+            List<Boletoguia> ListaBoleto = new List<Boletoguia>();
+            foreach (DebitoStructure item in Extrato_Lista) {
+                Boletoguia reg = new Boletoguia() {
+                    Codreduzido = _codigo.ToString("000000"),
+                    Nome = _prop[0].Nome,
+                    Inscricao_cadastral = _dados.Inscricao,
+                    Bairro = _dados.NomeBairro,
+                    Cep = _dados.Cep,
+                    Cidade = "JABOTICABAL",
+                    Cpf = _prop[0].CPF,
+                    Datadoc = DateTime.Now,
+                    Endereco = _dados.NomeLogradouroAbreviado + "," + _dados.Numero.ToString() + " " + _dados.Complemento,
+                    Lote = _dados.LoteOriginal,
+                    Quadra = _dados.QuadraOriginal,
+                    Totparcela = (short)_calc.Qtdeparc ,
+                    Numdoc=item.Numero_Documento.ToString(),
+                    Nossonumero= "287353200" + item.Numero_Documento.ToString(),
+                    Datavencto = Convert.ToDateTime(item.Data_Vencimento),
+                    Valorguia= Convert.ToDecimal(item.Soma_Principal)
+                };
+
+                if (item.Numero_Parcela == 0) {
+                    if (item.Complemento == 0)
+                        reg.Parcela = "Única 5%";
+                    else {
+                        if (item.Complemento == 91)
+                            reg.Parcela = "Única 4%";
+                        else
+                            reg.Parcela = "Única 3%";
+                    }
+                } else
+                    reg.Parcela = ((int)item.Numero_Parcela).ToString("00") + "/" + reg.Totparcela.ToString("00");
+
+                string _convenio = "2873532";
+                //***** GERA CÓDIGO DE BARRAS BOLETO REGISTRADO*****
+                DateTime _data_base = Convert.ToDateTime("07/10/1997");
+                TimeSpan ts = Convert.ToDateTime(item.Data_Vencimento) - _data_base;
+                int _fator_vencto = ts.Days;
+                string _quinto_grupo = String.Format("{0:D4}", _fator_vencto);
+                string _valor_boleto_str = string.Format("{0:0.00}", reg.Valorguia);
+                _quinto_grupo += string.Format("{0:D10}", Convert.ToInt64(Functions.RetornaNumero(_valor_boleto_str)));
+                string _barra = "0019" + _quinto_grupo + String.Format("{0:D13}", Convert.ToInt32(_convenio));
+                _barra += String.Format("{0:D10}", Convert.ToInt64(reg.Numdoc)) + "17";
+                string _campo1 = "0019" + _barra.Substring(19, 5);
+                string _digitavel = _campo1 + Functions.Calculo_DV10(_campo1).ToString();
+                string _campo2 = _barra.Substring(23, 10);
+                _digitavel += _campo2 + Functions.Calculo_DV10(_campo2).ToString();
+                string _campo3 = _barra.Substring(33, 10);
+                _digitavel += _campo3 + Functions.Calculo_DV10(_campo3).ToString();
+                string _campo5 = _quinto_grupo;
+                string _campo4 = Functions.Calculo_DV11(_barra).ToString();
+                _digitavel += _campo4 + _campo5;
+                _barra = _barra.Substring(0, 4) + _campo4 + _barra.Substring(4, _barra.Length - 4);
+                //**Resultado final**
+                string _linha_digitavel = _digitavel.Substring(0, 5) + "." + _digitavel.Substring(5, 5) + " " + _digitavel.Substring(10, 5) + "." + _digitavel.Substring(15, 6) + " ";
+                _linha_digitavel += _digitavel.Substring(21, 5) + "." + _digitavel.Substring(26, 6) + " " + _digitavel.Substring(32, 1) + " " + Functions.StringRight(_digitavel, 14);
+                string _codigo_barra = Functions.Gera2of5Str(_barra);
+                //**************************************************
+
+                reg.Codbarra = _codigo_barra;
+                reg.Digitavel = _digitavel;
+
+                ListaBoleto.Add(reg);
+            }
+
+            Warning[] warnings;
+            string[] streamIds;
+            string mimeType = string.Empty;
+            string encoding = string.Empty;
+            string extension = string.Empty;
+            Session["sid"] = "";
+            if (ListaBoleto.Count > 0) {
+                tributario_Class.Insert_Carne_Web(Convert.ToInt32(ListaBoleto[0].Codreduzido), 2020);
+                DataSet Ds = Functions.ToDataSet(ListaBoleto);
+                ReportDataSource rdsAct = new ReportDataSource("dsBoletoGuia", Ds.Tables[0]);
+                ReportViewer viewer = new ReportViewer();
+                viewer.LocalReport.Refresh();
+                viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Carne_IPTU.rdlc"); ;
+                viewer.LocalReport.DataSources.Add(rdsAct); // Add  datasource here       
+
+                Laseriptu RegIPTU = tributario_Class.Carrega_Dados_IPTU(Convert.ToInt32(ListaBoleto[0].Codreduzido), DateTime.Now.Year);
+
+                List<ReportParameter> parameters = new List<ReportParameter>();
+                parameters.Add(new ReportParameter("QUADRA", "Quadra: " + ListaBoleto[0].Quadra + " Lote: " + ListaBoleto[0].Lote));
+                parameters.Add(new ReportParameter("DATADOC", Convert.ToDateTime(ListaBoleto[0].Datadoc).ToString("dd/MM/yyyy")));
+                parameters.Add(new ReportParameter("NOME", ListaBoleto[0].Nome));
+                parameters.Add(new ReportParameter("ENDERECO", ListaBoleto[0].Endereco + " " + ListaBoleto[0].Complemento));
+                parameters.Add(new ReportParameter("BAIRRO", ListaBoleto[0].Bairro));
+                parameters.Add(new ReportParameter("CIDADE", ListaBoleto[0].Cidade + "/" + ListaBoleto[0].Uf));
+                parameters.Add(new ReportParameter("QUADRAO", ListaBoleto[0].Quadra));
+                parameters.Add(new ReportParameter("LOTEO", ListaBoleto[0].Lote));
+                parameters.Add(new ReportParameter("CODIGO", ListaBoleto[0].Codreduzido));
+                parameters.Add(new ReportParameter("INSC", ListaBoleto[0].Inscricao_cadastral));
+                parameters.Add(new ReportParameter("FRACAO", Convert.ToDecimal(RegIPTU.Fracaoideal).ToString("#0.00")));
+                parameters.Add(new ReportParameter("NATUREZA", RegIPTU.Natureza));
+                parameters.Add(new ReportParameter("TESTADA", Convert.ToDecimal(RegIPTU.Testadaprinc).ToString("#0.00")));
+                parameters.Add(new ReportParameter("AREAT", Convert.ToDecimal(RegIPTU.Areaterreno).ToString("#0.00")));
+                parameters.Add(new ReportParameter("AREAC", Convert.ToDecimal(RegIPTU.Areaconstrucao).ToString("#0.00")));
+                parameters.Add(new ReportParameter("VVT", Convert.ToDecimal(RegIPTU.Vvt).ToString("#0.00")));
+                parameters.Add(new ReportParameter("VVC", Convert.ToDecimal(RegIPTU.Vvc).ToString("#0.00")));
+                parameters.Add(new ReportParameter("VVI", Convert.ToDecimal(RegIPTU.Vvi).ToString("#0.00")));
+                parameters.Add(new ReportParameter("IPTU", Convert.ToDecimal(RegIPTU.Impostopredial).ToString("#0.00")));
+                parameters.Add(new ReportParameter("ITU", Convert.ToDecimal(RegIPTU.Impostoterritorial).ToString("#0.00")));
+                if (RegIPTU.Natureza == "predial")
+                    parameters.Add(new ReportParameter("TOTALPARC", Convert.ToDecimal(RegIPTU.Impostopredial).ToString("#0.00")));
+                else
+                    parameters.Add(new ReportParameter("TOTALPARC", Convert.ToDecimal(RegIPTU.Impostoterritorial).ToString("#0.00")));
+                parameters.Add(new ReportParameter("UNICA1", Convert.ToDecimal(RegIPTU.Valortotalunica).ToString("#0.00")));
+                parameters.Add(new ReportParameter("UNICA2", Convert.ToDecimal(RegIPTU.Valortotalunica2).ToString("#0.00")));
+                parameters.Add(new ReportParameter("UNICA3", Convert.ToDecimal(RegIPTU.Valortotalunica3).ToString("#0.00")));
+                viewer.LocalReport.SetParameters(parameters);
+
+                byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
+                Response.Buffer = true;
+                Response.Clear();
+                Response.ContentType = mimeType;
+                Response.AddHeader("content-disposition", "attachment; filename= guia_pmj" + "." + extension);
+                Response.OutputStream.Write(bytes, 0, bytes.Length);
+                Response.Flush();
+                Response.End();
+            }
+            return null;
         }
 
-
     }
+
+
+    
 }

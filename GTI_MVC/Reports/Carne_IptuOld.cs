@@ -16,14 +16,14 @@ namespace GTI_MVC.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class Carne_Iptu : ReportClass {
+    public class Carne_IptuOld : ReportClass {
         
-        public Carne_Iptu() {
+        public Carne_IptuOld() {
         }
         
         public override string ResourceName {
             get {
-                return "Carne_Iptu.rpt";
+                return "Carne_IptuOld.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace GTI_MVC.Reports {
         
         public override string FullResourceName {
             get {
-                return "GTI_MVC.Reports.Carne_Iptu.rpt";
+                return "GTI_MVC.Reports.Carne_IptuOld.rpt";
             }
             set {
                 // Do nothing
@@ -90,9 +90,9 @@ namespace GTI_MVC.Reports {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedCarne_Iptu : Component, ICachedReport {
+    public class CachedCarne_IptuOld : Component, ICachedReport {
         
-        public CachedCarne_Iptu() {
+        public CachedCarne_IptuOld() {
         }
         
         [Browsable(false)]
@@ -129,7 +129,7 @@ namespace GTI_MVC.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            Carne_Iptu rpt = new Carne_Iptu();
+            Carne_IptuOld rpt = new Carne_IptuOld();
             rpt.Site = this.Site;
             return rpt;
         }

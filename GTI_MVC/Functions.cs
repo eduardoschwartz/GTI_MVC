@@ -1,7 +1,9 @@
 ﻿using GTI_Models;
 using GTI_Models.Models;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -331,6 +333,28 @@ namespace GTI_Mvc {
             return nDV;
         }
 
+        public static Int32 Calculo_DV11(String sValue) {
+            Int32 nDV = 0;
+            Int32 intNumero = 0;
+            Int32 intTotalNumero = 0;
+            Int32 intMultiplicador = 2;
+
+            for (Int32 intContador = sValue.Length; intContador > 0; intContador--) {
+                intNumero = Convert.ToInt32(sValue.Substring(intContador - 1, 1)) * intMultiplicador;
+                intTotalNumero += intNumero;
+                intMultiplicador = intMultiplicador < 9 ? intMultiplicador + 1 : 2;
+            }
+
+            Int32 intResto = (intTotalNumero * 10) % 11;
+
+            if (intResto == 0 || intResto == 10)
+                nDV = 1;
+            else
+                nDV = intResto;
+
+            return nDV;
+        }
+
         public static ProcessoNumero Split_Processo_Numero(string Numero) {
             int _dv = 0, _numero = 0,_ano=0;
             try {
@@ -416,6 +440,36 @@ namespace GTI_Mvc {
             accents[(byte)'Ý'] = 'Y';
 
             return accents;
+        }
+
+        public static string StringRight(string value, int length) {
+            return value.Substring(value.Length - length);
+        }
+
+        public static DataSet ToDataSet<T>(this IList<T> list) {
+            Type elementType = typeof(T);
+            DataSet ds = new DataSet();
+            DataTable t = new DataTable();
+            ds.Tables.Add(t);
+
+            //add a column to table for each public property on T
+            foreach (var propInfo in elementType.GetProperties()) {
+                Type ColType = Nullable.GetUnderlyingType(propInfo.PropertyType) ?? propInfo.PropertyType;
+
+                t.Columns.Add(propInfo.Name, ColType);
+            }
+
+            //go through each property on T and add each value to the table
+            foreach (T item in list) {
+                DataRow row = t.NewRow();
+
+                foreach (var propInfo in elementType.GetProperties()) {
+                    row[propInfo.Name] = propInfo.GetValue(item, null) ?? DBNull.Value;
+                }
+
+                t.Rows.Add(row);
+            }
+            return ds;
         }
 
     }
