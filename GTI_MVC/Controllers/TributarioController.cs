@@ -5,6 +5,7 @@ using GTI_Models.Models;
 using GTI_Models.ReportModels;
 using GTI_Mvc.ViewModels;
 using GTI_Mvc.Views.Tributario.EditorTemplates;
+using Microsoft.Reporting.WebForms;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -1171,5 +1172,291 @@ namespace GTI_Mvc.Controllers {
         //    return await client.PostAsync("https://mpag.bb.com.br/site/mpag/", content);
         //}
 
+        [Route("SegundaVia_Parcelamento")]
+        [HttpGet]
+        public ViewResult SegundaVia_Parcelamento() {
+            DebitoViewModel model = new DebitoViewModel();
+            return View(model);
+        }
+
+        [Route("SegundaVia_Parcelamento")]
+        [HttpPost]
+        public ActionResult SegundaVia_Parcelamento(DebitoViewModel model) {
+            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+                ViewBag.Result = "Código de verificação inválido.";
+                return View(model);
+            }
+            string _nome, _endereco, _endereco_rua, _complemento, _bairro, _cpfcnpj, _cidade, _cep, _uf;
+            short _numero, _totParcela;
+            int _codigo = Convert.ToInt32(model.Inscricao);
+            string _processo = model.Numero_Processo;
+
+            if (_codigo < 100000) {
+                Imovel_bll imovel_Class = new Imovel_bll("GTIconnection");
+                bool ExisteImovel = imovel_Class.Existe_Imovel(_codigo);
+                if (!ExisteImovel) {
+                    ViewBag.Result = "Inscrição não cadastrada.";
+                    return View(model);
+                } else {
+                    ImovelStruct reg = imovel_Class.Dados_Imovel(_codigo);
+                    List<ProprietarioStruct> regProp = imovel_Class.Lista_Proprietario(_codigo, true);
+                    _endereco = reg.NomeLogradouro + ", " + reg.Numero + " " + reg.Complemento;
+                    _endereco_rua = reg.NomeLogradouro;
+                    _numero = (short)reg.Numero;
+                    _complemento = reg.Complemento;
+                    _bairro = reg.NomeBairro;
+                    _cidade = "JABOTICABAL/SP";
+                    _uf = "SP";
+                    _cep = reg.Cep;
+                    _nome = regProp[0].Nome;
+                    _cpfcnpj = regProp[0].CPF;
+                }
+            } else {
+                if (_codigo >= 100000 && _codigo < 500000) {
+                    Empresa_bll empresa_Class = new Empresa_bll("GTIconnection");
+                    bool ExisteEmpresa = empresa_Class.Existe_Empresa(_codigo);
+                    if (!ExisteEmpresa) {
+                        ViewBag.Result = "Inscrição não cadastrada.";
+                        return View(model);
+                    } else {
+                        EmpresaStruct _empresa = empresa_Class.Retorna_Empresa(_codigo);
+                        _nome = _empresa.Razao_social;
+                        _endereco = _empresa.Endereco_nome + ", " + _empresa.Numero.ToString() + " " + _empresa.Complemento;
+                        _endereco_rua = _empresa.Endereco_nome;
+                        _numero = (short)_empresa.Numero;
+                        _complemento = _empresa.Complemento;
+                        _bairro = _empresa.Bairro_nome;
+                        _cidade = _empresa.Cidade_nome + "/" + _empresa.UF;
+                        _uf = _empresa.UF;
+                        _cep = _empresa.Cep;
+                        _cpfcnpj = _empresa.Cpf_cnpj;
+                    }
+                } else {
+                    Cidadao_bll cidadao_Class = new Cidadao_bll("GTIconnection");
+                    bool ExisteCidadao = cidadao_Class.ExisteCidadao(_codigo);
+                    if (!ExisteCidadao) {
+                        ViewBag.Result = "Inscrição não cadastrada.";
+                        return View(model);
+                    } else {
+                        CidadaoStruct reg = cidadao_Class.LoadReg(_codigo);
+                        if (reg.EtiquetaR != null && reg.EtiquetaR == "S") {
+                            _endereco = reg.EnderecoR + ", " + reg.NumeroR + " " + reg.ComplementoR;
+                            _endereco_rua = reg.EnderecoR;
+                            _numero = (short)reg.NumeroR;
+                            _complemento = reg.ComplementoR;
+                            _bairro = reg.NomeBairroR;
+                            _cidade = reg.NomeCidadeR + "/" + reg.UfR;
+                            _cep = reg.CepR.ToString();
+                            _uf = reg.UfR;
+                        } else {
+                            _endereco = reg.EnderecoC + ", " + reg.NumeroC + " " + reg.ComplementoC;
+                            _endereco_rua = reg.EnderecoC;
+                            _numero = (short)reg.NumeroC;
+                            _complemento = reg.ComplementoC;
+                            _bairro = reg.NomeBairroC;
+                            _cidade = reg.NomeCidadeC + "/" + reg.UfC;
+                            _cep = reg.CepC.ToString();
+                            _uf = reg.UfC;
+                        }
+                        _nome = reg.Nome;
+                        if (!string.IsNullOrWhiteSpace(reg.Cnpj))
+                            _cpfcnpj = reg.Cnpj;
+                        else
+                            _cpfcnpj = reg.Cpf;
+                    }
+                }
+            }
+
+            _processo = _processo.Substring(0, _processo.LastIndexOf('-')) + _processo.Substring(_processo.Length - 5, 5);
+            Tributario_bll tributario_class = new Tributario_bll("GTIconnection");
+            List<Destinoreparc> Lista = tributario_class.Lista_Destino_Parcelamento(_processo);
+            if (Lista.Count == 0) {
+                ViewBag.Result = "Processo não cadastrado.";
+                return View(model);
+            } else {
+                int _codigoParc = Lista[0].Codreduzido;
+                if (_codigoParc != _codigo) {
+                    ViewBag.Result = "Processo não pertence a esta inscrição.";
+                    return View(model);
+                } else {
+                    Processoreparc pr = tributario_class.Retorna_Processo_Parcelamento(_processo);
+                    _totParcela = (short)pr.Qtdeparcela;
+
+                    int _seq = Lista[0].Numsequencia;
+                    List<DebitoStructure> ListaDebito = tributario_class.Lista_Parcelas_Parcelamento_Ano(_codigo, 2020, _seq);
+                    if (ListaDebito.Count == 0) {
+                        ViewBag.Result = "Não existem parcelas a serem impressas.";
+                        return View(model);
+                    } else {
+                        if (ListaDebito[0].Numero_Parcela == 1) {
+                            bool _find = false;
+                            foreach (DebitoStructure itemtmp in ListaDebito) {
+                                if (itemtmp.Codigo_Situacao < 3) {
+                                    _find = true;
+                                    break;
+                                }
+                            }
+                            if (!_find) {
+                                ViewBag.Result = "Liberação do carnê somente após o pagamento da primeira parcela.";
+                                return View(model);
+                            } else {
+                                string _descricao_lancamento = "PARCELAMENTO DE DÉBITOS";
+                                int nSid = Functions.GetRandomNumber();
+                                int nPos = 0;
+                                foreach (DebitoStructure item in ListaDebito) {
+
+                                    //criamos um documento novo para cada parcela da vigilância
+                                    Numdocumento regDoc = new Numdocumento();
+                                    regDoc.Valorguia = item.Soma_Principal;
+                                    regDoc.Emissor = "Gti.Web/2ViaVS";
+                                    regDoc.Datadocumento = DateTime.Now;
+                                    regDoc.Registrado = false;
+                                    regDoc.Percisencao = 0;
+                                    regDoc.Percisencao = 0;
+                                    int _novo_documento = tributario_class.Insert_Documento(regDoc);
+                                    regDoc.numdocumento = _novo_documento;
+                                    ListaDebito[nPos].Numero_Documento = _novo_documento;
+
+                                    //grava o documento na parcela
+                                    Parceladocumento regParc = new Parceladocumento();
+                                    regParc.Codreduzido = item.Codigo_Reduzido;
+                                    regParc.Anoexercicio = Convert.ToInt16(item.Ano_Exercicio);
+                                    regParc.Codlancamento = Convert.ToInt16(item.Codigo_Lancamento);
+                                    regParc.Seqlancamento = Convert.ToInt16(item.Sequencia_Lancamento);
+                                    regParc.Numparcela = Convert.ToByte(item.Numero_Parcela);
+                                    regParc.Codcomplemento = Convert.ToByte(item.Complemento);
+                                    regParc.Numdocumento = _novo_documento;
+                                    regParc.Valorjuros = 0;
+                                    regParc.Valormulta = 0;
+                                    regParc.Valorcorrecao = 0;
+                                    regParc.Plano = 0;
+                                    tributario_class.Insert_Parcela_Documento(regParc);
+
+                                    //Registrar os novos documentos
+                                    Ficha_compensacao_documento ficha = new Ficha_compensacao_documento();
+                                    ficha.Nome = _nome.Length > 40 ? _nome.Substring(0, 40) : _nome;
+                                    ficha.Endereco = _endereco.Length > 40 ? _endereco.Substring(0, 40) : _endereco;
+                                    ficha.Bairro = _bairro.Length > 15 ? _bairro.Substring(0, 15) : _bairro;
+                                    ficha.Cidade = _cidade.Length > 30 ? _cidade.Substring(0, 30) : _cidade;
+                                    ficha.Cep = _cep ?? "14870000";
+                                    ficha.Cpf = _cpfcnpj;
+                                    ficha.Numero_documento = _novo_documento;
+                                    ficha.Data_vencimento = Convert.ToDateTime(item.Data_Vencimento);
+                                    ficha.Valor_documento = Convert.ToDecimal(item.Soma_Principal);
+                                    ficha.Uf = _uf;
+                                    if (item.Data_Vencimento > DateTime.Now) {
+                                        Exception ex = tributario_class.Insert_Ficha_Compensacao_Documento(ficha);
+                                        if (ex == null)
+                                            ex = tributario_class.Marcar_Documento_Registrado(_novo_documento);
+                                    }
+                                    nPos++;
+                                }
+
+                                short _index = 0;
+                                string _convenio = "2873532";
+                                foreach (DebitoStructure item in ListaDebito) {
+
+                                    Boletoguia reg = new Boletoguia();
+                                    reg.Usuario = "Gti.Web/LibParc";
+                                    reg.Computer = "web";
+                                    reg.Sid = nSid;
+                                    reg.Seq = _index;
+                                    reg.Codreduzido = _codigo.ToString("000000");
+                                    reg.Nome = _nome;
+                                    reg.Cpf = _cpfcnpj;
+                                    reg.Numimovel = _numero;
+                                    reg.Endereco = _endereco_rua;
+                                    reg.Complemento = _complemento;
+                                    reg.Bairro = _bairro;
+                                    reg.Cidade = "JABOTICABAL";
+                                    reg.Uf = "SP";
+                                    reg.Cep = _cep;
+                                    reg.Desclanc = _descricao_lancamento;
+                                    reg.Fulllanc = _descricao_lancamento;
+                                    reg.Numdoc = item.Numero_Documento.ToString();
+                                    reg.Numparcela = (short)item.Numero_Parcela;
+                                    reg.Datadoc = DateTime.Now;
+                                    reg.Datavencto = item.Data_Vencimento;
+                                    reg.Numdoc2 = item.Numero_Documento.ToString();
+                                    reg.Valorguia = item.Soma_Principal;
+                                    reg.Valor_ISS = 0;
+                                    reg.Valor_Taxa = 0;
+                                    reg.Totparcela = _totParcela;
+                                    reg.Obs = "Referente ao parcelamento de débitos: processo nº " + _processo;
+                                    reg.Numproc = _processo;
+
+                                    //***** GERA CÓDIGO DE BARRAS BOLETO REGISTRADO*****
+                                    DateTime _data_base = Convert.ToDateTime("07/10/1997");
+                                    TimeSpan ts = Convert.ToDateTime(item.Data_Vencimento) - _data_base;
+                                    int _fator_vencto = ts.Days;
+                                    string _quinto_grupo = String.Format("{0:D4}", _fator_vencto);
+                                    string _valor_boleto_str = string.Format("{0:0.00}", reg.Valorguia);
+                                    _quinto_grupo += string.Format("{0:D10}", Convert.ToInt64(Functions.RetornaNumero(_valor_boleto_str)));
+                                    string _barra = "0019" + _quinto_grupo + String.Format("{0:D13}", Convert.ToInt32(_convenio));
+                                    _barra += String.Format("{0:D10}", Convert.ToInt64(reg.Numdoc)) + "17";
+                                    string _campo1 = "0019" + _barra.Substring(19, 5);
+                                    string _digitavel = _campo1 + Functions.Calculo_DV10(_campo1).ToString();
+                                    string _campo2 = _barra.Substring(23, 10);
+                                    _digitavel += _campo2 + Functions.Calculo_DV10(_campo2).ToString();
+                                    string _campo3 = _barra.Substring(33, 10);
+                                    _digitavel += _campo3 + Functions.Calculo_DV10(_campo3).ToString();
+                                    string _campo5 = _quinto_grupo;
+                                    string _campo4 = Functions.Calculo_DV11(_barra).ToString();
+                                    _digitavel += _campo4 + _campo5;
+                                    _barra = _barra.Substring(0, 4) + _campo4 + _barra.Substring(4, _barra.Length - 4);
+                                    //**Resultado final**
+                                    string _linha_digitavel = _digitavel.Substring(0, 5) + "." + _digitavel.Substring(5, 5) + " " + _digitavel.Substring(10, 5) + "." + _digitavel.Substring(15, 6) + " ";
+                                    _linha_digitavel += _digitavel.Substring(21, 5) + "." + _digitavel.Substring(26, 6) + " " + _digitavel.Substring(32, 1) + " " + Functions.StringRight(_digitavel, 14);
+                                    string _codigo_barra = Functions.Gera2of5Str(_barra);
+                                    //**************************************************
+                                    reg.Totparcela = (short)ListaDebito.Count;
+                                    if (item.Numero_Parcela == 0) {
+                                        reg.Parcela = "Única";
+                                    } else
+                                        reg.Parcela = reg.Numparcela.ToString("00") + "/" + _totParcela.ToString("00");
+
+                                    reg.Digitavel = _linha_digitavel;
+                                    reg.Codbarra = _codigo_barra;
+                                    reg.Nossonumero = _convenio + String.Format("{0:D10}", Convert.ToInt64(reg.Numdoc));
+                                    tributario_class.Insert_Boleto_Guia(reg);
+
+                                    _index++;
+                                }
+                                Warning[] warnings;
+                                string[] streamIds;
+                                string mimeType = string.Empty;
+                                string encoding = string.Empty;
+                                string extension = string.Empty;
+                                Session["sid"] = "";
+                                Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
+                                List<Boletoguia> ListaBoleto = tributario_Class.Lista_Boleto_Guia(nSid);
+                                if (ListaBoleto.Count > 0) {
+                                    tributario_Class.Insert_Carne_Web(Convert.ToInt32(ListaBoleto[0].Codreduzido), 2019);
+                                    DataSet Ds = Functions.ToDataSet(ListaDebito);
+                                    ReportDataSource rdsAct = new ReportDataSource("dsBoletoGuia", Ds.Tables[0]);
+                                    ReportViewer viewer = new ReportViewer();
+                                    viewer.LocalReport.Refresh();
+                                    viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Carne_Parcelamento.rdlc"); ;
+                                    viewer.LocalReport.DataSources.Add(rdsAct);
+
+                                    byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
+                                    Response.Buffer = true;
+                                    Response.Clear();
+                                    Response.ContentType = mimeType;
+                                    Response.AddHeader("content-disposition", "attachment; filename= guia_pmj" + "." + extension);
+                                    Response.OutputStream.Write(bytes, 0, bytes.Length);
+                                    Response.Flush();
+                                    Response.End();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
     }
+
 }

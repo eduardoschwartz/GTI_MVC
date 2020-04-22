@@ -200,6 +200,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsBoletoGuia.xsd</DependentUpon>
     </Compile>
+    <Compile Include="dsBoletoGuia.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsBoletoGuia.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Functions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -215,12 +220,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Alvara_Funcionamento_Valida.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Reports\Carne_IptuOld.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Carne_IptuOld.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\CertidaoDebitoDocumentoN.cs">
@@ -429,6 +428,17 @@
     <Content Include="Datasets\dsBoletoGuia.xss">
       <DependentUpon>dsBoletoGuia.xsd</DependentUpon>
     </Content>
+    <Content Include="dsBoletoGuia.xsc">
+      <DependentUpon>dsBoletoGuia.xsd</DependentUpon>
+    </Content>
+    <None Include="dsBoletoGuia.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsBoletoGuia.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="dsBoletoGuia.xss">
+      <DependentUpon>dsBoletoGuia.xsd</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\gti.js" />
@@ -508,6 +518,7 @@
     <Content Include="TributacaoDataSet.xss">
       <DependentUpon>TributacaoDataSet.xsd</DependentUpon>
     </Content>
+    <Content Include="Views\Tributario\SegundaVia_Parcelamento.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -535,10 +546,7 @@
       <LastGenOutput>Alvara_Funcionamento_Valida.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Carne_IPTU.rdlc" />
-    <EmbeddedResource Include="Reports\Carne_IptuOld.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>Carne_IptuOld.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Carne_Parcelamento.rdlc" />
     <EmbeddedResource Include="Reports\CertidaoDebitoDocumentoN.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>CertidaoDebitoDocumentoN.cs</LastGenOutput>

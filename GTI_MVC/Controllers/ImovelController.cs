@@ -782,7 +782,8 @@ namespace GTI_Mvc.Controllers {
                 reg.Codbarra = _codigo_barra;
                 reg.Digitavel = _digitavel;
 
-                ListaBoleto.Add(reg);
+                if(reg.Datavencto>=DateTime.Now)
+                    ListaBoleto.Add(reg);
             }
 
             Warning[] warnings;

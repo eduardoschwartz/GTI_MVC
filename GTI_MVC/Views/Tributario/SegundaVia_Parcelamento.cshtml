@@ -1,8 +1,8 @@
-﻿@model GTI_Mvc.ViewModels.ProcessoViewModel
+﻿@model GTI_Mvc.ViewModels.DebitoViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Consulta de Processo";
+    ViewData["Title"] = "2ª via de Parcelamento";
 }
 
 <style>
@@ -17,15 +17,28 @@
     }
 </style>
 
-<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline">Consulta de Processo</label>
+<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline">Emissão de 2ª via de parcelamento</label>
 <br />
+<br />
+<span style="color: #CC0000">
+    <span style="text-decoration: underline">Observação importante</span>:&nbsp; Os boletos serão registrados durante a noite e estarão disponíveis para pagamento<br />
+    a partir de amanhã. Caso queira pagar alguma parcela hoje, emitir boleto através da consulta e atualização <br />
+    de boletos disponível no site.
+</span>
 <br />
 
-@using (Html.BeginForm("Consulta_Processo", "Protocolo", FormMethod.Post, new { @id = "MainForm" })) {
+
+@using (Html.BeginForm("SegundaVia_Parcelamento", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
     <table width="500px">
         <tr style="height:40px">
+            <td style="  padding-top:15px;width:150px">
+                @Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })
+            </td>
+            <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "Codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
+        </tr>
+        <tr style="height:40px">
             <td style="width:150px"><label style="font-weight:normal">Nº do Processo: </label></td>
-            <td style="width:300px">@Html.TextBoxFor(m => m.Numero_Ano, new { @id = "numprocesso", @class = "textBoxBlue", @style = "max-width:150px" })</td>
+            <td style="width:300px">@Html.TextBoxFor(m => m.Numero_Processo, new { @id = "numprocesso", @class = "textBoxBlue", @style = "max-width:150px" })</td>
         </tr>
 
         <tr style="height:40px">
@@ -69,6 +82,12 @@
             ClearError();
             var _numero = document.getElementById('numprocesso').value.trim();
             var _captcha = document.getElementById('captchaTxt').value;
+            var _cod = document.getElementById('Codigo').value;
+
+            if ((_cod == "" || parseInt(_cod) == 0)) {
+                document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal!";
+                return false;
+            }
 
             var _error = Valida_Numero_Processo(_numero);
             if (_error != "") {

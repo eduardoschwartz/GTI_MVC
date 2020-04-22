@@ -9,6 +9,8 @@ namespace GTI_Mvc.ViewModels {
         public string Nome { get; set; }
         public string CpfCnpjLabel { get; set; }
         public string ErrorMessage { get; set; }
+        [Display(Name = "Nº do Processo")]
+        public string Numero_Processo { get; set; }
         [Display(Name = "Data de vencimento")]
         public string DataVencimento { get; set; }
         public List<DebitoStructureWeb> Lista_Debito { get; set; }
@@ -19,5 +21,8 @@ namespace GTI_Mvc.ViewModels {
         public decimal Soma_Total { get; set; }
         public decimal Soma_Honorario { get; set; }
         public int Plano { get; set; }
+        [StringLength(4)]
+        public string CaptchaCode { get; set; }
+
     }
 }
