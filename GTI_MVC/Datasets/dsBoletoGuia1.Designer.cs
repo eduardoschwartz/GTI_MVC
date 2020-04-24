@@ -329,14 +329,6 @@ namespace GTI_MVC.Datasets {
             
             private global::System.Data.DataColumn columncep;
             
-            private global::System.Data.DataColumn columnnumbarra2a;
-            
-            private global::System.Data.DataColumn columnnumbarra2b;
-            
-            private global::System.Data.DataColumn columnnumbarra2c;
-            
-            private global::System.Data.DataColumn columnnumbarra2d;
-            
             private global::System.Data.DataColumn columndesclanc;
             
             private global::System.Data.DataColumn columnnossonumero;
@@ -590,38 +582,6 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn numbarra2aColumn {
-                get {
-                    return this.columnnumbarra2a;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn numbarra2bColumn {
-                get {
-                    return this.columnnumbarra2b;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn numbarra2cColumn {
-                get {
-                    return this.columnnumbarra2c;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn numbarra2dColumn {
-                get {
-                    return this.columnnumbarra2d;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public global::System.Data.DataColumn desclancColumn {
                 get {
                     return this.columndesclanc;
@@ -755,10 +715,6 @@ namespace GTI_MVC.Datasets {
                         string obs, 
                         string numproc, 
                         string cep, 
-                        string numbarra2a, 
-                        string numbarra2b, 
-                        string numbarra2c, 
-                        string numbarra2d, 
                         string desclanc, 
                         string nossonumero, 
                         string parcela, 
@@ -795,10 +751,6 @@ namespace GTI_MVC.Datasets {
                         obs,
                         numproc,
                         cep,
-                        numbarra2a,
-                        numbarra2b,
-                        numbarra2c,
-                        numbarra2d,
                         desclanc,
                         nossonumero,
                         parcela,
@@ -863,10 +815,6 @@ namespace GTI_MVC.Datasets {
                 this.columnobs = base.Columns["obs"];
                 this.columnnumproc = base.Columns["numproc"];
                 this.columncep = base.Columns["cep"];
-                this.columnnumbarra2a = base.Columns["numbarra2a"];
-                this.columnnumbarra2b = base.Columns["numbarra2b"];
-                this.columnnumbarra2c = base.Columns["numbarra2c"];
-                this.columnnumbarra2d = base.Columns["numbarra2d"];
                 this.columndesclanc = base.Columns["desclanc"];
                 this.columnnossonumero = base.Columns["nossonumero"];
                 this.columnparcela = base.Columns["parcela"];
@@ -931,14 +879,6 @@ namespace GTI_MVC.Datasets {
                 base.Columns.Add(this.columnnumproc);
                 this.columncep = new global::System.Data.DataColumn("cep", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columncep);
-                this.columnnumbarra2a = new global::System.Data.DataColumn("numbarra2a", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnnumbarra2a);
-                this.columnnumbarra2b = new global::System.Data.DataColumn("numbarra2b", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnnumbarra2b);
-                this.columnnumbarra2c = new global::System.Data.DataColumn("numbarra2c", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnnumbarra2c);
-                this.columnnumbarra2d = new global::System.Data.DataColumn("numbarra2d", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnnumbarra2d);
                 this.columndesclanc = new global::System.Data.DataColumn("desclanc", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columndesclanc);
                 this.columnnossonumero = new global::System.Data.DataColumn("nossonumero", typeof(string), null, global::System.Data.MappingType.Element);
@@ -982,10 +922,6 @@ namespace GTI_MVC.Datasets {
                 this.columnobs.MaxLength = 500;
                 this.columnnumproc.MaxLength = 25;
                 this.columncep.MaxLength = 9;
-                this.columnnumbarra2a.MaxLength = 13;
-                this.columnnumbarra2b.MaxLength = 13;
-                this.columnnumbarra2c.MaxLength = 13;
-                this.columnnumbarra2d.MaxLength = 13;
                 this.columndesclanc.MaxLength = 50;
             }
             
@@ -1509,70 +1445,6 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string numbarra2a {
-                get {
-                    try {
-                        return ((string)(this[this.tableboletoguia.numbarra2aColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'numbarra2a\' in table \'boletoguia\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableboletoguia.numbarra2aColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string numbarra2b {
-                get {
-                    try {
-                        return ((string)(this[this.tableboletoguia.numbarra2bColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'numbarra2b\' in table \'boletoguia\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableboletoguia.numbarra2bColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string numbarra2c {
-                get {
-                    try {
-                        return ((string)(this[this.tableboletoguia.numbarra2cColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'numbarra2c\' in table \'boletoguia\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableboletoguia.numbarra2cColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public string numbarra2d {
-                get {
-                    try {
-                        return ((string)(this[this.tableboletoguia.numbarra2dColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'numbarra2d\' in table \'boletoguia\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableboletoguia.numbarra2dColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public string desclanc {
                 get {
                     try {
@@ -1969,54 +1841,6 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool Isnumbarra2aNull() {
-                return this.IsNull(this.tableboletoguia.numbarra2aColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void Setnumbarra2aNull() {
-                this[this.tableboletoguia.numbarra2aColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool Isnumbarra2bNull() {
-                return this.IsNull(this.tableboletoguia.numbarra2bColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void Setnumbarra2bNull() {
-                this[this.tableboletoguia.numbarra2bColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool Isnumbarra2cNull() {
-                return this.IsNull(this.tableboletoguia.numbarra2cColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void Setnumbarra2cNull() {
-                this[this.tableboletoguia.numbarra2cColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool Isnumbarra2dNull() {
-                return this.IsNull(this.tableboletoguia.numbarra2dColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void Setnumbarra2dNull() {
-                this[this.tableboletoguia.numbarra2dColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsdesclancNull() {
                 return this.IsNull(this.tableboletoguia.desclancColumn);
             }
@@ -2308,22 +2132,18 @@ namespace GTI_MVC.Datasets.dsBoletoGuiaTableAdapters {
             tableMapping.ColumnMappings.Add("obs", "obs");
             tableMapping.ColumnMappings.Add("numproc", "numproc");
             tableMapping.ColumnMappings.Add("cep", "cep");
-            tableMapping.ColumnMappings.Add("numbarra2a", "numbarra2a");
-            tableMapping.ColumnMappings.Add("numbarra2b", "numbarra2b");
-            tableMapping.ColumnMappings.Add("numbarra2c", "numbarra2c");
-            tableMapping.ColumnMappings.Add("numbarra2d", "numbarra2d");
             tableMapping.ColumnMappings.Add("desclanc", "desclanc");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = "DELETE FROM [dbo].[boletoguia] WHERE (([sid] = @Original_sid) AND ([seq] = @Origi" +
-                "nal_seq))";
+            this._adapter.DeleteCommand.CommandText = "DELETE FROM [boletoguia] WHERE (([sid] = @Original_sid) AND ([seq] = @Original_se" +
+                "q))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_sid", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "sid", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_seq", global::System.Data.SqlDbType.SmallInt, 0, global::System.Data.ParameterDirection.Input, 0, 0, "seq", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = @"INSERT INTO [dbo].[boletoguia] ([usuario], [computer], [sid], [seq], [codreduzido], [nome], [cpf], [endereco], [numimovel], [complemento], [bairro], [cidade], [uf], [fulllanc], [numdoc], [numparcela], [totparcela], [datavencto], [numdoc2], [digitavel], [codbarra], [valorguia], [obs], [numproc], [cep], [numbarra2a], [numbarra2b], [numbarra2c], [numbarra2d], [desclanc]) VALUES (@usuario, @computer, @sid, @seq, @codreduzido, @nome, @cpf, @endereco, @numimovel, @complemento, @bairro, @cidade, @uf, @fulllanc, @numdoc, @numparcela, @totparcela, @datavencto, @numdoc2, @digitavel, @codbarra, @valorguia, @obs, @numproc, @cep, @numbarra2a, @numbarra2b, @numbarra2c, @numbarra2d, @desclanc)";
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO [boletoguia] ([usuario], [computer], [sid], [seq], [codreduzido], [nome], [cpf], [endereco], [numimovel], [complemento], [bairro], [cidade], [uf], [fulllanc], [numdoc], [numparcela], [totparcela], [datavencto], [numdoc2], [digitavel], [codbarra], [valorguia], [obs], [numproc], [cep], [desclanc]) VALUES (@usuario, @computer, @sid, @seq, @codreduzido, @nome, @cpf, @endereco, @numimovel, @complemento, @bairro, @cidade, @uf, @fulllanc, @numdoc, @numparcela, @totparcela, @datavencto, @numdoc2, @digitavel, @codbarra, @valorguia, @obs, @numproc, @cep, @desclanc)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@usuario", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "usuario", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@computer", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "computer", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -2350,14 +2170,10 @@ namespace GTI_MVC.Datasets.dsBoletoGuiaTableAdapters {
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@obs", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "obs", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@numproc", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "numproc", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@cep", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "cep", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@numbarra2a", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "numbarra2a", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@numbarra2b", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "numbarra2b", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@numbarra2c", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "numbarra2c", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@numbarra2d", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "numbarra2d", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@desclanc", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "desclanc", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE [dbo].[boletoguia] SET [usuario] = @usuario, [computer] = @computer, [sid] = @sid, [seq] = @seq, [codreduzido] = @codreduzido, [nome] = @nome, [cpf] = @cpf, [endereco] = @endereco, [numimovel] = @numimovel, [complemento] = @complemento, [bairro] = @bairro, [cidade] = @cidade, [uf] = @uf, [fulllanc] = @fulllanc, [numdoc] = @numdoc, [numparcela] = @numparcela, [totparcela] = @totparcela, [datavencto] = @datavencto, [numdoc2] = @numdoc2, [digitavel] = @digitavel, [codbarra] = @codbarra, [valorguia] = @valorguia, [obs] = @obs, [numproc] = @numproc, [cep] = @cep, [numbarra2a] = @numbarra2a, [numbarra2b] = @numbarra2b, [numbarra2c] = @numbarra2c, [numbarra2d] = @numbarra2d, [desclanc] = @desclanc WHERE (([sid] = @Original_sid) AND ([seq] = @Original_seq))";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [boletoguia] SET [usuario] = @usuario, [computer] = @computer, [sid] = @sid, [seq] = @seq, [codreduzido] = @codreduzido, [nome] = @nome, [cpf] = @cpf, [endereco] = @endereco, [numimovel] = @numimovel, [complemento] = @complemento, [bairro] = @bairro, [cidade] = @cidade, [uf] = @uf, [fulllanc] = @fulllanc, [numdoc] = @numdoc, [numparcela] = @numparcela, [totparcela] = @totparcela, [datavencto] = @datavencto, [numdoc2] = @numdoc2, [digitavel] = @digitavel, [codbarra] = @codbarra, [valorguia] = @valorguia, [obs] = @obs, [numproc] = @numproc, [cep] = @cep, [desclanc] = @desclanc WHERE (([sid] = @Original_sid) AND ([seq] = @Original_seq))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@usuario", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "usuario", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@computer", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "computer", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -2384,10 +2200,6 @@ namespace GTI_MVC.Datasets.dsBoletoGuiaTableAdapters {
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@obs", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "obs", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@numproc", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "numproc", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@cep", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "cep", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@numbarra2a", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "numbarra2a", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@numbarra2b", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "numbarra2b", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@numbarra2c", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "numbarra2c", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@numbarra2d", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "numbarra2d", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@desclanc", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "desclanc", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_sid", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "sid", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_seq", global::System.Data.SqlDbType.SmallInt, 0, global::System.Data.ParameterDirection.Input, 0, 0, "seq", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
@@ -2397,7 +2209,7 @@ namespace GTI_MVC.Datasets.dsBoletoGuiaTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["TributacaoConnectionString"].ConnectionString;
+            this._connection.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["GTIconnection"].ConnectionString;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2406,7 +2218,10 @@ namespace GTI_MVC.Datasets.dsBoletoGuiaTableAdapters {
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT usuario, computer, sid, seq, codreduzido, nome, cpf, endereco, numimovel, complemento, bairro, cidade, uf, fulllanc, numdoc, numparcela, totparcela, datavencto, numdoc2, digitavel, codbarra, valorguia, obs, numproc, cep, numbarra2a, numbarra2b, numbarra2c, numbarra2d, desclanc FROM boletoguia";
+            this._commandCollection[0].CommandText = "SELECT usuario, computer, sid, seq, codreduzido, nome, cpf, endereco, numimovel, " +
+                "complemento, bairro, cidade, uf, fulllanc, numdoc, numparcela, totparcela, datav" +
+                "encto, numdoc2, digitavel, codbarra, valorguia, obs, numproc, cep, desclanc FROM" +
+                " boletoguia";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -2516,10 +2331,6 @@ namespace GTI_MVC.Datasets.dsBoletoGuiaTableAdapters {
                     string obs, 
                     string numproc, 
                     string cep, 
-                    string numbarra2a, 
-                    string numbarra2b, 
-                    string numbarra2c, 
-                    string numbarra2d, 
                     string desclanc) {
             if ((usuario == null)) {
                 throw new global::System.ArgumentNullException("usuario");
@@ -2661,35 +2472,11 @@ namespace GTI_MVC.Datasets.dsBoletoGuiaTableAdapters {
             else {
                 this.Adapter.InsertCommand.Parameters[24].Value = ((string)(cep));
             }
-            if ((numbarra2a == null)) {
+            if ((desclanc == null)) {
                 this.Adapter.InsertCommand.Parameters[25].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[25].Value = ((string)(numbarra2a));
-            }
-            if ((numbarra2b == null)) {
-                this.Adapter.InsertCommand.Parameters[26].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[26].Value = ((string)(numbarra2b));
-            }
-            if ((numbarra2c == null)) {
-                this.Adapter.InsertCommand.Parameters[27].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[27].Value = ((string)(numbarra2c));
-            }
-            if ((numbarra2d == null)) {
-                this.Adapter.InsertCommand.Parameters[28].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[28].Value = ((string)(numbarra2d));
-            }
-            if ((desclanc == null)) {
-                this.Adapter.InsertCommand.Parameters[29].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[29].Value = ((string)(desclanc));
+                this.Adapter.InsertCommand.Parameters[25].Value = ((string)(desclanc));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -2737,10 +2524,6 @@ namespace GTI_MVC.Datasets.dsBoletoGuiaTableAdapters {
                     string obs, 
                     string numproc, 
                     string cep, 
-                    string numbarra2a, 
-                    string numbarra2b, 
-                    string numbarra2c, 
-                    string numbarra2d, 
                     string desclanc, 
                     int Original_sid, 
                     short Original_seq) {
@@ -2884,38 +2667,14 @@ namespace GTI_MVC.Datasets.dsBoletoGuiaTableAdapters {
             else {
                 this.Adapter.UpdateCommand.Parameters[24].Value = ((string)(cep));
             }
-            if ((numbarra2a == null)) {
+            if ((desclanc == null)) {
                 this.Adapter.UpdateCommand.Parameters[25].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[25].Value = ((string)(numbarra2a));
+                this.Adapter.UpdateCommand.Parameters[25].Value = ((string)(desclanc));
             }
-            if ((numbarra2b == null)) {
-                this.Adapter.UpdateCommand.Parameters[26].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[26].Value = ((string)(numbarra2b));
-            }
-            if ((numbarra2c == null)) {
-                this.Adapter.UpdateCommand.Parameters[27].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[27].Value = ((string)(numbarra2c));
-            }
-            if ((numbarra2d == null)) {
-                this.Adapter.UpdateCommand.Parameters[28].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[28].Value = ((string)(numbarra2d));
-            }
-            if ((desclanc == null)) {
-                this.Adapter.UpdateCommand.Parameters[29].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[29].Value = ((string)(desclanc));
-            }
-            this.Adapter.UpdateCommand.Parameters[30].Value = ((int)(Original_sid));
-            this.Adapter.UpdateCommand.Parameters[31].Value = ((short)(Original_seq));
+            this.Adapter.UpdateCommand.Parameters[26].Value = ((int)(Original_sid));
+            this.Adapter.UpdateCommand.Parameters[27].Value = ((short)(Original_seq));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -2960,14 +2719,10 @@ namespace GTI_MVC.Datasets.dsBoletoGuiaTableAdapters {
                     string obs, 
                     string numproc, 
                     string cep, 
-                    string numbarra2a, 
-                    string numbarra2b, 
-                    string numbarra2c, 
-                    string numbarra2d, 
                     string desclanc, 
                     int Original_sid, 
                     short Original_seq) {
-            return this.Update(usuario, computer, Original_sid, Original_seq, codreduzido, nome, cpf, endereco, numimovel, complemento, bairro, cidade, uf, fulllanc, numdoc, numparcela, totparcela, datavencto, numdoc2, digitavel, codbarra, valorguia, obs, numproc, cep, numbarra2a, numbarra2b, numbarra2c, numbarra2d, desclanc, Original_sid, Original_seq);
+            return this.Update(usuario, computer, Original_sid, Original_seq, codreduzido, nome, cpf, endereco, numimovel, complemento, bairro, cidade, uf, fulllanc, numdoc, numparcela, totparcela, datavencto, numdoc2, digitavel, codbarra, valorguia, obs, numproc, cep, desclanc, Original_sid, Original_seq);
         }
     }
     
