@@ -14,10 +14,12 @@
 <div style="width: 100%; overflow: hidden;">
     <div style="width: 400px; float: left;">
         <span style="color:saddlebrown;font-weight:bold;font-style:italic">Menu de sistema</span><br />
-        @Html.ActionLink("Tramitação de processos", "Tramite_Processo", "Protocolo")
+        @Html.ActionLink("Tramitação de processos", "Tramite_Processo", "Protocolo")<br />
+        @Html.ActionLink("Alterar a senha", "Login_update", "Home")<br />
     </div>
 </div>
 
 
 <br />
+@Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home")
 <br />

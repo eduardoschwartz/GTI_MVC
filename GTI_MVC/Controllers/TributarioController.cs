@@ -1438,8 +1438,8 @@ namespace GTI_Mvc.Controllers {
                                     viewer.LocalReport.Refresh();
                                     viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Carne_Parcelamento.rdlc"); ;
                                     viewer.LocalReport.DataSources.Add(rdsAct);
-
                                     byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
+                                    
                                     Response.Buffer = true;
                                     Response.Clear();
                                     Response.ContentType = mimeType;

@@ -200,11 +200,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsBoletoGuia.xsd</DependentUpon>
     </Compile>
-    <Compile Include="dsBoletoGuia.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsBoletoGuia.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Functions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -375,11 +370,6 @@
     <Compile Include="SelectListaItem.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="TAcesso.cs" />
-    <Compile Include="TributacaoDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TributacaoDataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\BoletoViewModel.cs" />
     <Compile Include="ViewModels\CertidaoViewModel.cs" />
     <Compile Include="ViewModels\DebitoListViewModel.cs" />
@@ -398,7 +388,6 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\gti.css" />
-    <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -426,17 +415,6 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="Datasets\dsBoletoGuia.xss">
-      <DependentUpon>dsBoletoGuia.xsd</DependentUpon>
-    </Content>
-    <Content Include="dsBoletoGuia.xsc">
-      <DependentUpon>dsBoletoGuia.xsd</DependentUpon>
-    </Content>
-    <None Include="dsBoletoGuia.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>dsBoletoGuia.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="dsBoletoGuia.xss">
       <DependentUpon>dsBoletoGuia.xsd</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
@@ -507,18 +485,8 @@
     <Content Include="Views\Protocolo\Consulta_Processo2.cshtml" />
     <Content Include="Views\Imovel\Carne_Iptu.cshtml" />
     <Content Include="Views\Tributario\GateBank.cshtml" />
-    <Content Include="TributacaoDataSet.xsc">
-      <DependentUpon>TributacaoDataSet.xsd</DependentUpon>
-    </Content>
-    <None Include="TributacaoDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>TributacaoDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="TributacaoDataSet.xss">
-      <DependentUpon>TributacaoDataSet.xsd</DependentUpon>
-    </Content>
     <Content Include="Views\Tributario\SegundaVia_Parcelamento.cshtml" />
+    <Content Include="Views\Home\Login_update.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

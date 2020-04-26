@@ -23,25 +23,25 @@
 
 @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @id = "MainForm" })) {
 
-<table width="500px">
-    <tr style="height:40px">
-        <td style="width:80px">@Html.LabelFor(m => m.Usuario, new { @style = "font-weight:normal" })</td>
-        <td style="width:300px">@Html.TextBoxFor(m => m.Usuario, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:200px" })</td>
-    </tr>
-    <tr style="height:40px">
-        <td style="width:80px">@Html.LabelFor(m => m.Senha, new { @style = "font-weight:normal" })</td>
-        <td style="width:300px">@Html.TextBoxFor(m => m.Senha, new {@type="password", @id = "senha", @class = "textBoxBlue", @style = "max-width:200px" })</td>
-    </tr>
-</table>
+    <table width="500px">
+        <tr style="height:40px">
+            <td style="width:80px">@Html.LabelFor(m => m.Usuario, new { @style = "font-weight:normal" })</td>
+            <td style="width:300px">@Html.TextBoxFor(m => m.Usuario, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:200px" })</td>
+        </tr>
+        <tr style="height:40px">
+            <td style="width:80px">@Html.LabelFor(m => m.Senha, new { @style = "font-weight:normal" })</td>
+            <td style="width:300px">@Html.TextBoxFor(m => m.Senha, new { @type = "password", @id = "senha", @class = "textBoxBlue", @style = "max-width:200px" })</td>
+        </tr>
+    </table>
 
     <br />
     <div class="col-sm-10">
-        <button type="submit" title="Acessar o sistema" class="green_button" > Entrar</button>
+        <button type="submit" title="Acessar o sistema" class="green_button"> Entrar</button>
     </div>
     <br />
     <br />
     <br />
-    
+
 
     <br />
     <div class="form-group row">
@@ -70,7 +70,7 @@
             var _cod = document.getElementById('codigo').value;
             var _senha = document.getElementById('senha').value;
 
-            if (_cod == "" ||  _senha == "") {
+            if (_cod == "" || _senha == "") {
                 document.getElementById('errorLabel').innerHTML = "Digite o login e a senha";
                 return false;
             }
