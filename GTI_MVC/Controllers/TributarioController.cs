@@ -1120,27 +1120,62 @@ namespace GTI_Mvc.Controllers {
         [Route("GateBank")]
         [HttpGet]
         public ActionResult GateBank(string p1,string p2,string p3,string p4,string p5,string p6,string p7,string p8,string p9) {
+            /*
+             p1-nome
+             p2-endereco
+             p3-data dam
+             p4-documento
+             p5-nosso numero
+             p6-valor
+             p7-cidade
+             p8-uf
+             p9-cep
+             */
+
+
             if (string.IsNullOrWhiteSpace(p1)) {
                 return RedirectToAction("Login_gti", "Home");
             }
-            string _nosso_numero = "287353200" +  Decrypt(p7);
-            string _valor_boleto = Decrypt(p6);
-            string _valor_boleto_full = (Convert.ToDecimal(_valor_boleto) / 100).ToString("#0.00");
-            string _cpf = Decrypt(p2);
-            string _tipodoc= _cpf.Length == 11 ? "1" : "2";
-            BoletoViewModel model = new BoletoViewModel {
-                Nome = Decrypt( p1),
-                CpfCnpj= _cpf,
-                TipoDoc=_tipodoc,
-                Endereco = Decrypt(p3),
-                Cep = Decrypt(p4),
-                Data_Vencimento = Decrypt(p5),
-                Valor_Boleto = _valor_boleto,
-                Nosso_Numero=_nosso_numero,
-                Cidade=Decrypt(p8),
-                Uf=Decrypt(p9),
-                Valor_Boleto_Full=_valor_boleto_full
-            };
+            BoletoViewModel model = new BoletoViewModel();
+            TAcessoFunction tAcesso_Class = new TAcessoFunction();
+            try {
+                //string _nosso_numero = "287353200" + tAcesso_Class.DecryptGTI(p5);
+                //string _valor_boleto = tAcesso_Class.DecryptGTI(p6);
+                //string _valor_boleto_full = (Convert.ToDecimal(_valor_boleto) / 100).ToString("#0.00");
+                //string _cpf = tAcesso_Class.DecryptGTI(p2);
+                //string _tipodoc = _cpf.Length == 11 ? "1" : "2";
+                //model.Nome = tAcesso_Class.DecryptGTI(p1);
+                //model.CpfCnpj = _cpf;
+                //model.TipoDoc = _tipodoc;
+                //model.Endereco = tAcesso_Class.DecryptGTI(p2);
+                //model.Cep = tAcesso_Class.DecryptGTI(p4);
+                //model.Data_Vencimento = tAcesso_Class.DecryptGTI(p3);
+                //model.Valor_Boleto = _valor_boleto;
+                //model.Nosso_Numero = _nosso_numero;
+                //model.Cidade = tAcesso_Class.DecryptGTI(p7);
+                //model.Uf = tAcesso_Class.DecryptGTI(p8);
+                //model.Valor_Boleto_Full = _valor_boleto_full;
+                //model.Cep= tAcesso_Class.DecryptGTI(p9);
+                string _nosso_numero = p5;
+                string _valor_boleto = p6;
+                string _valor_boleto_full = (Convert.ToDecimal(_valor_boleto) / 100).ToString("#0.00");
+                string _cpf = p4;
+                string _tipodoc = _cpf.Length == 11 ? "1" : "2";
+                model.Nome = p1;
+                model.CpfCnpj = _cpf;
+                model.TipoDoc = _tipodoc;
+                model.Endereco = p2;
+                model.Cep = p4;
+                model.Data_Vencimento = p3;
+                model.Valor_Boleto = _valor_boleto;
+                model.Nosso_Numero = _nosso_numero;
+                model.Cidade = p7;
+                model.Uf = p8;
+                model.Cep = p9;
+                model.Valor_Boleto_Full = _valor_boleto_full;
+            } catch (Exception) {
+                throw;
+            }
             return View(model);
         }
 
@@ -1459,7 +1494,6 @@ namespace GTI_Mvc.Controllers {
 
 
 
-        //28735320017287155
     }
 
 }
