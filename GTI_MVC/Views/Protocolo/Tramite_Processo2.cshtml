@@ -142,10 +142,10 @@
                             @Html.DisplayFor(modelItem => item.Usuario2)
                         </td>
                         <td>
-                            <a href="@Url.Action("Receive","Protocolo",new {Ano=@Model.Ano,Numero=@Model.Numero, Seq=item.Seq})" title="Receber processo"> <img src="@Url.Content("~/images/receber.png")" onclick="return Validar_Receber('@Model.Lista_CC',@item.Seq,@item.CentroCustoCodigo)" /></a>
-                            <a href="@Url.Action("Send","Protocolo",new {Ano=@Model.Ano,Numero=@Model.Numero, Seq=item.Seq})" title="Enviar processo"> <img src="@Url.Content("~/images/enviar.png")" onclick="return Validar_Enviar('@Model.Lista_CC',@item.Seq,@item.CentroCustoCodigo)" /></a>
-                            <a href="#" title="Mover trâmite para baixo"> <img src="@Url.Content("~/images/abaixo.gif")" data-value="@item.Seq" onclick="MoveDown('@Model.Ano',@Model.Numero,@item.Seq)"></a>
-                            <a href="#" title="Mover trâmite para cima"> <img src="@Url.Content("~/images/acima.gif")" data-value="@item.Seq" onclick="MoveUp('@Model.Ano',@Model.Numero,@item.Seq)"></a>
+                            <a href="@Url.Action("Receive","Protocolo",new {p1=Functions.Encrypt( @Model.Ano.ToString()),p2=Functions.Encrypt( @Model.Numero.ToString()), p3=Functions.Encrypt(item.Seq.ToString())})" title="Receber processo"> <img src="@Url.Content("~/images/receber.png")" onclick="return Validar_Receber('@Model.Lista_CC',@item.Seq,@item.CentroCustoCodigo)" /></a>
+                            <a href="@Url.Action("Send","Protocolo",new {p1=Functions.Encrypt( @Model.Ano.ToString()),p2=Functions.Encrypt( @Model.Numero.ToString()), p3=Functions.Encrypt(item.Seq.ToString())})" title="Enviar processo"> <img src="@Url.Content("~/images/enviar.png")" onclick="return Validar_Enviar('@Model.Lista_CC',@item.Seq,@item.CentroCustoCodigo)" /></a>
+                            <a href="#" title="Mover trâmite para baixo"> <img src="@Url.Content("~/images/abaixo.gif")" data-value="@item.Seq" onclick="MoveDown(@Model.Ano,@Model.Numero,@item.Seq)"></a>
+                            <a href="#" title="Mover trâmite para cima"> <img src="@Url.Content("~/images/acima.gif")" data-value="@item.Seq" onclick="MoveUp(@Model.Ano,@Model.Numero,@item.Seq)"></a>
                             <a href="@Url.Action("AddPlace","Protocolo",new {Ano=@Model.Ano,Numero=@Model.Numero, Seq=item.Seq,@item.CentroCustoCodigo})" title="Incluir um local de trâmite"> <img src="@Url.Content("~/images/inserir_local.png")" onclick="return Validar_AddPlace('@Model.Ano',@Model.Numero,@item.Seq,@item.CentroCustoCodigo)" /></a>
                             <a href="@Url.Action("RemovePlace","Protocolo",new {Ano=@Model.Ano,Numero=@Model.Numero, Seq=item.Seq})" title="Remover um local de trâmite"> <img src="@Url.Content("~/images/remover_local.png")" onclick="return Usuario_CC_Remover('@Model.Lista_CC',@item.Seq,@item.CentroCustoCodigo)" /></a>
                             @*<a href="@Url.Action("Obs","Protocolo",new {Ano=@Model.Ano,Numero=@Model.Numero, Seq=item.Seq})" title="Observação"> <img src="@Url.Content("~/images/observacao.png")"  /></a>*@
@@ -319,7 +319,7 @@
     //***************************
     //Scripts para Mover trâmite
     //***************************
-    function MoveUp(Ano, Numero, Seq) {
+        function MoveUp(Ano, Numero, Seq) {
         var tbl = document.getElementById("tblMain");
         var _texto = tbl.rows[Seq-1].cells[2].innerHTML;
         if (Seq == 1) {
@@ -338,14 +338,13 @@
                         window.location.href = data;
                     },
                     data: {
-                        Ano: Ano,
-                        Numero: Numero,
+                        Ano: @Model.Ano,
+                        Numero: @Model.Numero,
                         Seq: Seq
                     }
                 });
             }
         }
-        window.location.href = window.location.href;
         return true;
     }
 
@@ -375,7 +374,6 @@
                   });
               }
           }
-        window.location.href = window.location.href;
         return true;
     }
 
@@ -391,7 +389,7 @@
         }
          $.ajax({
                     type: "Post",
-             url: "/Protocolo/AddPlace",
+                     url: "/Protocolo/AddPlace",
                      dataType: 'json',
                     success: function (data) {
                         window.location.href = data;

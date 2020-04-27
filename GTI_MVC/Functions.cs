@@ -153,20 +153,27 @@ namespace GTI_Mvc {
         }
 
         public static string Encrypt(string clearText) {
-            SymmetricAlgorithm algorithm = DES.Create();
-            ICryptoTransform transform = algorithm.CreateEncryptor(key, iv);
-            byte[] inputbuffer = System.Text.Encoding.Unicode.GetBytes(clearText);
-            byte[] outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
-            return Convert.ToBase64String(outputBuffer);
+            try {
+                SymmetricAlgorithm algorithm = DES.Create();
+                ICryptoTransform transform = algorithm.CreateEncryptor(key, iv);
+                byte[] inputbuffer = System.Text.Encoding.Unicode.GetBytes(clearText);
+                byte[] outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
+                return Convert.ToBase64String(outputBuffer);
+            } catch {
+                return "";
+            }
         }
 
         public static string Decrypt(string cipherText) {
-            SymmetricAlgorithm algorithm = DES.Create();
-            ICryptoTransform transform = algorithm.CreateDecryptor(key, iv);
-            byte[] inputbuffer = Convert.FromBase64String(cipherText);
-            byte[] outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
-            return System.Text.Encoding.Unicode.GetString(outputBuffer);
-
+            try {
+                SymmetricAlgorithm algorithm = DES.Create();
+                ICryptoTransform transform = algorithm.CreateDecryptor(key, iv);
+                byte[] inputbuffer = Convert.FromBase64String(cipherText);
+                byte[] outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
+                return System.Text.Encoding.Unicode.GetString(outputBuffer);
+            } catch  {
+                return "";
+            }
         }
 
         public static int RetornaDvProcesso(int Numero) {

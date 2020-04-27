@@ -1,4 +1,5 @@
-﻿using GTI_Bll.Classes;
+﻿using Antlr.Runtime.Tree;
+using GTI_Bll.Classes;
 using GTI_Models.Models;
 using GTI_Mvc.ViewModels;
 using GTI_MVC;
@@ -160,15 +161,25 @@ namespace GTI_Mvc.Controllers {
          * **************************************************************/
         [Route("Receive/{Ano}/{Numero}/{Seq}")]
         [HttpGet]
-        public ViewResult Receive(int Ano=0, int Numero=0, int Seq=0) {
-            if (Functions.pUserId == 0)
-                return View("../Home/Login");
+        public ViewResult Receive(string p1 = "", string p2 = "", string p3 = "") {
+            if (Functions.pUserId == 0) {
+                LoginViewModel model = new LoginViewModel();
+                return View("../Home/Login", model);
+            }
+
+            int _ano = 0, _numero = 0, _seq = 0;
+            try {
+                _ano = Convert.ToInt32(Functions.Decrypt(p1)); _numero = Convert.ToInt32(Functions.Decrypt(p2)); _seq = Convert.ToInt32(Functions.Decrypt(p3));
+            } catch {
+                LoginViewModel model = new LoginViewModel();
+                return View("../Home/Login",model);
+            }
 
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
-            ProcessoViewModel processoViewModel = Exibe_Tramite(Numero_Ano, Seq);
+            string Numero_Ano = _numero.ToString() + "-" + Functions.RetornaDvProcesso(_numero) + "/" + _ano.ToString();
+            ProcessoViewModel processoViewModel = Exibe_Tramite(Numero_Ano, _seq);
             processoViewModel.CCusto_Codigo = processoViewModel.Lista_Tramite[0].CentroCustoCodigo;
-
+            processoViewModel.Seq = processoViewModel.Lista_Tramite[0].Seq;
             List<UsuariocentroCusto> _listaCC = protocoloRepository.ListaCentrocustoUsuario(Convert.ToInt32(ViewBag.UserId));
  
             List<Despacho> Lista_Despacho = protocoloRepository.Lista_Despacho();
@@ -209,13 +220,24 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Send/{Ano}/{Numero}/{Seq}")]
         [HttpGet]
-        public ViewResult Send(int Ano=0, int Numero=0, int Seq=0) {
+        public ViewResult Send(string p1="", string p2="", string p3="") {
+            if (Functions.pUserId == 0) {
+                LoginViewModel model = new LoginViewModel();
+                return View("../Home/Login", model);
+            }
+            int _ano = 0, _numero = 0, _seq = 0;
+            try {
+                _ano = Convert.ToInt32(Functions.Decrypt(p1)); _numero = Convert.ToInt32(Functions.Decrypt(p2)); _seq = Convert.ToInt32(Functions.Decrypt(p3));
+            } catch  {
+                LoginViewModel model = new LoginViewModel();
+                return View("../Home/Login", model);
+            }
+
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-
-            string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
-            ProcessoViewModel processoViewModel = Exibe_Tramite(Numero_Ano, Seq);
+            string Numero_Ano = _numero.ToString() + "-" + Functions.RetornaDvProcesso(_numero) + "/" + _ano.ToString();
+            ProcessoViewModel processoViewModel = Exibe_Tramite(Numero_Ano, _seq);
             processoViewModel.CCusto_Codigo = processoViewModel.Lista_Tramite[0].CentroCustoCodigo;
-
+            processoViewModel.Seq = processoViewModel.Lista_Tramite[0].Seq;
             List<Despacho> Lista_Despacho = protocoloRepository.Lista_Despacho();
             ViewBag.Lista_Despacho = new SelectList(Lista_Despacho, "Codigo", "Descricao",processoViewModel.Lista_Tramite[0].DespachoCodigo);
 
