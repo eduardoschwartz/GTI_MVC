@@ -180,10 +180,10 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Captcha.cs" />
-    <Compile Include="CaptchaNew.cs" />
-    <Compile Include="CaptchaResult.cs" />
-    <Compile Include="CaptchaResultNew.cs" />
+    <Compile Include="Classes\Captcha.cs" />
+    <Compile Include="Classes\CaptchaNew.cs" />
+    <Compile Include="Classes\CaptchaResult.cs" />
+    <Compile Include="Classes\CaptchaResultNew.cs" />
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImovelController.cs" />
@@ -200,7 +200,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsBoletoGuia.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Functions.cs" />
+    <Compile Include="Classes\Functions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -367,9 +367,9 @@
       <DependentUpon>Situacao_Pagamento.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="SelectListaItem.cs" />
+    <Compile Include="Classes\SelectListaItem.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
-    <Compile Include="TAcesso.cs" />
+    <Compile Include="Classes\TAcesso.cs" />
     <Compile Include="ViewModels\BoletoViewModel.cs" />
     <Compile Include="ViewModels\CertidaoViewModel.cs" />
     <Compile Include="ViewModels\DebitoListViewModel.cs" />
