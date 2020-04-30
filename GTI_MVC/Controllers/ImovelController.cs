@@ -9,10 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Web.Hosting;
 using System.Web.Mvc;
 using static GTI_Models.modelCore;
-using Boleto = GTI_Models.ReportModels.Boleto;
 
 namespace GTI_Mvc.Controllers {
 
@@ -847,12 +845,26 @@ namespace GTI_Mvc.Controllers {
 
         [Route("CadImovel")]
         [HttpGet]
-        public ViewResult CadImovel() {
+        public ViewResult CadImovel(int Codigo) {
+            ImovelDetailsViewModel model = HomeLoad(Codigo);
+            return View(model);
+        }
+
+        public ImovelDetailsViewModel HomeLoad(int Codigo) {
             ImovelDetailsViewModel model = new ImovelDetailsViewModel();
             Imovel_bll imovel_Class = new Imovel_bll("GTIconnection");
-            model.ImovelStruct= imovel_Class.Dados_Imovel(1);
-            model.Lista_Proprietario = imovel_Class.Lista_Proprietario(1, false);
-            return View(model);
+            model.ImovelStruct = imovel_Class.Dados_Imovel(Codigo);
+            model.Lista_Proprietario = imovel_Class.Lista_Proprietario(Codigo, false);
+            short _tipoEE = (short)model.ImovelStruct.EE_TipoEndereco;
+            if (_tipoEE == 0)
+                model.Endereco_Entrega = imovel_Class.Dados_Endereco(Codigo, TipoEndereco.Local);
+            else {
+                if (_tipoEE == 1)
+                    model.Endereco_Entrega = imovel_Class.Dados_Endereco(Codigo, TipoEndereco.Proprietario);
+                else
+                    model.Endereco_Entrega = imovel_Class.Dados_Endereco(Codigo, TipoEndereco.Entrega);
+            }
+            return model;
         }
 
 

@@ -20,37 +20,76 @@
 <label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline" ;>Cadastro de imóvel</label>
 <br />
 <br />
-
 @using (Html.BeginForm("CadImovel", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
-    <label style="font-weight:normal">Código:</label><label>&nbsp; @Model.ImovelStruct.Codigo.ToString("000000")</label>
-    <label style="font-weight:normal">&nbsp;&nbsp;Inscrição:</label><label>&nbsp; @Model.ImovelStruct.Inscricao</label>
+    <table style="font-size:12px">
+        <tr>
+            <td>Código:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Codigo.ToString("000000")</span>&nbsp;&nbsp;Inscrição:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Inscricao</span>       </td>
+        </tr>
+        <tr>
+            <td>Condomínio:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.NomeCondominio</span> </td>
+        </tr>
+    </table>
     <br />
     <label style="font-weight:normal;font-style:italic;text-decoration:underline;color:indigo">Proprietário(s)</label>
     <br />
-    foreach (GTI_Models.Models.ProprietarioStruct prop in Model.Lista_Proprietario) {
-        if (@prop.Principal) {
-            @prop.Nome @Html.Raw(" (Principal)");
-        } else {
-            @prop.Nome;
+    <table style="font-size:12px;font-weight:bold">
+        @foreach (GTI_Models.Models.ProprietarioStruct prop in Model.Lista_Proprietario) {
+            @Html.Raw(" <tr><td>")
+            if (@prop.Principal) {
+                @prop.Nome @Html.Raw(" (Principal)");
+            } else {
+                @prop.Nome;
+            }
+            @Html.Raw("</td></tr>")
         }
-        <br />
-    }
+    </table>
     <br />
+    <table style="font-size:12px">
+        <tr>
+            <td style="font-weight:normal;width:165px">
+                Proprietário reside no imóvel:
+            </td>
+            <td style="font-weight:bold">
+                @if (Model.ImovelStruct.ResideImovel == true) {
+                    @Html.Raw("Sim")
+                } else {
+                    @Html.Raw("Não")
+                }
+            </td>
+        </tr>
+    </table>
 
+    <br />
     <label style="font-weight:normal;font-style:italic;text-decoration:underline;color:indigo">Localização</label>
     <br />
 
-    <label style="font-weight:normal">Endereço:</label><label>&nbsp; @Model.ImovelStruct.NomeLogradouro @Html.Raw(", ") @Model.ImovelStruct.Numero.ToString() @Html.Raw(" ") @Model.ImovelStruct.Complemento</label>
-    <br />
-    <label style="font-weight:normal">Bairro:</label><label>&nbsp; @Model.ImovelStruct.NomeBairro</label>
-    <label style="font-weight:normal">&nbsp;&nbsp;CEP:</label><label>&nbsp; @Model.ImovelStruct.Cep</label>
-    <br />
-    <label style="font-weight:normal">Lote:</label><label>&nbsp; @Model.ImovelStruct.LoteOriginal</label>
-    <label style="font-weight:normal">&nbsp;&nbsp;Quadra:</label><label>&nbsp; @Model.ImovelStruct.QuadraOriginal</label>
-    <br />
+    <table style="font-size:12px">
+        <tr>
+            <td>Endereço:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.NomeLogradouro @Html.Raw(", ") @Model.ImovelStruct.Numero.ToString() @Html.Raw(" ") @Model.ImovelStruct.Complemento</span></td>
+        </tr>
+        <tr>
+            <td>Bairro:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.NomeBairro</span>&nbsp;&nbsp;CEP:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Cep</span></td>
+        </tr>
+        <tr>
+            <td>Lote:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.LoteOriginal</span>&nbsp;&nbsp;Quadra:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.QuadraOriginal</span></td>
+        </tr>
+    </table>
 
+
+    <br />
     <label style="font-weight:normal;font-style:italic;text-decoration:underline;color:indigo">Endereço de Entrega</label>
     <br />
+    <table style="font-size:12px">
+        <tr>
+            <td>Endereço:&nbsp; <span style="font-weight:bold">@Model.Endereco_Entrega.Endereco @Html.Raw(", ") @Model.Endereco_Entrega.Numero.ToString() @Html.Raw(" ") @Model.Endereco_Entrega.Complemento</span></td>
+        </tr>
+        <tr>
+            <td>Bairro:&nbsp; <span style="font-weight:bold">@Model.Endereco_Entrega.NomeBairro</span>&nbsp;&nbsp;CEP:&nbsp; <span style="font-weight:bold">@Model.Endereco_Entrega.Cep</span></td>
+        </tr>
+        <tr>
+            <td>Cidade:&nbsp; <span style="font-weight:bold">@Model.Endereco_Entrega.NomeCidade</span>&nbsp;&nbsp;UF:&nbsp; <span style="font-weight:bold">@Model.Endereco_Entrega.UF</span></td>
+        </tr>
+    </table>
 
 }
 

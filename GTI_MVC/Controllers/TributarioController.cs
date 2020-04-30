@@ -1120,17 +1120,7 @@ namespace GTI_Mvc.Controllers {
         [Route("GateBank")]
         [HttpGet]
         public ActionResult GateBank(string p1,string p2,string p3,string p4,string p5,string p6,string p7,string p8,string p9) {
-            /*
-             p1-nome
-             p2-endereco
-             p3-data dam
-             p4-documento
-             p5-nosso numero
-             p6-valor
-             p7-cidade
-             p8-uf
-             p9-cep
-             */
+            /*p1-nome,p2-endereco,p3-data dam,p4-documento,p5-nosso numero,p6-valor,p7-cidade,p8-uf,p9-cep*/
 
 
             if (string.IsNullOrWhiteSpace(p1)) {
@@ -1156,6 +1146,10 @@ namespace GTI_Mvc.Controllers {
                 //model.Uf = tAcesso_Class.DecryptGTI(p8);
                 //model.Valor_Boleto_Full = _valor_boleto_full;
                 //model.Cep= tAcesso_Class.DecryptGTI(p9);
+
+                if (p3.Length > 8)
+                    p3 = p3.Substring(0, 2) + p3.Substring(3, 2) + StringRight(p3, 4);
+
                 string _nosso_numero = p5;
                 string _valor_boleto = p6;
                 string _valor_boleto_full = (Convert.ToDecimal(_valor_boleto) / 100).ToString("#0.00");
