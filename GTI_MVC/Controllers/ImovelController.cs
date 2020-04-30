@@ -845,10 +845,18 @@ namespace GTI_Mvc.Controllers {
 
         [Route("CadImovel")]
         [HttpGet]
-        public ViewResult CadImovel(int Codigo) {
-            ImovelDetailsViewModel model = HomeLoad(Codigo);
+        public ViewResult CadImovel() {
+            ImovelDetailsViewModel model = new ImovelDetailsViewModel();
             return View(model);
         }
+
+        [Route("CadImovel")]
+        [HttpPost]
+        public ViewResult CadImovel(ImovelDetailsViewModel model) {
+            model = HomeLoad(Convert.ToInt32( model.Inscricao));
+            return View(model);
+        }
+
 
         public ImovelDetailsViewModel HomeLoad(int Codigo) {
             ImovelDetailsViewModel model = new ImovelDetailsViewModel();

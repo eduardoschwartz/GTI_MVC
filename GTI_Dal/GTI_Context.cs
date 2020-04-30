@@ -148,5 +148,6 @@ namespace GTI_Dal {
         public DbSet<Livro> Livro { get; set; }
         public DbSet<Redesim_viabilidade> Redesim_viabilidade { get; set; }
         public DbSet<dados_imovel_web> Dados_Imovel { get; set; }
+        public DbSet<Encargo_cvd> Encargo_Cvd { get; set; }
     }
 }

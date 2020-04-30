@@ -21,6 +21,14 @@
 <br />
 <br />
 @using (Html.BeginForm("CadImovel", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+<label style="font-weight:normal">Código Reduzido:&nbsp;&nbsp;</label>@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })
+<label>&nbsp;&nbsp;</label> <button type="submit" class="btn btn-primary"> Consultar</button>
+
+    <br />
+}
+
+@if (@Model.ImovelStruct != null) {
+
     <table style="font-size:12px">
         <tr>
             <td>Código:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Codigo.ToString("000000")</span>&nbsp;&nbsp;Inscrição:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Inscricao</span>       </td>
