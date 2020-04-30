@@ -487,6 +487,7 @@
     <Content Include="Views\Tributario\GateBank.cshtml" />
     <Content Include="Views\Tributario\SegundaVia_Parcelamento.cshtml" />
     <Content Include="Views\Home\Login_update.cshtml" />
+    <Content Include="Views\Imovel\CadImovel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -845,8 +845,17 @@ namespace GTI_Mvc.Controllers {
             return null;
         }
 
+        [Route("CadImovel")]
+        [HttpGet]
+        public ViewResult CadImovel() {
+            ImovelDetailsViewModel model = new ImovelDetailsViewModel();
+            Imovel_bll imovel_Class = new Imovel_bll("GTIconnection");
+            model.ImovelStruct= imovel_Class.Dados_Imovel(1);
+            model.Lista_Proprietario = imovel_Class.Lista_Proprietario(1, false);
+            return View(model);
+        }
+
+
+
     }
-
-
-    
 }

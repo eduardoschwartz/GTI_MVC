@@ -1,0 +1,60 @@
+﻿@model GTI_Mvc.ViewModels.ImovelDetailsViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Cadastro de imóvel";
+}
+
+<style>
+    .textBoxBlue {
+        height: 25px;
+        position: relative;
+        border: 1px solid #0094ff;
+        border-color: rgba(0, 0, 0, .14);
+        background-color: white;
+        font-size: 14px;
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
+    }
+</style>
+
+<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline" ;>Cadastro de imóvel</label>
+<br />
+<br />
+
+@using (Html.BeginForm("CadImovel", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+    <label style="font-weight:normal">Código:</label><label>&nbsp; @Model.ImovelStruct.Codigo.ToString("000000")</label>
+    <label style="font-weight:normal">&nbsp;&nbsp;Inscrição:</label><label>&nbsp; @Model.ImovelStruct.Inscricao</label>
+    <br />
+    <label style="font-weight:normal;font-style:italic;text-decoration:underline;color:indigo">Proprietário(s)</label>
+    <br />
+    foreach (GTI_Models.Models.ProprietarioStruct prop in Model.Lista_Proprietario) {
+        if (@prop.Principal) {
+            @prop.Nome @Html.Raw(" (Principal)");
+        } else {
+            @prop.Nome;
+        }
+        <br />
+    }
+    <br />
+
+    <label style="font-weight:normal;font-style:italic;text-decoration:underline;color:indigo">Localização</label>
+    <br />
+
+    <label style="font-weight:normal">Endereço:</label><label>&nbsp; @Model.ImovelStruct.NomeLogradouro @Html.Raw(", ") @Model.ImovelStruct.Numero.ToString() @Html.Raw(" ") @Model.ImovelStruct.Complemento</label>
+    <br />
+    <label style="font-weight:normal">Bairro:</label><label>&nbsp; @Model.ImovelStruct.NomeBairro</label>
+    <label style="font-weight:normal">&nbsp;&nbsp;CEP:</label><label>&nbsp; @Model.ImovelStruct.Cep</label>
+    <br />
+    <label style="font-weight:normal">Lote:</label><label>&nbsp; @Model.ImovelStruct.LoteOriginal</label>
+    <label style="font-weight:normal">&nbsp;&nbsp;Quadra:</label><label>&nbsp; @Model.ImovelStruct.QuadraOriginal</label>
+    <br />
+
+    <label style="font-weight:normal;font-style:italic;text-decoration:underline;color:indigo">Endereço de Entrega</label>
+    <br />
+
+}
+
+<br />
+@Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home")
+
+

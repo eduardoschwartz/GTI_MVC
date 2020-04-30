@@ -108,6 +108,7 @@ namespace GTI_Dal.Classes {
                 var reg = (from p in db.Proprietario
                            join c in db.Cidadao on p.Codcidadao equals c.Codcidadao
                            where p.Codreduzido == CodigoImovel
+                           orderby p.Principal descending 
                            select new { p.Codcidadao, c.Nomecidadao, p.Tipoprop, p.Principal,c.Cpf,c.Cnpj,c.Rg });
 
                 if (Principal)
