@@ -21,17 +21,17 @@
 <br />
 <br />
 @using (Html.BeginForm("CadImovel", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
-<label style="font-weight:normal">Código Reduzido:&nbsp;&nbsp;</label>@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })
-<label>&nbsp;&nbsp;</label> <button type="submit" class="btn btn-primary"> Consultar</button>
-
+    <label style="font-weight:normal">Código Reduzido:&nbsp;&nbsp;</label>@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§', event)" })
+    <label>&nbsp;&nbsp;</label>
+    <button type="submit" class="btn btn-primary"> Consultar</button>
     <br />
 }
 
-@if (@Model.ImovelStruct != null) {
+@if (@Model.ImovelStruct != null && Model.ImovelStruct.EE_TipoEndereco != null) {
 
     <table style="font-size:12px">
         <tr>
-            <td>Código:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Codigo.ToString("000000")</span>&nbsp;&nbsp;Inscrição:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Inscricao</span>       </td>
+            <td>Código:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Codigo.ToString("00000")</span>&nbsp;&nbsp;Inscrição:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Inscricao</span>       </td>
         </tr>
         <tr>
             <td>Condomínio:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.NomeCondominio</span> </td>
@@ -74,6 +74,7 @@
     <table style="font-size:12px">
         <tr>
             <td>Endereço:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.NomeLogradouro @Html.Raw(", ") @Model.ImovelStruct.Numero.ToString() @Html.Raw(" ") @Model.ImovelStruct.Complemento</span></td>
+
         </tr>
         <tr>
             <td>Bairro:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.NomeBairro</span>&nbsp;&nbsp;CEP:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Cep</span></td>
@@ -83,11 +84,25 @@
         </tr>
     </table>
 
-
     <br />
     <label style="font-weight:normal;font-style:italic;text-decoration:underline;color:indigo">Endereço de Entrega</label>
     <br />
     <table style="font-size:12px">
+        <tr>
+            <td>
+                Tipo de Endereço:&nbsp; <span style="font-weight:bold">
+                    @if (Model.ImovelStruct.EE_TipoEndereco == 0) {
+                        @Html.Raw("Endereço de Localização")
+                    } else {
+                        if (Model.ImovelStruct.EE_TipoEndereco == 1) {
+                            @Html.Raw("Endereço do Proprietário")
+                        } else {
+                            @Html.Raw("Endereço de Entrega")
+                        }
+                    }
+                </span>
+            </td>
+        </tr>
         <tr>
             <td>Endereço:&nbsp; <span style="font-weight:bold">@Model.Endereco_Entrega.Endereco @Html.Raw(", ") @Model.Endereco_Entrega.Numero.ToString() @Html.Raw(" ") @Model.Endereco_Entrega.Complemento</span></td>
         </tr>
@@ -99,9 +114,63 @@
         </tr>
     </table>
 
+    <br />
+    <label style="font-weight:normal;font-style:italic;text-decoration:underline;color:indigo">Dados Territoriais</label>
+    <br />
+    <table style="font-size:12px">
+        <tr>
+            <td>Área do Terreno:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Area_Terreno.ToString("#0.00")  m²</span> &nbsp;&nbsp;Fração Ideal: <span style="font-weight:bold">&nbsp;@Model.ImovelStruct.FracaoIdeal.ToString("#0.00") m²</span></td>
+        </tr>
+        <tr>
+            <td>Topografia:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Topografia_Nome</span>&nbsp;&nbsp;Situação:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Situacao_Nome</span></td>
+        </tr>
+        <tr>
+            <td>Categoria:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Categoria_Nome</span>&nbsp;&nbsp;Pedologia:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Pedologia_Nome</span></td>
+        </tr>
+        <tr>
+            <td>Benfeitoria:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Benfeitoria_Nome</span>&nbsp;&nbsp;Uso Construção:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Uso_terreno_Nome</span></td>
+        </tr>
+
+    </table>
+
 }
 
 <br />
+<div class="form-group row">
+    <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+</div>
+<br />
 @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home")
 
+@section scripts{
 
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+        });
+
+        function ValidateForm() {
+            ClearError();
+            var _codigo = document.getElementById('codigo').value.trim();
+            if (_codigo == "") {
+                document.getElementById('errorLabel').innerHTML = "Digite o código do imóvel!";
+                return false;
+            } else {
+                if (_codigo >= 40000) {
+                    document.getElementById('errorLabel').innerHTML = "Imóvel não cadastrado";
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+
+        function ClearError() {
+            document.getElementById('errorLabel').innerHTML = "";
+        }
+
+    </script>
+}

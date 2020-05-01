@@ -854,6 +854,9 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ViewResult CadImovel(ImovelDetailsViewModel model) {
             model = HomeLoad(Convert.ToInt32( model.Inscricao));
+            if (model.ImovelStruct.EE_TipoEndereco == null) {
+                ViewBag.Result = "Imóvel não cadastrado.";
+            }
             return View(model);
         }
 
@@ -863,14 +866,16 @@ namespace GTI_Mvc.Controllers {
             Imovel_bll imovel_Class = new Imovel_bll("GTIconnection");
             model.ImovelStruct = imovel_Class.Dados_Imovel(Codigo);
             model.Lista_Proprietario = imovel_Class.Lista_Proprietario(Codigo, false);
-            short _tipoEE = (short)model.ImovelStruct.EE_TipoEndereco;
-            if (_tipoEE == 0)
-                model.Endereco_Entrega = imovel_Class.Dados_Endereco(Codigo, TipoEndereco.Local);
-            else {
-                if (_tipoEE == 1)
-                    model.Endereco_Entrega = imovel_Class.Dados_Endereco(Codigo, TipoEndereco.Proprietario);
-                else
-                    model.Endereco_Entrega = imovel_Class.Dados_Endereco(Codigo, TipoEndereco.Entrega);
+            if (model.ImovelStruct.EE_TipoEndereco != null) {
+                short _tipoEE = (short)model.ImovelStruct.EE_TipoEndereco;
+                if (_tipoEE == 0)
+                    model.Endereco_Entrega = imovel_Class.Dados_Endereco(Codigo, TipoEndereco.Local);
+                else {
+                    if (_tipoEE == 1)
+                        model.Endereco_Entrega = imovel_Class.Dados_Endereco(Codigo, TipoEndereco.Proprietario);
+                    else
+                        model.Endereco_Entrega = imovel_Class.Dados_Endereco(Codigo, TipoEndereco.Entrega);
+                }
             }
             return model;
         }

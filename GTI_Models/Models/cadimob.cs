@@ -23,7 +23,7 @@ namespace GTI_Models.Models {
         public short? Li_codbairro { get; set; }
         public string Li_quadras { get; set; }
         public string Li_lotes { get; set; }
-        public decimal? Dt_areaterreno { get; set; }
+        public decimal Dt_areaterreno { get; set; }
         public short? Dt_codusoterreno { get; set; }
         public short? Dt_codbenf { get; set; }
         public short? Dt_codtopog { get; set; }
@@ -31,7 +31,7 @@ namespace GTI_Models.Models {
         public short? Dt_codsituacao { get; set; }
         public short? Dt_codpedol { get; set; }
         public string Dt_numagua { get; set; }
-        public decimal? Dt_fracaoideal { get; set; }
+        public decimal Dt_fracaoideal { get; set; }
         public short? Dc_qtdeedif { get; set; }
         public short? Dc_qtdepav { get; set; }
         public short Ee_tipoend { get; set; }
@@ -74,8 +74,8 @@ namespace GTI_Models.Models {
         public bool? ResideImovel { get; set; }
         public string Cep { get; set; }
         public short? EE_TipoEndereco { get; set; }
-        public decimal? FracaoIdeal { get; set; }
-        public decimal? Area_Terreno { get; set; }
+        public decimal FracaoIdeal { get; set; }
+        public decimal Area_Terreno { get; set; }
         public short? Uso_terreno { get; set; }
         public string Uso_terreno_Nome { get; set; }
         public short? Benfeitoria { get; set; }
