@@ -611,9 +611,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Damb")]
         [HttpPost]
-#pragma warning disable IDE0060 // Remove unused parameter
         public ActionResult Damb(CertidaoViewModel model,int Codigo=0) {
-#pragma warning restore IDE0060 // Remove unused parameter
             if (model.CpfValue != null) {
                 if (!ValidaCpf(model.CpfValue)) {
                     ViewBag.Result = "CPF inválido.";
@@ -626,7 +624,9 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 }
             }
-
+            if (Codigo == 0) {
+                
+            }
             if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
                 ViewBag.Result = "Código de verificação inválido.";
                 return View(model);
@@ -871,10 +871,31 @@ namespace GTI_Mvc.Controllers {
                     Soma_Total=_debitos.Soma_Total,
                     Soma_Honorario=_debitos.Soma_Honorario,
                     Pt=_debitos.Codigo_Situacao==38?"S":"N",
-                    Ep=_debitos.Codigo_Situacao==39?"S":"N"
+                    Ep= _debitos.Codigo_Situacao == 39 ? "S" : "N"
                 };
+                if (Convert.ToDateTime(editorViewModel.Data_Vencimento).Year == 2020 && Convert.ToDateTime(editorViewModel.Data_Vencimento).Month>3 && Convert.ToDateTime(editorViewModel.Data_Vencimento).Month < 7) {
+                    editorViewModel.Soma_Juros = 0;
+                    editorViewModel.Soma_Multa = 0;
+                    editorViewModel.Soma_Total = editorViewModel.Soma_Principal+editorViewModel.Soma_Correcao;
+                    var editorViewModel2 = new SelectDebitoEditorViewModel() {
+                        Id = _linha,
+                        Exercicio = _debitos.Ano_Exercicio,
+                        Lancamento = _debitos.Codigo_Lancamento,
+                        Seq = _debitos.Sequencia_Lancamento,
+                        Parcela = (short)_debitos.Numero_Parcela,
+                        Complemento = _debitos.Complemento,
+                        Selected = false,
+                        Soma_Principal = _debitos.Soma_Principal,
+                        Soma_Juros = _debitos.Soma_Juros,
+                        Soma_Multa = _debitos.Soma_Multa,
+                        Soma_Correcao = _debitos.Soma_Correcao,
+                        Soma_Total = _debitos.Soma_Total
+                    };
+                    model.Decreto.Add(editorViewModel2);
+                }
                 _linha++;
                 model.Debito.Add(editorViewModel);
+                
             }
             model.Soma_Principal = _somaP;
             model.Soma_Juros = _somaJ;

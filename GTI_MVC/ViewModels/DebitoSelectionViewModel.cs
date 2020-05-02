@@ -7,6 +7,7 @@ using System.Linq;
 namespace GTI_Mvc.ViewModels {
     public class DebitoSelectionViewModel {
         public List<SelectDebitoEditorViewModel> Debito { get; set; }
+        public List<SelectDebitoEditorViewModel> Decreto { get; set; }
         [Display(Name = "Inscrição Municipal")]
         public int Inscricao { get; set; }
         public DateTime Data_Vencimento { get; set; }
@@ -24,6 +25,7 @@ namespace GTI_Mvc.ViewModels {
 
         public DebitoSelectionViewModel() {
             this.Debito = new List<SelectDebitoEditorViewModel>();
+            this.Decreto = new List<SelectDebitoEditorViewModel>();
         }
 
         public IEnumerable<int> getSelectedIds() {
