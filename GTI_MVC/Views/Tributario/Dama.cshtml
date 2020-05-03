@@ -17,31 +17,31 @@
     }
 </style>
 
-<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline" ;>Consulta e atualização de débitos vencidos</label><br />
+<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline" ;>Consulta e atualização de débitos vencidos</label>
+<br />
 <br />
 <br />
 
 @using (Html.BeginForm("Dama", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
 
-    <table width="500px">
-        <tr >
+    <table style="width:auto">
+        <tr>
             <td style="padding-top:7px; width:150px">@Html.LabelFor(m => m.DataVencimento, new { @style = "font-weight:normal" })</td>
             <td style="width:300px">@Html.TextBoxFor(m => m.DataVencimento, new { @id = "vencto", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })</td>
+
         </tr>
     </table>
     <br />
-    <p style="color:red;">
-        Conforme Decreto Municipal Nº 7.162, de 30 de abril de 2020, Art. 1º fica prorrogado o pagamento de juros e multa <br />
-        decorrente do pagamento extemporâneo de todos os tributos municipais devidos pelo pagamento em atraso das parcelas <br />
-        dos meses de abril, maio e junho, cujo pagamento deverá ser realizado dentro do corrente exercício, em data a ser<br />
-        definida.
-    </p>
+
+    <img src="~/Images/decreto.png" />
+   
+    <br />
     <br />
     <div class="col-sm-10">
         &nbsp;&nbsp;<button type="submit" class="green_button"> Consultar</button>
     </div>
     <br />
-   
+
     <br />
     <div class="form-group row">
         <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>

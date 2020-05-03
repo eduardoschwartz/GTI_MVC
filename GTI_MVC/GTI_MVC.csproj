@@ -395,6 +395,7 @@
     <Content Include="Images\acima.gif" />
     <Content Include="Images\alterar.gif" />
     <Content Include="Images\brasaocor.png" />
+    <Content Include="Images\decreto.png" />
     <Content Include="Images\enviar.png" />
     <Content Include="Images\inserir_local.png" />
     <Content Include="Images\logobb.png" />

@@ -26,10 +26,10 @@
     @Html.Hidden("indicadorPessoa", @Model.CpfCnpjLabel.Length == 14 ? 2 : 1)
     @Html.Hidden("cpfCnpj", Regex.Replace(@Model.CpfCnpjLabel, " [^0-9]", ""))
     @Html.Hidden("tpPagamento", 2)
-    @Html.Hidden("dtVenc",@Model.Data_Vencimento_String)
+    @Html.Hidden("dtVenc", @Model.Data_Vencimento_String)
     @Html.Hidden("qtdPontos", 0)
     @Html.Hidden("valor", Convert.ToInt64(Model.Valor_Boleto))
-    @Html.Hidden("refTran", String.IsNullOrEmpty(@Model.RefTran)?0: Convert.ToInt64(@Model.RefTran))
+    @Html.Hidden("refTran", String.IsNullOrEmpty(@Model.RefTran) ? 0 : Convert.ToInt64(@Model.RefTran))
     @Html.Hidden("idConv", 317203)
 
     <table id="tblHeader" style="font-size:13px">
@@ -156,4 +156,8 @@
             </div>
         </div>
     </div>
+    <br />
+    @Html.ActionLink("Consultar outra inscrição", "Dama", "Tributario")
+    <br />
+    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home")
 }

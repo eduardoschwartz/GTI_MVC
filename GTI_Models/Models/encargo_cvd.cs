@@ -36,6 +36,8 @@ namespace GTI_Models.Models {
         [Key]
         [Column(Order = 11)]
         public byte Complemento_enc { get; set; }
+        [Key]
+        [Column(Order = 12)]
         public int Documento { get; set; }
     }
 }

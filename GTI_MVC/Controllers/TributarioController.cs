@@ -1107,11 +1107,11 @@ namespace GTI_Mvc.Controllers {
 
                                 Encargo_cvd regCvd = new Encargo_cvd {
                                     Codigo = model.Inscricao,
-                                    Exercicio = 2020,
-                                    Lancamento = 85,
-                                    Sequencia = _seqDec,
-                                    Parcela = 1,
-                                    Complemento = 0,
+                                    Exercicio = (short)deb.Exercicio,
+                                    Lancamento = (short)deb.Lancamento,
+                                    Sequencia = (short)deb.Seq,
+                                    Parcela = (byte)deb.Parcela,
+                                    Complemento = (byte)deb.Complemento,
                                     Exercicio_enc = 2020,
                                     Lancamento_enc = 85,
                                     Sequencia_enc = _seqDec,
