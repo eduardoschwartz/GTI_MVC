@@ -49,10 +49,12 @@
         <td style="width:60px" align="right">
             @Html.DisplayFor(model => model.Soma_Juros)
             @Html.HiddenFor(model => model.Soma_Juros)
+            @Html.HiddenFor(model => model.Soma_Juros_Hidden)
         </td>
         <td style="width:60px" align="right">
             @Html.DisplayFor(model => model.Soma_Multa)
             @Html.HiddenFor(model => model.Soma_Multa)
+            @Html.HiddenFor(model => model.Soma_Multa_Hidden)
         </td>
         <td style="width:60px" align="right">
             @Html.DisplayFor(model => model.Soma_Correcao)

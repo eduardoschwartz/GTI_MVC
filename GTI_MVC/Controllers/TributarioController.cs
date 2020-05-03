@@ -866,7 +866,9 @@ namespace GTI_Mvc.Controllers {
                     Selected = false,
                     Soma_Principal=_debitos.Soma_Principal,
                     Soma_Juros=_debitos.Soma_Juros,
+                    Soma_Juros_Hidden=_debitos.Soma_Juros,
                     Soma_Multa=_debitos.Soma_Multa,
+                    Soma_Multa_Hidden=_debitos.Soma_Multa,
                     Soma_Correcao=_debitos.Soma_Correcao,
                     Soma_Total=_debitos.Soma_Total,
                     Soma_Honorario=_debitos.Soma_Honorario,
@@ -877,21 +879,6 @@ namespace GTI_Mvc.Controllers {
                     editorViewModel.Soma_Juros = 0;
                     editorViewModel.Soma_Multa = 0;
                     editorViewModel.Soma_Total = editorViewModel.Soma_Principal+editorViewModel.Soma_Correcao;
-                    var editorViewModel2 = new SelectDebitoEditorViewModel() {
-                        Id = _linha,
-                        Exercicio = _debitos.Ano_Exercicio,
-                        Lancamento = _debitos.Codigo_Lancamento,
-                        Seq = _debitos.Sequencia_Lancamento,
-                        Parcela = (short)_debitos.Numero_Parcela,
-                        Complemento = _debitos.Complemento,
-                        Selected = false,
-                        Soma_Principal = _debitos.Soma_Principal,
-                        Soma_Juros = _debitos.Soma_Juros,
-                        Soma_Multa = _debitos.Soma_Multa,
-                        Soma_Correcao = _debitos.Soma_Correcao,
-                        Soma_Total = _debitos.Soma_Total
-                    };
-                    model.Decreto.Add(editorViewModel2);
                 }
                 _linha++;
                 model.Debito.Add(editorViewModel);
@@ -902,6 +889,8 @@ namespace GTI_Mvc.Controllers {
             model.Soma_Multa = _somaM;
             model.Soma_Correcao = _somaC;
             model.Soma_Total = _somaT;
+            model.Soma_Juros_Hidden = _somaJ;
+            model.Soma_Multa_Hidden = _somaM;
             model.Plano = nPlano;
             return View(model);
         }
