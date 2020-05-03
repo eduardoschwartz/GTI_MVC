@@ -352,6 +352,11 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Ultima_Seq_AR(Codigo, Ano);
         }
 
+        public short Retorna_Ultima_Seq_Decreto(int Codigo, int Ano) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Retorna_Ultima_Seq_Decreto(Codigo, Ano);
+        }
+
 
         ///<summary> Retorna a lista de documentos de uma parcela
         ///</summary>
@@ -1271,6 +1276,12 @@ namespace GTI_Bll.Classes {
         public Exception Insert_Debito_Tributo(Debitotributo Reg) {
             Tributario_Data obj = new Tributario_Data(_connection);
             Exception ex = obj.Insert_Debito_Tributo(Reg);
+            return ex;
+        }
+
+        public Exception Insert_Encargo_CVD(Encargo_cvd Reg) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            Exception ex = obj.Insert_Encargo_CVD(Reg);
             return ex;
         }
 

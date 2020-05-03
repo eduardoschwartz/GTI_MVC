@@ -633,8 +633,12 @@ namespace GTI_Dal.Classes {
             }
         }
 
-
-
+        public short Retorna_Ultima_Seq_Decreto(int Codigo, int Ano) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var cntCod = (from c in db.Debitoparcela where c.Codreduzido == Codigo && c.Anoexercicio == Ano && c.Codlancamento == 85 orderby c.Seqlancamento descending select c.Seqlancamento).FirstOrDefault();
+                return Convert.ToInt16(cntCod);
+            }
+        }
 
         public Exception Alterar_Observacao_Codigo(Debitoobservacao reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
@@ -2347,6 +2351,37 @@ Proximo:;
                 return null;
             }
         }
+
+        public Exception Insert_Encargo_CVD(Encargo_cvd Reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[12];
+                Parametros[0] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
+                Parametros[1] = new SqlParameter { ParameterName = "@exercicio", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Exercicio };
+                Parametros[2] = new SqlParameter { ParameterName = "@lancamento", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Lancamento };
+                Parametros[3] = new SqlParameter { ParameterName = "@sequencia", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Sequencia };
+                Parametros[4] = new SqlParameter { ParameterName = "@parcela", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Parcela };
+                Parametros[5] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Complemento };
+                Parametros[6] = new SqlParameter { ParameterName = "@exercicio_enc", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Exercicio_enc };
+                Parametros[7] = new SqlParameter { ParameterName = "@lancamento_enc", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Lancamento_enc };
+                Parametros[8] = new SqlParameter { ParameterName = "@sequencia_enc", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Sequencia_enc };
+                Parametros[9] = new SqlParameter { ParameterName = "@parcela_enc", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Parcela_enc };
+                Parametros[10] = new SqlParameter { ParameterName = "@complemento_enc", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Complemento_enc };
+                Parametros[11] = new SqlParameter { ParameterName = "@documento", SqlDbType = SqlDbType.Int, SqlValue = Reg.Documento };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO encargo_cvd(codigo,exercicio,lancamento,sequencia,parcela,complemento,exercicio_enc,lancamento_enc," +
+                    "sequencia_enc,parcela_enc,complemento_enc,documento) VALUES(@codigo,@exercicio,@lancamento,@sequencia,@parcela,@complemento,@exercicio_enc," +
+                    "@lancamento_enc,@sequencia_enc,@parcela_enc,@complemento_enc,@documento)", Parametros); ;
+
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+
 
         public List<Origemreparc> Lista_Origem_Parcelamento(string NumeroProcesso) {
             using (GTI_Context db = new GTI_Context(_connection)) {

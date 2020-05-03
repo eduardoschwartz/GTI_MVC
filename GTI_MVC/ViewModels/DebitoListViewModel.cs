@@ -23,6 +23,8 @@ namespace GTI_Mvc.ViewModels {
         public decimal Soma_Correcao { get; set; }
         public decimal Soma_Total { get; set; }
         public decimal Soma_Honorario { get; set; }
+        public decimal Soma_Juros_Hidden { get; set; }
+        public decimal Soma_Multa_Hidden { get; set; }
         public string RefTran { get; set; }
         public string Valor_Boleto { get; set; }
         public string Data_Vencimento_String { get; set; }
