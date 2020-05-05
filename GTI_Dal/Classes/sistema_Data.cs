@@ -75,6 +75,13 @@ namespace GTI_Dal.Classes {
                     var Sql2 = (from m in db.Mobiliario where m.Cpf == cpf select m.Razaosocial).FirstOrDefault();
                     if (Sql2 != null)
                         _nome = Sql2.ToString();
+                    else {
+                        var Sql3 = (from i in db.Cadimob join p in db.Proprietario on i.Codreduzido equals p.Codreduzido join c in db.Cidadao on p.Codcidadao equals c.Codcidadao
+                                    where c.Cpf==cpf select c.Nomecidadao).FirstOrDefault();
+                        if (Sql3!= null)
+                            _nome = Sql3.ToString();
+
+                    }
                 }
             }
             return _nome;
