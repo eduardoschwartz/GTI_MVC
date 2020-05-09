@@ -866,6 +866,7 @@ namespace GTI_Mvc.Controllers {
             Imovel_bll imovel_Class = new Imovel_bll("GTIconnection");
             model.ImovelStruct = imovel_Class.Dados_Imovel(Codigo);
             model.Lista_Proprietario = imovel_Class.Lista_Proprietario(Codigo, false);
+            model.Lista_Areas = imovel_Class.Lista_Area(Codigo);
             if (model.ImovelStruct.EE_TipoEndereco != null) {
                 short _tipoEE = (short)model.ImovelStruct.EE_TipoEndereco;
                 if (_tipoEE == 0)

@@ -80,7 +80,7 @@
             <td>Bairro:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.NomeBairro</span>&nbsp;&nbsp;CEP:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Cep</span></td>
         </tr>
         <tr>
-            <td>Lote:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.LoteOriginal</span>&nbsp;&nbsp;Quadra:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.QuadraOriginal</span></td>
+            <td style="a">Lote:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.LoteOriginal</span>&nbsp;&nbsp;Quadra:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.QuadraOriginal</span></td>
         </tr>
     </table>
 
@@ -131,6 +131,40 @@
             <td>Benfeitoria:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Benfeitoria_Nome</span>&nbsp;&nbsp;Uso Construção:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.Uso_terreno_Nome</span></td>
         </tr>
 
+    </table>
+
+    <br />
+    <label style="font-weight:normal;font-style:italic;text-decoration:underline;color:indigo">Áreas Construidas</label>
+    <br />
+    <table class="table table-condensed" style="font-size:12px;width:500px">
+        <thead style="background-color:darkslateblue;color:whitesmoke">
+            <tr style="height:10px">
+                <td style="text-align:center">Seq</td>
+                <td>Uso</td>
+                <td>Tipo</td>
+                <td>Categoria</td>
+                <td style="text-align:right">Área m²</td>
+            </tr>
+        </thead>
+        @foreach (GTI_Models.Models.AreaStruct area in Model.Lista_Areas) {
+            @Html.Raw(" <tr>")
+            @Html.Raw("<td style=" + "text-align:center" + " >")
+            @area.Seq ;
+            @Html.Raw("</td>")
+            @Html.Raw(" <td>")
+            @area.Uso_Nome ;
+            @Html.Raw("</td>")
+            @Html.Raw(" <td>")
+            @area.Tipo_Nome ;
+            @Html.Raw("</td>")
+            @Html.Raw(" <td>")
+            @area.Categoria_Nome ;
+            @Html.Raw("</td>")
+            @Html.Raw("<td style=" + "text-align:right" + " >")
+            @area.Area ;
+            @Html.Raw("</td>")
+            @Html.Raw("</tr>")
+        }
     </table>
 
 }

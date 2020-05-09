@@ -10,6 +10,7 @@ namespace GTI_Mvc.ViewModels {
         public ImovelStruct ImovelStruct { get; set; }
         public List<ProprietarioStruct> Lista_Proprietario { get; set; }
         public EnderecoStruct Endereco_Entrega { get; set; }
+        public List<AreaStruct> Lista_Areas { get; set; }
         [Display(Name = "Inscrição Municipal")]
         public string Inscricao { get; set; }
         public string CpfCnpjLabel { get; set; }
