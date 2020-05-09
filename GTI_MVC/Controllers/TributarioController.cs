@@ -248,11 +248,13 @@ namespace GTI_Mvc.Controllers {
                 
                 if (model.CpfValue != null) {
                     sNome = sistemaRepository.Nome_por_Cpf(RetornaNumero(model.CpfValue));
-                    _lista = empresaRepository.Retorna_Codigo_por_CPF(RetornaNumero(model.CpfValue));
+                    _lista = sistemaRepository.Lista_Codigos_Documento(RetornaNumero(model.CpfValue), TipoDocumento.Cpf);
+//                    _lista = empresaRepository.Retorna_Codigo_por_CPF(RetornaNumero(model.CpfValue));
                 } else {
                     if (model.CnpjValue != null) {
                         sNome = sistemaRepository.Nome_por_Cnpj(RetornaNumero(model.CnpjValue));
-                        _lista = empresaRepository.Retorna_Codigo_por_CNPJ(RetornaNumero(model.CnpjValue));
+                        _lista = sistemaRepository.Lista_Codigos_Documento(RetornaNumero(model.CnpjValue), TipoDocumento.Cnpj);
+//                        _lista = empresaRepository.Retorna_Codigo_por_CNPJ(RetornaNumero(model.CnpjValue));
                     }
                 }
                 if (_lista.Count == 0) {
@@ -1074,7 +1076,7 @@ namespace GTI_Mvc.Controllers {
                         Numparcela = 1,
                         Codcomplemento = 0,
                         Statuslanc = 3,
-                        Datavencimento = Convert.ToDateTime("30/07/2020"),
+                        Datavencimento = Convert.ToDateTime("30/12/2020"),
                         Datadebase = DateTime.Now,
                         Userid = 236
                     };
