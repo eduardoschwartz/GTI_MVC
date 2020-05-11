@@ -6,17 +6,13 @@
     ViewData["Title"] = "Adicionar local";
 }
 
-<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-<link href="~/css/gti.css" rel="stylesheet" />
-
-<label style="color:brown;font-size:16px;font-style:italic">Adicionar local de tramitação</label>
 
 <style>
     .tableContainer {
         color: dodgerblue;
         border-spacing: 10px;
         empty-cells: show;
-        width: 100%;
+        /*width: 100%;*/
         text-align: left;
         font-size: 12px;
     }
@@ -25,95 +21,106 @@
             white-space: nowrap;
             text-align: left;
         }
+
+    .center {
+        margin: auto;
+        width: 850px;
+        border: 1px solid rgba(0,0,0,0.24);
+        padding: 20px;
+        box-shadow: 0 .1em 0.5em #000;
+        border-radius: 13px;
+    }
 </style>
 
-<!--###########################-->
-<!--          HEADER           -->
-<!--###########################-->
-<form asp-controller="Protocolo" enctype="multipart/form-data" method="post" onsubmit="return ValidateForm()" class="mt-3">
-    <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
-        <tr>
-            <td style="width:200px;padding: 1px 1px 1px 5px;">
-                Nº do processo:
-            </td>
-            <td style="color:black;font-weight:bold">
-                @Model.Numero_Ano
-            </td>
-        </tr>
-        <tr>
-            <td style="width:600px;padding: 1px 1px 1px 5px;">
-                Data do processo:
-            </td>
-            <td style="color:black;font-weight:bold">
-                @Model.Data_Processo
-            </td>
-        </tr>
-        <tr>
-            <td style="width:15%;padding: 1px 1px 1px 5px;">
-                Requerente:
-            </td>
-            <td style="color:black;font-weight:bold">
-                @Model.Requerente
-            </td>
-        </tr>
-        <tr>
-            <td style="width:15%;padding: 1px 1px 1px 5px;">
-                Assunto:
-            </td>
-            <td style="color:black;font-weight:bold">
-                @Model.Assunto_Nome
-            </td>
-        </tr>
-    </table>
-    <br />
-
-    <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
-        @foreach (var item in Model.Lista_Tramite) {
+<div class="center" >
+    <label style="color:brown;font-size:16px;font-style:italic">Adicionar local de tramitação</label>
+    <!--###########################-->
+    <!--          HEADER           -->
+    <!--###########################-->
+    <form asp-controller="Protocolo" enctype="multipart/form-data" method="post" onsubmit="return ValidateForm()" class="mt-3">
+        <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
             <tr>
                 <td style="width:200px;padding: 1px 1px 1px 5px;">
-                    Seq
+                    Nº do processo:
                 </td>
                 <td style="color:black;font-weight:bold">
-                    @item.Seq
+                    @Model.Numero_Ano
                 </td>
             </tr>
-
+            <tr>
+                <td style="width:600px;padding: 1px 1px 1px 5px;">
+                    Data do processo:
+                </td>
+                <td style="color:black;font-weight:bold">
+                    @Model.Data_Processo
+                </td>
+            </tr>
             <tr>
                 <td style="width:15%;padding: 1px 1px 1px 5px;">
-                    Centro de custos:
+                    Requerente:
                 </td>
                 <td style="color:black;font-weight:bold">
-                    @item.CentroCustoNome
+                    @Model.Requerente
                 </td>
             </tr>
+            <tr>
+                <td style="width:15%;padding: 1px 1px 1px 5px;">
+                    Assunto:
+                </td>
+                <td style="color:black;font-weight:bold">
+                    @Model.Assunto_Nome
+                </td>
+            </tr>
+        </table>
+        <br />
 
-        }
-    </table>
-    <br />
+        <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
+            @foreach (var item in Model.Lista_Tramite) {
+                <tr>
+                    <td style="width:200px;padding: 1px 1px 1px 5px;">
+                        Seq
+                    </td>
+                    <td style="color:black;font-weight:bold">
+                        @item.Seq
+                    </td>
+                </tr>
 
-    <!--###########################-->
-    <!--          FORMULÁRIO       -->
-    <!--###########################-->
-    <div class="form-group row align-items-lg-baseline" style="margin-left:1px">
-        <div class="col-sm-10">
-            <label>Novo Local: </label>
-            @Html.DropDownListFor(m => m.CCusto_Codigo, ViewBag.Lista_CentroCusto as SelectList, "-Selecione um Local-", new { @id = "AddPlaceDropDown", style = "width:330px;height:25px", rows = 10 })
+                <tr>
+                    <td style="width:15%;padding: 1px 1px 1px 5px;">
+                        Centro de custos:
+                    </td>
+                    <td style="color:black;font-weight:bold">
+                        @item.CentroCustoNome
+                    </td>
+                </tr>
+
+            }
+        </table>
+        <br />
+
+        <!--###########################-->
+        <!--          FORMULÁRIO       -->
+        <!--###########################-->
+        <div class="form-group row align-items-lg-baseline" style="margin-left:1px">
+            <div class="col-sm-10">
+                <label>Novo Local: </label>
+                @Html.DropDownListFor(m => m.CCusto_Codigo, ViewBag.Lista_CentroCusto as SelectList, "-Selecione um Local-", new { @id = "AddPlaceDropDown", style = "width:330px;height:25px", rows = 10 })
+            </div>
         </div>
-    </div>
-    <div class="col-sm-10">
-        <button type="submit" class="btn btn-primary" id="Enviar_Save">Gravar</button>
-        <input type="button" class="btn btn-secondary" value="Cancelar" onclick="@("window.location.href='" + @Url.Action("Tramite_Processo2", "Protocolo",new { @Ano=Functions.Encrypt(Model.Ano.ToString()),@Numero=Functions.Encrypt(Model.Numero.ToString())}) + "'");" />
-    </div>
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary" id="Enviar_Save">Gravar</button>
+            <input type="button" class="btn btn-secondary" value="Cancelar" onclick="@("window.location.href='" + @Url.Action("Tramite_Processo2", "Protocolo",new { @Ano=Functions.Encrypt(Model.Ano.ToString()),@Numero=Functions.Encrypt(Model.Numero.ToString())}) + "'");" />
+        </div>
 
-</form>
+    </form>
 
-<!--###########################-->
-<!--          FOOTER           -->
-<!--###########################-->
-<div class="form-group row" style="margin-left:-10px">
-    &nbsp;&nbsp;<label class="text-danger" id="errorLabel">@ViewBag.Result</label>
+    <!--###########################-->
+    <!--          FOOTER           -->
+    <!--###########################-->
+    <div class="form-group row" style="margin-left:-10px">
+        &nbsp;&nbsp;<label class="text-danger" id="errorLabel">@ViewBag.Result</label>
+    </div>
 </div>
-
 
 <!--###########################-->
 <!--          SCRIPTS          -->
