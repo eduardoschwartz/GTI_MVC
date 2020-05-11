@@ -5,15 +5,22 @@
     ViewBag.Title = "Detalhe de uma empresa";
 }
 
+<style>
+    .center {
+        margin: auto;
+        width: 780px;
+        border: 1px solid rgba(0,0,0,0.24);
+        padding: 20px;
+        box-shadow: 0 .1em 0.5em #000;
+        border-radius: 13px;
+    }
+</style>
 
-
-<label style="color:brown;font-size:16px;font-style:italic">Detalhes de uma empresa</label>
-
-
-<br />
-
-@using (Html.BeginForm("PrintDetalhes","Empresa", FormMethod.Post)) {
-        <table  style="width:700px; border:solid; border-color:#3a8dcc; font-size:13px">
+<div class="center">
+    <label style="color:brown;font-size:16px;font-style:italic">Detalhes de uma empresa</label>
+    <br />
+    @using (Html.BeginForm("PrintDetalhes", "Empresa", FormMethod.Post)) {
+        <table style="width:740px;font-size:13px">
             <thead>
                 <tr>
                     <th>
@@ -189,7 +196,7 @@
         </table>
         <br />
         <div class="col-sm-10">
-            <input type="submit" value="Imprimir" title="Imprimir ficha cadastral." style="margin-left:1px" class="green_button" />
+            <input type="submit" value="Imprimir" title="Imprimir ficha cadastral." style="margin-left:1px" class="btn btn-primary" />
         </div>
         <br />
         <br />
@@ -198,5 +205,6 @@
 
 
 
-}
+    }
 
+</div>

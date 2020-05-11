@@ -15,20 +15,25 @@
         font-size: 14px;
         box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
     }
+    .center {
+        margin: auto;
+        width: 440px;
+        border: 1px solid rgba(0,0,0,0.24);
+        padding: 20px;
+        box-shadow: 0 .1em 0.5em #000;
+        border-radius: 13px;
+    }
 </style>
 
-<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline" ;>Consulta e atualização de débitos vencidos</label>
-<br />
-<br />
-<br />
-
-
+<div class="center">
+    <label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline" ;>Consulta e atualização de débitos vencidos</label>
+    <br />
     @using (Html.BeginForm("Dama", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
 
-        <table >
+        <table>
             <tr>
-                <td style="padding-top:7px; width:160px"><label style="font-weight:normal">Data de pagamento:&nbsp;</label></td>
-                <td style="width:300px">@Html.TextBoxFor(m => m.DataVencimento, new { @id = "vencto", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })</td>
+                <td style="padding-top:7px; width:200px"><label style="font-weight:normal">Data de pagamento:&nbsp;</label></td>
+                <td style="width:200px">@Html.TextBoxFor(m => m.DataVencimento, new { @id = "vencto", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })</td>
 
             </tr>
         </table>
@@ -38,20 +43,19 @@
 
         <br />
         <br />
-        <div class="col-sm-10">
-            &nbsp;&nbsp;<button type="submit" class="green_button"> Consultar</button>
-        </div>
+            <button type="submit" class="btn btn-primary"> Consultar</button>
         <br />
 
         <br />
         <div class="form-group row">
             <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
         </div>
-        <br />
+
 
     }
 
-@Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home")
+    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home")
+</div>
 
 
 @section scripts{

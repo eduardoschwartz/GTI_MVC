@@ -6,10 +6,7 @@
     ViewData["Title"] = "Envio de Processo";
 }
 
-<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-<link href="~/css/gti.css" rel="stylesheet" />
 
-<label style="color:brown;font-size:16px;font-style:italic">Envio de Processo</label>
 
 <style>
     .tableContainer {
@@ -25,19 +22,29 @@
             white-space: nowrap;
             text-align: left;
         }
+    .center {
+        margin: auto;
+        width: 760px;
+        border: 1px solid rgba(0,0,0,0.24);
+        padding: 20px;
+        box-shadow: 0 .1em 0.5em #000;
+        border-radius: 13px;
+    }
 </style>
 
-<!--###########################-->
-<!--          HEADER           -->
-<!--###########################-->
-@using (Html.BeginForm("Send", "Protocolo", FormMethod.Post, new { @id = "MainForm" })) {
-        <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
+<div class="center">
+    <label style="color:brown;font-size:16px;font-style:italic">Envio de Processo</label>
+    <!--###########################-->
+    <!--          HEADER           -->
+    <!--###########################-->
+    @using (Html.BeginForm("Send", "Protocolo", FormMethod.Post, new { @id = "MainForm" })) {
+        <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:700px; ">
             <tr>
                 <td style="width:200px;padding: 1px 1px 1px 5px;font-weight:normal">
                     Nº do processo:
                 </td>
                 <td style="color:black;font-weight:bold">
-                    @Model.Numero_Ano 
+                    @Model.Numero_Ano
                 </td>
             </tr>
             <tr>
@@ -67,7 +74,7 @@
         </table>
         <br />
 
-        <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
+        <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:700px; ">
             @foreach (var item in Model.Lista_Tramite) {
                 <tr>
                     <td style="width: 200px; padding: 1px 1px 1px 5px;">
@@ -117,9 +124,9 @@
                 @Html.HiddenFor(m => m.Numero)
                 @Html.HiddenFor(m => m.CCusto_Codigo)
                 @Html.HiddenFor(m => m.Seq)
-                @Html.HiddenFor(m=>m.Lista_Tramite)
+                @Html.HiddenFor(m => m.Lista_Tramite)
 
-                @Html.DropDownListFor(m => m.Despacho_Codigo, ViewBag.Lista_Despacho as SelectList,  new { @id = "EnviarDropDown", style = "width:330px;height:25px" })
+                @Html.DropDownListFor(m => m.Despacho_Codigo, ViewBag.Lista_Despacho as SelectList, new { @id = "EnviarDropDown", style = "width:330px;height:25px" })
             </div>
         </div>
         <div class="col-sm-10">
@@ -127,7 +134,7 @@
             <input type="button" class="btn btn-secondary" value="Cancelar" onclick="@("window.location.href='" + @Url.Action("Tramite_Processo2", "Protocolo", new { @Ano = Functions.Encrypt( Model.Ano.ToString()), @Numero = Functions.Encrypt( Model.Numero.ToString()) }) + "'");" />
         </div>
 
-}
+    }
     <br />
     <br />
     <!--###########################-->
@@ -137,7 +144,7 @@
         <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
     </div>
     <br />
-
+</div>
 
     <!--###########################-->
     <!--          SCRIPTS          -->
