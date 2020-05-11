@@ -394,6 +394,7 @@
     <Content Include="Images\abaixo.gif" />
     <Content Include="Images\acima.gif" />
     <Content Include="Images\alterar.gif" />
+    <Content Include="Images\bege.jpg" />
     <Content Include="Images\brasaocor.png" />
     <Content Include="Images\decreto.png" />
     <Content Include="Images\enviar.png" />
@@ -404,6 +405,7 @@
     <Content Include="Images\receber.png" />
     <Content Include="Images\remover_local.png" />
     <Content Include="Images\Separator.png" />
+    <Content Include="Images\titulo.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Files\DECA2018.pdf" />
