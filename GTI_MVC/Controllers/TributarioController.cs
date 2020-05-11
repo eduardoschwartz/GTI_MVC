@@ -930,9 +930,10 @@ namespace GTI_Mvc.Controllers {
                         _cep = (enderecoRepository.RetornaCep((int)_cidadao.CodigoLogradouroR, (short)_cidadao.NumeroR)).ToString();
                     else {
                         _cep = _cidadao.CepR.ToString();
-                        if (_cidadao.CepR == 0)
-                            _cep = "14870000";
                     }
+                    if (_cep == "0")
+                        _cep = "14870000";
+
                 }
             }
 
@@ -1068,20 +1069,24 @@ namespace GTI_Mvc.Controllers {
                 if (Convert.ToDateTime(deb.Data_Vencimento).Year == 2020 && Convert.ToDateTime(deb.Data_Vencimento).Month > 3 && Convert.ToDateTime(deb.Data_Vencimento).Month < 7) {
                     short _seqDec = tributarioRepository.Retorna_Ultima_Seq_Decreto(model.Inscricao, DateTime.Now.Year);
                     _seqDec++;
-                    Debitoparcela regParcela = new Debitoparcela {
-                        Codreduzido = model.Inscricao,
-                        Anoexercicio = 2020,
-                        Codlancamento = 85,
-                        Seqlancamento = _seqDec,
-                        Numparcela = 1,
-                        Codcomplemento = 0,
-                        Statuslanc = 3,
-                        Datavencimento = Convert.ToDateTime("30/12/2020"),
-                        Datadebase = DateTime.Now,
-                        Userid = 236
-                    };
-                    Exception ex = tributarioRepository.Insert_Debito_Parcela(regParcela);
-                    if (ex == null) {
+
+                    if (deb.Soma_Multa_Hidden > 0 || deb.Soma_Juros_Hidden > 0) {
+                        Debitoparcela regParcela = new Debitoparcela {
+                            Codreduzido = model.Inscricao,
+                            Anoexercicio = 2020,
+                            Codlancamento = 85,
+                            Seqlancamento = _seqDec,
+                            Numparcela = 1,
+                            Codcomplemento = 0,
+                            Statuslanc = 3,
+                            Datavencimento = Convert.ToDateTime("30/12/2020"),
+                            Datadebase = DateTime.Now,
+                            Userid = 236
+                        };
+
+                        Exception ex = tributarioRepository.Insert_Debito_Parcela(regParcela);
+                    }
+                    if (deb.Soma_Multa_Hidden > 0) { 
                         Debitotributo regTributo = new Debitotributo {
                             Codreduzido = model.Inscricao,
                             Anoexercicio = 2020,
@@ -1092,45 +1097,41 @@ namespace GTI_Mvc.Controllers {
                             Codtributo = 112,
                             Valortributo = deb.Soma_Multa_Hidden
                         };
-                        ex = tributarioRepository.Insert_Debito_Tributo(regTributo);
-                        if (ex == null) {
-                            regTributo = new Debitotributo {
-                                Codreduzido = model.Inscricao,
-                                Anoexercicio = 2020,
-                                Codlancamento = 85,
-                                Seqlancamento = _seqDec,
-                                Numparcela = 1,
-                                Codcomplemento = 0,
-                                Codtributo = 113,
-                                Valortributo = deb.Soma_Juros_Hidden
-                            };
-                            ex = tributarioRepository.Insert_Debito_Tributo(regTributo);
-                            if (ex == null) {
+                        Exception ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
+                    }
 
-                                Encargo_cvd regCvd = new Encargo_cvd {
-                                    Codigo = model.Inscricao,
-                                    Exercicio = (short)deb.Exercicio,
-                                    Lancamento = (short)deb.Lancamento,
-                                    Sequencia = (short)deb.Seq,
-                                    Parcela = (byte)deb.Parcela,
-                                    Complemento = (byte)deb.Complemento,
-                                    Exercicio_enc = 2020,
-                                    Lancamento_enc = 85,
-                                    Sequencia_enc = _seqDec,
-                                    Parcela_enc = 1,
-                                    Complemento_enc = 0,
-                                    Documento = _documento
-                                };
-                                ex = tributarioRepository.Insert_Encargo_CVD(regCvd);
-                                if (ex == null) {
-
-                                }
-                            }
-                        }
+                    if (deb.Soma_Juros_Hidden > 0) {
+                        Debitotributo regTributo = new Debitotributo {
+                            Codreduzido = model.Inscricao,
+                            Anoexercicio = 2020,
+                            Codlancamento = 85,
+                            Seqlancamento = _seqDec,
+                            Numparcela = 1,
+                            Codcomplemento = 0,
+                            Codtributo = 113,
+                            Valortributo = deb.Soma_Juros_Hidden
+                        };
+                        Exception ex3 = tributarioRepository.Insert_Debito_Tributo(regTributo);
+                    }
+                    if (deb.Soma_Multa_Hidden > 0 || deb.Soma_Juros_Hidden > 0) {
+                        Encargo_cvd regCvd = new Encargo_cvd {
+                            Codigo = model.Inscricao,
+                            Exercicio = (short)deb.Exercicio,
+                            Lancamento = (short)deb.Lancamento,
+                            Sequencia = (short)deb.Seq,
+                            Parcela = (byte)deb.Parcela,
+                            Complemento = (byte)deb.Complemento,
+                            Exercicio_enc = 2020,
+                            Lancamento_enc = 85,
+                            Sequencia_enc = _seqDec,
+                            Parcela_enc = 1,
+                            Complemento_enc = 0,
+                            Documento = _documento
+                        };
+                        Exception ex = tributarioRepository.Insert_Encargo_CVD(regCvd);
                     }
                 }
             }
-
             //##################################
             model.Data_Vencimento_String = Convert.ToDateTime(value.Data_Vencimento.ToString()).ToString("ddMMyyyy");
             model.RefTran = "287353200" + _documento.ToString();

@@ -22,35 +22,37 @@
 <br />
 <br />
 
-@using (Html.BeginForm("Dama", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
 
-    <table style="width:auto">
-        <tr>
-            <td style="padding-top:7px; width:160px"><label style="font-weight:normal">Data de pagamento:&nbsp;</label></td>
-            <td style="width:300px">@Html.TextBoxFor(m => m.DataVencimento, new { @id = "vencto", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })</td>
+    @using (Html.BeginForm("Dama", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
 
-        </tr>
-    </table>
-    <br />
+        <table >
+            <tr>
+                <td style="padding-top:7px; width:160px"><label style="font-weight:normal">Data de pagamento:&nbsp;</label></td>
+                <td style="width:300px">@Html.TextBoxFor(m => m.DataVencimento, new { @id = "vencto", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })</td>
 
-    <img src="~/Images/decreto.png" />
-   
-    <br />
-    <br />
-    <div class="col-sm-10">
-        &nbsp;&nbsp;<button type="submit" class="green_button"> Consultar</button>
-    </div>
-    <br />
+            </tr>
+        </table>
+        <br />
 
-    <br />
-    <div class="form-group row">
-        <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
-    </div>
-    <br />
+        <img src="~/Images/decreto.png" />
 
-}
+        <br />
+        <br />
+        <div class="col-sm-10">
+            &nbsp;&nbsp;<button type="submit" class="green_button"> Consultar</button>
+        </div>
+        <br />
+
+        <br />
+        <div class="form-group row">
+            <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+        </div>
+        <br />
+
+    }
 
 @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home")
+
 
 @section scripts{
 
