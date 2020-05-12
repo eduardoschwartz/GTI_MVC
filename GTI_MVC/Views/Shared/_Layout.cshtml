@@ -1,68 +1,125 @@
 ﻿
-<html style="background-image: url('http://sistemas.jaboticabal.sp.gov.br/gti/Images/bege.jpg')">
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <link href="~/Content/bootstrap.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery-3.4.1.js"></script>
-    <script src="~/Scripts/bootstrap.js"></script>
-    <script src="~/Scripts/gti.js"></script>
-    <link href="~/Content/gti.css" rel="stylesheet" />
-    <title>@ViewBag.Title</title>
+    <html style="background-image: url('http://sistemas.jaboticabal.sp.gov.br/gti/Images/bege.jpg')">
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <link href="~/Content/bootstrap.css" rel="stylesheet" />
+        <script src="~/Scripts/jquery-3.4.1.js"></script>
+        <script src="~/Scripts/bootstrap.js"></script>
+        <script src="~/Scripts/gti.js"></script>
+        @*<link href="~/Content/gti.css" rel="stylesheet" />*@
+        <title>@ViewBag.Title</title>
 
-    <style>
-        .center {
-            margin: auto;
-            /*width: 80%;*/
-            /*border: 3px solid #73ad21;*/
-            padding: 10px;
-        }
-
-        body:lang(en) {
-            margin-top: 1em;
-        }
-
-
-        body {
-            padding: 0 10px;
-            margin: 1em 8% 1em 8%;
-            margin-top: 2em;
-            position: relative;
-            box-shadow: 0 .3em 1em #000;
-            border-radius: 13px;
-        }
-    </style>
-
-</head>
-<body>
-    <header style="background-color:white">
-        <div style="display:block;text-align:center;padding-top:10px">
-            <img src="~/Images/titulo.png" />
-            <br />
-            <img src="~/Images/Separator.png" />
-        </div>
-    </header>
-
-
-
-    <div style="background-color:white">
-        <br />
-        @RenderBody()
-    </div>
-    @RenderSection("scripts", required: false)
-    <br />
-
-    <div style="background-color:white;display:block;text-align:center;padding-top:10px">
-        <div><img src="~/Images/Separator.png" /></div>
-        <div style="  font-family: Arial, Helvetica, sans-serif;font-size: 12px;font-weight: bold;">&copy;2003-2020 - Gestão Tributária Integrada (G.T.I.)</div>
-        <div style="  font-family: Arial, Helvetica, sans-serif;font-size: 11px;font-weight: bold;color:darkgreen">
-            Logado como @Functions.pUserFullName
-            @if (Functions.pUserId > 0) {
-                @Html.ActionLink("Sair do sistema", "Logout", "Home");
+        <style>
+            .center {
+                margin: auto;
+                /*width: 80%;*/
+                /*border: 3px solid #73ad21;*/
+                /*padding: 10px;*/
             }
+
+            body:lang(en) {
+                margin-top: 1em;
+            }
+
+
+            body {
+                
+                padding: 0 10px;
+                margin: 1em 8% 1em 8%;
+                margin-top: 2em;
+                position: relative;
+                box-shadow: 0 .3em 1em #000;
+                border-radius: 13px;
+            }
+
+            /*header {
+                background-color: brown;
+                padding: 0 10px;
+                margin-top: 2em;
+                margin: 1em 8% 1em 8%;
+                position: relative;
+                border-radius: 13px;
+            }*/
+            #header {
+                position: absolute;
+                height: 80px;
+                top: 0;
+                left: 0;
+                right: 0;
+                text-align: center;
+                display: block;
+                border-radius: 13px 13px 0px 0px;
+                background: black;
+            }
+            #footer {
+                position: absolute;
+                height: 41px;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                text-align: center;
+                display: block;
+                background: black;
+                border-radius: 0px 0px 13px 13px;
+            }
+            #divElement {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin-right: -50%;
+                transform: translate(-50%, -50%)
+            }
+            .container {
+                width: 60%;
+            }
+
+            .one {
+                position:fixed;
+                width:100px;
+                float: left;
+            }
+
+            .two {
+                padding-top:10px;
+                margin-left: 15%;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div id="header">
+            <section class="container">
+                <div class="one">
+                    <img src="~/Images/brasaocor.png" style="height:100px;width:90px;padding-top:10px" />
+                </div>
+                <div class="two">
+                    <span style="font-family: Arial, Helvetica, sans-serif;font-size: 24px;font-weight: normal;color:white">Prefeitura Municipal de Jaboticabal</span>
+                    <br /><span style="font-family: Arial, Helvetica, sans-serif;font-size: 16px;font-weight: normal;color:white">Serviços disponíveis</span>
+                </div>
+            </section="container">
+
         </div>
-    </div>
 
 
 
-</body>
-</html>
+        <div id="divElement"   style="background-color: white">
+            <br />
+            @RenderBody()
+        </div>
+        @RenderSection("scripts", required: false)
+        <br />
+
+            <div id="footer" style="display:block;text-align:center;padding-top:7px">
+                <div style="  font-family: Arial, Helvetica, sans-serif;font-size: 12px;font-weight: bold;color:white">&copy;2003-2020 - Gestão Tributária Integrada (G.T.I.)</div>
+                <div style="font-family: Arial, Helvetica, sans-serif;font-size: 11px;font-weight: bold;color:moccasin">
+                    Logado como @Functions.pUserFullName
+                    @if (Functions.pUserId > 0) {
+                        @Html.ActionLink("Sair do sistema", "Logout", "Home");
+                    }
+                </div>
+            </div>
+
+    </body>
+
+
+    </html>
