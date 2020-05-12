@@ -17,8 +17,7 @@
     }
 </style>
 
-<label style="color: brown;font-size: 16px;font-style: italic;font-weight: normal;text-decoration:underline" ;>Cadastro de imóvel</label>
-<br />
+<label style="color: brown;font-size: 16px;font-style: italic">Cadastro de imóvel</label>
 <br />
 @using (Html.BeginForm("CadImovel", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
     <label style="font-weight:normal">Código Reduzido:&nbsp;&nbsp;</label>@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§', event)" })
