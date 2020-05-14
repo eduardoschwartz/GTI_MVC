@@ -31,6 +31,13 @@
         box-shadow: 0 .1em 0.5em #000;
         border-radius: 13px;
     }
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
 </style>
 <div class="center">
     <label style="color:brown;font-size:16px;font-style:italic">Trâmite de Processo</label>
@@ -178,11 +185,11 @@
 
 
 
-    @Html.ActionLink("Consultar outro processo", "Tramite_Processo", "Protocolo")
+    @Html.ActionLink("Consultar outro processo", "Tramite_Processo", "Protocolo", null, new { @class = "actionlink" })
     <br />
-    @Html.ActionLink("Retornar ao menu de opções", "SysMenu", "Home")
+    @Html.ActionLink("Retornar ao menu de opções", "SysMenu", "Home", null, new { @class = "actionlink" })
     <br />
-    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home")
+    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 </div>
 
 <!--##########################-->

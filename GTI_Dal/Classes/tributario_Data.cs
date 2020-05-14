@@ -2456,5 +2456,20 @@ Proximo:;
             }
         }
 
+        public Exception Atualiza_Plano_Documento(int Documento, int Plano) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                try {
+                    db.Database.ExecuteSqlCommand("UPDATE PARCELADOCUMENTO SET PLANO=@Plano WHERE NUMDOCUMENTO=@Documento",
+                        new SqlParameter("@Documento", Documento),
+                        new SqlParameter("@Plano", Plano));
+                } catch (Exception ex) {
+                    return ex;
+                }
+            }
+            return null;
+        }
+
+
+
     }//end class
 }

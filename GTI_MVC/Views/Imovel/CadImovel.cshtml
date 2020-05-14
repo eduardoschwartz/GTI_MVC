@@ -15,6 +15,13 @@
         font-size: 14px;
         box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
     }
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
 </style>
 
 <label style="color: brown;font-size: 16px;font-style: italic">Cadastro de imóvel</label>
@@ -173,7 +180,7 @@
     <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
 </div>
 <br />
-@Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home")
+@Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 
 @section scripts{
 

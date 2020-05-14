@@ -8,29 +8,18 @@
     <script src="~/Scripts/jquery-3.4.1.js"></script>
     <script src="~/Scripts/bootstrap.js"></script>
     <script src="~/Scripts/gti.js"></script>
-    @*<link href="~/Content/gti.css" rel="stylesheet" />*@
     <title>@ViewBag.Title</title>
 
     <style>
         .center {
             margin: auto;
-            /*width: 80%;*/
-            /*border: 3px solid #73ad21;*/
-            /*padding: 10px;*/
         }
 
         body:lang(en) {
             margin-top: 1em;
         }
 
-
         body {
-            /*position: absolute;
-                top: 50%;
-                left: 50%;
-                margin-right: -50%;
-                transform: translate(-50%, -50%)
-                padding: 0 10px;*/
             margin: 1em 8% 1em 8%;
             margin-top: 2em;
             min-width: 1000px;
@@ -39,14 +28,6 @@
             border-radius: 13px;
         }
 
-        /*header {
-                background-color: brown;
-                padding: 0 10px;
-                margin-top: 2em;
-                margin: 1em 8% 1em 8%;
-                position: relative;
-                border-radius: 13px;
-            }*/
         #header {
             position: relative;
             z-index: 9;
@@ -57,7 +38,7 @@
             text-align: center;
             display: block;
             border-radius: 13px 13px 0px 0px;
-            background: brown;
+            background: linear-gradient(to bottom,darkred,black);
             display: flex;
             justify-content: center;
         }
@@ -72,27 +53,6 @@
             display: block;
             background: black;
             padding-top: 5px;
-            /*border-radius: 0px 0px 13px 13px;*/
-        }
-
-        #divElement {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            margin-right: -50%;
-            transform: translate(-50%, -50%)
-        }
-
-        .titulo2 {
-            width: 700px;
-            /*display: block;
-                text-align: center;*/
-        }
-
-        .container2 {
-            width: 300px;
-            display: block;
-            text-align: center;
         }
 
         #container {
@@ -103,17 +63,6 @@
         }
 
         #content {
-        }
-
-        .one {
-            position: fixed;
-            width: 100px;
-            float: left;
-        }
-
-        .two {
-            padding-top: 10px;
-            margin-left: 15%;
         }
 
         .footer {
@@ -141,23 +90,18 @@
                 </td>
                 <td style="text-align:center">
                     <span style="font-family: Arial, Helvetica, sans-serif;font-size: 24px;font-weight: normal;color:white">Prefeitura Municipal de Jaboticabal</span>
-                    <br /><span style="font-family: Arial, Helvetica, sans-serif;font-size: 16px;font-weight: normal;color:white">Serviços disponíveis</span>
+                    <br /><span style="font-family: Arial, Helvetica, sans-serif;font-size: 16px;font-weight: normal;color:white">Serviços Disponíveis Online</span>
                 </td>
             </tr>
         </table>
     </div>
 
-
-    <br />
     <div id="container" style="background-color: white">
         <div id="content">
             @RenderBody()
         </div>
     </div>
-    <br />
     @RenderSection("scripts", required: false)
-    <br />
-
 
     <div id="footer">
         <span style="font-family: Arial, Helvetica, sans-serif;font-size: 12px;font-weight: bold;color:white">&copy;2003-2020 - Gestão Tributária Integrada (G.T.I.)</span>
@@ -170,8 +114,6 @@
     </div>
 
 </body>
-
-
 
 </html>
 
