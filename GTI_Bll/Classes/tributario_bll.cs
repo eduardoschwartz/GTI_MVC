@@ -1285,6 +1285,12 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Atualiza_Plano_Documento(int Documento, int Plano) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            Exception ex = obj.Atualiza_Plano_Documento(Documento,Plano);
+            return ex;
+        }
+
         public List<Origemreparc> Lista_Origem_Parcelamento(string NumeroProcesso) {
             Tributario_Data obj = new Tributario_Data(_connection);
             List<Origemreparc> Lista = obj.Lista_Origem_Parcelamento(NumeroProcesso);

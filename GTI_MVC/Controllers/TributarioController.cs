@@ -1129,7 +1129,10 @@ namespace GTI_Mvc.Controllers {
                             Documento = _documento
                         };
                         Exception ex = tributarioRepository.Insert_Encargo_CVD(regCvd);
+
+                        ex = tributarioRepository.Atualiza_Plano_Documento(_documento, 40);
                     }
+
                 }
             }
             //##################################
