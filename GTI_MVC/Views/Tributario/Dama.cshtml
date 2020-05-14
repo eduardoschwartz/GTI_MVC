@@ -32,18 +32,19 @@
 
         <table>
             <tr>
-                <td style="padding-top:7px; width:200px"><label style="font-weight:normal">Data de pagamento:&nbsp;</label></td>
+                <td style="padding-top:7px; width:170px"><label style="font-weight:normal">Data de pagamento:&nbsp;</label></td>
                 <td style="width:200px">@Html.TextBoxFor(m => m.DataVencimento, new { @id = "vencto", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })</td>
-
             </tr>
-        </table>
-        <br />
 
+        </table>
+        <span style="color:red;font-weight:bold">Digite a data que deseja efetuar o pagamento do boleto.</span>
+        <br />
+        <br />
         <img src="~/Images/decreto.png" />
 
         <br />
         <br />
-            <button type="submit" class="btn btn-primary"> Consultar</button>
+        <button type="submit" class="btn btn-primary"> Consultar</button>
         <br />
 
         <br />
