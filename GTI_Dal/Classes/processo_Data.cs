@@ -712,7 +712,7 @@ namespace GTI_Dal.Classes {
                         sFullName = String.IsNullOrEmpty(query.Usuario1) ? "" : clsSistema.Retorna_User_FullName(query.Usuario1);
                         Lista[i].Userid1 = query.Userid;
                         Lista[i].Usuario1 = sFullName;
-                        Lista[i].DespachoCodigo = (short)query.Despacho;
+                        Lista[i].DespachoCodigo =query.Despacho==null?(short)0:  (short)query.Despacho;
                         Lista[i].DespachoNome = String.IsNullOrEmpty(query.Descricao) ? "" : query.Descricao;
                         Lista[i].DataEnvio = query.Dataenvio == null ? "" : DateTime.Parse(query.Dataenvio.ToString()).ToString("dd/MM/yyyy");
                         Lista[i].Userid2 = query.Userid2;
@@ -1170,7 +1170,7 @@ namespace GTI_Dal.Classes {
                     reg.HoraEntrada = query.Datahora.ToString() == "" ? "" : DateTime.Parse(query.Datahora.ToString()).ToString("hh:mm");
                     reg.Usuario1 = String.IsNullOrEmpty(query.Usuario1) ? "" : clsSistema.Retorna_User_FullName(query.Usuario1);
                     reg.Userid1 = query.Userid;
-                    reg.DespachoCodigo = (short)query.Despacho;
+                    reg.DespachoCodigo = query.Despacho==null?(short)0:(short)query.Despacho;
                     reg.DespachoNome = String.IsNullOrEmpty(query.Descricao) ? "" : query.Descricao;
                     reg.DataEnvio = query.Dataenvio == null ? "" : DateTime.Parse(query.Dataenvio.ToString()).ToString("dd/MM/yyyy");
                     reg.Userid2 = query.Userid2;

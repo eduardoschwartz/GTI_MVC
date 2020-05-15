@@ -195,6 +195,7 @@ namespace GTI_Mvc.Controllers {
                 Atividade = reg.Atividade_Extenso,
                 Suspenso="",
                 Lancamento = dadosCertidao.Descricao_Lancamentos
+                
             };
             Exception ex = tributarioRepository.Insert_Certidao_Debito(cert);
             if (ex != null) {
@@ -714,7 +715,7 @@ namespace GTI_Mvc.Controllers {
                     }
                     CidadaoStruct _cidadao = requerenteRepository.Dados_Cidadao(_codigo);
                     _nome = _cidadao.Nome;
-                    _cpfcnpj = _cidadao.Cpf ?? _cidadao.Cnpj;
+                    _cpfcnpj = string.IsNullOrWhiteSpace(_cidadao.Cpf) ? _cidadao.Cnpj: _cidadao.Cpf;
                 }
             }
             DebitoSelectionViewModel modelt = new DebitoSelectionViewModel() {
@@ -923,7 +924,7 @@ namespace GTI_Mvc.Controllers {
                     _cep = _empresa.Cep;
                 } else {
                     CidadaoStruct _cidadao = requerenteRepository.Dados_Cidadao(_codigo);
-                    _endereco = _cidadao.EnderecoR + ", " + _cidadao.NumeroR.ToString() + _cidadao.ComplementoR == null ? "" : " " + _cidadao.ComplementoR + " " + _cidadao.NomeBairroR;
+                    _endereco = _cidadao.EnderecoR + ", " + _cidadao.NumeroR.ToString() + (_cidadao.ComplementoR == null ? "" : " " + _cidadao.ComplementoR) + " " + _cidadao.NomeBairroR;
                     _cidade = _cidadao.NomeCidadeR;
                     _uf = _cidadao.UfR;
                     if (_cidadao.CodigoCidadeR == 413)
