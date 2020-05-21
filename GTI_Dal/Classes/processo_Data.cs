@@ -709,11 +709,11 @@ namespace GTI_Dal.Classes {
                     foreach (var query in reg4) {
                         Lista[i].DataEntrada = query.Datahora.ToString() == "" ? "" : DateTime.Parse(query.Datahora.ToString()).ToString("dd/MM/yyyy");
                         Lista[i].HoraEntrada = query.Datahora.ToString() == "" ? "" : DateTime.Parse(query.Datahora.ToString()).ToString("hh:mm");
-                        sFullName = String.IsNullOrEmpty(query.Usuario1) ? "" : clsSistema.Retorna_User_FullName(query.Usuario1);
+                        sFullName = string.IsNullOrEmpty(query.Usuario1) ? "" : clsSistema.Retorna_User_FullName(query.Usuario1);
                         Lista[i].Userid1 = query.Userid;
                         Lista[i].Usuario1 = sFullName;
                         Lista[i].DespachoCodigo =query.Despacho==null?(short)0:  (short)query.Despacho;
-                        Lista[i].DespachoNome = String.IsNullOrEmpty(query.Descricao) ? "" : query.Descricao;
+                        Lista[i].DespachoNome = string.IsNullOrEmpty(query.Descricao) ? "" : query.Descricao;
                         Lista[i].DataEnvio = query.Dataenvio == null ? "" : DateTime.Parse(query.Dataenvio.ToString()).ToString("dd/MM/yyyy");
                         Lista[i].Userid2 = query.Userid2;
 
@@ -722,9 +722,9 @@ namespace GTI_Dal.Classes {
                             Lista[i].Usuario2 = clsSistema.Retorna_User_FullName(NomeLogin);
                         } else
                             Lista[i].Usuario2 = "";
-                        Lista[i].Obs = String.IsNullOrEmpty(query.Obs) ? "" : query.Obs;
-                        Lista[i].ObsGeral = String.IsNullOrEmpty(query.Obs) ? "" : query.Obs;
-                        Lista[i].ObsInterna = String.IsNullOrEmpty(query.Obsinterna) ? "" : query.Obsinterna;
+                        Lista[i].Obs = string.IsNullOrEmpty(query.Obs) ? "" : query.Obs;
+                        Lista[i].ObsGeral = string.IsNullOrEmpty(query.Obs) ? "" : query.Obs;
+                        Lista[i].ObsInterna = string.IsNullOrEmpty(query.Obsinterna) ? "" : query.Obsinterna;
                     }
                 }
             }
