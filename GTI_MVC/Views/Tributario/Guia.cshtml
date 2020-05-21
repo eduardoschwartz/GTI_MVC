@@ -1,0 +1,89 @@
+﻿@model GTI_Mvc.ViewModels.DebitoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Emissão de Guia";
+}
+
+<style>
+    .textBoxBlue {
+        height: 25px;
+        position: relative;
+        border: 1px solid #0094ff;
+        border-color: rgba(0, 0, 0, .14);
+        background-color: white;
+        font-size: 14px;
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
+    }
+
+    .center {
+        margin: auto;
+        width: 440px;
+        border: 1px solid rgba(0,0,0,0.24);
+        padding: 20px;
+        box-shadow: 0 .1em 0.5em #000;
+        border-radius: 13px;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+</style>
+
+<div class="center">
+    <label style="color: brown;font-size: 16px;font-style: italic">Emissão de Guia</label>
+    <br />
+    @using (Html.BeginForm("Guia", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
+
+        <table>
+            <tr>
+                <td style="padding-top:7px; width:150px"><label style="font-weight:normal">Código Reduzido:&nbsp;</label></td>
+                <td style="width:120px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
+                <td>@Html.ActionLink("Procurar", "Findcd", "Home",null, new { @class="btn btn-primary" })</td>
+            </tr>
+
+        </table>
+
+        <br />
+        <button type="submit" class="btn btn-primary" title="Consultar o código selecionado">Consultar</button>
+        <br />
+
+        <label style="font-weight:normal;color:red;padding-left:1px" id="errorLabel">@ViewBag.Result</label>
+
+    }
+
+    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+</div>
+
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+        });
+
+        function ValidateForm() {
+            ClearError();
+            var _codigo = document.getElementById('codigo').value;
+
+            if (_codigo == "" || parseInt(_codigo) == 0) {
+                document.getElementById('errorLabel').innerHTML = "Digite um código válido";
+                return false;
+            }
+            return true;
+        }
+
+        function ClearError() {
+            document.getElementById('errorLabel').innerHTML = "";
+        }
+
+    </script>
+}

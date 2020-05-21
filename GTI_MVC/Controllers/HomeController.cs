@@ -125,7 +125,12 @@ namespace GTI_Mvc.Controllers {
             return View(model);
         }
 
-
+        [Route("Findcd")]
+        [HttpGet]
+        public ViewResult Findcd() {
+            DebitoViewModel model = new DebitoViewModel();
+            return View(model);
+        }
 
     }
 }

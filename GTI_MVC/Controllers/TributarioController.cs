@@ -1576,7 +1576,12 @@ namespace GTI_Mvc.Controllers {
             return null;
         }
 
-
+        [Route("Guia")]
+        [HttpGet]
+        public ViewResult Guia() {
+            DebitoViewModel model = new DebitoViewModel();
+            return View(model);
+        }
 
     }
 

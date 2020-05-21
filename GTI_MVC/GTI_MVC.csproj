@@ -396,6 +396,7 @@
     <Content Include="Images\alterar.gif" />
     <Content Include="Images\bege.jpg" />
     <Content Include="Images\brasaocor.png" />
+    <Content Include="Images\Consultar.gif" />
     <Content Include="Images\decreto.png" />
     <Content Include="Images\enviar.png" />
     <Content Include="Images\inserir_local.png" />
@@ -491,6 +492,8 @@
     <Content Include="Views\Tributario\SegundaVia_Parcelamento.cshtml" />
     <Content Include="Views\Home\Login_update.cshtml" />
     <Content Include="Views\Imovel\CadImovel.cshtml" />
+    <Content Include="Views\Tributario\Guia.cshtml" />
+    <Content Include="Views\Home\Findcd.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
