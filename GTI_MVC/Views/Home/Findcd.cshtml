@@ -43,42 +43,48 @@
 
     @using (Html.BeginForm("Findcd", "Home", FormMethod.Post, new { @id = "MainForm" })) {
 
-        <table>
-            <tr style="height:40px">
-                <td style="padding-top:7px"><label style="font-weight:normal;width:200px">
-                    Tipo de Cadastro:&nbsp;</label>
-                </td>
-                <td style="width: 420px">
-                    @foreach (var gender in Model.Genders) {
-                        @Html.RadioButtonFor(model => model.Gender, gender) @gender<br />
-                    }
-                    <input type="submit" />
-                    @*@Html.CheckBoxFor(m=>m.Tipo_Cadastro)*@
-                    @*Imóvel:&nbsp; <input type="radio" required asp-for="Tipo_Cadastro" id="imovelCheck" value="cpf" name="tipo" checked="checked"  />
-        &nbsp;Empresa:&nbsp;  <input type="radio" required asp-for="Tipo_Cadastro" id="empresaCheck" value="cnpj" name="tipo" />
-        &nbsp;Cidadão:&nbsp;  <input type="radio" required asp-for="Tipo_Cadastro" id="cidadaoCheck" value="cnpj" name="tipo"  />*@
-                </td>
-            </tr>
-            <tr style="height:40px">
-                <td >
-                    CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
-                    &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
-                </td>
-                <td >
-                    @Html.TextBoxFor(m => m.CpfValue, new { @id = "cpfTxt", @class = "textBoxBlue", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CPF" })
-                    @Html.TextBoxFor(m => m.CnpjValue, new { @id = "cnpjTxt", @class = "textBoxBlue", @style = "max-width:200px;display:none", @onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CNPJ" })
-                </td>
-            </tr>
-            <tr>
-                <td style="padding-top:7px"><label style="font-weight:normal">Nome/Razão Social:&nbsp;</label></td>
-                <td style="width:420px">@Html.TextBoxFor(m => m.Nome, new { @id = "nome", @class = "textBoxBlue", @style = "width:400px" })</td>
-            </tr>
+        <div style="border-top-style:solid;border-bottom-style:solid;border-top-width:thin;border-top-color:cadetblue;border-bottom-width:thin;border-bottom-color:cadetblue">
+            <table style="font-size: 14px;font-weight: normal;padding-top:7px">
+                <tr style="height:40px">
+                    <td style="padding-top:7px">
+                        <label style="font-weight:normal;width:160px">
+                            Tipo de Cadastro:&nbsp;
+                        </label>
+                    </td>
+                    <td style="width: 420px">
+                        @foreach (var tipo in Model.Tipo_Cadastro) {
+                            @Html.RadioButtonFor(model => model.Cadastro, tipo) <span>&nbsp;</span>@tipo<span>&nbsp;&nbsp;</span>
+                        }
+                    </td>
+                </tr>
+                <tr style="height:40px">
+                    <td>
+                        CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
+                        &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.CpfValue, new { @id = "cpfTxt", @class = "textBoxBlue", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CPF" })
+                        @Html.TextBoxFor(m => m.CnpjValue, new { @id = "cnpjTxt", @class = "textBoxBlue", @style = "max-width:200px;display:none", @onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CNPJ" })
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-top:7px"><label style="font-weight:normal">Nome/Razão Social:&nbsp;</label></td>
+                    <td style="width:420px">@Html.TextBoxFor(m => m.Nome, new { @id = "nome", @class = "textBoxBlue", @style = "width:400px" })</td>
+                </tr>
+            </table>
 
-        </table>
+            <br />
+            <button type="submit" class="btn btn-primary" title="Retornar o código selecionado" name="action" value="consultar">Consultar</button>
+            <br />
+            <br />
+        </div>
+        <br />
+        if (@Model.Inscricao != null) {
+            <label style="color: brown;font-size: 14px;font-weight: normal">Resultado</label>
+            <br />
 
-        <br />
-        <button type="submit" class="btn btn-primary" title="Retornar o código selecionado">Consultar</button>
-        <br />
+        }
+
 
 
         <label style="font-weight:normal;color:red;padding-left:1px" id="errorLabel">@ViewBag.Result</label>

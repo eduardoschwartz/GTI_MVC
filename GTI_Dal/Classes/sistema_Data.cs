@@ -561,5 +561,12 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<int> CodigoHeader(TipoCadastro tipo,string Cpf,string Cnpj,string Nome) {
+            List<int> Lista = new List<int>();
+
+
+            return Lista;
+        }
+
     }
 }

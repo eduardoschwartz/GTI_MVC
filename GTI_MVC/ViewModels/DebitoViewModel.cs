@@ -26,7 +26,7 @@ namespace GTI_Mvc.ViewModels {
         public int Plano { get; set; }
         [StringLength(4)]
         public string CaptchaCode { get; set; }
-        public string Gender { get; set; } = "Imóvel";
+        public string Cadastro { get; set; } = "Imóvel";
         public string[] Tipo_Cadastro = new[] { "Imóvel", "Empresa", "Cidadão" };
     }
 

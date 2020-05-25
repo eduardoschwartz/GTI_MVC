@@ -1,9 +1,11 @@
 ﻿using GTI_Bll.Classes;
+using GTI_Models;
 using GTI_Models.Models;
 using GTI_Mvc.ViewModels;
 using System;
 using System.Web.Mvc;
 using System.Web.UI;
+using static GTI_Models.modelCore;
 
 namespace GTI_Mvc.Controllers {
     public class HomeController : Controller {
@@ -134,7 +136,13 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Findcd")]
         [HttpPost]
-        public ActionResult Findcd(DebitoViewModel model) {
+        public ActionResult Findcd(DebitoViewModel model,string action) {
+            TipoCadastro tipo = model.Cadastro == "Imóvel" ? TipoCadastro.Imovel : model.Cadastro == "Empresa" ? TipoCadastro.Empresa : TipoCadastro.Cidadao;
+            string cpf = model.CpfValue == null ? "" : Functions.RetornaNumero(model.CpfValue);
+            string cnpj = model.CnpjValue == null ? "" : Functions.RetornaNumero(model.CnpjValue);
+            string name =  model.Nome==null?"":  model.Nome.Trim();
+
+
 
             return View( model);
         }
