@@ -13,6 +13,8 @@ using GTI_Models.Models;
 using static GTI_Models.modelCore;
 using GTI_Mvc.ViewModels;
 using GTI_MVC;
+using QRCoder;
+using System.Drawing;
 
 namespace GTI_Mvc.Controllers {
 
@@ -233,13 +235,14 @@ namespace GTI_Mvc.Controllers {
                         return View("Certidao_Inscricao", model);
                     }
 
+                   
                     ReportDocument rd = new ReportDocument();
                     rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Comprovante_Inscricao_Valida.rpt"));
 
                     try {
                         rd.SetDataSource(certidao);
                         Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
-                        return File(stream, "application/pdf", "Certidao_Endereco.pdf");
+                        return File(stream, "application/pdf", "Certidao_Inscricao.pdf");
                     } catch {
 
                         throw;
@@ -452,6 +455,19 @@ namespace GTI_Mvc.Controllers {
                 reg
             };
 
+            //##### QRCode ##########################################################
+            //string Code = "http://www.google.com";
+            //QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            //QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
+            //using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+            //    using (MemoryStream ms = new MemoryStream()) {
+            //        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            //        byte[] byteImage = ms.ToArray();
+            //        certidao[0].QRCodeImage = byteImage;
+            //    }
+            //}
+            //#######################################################################
+   
             ReportDocument rd = new ReportDocument();
             if (model.Extrato) {
                 if (_dados.Data_Encerramento != null) {
