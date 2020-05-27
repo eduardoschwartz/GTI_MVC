@@ -3,6 +3,7 @@ using GTI_Models;
 using GTI_Models.Models;
 using GTI_Mvc.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.UI;
 using static GTI_Models.modelCore;
@@ -143,6 +144,8 @@ namespace GTI_Mvc.Controllers {
             string name =  model.Nome==null?"":  model.Nome.Trim();
 
 
+            Sistema_bll sistemaClass = new Sistema_bll("GTIconnection");
+            List<Contribuinte_Header_Struct> ListaCodigo = sistemaClass.CodigoHeader(tipo, cpf, cnpj, name);
 
             return View( model);
         }

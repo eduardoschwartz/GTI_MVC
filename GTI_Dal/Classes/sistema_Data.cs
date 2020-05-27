@@ -561,10 +561,72 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public List<int> CodigoHeader(TipoCadastro tipo,string Cpf,string Cnpj,string Nome) {
-            List<int> Lista = new List<int>();
+        public List<Contribuinte_Header_Struct> CodigoHeader(TipoCadastro tipo,string Cpf,string Cnpj,string Nome) {
+            List<Contribuinte_Header_Struct> Lista = new List<Contribuinte_Header_Struct>();
 
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                if (tipo == TipoCadastro.Imovel) {
+                    var Sql = (from c in db.Cadimob
+                               join p in db.Proprietario on c.Codreduzido equals p.Codreduzido into pc from p in pc.DefaultIfEmpty()
+                               join i in db.Cidadao on p.Codcidadao equals i.Codcidadao into ip from i in ip.DefaultIfEmpty()
+                               select new { Codigo = c.Codreduzido, cpf = i.Cpf, cnpj = i.Cnpj,nome= i.Nomecidadao });
+                    if (Cpf != "")
+                        Sql = Sql.Where(c => c.cpf == Cpf);
+                    if (Cnpj != "")
+                        Sql = Sql.Where(c => c.cnpj == Cnpj);
+                    if (Nome != "")
+                        Sql = Sql.Where(c => c.nome == Nome);
 
+                    foreach (var item in Sql) {
+                        Contribuinte_Header_Struct reg = new Contribuinte_Header_Struct() {
+                            Codigo = item.Codigo,
+                            Nome = item.nome,
+                            Cpf_cnpj = string.IsNullOrWhiteSpace(item.cpf) ? item.cnpj : item.cpf
+                        };
+                        Lista.Add(reg);
+                    }
+                } else {
+                    if (tipo == TipoCadastro.Empresa) {
+                        var Sql = (from m in db.Mobiliario
+                                   select new { Codigo = m.Codigomob, cpf = m.Cpf, cnpj = m.Cnpj, nome = m.Razaosocial });
+                        if (Cpf != "")
+                            Sql = Sql.Where(c => c.cpf == Cpf);
+                        if (Cnpj != "")
+                            Sql = Sql.Where(c => c.cnpj == Cnpj);
+                        if (Nome != "")
+                            Sql = Sql.Where(c => c.nome == Nome);
+
+                        foreach (var item in Sql) {
+                            Contribuinte_Header_Struct reg = new Contribuinte_Header_Struct() {
+                                Codigo = item.Codigo,
+                                Nome = item.nome,
+                                Cpf_cnpj = string.IsNullOrWhiteSpace(item.cpf) ? item.cnpj : item.cpf
+                            };
+                            Lista.Add(reg);
+                        }
+                    } else {
+                        if (tipo == TipoCadastro.Cidadao) {
+                            var Sql = (from c in db.Cidadao
+                                       select new { Codigo = c.Codcidadao, cpf = c.Cpf, cnpj = c.Cnpj, nome = c.Nomecidadao });
+                            if (Cpf != "")
+                                Sql = Sql.Where(c => c.cpf == Cpf);
+                            if (Cnpj != "")
+                                Sql = Sql.Where(c => c.cnpj == Cnpj);
+                            if (Nome != "")
+                                Sql = Sql.Where(c => c.nome == Nome);
+
+                            foreach (var item in Sql) {
+                                Contribuinte_Header_Struct reg = new Contribuinte_Header_Struct() {
+                                    Codigo = item.Codigo,
+                                    Nome = item.nome,
+                                    Cpf_cnpj = string.IsNullOrWhiteSpace(item.cpf) ? item.cnpj : item.cpf
+                                };
+                                Lista.Add(reg);
+                            }
+                        }
+                    }
+                }
+            }
             return Lista;
         }
 

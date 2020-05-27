@@ -245,5 +245,9 @@ namespace GTI_Bll.Classes {
             return obj.Nome_por_Cnpj(cnpj);
         }
 
+        public List<Contribuinte_Header_Struct> CodigoHeader(TipoCadastro tipo, string Cpf, string Cnpj, string Nome) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            return obj.CodigoHeader(tipo,Cpf,Cnpj,Nome);
+        }
     }
 }
