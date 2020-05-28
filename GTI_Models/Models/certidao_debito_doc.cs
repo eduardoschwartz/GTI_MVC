@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace GTI_Models.Models {
-    public class certidao_debito_doc {
+    public class Certidao_debito_doc {
         [Key]
         [Column(Order = 1)]
         public int Numero { get; set; }

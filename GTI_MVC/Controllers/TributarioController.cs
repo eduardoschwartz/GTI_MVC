@@ -6,9 +6,11 @@ using GTI_Models.ReportModels;
 using GTI_Mvc.ViewModels;
 using GTI_Mvc.Views.Tributario.EditorTemplates;
 using Microsoft.Reporting.WebForms;
+using QRCoder;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -71,6 +73,12 @@ namespace GTI_Mvc.Controllers {
                 return View(certidaoViewModel);
             }
 
+            //if (_codigo!=3) {
+            //    ViewBag.Result = "Inscrição não cadastrada.";
+            //    return View(certidaoViewModel);
+            //}
+
+
             //***Verifica débito
 
             Certidao_debito_detalhe dadosCertidao = tributarioRepository.Certidao_Debito(_codigo);
@@ -107,7 +115,7 @@ namespace GTI_Mvc.Controllers {
                 }
             }
                       
-            int _numero_certidao =tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Debito);
+            int _numero_certidao =tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Debito_Doc);
             int _ano_certidao = DateTime.Now.Year;
             List<Certidao> certidao = new List<Certidao>();
             Certidao reg = new Certidao();
@@ -116,6 +124,7 @@ namespace GTI_Mvc.Controllers {
                 _cpf = listaProp[0].CPF;
                 ImovelStruct _dados = imovelRepository.Dados_Imovel(_codigo);
                 reg.Codigo = _dados.Codigo;
+                reg.Cpf_Cnpj = _cpf;
                 reg.Inscricao = _dados.Inscricao;
                 reg.Endereco = _dados.NomeLogradouro;
                 reg.Endereco_Numero = (int)_dados.Numero;
@@ -198,6 +207,52 @@ namespace GTI_Mvc.Controllers {
                 
             };
             Exception ex = tributarioRepository.Insert_Certidao_Debito(cert);
+
+            Certidao_impressao cimp = new Certidao_impressao() {
+                Ano=reg.Ano,
+                Numero=reg.Numero,
+                Codigo=Convert.ToInt32(reg.Codigo).ToString("000000"),
+                Endereco=reg.Endereco,
+                Endereco_Numero=reg.Endereco_Numero,
+                Endereco_Complemento=reg.Endereco_Complemento,
+                Bairro=reg.Bairro,
+                Quadra_Original=reg.Quadra_Original,
+                Lote_Original=reg.Lote_Original,
+                Inscricao=reg.Inscricao,
+                Numero_Ano=reg.Numero_Ano,
+                Nome=reg.Nome_Requerente,
+                Tributo=reg.Tributo,
+                Tipo_Certidao=reg.Tipo_Certidao,
+                Nao=reg.Nao.ToUpper()
+            };
+
+            //##### QRCode ##########################################################
+            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + reg.Controle;
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
+            using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+                using (MemoryStream ms = new MemoryStream()) {
+                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    byte[] byteImage = ms.ToArray();
+                    cimp.QRCodeImage = byteImage;
+                }
+            }
+            //#######################################################################
+            ex = tributarioRepository.Insert_Certidao_Impressao(cimp);
+
+            Certidao_debito_doc RegSave = new Certidao_debito_doc() {
+                Ano =(short) _ano_certidao,
+                Numero = _numero_certidao,
+                Ret = _ret,
+                Cpf_cnpj = reg.Cpf_Cnpj,
+                Data_emissao = DateTime.Now,
+                Nome = reg.Nome_Requerente,
+                Tributo = reg.Tributo,
+                Validacao = reg.Controle
+            };
+            ex = tributarioRepository.Insert_Certidao_Debito_Doc(RegSave);
+
+
             if (ex != null) {
                 ViewBag.Result = "Ocorreu um erro no processamento das informações.";
                 return View("Certidao_Debito_Codigo");
@@ -205,9 +260,23 @@ namespace GTI_Mvc.Controllers {
 
             ReportDocument rd = new ReportDocument();
             rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/" + _reportName));
+            TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+            TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+            ConnectionInfo crConnectionInfo = new ConnectionInfo();
+            Tables CrTables;
+            crConnectionInfo.ServerName = "200.232.123.115";
+            crConnectionInfo.DatabaseName = "Tributacao";
+            crConnectionInfo.UserID = "gtisys";
+            crConnectionInfo.Password = "everest";
+            CrTables = rd.Database.Tables;
+            foreach (Table CrTable in CrTables) {
+                crtableLogoninfo = CrTable.LogOnInfo;
+                crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                CrTable.ApplyLogOnInfo(crtableLogoninfo);
+            }
 
             try {
-                rd.SetDataSource(certidao);
+                rd.RecordSelectionFormula = "{certidao_impressao.ano}=" + cimp.Ano + " and {certidao_impressao.numero}=" + cimp.Numero;
                 Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
                 return File(stream, "application/pdf", "Certidao_Debito.pdf");
             } catch {
@@ -387,7 +456,7 @@ namespace GTI_Mvc.Controllers {
             List<Certidao> ListaCertidao = new List<Certidao>();
             ListaCertidao.Add(cert);
 
-            certidao_debito_doc RegSave = new certidao_debito_doc() {
+            Certidao_debito_doc RegSave = new Certidao_debito_doc() {
                 Ano = (short)_ano_certidao,
                 Numero = _numero_certidao,
                 Ret = nRet,
@@ -1169,7 +1238,7 @@ namespace GTI_Mvc.Controllers {
                     _numero = _chaveStruct.Numero;
                     _ano = _chaveStruct.Ano;
                     List<Certidao> certidao = new List<Certidao>();
-                    certidao_debito_doc _dados = tributarioRepository.Retorna_Certidao_Debito_Doc(model.Chave);
+                    Certidao_debito_doc _dados = tributarioRepository.Retorna_Certidao_Debito_Doc(model.Chave);
                     if (_dados != null) {
                         Certidao reg = new Certidao() {
                             Codigo = _codigo,

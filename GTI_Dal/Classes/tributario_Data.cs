@@ -1296,6 +1296,18 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Insert_Certidao_Impressao(Certidao_impressao Reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                try {
+                    db.Certidao_impressao.Add(Reg);
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
         public Exception Insert_Certidao_ValorVenal(Certidao_valor_venal Reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 try {
@@ -1386,7 +1398,7 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public Exception Insert_Certidao_Debito_Doc(certidao_debito_doc Reg) {
+        public Exception Insert_Certidao_Debito_Doc(Certidao_debito_doc Reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 try {
                     db.Certidao_debito_doc.Add(Reg);
@@ -1417,7 +1429,7 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public certidao_debito_doc Retorna_Certidao_Debito_Doc(string Validacao) {
+        public Certidao_debito_doc Retorna_Certidao_Debito_Doc(string Validacao) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var Sql = (from p in db.Certidao_debito_doc where p.Validacao == Validacao select p).FirstOrDefault();
                 return Sql;

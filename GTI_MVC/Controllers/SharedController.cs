@@ -3,20 +3,12 @@ using CrystalDecisions.Shared;
 using GTI_Bll.Classes;
 using GTI_Models.Models;
 using GTI_Models.ReportModels;
-using GTI_Mvc;
 using GTI_Mvc.ViewModels;
-using Microsoft.Reporting.WebForms;
-using QRCoder;
-using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Web.Mvc;
-using static GTI_Models.modelCore;
 
-namespace GTI_MVC.Controllers
-{
+namespace GTI_MVC.Controllers {
     public class SharedController : Controller {
 
         [Route("Checkgticd")]
@@ -29,58 +21,89 @@ namespace GTI_MVC.Controllers
 
         [Route("Checkgticd")]
         [HttpPost]
-        public ActionResult Checkgticd(CertidaoViewModel model,string c) {
+        public ActionResult Checkgticd(CertidaoViewModel model, string c) {
             int _codigo, _ano, _numero;
-            string _chave = c;
+            string _tipo, _chave = c,_pdfFileName="";
             if (c != null) {
                 Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
                 Certidao reg = new Certidao();
                 List<Certidao> certidao = new List<Certidao>();
                 chaveStruct _chaveStruct = tributarioRepository.Valida_Certidao(_chave);
-                if (!_chaveStruct.Valido) {
-                    ViewBag.Result = "Chave de autenticação da certidão inválida.";
-                    return View("Certidao_Endereco", model);
-                } else {
-                    _codigo = _chaveStruct.Codigo;
-                    _numero = _chaveStruct.Numero;
-                    _ano = _chaveStruct.Ano;
-
-                    Certidao_endereco certidaoGerada = tributarioRepository.Retorna_Certidao_Endereco(_ano, _numero, _codigo);
-                    if (certidaoGerada != null) {
-                        reg.Codigo = _codigo;
-                        reg.Ano = _ano;
-                        reg.Numero = _numero;
-                        reg.Endereco = certidaoGerada.Logradouro;
-                        reg.Endereco_Numero = certidaoGerada.Li_num;
-                        reg.Endereco_Complemento = certidaoGerada.Li_compl ?? "";
-                        reg.Bairro = certidaoGerada.descbairro;
-                        reg.Nome_Requerente = certidaoGerada.Nomecidadao;
-                        reg.Data_Geracao = certidaoGerada.Data;
-                        reg.Inscricao = certidaoGerada.Inscricao;
-                        reg.Numero_Ano = reg.Numero.ToString("00000") + "/" + reg.Ano;
-                    } else {
-                        ViewBag.Result = "Ocorreu um erro ao processar as informações.";
-                        return View("Certidao_Endereco", model);
-                    }
-                };
-
-                certidao.Add(reg);
-
+                _codigo = _chaveStruct.Codigo;
+                _numero = _chaveStruct.Numero;
+                _ano = _chaveStruct.Ano;
+                _tipo = _chaveStruct.Tipo;
                 ReportDocument rd = new ReportDocument();
-                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Certidao_Endereco_Valida.rpt"));
+                switch (_tipo) {//Certidão endereço
+                    case "EA": {
+                            //####################Certidão endereço####################################
+                            Certidao_endereco certidaoGerada = tributarioRepository.Retorna_Certidao_Endereco(_ano, _numero, _codigo);
+                            reg.Codigo = _codigo;
+                            reg.Ano = _ano;
+                            reg.Numero = _numero;
+                            reg.Endereco = certidaoGerada.Logradouro;
+                            reg.Endereco_Numero = certidaoGerada.Li_num;
+                            reg.Endereco_Complemento = certidaoGerada.Li_compl ?? "";
+                            reg.Bairro = certidaoGerada.descbairro;
+                            reg.Nome_Requerente = certidaoGerada.Nomecidadao;
+                            reg.Data_Geracao = certidaoGerada.Data;
+                            reg.Inscricao = certidaoGerada.Inscricao;
+                            reg.Numero_Ano = reg.Numero.ToString("00000") + "/" + reg.Ano;
+                            certidao.Add(reg);
+                            
+                            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Certidao_Endereco_Valida.rpt"));
+                            rd.SetDataSource(certidao);
+                            _pdfFileName= "Certidao_Endereco.pdf";
+                            break;
+                        }
+                    //#################################################################################
+                    case "IN": case "IP":  case "IS":  case "CN":  case "CP": case "PN": {
+                            //##########################Certidão débito####################################
+                            Certidao_debito_doc _dados = tributarioRepository.Retorna_Certidao_Debito_Doc(_chave);
+                            Certidao regdeb = new Certidao() {
+                                Codigo = _codigo,
+                                Nome_Requerente = _dados.Nome,
+                                Ano = _ano,
+                                Numero = _numero,
+                                Numero_Ano = _dados.Numero.ToString("00000") + "/" + _dados.Ano.ToString(),
+                                Controle = _chave,
+                                Tributo = _dados.Ret==3?"N/A": _dados.Tributo,
+                                Cpf_Cnpj = _dados.Cpf_cnpj,
+                                Data_Geracao = _dados.Data_emissao,
+                                Tipo_Certidao = _dados.Ret == 3 ? "Negativa" : _dados.Ret == 4 ? "Positiva" : "Positiva com Efeito Negativa"
+                            };
+                            certidao.Add(regdeb);
+                            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/CertidaoDebitoDocValida.rpt"));
+                            rd.SetDataSource(certidao);
+                            _pdfFileName = "Certidao_Debito.pdf";
+                            break;
+                        }
+                    case "AF":
+                    case "AN":
+                        break;
+                    case "IE":
+                    case "XE":
+                    case "XA":
+                        break;
+                    case "CI":
+                        break;
+                    case "VV":
+                        break;
+                    default:
+                        break;
+                }
 
                 try {
-                    rd.SetDataSource(certidao);
                     Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
-                    return File(stream, "application/pdf", "Certidao_Endereco.pdf");
+                    return File(stream, "application/pdf", _pdfFileName);
                 } catch {
-
                     throw;
                 }
-            } else {
-                ViewBag.Result = "Chave de validação inválida.";
-                return View("Certidao_Endereço", model);
+
             }
+
+            return null;
+
         }
 
     }

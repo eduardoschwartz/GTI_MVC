@@ -106,7 +106,7 @@ namespace GTI_Dal {
         public DbSet<Certidao_valor_venal> Certidao_valor_venal { get; set; }
         public DbSet<Certidao_isencao> Certidao_isencao { get; set; }
         public DbSet<Certidao_debito> Certidao_debito { get; set; }
-        public DbSet<certidao_debito_doc> Certidao_debito_doc { get; set; }
+        public DbSet<Certidao_debito_doc> Certidao_debito_doc { get; set; }
         public DbSet<Certidao_inscricao> Certidao_inscricao { get; set; }
         public DbSet<Parametros> Parametros { get; set; }
         public DbSet<Vwproprietarioduplicado> Vwproprietarioduplicado { get; set; }
@@ -149,5 +149,6 @@ namespace GTI_Dal {
         public DbSet<Redesim_viabilidade> Redesim_viabilidade { get; set; }
         public DbSet<dados_imovel_web> Dados_Imovel { get; set; }
         public DbSet<Encargo_cvd> Encargo_Cvd { get; set; }
+        public DbSet<Certidao_impressao> Certidao_impressao { get; set; }
     }
 }

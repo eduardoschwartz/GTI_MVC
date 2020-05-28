@@ -71,6 +71,7 @@
     <Compile Include="Models\banco.cs" />
     <Compile Include="Models\boleto.cs" />
     <Compile Include="Models\boletoguia.cs" />
+    <Compile Include="Models\certidao_impressao.cs" />
     <Compile Include="Models\chaveStruct.cs" />
     <Compile Include="Models\dados_imovel_web.cs" />
     <Compile Include="Models\encargo_cvd.cs" />
@@ -86,7 +87,7 @@
     <Compile Include="Models\Integrativa\cdas.cs" />
     <Compile Include="Models\cep.cs" />
     <Compile Include="Models\certidao_debito.cs" />
-    <Compile Include="Models\certidao_debito_doc.cs" />
+    <Compile Include="Models\Certidao_debito_doc.cs" />
     <Compile Include="Models\certidao_endereco.cs" />
     <Compile Include="Models\certidao_inscricao.cs" />
     <Compile Include="Models\certidao_isencao.cs" />

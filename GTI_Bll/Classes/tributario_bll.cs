@@ -659,7 +659,7 @@ namespace GTI_Bll.Classes {
         /// </summary>
         /// <param name="Validacao"></param>
         /// <returns></returns>
-        public certidao_debito_doc Retorna_Certidao_Debito_Doc(string Validacao) {
+        public Certidao_debito_doc Retorna_Certidao_Debito_Doc(string Validacao) {
             Tributario_Data obj = new Tributario_Data(_connection);
             return obj.Retorna_Certidao_Debito_Doc(Validacao);
         }
@@ -713,7 +713,7 @@ namespace GTI_Bll.Classes {
         /// </summary>
         /// <param name="Reg"></param>
         /// <returns></returns>
-        public Exception Insert_Certidao_Debito_Doc(certidao_debito_doc Reg) {
+        public Exception Insert_Certidao_Debito_Doc(Certidao_debito_doc Reg) {
             Tributario_Data obj = new Tributario_Data(_connection);
             Exception ex = obj.Insert_Certidao_Debito_Doc(Reg);
             return ex;
@@ -1393,8 +1393,8 @@ namespace GTI_Bll.Classes {
                                     return reg;
                                 } 
                             } else {
-                                if (sTipo == "IN" || sTipo == "IP" || sTipo == "IS") {
-                                    certidao_debito_doc dadosCDB = Retorna_Certidao_Debito_Doc(Chave);
+                                if (sTipo == "IN" || sTipo == "IP" || sTipo == "IS"||sTipo == "CN" || sTipo == "CP" || sTipo == "PN") {
+                                    Certidao_debito_doc dadosCDB = Retorna_Certidao_Debito_Doc(Chave);
                                     if (dadosCDB != null) {
                                         chaveStruct reg = new chaveStruct {
                                             Codigo = nCodigo,
@@ -1433,6 +1433,11 @@ namespace GTI_Bll.Classes {
             return _reg;
         }
 
+        public Exception Insert_Certidao_Impressao(Certidao_impressao Reg) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            Exception ex = obj.Insert_Certidao_Impressao(Reg);
+            return ex;
+        }
 
     }//end class
 }
