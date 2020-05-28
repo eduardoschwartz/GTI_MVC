@@ -20,5 +20,6 @@ namespace GTI_Models.Models {
         public string Li_quadras { get; set; }
         public string Li_lotes { get; set; }
         public string descbairro { get; set; }
+        public byte[] QRCodeImage { get; set; }
     }
 }

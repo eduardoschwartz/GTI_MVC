@@ -191,6 +191,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImovelController.cs" />
     <Compile Include="Controllers\ProtocoloController.cs" />
+    <Compile Include="Controllers\SharedController.cs" />
     <Compile Include="Controllers\TributarioController.cs" />
     <Compile Include="Datasets\dsBoletoGuia.cs">
       <DependentUpon>dsBoletoGuia.xsd</DependentUpon>
@@ -497,6 +498,7 @@
     <Content Include="Views\Imovel\CadImovel.cshtml" />
     <Content Include="Views\Tributario\Guia.cshtml" />
     <Content Include="Views\Home\Findcd.cshtml" />
+    <Content Include="Views\Shared\Checkgticd.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -5,9 +5,11 @@ using GTI_Models.Models;
 using GTI_Models.ReportModels;
 using GTI_Mvc.ViewModels;
 using Microsoft.Reporting.WebForms;
+using QRCoder;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.IO;
 using System.Web.Mvc;
 using static GTI_Models.modelCore;
@@ -98,6 +100,20 @@ namespace GTI_Mvc.Controllers {
                 Li_quadras = reg.Quadra_Original,
                 Numero = reg.Numero
             };
+
+            //##### QRCode ##########################################################
+            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + reg.Controle;
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
+            using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+                using (MemoryStream ms = new MemoryStream()) {
+                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    byte[] byteImage = ms.ToArray();
+                    regCert.QRCodeImage = byteImage;
+                }
+            }
+            //#######################################################################
+
             Exception ex = tributarioRepository.Insert_Certidao_Endereco(regCert);
             if (ex != null) {
                 ViewBag.Result = "Ocorreu um erro no processamento das informações.";
@@ -106,9 +122,25 @@ namespace GTI_Mvc.Controllers {
 
             ReportDocument rd = new ReportDocument();
             rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Certidao_Endereco.rpt"));
+            TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+            TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+            ConnectionInfo crConnectionInfo = new ConnectionInfo();
+            Tables CrTables;
+            crConnectionInfo.ServerName = "200.232.123.115";
+            crConnectionInfo.DatabaseName = "Tributacao";
+            crConnectionInfo.UserID = "gtisys";
+            crConnectionInfo.Password = "everest";
+            CrTables =rd.Database.Tables;
+            foreach (Table CrTable in CrTables) {
+                crtableLogoninfo = CrTable.LogOnInfo;
+                crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                CrTable.ApplyLogOnInfo(crtableLogoninfo);
+            }
 
             try {
-                rd.SetDataSource(certidao);
+                rd.RecordSelectionFormula = "{certidao_endereco.ano}=" + regCert.Ano + " and {certidao_endereco.numero}=" + regCert.Numero;
+                rd.SetParameterValue("ANONUMERO", regCert.Numero.ToString("00000") + "/" + regCert.Ano.ToString("0000"));
+                rd.SetParameterValue("CADASTRO", regCert.Codigo.ToString("000000")) ;
                 Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
                 return File(stream, "application/pdf", "Certidao_Endereco.pdf");
             } catch {
