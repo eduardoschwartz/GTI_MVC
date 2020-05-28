@@ -38,7 +38,7 @@ namespace GTI_Mvc.Controllers {
             int _codigo = 0;
             short _ret =0;
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
-            int _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Debito);
+            int _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Debito_Doc);
             bool _existeCod = false;
             string _tipoCertidao = "",_nao="", _sufixo = "XX",_reportName="", _numProcesso = "9222-3/2012", _dataProcesso = "18/04/2012",_cpf,_cnpj; 
             TipoCadastro _tipoCadastro=new TipoCadastro();
@@ -345,7 +345,7 @@ namespace GTI_Mvc.Controllers {
             //####################################
 
 
-            string sData = "18/04/2012", sTributo = "", sNao = "", sCertifica = "";
+            string sData = "18/04/2012", sTributo = "", sNao = "", sCertifica = "",_reportName="",_tipo_certidao="";
             short nRet = 0;
             List < Certidao_debito_documento> _lista_certidao = new List<Certidao_debito_documento>();
             RetornoCertidaoDebito _tipo_Certidao;
@@ -397,6 +397,7 @@ namespace GTI_Mvc.Controllers {
             if (!_find) {
                 _tipo_Certidao = RetornoCertidaoDebito.Negativa;
                 sNao = " não";
+                _reportName = "CertidaoDebitoDocumentoN.rpt";
             } else {
                 _find = false;
                 foreach (Certidao_debito_documento reg in _lista_certidao) {
@@ -407,6 +408,7 @@ namespace GTI_Mvc.Controllers {
                 }
                 if (_find) {
                     _tipo_Certidao = RetornoCertidaoDebito.Positiva;
+                    nRet = 4;
                     if (!bEmpresa && !bCidadao && !bImovel) {
                         //Se a certidão positiva for apenas de imóvel, verifica se esta no prazo das parcelas únicas em aberto.
                         bool bUnicaNaoPago = false;
@@ -445,15 +447,22 @@ namespace GTI_Mvc.Controllers {
             if (_tipo_Certidao == RetornoCertidaoDebito.Negativa) {
                 cert.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "-IN";
                 cert.Tributo = "Não consta débito apurado contra o(a) mesmo(a).";
+                _tipo_certidao = "Negativa";
                 cert.Nao = "NÃO";
             } else {
                 if (_tipo_Certidao == RetornoCertidaoDebito.Positiva) {
                     cert.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "-IP";
                     cert.Tributo = "Consta débito apurado contra o(a) mesmo(a) com referência a: " + _tributo;
+                    cert.Nao = "";
+                    _tipo_certidao = "Positiva";
+                    _reportName = "CertidaoDebitoDocumentoP.rpt";
                 } else {
                     if (_tipo_Certidao == RetornoCertidaoDebito.NegativaPositiva) {
                         cert.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "-IS";
                         cert.Tributo = "Consta débito apurado contra o(a) mesmo(a) com referência a: " + _tributo + " que se encontram em sua exigibilidade suspensa, em razão de parcelamento dos débitos";
+                        _reportName = "CertidaoDebitoDocumentoPN.rpt";
+                        _tipo_certidao = "Positiva com efeito negativa";
+                        cert.Nao = "";
                     }
                 }
             }
@@ -472,50 +481,63 @@ namespace GTI_Mvc.Controllers {
             };
             Exception ex = tributario_Class.Insert_Certidao_Debito_Doc(RegSave);
 
+
+            Certidao_impressao cimp = new Certidao_impressao() {
+                Ano = (short)_ano_certidao,
+                Numero = _numero_certidao,
+                Numero_Ano = cert.Numero_Ano,
+                Nome = cert.Nome_Requerente,
+                Cpf_Cnpj = cert.Cpf_Cnpj,
+                Tributo = cert.Tributo,
+                Tipo_Certidao =_tipo_certidao,
+                Nao = cert.Nao.ToUpper()
+            };
+
+            //##### QRCode ##########################################################
+            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + cert.Controle;
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
+            using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+                using (MemoryStream ms = new MemoryStream()) {
+                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    byte[] byteImage = ms.ToArray();
+                    cimp.QRCodeImage = byteImage;
+                }
+            }
+            //#######################################################################
+            ex = tributarioRepository.Insert_Certidao_Impressao(cimp);
+
             if (ex != null) {
                 throw ex;
             } else {
-                if (_tipo_Certidao == RetornoCertidaoDebito.Negativa) {
-                    ReportDocument rd = new ReportDocument();
-                    rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/CertidaoDebitoDocumentoN.rpt"));
 
-                    try {
-                        rd.SetDataSource(ListaCertidao);
-                        Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
-                        return File(stream, "application/pdf", "Certidao_Debito.pdf");
-                    } catch {
-                        throw;
-                    }
-                } else {
-                    if (_tipo_Certidao == RetornoCertidaoDebito.Positiva) {
-                        ReportDocument rd = new ReportDocument();
-                        rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/CertidaoDebitoDocumentoP.rpt"));
-
-                        try {
-                            rd.SetDataSource(ListaCertidao);
-                            Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
-                            return File(stream, "application/pdf", "Certidao_Debito.pdf");
-                        } catch {
-                            throw;
-                        }
-                    } else {
-                        if (_tipo_Certidao == RetornoCertidaoDebito.NegativaPositiva) {
-                            ReportDocument rd = new ReportDocument();
-                            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/CertidaoDebitoDocumentoPN.rpt"));
-
-                            try {
-                                rd.SetDataSource(ListaCertidao);
-                                Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
-                                return File(stream, "application/pdf", "Certidao_Debito.pdf");
-                            } catch {
-                                throw;
-                            }
-                        }
-                    }
+                ReportDocument rd = new ReportDocument();
+                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/" + _reportName));
+                TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+                TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+                ConnectionInfo crConnectionInfo = new ConnectionInfo();
+                Tables CrTables;
+                crConnectionInfo.ServerName = "200.232.123.115";
+                crConnectionInfo.DatabaseName = "Tributacao";
+                crConnectionInfo.UserID = "gtisys";
+                crConnectionInfo.Password = "everest";
+                CrTables = rd.Database.Tables;
+                foreach (Table CrTable in CrTables) {
+                    crtableLogoninfo = CrTable.LogOnInfo;
+                    crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                    CrTable.ApplyLogOnInfo(crtableLogoninfo);
                 }
+
+                try {
+                    rd.RecordSelectionFormula = "{certidao_impressao.ano}=" + cimp.Ano + " and {certidao_impressao.numero}=" + cimp.Numero;
+                    Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                    return File(stream, "application/pdf", "Certidao_Debito.pdf");
+                } catch {
+                    throw;
+                }
+
             }
 
-            return View(model);
         }
 
 
