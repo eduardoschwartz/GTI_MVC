@@ -33,6 +33,8 @@ namespace GTI_MVC.Controllers {
                 _numero = _chaveStruct.Numero;
                 _ano = _chaveStruct.Ano;
                 _tipo = _chaveStruct.Tipo;
+                if (_numero == 0)
+                    return null;
                 ReportDocument rd = new ReportDocument();
                 switch (_tipo) {//Certidão endereço
                     case "EA": {

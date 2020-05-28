@@ -23,5 +23,9 @@ namespace GTI_Models.Models {
         public string Nao { get; set; }
         public string Tributo { get; set; }
         public byte[] QRCodeImage { get; set; }
+        public string Cpf_Cnpj { get; set; }
+        public string Atividade { get; set; }
+        public string Cidade { get; set; }
+        public string Uf { get; set; }
     }
 }
