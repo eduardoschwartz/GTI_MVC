@@ -113,6 +113,15 @@
                 return false;
             }
 
+            var regName = /^[a-zA-Z]+ [a-zA-Z]+$/;
+            var name = document.getElementById('name').value;
+            if (!regName.test(name)) {
+                document.getElementById('errorLabel').innerHTML = "Digite o seu nome completo";
+                document.getElementById('nome').focus();
+                return false;
+            } 
+
+
             return true;
         }
 
