@@ -16,7 +16,7 @@
     }
    .center {
         margin: auto;
-        width: 350px;
+        width: 340px;
         border: 1px solid rgba(0,0,0,0.24);
         padding: 20px;
         box-shadow: 0 .1em 0.5em #000;
@@ -36,29 +36,22 @@
     <label style="color: brown;font-size: 16px;font-style: italic">Acesso ao Sistema</label>
     <br />
 
-
+    <br />
     @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @id = "MainForm" })) {
-
-        <table width="500px">
-            <tr style="height:40px">
-                <td style="width:80px">@Html.LabelFor(m => m.Usuario, new { @style = "font-weight:normal" })</td>
-                <td style="width:300px">@Html.TextBoxFor(m => m.Usuario, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:200px" })</td>
-            </tr>
-            <tr style="height:40px">
-                <td style="width:80px">@Html.LabelFor(m => m.Senha, new { @style = "font-weight:normal" })</td>
-                <td style="width:300px">@Html.TextBoxFor(m => m.Senha, new { @type = "password", @id = "senha", @class = "textBoxBlue", @style = "max-width:200px" })</td>
-            </tr>
-        </table>
+        @Html.TextBoxFor(m => m.Usuario, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:300px;width:320px", placeholder = "Nome de usuário ou Email" })<br /><br />
+        @Html.TextBoxFor(m => m.Senha, new { @type = "password", @id = "senha", @class = "textBoxBlue", @style = "max-width:200px", placeholder = "Digite a senha" })<br />
 
         <br />
-            <button type="submit" title="Acessar o sistema" class="btn btn-primary"> Entrar</button>
-     
+        <button type="submit" title="Acessar o sistema" class="btn btn-primary"> Entrar</button><span>&nbsp;&nbsp;&nbsp;</span>@Html.ActionLink("Criar conta", "Login_create", "Home", null, new { @class = "btn btn-info", title = "Criar uma nova conta no sistema" })
+
+        <br />
         <br />
         <div class="form-group row">
-            <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+            <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
         </div>
     }
 
+    @Html.ActionLink("Esqueci minha senha", "Login_gti", "Home", null, new { @class = "actionlink" })<br />
     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 </div>
 
@@ -78,7 +71,7 @@
             var _senha = document.getElementById('senha').value;
 
             if (_cod == "" || _senha == "") {
-                document.getElementById('errorLabel').innerHTML = "Digite o login e a senha";
+                document.getElementById('errorLabel').innerHTML = "Digite o Usuário/Email e a senha";
                 return false;
             }
 

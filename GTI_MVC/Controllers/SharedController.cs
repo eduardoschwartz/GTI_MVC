@@ -109,9 +109,7 @@ namespace GTI_MVC.Controllers {
                             break;
                         }
                     //#################################################################################
-                    case "IE":
-                    case "XE":
-                    case "XA":
+                    case "IE": case "XE": case "XA":
                         break;
                     case "CI":
                         break;

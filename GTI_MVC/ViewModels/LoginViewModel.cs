@@ -11,5 +11,16 @@ namespace GTI_Mvc.ViewModels {
         [Display(Name = "Confimação: ")]
         public string Senha3 { get; set; }
         public string ErrorMessage { get; set; }
+        public string CpfCnpjLabel { get; set; }
+        public string CpfValue { get; set; }
+        public string CnpjValue { get; set; }
+        [Required]
+        [StringLength(6)]
+        public string CaptchaCode { get; set; }
+        [Display(Name = "Chave de validação")]
+        public string Chave { get; set; }
+        public string Email { get; set; }
+        public string Telefone { get; set; }
+
     }
 }

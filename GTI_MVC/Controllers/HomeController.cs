@@ -150,5 +150,21 @@ namespace GTI_Mvc.Controllers {
             return View( model);
         }
 
+        [Route("Login_create")]
+        [HttpGet]
+        public ViewResult Login_create() {
+            LoginViewModel model = new LoginViewModel();
+            return View(model);
+        }
+
+        [Route("Login_create")]
+        [HttpPost]
+        public ViewResult Login_create(LoginViewModel model) {
+            return View(model);
+        }
+
+
+
+
     }
 }
