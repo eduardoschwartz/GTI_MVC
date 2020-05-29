@@ -27,5 +27,6 @@ namespace GTI_Models.Models {
         public string Atividade { get; set; }
         public string Cidade { get; set; }
         public string Uf { get; set; }
+        public string Horario { get; set; }
     }
 }

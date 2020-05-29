@@ -20,5 +20,6 @@ namespace GTI_Models.Models {
         public string Horario { get; set; }
         public DateTime Validade { get; set; }
         public DateTime Data_Gravada { get; set; }
+        public byte[] QRCodeImage { get; set; }
     }
 }

@@ -1334,7 +1334,7 @@ namespace GTI_Dal.Classes {
 
         public Exception Insert_Alvara_Funcionamento(Alvara_funcionamento Reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[12];
+                object[] Parametros = new object[13];
                 Parametros[0] = new SqlParameter { ParameterName = "@Ano", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano };
                 Parametros[1] = new SqlParameter { ParameterName = "@Numero", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero };
                 Parametros[2] = new SqlParameter { ParameterName = "@Controle", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Controle };
@@ -1347,8 +1347,9 @@ namespace GTI_Dal.Classes {
                 Parametros[9] = new SqlParameter { ParameterName = "@Horario", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Horario };
                 Parametros[10] = new SqlParameter { ParameterName = "@Validade", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Validade };
                 Parametros[11] = new SqlParameter { ParameterName = "@Data_gravada", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_Gravada };
-                db.Database.ExecuteSqlCommand("INSERT INTO Alvara_Funcionamento(ano,numero,controle,codigo,razao_social,documento,endereco,bairro,atividade,horario,validade,data_gravada) VALUES(@ano,@numero," +
-                                              "@controle,@codigo,@razao_social,@documento,@endereco,@bairro,@atividade,@horario,@validade,@data_gravada)", Parametros);
+                Parametros[12] = new SqlParameter { ParameterName = "@QRCodeImage", SqlDbType = SqlDbType.Image, SqlValue = Reg.QRCodeImage };
+                db.Database.ExecuteSqlCommand("INSERT INTO Alvara_Funcionamento(ano,numero,controle,codigo,razao_social,documento,endereco,bairro,atividade,horario,validade,data_gravada,QRCodeImage) VALUES(@ano,@numero," +
+                                              "@controle,@codigo,@razao_social,@documento,@endereco,@bairro,@atividade,@horario,@validade,@data_gravada,@QRCodeImage)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {

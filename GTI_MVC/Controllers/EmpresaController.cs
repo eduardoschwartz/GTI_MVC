@@ -810,6 +810,19 @@ namespace GTI_Mvc.Controllers {
                 alvara.Validade = Convert.ToDateTime("30/06/2019");
                 alvara.Data_Gravada = DateTime.Now;
 
+                //##### QRCode ##########################################################
+                string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + alvara.Controle;
+                QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
+                using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+                    using (MemoryStream ms = new MemoryStream()) {
+                        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                        byte[] byteImage = ms.ToArray();
+                        alvara.QRCodeImage = byteImage;
+                    }
+                }
+                //#######################################################################
+
                 Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
                 Exception ex = tributarioRepository.Insert_Alvara_Funcionamento(alvara);
                 if (ex != null){
@@ -817,30 +830,30 @@ namespace GTI_Mvc.Controllers {
                     return View(certidaoViewModel);
                 }
 
-                Certidao reg = new Certidao() {
-                    Codigo = _codigo,
-                    Razao_Social = empresa.Razao_social,
-                    Endereco = empresa.Endereco_nome,
-                    Endereco_Numero = (int)empresa.Numero,
-                    Endereco_Complemento = empresa.Complemento,
-                    Bairro = empresa.Bairro_nome,
-                    Atividade_Extenso = empresa.Atividade_extenso,
-                    Horario = string.IsNullOrWhiteSpace(empresa.Horario_extenso) ? empresa.Horario_Nome : empresa.Horario_extenso,
-                    Controle =controle
-                };
-
-                List<Certidao> _lista_Dados = new List<Certidao>();
-                _lista_Dados.Add(reg);
                 ReportDocument rd = new ReportDocument();
                 rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Alvara_Funcionamento.rpt"));
+                TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+                TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+                ConnectionInfo crConnectionInfo = new ConnectionInfo();
+                Tables CrTables;
+                crConnectionInfo.ServerName = "200.232.123.115";
+                crConnectionInfo.DatabaseName = "Tributacao";
+                crConnectionInfo.UserID = "gtisys";
+                crConnectionInfo.Password = "everest";
+                CrTables = rd.Database.Tables;
+                foreach (Table CrTable in CrTables) {
+                    crtableLogoninfo = CrTable.LogOnInfo;
+                    crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                    CrTable.ApplyLogOnInfo(crtableLogoninfo);
+                }
+
                 try {
-                    rd.SetDataSource(_lista_Dados);
+                    rd.RecordSelectionFormula = "{Alvara_Funcionamento.ano}=" + alvara.Ano + " and {Alvara_Funcionamento.numero}=" + alvara.Numero;
                     Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
                     return File(stream, "application/pdf", "Alvara.pdf");
                 } catch {
                     throw;
                 }
-
             } else {
                 certidaoViewModel.ErrorMessage = "Empresa não cadastrada.";
                 return View(certidaoViewModel);
