@@ -36,7 +36,7 @@ namespace GTI_MVC.Controllers {
                 if (_numero == 0)
                     return null;
                 ReportDocument rd = new ReportDocument();
-                switch (_tipo) {//Certidão endereço
+                switch (_tipo) {
                     case "EA": {
                             //####################Certidão endereço####################################
                             Certidao_endereco certidaoGerada = tributarioRepository.Retorna_Certidao_Endereco(_ano, _numero, _codigo);
@@ -80,17 +80,72 @@ namespace GTI_MVC.Controllers {
                             _pdfFileName = "Certidao_Debito.pdf";
                             break;
                         }
-                    case "AF":
-                    case "AN":
-                        break;
+                    //#################################################################################
+                    case "AF": case "AN": {
+                            //#########################Alvará de Funcionamento#############################
+                            _codigo = _chaveStruct.Codigo;
+                            _numero = _chaveStruct.Numero;
+                            _ano = _chaveStruct.Ano;
+                            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+                            Alvara_funcionamento _dadosalvara = empresaRepository.Alvara_Funcionamento_gravado(_chave);
+                            if (_dadosalvara != null) {
+                                Certidao regAlvara = new Certidao() {
+                                    Codigo = _codigo,
+                                    Razao_Social = _dadosalvara.Razao_social,
+                                    Endereco = _dadosalvara.Endereco + ", " + _dadosalvara.Numero,
+                                    Bairro = _dadosalvara.Bairro ?? "",
+                                    Ano = _ano,
+                                    Numero = _numero,
+                                    Controle = _chave,
+                                    Atividade_Extenso = _dadosalvara.Atividade,
+                                    Cpf_Cnpj = _dadosalvara.Documento,
+                                    Horario = _dadosalvara.Horario
+                                };
+                                certidao.Add(regAlvara);
+                            }
+                            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Alvara_Funcionamento_Valida.rpt"));
+                            rd.SetDataSource(certidao);
+                            _pdfFileName = "AlvaraValida.pdf";
+                            break;
+                        }
+                    //#################################################################################
                     case "IE":
                     case "XE":
                     case "XA":
                         break;
                     case "CI":
                         break;
-                    case "VV":
-                        break;
+                    case "VV": {
+                            //#########################Certidão Valor Venal############################
+                            Certidao_valor_venal certidaoGerada = tributarioRepository.Retorna_Certidao_ValorVenal(_ano, _numero, _codigo);
+                            if (certidaoGerada != null) {
+                                reg.Codigo = _codigo;
+                                reg.Ano = _ano;
+                                reg.Numero = _numero;
+                                reg.Endereco = certidaoGerada.Logradouro;
+                                reg.Endereco_Numero = certidaoGerada.Li_num;
+                                reg.Endereco_Complemento = certidaoGerada.Li_compl ?? "";
+                                reg.Bairro = certidaoGerada.Descbairro;
+                                reg.Nome_Requerente = certidaoGerada.Nomecidadao;
+                                reg.Data_Geracao = certidaoGerada.Data;
+                                reg.Inscricao = certidaoGerada.Inscricao;
+                                reg.Area = certidaoGerada.Areaterreno;
+                                reg.VVT = certidaoGerada.Vvt;
+                                reg.VVP = certidaoGerada.Vvp;
+                                reg.VVI = certidaoGerada.Vvi;
+                                reg.Numero_Ano = reg.Numero.ToString("00000") + "/" + reg.Ano;
+                            } else {
+                                ViewBag.Result = "Ocorreu um erro ao processar as informações.";
+                                return View("Certidao_Valor_Venal", model);
+                            }
+
+                            certidao.Add(reg);
+                            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Certidao_Valor_venal_Valida.rpt"));
+                            rd.SetDataSource(certidao);
+                            _pdfFileName = "Certidao_ValorVenal.pdf";
+                            break;
+                        }
+                    //#################################################################################
                     default:
                         break;
                 }

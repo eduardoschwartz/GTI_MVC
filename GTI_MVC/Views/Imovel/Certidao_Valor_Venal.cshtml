@@ -68,9 +68,10 @@
                 <div class="input-group">
                     <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chave</label>
                     &nbsp;&nbsp;@Html.TextBoxFor(m => m.Chave, new { @id = "chave", @class = "textBoxBlue", @style = "max-width:110px;" })
-
                     &nbsp;&nbsp;<button class="btn btn-primary" type="submit" title="Validar a certidão." formaction="Validate_VV" formmethod="post">Validar</button>
                 </div>
+                <br />
+                <article style="color:darkred;font-size:small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Obs: A partir de 27/05/2020 a validação será feita através do <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;QRCode presente na certidão.</article>
             </div>
         </div>
 

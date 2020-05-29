@@ -101,6 +101,30 @@ namespace GTI_Mvc.Controllers {
                 Numero = reg.Numero
             };
 
+            Exception ex = tributarioRepository.Insert_Certidao_Endereco(regCert);
+
+
+            Certidao_impressao cimp = new Certidao_impressao() {
+                Ano = reg.Ano,
+                Numero = reg.Numero,
+                Codigo = Convert.ToInt32(reg.Codigo).ToString("000000"),
+                Endereco = reg.Endereco,
+                Endereco_Numero = reg.Endereco_Numero,
+                Endereco_Complemento = reg.Endereco_Complemento,
+                Bairro = reg.Bairro,
+                Cidade = reg.Cidade,
+                Uf = reg.Uf,
+                Quadra_Original = reg.Quadra_Original,
+                Lote_Original = reg.Lote_Original,
+                Inscricao = reg.Inscricao,
+                Numero_Ano = reg.Numero_Ano,
+                Nome = reg.Nome_Requerente,
+                Cpf_Cnpj = reg.Cpf_Cnpj,
+                Atividade = reg.Atividade_Extenso,
+                Tributo = reg.Tributo,
+                Tipo_Certidao = reg.Tipo_Certidao,
+                Nao = reg.Nao.ToUpper()
+            };
             //##### QRCode ##########################################################
             string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + reg.Controle;
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
@@ -114,7 +138,8 @@ namespace GTI_Mvc.Controllers {
             }
             //#######################################################################
 
-            Exception ex = tributarioRepository.Insert_Certidao_Endereco(regCert);
+
+
             if (ex != null) {
                 ViewBag.Result = "Ocorreu um erro no processamento das informações.";
                 return View(certidaoViewModel);
@@ -284,26 +309,76 @@ namespace GTI_Mvc.Controllers {
                 Vvp = RegCalculo.Vvp,
                 Vvi = RegCalculo.Vvi
             };
-
             Exception ex = tributarioRepository.Insert_Certidao_ValorVenal(regCert);
+
+            Certidao_impressao cimp = new Certidao_impressao() {
+                Ano = reg.Ano,
+                Numero = reg.Numero,
+                Codigo = Convert.ToInt32(reg.Codigo).ToString("000000"),
+                Endereco = reg.Endereco,
+                Endereco_Numero = reg.Endereco_Numero,
+                Endereco_Complemento = reg.Endereco_Complemento,
+                Bairro = reg.Bairro,
+                Cidade = "JABOTICABAL",
+                Uf = "SP",
+                Quadra_Original = reg.Quadra_Original??"",
+                Lote_Original = reg.Lote_Original??"",
+                Inscricao = reg.Inscricao,
+                Numero_Ano = reg.Numero_Ano,
+                Nome = reg.Nome_Requerente,
+                Cpf_Cnpj = reg.Cpf_Cnpj,
+                Atividade = reg.Atividade_Extenso??"",
+                Tributo = reg.Tributo??"",
+                Tipo_Certidao = reg.Tipo_Certidao??"",
+                Nao = "",
+                Vvt=reg.VVT,
+                Vvp=reg.VVP,
+                Vvi=reg.VVI
+            };
+            //##### QRCode ##########################################################
+            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + reg.Controle;
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
+            using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+                using (MemoryStream ms = new MemoryStream()) {
+                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    byte[] byteImage = ms.ToArray();
+                    cimp.QRCodeImage = byteImage;
+                }
+            }
+            //#######################################################################
+            ex = tributarioRepository.Insert_Certidao_Impressao(cimp);
+
             if (ex != null) {
                 ViewBag.Result = "Ocorreu um erro no processamento das informações.";
                 return View(certidaoViewModel);
             }
-            List<Certidao> certidao = new List<Certidao> {
-                reg
-            };
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Certidao_Valor_Venal.rpt"));
+            TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+            TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+            ConnectionInfo crConnectionInfo = new ConnectionInfo();
+            Tables CrTables;
+            crConnectionInfo.ServerName = "200.232.123.115";
+            crConnectionInfo.DatabaseName = "Tributacao";
+            crConnectionInfo.UserID = "gtisys";
+            crConnectionInfo.Password = "everest";
+            CrTables = rd.Database.Tables;
+            foreach (Table CrTable in CrTables) {
+                crtableLogoninfo = CrTable.LogOnInfo;
+                crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                CrTable.ApplyLogOnInfo(crtableLogoninfo);
+            }
 
             try {
-                ReportDocument rd = new ReportDocument();
-                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Certidao_Valor_Venal.rpt"));
-                rd.SetDataSource(certidao);
+                rd.RecordSelectionFormula = "{Certidao_impressao.ano}=" + regCert.Ano + " and {Certidao_impressao.numero}=" + regCert.Numero;
                 Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
                 return File(stream, "application/pdf", "Certidao_VVenal.pdf");
-            } catch (Exception ex2)  {
-                ViewBag.Result = ex2.InnerException;
-                return View(certidaoViewModel);
+            } catch {
+                throw;
             }
+
         }
 
         [HttpPost]

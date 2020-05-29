@@ -28,5 +28,8 @@ namespace GTI_Models.Models {
         public string Cidade { get; set; }
         public string Uf { get; set; }
         public string Horario { get; set; }
+        public decimal Vvt { get; set; }
+        public decimal Vvp { get; set; }
+        public decimal Vvi { get; set; }
     }
 }
