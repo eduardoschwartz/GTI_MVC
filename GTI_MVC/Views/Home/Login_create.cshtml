@@ -56,7 +56,7 @@
         </td>
     </tr>
     <tr style="height:40px">
-        <td ><label style="font-weight:normal">Endereço de Email:</label></td>
+        <td ><label style="font-weight:normal">Nº de Telefone:</label></td>
         <td >@Html.TextBoxFor(m => m.Telefone, new { @id = "telefone", @class = "textBoxBlue", @style = "max-width:400px;width:300px" })</td>
     </tr>
     <tr style="height:40px">
@@ -107,20 +107,59 @@
         function ValidateForm() {
             ClearError();
             var _nome = document.getElementById('nome').value;
+            var _cpf = document.getElementById('cpfTxt').value;
+            var _cnpj = document.getElementById('cnpjTxt').value;
+            var _captcha = document.getElementById('captchaTxt').value;
+            var _email = document.getElementById('email').value;
+            var _fone = document.getElementById('telefone').value;
+            var _senha2 = document.getElementById('senha2').value;
+            var _senha3 = document.getElementById('senha3').value;
 
             if (_nome == "" ) {
-                document.getElementById('errorLabel').innerHTML = "Digite o seu nome completo";
+                document.getElementById('errorLabel').innerHTML = "Informe o nome completo";
                 return false;
             }
 
             var regName = /^[a-zA-Z]+ [a-zA-Z]+$/;
-            var name = document.getElementById('name').value;
+            var name = document.getElementById('nome').value;
             if (!regName.test(name)) {
-                document.getElementById('errorLabel').innerHTML = "Digite o seu nome completo";
+                document.getElementById('errorLabel').innerHTML = "Informe o nome completo";
                 document.getElementById('nome').focus();
                 return false;
-            } 
+            }
 
+            if (_fone == "") {
+                document.getElementById('errorLabel').innerHTML = "Informe o nº de telefone";
+                return false;
+            }
+
+            if (_nome == "") {
+                document.getElementById('errorLabel').innerHTML = "Informe o endereço de email";
+                document.getElementById('email').focus();
+                return false;
+            }
+
+            if (_cpf == "" && _cnpj == "") {
+                document.getElementById('errorLabel').innerHTML = "Informe o cpf ou o cnpj";
+                return false;
+            }
+
+            var mailformat = /^[a-z0-9\.\_%+-]+@@[a-z0-9\.\-]+\.[a-z]{2,4}$/i;
+            if (!mailformat.test(_email)) {
+                document.getElementById('errorLabel').innerHTML = "Endereço de email inválido";
+                document.getElementById('email').focus();
+                return false;
+            }
+
+            if (_senha2.length<6 ) {
+                document.getElementById('errorLabel').innerHTML = "Senha muito curta";
+                return false;
+            }
+
+            if (_senha2!=_senha3) {
+                document.getElementById('errorLabel').innerHTML = "Senhas não conferem";
+                return false;
+            }
 
             return true;
         }

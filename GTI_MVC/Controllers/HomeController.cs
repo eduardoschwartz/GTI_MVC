@@ -4,6 +4,8 @@ using GTI_Models.Models;
 using GTI_Mvc.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Mail;
 using System.Web.Mvc;
 using System.Web.UI;
 using static GTI_Models.modelCore;
@@ -159,12 +161,57 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Login_create")]
         [HttpPost]
-        public ViewResult Login_create(LoginViewModel model) {
+        public ActionResult Login_create(LoginViewModel model) {
+            using (MailMessage emailMessage = new MailMessage()) {
+                emailMessage.From = new MailAddress("gti@jaboticabal.sp.gov.br", "GTIPref");
+                emailMessage.To.Add(new MailAddress("eduardo.schwartz@gmail.com"));
+                emailMessage.Subject = "Autoriza";
+                emailMessage.Body = "Minha mensagem";
+                emailMessage.Priority = MailPriority.Normal;
+
+                using (SmtpClient MailClient = new SmtpClient("smtp.gmail.com", 587)) {
+                    MailClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    MailClient.EnableSsl = true;
+                    MailClient.Credentials = new System.Net.NetworkCredential("gti.jaboticabal@gmail.com", "esnssgzxxjcdjrpk");
+                    MailClient.Send(emailMessage);
+                }
+            }
+
+
+            //     var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
+            //var message = new MailMessage();
+            //    message.To.Add(new MailAddress("eduardo.schwartz@gmail.com")); 
+            //    message.From = new MailAddress("gti@jaboticabal.sp.gov.br");  
+            //    message.Subject = "Prefeitura Municipal de Jaboticabal (G.T.I.) - Ativação de Cadastro";
+            //    message.Body = string.Format(body, "Prefeitura Municipal de Jaboticabal - GTI", "gti@jaboticabal.sp.gov.br", "teste de mensagem");
+            //    message.IsBodyHtml = true;
+
+            //    using (var smtp = new SmtpClient()) {
+            //        var credential = new NetworkCredential {
+            //            UserName = "gti@jaboticabal.sp.gov.br",  
+            //            Password = "cvrcs041"
+            //        };
+            //        smtp.Credentials = credential;
+            //        smtp.Host = "smtplw.com.br";
+            //        smtp.Port = 587;
+            //        smtp.EnableSsl = true;
+            //        smtp.Send(message);
+            //    }
+
+            return View("Login_create2", model);
+        }
+
+        [Route("Login_create2")]
+        [HttpGet]
+        public ViewResult Login_create2(LoginViewModel model) {
             return View(model);
         }
 
-
-
+        [Route("Login_create2")]
+        [HttpPost]
+        public ActionResult Login_create2() {
+            return RedirectToAction("Login");
+        }
 
     }
 }

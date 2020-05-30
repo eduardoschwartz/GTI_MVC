@@ -500,6 +500,7 @@
     <Content Include="Views\Home\Findcd.cshtml" />
     <Content Include="Views\Shared\Checkgticd.cshtml" />
     <Content Include="Views\Home\Login_create.cshtml" />
+    <Content Include="Views\Home\Login_create2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
