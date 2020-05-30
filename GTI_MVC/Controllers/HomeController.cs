@@ -162,11 +162,25 @@ namespace GTI_Mvc.Controllers {
         [Route("Login_create")]
         [HttpPost]
         public ActionResult Login_create(LoginViewModel model) {
+            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Usuario_web reg = new Usuario_web() {
+                Nome = model.Usuario,
+                Email = model.Email,
+                Telefone = model.Telefone,
+                Cpf_Cnpj = model.CpfValue == null ? Functions.RetornaNumero( model.CnpjValue) : Functions.RetornaNumero(model.CpfValue),
+                Senha=Functions.Encrypt(model.Senha2),
+                Data_Cadastro=DateTime.Now,
+                Ativo=false,
+                Bloquedo=false
+            };
+            int id = sistemaRepository.Incluir_Usuario_Web(reg);
+            string sid = Functions.Encrypt("#Prefeitura Municipal de Jaboticabal - GTI - Serviços Online#"+id.ToString("000000"));
+
             string Body = System.IO.File.ReadAllText( System.Web.HttpContext.Current.Server.MapPath("~/Files/AccessTemplate.htm"));
-            Body = Body.Replace("#aaaaaaa#", "código:123456");
+            Body = Body.Replace("#$$$#", sid);
             using (MailMessage emailMessage = new MailMessage()) {
                 emailMessage.From = new MailAddress("gti@jaboticabal.sp.gov.br", "Prefeitura de Jaboticabal");
-                emailMessage.To.Add(new MailAddress("eduardo.schwartz@gmail.com"));
+                emailMessage.To.Add(new MailAddress(model.Email));
                 emailMessage.Subject = "Prefeitura Municipal de Jaboticabal - Acesso aos serviços online (G.T.I.)";
                 emailMessage.Body = Body;
                 emailMessage.Priority = MailPriority.Normal;

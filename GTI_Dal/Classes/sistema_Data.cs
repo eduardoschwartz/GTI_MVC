@@ -630,5 +630,33 @@ namespace GTI_Dal.Classes {
             return Lista;
         }
 
+        public int Incluir_Usuario_Web(Usuario_web reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                int _id=0;
+                var Sql = (from c in db.Usuario_Web orderby c.Id descending select c.Id).FirstOrDefault();
+                _id=++Sql;
+
+                try {
+                    List<SqlParameter> parameters = new List<SqlParameter> {
+                        new SqlParameter("@id", _id),
+                        new SqlParameter("@nome", reg.Nome),
+                        new SqlParameter("@email", reg.Email),
+                        new SqlParameter("@senha", reg.Senha),
+                        new SqlParameter("@telefone", reg.Telefone),
+                        new SqlParameter("@cpf_cnpj", reg.Cpf_Cnpj),
+                        new SqlParameter("@ativo", reg.Ativo),
+                        new SqlParameter("@data_cadastro", reg.Data_Cadastro),
+                        new SqlParameter("@bloqueado", reg.Bloquedo)
+                    };
+
+                    db.Database.ExecuteSqlCommand("INSERT INTO usuario_web(id,nome,email,senha,telefone,cpf_cnpj,ativo,data_cadastro,bloqueado)" +
+                                                  " VALUES(@id,@nome,@email,@senha,@telefone,@cpf_cnpj,@ativo,@data_cadastro,@bloqueado)", parameters.ToArray());
+                } catch  {
+                    throw;
+                }
+                return _id;
+            }
+        }
+
     }
 }

@@ -195,6 +195,7 @@
     <Compile Include="Models\usuario.cs" />
     <Compile Include="Models\usuariocc.cs" />
     <Compile Include="Models\usuariofunc.cs" />
+    <Compile Include="Models\usuario_web.cs" />
     <Compile Include="Models\vre_atividade.cs" />
     <Compile Include="Models\vre_empresa.cs" />
     <Compile Include="Models\vre_licenciamento.cs" />

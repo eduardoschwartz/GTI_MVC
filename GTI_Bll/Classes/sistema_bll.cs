@@ -249,5 +249,13 @@ namespace GTI_Bll.Classes {
             Sistema_Data obj = new Sistema_Data(_connection);
             return obj.CodigoHeader(tipo,Cpf,Cnpj,Nome);
         }
+
+        public int Incluir_Usuario_Web(Usuario_web reg) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            int id = obj.Incluir_Usuario_Web(reg);
+            return id;
+        }
+
+
     }
 }

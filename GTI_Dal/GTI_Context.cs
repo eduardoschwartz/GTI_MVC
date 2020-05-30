@@ -150,5 +150,6 @@ namespace GTI_Dal {
         public DbSet<dados_imovel_web> Dados_Imovel { get; set; }
         public DbSet<Encargo_cvd> Encargo_Cvd { get; set; }
         public DbSet<Certidao_impressao> Certidao_impressao { get; set; }
+        public DbSet<Usuario_web> Usuario_Web { get; set; }
     }
 }
