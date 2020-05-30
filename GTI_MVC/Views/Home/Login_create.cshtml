@@ -161,6 +161,12 @@
                 return false;
             }
 
+            if (_captcha == "") {
+                document.getElementById('errorLabel').innerHTML = "Digite o código de validação";
+                document.getElementById('captchaTxt').focus();
+                return false;
+            }
+
             return true;
         }
 
