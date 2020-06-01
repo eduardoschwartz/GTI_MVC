@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Reenviar confirmação";
+    ViewData["Title"] = "Redefinição de senha";
 }
 <style>
     .textBoxBlue {
@@ -17,7 +17,7 @@
 
     .center {
         margin: auto;
-        width: 520px;
+        width: 420px;
         border: 1px solid rgba(0,0,0,0.24);
         padding: 20px;
         box-shadow: 0 .1em 0.5em #000;
@@ -35,15 +35,20 @@
 
 <div class="center">
     <br />
-    <label style="color: brown;font-size: 16px;font-style: italic">Reenviar email de confirmação da conta</label>
+    <label style="color: brown;font-size: 16px;font-style: italic">Redefinição de senha <span style="color:darkblue;font-weight:normal">(@Model.Email)</span></label>
     <br />
 
     <br />
-    @using (Html.BeginForm("Login_resend", "Home", FormMethod.Post, new { @id = "MainForm" })) {
-        <table width="500px">
+    @using (Html.BeginForm("Login_reset", "Home", FormMethod.Post, new { @id = "MainForm" })) {
+        @Html.HiddenFor(m=>m.Email)
+        <table width="400px">
             <tr style="height:40px">
-                <td><label style="font-weight:normal">Endereço de Email:</label></td>
-                <td>@Html.TextBoxFor(m => m.Email, new { @id = "email", @class = "textBoxBlue", @style = "max-width:400px;width:300px" })</td>
+                <td><label style="font-weight:normal">Digite a Senha:</label></td>
+                <td>@Html.TextBoxFor(m => m.Senha2, new { @type = "password", @id = "senha2", @class = "textBoxBlue", @style = "max-width:400px" })</td>
+            </tr>
+            <tr style="height:40px">
+                <td><label style="font-weight:normal">Confirme a Senha:</label></td>
+                <td>@Html.TextBoxFor(m => m.Senha3, new { @type = "password", @id = "senha3", @class = "textBoxBlue", @style = "max-width:400px" })</td>
             </tr>
 
             <tr style="height:40px">
@@ -56,7 +61,7 @@
             </tr>
         </table>
         <br />
-        <button type="submit" title="Enviar" class="btn btn-primary"> Enviar</button>
+        <button type="submit" title="Gravar a nova senha" class="btn btn-primary"> Redefinir</button>
 
         <br />
         <br />
@@ -81,16 +86,21 @@
         function ValidateForm() {
             ClearError();
             var _captcha = document.getElementById('captchaTxt').value;
-            var _email = document.getElementById('email').value;
+            var _senha2 = document.getElementById('senha2').value;
+            var _senha3 = document.getElementById('senha3').value;
 
-            var mailformat = /^[a-z0-9\.\_%+-]+@@[a-z0-9\.\-]+\.[a-z]{2,4}$/i;
-            if (!mailformat.test(_email)) {
-                document.getElementById('errorLabel').innerHTML = "Endereço de email inválido";
-                document.getElementById('email').focus();
+
+            if (_senha2.length<6 ) {
+                document.getElementById('errorLabel').innerHTML = "Senha muito curta";
                 return false;
             }
 
-            if (_captcha.length < 6) {
+            if (_senha2!=_senha3) {
+                document.getElementById('errorLabel').innerHTML = "Senhas não conferem";
+                return false;
+            }
+
+            if (_captcha.length <6) {
                 document.getElementById('errorLabel').innerHTML = "Código de validação inválido";
                 document.getElementById('captchaTxt').focus();
                 return false;
@@ -103,6 +113,8 @@
         function ClearError() {
             document.getElementById('errorLabel').innerHTML = "";
         }
+
+        
 
 
     </script>

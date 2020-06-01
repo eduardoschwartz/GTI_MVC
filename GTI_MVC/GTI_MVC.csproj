@@ -392,6 +392,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\gti.css" />
+    <Content Include="Files\PwdTemplate.htm" />
     <Content Include="Files\AccessTemplate.htm" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -504,6 +505,8 @@
     <Content Include="Views\Home\Login_create2.cshtml" />
     <Content Include="Views\Home\Login_welcome.cshtml" />
     <Content Include="Views\Home\Login_resend.cshtml" />
+    <Content Include="Views\Home\Login_reset.cshtml" />
+    <Content Include="Views\Home\Login_resend_pwd.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

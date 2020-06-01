@@ -181,8 +181,8 @@ namespace GTI_Mvc.Controllers {
                 Bloqueado=false
             };
             int id = sistemaRepository.Incluir_Usuario_Web(reg);
-            string sid =  Url.Encode( Functions.Encrypt("#GTI - Serviços Online#"+id.ToString("000000")));
 
+            string sid =  Url.Encode( Functions.Encrypt("#GTI - Serviços Online#"+id.ToString("000000")));
             string Body = System.IO.File.ReadAllText( System.Web.HttpContext.Current.Server.MapPath("~/Files/AccessTemplate.htm"));
             Body = Body.Replace("#$$$#", sid);
             using (MailMessage emailMessage = new MailMessage()) {
@@ -196,7 +196,7 @@ namespace GTI_Mvc.Controllers {
                 using (SmtpClient MailClient = new SmtpClient("smtp.gmail.com", 587)) {
                     MailClient.DeliveryMethod = SmtpDeliveryMethod.Network;
                     MailClient.EnableSsl = true;
-                    MailClient.Credentials = new System.Net.NetworkCredential("gti.jaboticabal@gmail.com", "esnssgzxxjcdjrpk");
+                    MailClient.Credentials = new NetworkCredential("gti.jaboticabal@gmail.com", "esnssgzxxjcdjrpk");
                     MailClient.Send(emailMessage);
                 }
             }
@@ -246,11 +246,130 @@ namespace GTI_Mvc.Controllers {
         [Route("Login_resend")]
         [HttpPost]
         public ViewResult Login_resend(LoginViewModel model) {
+            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+                ViewBag.Result = "Código de verificação inválido.";
+                return View(model);
+            }
+
+            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Usuario_web reg = sistemaRepository.Retorna_Usuario_Web(model.Email);
+            if (reg == null) {
+                ViewBag.Result = "Erro, email não cadastrado.";
+                return View(model);
+            } else {
+                if (reg.Bloqueado) {
+                    ViewBag.Result = "Erro, este endereço de email encontra-se bloqueado.";
+                    return View(model);
+                }
+            }
+
+            string sid = Url.Encode(Functions.Encrypt("#GTI - Serviços Online#" + reg.Id.ToString("000000")));
+            string Body = System.IO.File.ReadAllText(System.Web.HttpContext.Current.Server.MapPath("~/Files/AccessTemplate.htm"));
+            Body = Body.Replace("#$$$#", sid);
+            using (MailMessage emailMessage = new MailMessage()) {
+                emailMessage.From = new MailAddress("gti@jaboticabal.sp.gov.br", "Prefeitura de Jaboticabal");
+                emailMessage.To.Add(new MailAddress(model.Email));
+                emailMessage.Subject = "Prefeitura Municipal de Jaboticabal - Acesso aos serviços online (G.T.I.)";
+                emailMessage.Body = Body;
+                emailMessage.Priority = MailPriority.Normal;
+                emailMessage.IsBodyHtml = true;
+
+                using (SmtpClient MailClient = new SmtpClient("smtp.gmail.com", 587)) {
+                    MailClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    MailClient.EnableSsl = true;
+                    MailClient.Credentials = new NetworkCredential("gti.jaboticabal@gmail.com", "esnssgzxxjcdjrpk");
+                    MailClient.Send(emailMessage);
+                }
+            }
+
+            return View("Login_create2", model);
+        }
+
+        [Route("Login_resend_pwd")]
+        [HttpGet]
+        public ViewResult Login_resend_pwd() {
+            return View();
+        }
+
+        [Route("Login_resend_pwd")]
+        [HttpPost]
+        public ViewResult Login_resend_pwd(LoginViewModel model) {
+            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+                ViewBag.Result = "Código de verificação inválido.";
+                return View(model);
+            }
+
+            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Usuario_web reg = sistemaRepository.Retorna_Usuario_Web(model.Email);
+            if (reg == null) {
+                ViewBag.Result = "Erro, email não cadastrado.";
+                return View(model);
+            } else {
+                if (reg.Bloqueado) {
+                    ViewBag.Result = "Erro, este endereço de email encontra-se bloqueado.";
+                    return View(model);
+                } else {
+                    if (!reg.Ativo) {
+                        ViewBag.Result = "Erro, este endereço de email não foi ativado.";
+                        return View(model);
+                    }
+                }
+            }
+            string sid = Url.Encode(Functions.Encrypt("#GTI - Serviços Online#" + reg.Id.ToString("000000")));
+            string Body = System.IO.File.ReadAllText(System.Web.HttpContext.Current.Server.MapPath("~/Files/PwdTemplate.htm"));
+                Body = Body.Replace("#email#", model.Email);
+                Body = Body.Replace("#$$$#", sid);
+            using (MailMessage emailMessage = new MailMessage()) {
+                emailMessage.From = new MailAddress("gti@jaboticabal.sp.gov.br", "Prefeitura de Jaboticabal");
+                emailMessage.To.Add(new MailAddress(model.Email));
+                emailMessage.Subject = "Prefeitura Municipal de Jaboticabal - Acesso aos serviços online (G.T.I.)";
+                emailMessage.Body = Body;
+                emailMessage.Priority = MailPriority.Normal;
+                emailMessage.IsBodyHtml = true;
+
+                using (SmtpClient MailClient = new SmtpClient("smtp.gmail.com", 587)) {
+                    MailClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    MailClient.EnableSsl = true;
+                    MailClient.Credentials = new NetworkCredential("gti.jaboticabal@gmail.com", "esnssgzxxjcdjrpk");
+                    MailClient.Send(emailMessage);
+                }
+            }
+
+            return View("Login_create2", model);
+        }
+
+
+        [Route("Login_reset")]
+        [HttpGet]
+        public ActionResult Login_reset(string c) {
+            string p = Functions.Decrypt(c);
+            if (p.Substring(0, 4) != "#GTI") {
+                return RedirectToAction("Login");
+            }
+            int Id = Convert.ToInt32(Functions.StringRight(p, 7).Substring(1, 6));
+            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Usuario_web reg = sistemaRepository.Retorna_Usuario_Web(Id);
+            LoginViewModel model = new LoginViewModel() {
+                Email = reg.Email
+            };
+            return View(model);
+        }
+
+        [Route("Login_reset")]
+        [HttpPost]
+        public ViewResult Login_reset(LoginViewModel model) {
+
+            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Usuario_web reg = sistemaRepository.Retorna_Usuario_Web(model.Email);
+            int Id = reg.Id;
 
 
 
             return View(model);
         }
+
+
+
 
 
     }

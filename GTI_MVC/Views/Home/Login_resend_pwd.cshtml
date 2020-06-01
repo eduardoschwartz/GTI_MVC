@@ -35,11 +35,11 @@
 
 <div class="center">
     <br />
-    <label style="color: brown;font-size: 16px;font-style: italic">Reenviar email de confirmação da conta</label>
+    <label style="color: brown;font-size: 16px;font-style: italic">Reenviar email de redefinição de senha</label>
     <br />
 
     <br />
-    @using (Html.BeginForm("Login_resend", "Home", FormMethod.Post, new { @id = "MainForm" })) {
+    @using (Html.BeginForm("Login_resend_pwd", "Home", FormMethod.Post, new { @id = "MainForm" })) {
         <table width="500px">
             <tr style="height:40px">
                 <td><label style="font-weight:normal">Endereço de Email:</label></td>
