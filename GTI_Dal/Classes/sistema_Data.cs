@@ -646,7 +646,7 @@ namespace GTI_Dal.Classes {
                         new SqlParameter("@cpf_cnpj", reg.Cpf_Cnpj),
                         new SqlParameter("@ativo", reg.Ativo),
                         new SqlParameter("@data_cadastro", reg.Data_Cadastro),
-                        new SqlParameter("@bloqueado", reg.Bloquedo)
+                        new SqlParameter("@bloqueado", reg.Bloqueado)
                     };
 
                     db.Database.ExecuteSqlCommand("INSERT INTO usuario_web(id,nome,email,senha,telefone,cpf_cnpj,ativo,data_cadastro,bloqueado)" +
@@ -658,5 +658,30 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Ativar_Usuario_Web(int id) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                try {
+                    db.Database.ExecuteSqlCommand("UPDATE USUARIO_WEB SET ATIVO=1 WHERE ID=@Id",
+                        new SqlParameter("@Id", id));
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Usuario_web Retorna_Usuario_Web(int Id) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Usuario_web Sql = (from t in db.Usuario_Web where t.Id==Id select t).FirstOrDefault();
+                return Sql;
+            }
+        }
+
+        public Usuario_web Retorna_Usuario_Web(string Email) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Usuario_web Sql = (from t in db.Usuario_Web where t.Email == Email select t).FirstOrDefault();
+                return Sql;
+            }
+        }
     }
 }

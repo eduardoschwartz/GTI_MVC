@@ -12,6 +12,6 @@ namespace GTI_Models.Models {
         public string Cpf_Cnpj { get; set; }
         public bool Ativo { get; set; }
         public DateTime Data_Cadastro { get; set; }
-        public bool Bloquedo { get; set; }
+        public bool Bloqueado { get; set; }
     }
 }

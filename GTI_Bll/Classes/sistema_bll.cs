@@ -256,6 +256,23 @@ namespace GTI_Bll.Classes {
             return id;
         }
 
+        public Exception Ativar_Usuario_Web(int id) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            Exception ex = obj.Ativar_Usuario_Web(id);
+            return ex;
+        }
+
+        public Usuario_web Retorna_Usuario_Web(int Id) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            return obj.Retorna_Usuario_Web(Id);
+        }
+
+        public Usuario_web Retorna_Usuario_Web(string Email) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            return obj.Retorna_Usuario_Web(Email);
+        }
+
+
 
     }
 }

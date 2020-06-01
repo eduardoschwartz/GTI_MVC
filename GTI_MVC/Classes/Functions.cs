@@ -171,7 +171,7 @@ namespace GTI_Mvc {
                 byte[] inputbuffer = Convert.FromBase64String(cipherText);
                 byte[] outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
                 return System.Text.Encoding.Unicode.GetString(outputBuffer);
-            } catch  {
+            } catch(Exception ex) {
                 return "";
             }
         }

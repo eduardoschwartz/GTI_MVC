@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Policy;
 using System.Web.Mvc;
 using System.Web.UI;
 using static GTI_Models.modelCore;
@@ -162,6 +163,12 @@ namespace GTI_Mvc.Controllers {
         [Route("Login_create")]
         [HttpPost]
         public ActionResult Login_create(LoginViewModel model) {
+
+            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+                ViewBag.Result = "Código de verificação inválido.";
+                return View(model);
+            }
+
             Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
             Usuario_web reg = new Usuario_web() {
                 Nome = model.Usuario,
@@ -171,10 +178,10 @@ namespace GTI_Mvc.Controllers {
                 Senha=Functions.Encrypt(model.Senha2),
                 Data_Cadastro=DateTime.Now,
                 Ativo=false,
-                Bloquedo=false
+                Bloqueado=false
             };
             int id = sistemaRepository.Incluir_Usuario_Web(reg);
-            string sid = Functions.Encrypt("#Prefeitura Municipal de Jaboticabal - GTI - Serviços Online#"+id.ToString("000000"));
+            string sid =  Url.Encode( Functions.Encrypt("#GTI - Serviços Online#"+id.ToString("000000")));
 
             string Body = System.IO.File.ReadAllText( System.Web.HttpContext.Current.Server.MapPath("~/Files/AccessTemplate.htm"));
             Body = Body.Replace("#$$$#", sid);
@@ -208,6 +215,43 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Login_create2() {
             return RedirectToAction("Login");
         }
+
+
+        [Route("Login_welcome")]
+        [HttpGet]
+        public ActionResult Login_welcome(string c) {
+            string p = Functions.Decrypt( c);
+            if (p.Substring(0, 4) == "#GTI") {
+                int Id =  Convert.ToInt32(Functions.StringRight(p, 7).Substring(1,6));
+                Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+                Exception ex = sistemaRepository.Ativar_Usuario_Web(Id);
+                return View();
+            } else {
+                return RedirectToAction("Login");
+            }
+        }
+
+        [Route("Login_welcome")]
+        [HttpPost]
+        public ActionResult Login_welcome() {
+            return RedirectToAction("Login");
+        }
+
+        [Route("Login_resend")]
+        [HttpGet]
+        public ViewResult Login_resend() {
+            return View();
+        }
+
+        [Route("Login_resend")]
+        [HttpPost]
+        public ViewResult Login_resend(LoginViewModel model) {
+
+
+
+            return View(model);
+        }
+
 
     }
 }
