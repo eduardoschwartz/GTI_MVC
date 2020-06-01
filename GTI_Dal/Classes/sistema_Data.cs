@@ -683,5 +683,20 @@ namespace GTI_Dal.Classes {
                 return Sql;
             }
         }
+
+        public Exception Alterar_Usuario_Web_Senha(int id,string senha) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                try {
+                    db.Database.ExecuteSqlCommand("UPDATE USUARIO_WEB SET SENHA=@Senha WHERE ID=@Id",
+                        new SqlParameter("@Senha", senha),
+                        new SqlParameter("@Id", id));
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+
     }
 }

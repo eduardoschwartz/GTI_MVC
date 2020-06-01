@@ -220,7 +220,13 @@ namespace GTI_Mvc.Controllers {
         [Route("Login_welcome")]
         [HttpGet]
         public ActionResult Login_welcome(string c) {
+            if (c == null) {
+                return RedirectToAction("Login");
+            }
             string p = Functions.Decrypt( c);
+            if (p == "") {
+                return RedirectToAction("Login");
+            }
             if (p.Substring(0, 4) == "#GTI") {
                 int Id =  Convert.ToInt32(Functions.StringRight(p, 7).Substring(1,6));
                 Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
@@ -260,6 +266,11 @@ namespace GTI_Mvc.Controllers {
                 if (reg.Bloqueado) {
                     ViewBag.Result = "Erro, este endereço de email encontra-se bloqueado.";
                     return View(model);
+                } else {
+                    if (reg.Ativo) {
+                        ViewBag.Result = "Erro, este endereço de email já foi ativado.";
+                        return View(model);
+                    }
                 }
             }
 
@@ -342,6 +353,13 @@ namespace GTI_Mvc.Controllers {
         [Route("Login_reset")]
         [HttpGet]
         public ActionResult Login_reset(string c) {
+            if (c == null) {
+                return RedirectToAction("Login");
+            }
+            string p = Functions.Decrypt(c);
+            if (p == "") {
+                return RedirectToAction("Login");
+            }
             string p = Functions.Decrypt(c);
             if (p.Substring(0, 4) != "#GTI") {
                 return RedirectToAction("Login");
@@ -357,13 +375,14 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Login_reset")]
         [HttpPost]
-        public ViewResult Login_reset(LoginViewModel model) {
+        public ActionResult Login_reset(LoginViewModel model) {
 
             Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
             Usuario_web reg = sistemaRepository.Retorna_Usuario_Web(model.Email);
             int Id = reg.Id;
+            Exception ex = sistemaRepository.Alterar_Usuario_Web_Senha(Id, model.Senha);
 
-
+            ViewBag.Message = "A senha foi alterar com sucesso.";
 
             return View(model);
         }

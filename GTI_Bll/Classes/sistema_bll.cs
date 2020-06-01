@@ -272,7 +272,11 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Usuario_Web(Email);
         }
 
-
+        public Exception Alterar_Usuario_Web_Senha(int id, string senha) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            Exception ex = obj.Alterar_Usuario_Web_Senha(id,senha);
+            return ex;
+        }
 
     }
 }
