@@ -1013,11 +1013,14 @@ namespace GTI_Mvc.Controllers {
 
         public ItbiViewModel ItbiUrbanoLoad(int Codigo) {
             ItbiViewModel model = new ItbiViewModel();
-            Imovel_bll imovel_Class = new Imovel_bll("GTIconnection");
-            ImovelStruct imovel= imovel_Class.Dados_Imovel(Codigo);
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
+            ImovelStruct imovel= imovelRepository.Dados_Imovel(Codigo);
             if (imovel != null) {
                 model.Inscricao = imovel.Inscricao;
                 model.Dados_Imovel = imovel;
+                CidadaoStruct CompradorReg = new CidadaoStruct();
+                model.Comprador = CompradorReg;
             }
 
 

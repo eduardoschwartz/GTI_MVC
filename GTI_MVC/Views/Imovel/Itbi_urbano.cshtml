@@ -5,25 +5,11 @@
     ViewBag.Title = "ITBI Urbano";
 }
 
-<link href="~/Content/Baloon.css" rel="stylesheet" />
 <style>
-    .textBoxBlue {
-        height: 25px;
-        position: relative;
-        /*border: 1px solid #0094ff;
-        border-color: rgba(0, 0, 0, .14);*/
-        background-color: white;
-        font-size: 14px;
-        /*box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);*/
-    }
-
     .center {
         margin: auto;
         width: 730px;
-        /*border: 1px solid rgba(0,0,0,0.24);*/
         padding: 20px;
-        /*box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;*/
     }
 
     .actionlink:hover {
@@ -48,30 +34,52 @@
                         <label>&nbsp;&nbsp;</label>
                         <button type="submit" class="btn btn-primary"> Consultar</button>
                         <label style="font-weight:normal;font-size:14px;color:brown">&nbsp;&nbsp;(Encontra-se na capa do carnê de IPTU)&nbsp;&nbsp;</label><br />
-                    </div>                    
+                    </div>
                     @if (@Model.Inscricao != null) {
-                        
-                <div style="padding-left:7px">
-                    <label style="font-weight:normal;padding-top:7px">Inscrição Cadastral:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue;padding-top:7px">@Html.TextBoxFor(m => m.Inscricao, new { @Value = @Model.Inscricao, @readonly = true, style = "width:200px;" })</label><br />
-                    <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Endereço do Imóvel:</label><br />
-                    <label style="font-weight:normal;padding-top:7px">Cep:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Cep, new { style = "width:80px;", @readonly = true })</label>
-                    <label style="font-weight:normal;padding-left:10px">Logradouro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.NomeLogradouro, new { style = "width:400px;", @readonly = true })</label><br />
-                    <label style="font-weight:normal">Número:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Numero, new { style = "width:90px;", @readonly = true })</label>
-                    <label style="font-weight:normal;padding-left:10px">Complemento:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Complemento, new { style = "width:350px;", @readonly = true })</label><br />
-                    <label style="font-weight:normal">Quadra:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.QuadraOriginal, new { style = "width:100px;", @readonly = true })</label>
-                    <label style="font-weight:normal;padding-left:10px">Lote:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.LoteOriginal, new { style = "width:140px;", @readonly = true })</label>
-                    <label style="font-weight:normal;padding-left:10px">Bairro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">
-                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.NomeBairro, new { style = "width:200px;", @readonly = true })</label><br />
-                    </label>
-                </div>
+                        <div style="padding-left:7px">
+                            <label style="font-weight:normal;padding-top:7px">Inscrição Cadastral:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue;padding-top:7px">@Html.TextBoxFor(m => m.Inscricao, new { @readonly = true, style = "width:200px;" })</label><br />
+                            <label style="font-weight:normal;padding-top:5px">Natureza da transação:&nbsp;&nbsp;</label><br />
+                            <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Endereço do Imóvel:</label><br />
+                            <label style="font-weight:normal;padding-top:7px">Cep:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Cep, new { style = "width:80px;", @readonly = true })</label>
+                            <label style="font-weight:normal;padding-left:10px">Logradouro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.NomeLogradouro, new { style = "width:400px;", @readonly = true })</label><br />
+                            <label style="font-weight:normal">Número:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Numero, new { style = "width:90px;", @readonly = true })</label>
+                            <label style="font-weight:normal;padding-left:10px">Complemento:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Complemento, new { style = "width:350px;", @readonly = true })</label><br />
+                            <label style="font-weight:normal">Quadra:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.QuadraOriginal, new { style = "width:100px;", @readonly = true })</label>
+                            <label style="font-weight:normal;padding-left:10px">Lote:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.LoteOriginal, new { style = "width:140px;", @readonly = true })</label>
+                            <label style="font-weight:normal;padding-left:10px">Bairro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.NomeBairro, new { style = "width:200px;", @readonly = true })</label><br />
+
+                        </div>
                     }
                 </div>
+
+                @if (@Model.Inscricao != null) {
+                    <div class="panel-heading">Dados dos Compradores </div>
+                    <div class="panel-body">
+                        <table width="600px">
+                            <tr style="height:40px">
+                                <td style="width:150px">
+                                    CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
+                                    &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
+                                </td>
+                                <td style="width:200px">
+                                    @Html.TextBoxFor(m => m.Comprador.Cpf, new { @id = "cpfc1Txt", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CPF" })
+                                    @Html.TextBoxFor(m => m.Comprador.Cnpj, new { @id = "cnpjc1Txt", @style = "max-width:200px;display:none", @onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CNPJ" })
+                                </td>
+                                <td style="padding-left:14px"><button type="submit" class="btn btn-primary"> Consultar</button></td>
+                            </tr>
+                        </table>
+                        <label style="font-weight:normal;padding-top:7px">Nome:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Nome, new { style = "width:300px;", @readonly = true })</label>
+                    </div>
+                }
+
             </div>
         </div>
 
 
+
+
         <br /><br />
-              <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })</div>
+        <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })</div>
     }
 
     @if (@Model.Inscricao != null && @Model.Codigo != null) {
@@ -80,3 +88,48 @@
 
 </div>
 
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+        });
+
+        function radioCheck() {
+            document.getElementById('cnpjTxt').value = "";
+            document.getElementById('cpfTxt').value = "";
+            if (document.getElementById('cpfCheck').checked) {
+                document.getElementById('cpfTxt').style.display = 'block';
+            }
+            else {
+                document.getElementById('cpfTxt').style.display = 'none';
+            }
+            if (document.getElementById('cnpjCheck').checked) {
+                document.getElementById('cnpjTxt').style.display = 'block';
+            }
+            else {
+                document.getElementById('cnpjTxt').style.display = 'none';
+            }
+        }
+
+        function ValidateForm() {
+            var _cod = document.getElementById('codigo').value;
+            var _cpfc1 = document.getElementById('cpfc1Txt').value;
+            var _cnpjc1 = document.getElementById('cnpjc1Txt').value;
+
+            if (_cod==null || _cod == "" || parseInt(_cod) == 0) {
+                alert("Digite o código do imóvel");
+                return false;
+            }
+            else {
+                if (_cpfc1 == "" && _cnpjc1 == "") {
+                    alert("Digite o Cpf ou o CNPJ do comprador!");
+                    return false;
+                } 
+            }
+        }
+
+    </script>
+}
