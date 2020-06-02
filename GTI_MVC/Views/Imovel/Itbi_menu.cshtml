@@ -1,0 +1,37 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Menu de Opções";
+}
+<link href="~/css/gti.css" rel="stylesheet" />
+<style>
+    .center {
+        margin: auto;
+        width: 500px;
+        border: 1px solid rgba(0,0,0,0.24);
+        padding: 20px;
+        box-shadow: 0 .1em 0.5em #000;
+        border-radius: 13px;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+</style>
+<br />
+
+<div class="center">
+    <span style="color:brown;font-weight:bold;font-style:italic">Imposto sobre Transmissão de Bens Imóveis (ITBI)</span><br />
+    @Html.ActionLink("Nova declaração de transações imobiliárias (Imóveis Urbanos)", "Tramite_Processo", "Protocolo", null, new { @class = "actionlink" })<br />
+    @Html.ActionLink("Nova declaração de transações imobiliárias (Imóveis Rurais)", "Login_update", "Home", null, new { @class = "actionlink" })<br />
+    @Html.ActionLink("Consultar declarações enviadas", "Tramite_Processo", "Protocolo", null, new { @class = "actionlink" })<br />
+
+    <br />
+    @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
+    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+    <br />
+</div>

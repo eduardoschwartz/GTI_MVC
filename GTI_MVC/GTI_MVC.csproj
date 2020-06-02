@@ -507,6 +507,7 @@
     <Content Include="Views\Home\Login_resend.cshtml" />
     <Content Include="Views\Home\Login_reset.cshtml" />
     <Content Include="Views\Home\Login_resend_pwd.cshtml" />
+    <Content Include="Views\Imovel\Itbi_menu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

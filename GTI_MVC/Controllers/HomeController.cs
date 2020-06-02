@@ -30,6 +30,11 @@ namespace GTI_Mvc.Controllers {
         [Route("Login")]
         [HttpGet]
         public ViewResult Login() {
+            if (Functions.pUserId > 0) {
+                return View("SysMenu");
+            }
+            Functions.pUserId = 0;
+            Functions.pUserFullName = "Visitante";
             LoginViewModel model = new LoginViewModel();
             return View(model);
         }
@@ -47,8 +52,9 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult SysMenu() {
 
-            if (Functions.pUserId == 0) { 
-                return View("Login");
+            if (Functions.pUserId == 0) {
+                LoginViewModel model = new LoginViewModel();
+                return View("Login",model);
             } else {
                 return View();
             }
@@ -62,38 +68,70 @@ namespace GTI_Mvc.Controllers {
 
             Sistema_bll sistema_Class = new Sistema_bll("GTIconnection");
             TAcessoFunction tacesso_Class = new TAcessoFunction();
-            sOldPwd = sistema_Class.Retorna_User_Password(sLogin);
-            int UserId = sistema_Class.Retorna_User_LoginId(sLogin);
-            if (sOldPwd == null) {
-                Functions.pUserId = 0;
-                ViewBag.Result = "Usuário/Senha inválido!";
-                return View(loginViewModel);
-            } else {
-                sOldPwd2 = tacesso_Class.DecryptGTI(sOldPwd);
-                if (sOldPwd2 != sNewPwd) {
-                    ViewBag.Result = "Usuário/Senha inválido!";
+
+            bool bFuncionario = model.Usuario.LastIndexOf('@') > 1 ? false : true;
+            Functions.pUserGTI = bFuncionario;
+            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+
+            if (bFuncionario) {
+                sOldPwd = sistema_Class.Retorna_User_Password(sLogin);
+                int UserId = sistema_Class.Retorna_User_LoginId(sLogin);
+                if (sOldPwd == null) {
                     Functions.pUserId = 0;
+                    ViewBag.Result = "Usuário/Senha inválido!";
                     return View(loginViewModel);
                 } else {
-                    ViewBag.Result = "";
-                    Functions.pUserId = UserId;
+                    sOldPwd2 = tacesso_Class.DecryptGTI(sOldPwd);
+                    if (sOldPwd2 != sNewPwd) {
+                        ViewBag.Result = "Usuário/Senha inválido!";
+                        Functions.pUserId = 0;
+                        return View(loginViewModel);
+                    } else {
+                        ViewBag.Result = "";
+                        Functions.pUserId = UserId;
+                    }
                 }
-            }
+                
+                if (UserId == 0) {
+                    ViewBag.Result = "Usuário/Senha inválido.";
+                    return View(loginViewModel);
+                }
 
-            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
-            if (UserId == 0) {
-                ViewBag.Result = "Usuário/Senha inválido.";
-                return View(loginViewModel);
-            }
-
-            usuarioStruct _user = sistemaRepository.Retorna_Usuario(UserId);
-            if (_user.Ativo == 0) {
-                ViewBag.Result = "Usuário inativo.";
-                return View(loginViewModel);
+                usuarioStruct _user = sistemaRepository.Retorna_Usuario(UserId);
+                if (_user.Ativo == 0) {
+                    ViewBag.Result = "Usuário inativo.";
+                    return View(loginViewModel);
+                } else {
+                    Functions.pUserLoginName = _user.Nome_login;
+                    Functions.pUserFullName = _user.Nome_completo;
+                    return View("../Home/SysMenu");
+                }
             } else {
-                Functions.pUserLoginName = _user.Nome_login;
-                Functions.pUserFullName = _user.Nome_completo;
-                return View("../Home/SysMenu");
+                Usuario_web user_web = sistemaRepository.Retorna_Usuario_Web(model.Usuario);
+                if (user_web == null) {
+                    ViewBag.Result = "Usuário/Senha inválido.";
+                    return View(loginViewModel);
+                } else {
+                    if (model.Senha != Functions.Decrypt(user_web.Senha)) {
+                        ViewBag.Result = "Usuário/Senha inválido.";
+                        return View(loginViewModel);
+                    } else {
+                        if (!user_web.Ativo) {
+                            ViewBag.Result = "Esta conta encontra-se inativa.";
+                            return View(loginViewModel);
+                        } else {
+                            if (user_web.Bloqueado) {
+                                ViewBag.Result = "Esta conta encontra-se bloqueada.";
+                                return View(loginViewModel);
+                            } else {
+                                Functions.pUserId = user_web.Id;
+                                Functions.pUserLoginName = user_web.Email;
+                                Functions.pUserFullName = user_web.Nome;
+                                return View("../Home/SysMenu");
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -216,7 +254,6 @@ namespace GTI_Mvc.Controllers {
             return RedirectToAction("Login");
         }
 
-
         [Route("Login_welcome")]
         [HttpGet]
         public ActionResult Login_welcome(string c) {
@@ -246,7 +283,8 @@ namespace GTI_Mvc.Controllers {
         [Route("Login_resend")]
         [HttpGet]
         public ViewResult Login_resend() {
-            return View();
+            LoginViewModel model = new LoginViewModel();
+            return View(model);
         }
 
         [Route("Login_resend")]
@@ -295,10 +333,11 @@ namespace GTI_Mvc.Controllers {
 
             return View("Login_create2", model);
         }
-
+        
         [Route("Login_resend_pwd")]
         [HttpGet]
         public ViewResult Login_resend_pwd() {
+            LoginViewModel model = new LoginViewModel();
             return View();
         }
 
@@ -349,7 +388,6 @@ namespace GTI_Mvc.Controllers {
             return View("Login_create2", model);
         }
 
-
         [Route("Login_reset")]
         [HttpGet]
         public ActionResult Login_reset(string c) {
@@ -358,10 +396,6 @@ namespace GTI_Mvc.Controllers {
             }
             string p = Functions.Decrypt(c);
             if (p == "") {
-                return RedirectToAction("Login");
-            }
-            string p = Functions.Decrypt(c);
-            if (p.Substring(0, 4) != "#GTI") {
                 return RedirectToAction("Login");
             }
             int Id = Convert.ToInt32(Functions.StringRight(p, 7).Substring(1, 6));
@@ -376,7 +410,10 @@ namespace GTI_Mvc.Controllers {
         [Route("Login_reset")]
         [HttpPost]
         public ActionResult Login_reset(LoginViewModel model) {
-
+            //if (Functions.pUserId == 0) {
+            //    Functions.pUserFullName = "Visitante";
+            //    return View(model);
+            //}
             Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
             Usuario_web reg = sistemaRepository.Retorna_Usuario_Web(model.Email);
             int Id = reg.Id;
@@ -386,9 +423,6 @@ namespace GTI_Mvc.Controllers {
 
             return View(model);
         }
-
-
-
 
 
     }

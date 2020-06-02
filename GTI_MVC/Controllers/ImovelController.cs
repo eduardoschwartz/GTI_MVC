@@ -966,8 +966,7 @@ namespace GTI_Mvc.Controllers {
             }
             return View(model);
         }
-
-
+        
         public ImovelDetailsViewModel HomeLoad(int Codigo) {
             ImovelDetailsViewModel model = new ImovelDetailsViewModel();
             Imovel_bll imovel_Class = new Imovel_bll("GTIconnection");
@@ -988,7 +987,13 @@ namespace GTI_Mvc.Controllers {
             return model;
         }
 
-
+        [Route("Itbi_menu")]
+        [HttpGet]
+        public ActionResult Itbi_menu() {
+            if (Functions.pUserId == 0)
+                return RedirectToAction("Login", "Home");
+            return View();
+        }
 
     }
 }

@@ -23,14 +23,17 @@
 </style>
 <br />
 
-
-
 <div class="center">
-    <span style="color:brown;font-weight:bold;font-style:italic">Menu de sistema</span><br /><br />
-    @Html.ActionLink("Tramitação de processos", "Tramite_Processo", "Protocolo", null, new { @class = "actionlink" })<br />
-    @Html.ActionLink("Alterar a senha", "Login_update", "Home", null, new { @class = "actionlink" })<br />
+    <span style="color:brown;font-weight:bold;font-style:italic">Selecione um serviço</span><br />
+    @if (Functions.pUserGTI) {
+        @Html.ActionLink("Tramitação de processos", "Tramite_Processo", "Protocolo", null, new { @class = "actionlink" })<br />
+    }
+    @Html.ActionLink("Imposto sobre Transmissão de Bens Imóveis (ITBI)", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })<br />
 
 
+    @if (Functions.pUserGTI) {
+        @Html.ActionLink("Alterar a senha", "Login_update", "Home", null, new { @class = "actionlink" })<br />
+    }
     <br />
     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
     <br />
