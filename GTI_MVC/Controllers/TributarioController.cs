@@ -1502,7 +1502,7 @@ namespace GTI_Mvc.Controllers {
                         ViewBag.Result = "Não existem parcelas a serem impressas.";
                         return View(model);
                     } else {
-                        if (ListaDebito[0].Numero_Parcela == 1) {
+                      //  if (ListaDebito[0].Numero_Parcela == 1) {
                             bool _find = false;
                             foreach (DebitoStructure itemtmp in ListaDebito) {
                                 if (itemtmp.Codigo_Situacao < 3) {
@@ -1663,12 +1663,13 @@ namespace GTI_Mvc.Controllers {
                                     Response.End();
                                 }
                             }
-                        }
+                       // }
                     }
                 }
             }
 
-            return null;
+            ViewBag.Result = "Não existem parcelas a serem impressas.";
+            return View(model);
         }
 
         [Route("Guia")]

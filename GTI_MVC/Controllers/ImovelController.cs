@@ -112,18 +112,14 @@ namespace GTI_Mvc.Controllers {
                 Endereco_Numero = reg.Endereco_Numero,
                 Endereco_Complemento = reg.Endereco_Complemento,
                 Bairro = reg.Bairro,
-                Cidade = reg.Cidade,
-                Uf = reg.Uf,
-                Quadra_Original = reg.Quadra_Original,
-                Lote_Original = reg.Lote_Original,
+                Cidade = "JABOTICABAL",
+                Uf = "SP",
+                Quadra_Original = reg.Quadra_Original??"",
+                Lote_Original = reg.Lote_Original??"",
                 Inscricao = reg.Inscricao,
                 Numero_Ano = reg.Numero_Ano,
                 Nome = reg.Nome_Requerente,
-                Cpf_Cnpj = reg.Cpf_Cnpj,
-                Atividade = reg.Atividade_Extenso,
-                Tributo = reg.Tributo,
-                Tipo_Certidao = reg.Tipo_Certidao,
-                Nao = reg.Nao.ToUpper()
+                Cpf_Cnpj = listaProp[0].CPF
             };
             //##### QRCode ##########################################################
             string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + reg.Controle;
@@ -502,7 +498,7 @@ namespace GTI_Mvc.Controllers {
                 Nome_Requerente = listaProp[0].Nome,
                 Ano = DateTime.Now.Year,
                 Numero = _numero,
-                Quadra_Original = _dados.QuadraOriginal ?? "",
+                Quadra_Original = _dados.QuadraOriginal==null?"":_dados.QuadraOriginal.Replace("\"",""),
                 Lote_Original = _dados.LoteOriginal ?? "",
                 Controle = _numero.ToString("00000") + DateTime.Now.Year.ToString("0000") + "/" + _codigo.ToString() + "-CI",
                 Numero_Processo=_numero_processo,
@@ -531,6 +527,7 @@ namespace GTI_Mvc.Controllers {
                             return View(certidaoViewModel);
                         }
                         nPerc = 100;
+                        reg.Data_Processo = DateTime.Now;
                         reportName = "Certidao_Isencao_65metros.rpt";
                     } else {
                         ViewBag.Result = "Este imóvel não esta isento da cobrança de IPTU no ano atual.";
@@ -998,10 +995,35 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_urbano")]
         [HttpGet]
         public ActionResult Itbi_urbano() {
-            ImovelDetailsViewModel model = new ImovelDetailsViewModel();
             if (Functions.pUserId == 0)
                 return RedirectToAction("Login", "Home");
+            ItbiViewModel model = new ItbiViewModel();
             return View(model);
         }
+
+        [Route("CadImovel")]
+        [HttpPost]
+        public ViewResult Itbi_urbano(ItbiViewModel model) {
+            model = ItbiUrbanoLoad(Convert.ToInt32(model.Codigo));
+            if (model.Inscricao == null) {
+                ViewBag.Error = "Imóvel não cadastrado.";
+            }
+            return View(model);
+        }
+
+        public ItbiViewModel ItbiUrbanoLoad(int Codigo) {
+            ItbiViewModel model = new ItbiViewModel();
+            Imovel_bll imovel_Class = new Imovel_bll("GTIconnection");
+            ImovelStruct imovel= imovel_Class.Dados_Imovel(Codigo);
+            if (imovel != null) {
+                model.Inscricao = imovel.Inscricao;
+                model.Dados_Imovel = imovel;
+            }
+
+
+     
+            return model;
+        }
+
     }
 }

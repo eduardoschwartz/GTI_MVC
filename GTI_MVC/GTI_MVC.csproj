@@ -381,6 +381,7 @@
     <Compile Include="ViewModels\DebitoViewModel.cs" />
     <Compile Include="ViewModels\EmpresaDetailsViewModel.cs" />
     <Compile Include="ViewModels\ImovelDetailsViewModel.cs" />
+    <Compile Include="ViewModels\ItbiViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\ProcessoViewModel.cs" />
     <Compile Include="Views\Tributario\EditorTemplates\ListDebitoEditorViewModel.cs" />
