@@ -1,0 +1,117 @@
+﻿@model GTI_Mvc.ViewModels.ImovelDetailsViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "ITBI Urbano";
+}
+
+<link href="~/Content/Baloon.css" rel="stylesheet" />
+<style>
+    .textBoxBlue {
+        height: 25px;
+        position: relative;
+        border: 1px solid #0094ff;
+        border-color: rgba(0, 0, 0, .14);
+        background-color: white;
+        font-size: 14px;
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
+    }
+
+    .center {
+        margin: auto;
+        width: 550px;
+        border: 1px solid rgba(0,0,0,0.24);
+        padding: 20px;
+        box-shadow: 0 .1em 0.5em #000;
+        border-radius: 13px;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+</style>
+
+<div class="center">
+    <label style="color: brown;font-size: 16px;font-style: italic">Certidão de Endereço</label>
+    <br />
+
+    @using (Html.BeginForm("Certidao_Endereco", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+
+        <table width="500px">
+            <tr style="height:40px">
+                <td style="width:150px">@Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })</td>
+                <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
+            </tr>
+
+        </table>
+
+        <br />
+        <button type="submit" class="btn btn-primary" data-balloon-length="medium" aria-label="Now that's a super big text we have over here right? Lorem ipsum dolor sit I'm done." data-balloon-pos="up"> Consultar</button>
+        <br />
+        <br />
+        <div class="form-group row">
+            <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+        </div>
+    }
+
+    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+        });
+
+        function ValidateForm() {
+            ClearError();
+            var _cod = document.getElementById('codigo').value;
+            var _captcha = document.getElementById('captchaTxt').value;
+            var _chave = document.getElementById('chave').value;
+
+            if ((_cod == "" || parseInt(_cod) == 0) && _chave == "") {
+                document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal ou a chave de autenticação da certidão";
+                return false;
+            }
+
+            if (_captcha == "" && _chave == "") {
+                document.getElementById('errorLabel').innerHTML = "Digite o código de validação!";
+                return false;
+            } else {
+                if (_captcha.length < 6) {
+                    document.getElementById('errorLabel').innerHTML = "Código de validação inválido!";
+                    return false;
+                }else
+                    return true;
+            }
+
+            if (_chave.length > 8) {
+                var _sufixo = _chave.substring(_chave.length - 3, _chave.length);
+                if (_sufixo != "-CI") {
+                    document.getElementById('errorLabel').innerHTML = "Chave de autenticação inválida!";
+                    return false;
+                }
+            } else {
+                if (_chave.length != "") {
+                    document.getElementById('errorLabel').innerHTML = "Chave de autenticação inválida!";
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function ClearError() {
+            document.getElementById('errorLabel').innerHTML = "";
+        }
+
+
+    </script>
+}

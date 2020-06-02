@@ -30,11 +30,11 @@
     }
     @Html.ActionLink("Imposto sobre Transmissão de Bens Imóveis (ITBI)", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })<br />
 
-
+    <br />
     @if (Functions.pUserGTI) {
         @Html.ActionLink("Alterar a senha", "Login_update", "Home", null, new { @class = "actionlink" })<br />
     }
-    <br />
+
     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
     <br />
 </div>

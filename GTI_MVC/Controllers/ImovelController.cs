@@ -995,5 +995,13 @@ namespace GTI_Mvc.Controllers {
             return View();
         }
 
+        [Route("Itbi_urbano")]
+        [HttpGet]
+        public ActionResult Itbi_urbano() {
+            ImovelDetailsViewModel model = new ImovelDetailsViewModel();
+            if (Functions.pUserId == 0)
+                return RedirectToAction("Login", "Home");
+            return View(model);
+        }
     }
 }

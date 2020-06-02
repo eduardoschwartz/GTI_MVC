@@ -387,6 +387,7 @@
     <Compile Include="Views\Tributario\EditorTemplates\SelectDebitoEditorViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Baloon.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -508,6 +509,7 @@
     <Content Include="Views\Home\Login_reset.cshtml" />
     <Content Include="Views\Home\Login_resend_pwd.cshtml" />
     <Content Include="Views\Imovel\Itbi_menu.cshtml" />
+    <Content Include="Views\Imovel\Itbi_urbano.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
