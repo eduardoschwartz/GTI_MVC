@@ -1000,17 +1000,45 @@ namespace GTI_Mvc.Controllers {
             ItbiViewModel model = new ItbiViewModel();
             model.Codigo = "";
             model.CpfCompradorCheck = false;
+
             return View(model);
         }
 
         [Route("Itbi_urbano")]
         [HttpPost]
-        public ViewResult Itbi_urbano(ItbiViewModel model) {
-            model = ItbiUrbanoLoad(model);
-            if (model.Inscricao == null) {
-                ViewBag.Error = "Imóvel não cadastrado.";
+        public ViewResult Itbi_urbano(ItbiViewModel model,string action) {
+             ModelState.Clear();
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
+            ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
+
+            if (action == "btnCodigoCancel") {
+                model = new ItbiViewModel();
+                return View(model);
             }
-            ModelState.Clear();
+            if (action == "btnCpfOK") {
+                bool _bcpf = model.Comprador.Cpf != null;
+                bool _bcnpj = model.Comprador.Cnpj != null;
+                if (!_bcpf && !_bcnpj) {
+                    ViewBag.Error = "* Informe o CPF ou o CNPJ do comprador.";
+                    return View(model);
+                }
+                if (_bcpf && !Functions.ValidaCpf(model.Comprador.Cpf)) {
+                    ViewBag.Error = "* CPF do comprador inválido.";
+                    return View(model);
+                } else {
+                    if (_bcnpj && !Functions.ValidaCNPJ(model.Comprador.Cnpj)) {
+                        ViewBag.Error = "* CNPJ do comprador inválido.";
+                        return View(model);
+                    }
+                }
+            }
+
+
+            model = ItbiUrbanoLoad(model);
+            if (model.Inscricao == null && Convert.ToInt32(model.Codigo)>0) {
+                ViewBag.Error = "* Imóvel não cadastrado.";
+            }
             return View(model);
         }
 
@@ -1024,11 +1052,6 @@ namespace GTI_Mvc.Controllers {
                 model.Inscricao = imovel.Inscricao;
                 model.Dados_Imovel = imovel;
            
-                List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
-                ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
-
-                List<Uf> Lista_UF = imovelRepository.Lista_UF();
-                ViewBag.Lista_UF = new SelectList(Lista_Natureza, "SiglaUf", "DescUf");
                 if (model.Comprador == null)
                     model.Comprador = new CidadaoStruct();
                 bool _bcpf = model.Comprador.Cpf != null;
