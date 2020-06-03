@@ -128,6 +128,7 @@
     <Compile Include="Models\laseriptu.cs" />
     <Compile Include="Models\livro.cs" />
     <Compile Include="Models\logevento.cs" />
+    <Compile Include="Models\logradouro_bairro.cs" />
     <Compile Include="Models\mei.cs" />
     <Compile Include="Models\mobiliario.cs" />
     <Compile Include="Models\benfeitoria.cs" />

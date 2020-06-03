@@ -68,16 +68,18 @@
                                 <td style="padding-left:14px"><button type="submit" class="btn btn-primary">Consultar</button></td>
                             </tr>
                         </table>
-                        <label style="font-weight:normal;padding-top:7px">Nome:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Nome, new { style = "width:350px;", @readonly = true })</label>
-                        <label style="font-size:10px">&nbsp;Caso deseje, clique <a href="mailto:gti@jaboticabal.sp.gov.br">aqui</a> para consultar o Cep</label><br />
-                        <label style="font-weight:normal;">Cep:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.CepR, new { style = "width:80px;", @readonly = true })</label>
-                        <label style="font-weight:normal;padding-left:10px">Logradouro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.EnderecoR, new { style = "width:410px;", @readonly = true })</label><br />
-                        <label style="font-weight:normal">Número:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.NumeroR, new { style = "width:70px;", @readonly = true })</label>
-                        <label style="font-weight:normal;padding-left:10px">Complemento:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.ComplementoR, new { style = "width:140px;", @readonly = true })</label>
-                        <label style="font-weight:normal">&nbsp;&nbsp;Bairro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.NomeBairroR, new { style = "width:180px;", @readonly = true })</label><br />
-                        <label style="font-weight:normal">Cidade:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.NomeCidadeR, new { style = "width:180px;", @readonly = true })</label>
-                        <label style="font-weight:normal;padding-left:10px">UF:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.UfR, new { style = "width:40px;", @readonly = true })</label>
-                        &nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-primary">Editar Endereço</button><br />
+                        @if (@Model.CpfCompradorCheck) {
+                            <label style="font-weight:normal;padding-top:7px">Nome:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Nome, new { style = "width:350px;", @readonly = true,@value=@Model.Comprador.Nome })</label>
+                            <label style="font-size:10px">&nbsp;Caso deseje, clique <a href="mailto:gti@jaboticabal.sp.gov.br">aqui</a> para consultar o Cep</label><br />
+                            <label style="font-weight:normal;">Cep:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.CepR, new { style = "width:80px;", @readonly = true })</label>
+                            <label style="font-weight:normal;padding-left:10px">Logradouro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.EnderecoR, new { style = "width:410px;", @readonly = true })</label><br />
+                            <label style="font-weight:normal">Número:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.NumeroR, new { style = "width:70px;", @readonly = true })</label>
+                            <label style="font-weight:normal;padding-left:10px">Complemento:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.ComplementoR, new { style = "width:140px;", @readonly = true })</label>
+                            <label style="font-weight:normal">&nbsp;&nbsp;Bairro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.NomeBairroR, new { style = "width:180px;", @readonly = true })</label><br />
+                            <label style="font-weight:normal">Cidade:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.NomeCidadeR, new { style = "width:180px;", @readonly = true })</label>
+                            <label style="font-weight:normal;padding-left:10px">UF:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.UfR, new { style = "width:40px;", @readonly = true })&nbsp; &nbsp; &nbsp;</label>
+                            <button type="submit" class="btn btn-primary">Editar Endereço</button><br />
+                        }
                     </div>
                 }
 

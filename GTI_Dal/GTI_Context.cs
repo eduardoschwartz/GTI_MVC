@@ -152,5 +152,6 @@ namespace GTI_Dal {
         public DbSet<Certidao_impressao> Certidao_impressao { get; set; }
         public DbSet<Usuario_web> Usuario_Web { get; set; }
         public DbSet<Itbi_natureza> Itbi_Natureza { get; set; }
+        public DbSet<Logradouro_bairro> Logradouro_Bairro { get; set; }
     }
 }

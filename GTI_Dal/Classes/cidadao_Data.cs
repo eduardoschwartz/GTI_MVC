@@ -411,6 +411,7 @@ namespace GTI_Dal.Classes {
             }
         }
 
+
         public bool Existe_Cidadao_Cnpj(int Codigo, string Cnpj) {
             bool bRet = false;
             using (GTI_Context db = new GTI_Context(_connection)) {
@@ -421,5 +422,30 @@ namespace GTI_Dal.Classes {
                 return bRet;
             }
         }
+
+        public int Existe_Cidadao_Cpf( string Cpf) {
+            int _cod = 0;
+            string _cpf = dalCore.RetornaNumero(Cpf);
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Cidadao reg = (from m in db.Cidadao where  m.Cpf == _cpf select m).FirstOrDefault();
+                if (reg != null) 
+                    _cod = reg.Codcidadao;
+
+                return _cod;
+            }
+        }
+
+        public int Existe_Cidadao_Cnpj(string Cnpj) {
+            int _cod = 0;
+            string _cnpj = dalCore.RetornaNumero(Cnpj);
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Cidadao reg = (from m in db.Cidadao where m.Cnpj == _cnpj select m).FirstOrDefault();
+                if (reg != null)
+                    _cod = reg.Codcidadao;
+
+                return _cod;
+            }
+        }
+
     }
 }

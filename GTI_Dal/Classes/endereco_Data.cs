@@ -253,5 +253,35 @@ namespace GTI_Dal.Classes {
             return nCep;
         }
 
+
+        public Bairro RetornaLogradouroBairro(Int32 CodigoLogradouro, Int16 Numero) {
+            int nBairro = 0;
+            int Num1, Num2;
+            Bairro _bairro = new Bairro();
+
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from e in db.Logradouro_Bairro where e.Logradouro == CodigoLogradouro select e).ToList();
+                if (Sql.Count == 0)
+                    nBairro = 0;
+                else if (Sql.Count == 1)
+                    nBairro = Sql[0].Bairro;
+                else {
+                    foreach (var item in Sql) {
+                        Num1 = Convert.ToInt32(item.Inicial);
+                        Num2 = Convert.ToInt32(item.Final);
+                        if (Numero >= Num1 && Numero <= Num2) {
+                                nBairro = item.Bairro;
+                                break;
+                        } else if (Numero >= Num1 && Num2 == 0) {
+                                nBairro = item.Bairro;
+                                break;
+                        }
+                    }
+                }
+
+            }
+            return _bairro;
+        }
+
     }
 }

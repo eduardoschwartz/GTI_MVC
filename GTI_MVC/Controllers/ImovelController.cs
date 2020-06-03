@@ -999,16 +999,18 @@ namespace GTI_Mvc.Controllers {
                 return RedirectToAction("Login", "Home");
             ItbiViewModel model = new ItbiViewModel();
             model.Codigo = "";
+            model.CpfCompradorCheck = false;
             return View(model);
         }
 
-        [Route("CadImovel")]
+        [Route("Itbi_urbano")]
         [HttpPost]
         public ViewResult Itbi_urbano(ItbiViewModel model) {
             model = ItbiUrbanoLoad(model);
             if (model.Inscricao == null) {
                 ViewBag.Error = "Imóvel não cadastrado.";
             }
+            ModelState.Clear();
             return View(model);
         }
 
@@ -1021,14 +1023,36 @@ namespace GTI_Mvc.Controllers {
                 model.Codigo = Codigo.ToString();
                 model.Inscricao = imovel.Inscricao;
                 model.Dados_Imovel = imovel;
-                CidadaoStruct CompradorReg = new CidadaoStruct();
-                model.Comprador = CompradorReg;
-
+           
                 List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
                 ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
 
                 List<Uf> Lista_UF = imovelRepository.Lista_UF();
                 ViewBag.Lista_UF = new SelectList(Lista_Natureza, "SiglaUf", "DescUf");
+                if (model.Comprador == null)
+                    model.Comprador = new CidadaoStruct();
+                bool _bcpf = model.Comprador.Cpf != null;
+                bool _bcnpj = model.Comprador.Cnpj != null;
+                
+                int _codcidadao = 0;
+                if (_bcpf) {
+                     _codcidadao = cidadaoRepository.Existe_Cidadao_Cpf(model.Comprador.Cpf);
+                    model.CpfCompradorCheck = true;
+                } else {
+                    if (_bcnpj) {
+                        _codcidadao = cidadaoRepository.Existe_Cidadao_Cnpj(model.Comprador.Cnpj);
+                        model.CpfCompradorCheck = true;
+                    }
+                }
+                if (_codcidadao > 0) {
+                    model.Comprador = cidadaoRepository.Dados_Cidadao(_codcidadao);
+                    if (_bcpf)
+                        model.Comprador.Cpf = Functions.FormatarCpfCnpj(model.Comprador.Cpf);
+                    if (_bcnpj)
+                        model.Comprador.Cnpj = Functions.FormatarCpfCnpj(model.Comprador.Cnpj);
+                } else {
+                    model.Comprador = new CidadaoStruct();
+                }
 
 
 

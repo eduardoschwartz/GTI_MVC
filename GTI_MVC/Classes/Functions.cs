@@ -133,6 +133,7 @@ namespace GTI_Mvc {
         }
 
         public static string FormatarCpfCnpj(string strCpfCnpj) {
+            strCpfCnpj = RetornaNumero(strCpfCnpj);
             if (strCpfCnpj.Length <= 11) {
                 MaskedTextProvider mtpCpf = new MaskedTextProvider(@"000\.000\.000-00");
                 mtpCpf.Set(ZerosEsquerda(strCpfCnpj, 11));
