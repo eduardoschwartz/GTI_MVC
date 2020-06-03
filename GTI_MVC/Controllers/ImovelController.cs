@@ -134,8 +134,6 @@ namespace GTI_Mvc.Controllers {
             }
             //#######################################################################
 
-
-
             if (ex != null) {
                 ViewBag.Result = "Ocorreu um erro no processamento das informações.";
                 return View(certidaoViewModel);
@@ -1033,7 +1031,6 @@ namespace GTI_Mvc.Controllers {
                     }
                 }
             }
-
 
             model = ItbiUrbanoLoad(model);
             if (model.Inscricao == null && Convert.ToInt32(model.Codigo)>0) {
