@@ -998,33 +998,42 @@ namespace GTI_Mvc.Controllers {
             if (Functions.pUserId == 0)
                 return RedirectToAction("Login", "Home");
             ItbiViewModel model = new ItbiViewModel();
+            model.Codigo = "";
             return View(model);
         }
 
         [Route("CadImovel")]
         [HttpPost]
         public ViewResult Itbi_urbano(ItbiViewModel model) {
-            model = ItbiUrbanoLoad(Convert.ToInt32(model.Codigo));
+            model = ItbiUrbanoLoad(model);
             if (model.Inscricao == null) {
                 ViewBag.Error = "Imóvel não cadastrado.";
             }
             return View(model);
         }
 
-        public ItbiViewModel ItbiUrbanoLoad(int Codigo) {
-            ItbiViewModel model = new ItbiViewModel();
+        public ItbiViewModel ItbiUrbanoLoad(ItbiViewModel model) {
+            int Codigo = Convert.ToInt32(model.Codigo);
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
             ImovelStruct imovel= imovelRepository.Dados_Imovel(Codigo);
             if (imovel != null) {
+                model.Codigo = Codigo.ToString();
                 model.Inscricao = imovel.Inscricao;
                 model.Dados_Imovel = imovel;
                 CidadaoStruct CompradorReg = new CidadaoStruct();
                 model.Comprador = CompradorReg;
+
+                List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
+                ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
+
+                List<Uf> Lista_UF = imovelRepository.Lista_UF();
+                ViewBag.Lista_UF = new SelectList(Lista_Natureza, "SiglaUf", "DescUf");
+
+
+
             }
 
-
-     
             return model;
         }
 

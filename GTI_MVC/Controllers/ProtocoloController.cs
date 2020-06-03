@@ -183,7 +183,6 @@ namespace GTI_Mvc.Controllers {
             List<UsuariocentroCusto> _listaCC = protocoloRepository.ListaCentrocustoUsuario(Convert.ToInt32(ViewBag.UserId));
  
             List<Despacho> Lista_Despacho = protocoloRepository.Lista_Despacho();
-
             ViewBag.Lista_Despacho = new SelectList(Lista_Despacho, "Codigo", "Descricao");
             
             return View(processoViewModel);

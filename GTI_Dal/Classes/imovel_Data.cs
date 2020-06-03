@@ -1319,7 +1319,6 @@ namespace GTI_Dal.Classes {
             }
         }
 
-
         public bool Existe_Imovel_Cpf(int Codigo, string Cpf) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var reg = (from p in db.Proprietario
@@ -1344,7 +1343,19 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<Itbi_natureza> Lista_Itbi_Natureza() {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                List<Itbi_natureza> Sql = (from t in db.Itbi_Natureza orderby t.Codigo select t).ToList();
+                return Sql;
+            }
+        }
 
+        public List<Uf> Lista_UF() {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                List<Uf> Sql = (from t in db.Uf orderby t.Siglauf select t).ToList();
+                return Sql;
+            }
+        }
 
     }//end class
 }

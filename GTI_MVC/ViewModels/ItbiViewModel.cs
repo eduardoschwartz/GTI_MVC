@@ -10,5 +10,6 @@ namespace GTI_Mvc.ViewModels {
         public string Inscricao { get; set; }
         public ImovelStruct Dados_Imovel { get; set; }
         public CidadaoStruct Comprador { get; set; }
+        public int Natureza_Codigo { get; set; }
     }
 }

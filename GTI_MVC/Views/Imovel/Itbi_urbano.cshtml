@@ -38,7 +38,8 @@
                     @if (@Model.Inscricao != null) {
                         <div style="padding-left:7px">
                             <label style="font-weight:normal;padding-top:7px">Inscrição Cadastral:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue;padding-top:7px">@Html.TextBoxFor(m => m.Inscricao, new { @readonly = true, style = "width:200px;" })</label><br />
-                            <label style="font-weight:normal;padding-top:5px">Natureza da transação:&nbsp;&nbsp;</label><br />
+                            <label style="font-weight:normal;padding-top:7px">Natureza da transação:&nbsp;&nbsp;</label>
+                            @Html.DropDownListFor(m => m.Natureza_Codigo, ViewBag.Lista_Natureza as SelectList, "(Selecione...)", new { @id = "NaturezaDropDown", style = "width:460px;height:25px", rows = 10 })<br />
                             <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Endereço do Imóvel:</label><br />
                             <label style="font-weight:normal;padding-top:7px">Cep:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Cep, new { style = "width:80px;", @readonly = true })</label>
                             <label style="font-weight:normal;padding-left:10px">Logradouro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.NomeLogradouro, new { style = "width:400px;", @readonly = true })</label><br />
@@ -47,7 +48,6 @@
                             <label style="font-weight:normal">Quadra:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.QuadraOriginal, new { style = "width:100px;", @readonly = true })</label>
                             <label style="font-weight:normal;padding-left:10px">Lote:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.LoteOriginal, new { style = "width:140px;", @readonly = true })</label>
                             <label style="font-weight:normal;padding-left:10px">Bairro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.NomeBairro, new { style = "width:200px;", @readonly = true })</label><br />
-
                         </div>
                     }
                 </div>
@@ -58,31 +58,37 @@
                         <table width="600px">
                             <tr style="height:40px">
                                 <td style="width:150px">
-                                    CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
-                                    &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
+                                    CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfc1Check" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
+                                    &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjc1Check" value="cnpj" name="doc" onclick="radioCheck()" />
                                 </td>
                                 <td style="width:200px">
                                     @Html.TextBoxFor(m => m.Comprador.Cpf, new { @id = "cpfc1Txt", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CPF" })
                                     @Html.TextBoxFor(m => m.Comprador.Cnpj, new { @id = "cnpjc1Txt", @style = "max-width:200px;display:none", @onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CNPJ" })
                                 </td>
-                                <td style="padding-left:14px"><button type="submit" class="btn btn-primary"> Consultar</button></td>
+                                <td style="padding-left:14px"><button type="submit" class="btn btn-primary">Consultar</button></td>
                             </tr>
                         </table>
-                        <label style="font-weight:normal;padding-top:7px">Nome:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Nome, new { style = "width:300px;", @readonly = true })</label>
+                        <label style="font-weight:normal;padding-top:7px">Nome:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Nome, new { style = "width:350px;", @readonly = true })</label>
+                        <label style="font-size:10px">&nbsp;Caso deseje, clique <a href="mailto:gti@jaboticabal.sp.gov.br">aqui</a> para consultar o Cep</label><br />
+                        <label style="font-weight:normal;">Cep:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.CepR, new { style = "width:80px;", @readonly = true })</label>
+                        <label style="font-weight:normal;padding-left:10px">Logradouro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.EnderecoR, new { style = "width:410px;", @readonly = true })</label><br />
+                        <label style="font-weight:normal">Número:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.NumeroR, new { style = "width:70px;", @readonly = true })</label>
+                        <label style="font-weight:normal;padding-left:10px">Complemento:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.ComplementoR, new { style = "width:140px;", @readonly = true })</label>
+                        <label style="font-weight:normal">&nbsp;&nbsp;Bairro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.NomeBairroR, new { style = "width:180px;", @readonly = true })</label><br />
+                        <label style="font-weight:normal">Cidade:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.NomeCidadeR, new { style = "width:180px;", @readonly = true })</label>
+                        <label style="font-weight:normal;padding-left:10px">UF:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.UfR, new { style = "width:40px;", @readonly = true })</label>
+                        &nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-primary">Editar Endereço</button><br />
                     </div>
                 }
 
             </div>
         </div>
 
-
-
-
         <br /><br />
         <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })</div>
     }
 
-    @if (@Model.Inscricao != null && @Model.Codigo != null) {
+    @if (@Model.Inscricao != null && @Model.Codigo == "") {
         <script type="text/javascript">window.onload = function () { alert("Imóvel não cadastrado"); };</script>
     }
 
@@ -98,21 +104,22 @@
         });
 
         function radioCheck() {
-            document.getElementById('cnpjTxt').value = "";
-            document.getElementById('cpfTxt').value = "";
-            if (document.getElementById('cpfCheck').checked) {
-                document.getElementById('cpfTxt').style.display = 'block';
+            document.getElementById('cnpjc1Txt').value = "";
+            document.getElementById('cpfc1Txt').value = "";
+            if (document.getElementById('cpfc1Check').checked) {
+                document.getElementById('cpfc1Txt').style.display = 'block';
             }
             else {
-                document.getElementById('cpfTxt').style.display = 'none';
+                document.getElementById('cpfc1Txt').style.display = 'none';
             }
-            if (document.getElementById('cnpjCheck').checked) {
-                document.getElementById('cnpjTxt').style.display = 'block';
+            if (document.getElementById('cnpjc1Check').checked) {
+                document.getElementById('cnpjc1Txt').style.display = 'block';
             }
             else {
-                document.getElementById('cnpjTxt').style.display = 'none';
+                document.getElementById('cnpjc1Txt').style.display = 'none';
             }
         }
+       
 
         function ValidateForm() {
             var _cod = document.getElementById('codigo').value;
@@ -129,6 +136,30 @@
                     return false;
                 } 
             }
+
+            if (_cpfc1 != "" && !valida_Cpf(_cpfc1)) {
+                alert("CPF do compradir inválido");
+                return false;
+            }
+
+            if (_cnpjc1 != "" && !valida_Cnpj(_cnpjc1)) {
+                alert("CNPJ do comprador inválido");
+                return false;
+            }
+
+            var value = $("#NaturezaDropDown option:selected").val();
+            var x = document.getElementById("NaturezaDropDown").selectedIndex;
+
+            if (x < 1) {
+                alert("Natureza da transação não selecionada!");
+                return false;
+            }
+
+
+
+
+
+            return true;
         }
 
     </script>

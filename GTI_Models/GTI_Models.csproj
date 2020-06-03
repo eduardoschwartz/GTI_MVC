@@ -123,6 +123,7 @@
     <Compile Include="Models\horariofunc.cs" />
     <Compile Include="Models\horario_funcionamento.cs" />
     <Compile Include="Models\isencao.cs" />
+    <Compile Include="Models\itbi_natureza.cs" />
     <Compile Include="Models\lancamento.cs" />
     <Compile Include="Models\laseriptu.cs" />
     <Compile Include="Models\livro.cs" />

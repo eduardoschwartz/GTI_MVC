@@ -501,5 +501,15 @@ namespace GTI_Bll.Classes {
             return obj.Existe_Imovel_Cnpj(Codigo, Cnpj);
         }
 
+        public List<Itbi_natureza> Lista_Itbi_Natureza() {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Lista_Itbi_Natureza();
+        }
+
+        public List<Uf> Lista_UF() {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Lista_UF();
+        }
+
     }//end class
 }
