@@ -11,6 +11,7 @@ namespace GTI_Mvc.ViewModels {
         public ImovelStruct Dados_Imovel { get; set; }
         public CidadaoStruct Comprador { get; set; }
         public int Natureza_Codigo { get; set; }
-        public bool CpfCompradorCheck { get; set; }
+        public string Cpf_Cnpj { get; set; }
+
     }
 }

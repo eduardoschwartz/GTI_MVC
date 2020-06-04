@@ -997,7 +997,7 @@ namespace GTI_Mvc.Controllers {
                 return RedirectToAction("Login", "Home");
             ItbiViewModel model = new ItbiViewModel();
             model.Codigo = "";
-            model.CpfCompradorCheck = false;
+            model.Cpf_Cnpj = "";
 
             return View(model);
         }
@@ -1005,6 +1005,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_urbano")]
         [HttpPost]
         public ViewResult Itbi_urbano(ItbiViewModel model,string action) {
+            bool _bcpf = false, _bcnpj = false;
              ModelState.Clear();
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
@@ -1014,25 +1015,64 @@ namespace GTI_Mvc.Controllers {
                 model = new ItbiViewModel();
                 return View(model);
             }
-            if (action == "btnCpfOK") {
-                bool _bcpf = model.Comprador.Cpf != null;
-                bool _bcnpj = model.Comprador.Cnpj != null;
-                if (!_bcpf && !_bcnpj) {
-                    ViewBag.Error = "* Informe o CPF ou o CNPJ do comprador.";
-                    return View(model);
-                }
-                if (_bcpf && !Functions.ValidaCpf(model.Comprador.Cpf)) {
-                    ViewBag.Error = "* CPF do comprador inválido.";
-                    return View(model);
-                } else {
-                    if (_bcnpj && !Functions.ValidaCNPJ(model.Comprador.Cnpj)) {
-                        ViewBag.Error = "* CNPJ do comprador inválido.";
+
+            
+
+            if (action == "btnCpfCompradorOK") {
+                if (model.Cpf_Cnpj != null) {
+                    string _cpfCnpj = model.Cpf_Cnpj;
+                    if (_cpfCnpj.Length > 11) {
+                        _cpfCnpj = _cpfCnpj.PadLeft(14, '0');
+                        if (!Functions.ValidaCNPJ(_cpfCnpj)) {
+                            ViewBag.Error = "* Cpf/Cnpj do comprador inválido.";
+                            model.Comprador = new CidadaoStruct();
+                            return View(model);
+                        } else {
+                            _bcnpj = true;
+                        }
+                    } else {
+                        if (Functions.ValidaCNPJ(_cpfCnpj)) {
+                            _bcnpj = true;
+                        } else {
+                            if (Functions.ValidaCpf(_cpfCnpj)) {
+                                _bcpf = true;
+                            }
+                        }
+                    }
+                    if (_bcnpj) {
+                        _cpfCnpj = _cpfCnpj.PadLeft(14, '0');
+                        _cpfCnpj = Functions.FormatarCpfCnpj(_cpfCnpj);
+                    } else {
+                        if (_bcpf) {
+                            _cpfCnpj = _cpfCnpj.PadLeft(11, '0');
+                            _cpfCnpj = Functions.FormatarCpfCnpj(_cpfCnpj);
+                        }
+                    }
+                    if (_bcpf || _bcnpj) {
+                        model.Cpf_Cnpj = _cpfCnpj;
+                    } else {
+                        ViewBag.Error = "* Cpf/Cnpj do comprador inválido.";
+                        model.Comprador = new CidadaoStruct();
                         return View(model);
                     }
+                } else {
+                    ViewBag.Error = "* Digite o Cpf/Cnpj do comprador.";
+                    model.Comprador = new CidadaoStruct();
+                    return View(model);
                 }
             }
 
-            model = ItbiUrbanoLoad(model);
+            if (action == "btnCpfCompradorCancel") {
+                model.Cpf_Cnpj = "";
+                model.Comprador = new CidadaoStruct();
+            }
+
+                //if ((_bcpf || _bcnpj) && model.Natureza_Codigo ==0) {
+                //    ViewBag.Error = "* Natureza da transação não selecionada.";
+                //    return View(model);
+                //}
+
+                model = ItbiUrbanoLoad(model);
             if (model.Inscricao == null && Convert.ToInt32(model.Codigo)>0) {
                 ViewBag.Error = "* Imóvel não cadastrado.";
             }
@@ -1051,17 +1091,20 @@ namespace GTI_Mvc.Controllers {
            
                 if (model.Comprador == null)
                     model.Comprador = new CidadaoStruct();
-                bool _bcpf = model.Comprador.Cpf != null;
-                bool _bcnpj = model.Comprador.Cnpj != null;
+                string _cpf = model.Comprador.Cpf;
+                string _cnpj = model.Comprador.Cnpj;
+
+                bool _bcpf = _cpf != null;
+                bool _bcnpj = _cnpj != null;
                 
                 int _codcidadao = 0;
                 if (_bcpf) {
                      _codcidadao = cidadaoRepository.Existe_Cidadao_Cpf(model.Comprador.Cpf);
-                    model.CpfCompradorCheck = true;
+                    model.Cpf_Cnpj = "";
                 } else {
                     if (_bcnpj) {
                         _codcidadao = cidadaoRepository.Existe_Cidadao_Cnpj(model.Comprador.Cnpj);
-                        model.CpfCompradorCheck = true;
+                        model.Cpf_Cnpj = "";
                     }
                 }
                 if (_codcidadao > 0) {
@@ -1072,6 +1115,8 @@ namespace GTI_Mvc.Controllers {
                         model.Comprador.Cnpj = Functions.FormatarCpfCnpj(model.Comprador.Cnpj);
                 } else {
                     model.Comprador = new CidadaoStruct();
+                    model.Comprador.Cpf = _cpf;
+                    model.Comprador.Cnpj = _cnpj;
                 }
 
 
