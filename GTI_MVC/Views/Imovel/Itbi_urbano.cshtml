@@ -72,7 +72,7 @@
                     <div class="panel-body">
                         @if (@Model.Cpf_Cnpj != null && @Model.Cpf_Cnpj != "") {
                             <label style="font-weight:normal;">Cpf/Cnpj:&nbsp;&nbsp;</label>
-                            @Html.TextBoxFor(m => m.Cpf_Cnpj, new { @id = "cpfcnpjc1Txt", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§§§§§§§§§§§§', event)" ,@readonly=true})
+                            @Html.TextBoxFor(m => m.Cpf_Cnpj, new { @id = "cpfcnpjc1Txt", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§§§§§§§§§§§§', event)", @readonly = true })
                         } else {
                             <label style="font-weight:normal;padding-left:7px">Digite o Cpf/Cnpj:&nbsp;&nbsp;</label>
                             @Html.TextBoxFor(m => m.Cpf_Cnpj, new { @id = "cpfcnpjc1Txt", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§§§§§§§§§§§§', event)" })
@@ -86,16 +86,48 @@
                             }
                         </span><br />
                         @if (@Model.Cpf_Cnpj != null && @Model.Cpf_Cnpj != "") {
-                            <label style="font-weight:normal;padding-top:9px">Nome:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Nome, new { style = "width:350px;", @readonly = true, @value = @Model.Comprador.Nome })</label>
-                            <label style="font-size:10px">&nbsp;Caso deseje, clique <a href="mailto:gti@jaboticabal.sp.gov.br">aqui</a> para consultar o Cep</label><br />
-                            <label style="font-weight:normal;">Cep:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.CepR, new { style = "width:80px;", @readonly = true })</label>
-                            <label style="font-weight:normal;padding-left:10px">Logradouro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.EnderecoR, new { style = "width:410px;", @readonly = true })</label><br />
-                            <label style="font-weight:normal">Número:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.NumeroR, new { style = "width:70px;", @readonly = true })</label>
-                            <label style="font-weight:normal;padding-left:10px">Complemento:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.ComplementoR, new { style = "width:140px;", @readonly = true })</label>
-                            <label style="font-weight:normal">&nbsp;&nbsp;Bairro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.NomeBairroR, new { style = "width:180px;", @readonly = true })</label><br />
-                            <label style="font-weight:normal">Cidade:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.NomeCidadeR, new { style = "width:180px;", @readonly = true })</label>
-                            <label style="font-weight:normal;padding-left:10px">UF:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.UfR, new { style = "width:40px;", @readonly = true })&nbsp; &nbsp; &nbsp;</label>
-                            <button type="submit" class="btn btn-primary">Editar Endereço</button><br />
+                            <label style="font-weight:normal;padding-top:9px">Nome:&nbsp;&nbsp;</label>
+                            <label style="font-weight:normal;color:blue">
+                                @Html.TextBoxFor(m => m.Comprador.Nome, new { style = "width:450px;", @readonly = true, @value = @Model.Comprador.Nome })
+                            </label><br />
+                            <label style="font-weight:normal;">Pesquisa de Cep:&nbsp;&nbsp;</label> <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.CepR, new { style = "width:80px;", @readonly = true })</label>
+                            <button type="submit" class="btn btn-info" name="action" value="btnCpfCompradorOK">Pesquisar</button>
+                            <label style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">aqui</a> para consultar o Cep</label><br />
+                            <label style="font-weight:normal;padding-top:10px">Logradouro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.EnderecoR, new { style = "width:400px;", @readonly = true })</label>
+                            <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.NumeroR, new { style = "width:60px;", @readonly = true })</label>
+
+                            <table style="font-size:14px">
+                                <tr style="height:30px">
+                                    <td>
+                                        <label style="font-weight:normal;">Complemento:&nbsp;&nbsp;</label>
+                                    </td>
+                                    <td>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.ComplementoR, new { style = "width:230px;height:25px", @readonly = true })</label>
+                                        
+                                    </td>
+                                    <td>
+                                        <label style="font-weight:normal">&nbsp;&nbsp;Bairro:&nbsp;&nbsp;</label>
+                                    </td>
+                                    <td>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.NomeBairroR, new { style = "width:230px;height:25px", @readonly = true })</label>
+                                    </td>
+                                </tr>
+                                <tr style="height:30px">
+                                    <td>
+                                        <label style="font-weight:normal">Cidade:&nbsp;&nbsp;</label>
+                                    </td>
+                                    <td>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.NomeCidadeR, new { style = "width:230px;height:25px", @readonly = true })</label>
+                                        
+                                    </td>
+                                    <td>
+                                        <label style="font-weight:normal;padding-left:10px">UF:&nbsp;&nbsp;</label>
+                                    </td>
+                                    <td>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.UfR, new { style = "width:230px;height:25px", @readonly = true })</label>
+                                    </td>
+                                </tr>
+                            </table>
                         }
                     </div>
                 }
@@ -108,32 +140,33 @@
         </div>
 
 
+
         <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })</div>
     }
 
-    <div class="container">
-        <div class="modal fade" tabindex="-1" id="errorModal"
-             data-keyboard="false" data-backdrop="static">
-            <div class="modal-dialog modal-lg" style="background-color:antiquewhite">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Observação Importante:</h4>
-                    </div>
-                    <div class="modal-body">
-                        <h4>Foram selecionados débitos ajuizados e/ou protestados.</h4><br /><br />
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" id="submit" class="btn btn-primary button btn-success">Imprimir</button>
-                        <button type="button" id="btnHideModal" class="btn btn-danger button button4" data-dismiss="modal">
-                            Cancelar
-                        </button>
-                    </div>
+    <!-- Modal Endereço -->
+    <div class="modal fade" id="EnderecoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabel">Endereço do Comprador</h4>
+                </div>
+                <div class="modal-body">
+                    <label style="font-weight:normal;padding-left:7px">Digite o Cep:&nbsp;&nbsp;</label>
+                    @Html.TextBoxFor(m => m.Endereco.Cep, new { @id = "Endereco_Cep", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§-§§§', event)" })
+                    <label>&nbsp;&nbsp;</label>
+                    <button id="btnCepOk" type="button" class="btn btn-primary" name="action" value="btnCodigoOK">Consultar</button>
+                    <label style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="mailto:gti@jaboticabal.sp.gov.br">aqui</a> para consultar o Cep</label><br />
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Gravar</button>
                 </div>
             </div>
         </div>
     </div>
-
 
 </div>
 
@@ -148,24 +181,6 @@
             });
         });
 
-
-        //function radioCheck() {
-        //    document.getElementById('cnpjc1Txt').value = "";
-        //    document.getElementById('cpfc1Txt').value = "";
-        //    if (document.getElementById('cpfc1Check').checked) {
-        //        document.getElementById('cpfc1Txt').style.display = 'block';
-        //    }
-        //    else {
-        //        document.getElementById('cpfc1Txt').style.display = 'none';
-        //    }
-        //    if (document.getElementById('cnpjc1Check').checked) {
-        //        document.getElementById('cnpjc1Txt').style.display = 'block';
-        //    }
-        //    else {
-        //        document.getElementById('cnpjc1Txt').style.display = 'none';
-        //    }
-        //}
-
         function cancelarCodigo() {
             if (confirm('Deseja cancelar este ITBI?')) {
                 return true;
@@ -174,11 +189,16 @@
             }
         }
 
+        function EditarEndereco() {
+            $("#EnderecoModal").modal('show');
+        }
+
+
         function ValidateForm() {
             var _cod = document.getElementById('codigo').value;
 
             if (_cod == null || _cod == "" || parseInt(_cod) == 0) {
-                alert("Digite o código do imóvel");
+                document.getElementById('errorLabel').innerHTML = "Digite o código do imóvel";
                 return false;
             }
 

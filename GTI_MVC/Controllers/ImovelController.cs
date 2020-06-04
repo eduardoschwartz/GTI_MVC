@@ -1025,6 +1025,7 @@ namespace GTI_Mvc.Controllers {
                         _cpfCnpj = _cpfCnpj.PadLeft(14, '0');
                         if (!Functions.ValidaCNPJ(_cpfCnpj)) {
                             ViewBag.Error = "* Cpf/Cnpj do comprador inválido.";
+                            model.Cpf_Cnpj = "";
                             model.Comprador = new CidadaoStruct();
                             return View(model);
                         } else {
@@ -1052,6 +1053,7 @@ namespace GTI_Mvc.Controllers {
                         model.Cpf_Cnpj = _cpfCnpj;
                     } else {
                         ViewBag.Error = "* Cpf/Cnpj do comprador inválido.";
+                        model.Cpf_Cnpj = "";
                         model.Comprador = new CidadaoStruct();
                         return View(model);
                     }
