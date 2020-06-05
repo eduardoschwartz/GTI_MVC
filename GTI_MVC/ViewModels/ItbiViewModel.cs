@@ -12,9 +12,6 @@ namespace GTI_Mvc.ViewModels {
         public CidadaoStruct Comprador { get; set; }
         public int Natureza_Codigo { get; set; }
         public string Cpf_Cnpj { get; set; }
-        public EnderecoStruct Endereco { get; set; }
     }
-
-
 
 }
