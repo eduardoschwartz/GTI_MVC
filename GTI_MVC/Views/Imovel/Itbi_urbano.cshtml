@@ -39,25 +39,25 @@
                 <div class="panel-body">
                     <div style="padding-left:7px">
 
-                      <table style="font-size:14px;width:640px">
-                          <tr style="height:30px">
-                              <td style="width:154px">
-                                  <label style="font-weight:normal">Código do imóvel:</label>
-                              </td>
-                              <td>
-                                  @if (@Model.Inscricao == null) {
-                                      @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)" })
-                                      <label>&nbsp;&nbsp;</label>
-                                      <button id="btnCodigoOk" type="submit" class="btn btn-primary" name="action" value="btnCodigoOK">Consultar</button>
-                                      <label style="font-weight:normal;font-size:14px;color:brown">&nbsp;&nbsp;(Encontra-se na capa do carnê de IPTU)&nbsp;&nbsp;</label><br />
-                                  } else {
-                                      @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px;color:blue", @onKeyPress = "return formata(this, '§§§§§', event)", @readonly = true })
-                                      <label>&nbsp;&nbsp;</label>
-                                      <button id="btnCodigoCancel" type="submit" class="btn btn-danger" onclick="return cancelarCodigo()" name="action" value="btnCodigoCancel" data-balloon-length="medium" aria-label="Ao cancelar, todos os dados inseridos neste lançamento de ITBI serão perdidos." data-balloon-pos="right">Cancelar</button>
-                                  }
-                              </td>
-                          </tr>
-                      </table>
+                        <table style="font-size:14px;width:640px">
+                            <tr style="height:30px">
+                                <td style="width:154px">
+                                    <label style="font-weight:normal">Código do imóvel:</label>
+                                </td>
+                                <td>
+                                    @if (@Model.Inscricao == null) {
+                                        @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)" })
+                                        <label>&nbsp;&nbsp;</label>
+                                        <button id="btnCodigoOk" type="submit" class="btn btn-primary" name="action" value="btnCodigoOK">Consultar</button>
+                                        <label style="font-weight:normal;font-size:14px;color:brown">&nbsp;&nbsp;(Encontra-se na capa do carnê de IPTU)&nbsp;&nbsp;</label><br />
+                                    } else {
+                                        @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px;color:blue", @onKeyPress = "return formata(this, '§§§§§', event)", @readonly = true })
+                                        <label>&nbsp;&nbsp;</label>
+                                        <button id="btnCodigoCancel" type="submit" class="btn btn-danger" onclick="return cancelarCodigo()" name="action" value="btnCodigoCancel" data-balloon-length="medium" aria-label="Ao cancelar, todos os dados inseridos neste lançamento de ITBI serão perdidos." data-balloon-pos="right">Cancelar</button>
+                                    }
+                                </td>
+                            </tr>
+                        </table>
 
 
 
@@ -75,8 +75,8 @@
                                     </td>
                                 </tr>
                             </table>
-                            
-                            <table  style="font-size:14px;width:640px">
+
+                            <table style="font-size:14px;width:640px">
                                 <tr style="height:30px">
                                     <td style="width:154px">
                                         <label style="font-weight:normal;">Natureza da transação:</label>
@@ -86,7 +86,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            
+
                             <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Endereço do Imóvel:</label><br />
 
                             <table style="font-size:14px;width:640px">
@@ -180,11 +180,7 @@
                                         <label style="font-weight:normal;">Nº do Cep:</label>
                                     </td>
                                     <td>
-                                        @if (Model.Comprador.Nome == null) {
-                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Cep, new { style = "width:80px;height:25px", @onKeyPress = "return formata(this, '§§§§§-§§§', event)" })</label>
-                                        } else {
-                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Cep, new { style = "width:80px;height:25px", @readonly = true })</label>
-                                        }
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Cep, new { style = "width:80px;height:25px", @onKeyPress = "return formata(this, '§§§§§-§§§', event)" })</label>
                                         <button type="submit" class="btn btn-info" name="action" value="btnCepCompradorOK">Pesquisar</button>
                                         <label style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">aqui</a> para consultar o Cep</label><br />
                                     </td>
@@ -199,7 +195,7 @@
                                         </td>
                                         <td>
                                             <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Logradouro_Nome, new { style = "width:392px;height:25px", @readonly = true })</label>
-                                            <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Numero, new { style = "width:60px;height:25px", @readonly = true })</label>
+                                            <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal">@Html.TextBoxFor(m => m.Comprador.Numero, new { style = "width:60px;height:25px" })</label>
                                         </td>
                                     </tr>
                                 </table>
@@ -210,7 +206,7 @@
                                         <label style="font-weight:normal;">Complemento:</label>
                                     </td>
                                     <td>
-                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Complemento, new { style = "width:230px;height:25px", @readonly = true })</label>
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Comprador.Complemento, new { style = "width:230px;height:25px" })</label>
 
                                     </td>
                                     <td>
@@ -235,8 +231,75 @@
                                         <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.UF, new { style = "width:230px;height:25px", @readonly = true })</label>
                                     </td>
                                 </tr>
+                                <tr style="height:30px">
+                                    <td>
+                                        <label style="font-weight:normal">Telefone:</label>
+                                    </td>
+                                    <td>
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Comprador.Telefone, new { style = "width:230px;height:25px" })</label>
+
+                                    </td>
+                                    <td>
+                                        <label style="font-weight:normal;padding-left:10px">Email:</label>
+                                    </td>
+                                    <td>
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Comprador.Email, new { style = "width:230px;height:25px" })</label>
+                                    </td>
+                                </tr>
                             </table>
+
+                            <div style="padding-top:7px;"><button type="submit" class="btn btn-info" name="action" value="btnCompradorAdd">Incluir outros compradores</button></div>
+
+                            <div id="CompradorTable" style="max-height: 247px; overflow: auto;width:700px;padding-top:7px">
+                                <table id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                                    <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal">
+                                        <tr style="height:12px;">
+                                            <th style="width:40px;font-weight:normal">
+                                                Seq
+                                            </th>
+                                            <th style="width:320px;font-weight:normal">
+                                                Nome do comprador
+                                            </th>
+                                            <th style="width:210px;font-weight:normal">
+                                                Cpf ou Cnpj
+                                            </th>
+                                            <th>
+                                                #
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         }
+                    </div>
+
+                    <div class="panel-heading">Dados dos Vendedores </div>
+                    <div class="panel-body">
+                        <div style="padding-top:7px;"><button type="submit" class="btn btn-info" name="action" value="btnCompradorAdd">Incluir vendedores</button></div>
+                        <div id="VendedorTable" style="max-height: 247px; overflow: auto;width:700px;padding-top:7px">
+                            <table id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                                <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal">
+                                    <tr style="height:12px;">
+                                        <th style="width:40px;font-weight:normal">
+                                            Seq
+                                        </th>
+                                        <th style="width:320px;font-weight:normal">
+                                            Nome do vendedor
+                                        </th>
+                                        <th style="width:210px;font-weight:normal">
+                                            Cpf ou Cnpj
+                                        </th>
+                                        <th>
+                                            #
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="panel-heading">Outras informações </div>
+                    <div class="panel-body">
                     </div>
                 }
 

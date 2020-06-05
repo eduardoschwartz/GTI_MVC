@@ -12,6 +12,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using static GTI_Models.modelCore;
 
 namespace GTI_Mvc.Controllers {
@@ -1067,12 +1068,44 @@ namespace GTI_Mvc.Controllers {
                 model.Comprador = new Comprador_Itbi();
             }
 
-                //if ((_bcpf || _bcnpj) && model.Natureza_Codigo ==0) {
-                //    ViewBag.Error = "* Natureza da transação não selecionada.";
-                //    return View(model);
-                //}
+            if (action == "btnCepCompradorOK") {
+                if (model.Comprador.Cep==null ||   model.Comprador.Cep.Length < 9) {
+                    ViewBag.Error = "* Cep do comprador inválido.";
+                    model.Comprador = new Comprador_Itbi();
+                    return View(model);
+                }
 
-                model = ItbiUrbanoLoad(model,_bcpf,_bcnpj);
+                var cepObj = Classes.Cep.Busca(Functions.RetornaNumero(model.Comprador.Cep));
+                //string _cep = new JavaScriptSerializer().Serialize(cepObj);
+                if (cepObj.CEP != null){
+                    string rua = cepObj.Endereco;
+                    if (rua.IndexOf('-')>0) {
+                        rua = rua.Substring(0, rua.IndexOf('-'));
+                    }
+
+                    model.Comprador.Logradouro_Codigo = 0;
+                    model.Comprador.Logradouro_Nome = rua.ToUpper();
+                    model.Comprador.Bairro_Codigo = 0;
+                    model.Comprador.Bairro_Nome = cepObj.Bairro.ToUpper();
+                    model.Comprador.Cidade_Codigo = 0;
+                    model.Comprador.Cidade_Nome = cepObj.Cidade.ToUpper();
+                    model.Comprador.UF = cepObj.Estado;
+                } else {
+                    ViewBag.Error = "* Cep do comprador não localizado.";
+                    model.Comprador = new Comprador_Itbi();
+                    return View(model);
+                }
+
+
+            }
+
+
+            //if ((_bcpf || _bcnpj) && model.Natureza_Codigo ==0) {
+            //    ViewBag.Error = "* Natureza da transação não selecionada.";
+            //    return View(model);
+            //}
+
+            model = ItbiUrbanoLoad(model,_bcpf,_bcnpj);
             if (model.Inscricao == null && Convert.ToInt32(model.Codigo)>0) {
                 ViewBag.Error = "* Imóvel não cadastrado.";
             }
@@ -1139,7 +1172,8 @@ namespace GTI_Mvc.Controllers {
 
                     model.Comprador = _comprador;
                 } else {
-                    model.Comprador = new Comprador_Itbi();
+                    if(model.Comprador==null)
+                        model.Comprador = new Comprador_Itbi();
                 }
 
             }

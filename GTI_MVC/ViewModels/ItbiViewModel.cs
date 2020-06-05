@@ -1,8 +1,4 @@
 ﻿using GTI_Models.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace GTI_Mvc.ViewModels {
     public class ItbiViewModel {
@@ -29,6 +25,8 @@ namespace GTI_Mvc.ViewModels {
         public int Cidade_Codigo { get; set; }
         public string Cidade_Nome { get; set; }
         public string UF { get; set; }
+        public string Telefone { get; set; }
+        public string Email { get; set; }
     }
 
 }
