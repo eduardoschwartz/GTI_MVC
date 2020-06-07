@@ -27,7 +27,12 @@
     .show {
         display: block;
     }
+
+
 </style>
+
+
+
 
 <div class="center">
 
@@ -124,6 +129,7 @@
                 </div>
 
                 @if (@Model.Inscricao != null) {
+                    @*#############COMPRADORES###############*@
                     <div class="panel-heading">Dados dos Compradores </div>
                     <div class="panel-body">
 
@@ -163,10 +169,10 @@
                                         </td>
                                         <td>
                                             <label style="font-weight:normal;color:blue">
-                                                @if (Model.Comprador.Nome == null) {
-                                                    @Html.TextBoxFor(m => m.Comprador.Nome, new { style = "width:527px;height:25px", @value = @Model.Comprador.Nome })
+                                                @if (Model.Comprador[0].Nome == null) {
+                                                    @Html.TextBoxFor(m => m.Comprador[0].Nome, new { style = "width:527px;height:25px", @value = @Model.Comprador[0].Nome })
                                                 } else {
-                                                    @Html.TextBoxFor(m => m.Comprador.Nome, new { style = "width:527px;height:25px", @readonly = true, @value = @Model.Comprador.Nome })
+                                                    @Html.TextBoxFor(m => m.Comprador[0].Nome, new { style = "width:527px;height:25px", @readonly = true, @value = @Model.Comprador[0].Nome })
                                                 }
                                             </label>
                                         </td>
@@ -180,7 +186,7 @@
                                         <label style="font-weight:normal;">Nº do Cep:</label>
                                     </td>
                                     <td>
-                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Cep, new { style = "width:80px;height:25px", @onKeyPress = "return formata(this, '§§§§§-§§§', event)" })</label>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador[0].Cep, new { style = "width:80px;height:25px", @onKeyPress = "return formata(this, '§§§§§-§§§', event)" })</label>
                                         <button type="submit" class="btn btn-info" name="action" value="btnCepCompradorOK">Pesquisar</button>
                                         <label style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">aqui</a> para consultar o Cep</label><br />
                                     </td>
@@ -194,8 +200,8 @@
                                             <label style="font-weight:normal">Logradouro:</label>
                                         </td>
                                         <td>
-                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Logradouro_Nome, new { style = "width:392px;height:25px", @readonly = true })</label>
-                                            <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal">@Html.TextBoxFor(m => m.Comprador.Numero, new { style = "width:60px;height:25px" })</label>
+                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador[0].Logradouro_Nome, new { style = "width:392px;height:25px", @readonly = true })</label>
+                                            <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal">@Html.TextBoxFor(m => m.Comprador[0].Numero, new { style = "width:60px;height:25px" })</label>
                                         </td>
                                     </tr>
                                 </table>
@@ -206,14 +212,14 @@
                                         <label style="font-weight:normal;">Complemento:</label>
                                     </td>
                                     <td>
-                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Comprador.Complemento, new { style = "width:230px;height:25px" })</label>
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Comprador[0].Complemento, new { style = "width:230px;height:25px" })</label>
 
                                     </td>
                                     <td>
                                         <label style="font-weight:normal">&nbsp;&nbsp;Bairro:&nbsp;&nbsp;</label>
                                     </td>
                                     <td>
-                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Bairro_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador[0].Bairro_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
                                     </td>
                                 </tr>
                                 <tr style="height:30px">
@@ -221,14 +227,14 @@
                                         <label style="font-weight:normal">Cidade:</label>
                                     </td>
                                     <td>
-                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Cidade_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador[0].Cidade_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
 
                                     </td>
                                     <td>
                                         <label style="font-weight:normal;padding-left:10px">UF:&nbsp;&nbsp;</label>
                                     </td>
                                     <td>
-                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.UF, new { style = "width:230px;height:25px", @readonly = true })</label>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador[0].UF, new { style = "width:230px;height:25px", @readonly = true })</label>
                                     </td>
                                 </tr>
                                 <tr style="height:30px">
@@ -236,43 +242,57 @@
                                         <label style="font-weight:normal">Telefone:</label>
                                     </td>
                                     <td>
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Comprador.Telefone, new { style = "width:230px;height:25px" })</label>
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Comprador[0].Telefone, new { style = "width:230px;height:25px" })</label>
 
                                     </td>
                                     <td>
                                         <label style="font-weight:normal;padding-left:10px">Email:</label>
                                     </td>
                                     <td>
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Comprador.Email, new { style = "width:230px;height:25px" })</label>
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Comprador[0].Email, new { style = "width:230px;height:25px" })</label>
                                     </td>
                                 </tr>
                             </table>
 
-                            <div style="padding-top:7px;"><button type="submit" class="btn btn-info" name="action" value="btnCompradorAdd">Incluir outros compradores</button></div>
 
-                            <div id="CompradorTable" style="max-height: 247px; overflow: auto;width:700px;padding-top:7px">
-                                <table id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
-                                    <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal">
-                                        <tr style="height:12px;">
-                                            <th style="width:40px;font-weight:normal">
-                                                Seq
-                                            </th>
-                                            <th style="width:320px;font-weight:normal">
-                                                Nome do comprador
-                                            </th>
-                                            <th style="width:210px;font-weight:normal">
-                                                Cpf ou Cnpj
-                                            </th>
-                                            <th>
-                                                #
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
                         }
                     </div>
 
+                    <div class="panel-heading">Outros Compradores </div>
+                    <div class="panel-body">
+                        <div style="padding-top:7px;"><button type="button" class="btn btn-info" name="action" value="btnCompradorAdd" onclick="EditarComprador()">Incluir outros compradores</button></div>
+
+                        <div id="CompradorTable" style="max-height: 247px; overflow: auto;width:700px;padding-top:7px">
+                            <table id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                                <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal">
+                                    <tr style="height:12px;">
+                                        <th style="width:40px;font-weight:normal">
+                                            Seq
+                                        </th>
+                                        <th style="width:320px;font-weight:normal">
+                                            Nome do comprador
+                                        </th>
+                                        <th style="width:210px;font-weight:normal">
+                                            Cpf ou Cnpj
+                                        </th>
+                                        <th>
+                                            #
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                    @*@Ajax.ActionLink("All", "Itbi_Comprador", new AjaxOptions() {HttpMethod="GET",UpdateTargetId="divComprador",InsertionMode=InsertionMode.Replace})*@
+
+
+                    <div id="divComprador" title="Cadastro de compradores">
+                        <p>Aqui vão os compradores</p>
+                    </div>
+
+
+                    @*#############VENDEDORES###############*@
                     <div class="panel-heading">Dados dos Vendedores </div>
                     <div class="panel-body">
                         <div style="padding-top:7px;"><button type="submit" class="btn btn-info" name="action" value="btnCompradorAdd">Incluir vendedores</button></div>
@@ -300,6 +320,7 @@
 
                     <div class="panel-heading">Outras informações </div>
                     <div class="panel-body">
+                        poipoipo
                     </div>
                 }
 
@@ -310,14 +331,10 @@
 
         </div>
 
-
-
         <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })</div>
     }
-
-
     <!-- Modal Endereço -->
-    <div class="modal fade" id="EnderecoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="CompradorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -325,19 +342,18 @@
                 </div>
                 <div class="modal-body">
                     <label style="font-weight:normal;padding-left:7px">Digite o Cep:&nbsp;&nbsp;</label>
-                    @Html.TextBoxFor(m => m.Comprador.Cep, new { @id = "CompradorCep", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§-§§§', event)" })
-                    <label>&nbsp;&nbsp;</label>
-                    <button id="btnCepOk" type="button" class="btn btn-primary" name="action" value="btnCodigoOK">Consultar</button>
+                    <input id="cpfcnpjc2Txt" name="Cpf_Cnpj" onKeyPress="return formata(this, '§§§§§§§§§§§§§§', event)" style="max-width:200px;height:25px" type="text" value="" /> 
                     <label style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="mailto:gti@jaboticabal.sp.gov.br">aqui</a> para consultar o Cep</label><br />
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Gravar</button>
+                    <button type="button" class="btn btn-primary" id="btnCompradorOk">Gravar</button>
                 </div>
             </div>
         </div>
     </div>
+
 
 </div>
 
@@ -360,11 +376,18 @@
             }
         }
 
-        function EditarEndereco() {
-            $("#EnderecoModal").modal('show');
+        function EditarComprador() {
+            $('#CompradorModal').modal();
         }
 
+        $(document).ready(function () {
+            $('#btnCompradorOk').click(function () {
+                var databack = $("#CompradorModal #cpfcnpjc2Txt").val();
+                alert(databack);
+            });
+        });
 
+       
         function ValidateForm() {
             var _cod = document.getElementById('codigo').value;
 
@@ -372,7 +395,6 @@
                 document.getElementById('errorLabel').innerHTML = "Digite o código do imóvel";
                 return false;
             }
-
             return true;
         }
 

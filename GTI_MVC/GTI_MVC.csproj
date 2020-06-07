@@ -440,6 +440,7 @@
     <Content Include="Datasets\dsBoletoGuia.xss">
       <DependentUpon>dsBoletoGuia.xsd</DependentUpon>
     </Content>
+    <Content Include="libman.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\cep.js" />
@@ -523,6 +524,7 @@
     <Content Include="Views\Home\Login_resend_pwd.cshtml" />
     <Content Include="Views\Imovel\Itbi_menu.cshtml" />
     <Content Include="Views\Imovel\Itbi_urbano.cshtml" />
+    <Content Include="Views\Imovel\EditorTemplates\ListCompradorEditorViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

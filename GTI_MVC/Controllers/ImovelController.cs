@@ -999,7 +999,7 @@ namespace GTI_Mvc.Controllers {
             ItbiViewModel model = new ItbiViewModel();
             model.Codigo = "";
             model.Cpf_Cnpj = "";
-            model.Comprador = new Comprador_Itbi();
+            model.Comprador = new List<Comprador_Itbi>();
             return View(model);
         }
 
@@ -1025,7 +1025,7 @@ namespace GTI_Mvc.Controllers {
                         if (!Functions.ValidaCNPJ(_cpfCnpj)) {
                             ViewBag.Error = "* Cpf/Cnpj do comprador inválido.";
                             model.Cpf_Cnpj = "";
-                            model.Comprador = new Comprador_Itbi();
+                            model.Comprador = new List<Comprador_Itbi>();
                             return View(model);
                         } else {
                             _bcnpj = true;
@@ -1053,29 +1053,29 @@ namespace GTI_Mvc.Controllers {
                     } else {
                         ViewBag.Error = "* Cpf/Cnpj do comprador inválido.";
                         model.Cpf_Cnpj = "";
-                        model.Comprador = new Comprador_Itbi();
+                        model.Comprador = new List<Comprador_Itbi>();
                         return View(model);
                     }
                 } else {
                     ViewBag.Error = "* Digite o Cpf/Cnpj do comprador.";
-                    model.Comprador = new Comprador_Itbi();
+                    model.Comprador = new List<Comprador_Itbi>();
                     return View(model);
                 }
             }
 
             if (action == "btnCpfCompradorCancel") {
                 model.Cpf_Cnpj = "";
-                model.Comprador = new Comprador_Itbi();
+                model.Comprador = new List<Comprador_Itbi>();
             }
 
             if (action == "btnCepCompradorOK") {
-                if (model.Comprador.Cep==null ||   model.Comprador.Cep.Length < 9) {
+                if (model.Comprador[0].Cep==null ||   model.Comprador[0].Cep.Length < 9) {
                     ViewBag.Error = "* Cep do comprador inválido.";
-                    model.Comprador = new Comprador_Itbi();
+                    model.Comprador = new List<Comprador_Itbi>();
                     return View(model);
                 }
 
-                var cepObj = Classes.Cep.Busca(Functions.RetornaNumero(model.Comprador.Cep));
+                var cepObj = Classes.Cep.Busca(Functions.RetornaNumero(model.Comprador[0].Cep));
                 //string _cep = new JavaScriptSerializer().Serialize(cepObj);
                 if (cepObj.CEP != null){
                     string rua = cepObj.Endereco;
@@ -1083,16 +1083,16 @@ namespace GTI_Mvc.Controllers {
                         rua = rua.Substring(0, rua.IndexOf('-'));
                     }
 
-                    model.Comprador.Logradouro_Codigo = 0;
-                    model.Comprador.Logradouro_Nome = rua.ToUpper();
-                    model.Comprador.Bairro_Codigo = 0;
-                    model.Comprador.Bairro_Nome = cepObj.Bairro.ToUpper();
-                    model.Comprador.Cidade_Codigo = 0;
-                    model.Comprador.Cidade_Nome = cepObj.Cidade.ToUpper();
-                    model.Comprador.UF = cepObj.Estado;
+                    model.Comprador[0].Logradouro_Codigo = 0;
+                    model.Comprador[0].Logradouro_Nome = rua.ToUpper();
+                    model.Comprador[0].Bairro_Codigo = 0;
+                    model.Comprador[0].Bairro_Nome = cepObj.Bairro.ToUpper();
+                    model.Comprador[0].Cidade_Codigo = 0;
+                    model.Comprador[0].Cidade_Nome = cepObj.Cidade.ToUpper();
+                    model.Comprador[0].UF = cepObj.Estado;
                 } else {
                     ViewBag.Error = "* Cep do comprador não localizado.";
-                    model.Comprador = new Comprador_Itbi();
+                    model.Comprador = new List<Comprador_Itbi>();
                     return View(model);
                 }
 
@@ -1123,7 +1123,7 @@ namespace GTI_Mvc.Controllers {
                 model.Dados_Imovel = imovel;
            
                 if (model.Comprador == null)
-                    model.Comprador = new Comprador_Itbi();
+                    model.Comprador = new List<Comprador_Itbi>();
 
                 string _cpfCnpj = model.Cpf_Cnpj;
 
@@ -1170,16 +1170,21 @@ namespace GTI_Mvc.Controllers {
                         _comprador.Cep = ((int)_cidadao.CepC).ToString("00000-000");
                     }
 
-                    model.Comprador = _comprador;
+                    model.Comprador[0] = _comprador;
                 } else {
                     if(model.Comprador==null)
-                        model.Comprador = new Comprador_Itbi();
+                        model.Comprador = new List<Comprador_Itbi>();
                 }
 
             }
 
             return model;
         }
+
+        public PartialViewResult Itbi_Comprador(ItbiViewModel model) {
+            return PartialView("ListCompradorEditorViewModel", model);
+        }
+
 
     }
 }

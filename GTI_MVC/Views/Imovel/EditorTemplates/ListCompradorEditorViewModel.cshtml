@@ -1,0 +1,22 @@
+﻿@model GTI_Mvc.ViewModels.ItbiViewModel
+
+<table>
+    <tr>
+        <th>
+            Nome
+        </th>
+        <th>
+            Cpf/Cnpj
+        </th>
+    </tr>
+    @foreach (var item in Model.Comprador) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem=>item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cpf)
+            </td>
+        </tr>
+    }
+</table>
