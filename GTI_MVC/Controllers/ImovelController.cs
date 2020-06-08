@@ -4,6 +4,7 @@ using GTI_Bll.Classes;
 using GTI_Models.Models;
 using GTI_Models.ReportModels;
 using GTI_Mvc.ViewModels;
+using GTI_Mvc.Views.Imovel.EditorTemplates;
 using Microsoft.Reporting.WebForms;
 using QRCoder;
 using System;
@@ -999,6 +1000,7 @@ namespace GTI_Mvc.Controllers {
             ItbiViewModel model = new ItbiViewModel();
             model.Codigo = "";
             model.Cpf_Cnpj = "";
+            model.Comprador = new Comprador_Itbi();
             return View(model);
         }
 
@@ -1010,10 +1012,17 @@ namespace GTI_Mvc.Controllers {
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
             ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
+            if (model.Comprador == null) {
+                model.Comprador = new Comprador_Itbi();
+            }
             if (model.Comprador_Nome_tmp != null) {
-                model.Comprador.Nome = model.Comprador_Nome_tmp;
-                model.Comprador.Cpf = model.Comprador_Cpf_cnpj_tmp.Length > 11 ? null : model.Comprador_Cpf_cnpj_tmp;
-                model.Comprador.Cnpj = model.Comprador_Cpf_cnpj_tmp.Length < 14 ? null : model.Comprador_Cpf_cnpj_tmp;
+                //model.Comprador.Nome = model.Comprador_Nome_tmp;
+                //model.Comprador.Cpf = model.Comprador_Cpf_cnpj_tmp.Length > 11 ? null : model.Comprador_Cpf_cnpj_tmp;
+                //model.Comprador.Cnpj = model.Comprador_Cpf_cnpj_tmp.Length < 14 ? null : model.Comprador_Cpf_cnpj_tmp;
+                var editorViewModel = new ListCompradorEditorViewModel();
+                editorViewModel.Nome = model.Comprador_Nome_tmp;
+                editorViewModel.Cpf_Cnpj = model.Comprador_Cpf_cnpj_tmp;
+                model.Lista_Comprador.Add(editorViewModel);
             };
 
             if (action == "btnCodigoCancel") {
@@ -1066,7 +1075,7 @@ namespace GTI_Mvc.Controllers {
 
             if (action == "btnCpfCompradorCancel") {
                 model.Cpf_Cnpj = "";
-//                model.Comprador = new List<Comprador_Itbi>();
+                model.Comprador = new Comprador_Itbi();
             }
 
             if (action == "btnCepCompradorOK") {
@@ -1118,8 +1127,8 @@ namespace GTI_Mvc.Controllers {
                 model.Inscricao = imovel.Inscricao;
                 model.Dados_Imovel = imovel;
            
-//                if (model.Comprador == null)
- //                   model.Comprador = new List<Comprador_Itbi>();
+                if (model.Comprador == null)
+                    model.Comprador = new Comprador_Itbi();
 
                 string _cpfCnpj = model.Cpf_Cnpj;
 

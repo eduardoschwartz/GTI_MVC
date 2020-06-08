@@ -247,8 +247,6 @@
                                     </td>
                                 </tr>
                             </table>
-
-
                         }
                     </div>
 
@@ -260,13 +258,10 @@
                             <table id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
                                 <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal">
                                     <tr style="height:12px;">
-                                        <th style="width:40px;font-weight:normal">
-                                            Seq
-                                        </th>
-                                        <th style="width:320px;font-weight:normal">
+                                        <th style="width:420px;font-weight:normal">
                                             Nome do comprador
                                         </th>
-                                        <th style="width:210px;font-weight:normal">
+                                        <th style="width:150px;font-weight:normal">
                                             Cpf ou Cnpj
                                         </th>
                                         <th>
@@ -275,22 +270,17 @@
                                     </tr>
                                 </thead>
                             </table>
+                            <div>@Html.EditorFor(model => model.Lista_Comprador)</div>
                         </div>
                     </div>
 
-                    <div style="display: none;">@Html.EditorFor(model => model.Lista_Comprador)</div>
-                    @*for (int i = 0; i < Model.Comprador.Count; i++) {
-                        @Html.HiddenFor(model => Model.Comprador[i])
-                    }*@
                     @Html.HiddenFor(m => m.Comprador_Cpf_cnpj_tmp, new { @id = "Comprador_Cpf_cnpj_tmp" })
                     @Html.HiddenFor(m => m.Comprador_Nome_tmp, new { @id = "Comprador_Nome_tmp" })
 
                     @*@Ajax.ActionLink("All", "Itbi_Comprador", new AjaxOptions() {HttpMethod="GET",UpdateTargetId="divComprador",InsertionMode=InsertionMode.Replace})*@
 
 
-                    <div id="divComprador" title="Cadastro de compradores">
-                        <p>Aqui vão os compradores</p>
-                    </div>
+                  
 
 
                     @*#############VENDEDORES###############*@
