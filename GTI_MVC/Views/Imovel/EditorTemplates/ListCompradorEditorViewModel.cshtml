@@ -1,22 +1,16 @@
-﻿@model GTI_Mvc.ViewModels.ItbiViewModel
+﻿@model GTI_Mvc.Views.Imovel.EditorTemplates.ListCompradorEditorViewModel
 
 <table>
+
     <tr>
-        <th>
-            Nome
-        </th>
-        <th>
-            Cpf/Cnpj
-        </th>
+        <td>
+            @Html.DisplayFor(model=>model.Nome)
+            @Html.HiddenFor(model=>model.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Cpf_Cnpj)
+            @Html.HiddenFor(model=>model.Cpf_Cnpj)
+        </td>
     </tr>
-    @foreach (var item in Model.Comprador) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem=>item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cpf)
-            </td>
-        </tr>
-    }
+
 </table>

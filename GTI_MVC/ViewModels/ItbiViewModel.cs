@@ -1,4 +1,5 @@
 ﻿using GTI_Models.Models;
+using GTI_Mvc.Views.Imovel.EditorTemplates;
 using System.Collections.Generic;
 
 namespace GTI_Mvc.ViewModels {
@@ -6,9 +7,16 @@ namespace GTI_Mvc.ViewModels {
         public string Codigo { get; set; }
         public string Inscricao { get; set; }
         public ImovelStruct Dados_Imovel { get; set; }
-        public List<Comprador_Itbi> Comprador { get; set; }
+        public Comprador_Itbi Comprador { get; set; }
         public int Natureza_Codigo { get; set; }
         public string Cpf_Cnpj { get; set; }
+        public string Comprador_Cpf_cnpj_tmp { get; set; }
+        public string Comprador_Nome_tmp { get; set; }
+        public List<ListCompradorEditorViewModel> Lista_Comprador { get; set; }
+        public ItbiViewModel() {
+            this.Lista_Comprador = new List<ListCompradorEditorViewModel>();
+        }
+
     }
 
     public class Comprador_Itbi {
@@ -28,12 +36,6 @@ namespace GTI_Mvc.ViewModels {
         public string UF { get; set; }
         public string Telefone { get; set; }
         public string Email { get; set; }
-
-
     }
-
-
-
-
 
 }

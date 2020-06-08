@@ -27,13 +27,8 @@
     .show {
         display: block;
     }
-    body .modal-dialog {
-        width: 30%;
-    }
-
+   
 </style>
-
-
 
 
 <div class="center">
@@ -168,10 +163,10 @@
                                         </td>
                                         <td>
                                             <label style="font-weight:normal;color:blue">
-                                                @if (Model.Comprador[0].Nome == null) {
-                                                    @Html.TextBoxFor(m => m.Comprador[0].Nome, new { style = "width:527px;height:25px", @value = @Model.Comprador[0].Nome })
+                                                @if (Model.Comprador.Nome == null) {
+                                                    @Html.TextBoxFor(m => m.Comprador.Nome, new { style = "width:527px;height:25px", @value = @Model.Comprador.Nome })
                                                 } else {
-                                                    @Html.TextBoxFor(m => m.Comprador[0].Nome, new { style = "width:527px;height:25px", @readonly = true, @value = @Model.Comprador[0].Nome })
+                                                    @Html.TextBoxFor(m => m.Comprador.Nome, new { style = "width:527px;height:25px", @readonly = true, @value = @Model.Comprador.Nome })
                                                 }
                                             </label>
                                         </td>
@@ -185,7 +180,7 @@
                                         <label style="font-weight:normal;">Nº do Cep:</label>
                                     </td>
                                     <td>
-                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador[0].Cep, new { style = "width:80px;height:25px", @onKeyPress = "return formata(this, '§§§§§-§§§', event)" })</label>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Cep, new { style = "width:80px;height:25px", @onKeyPress = "return formata(this, '§§§§§-§§§', event)" })</label>
                                         <button type="submit" class="btn btn-info" name="action" value="btnCepCompradorOK">Pesquisar</button>
                                         <label style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">aqui</a> para consultar o Cep</label><br />
                                     </td>
@@ -199,8 +194,8 @@
                                             <label style="font-weight:normal">Logradouro:</label>
                                         </td>
                                         <td>
-                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador[0].Logradouro_Nome, new { style = "width:392px;height:25px", @readonly = true })</label>
-                                            <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal">@Html.TextBoxFor(m => m.Comprador[0].Numero, new { style = "width:60px;height:25px" })</label>
+                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Logradouro_Nome, new { style = "width:392px;height:25px", @readonly = true })</label>
+                                            <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal">@Html.TextBoxFor(m => m.Comprador.Numero, new { style = "width:60px;height:25px" })</label>
                                         </td>
                                     </tr>
                                 </table>
@@ -211,14 +206,14 @@
                                         <label style="font-weight:normal;">Complemento:</label>
                                     </td>
                                     <td>
-                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Comprador[0].Complemento, new { style = "width:230px;height:25px" })</label>
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Comprador.Complemento, new { style = "width:230px;height:25px" })</label>
 
                                     </td>
                                     <td>
                                         <label style="font-weight:normal">&nbsp;&nbsp;Bairro:&nbsp;&nbsp;</label>
                                     </td>
                                     <td>
-                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador[0].Bairro_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Bairro_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
                                     </td>
                                 </tr>
                                 <tr style="height:30px">
@@ -226,14 +221,14 @@
                                         <label style="font-weight:normal">Cidade:</label>
                                     </td>
                                     <td>
-                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador[0].Cidade_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Cidade_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
 
                                     </td>
                                     <td>
                                         <label style="font-weight:normal;padding-left:10px">UF:&nbsp;&nbsp;</label>
                                     </td>
                                     <td>
-                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador[0].UF, new { style = "width:230px;height:25px", @readonly = true })</label>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.UF, new { style = "width:230px;height:25px", @readonly = true })</label>
                                     </td>
                                 </tr>
                                 <tr style="height:30px">
@@ -241,14 +236,14 @@
                                         <label style="font-weight:normal">Telefone:</label>
                                     </td>
                                     <td>
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Comprador[0].Telefone, new { style = "width:230px;height:25px" })</label>
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Comprador.Telefone, new { style = "width:230px;height:25px" })</label>
 
                                     </td>
                                     <td>
                                         <label style="font-weight:normal;padding-left:10px">Email:</label>
                                     </td>
                                     <td>
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Comprador[0].Email, new { style = "width:230px;height:25px" })</label>
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Comprador.Email, new { style = "width:230px;height:25px" })</label>
                                     </td>
                                 </tr>
                             </table>
@@ -282,6 +277,13 @@
                             </table>
                         </div>
                     </div>
+
+                    <div style="display: none;">@Html.EditorFor(model => model.Lista_Comprador)</div>
+                    @*for (int i = 0; i < Model.Comprador.Count; i++) {
+                        @Html.HiddenFor(model => Model.Comprador[i])
+                    }*@
+                    @Html.HiddenFor(m => m.Comprador_Cpf_cnpj_tmp, new { @id = "Comprador_Cpf_cnpj_tmp" })
+                    @Html.HiddenFor(m => m.Comprador_Nome_tmp, new { @id = "Comprador_Nome_tmp" })
 
                     @*@Ajax.ActionLink("All", "Itbi_Comprador", new AjaxOptions() {HttpMethod="GET",UpdateTargetId="divComprador",InsertionMode=InsertionMode.Replace})*@
 
@@ -337,9 +339,10 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" >Adicionar outro comprador</h4>
+                    <h4 class="modal-title">Adicionar outro comprador</h4>
                 </div>
                 <div class="modal-body">
+
                     <table>
                         <tr style="height:30px">
                             <td>
@@ -358,10 +361,9 @@
                             </td>
                         </tr>
                     </table>
-                    
-                    
-                    
+                    <br />
 
+                    <label style="font-weight:normal;color:red;padding-left:7px" id="errorComprador">@ViewBag.Error</label>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -370,7 +372,6 @@
             </div>
         </div>
     </div>
-
 
 </div>
 
@@ -395,15 +396,51 @@
 
         function EditarComprador() {
             $('#CompradorModal').modal();
+            document.getElementById('errorComprador').innerHTML = "";
         }
 
         $(document).ready(function () {
             $('#btnCompradorOk').click(function () {
-                var databack = $("#CompradorModal #cpfcnpjc2Txt").val();
-                alert(databack);
+                var cpfcompradorback = $("#CompradorModal #cpfcnpjc2Txt").val();
+                var nomecompradorback = $("#CompradorModal #nomec2Txt").val();
+                if (cpfcompradorback.trim() == "" || nomecompradorback.trim() == "" || cpfcompradorback == null || nomecompradorback==null) {
+                    document.getElementById('errorComprador').innerHTML ="Digite o nome e o documento" ;
+                } else {
+
+                    var cnpjtmp = cpfcompradorback.padStart(14, '0');
+                    var cpftmp = cpfcompradorback.padStart(11, '0');
+                    var cpfcnpj = "";
+                    if (cpfcompradorback.length > 11) {
+                        if (!valida_Cnpj(cnpjtmp)) {
+                            document.getElementById('errorComprador').innerHTML = "Nº de Cnpj inválido.";
+                        } else {
+                            cpfcnpj = cnpjtmp;
+                        }
+                    } else {
+                        if (valida_Cnpj(cnpjtmp)) {
+                            cpfcnpj = cnpjtmp;
+                        } else {
+                            if (!valida_Cpf(cpftmp)) {
+                                document.getElementById('errorComprador').innerHTML = "Nº de Cpf inválido.";
+                            } else {
+                                cpfcnpj = cpftmp;
+                            }
+                        }
+                    }
+                    if (cpfcnpj == "") {
+                        document.getElementById('errorComprador').innerHTML = "Nº de Cpf/Cnpj inválido.";
+                    } else {
+                        document.getElementById('Comprador_Cpf_cnpj_tmp').value = cpfcnpj;
+                        document.getElementById('Comprador_Nome_tmp').value = nomecompradorback;
+                        $("#CompradorModal #cpfcnpjc2Txt").val("");
+                        $("#CompradorModal #nomec2Txt").val("");
+                        $("#CompradorModal #errorComprador").val("");
+                        $('#CompradorModal').modal('hide');
+                        $("#MainForm").submit();
+                    }
+                }
             });
         });
-
        
         function ValidateForm() {
             var _cod = document.getElementById('codigo').value;
