@@ -1015,15 +1015,45 @@ namespace GTI_Mvc.Controllers {
             if (model.Comprador == null) {
                 model.Comprador = new Comprador_Itbi();
             }
+
+            bool _find = false;    
             if (model.Comprador_Nome_tmp != null) {
-                //model.Comprador.Nome = model.Comprador_Nome_tmp;
-                //model.Comprador.Cpf = model.Comprador_Cpf_cnpj_tmp.Length > 11 ? null : model.Comprador_Cpf_cnpj_tmp;
-                //model.Comprador.Cnpj = model.Comprador_Cpf_cnpj_tmp.Length < 14 ? null : model.Comprador_Cpf_cnpj_tmp;
+                for (int i = 0; i < model.Lista_Comprador.Count; i++) {
+                    if (model.Lista_Comprador[i].Cpf_Cnpj == model.Comprador_Cpf_cnpj_tmp) {
+                        _find = true;
+                        break;
+                    } 
+                };
+            }
+
+            if (model.Cpf_Cnpj == Functions.RetornaNumero(model.Comprador_Cpf_cnpj_tmp) ) {
+                _find = true;
+            }
+
+            if (_find) {
+                ViewBag.Error = "* Cpf/Cnpj já cadastrado.";
+            } else {
+
                 var editorViewModel = new ListCompradorEditorViewModel();
-                editorViewModel.Nome = model.Comprador_Nome_tmp;
+                editorViewModel.Nome = model.Comprador_Nome_tmp != null?  model.Comprador_Nome_tmp.ToUpper(): model.Comprador_Nome_tmp;
+                //string _cpfCnpj = model.Comprador_Cpf_cnpj_tmp;
+                //if (_cpfCnpj != null) {
+                //    if (Functions.ValidaCNPJ(_cpfCnpj.PadLeft(14, '0'))) {
+                //        _bcnpj = true;
+                //        _cpfCnpj = _cpfCnpj.PadLeft(14, '0');
+                //    } else {
+                //        if (Functions.ValidaCpf(_cpfCnpj.PadLeft(11, '0'))) {
+                //            _bcpf = true;
+                //            _cpfCnpj = _cpfCnpj.PadLeft(11, '0');
+                //        }
+                //    }
+                //    _cpfCnpj = Functions.FormatarCpfCnpj(_cpfCnpj);
+                //}
                 editorViewModel.Cpf_Cnpj = model.Comprador_Cpf_cnpj_tmp;
                 model.Lista_Comprador.Add(editorViewModel);
-            };
+            }
+
+            model.Comprador_Cpf_cnpj_tmp = "";
 
             if (action == "btnCodigoCancel") {
                 model = new ItbiViewModel();
