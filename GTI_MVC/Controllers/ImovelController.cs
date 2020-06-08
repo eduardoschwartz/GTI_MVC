@@ -1011,6 +1011,12 @@ namespace GTI_Mvc.Controllers {
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
             ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
+            if (model.Comprador == null || model.Comprador.Count == 0) {
+                model.Comprador = new List<Comprador_Itbi>();
+                Comprador_Itbi c = new Comprador_Itbi();
+                model.Comprador.Add(c);
+            }
+
 
             if (action == "btnCodigoCancel") {
                 model = new ItbiViewModel();
@@ -1025,7 +1031,6 @@ namespace GTI_Mvc.Controllers {
                         if (!Functions.ValidaCNPJ(_cpfCnpj)) {
                             ViewBag.Error = "* Cpf/Cnpj do comprador inválido.";
                             model.Cpf_Cnpj = "";
-                            model.Comprador = new List<Comprador_Itbi>();
                             return View(model);
                         } else {
                             _bcnpj = true;
@@ -1053,12 +1058,10 @@ namespace GTI_Mvc.Controllers {
                     } else {
                         ViewBag.Error = "* Cpf/Cnpj do comprador inválido.";
                         model.Cpf_Cnpj = "";
-                        model.Comprador = new List<Comprador_Itbi>();
                         return View(model);
                     }
                 } else {
                     ViewBag.Error = "* Digite o Cpf/Cnpj do comprador.";
-                    model.Comprador = new List<Comprador_Itbi>();
                     return View(model);
                 }
             }
@@ -1071,7 +1074,6 @@ namespace GTI_Mvc.Controllers {
             if (action == "btnCepCompradorOK") {
                 if (model.Comprador[0].Cep==null ||   model.Comprador[0].Cep.Length < 9) {
                     ViewBag.Error = "* Cep do comprador inválido.";
-                    model.Comprador = new List<Comprador_Itbi>();
                     return View(model);
                 }
 
@@ -1092,7 +1094,6 @@ namespace GTI_Mvc.Controllers {
                     model.Comprador[0].UF = cepObj.Estado;
                 } else {
                     ViewBag.Error = "* Cep do comprador não localizado.";
-                    model.Comprador = new List<Comprador_Itbi>();
                     return View(model);
                 }
 
