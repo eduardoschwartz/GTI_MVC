@@ -67,10 +67,18 @@
                             <table style="font-size:14px;width:640px">
                                 <tr style="height:30px">
                                     <td style="width:154px">
-                                        <label style="font-weight:normal;padding-top:7px">Inscrição Cadastral:</label>
+                                        <label style="font-weight:normal;padding-top:7px">Proprietário principal:</label>
                                     </td>
                                     <td>
-                                        <label style="font-weight:normal;color:blue;padding-top:7px">@Html.TextBoxFor(m => m.Inscricao, new { @readonly = true, style = "width:200px;height:25px" })</label>
+                                        <label style="font-weight:normal;color:blue;padding-top:7px">@Html.TextBoxFor(m => m.Dados_Imovel.Proprietario_Nome, new { @readonly = true, style = "width:470px;height:25px" })</label>
+                                    </td>
+                                </tr>
+                                <tr style="height:30px">
+                                    <td style="width:154px">
+                                        <label style="font-weight:normal">Inscrição cadastral:</label>
+                                    </td>
+                                    <td>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Inscricao, new { @readonly = true, style = "width:200px;height:25px" })</label>
                                     </td>
                                 </tr>
                             </table>
@@ -196,7 +204,8 @@
                                         <td>
                                             <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Logradouro_Nome, new { style = "width:392px;height:25px", @readonly = true })</label>
                                             <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal">
-                                            @Html.TextBoxFor(m => m.Comprador.Numero, new { style = "width:60px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)" })</label>
+                                                @Html.TextBoxFor(m => m.Comprador.Numero, new { style = "width:60px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)" })
+                                            </label>
                                         </td>
                                     </tr>
                                 </table>
@@ -274,7 +283,7 @@
                                     </tr>
                                 </thead>
                             </table>
-                            <div >@Html.EditorFor(model => model.Lista_Comprador)</div>
+                            <div style="display:none">@Html.EditorFor(model => model.Lista_Comprador)</div>
                             @foreach (var item in Model.Lista_Comprador) {
                                 <table id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px">
                                     <tr>
@@ -300,9 +309,12 @@
                         </div>
                     </div>
 
+                    @Html.HiddenFor(m => m.Dados_Imovel.Inscricao)
+                    @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Codigo)
+                    @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Nome)
                     @Html.HiddenFor(m => m.Comprador_Cpf_cnpj_tmp, new { @id = "Comprador_Cpf_cnpj_tmp" })
                     @Html.HiddenFor(m => m.Comprador_Nome_tmp, new { @id = "Comprador_Nome_tmp" })
-                    @Html.HiddenFor(m=>m.Guid)
+                    @Html.HiddenFor(m => m.Guid)
 
                     @*@Ajax.ActionLink("All", "Itbi_Comprador", new AjaxOptions() {HttpMethod="GET",UpdateTargetId="divComprador",InsertionMode=InsertionMode.Replace})*@
 

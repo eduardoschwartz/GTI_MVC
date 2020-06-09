@@ -1007,7 +1007,8 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_urbano")]
         [HttpPost]
         public ViewResult Itbi_urbano(ItbiViewModel model,string action,int seq=0) {
-            bool _bcpf = false, _bcnpj = false,_save = false;
+            bool _bcpf = false, _bcnpj = false;
+            string _guid = "";
              ModelState.Clear();
 
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
@@ -1150,8 +1151,9 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.Error = "* Imóvel não cadastrado.";
             }
 
-            _save = Grava_Itbi(model);
-            if (!_save) {
+            _guid = Grava_Itbi(model);
+            model.Guid = _guid;
+            if (_guid=="") {
                 ViewBag.Error = "* Ocorreu um erro ao gravar.";
             }
 
@@ -1167,7 +1169,11 @@ namespace GTI_Mvc.Controllers {
                 model.Codigo = Codigo.ToString();
                 model.Inscricao = imovel.Inscricao;
                 model.Dados_Imovel = imovel;
-           
+                List<ProprietarioStruct> ListaProp = imovelRepository.Lista_Proprietario(Codigo, true);
+                model.Dados_Imovel.Proprietario_Codigo = ListaProp[0].Codigo;
+                model.Dados_Imovel.Proprietario_Nome = ListaProp[0].Nome;
+
+
                 if (model.Comprador == null)
                     model.Comprador = new Comprador_Itbi();
 
@@ -1227,33 +1233,41 @@ namespace GTI_Mvc.Controllers {
             return model;
         }
 
-        private bool Grava_Itbi(ItbiViewModel model) {
+        private string Grava_Itbi(ItbiViewModel model) {
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             string _guid;
             Exception ex = null;
 
             //################### Grava Itbi_Main #####################
 
+
             if (model.Guid == null) {
                 _guid = Guid.NewGuid().ToString("N");
                 Itbi_main regMain = new Itbi_main() {
                     Imovel_codigo = Convert.ToInt32(model.Codigo),
                     Guid=_guid,
-                    Data_cadastro=DateTime.Now
+                    Data_cadastro=DateTime.Now,
+                    Inscricao=model.Dados_Imovel.Inscricao,
+                    Proprietario_Codigo=(int)model.Dados_Imovel.Proprietario_Codigo,
+                    Proprietario_Nome=model.Dados_Imovel.Proprietario_Nome
                 };
                 ex = imovelRepository.Incluir_Itbi_main(regMain);
             } else {
                 _guid = model.Guid;
                 Itbi_main regMain = imovelRepository.Retorna_Itbi_Main(_guid);
+                regMain.Natureza_Codigo = model.Natureza_Codigo;
+                regMain.Imovel_endereco = model.Dados_Imovel.NomeLogradouro;
+                regMain.Imovel_numero = (short)model.Dados_Imovel.Numero;
+                regMain.Imovel_complemento = model.Dados_Imovel.Complemento;
+                regMain.Imovel_cep = Convert.ToInt32( Functions.RetornaNumero(model.Dados_Imovel.Cep));
+                regMain.Imovel_bairro = model.Dados_Imovel.NomeBairro;
                 ex = imovelRepository.Alterar_Itbi_Main(regMain);
             }
 
-            if (ex != null)
-                return false;
 
             //#########################################################
 
-            return true;
+            return _guid;
         }
 
 
