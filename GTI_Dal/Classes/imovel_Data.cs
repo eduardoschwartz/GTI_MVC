@@ -1357,5 +1357,47 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public bool Existe_Itbi(string guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from i in db.Itbi_Main
+                           where i.Guid == guid select i.Guid).FirstOrDefault();
+                if (string.IsNullOrEmpty(reg))
+                    return false;
+                else
+                    return true;
+            }
+        }
+
+        public Exception Incluir_Itbi_main(Itbi_main Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[3];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@data_cadastro", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_cadastro };
+                Parametros[2] = new SqlParameter { ParameterName = "@imovel_codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Imovel_codigo };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO itbi_main(guid,data_cadastro,imovel_codigo) VALUES(@guid,@data_cadastro,@imovel_codigo)", Parametros);
+
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Alterar_Itbi_Main(Itbi_main Reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Itbi_main i = db.Itbi_Main.First(i => i.Guid == Reg.Guid);
+                i.Imovel_codigo = Reg.Imovel_codigo;
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
     }//end class
 }

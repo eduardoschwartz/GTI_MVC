@@ -50,13 +50,14 @@
                 </td>
             </tr>
             <tr style="height:40px">
-                <td style="        style =
-" padding-top:15px;width:150px">
+                <td  style ="padding-top:15px;width:150px">
                     @Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })
                 </td>
                 <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "Codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
             </tr>
-
+            <tr>
+                <td style="font-size:12px;color:red">* No caso dos imóveis informar o código do imóvel </td>
+            </tr>
             <tr style="height:40px">
                 <td style="width: 150px">
                     CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />

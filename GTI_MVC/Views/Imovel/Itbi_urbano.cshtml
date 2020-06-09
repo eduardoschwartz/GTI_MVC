@@ -195,7 +195,8 @@
                                         </td>
                                         <td>
                                             <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Logradouro_Nome, new { style = "width:392px;height:25px", @readonly = true })</label>
-                                            <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal">@Html.TextBoxFor(m => m.Comprador.Numero, new { style = "width:60px;height:25px" })</label>
+                                            <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal">
+                                            @Html.TextBoxFor(m => m.Comprador.Numero, new { style = "width:60px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)" })</label>
                                         </td>
                                     </tr>
                                 </table>
@@ -258,6 +259,9 @@
                             <table id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
                                 <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal">
                                     <tr style="height:12px;">
+                                        <th style="width:20px;font-weight:normal">
+                                            #
+                                        </th>
                                         <th style="width:420px;font-weight:normal">
                                             Nome do comprador
                                         </th>
@@ -265,12 +269,34 @@
                                             Cpf ou Cnpj
                                         </th>
                                         <th style="width:20px;text-align:left">
-                                            #
+
                                         </th>
                                     </tr>
                                 </thead>
                             </table>
-                            <div>@Html.EditorFor(model => model.Lista_Comprador)</div>
+                            <div >@Html.EditorFor(model => model.Lista_Comprador)</div>
+                            @foreach (var item in Model.Lista_Comprador) {
+                                <table id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px">
+                                    <tr>
+                                        <td style="width:20px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Seq)
+                                            @Html.HiddenFor(modelItem => item.Seq)
+                                        </td>
+                                        <td style="width:420px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Nome)
+                                            @Html.HiddenFor(modelItem => item.Nome)
+                                        </td>
+                                        <td style="width:150px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Cpf_Cnpj)
+                                            @Html.HiddenFor(modelItem => item.Cpf_Cnpj)
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("Itbi_urbano","Imovel",new { @action="remover",@seq=item.Seq})" title="Remover comprador"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                            @*@Ajax.ActionLink("Delete", "Itbi_urbano", new { @action="remover",  @seq = item.Seq }, new AjaxOptions { HttpMethod = "POST" })*@
+                                        </td>
+                                    </tr>
+                                </table>
+                            }
                         </div>
                     </div>
 
@@ -278,10 +304,6 @@
                     @Html.HiddenFor(m => m.Comprador_Nome_tmp, new { @id = "Comprador_Nome_tmp" })
 
                     @*@Ajax.ActionLink("All", "Itbi_Comprador", new AjaxOptions() {HttpMethod="GET",UpdateTargetId="divComprador",InsertionMode=InsertionMode.Replace})*@
-
-
-                  
-
 
                     @*#############VENDEDORES###############*@
                     <div class="panel-heading">Dados dos Vendedores </div>
@@ -441,6 +463,7 @@
             }
             return true;
         }
+
 
     </script>
 }

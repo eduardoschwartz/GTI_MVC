@@ -511,5 +511,22 @@ namespace GTI_Bll.Classes {
             return obj.Lista_UF();
         }
 
+        public bool Existe_Itbi(string guid) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Existe_Itbi(guid);
+        }
+
+        public Exception Incluir_Itbi_main(Itbi_main Reg) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Incluir_Itbi_main(Reg);
+            return ex;
+        }
+
+        public Exception Alterar_Itbi_Main(Itbi_main Reg) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Alterar_Itbi_Main(Reg);
+            return ex;
+        }
+
     }//end class
 }

@@ -1006,7 +1006,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_urbano")]
         [HttpPost]
-        public ViewResult Itbi_urbano(ItbiViewModel model,string action) {
+        public ViewResult Itbi_urbano(ItbiViewModel model,string action,int seq=0) {
             bool _bcpf = false, _bcnpj = false;
              ModelState.Clear();
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
@@ -1033,26 +1033,27 @@ namespace GTI_Mvc.Controllers {
             if (_find) {
                 ViewBag.Error = "* Cpf/Cnpj já cadastrado.";
             } else {
-
                 var editorViewModel = new ListCompradorEditorViewModel();
-                editorViewModel.Nome = model.Comprador_Nome_tmp != null?  model.Comprador_Nome_tmp.ToUpper(): model.Comprador_Nome_tmp;
-                //string _cpfCnpj = model.Comprador_Cpf_cnpj_tmp;
-                //if (_cpfCnpj != null) {
-                //    if (Functions.ValidaCNPJ(_cpfCnpj.PadLeft(14, '0'))) {
-                //        _bcnpj = true;
-                //        _cpfCnpj = _cpfCnpj.PadLeft(14, '0');
-                //    } else {
-                //        if (Functions.ValidaCpf(_cpfCnpj.PadLeft(11, '0'))) {
-                //            _bcpf = true;
-                //            _cpfCnpj = _cpfCnpj.PadLeft(11, '0');
-                //        }
-                //    }
-                //    _cpfCnpj = Functions.FormatarCpfCnpj(_cpfCnpj);
-                //}
-                editorViewModel.Cpf_Cnpj = model.Comprador_Cpf_cnpj_tmp;
-                model.Lista_Comprador.Add(editorViewModel);
+                editorViewModel.Seq = model.Lista_Comprador.Count;
+                editorViewModel.Nome = model.Comprador_Nome_tmp != null ? model.Comprador_Nome_tmp.ToUpper() : model.Comprador_Nome_tmp;
+                string _cpfMask = model.Comprador_Cpf_cnpj_tmp;
+                if (_cpfMask != null) {
+                    if (Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
+                        _cpfMask = _cpfMask.PadLeft(14, '0');
+                    } else {
+                        if (Functions.ValidaCpf(_cpfMask.PadLeft(11, '0'))) {
+                            _cpfMask = _cpfMask.PadLeft(11, '0');
+                        }
+                    }
+                    _cpfMask = Functions.FormatarCpfCnpj(_cpfMask);
+                }
+                editorViewModel.Cpf_Cnpj = _cpfMask;
+                if (editorViewModel.Nome != null) {
+                    editorViewModel.Seq = model.Lista_Comprador.Count;
+                    model.Lista_Comprador.Add(editorViewModel);
+                }
+                
             }
-
             model.Comprador_Cpf_cnpj_tmp = "";
 
             if (action == "btnCodigoCancel") {
@@ -1215,6 +1216,7 @@ namespace GTI_Mvc.Controllers {
 
             return model;
         }
+
 
 
 
