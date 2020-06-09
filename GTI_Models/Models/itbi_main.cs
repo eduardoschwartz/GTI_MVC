@@ -15,6 +15,8 @@ namespace GTI_Models.Models {
         public string Imovel_complemento { get; set; }
         public int Imovel_cep { get; set; }
         public string Imovel_bairro { get; set; }
+        public string Imovel_Quadra { get; set; }
+        public string Imovel_Lote { get; set; }
         public int Natureza_Codigo { get; set; }
     }
 }

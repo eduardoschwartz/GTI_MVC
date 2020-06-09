@@ -1209,6 +1209,8 @@ namespace GTI_Mvc.Controllers {
                         _comprador.Cidade_Nome = _cidadao.NomeCidadeR;
                         _comprador.UF = _cidadao.UfR;
                         _comprador.Cep = ((int)_cidadao.CepR).ToString("00000-000");
+                        _comprador.Email = _cidadao.EmailR;
+                        _comprador.Telefone = _cidadao.TelefoneR;
                     } else {
                         _comprador.Logradouro_Codigo = (int)_cidadao.CodigoLogradouroC;
                         _comprador.Logradouro_Nome = _cidadao.EnderecoC;
@@ -1220,6 +1222,8 @@ namespace GTI_Mvc.Controllers {
                         _comprador.Cidade_Nome = _cidadao.NomeCidadeC;
                         _comprador.UF = _cidadao.UfC;
                         _comprador.Cep = ((int)_cidadao.CepC).ToString("00000-000");
+                        _comprador.Email = _cidadao.EmailC;
+                        _comprador.Telefone = _cidadao.TelefoneC;
                     }
 
                     model.Comprador = _comprador;
@@ -1261,6 +1265,8 @@ namespace GTI_Mvc.Controllers {
                 regMain.Imovel_complemento = model.Dados_Imovel.Complemento;
                 regMain.Imovel_cep = Convert.ToInt32( Functions.RetornaNumero(model.Dados_Imovel.Cep));
                 regMain.Imovel_bairro = model.Dados_Imovel.NomeBairro;
+                regMain.Imovel_Quadra = model.Dados_Imovel.QuadraOriginal;
+                regMain.Imovel_Lote = model.Dados_Imovel.LoteOriginal;
                 ex = imovelRepository.Alterar_Itbi_Main(regMain);
             }
 
