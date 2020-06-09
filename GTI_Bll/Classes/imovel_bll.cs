@@ -528,5 +528,16 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Itbi_main Retorna_Itbi_Main(string Guid) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Itbi_Main(Guid);
+        }
+
+        public Exception Excluir_Itbi(string Guid) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Excluir_Itbi(Guid);
+            return ex;
+        }
+
     }//end class
 }

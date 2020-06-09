@@ -1388,7 +1388,7 @@ namespace GTI_Dal.Classes {
 
         public Exception Alterar_Itbi_Main(Itbi_main Reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                Itbi_main i = db.Itbi_Main.First(i => i.Guid == Reg.Guid);
+                Itbi_main i = db.Itbi_Main.First(g => g.Guid == Reg.Guid);
                 i.Imovel_codigo = Reg.Imovel_codigo;
                 try {
                     db.SaveChanges();
@@ -1399,5 +1399,25 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Excluir_Itbi(string Guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Itbi_main b = db.Itbi_Main.First(i => i.Guid == Guid);
+                try {
+                    db.Itbi_Main.Remove(b);
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+
+        public Itbi_main Retorna_Itbi_Main(string Guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Itbi_main Sql = (from t in db.Itbi_Main where t.Guid==Guid select t).FirstOrDefault();
+                return Sql;
+            }
+        }
     }//end class
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace GTI_Mvc.ViewModels {
     public class ItbiViewModel {
+        public string Guid { get; set; }
         public string Codigo { get; set; }
         public string Inscricao { get; set; }
         public ImovelStruct Dados_Imovel { get; set; }
