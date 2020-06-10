@@ -1328,6 +1328,16 @@ namespace GTI_Mvc.Controllers {
                 ex = imovelRepository.Alterar_Itbi_Main(regMain);
             }
 
+            //################### Grava Itbi_Comprador #####################
+            foreach (ListCompradorEditorViewModel comp in model.Lista_Comprador) {
+                Itbi_comprador regC = new Itbi_comprador() {
+                    Guid=model.Guid,
+                    Seq=(byte)comp.Seq,
+                    Nome=comp.Nome,
+                    Cpf_cnpj=comp.Cpf_Cnpj
+                };
+                ex = imovelRepository.Incluir_Itbi_comprador(regC);
+            }
 
             //#########################################################
 

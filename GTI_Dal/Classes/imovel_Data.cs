@@ -1385,6 +1385,15 @@ namespace GTI_Dal.Classes {
                 } catch (Exception ex) {
                     return ex;
                 }
+
+                try {
+                    db.Itbi_Comprador.RemoveRange(db.Itbi_Comprador.Where(i => i.Guid == Reg.Guid));
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+
+
                 return null;
             }
         }
@@ -1436,6 +1445,12 @@ namespace GTI_Dal.Classes {
                 } catch (Exception ex) {
                     return ex;
                 }
+                try {
+                    db.Itbi_Comprador.RemoveRange(db.Itbi_Comprador.Where(i => i.Guid == Guid));
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
                 return null;
             }
         }
@@ -1447,8 +1462,25 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Incluir_Itbi_comprador(Itbi_comprador Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[4];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@seq", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Seq };
+                Parametros[2] = new SqlParameter { ParameterName = "@nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nome };
+                Parametros[3] = new SqlParameter { ParameterName = "@cpf_cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cpf_cnpj };
 
-        
+                db.Database.ExecuteSqlCommand("INSERT INTO itbi_comprador(guid,seq,nome,cpf_cnpj) " +
+                                              " VALUES(@guid,@seq,@nome,@cpf_cnpj)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
 
     }//end class
 }
