@@ -1404,6 +1404,20 @@ namespace GTI_Dal.Classes {
                 i.Imovel_bairro = Reg.Imovel_bairro;
                 i.Imovel_Quadra = Reg.Imovel_Quadra;
                 i.Imovel_Lote = Reg.Imovel_Lote;
+                i.Comprador_cpf_cnpj = Reg.Comprador_cpf_cnpj;
+                i.Comprador_codigo = Reg.Comprador_codigo;
+                i.Comprador_nome = Reg.Comprador_nome;
+                i.Comprador_logradouro_codigo = Reg.Comprador_logradouro_codigo;
+                i.Comprador_logradouro_nome = Reg.Comprador_logradouro_nome;
+                i.Comprador_numero = Reg.Comprador_numero;
+                i.Comprador_complemento = Reg.Comprador_complemento;
+                i.Comprador_bairro_codigo = Reg.Comprador_bairro_codigo;
+                i.Comprador_bairro_nome = Reg.Comprador_bairro_nome;
+                i.Comprador_cidade_codigo = Reg.Comprador_cidade_codigo;
+                i.Comprador_cidade_nome = Reg.Comprador_cidade_nome;
+                i.Comprador_uf = Reg.Comprador_uf;
+                i.Comprador_telefone = Reg.Comprador_telefone;
+                i.Comprador_email = Reg.Comprador_email;
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -1426,12 +1440,29 @@ namespace GTI_Dal.Classes {
             }
         }
 
-
         public Itbi_main Retorna_Itbi_Main(string Guid) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 Itbi_main Sql = (from t in db.Itbi_Main where t.Guid==Guid select t).FirstOrDefault();
                 return Sql;
             }
         }
+
+        public LogradouroStruct Retorna_Logradouro(int Cep) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from c in db.Cep
+                           join l in db.Logradouro on c.Codlogr equals l.Codlogradouro into cl from l in cl.DefaultIfEmpty()
+                           where c.cep==Cep select new {CodLogradouro=  c.Codlogr, Endereco=l.Endereco }).FirstOrDefault();
+
+                LogradouroStruct reg = new LogradouroStruct();
+                if(reg.CodLogradouro!=null){
+                    reg.CodLogradouro = Sql.CodLogradouro;
+                    reg.Endereco = Sql.Endereco;
+                };
+
+                return reg;
+            }
+        }
+
+
     }//end class
 }

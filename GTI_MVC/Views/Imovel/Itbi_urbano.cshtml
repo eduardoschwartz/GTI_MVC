@@ -188,7 +188,7 @@
                                         <label style="font-weight:normal;">Nº do Cep:</label>
                                     </td>
                                     <td>
-                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Cep, new { style = "width:80px;height:25px", @onKeyPress = "return formata(this, '§§§§§-§§§', event)" })</label>
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Comprador.Cep, new { style = "width:90px;height:25px", @onKeyPress = "return formata(this, '§§§§§-§§§', event)" })</label>
                                         <button type="submit" class="btn btn-info" name="action" value="btnCepCompradorOK">Pesquisar</button>
                                         <label style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">aqui</a> para consultar o Cep</label><br />
                                     </td>
@@ -313,6 +313,9 @@
                     @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Codigo)
                     @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Nome)
                     @Html.HiddenFor(m => m.Comprador.Codigo)
+                    @Html.HiddenFor(m => m.Comprador.Logradouro_Codigo)
+                    @Html.HiddenFor(m => m.Comprador.Bairro_Codigo)
+                    @Html.HiddenFor(m => m.Comprador.Cidade_Codigo)
                     @Html.HiddenFor(m => m.Comprador_Cpf_cnpj_tmp, new { @id = "Comprador_Cpf_cnpj_tmp" })
                     @Html.HiddenFor(m => m.Comprador_Nome_tmp, new { @id = "Comprador_Nome_tmp" })
                     @Html.HiddenFor(m => m.Guid)

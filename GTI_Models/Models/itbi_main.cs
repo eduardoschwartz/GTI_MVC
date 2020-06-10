@@ -18,5 +18,20 @@ namespace GTI_Models.Models {
         public string Imovel_Quadra { get; set; }
         public string Imovel_Lote { get; set; }
         public int Natureza_Codigo { get; set; }
+        public string Comprador_cpf_cnpj { get; set; }
+        public int Comprador_codigo { get; set; }
+        public string Comprador_nome { get; set; }
+        public int Comprador_logradouro_codigo { get; set; }
+        public string Comprador_logradouro_nome { get; set; }
+        public int Comprador_numero { get; set; }
+        public string Comprador_complemento { get; set; }
+        public int Comprador_bairro_codigo { get; set; }
+        public string Comprador_bairro_nome { get; set; }
+        public int Comprador_cidade_codigo { get; set; }
+        public string Comprador_cidade_nome { get; set; }
+        public string Comprador_uf { get; set; }
+        public string Comprador_telefone { get; set; }
+        public string Comprador_email { get; set; }
     }
 }
+
