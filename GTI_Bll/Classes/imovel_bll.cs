@@ -539,10 +539,6 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
-        public LogradouroStruct Retorna_Logradouro(int Cep) {
-            Imovel_Data obj = new Imovel_Data(_connection);
-            return obj.Retorna_Logradouro(Cep);
-        }
 
     }//end class
 }

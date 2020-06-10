@@ -5,6 +5,7 @@ using GTI_Models.Models;
 using GTI_Models.ReportModels;
 using GTI_Mvc.ViewModels;
 using GTI_Mvc.Views.Imovel.EditorTemplates;
+using Microsoft.Ajax.Utilities;
 using Microsoft.Reporting.WebForms;
 using QRCoder;
 using System;
@@ -1127,8 +1128,8 @@ namespace GTI_Mvc.Controllers {
                         rua = rua.Substring(0, rua.IndexOf('-'));
                     }
 
-                    LogradouroStruct _log = imovelRepository.Retorna_Logradouro(Convert.ToInt32(Functions.RetornaNumero(cepObj.CEP)));
-
+                    Endereco_bll enderecoRepository = new Endereco_bll("GTiconnection");
+                    LogradouroStruct _log = enderecoRepository.Retorna_Logradouro_Cep(Convert.ToInt32(Functions.RetornaNumero(cepObj.CEP)));
                     if (_log.Endereco != null) {
                         model.Comprador.Logradouro_Codigo = (int)_log.CodLogradouro;
                         model.Comprador.Logradouro_Nome = _log.Endereco;
@@ -1136,7 +1137,37 @@ namespace GTI_Mvc.Controllers {
                         model.Comprador.Logradouro_Codigo = 0;
                         model.Comprador.Logradouro_Nome = rua.ToUpper();
                     }
-                    model.Comprador.Bairro_Nome = cepObj.Bairro.ToUpper();
+                    
+                    Bairro bairro = enderecoRepository.RetornaLogradouroBairro(model.Comprador.Logradouro_Codigo,(short)model.Comprador.Numero);
+                    if (bairro.Descbairro != null) {
+                        model.Comprador.Bairro_Codigo = bairro.Codbairro;
+                        model.Comprador.Bairro_Nome = bairro.Descbairro;
+                    } else {
+                        string _uf = cepObj.Estado;
+                        string _cidade = cepObj.Cidade;
+                        string _bairro = cepObj.Bairro;
+                        int _codcidade = enderecoRepository.Retorna_Cidade(_uf, _cidade);
+                        if (_codcidade > 0) {
+                            model.Comprador.Cidade_Codigo = _codcidade;
+                            if (_codcidade != 413) {
+                                //verifica se bairro existe nesta cidade
+                                bool _existeBairro = enderecoRepository.Existe_Bairro(_uf, _codcidade, _bairro);
+                                if (!_existeBairro) {
+                                    Bairro reg = new Bairro() {
+                                        Siglauf = _uf,
+                                        Codcidade = (short)_codcidade,
+                                        Descbairro = _bairro.ToUpper()
+                                    };
+                                    int _codBairro = enderecoRepository.Incluir_bairro(reg);
+                                    model.Comprador.Bairro_Codigo = _codBairro;
+                                }
+                            }
+                        } else {
+                            model.Comprador.Cidade_Codigo = 0;
+                        }
+                        model.Comprador.Bairro_Nome = cepObj.Bairro.ToUpper();
+                    }
+                    
                     model.Comprador.Cidade_Nome = cepObj.Cidade.ToUpper();
                     model.Comprador.UF = cepObj.Estado;
                 } else {

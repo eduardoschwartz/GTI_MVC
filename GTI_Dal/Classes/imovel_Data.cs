@@ -1447,22 +1447,8 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public LogradouroStruct Retorna_Logradouro(int Cep) {
-            using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from c in db.Cep
-                           join l in db.Logradouro on c.Codlogr equals l.Codlogradouro into cl from l in cl.DefaultIfEmpty()
-                           where c.cep==Cep select new {CodLogradouro=  c.Codlogr, Endereco=l.Endereco }).FirstOrDefault();
 
-                LogradouroStruct reg = new LogradouroStruct();
-                if(reg.CodLogradouro!=null){
-                    reg.CodLogradouro = Sql.CodLogradouro;
-                    reg.Endereco = Sql.Endereco;
-                };
-
-                return reg;
-            }
-        }
-
+        
 
     }//end class
 }

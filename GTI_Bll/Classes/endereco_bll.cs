@@ -31,10 +31,9 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Bairro(UF, cidade);
         }
 
-        public Exception Incluir_bairro(Bairro reg) {
+        public int Incluir_bairro(Bairro reg) {
             Endereco_Data obj = new Endereco_Data(_connection);
-            Exception ex = obj.Incluir_bairro(reg);
-            return ex;
+            return obj.Incluir_bairro(reg);
         }
 
         public Exception Alterar_Bairro(Bairro reg) {
@@ -124,41 +123,30 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Bairro(UF, Cidade,Bairro);
         }
 
-        //private Exception Validated(endereco reg) {
-        //    Exception AppEx;
-        //    if (reg.id_pais==0) {
-        //        AppEx = new Exception("Informe o país.");
-        //        return AppEx;
-        //    }
-        //    if (String.IsNullOrEmpty(reg.sigla_uf)) {
-        //        AppEx = new Exception("Informe o Estado.");
-        //        return AppEx;
-        //    }
-        //    if (reg.id_cidade == 0) {
-        //        AppEx = new Exception("Informe a cidade.");
-        //        return AppEx;
-        //    }
-        //    if (reg.id_bairro == 0) {
-        //        AppEx = new Exception("Informe o bairro.");
-        //        return AppEx;
-        //    }
-        //    if (reg.sigla_uf=="SP" && reg.id_cidade==413 && reg.logradouro_codigo==0) {
-        //        AppEx = new Exception("Informe o logradouro de Jaboticabal.");
-        //        return AppEx;
-        //    }
-        //    if ((reg.sigla_uf != "SP" || reg.id_cidade != 413) && string.IsNullOrEmpty( reg.logradouro_fora)) {
-        //        AppEx = new Exception("Informe o logradouro.");
-        //        return AppEx;
-        //    }
-            
-        //    return null;
-        //}
-
-        public int RetornaCep(Int32 CodigoLogradouro, Int16 Numero) {
+        public int RetornaCep(int CodigoLogradouro, short Numero) {
             Endereco_Data obj = new Endereco_Data(_connection);
             return obj.RetornaCep(CodigoLogradouro, Numero);
         }
 
+        public Bairro RetornaLogradouroBairro(int CodigoLogradouro, short Numero) {
+            Endereco_Data obj = new Endereco_Data(_connection);
+            return obj.RetornaLogradouroBairro(CodigoLogradouro, Numero);
+        }
+
+        public LogradouroStruct Retorna_Logradouro_Cep(int Cep) {
+            Endereco_Data obj = new Endereco_Data(_connection);
+            return obj.Retorna_Logradour_Cep(Cep);
+        }
+
+        public int Retorna_Cidade(string UF, string Cidade) {
+            Endereco_Data obj = new Endereco_Data(_connection);
+            return obj.Retorna_Cidade(UF,Cidade);
+        }
+
+        public bool Existe_Bairro(string uf, int cidade, string bairro) {
+            Endereco_Data obj = new Endereco_Data(_connection);
+            return obj.Existe_Bairro(uf, cidade,bairro);
+        }
 
     }
 }

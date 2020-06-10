@@ -1,4 +1,5 @@
 ﻿using GTI_Models.Models;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,7 +49,7 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public Exception Incluir_bairro(Bairro reg) {
+        public int Incluir_bairro(Bairro reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var cntCod = (from c in db.Bairro where c.Siglauf == reg.Siglauf && c.Codcidade == reg.Codcidade select c.Codbairro).Count();
                 int maxCod = 1;
@@ -58,10 +59,10 @@ namespace GTI_Dal.Classes {
                 db.Bairro.Add(reg);
                 try {
                     db.SaveChanges();
-                } catch (Exception ex) {
-                    return ex;
+                } catch  {
+                    maxCod = 0;
                 }
-                return null;
+                return maxCod;
             }
         }
 
@@ -139,6 +140,13 @@ namespace GTI_Dal.Classes {
         public string Retorna_Cidade(string UF, int Codigo) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var Sql = (from c in db.Cidade where c.Siglauf == UF && c.Codcidade==Codigo select c.Desccidade).FirstOrDefault();
+                return Sql;
+            }
+        }
+
+        public int Retorna_Cidade(string UF, string Cidade) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from c in db.Cidade where c.Siglauf == UF && c.Desccidade == Cidade select c.Codcidade).FirstOrDefault();
                 return Sql;
             }
         }
@@ -277,10 +285,42 @@ namespace GTI_Dal.Classes {
                                 break;
                         }
                     }
+
+                    
+                }
+                if (nBairro > 0) {
+                    _bairro = (from e in db.Bairro where e.Siglauf=="SP" && e.Codcidade==413 &&  e.Codbairro == nBairro select e).FirstOrDefault();
                 }
 
             }
             return _bairro;
+        }
+
+        public LogradouroStruct Retorna_Logradour_Cep(int Cep) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from c in db.Cep
+                           join l in db.Logradouro on c.Codlogr equals l.Codlogradouro into cl from l in cl.DefaultIfEmpty()
+                           where c.cep == Cep select new { CodLogradouro = c.Codlogr, Endereco = l.Endereco }).FirstOrDefault();
+
+                LogradouroStruct reg = new LogradouroStruct();
+                if (Sql != null && Sql.CodLogradouro > 0) {
+                    reg.CodLogradouro = Sql.CodLogradouro;
+                    reg.Endereco = Sql.Endereco;
+                };
+
+                return reg;
+            }
+        }
+
+        public bool Existe_Bairro(string uf,int cidade,string bairro) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from i in db.Bairro
+                           where i.Siglauf == uf && i.Codcidade==cidade && i.Descbairro==bairro select i.Codbairro).FirstOrDefault();
+                if (reg==0)
+                    return false;
+                else
+                    return true;
+            }
         }
 
     }
