@@ -1393,6 +1393,12 @@ namespace GTI_Dal.Classes {
                     return ex;
                 }
 
+                try {
+                    db.Itbi_Vendedor.RemoveRange(db.Itbi_Vendedor.Where(i => i.Guid == Reg.Guid));
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
 
                 return null;
             }
@@ -1467,6 +1473,18 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Excluir_Itbi_vendedor(string Guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                try {
+                    db.Itbi_Vendedor.RemoveRange(db.Itbi_Vendedor.Where(i => i.Guid == Guid));
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
         public Exception Excluir_Itbi_comprador(string guid,int seq) {
             object[] Parametros = new object[2];
             using (GTI_Context db = new GTI_Context(_connection)) {
@@ -1474,6 +1492,17 @@ namespace GTI_Dal.Classes {
                 Parametros[1] = new SqlParameter { ParameterName = "@seq", SqlDbType = SqlDbType.TinyInt, SqlValue = seq };
 
                 db.Database.ExecuteSqlCommand("DELETE FROM itbi_comprador WHERE guid=@guid AND seq=@seq", Parametros);
+                return null;
+            }
+        }
+
+        public Exception Excluir_Itbi_vendedor(string guid, int seq) {
+            object[] Parametros = new object[2];
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@seq", SqlDbType = SqlDbType.TinyInt, SqlValue = seq };
+
+                db.Database.ExecuteSqlCommand("DELETE FROM itbi_vendedor WHERE guid=@guid AND seq=@seq", Parametros);
                 return null;
             }
         }
@@ -1488,6 +1517,13 @@ namespace GTI_Dal.Classes {
         public List<Itbi_comprador> Retorna_Itbi_Comprador(string Guid) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 List<Itbi_comprador> Sql = (from t in db.Itbi_Comprador orderby t.Seq where t.Guid == Guid select t).ToList();
+                return Sql;
+            }
+        }
+
+        public List<Itbi_vendedor> Retorna_Itbi_Vendedor(string Guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                List<Itbi_vendedor> Sql = (from t in db.Itbi_Vendedor orderby t.Seq where t.Guid == Guid select t).ToList();
                 return Sql;
             }
         }
@@ -1516,6 +1552,29 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Incluir_Itbi_vendedor(List<Itbi_vendedor> Lista) {
+            using (var db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[4];
+                int z = 0;
+                foreach (Itbi_vendedor item in Lista) {
+                    Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = item.Guid };
+                    Parametros[1] = new SqlParameter { ParameterName = "@seq", SqlDbType = SqlDbType.TinyInt, SqlValue = z };
+                    Parametros[2] = new SqlParameter { ParameterName = "@nome", SqlDbType = SqlDbType.VarChar, SqlValue = item.Nome };
+                    Parametros[3] = new SqlParameter { ParameterName = "@cpf_cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = item.Cpf_cnpj };
+
+                    db.Database.ExecuteSqlCommand("INSERT INTO itbi_vendedor(guid,seq,nome,cpf_cnpj) " +
+                                                  " VALUES(@guid,@seq,@nome,@cpf_cnpj)", Parametros);
+                    try {
+                        db.SaveChanges();
+                    } catch (Exception ex) {
+                        return ex;
+                    }
+                    z++;
+                }
+
+                return null;
+            }
+        }
 
     }//end class
 }

@@ -1,0 +1,22 @@
+﻿@model GTI_Mvc.Views.Imovel.EditorTemplates.ListVendedorEditorViewModel
+
+<table id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px">
+    <tr>
+        <td style="width:20px;font-weight:normal;color:blue">
+            @Html.DisplayFor(model => model.Seq)
+            @Html.HiddenFor(model => model.Seq)
+        </td>
+        <td style="width:420px;font-weight:normal;color:blue">
+            @Html.DisplayFor(model => model.Nome)
+            @Html.HiddenFor(model => model.Nome)
+        </td>
+        <td style="width:150px;font-weight:normal;color:blue">
+            @Html.DisplayFor(model => model.Cpf_Cnpj)
+            @Html.HiddenFor(model => model.Cpf_Cnpj)
+        </td>
+
+    </tr>
+</table>
+
+
+

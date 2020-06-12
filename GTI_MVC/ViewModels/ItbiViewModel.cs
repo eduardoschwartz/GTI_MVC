@@ -17,11 +17,14 @@ namespace GTI_Mvc.ViewModels {
         public string Cpf_Cnpj { get; set; }
         public string Comprador_Cpf_cnpj_tmp { get; set; }
         public string Comprador_Nome_tmp { get; set; }
+        public string Vendedor_Cpf_cnpj_tmp { get; set; }
+        public string Vendedor_Nome_tmp { get; set; }
         public List<ListCompradorEditorViewModel> Lista_Comprador { get; set; }
+        public List<ListVendedorEditorViewModel> Lista_Vendedor { get; set; }
         public ItbiViewModel() {
-            this.Lista_Comprador = new List<ListCompradorEditorViewModel>();
+            Lista_Comprador = new List<ListCompradorEditorViewModel>();
+            Lista_Vendedor = new List<ListVendedorEditorViewModel>();
         }
-
     }
 
     public class Comprador_Itbi {
@@ -42,5 +45,6 @@ namespace GTI_Mvc.ViewModels {
         public string Telefone { get; set; }
         public string Email { get; set; }
     }
+
 
 }

@@ -396,6 +396,7 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\ProcessoViewModel.cs" />
     <Compile Include="Views\Imovel\EditorTemplates\ListCompradorEditorViewModel.cs" />
+    <Compile Include="Views\Imovel\EditorTemplates\ListVendedorEditorViewModel.cs" />
     <Compile Include="Views\Tributario\EditorTemplates\ListDebitoEditorViewModel.cs" />
     <Compile Include="Views\Tributario\EditorTemplates\SelectDebitoEditorViewModel.cs" />
   </ItemGroup>
@@ -526,6 +527,7 @@
     <Content Include="Views\Imovel\Itbi_menu.cshtml" />
     <Content Include="Views\Imovel\Itbi_urbano.cshtml" />
     <Content Include="Views\Imovel\EditorTemplates\ListCompradorEditorViewModel.cshtml" />
+    <Content Include="Views\Imovel\EditorTemplates\ListVendedorEditorViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -141,6 +141,7 @@
     <Compile Include="Models\itbi_comprador.cs" />
     <Compile Include="Models\itbi_main.cs" />
     <Compile Include="Models\itbi_natureza.cs" />
+    <Compile Include="Models\itbi_vendedor.cs" />
     <Compile Include="Models\lancamento.cs" />
     <Compile Include="Models\laseriptu.cs" />
     <Compile Include="Models\livro.cs" />

@@ -262,7 +262,9 @@
 
                     <div class="panel-heading">Outros Compradores </div>
                     <div class="panel-body">
-                        <div style="padding-top:7px;"><button type="button" class="btn btn-info" name="action" value="btnCompradorAdd" onclick="EditarComprador()">Incluir outros compradores</button></div>
+                        <div style="padding-top:7px;">
+                            <button type="button" class="btn btn-info" name="action" value="btnCompradorAdd" onclick="EditarComprador()">Incluir outros compradores</button>
+                        </div>
 
                         <div id="CompradorTable" style="max-height: 247px; overflow: auto;width:700px;padding-top:7px">
                             <table id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
@@ -301,7 +303,6 @@
                                         </td>
                                         <td>
                                             <a href="@Url.Action("Itbi_urbano","Imovel",new { @a="rc",@s=item.Seq,@guid=Model.Guid})" title="Remover comprador"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
-                                            @*@Ajax.ActionLink("Delete", "Itbi_urbano", new { @action="remover",  @seq = item.Seq }, new AjaxOptions { HttpMethod = "POST" })*@
                                         </td>
                                     </tr>
                                 </table>
@@ -318,6 +319,8 @@
                     @Html.HiddenFor(m => m.Comprador.Cidade_Codigo)
                     @Html.HiddenFor(m => m.Comprador_Cpf_cnpj_tmp, new { @id = "Comprador_Cpf_cnpj_tmp" })
                     @Html.HiddenFor(m => m.Comprador_Nome_tmp, new { @id = "Comprador_Nome_tmp" })
+                    @Html.HiddenFor(m => m.Vendedor_Cpf_cnpj_tmp, new { @id = "Vendedor_Cpf_cnpj_tmp" })
+                    @Html.HiddenFor(m => m.Vendedor_Nome_tmp, new { @id = "Vendedor_Nome_tmp" })
                     @Html.HiddenFor(m => m.Guid)
 
                     @*@Ajax.ActionLink("All", "Itbi_Comprador", new AjaxOptions() {HttpMethod="GET",UpdateTargetId="divComprador",InsertionMode=InsertionMode.Replace})*@
@@ -325,9 +328,9 @@
                     @*#############VENDEDORES###############*@
                     <div class="panel-heading">Dados dos Vendedores </div>
                     <div class="panel-body">
-                        <div style="padding-top:7px;"><button type="submit" class="btn btn-info" name="action" value="btnCompradorAdd">Incluir vendedores</button></div>
+                        <div style="padding-top:7px;"><button type="button" class="btn btn-info" name="action" value="btnVendedorAdd" onclick="EditarVendedor()">Incluir vendedores</button></div>
                         <div id="VendedorTable" style="max-height: 247px; overflow: auto;width:700px;padding-top:7px">
-                            <table id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                            <table id="tblVendedor" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
                                 <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal">
                                     <tr style="height:12px;">
                                         <th style="width:40px;font-weight:normal">
@@ -345,6 +348,28 @@
                                     </tr>
                                 </thead>
                             </table>
+                            <div style="display:none">@Html.EditorFor(model => model.Lista_Vendedor)</div>
+                            @foreach (var item in Model.Lista_Vendedor) {
+                                <table id="tblVendedor" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px">
+                                    <tr>
+                                        <td style="width:20px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Seq)
+                                            @Html.HiddenFor(modelItem => item.Seq)
+                                        </td>
+                                        <td style="width:420px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Nome)
+                                            @Html.HiddenFor(modelItem => item.Nome)
+                                        </td>
+                                        <td style="width:150px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Cpf_Cnpj)
+                                            @Html.HiddenFor(modelItem => item.Cpf_Cnpj)
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("Itbi_urbano","Imovel",new { @a="rv",@s=item.Seq,@guid=Model.Guid})" title="Remover vendedor"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            }
                         </div>
                     </div>
 
@@ -363,7 +388,7 @@
 
         <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })</div>
     }
-    <!-- Modal Endereço -->
+    <!-- Modal Comprador -->
     <div class="modal fade" id="CompradorModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -402,6 +427,44 @@
         </div>
     </div>
 
+    <!-- Modal Vendedor -->
+    <div class="modal fade" id="VendedorModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Adicionar vendedor</h4>
+                </div>
+                <div class="modal-body">
+
+                    <table>
+                        <tr style="height:30px">
+                            <td>
+                                <label style="font-weight:normal;font-size:14px">Digite o Cpf/Cnpj:&nbsp;&nbsp;</label>
+                            </td>
+                            <td>
+                                <input id="cpfcnpjc3Txt" name="Cpf_Cnpj_vendedor" onKeyPress="return formata(this, '§§§§§§§§§§§§§§', event)" style="width:150px;height:25px;font-size:14px" type="text" value="" />
+                            </td>
+                        </tr>
+                        <tr style="height:30px">
+                            <td>
+                                <label style="font-weight:normal;font-size:14px">Digite o Nome:&nbsp;&nbsp;</label>
+                            </td>
+                            <td>
+                                <input id="nomec3Txt" name="nome_vendedor" style="width:350px;height:25px;font-size:14px" type="text" value="" />
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+
+                    <label style="font-weight:normal;color:red;padding-left:7px" id="errorVendedor">@ViewBag.Error</label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnVendedorOk">Incluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -426,6 +489,11 @@
         function EditarComprador() {
             $('#CompradorModal').modal();
             document.getElementById('errorComprador').innerHTML = "";
+        }
+
+        function EditarVendedor() {
+            $('#VendedorModal').modal();
+            document.getElementById('errorVendedor').innerHTML = "";
         }
 
         $(document).ready(function () {
@@ -465,6 +533,46 @@
                         $("#CompradorModal #nomec2Txt").val("");
                         $("#CompradorModal #errorComprador").val("");
                         $('#CompradorModal').modal('hide');
+                        $("#MainForm").submit();
+                    }
+                }
+            });
+            $('#btnVendedorOk').click(function () {
+                var cpfvendedorback = $("#VendedorModal #cpfcnpjc3Txt").val();
+                var nomevendedorback = $("#VendedorModal #nomec3Txt").val();
+                if (cpfvendedorback.trim() == "" || nomevendedorback.trim() == "" || cpfvendedorback == null || nomevendedorback == null) {
+                    document.getElementById('errorVendedor').innerHTML = "Digite o nome e o documento";
+                } else {
+
+                    var cnpjtmp = cpfvendedorback.padStart(14, '0');
+                    var cpftmp = cpfvendedorback.padStart(11, '0');
+                    var cpfcnpj = "";
+                    if (cpfvendedorback.length > 11) {
+                        if (!valida_Cnpj(cnpjtmp)) {
+                            document.getElementById('errorVendedor').innerHTML = "Nº de Cnpj inválido.";
+                        } else {
+                            cpfcnpj = cnpjtmp;
+                        }
+                    } else {
+                        if (valida_Cnpj(cnpjtmp)) {
+                            cpfcnpj = cnpjtmp;
+                        } else {
+                            if (!valida_Cpf(cpftmp)) {
+                                document.getElementById('errorVendedor').innerHTML = "Nº de Cpf inválido.";
+                            } else {
+                                cpfcnpj = cpftmp;
+                            }
+                        }
+                    }
+                    if (cpfcnpj == "") {
+                        document.getElementById('errorVendedor').innerHTML = "Nº de Cpf/Cnpj inválido.";
+                    } else {
+                        document.getElementById('Vendedor_Cpf_cnpj_tmp').value = cpfcnpj;
+                        document.getElementById('Vendedor_Nome_tmp').value = nomevendedorback;
+                        $("#VendedorModal #cpfcnpjc3Txt").val("");
+                        $("#VendedorModal #nomec3Txt").val("");
+                        $("#VendedorModal #errorVendedor").val("");
+                        $('#VendedorModal').modal('hide');
                         $("#MainForm").submit();
                     }
                 }

@@ -1011,6 +1011,9 @@ namespace GTI_Mvc.Controllers {
                 if (a == "rc") {//remover comprador
                     Exception ex = imovelRepository.Excluir_Itbi_comprador(guid, s);
                 }
+                if (a == "rv") {//remover vendedor
+                    Exception ex = imovelRepository.Excluir_Itbi_comprador(guid, s);
+                }
 
                 model = Retorna_Itbi_Gravado(guid);
             }
@@ -1071,10 +1074,47 @@ namespace GTI_Mvc.Controllers {
             }
             model.Comprador_Cpf_cnpj_tmp = "";
 
+            _find = false;
+            if (model.Vendedor_Nome_tmp != null) {
+                for (int i = 0; i < model.Lista_Vendedor.Count; i++) {
+                    if (model.Lista_Vendedor[i].Cpf_Cnpj == model.Vendedor_Cpf_cnpj_tmp) {
+                        _find = true;
+                        break;
+                    }
+                };
+            }
+
+            if (_find) {
+                ViewBag.Error = "* Cpf/Cnpj já cadastrado.";
+            } else {
+                var editorViewModel = new ListVendedorEditorViewModel();
+                editorViewModel.Seq = model.Lista_Vendedor.Count;
+                editorViewModel.Nome = model.Vendedor_Nome_tmp != null ? model.Vendedor_Nome_tmp.ToUpper() : model.Vendedor_Nome_tmp;
+                string _cpfMask = model.Vendedor_Cpf_cnpj_tmp;
+                if (_cpfMask != null) {
+                    if (Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
+                        _cpfMask = _cpfMask.PadLeft(14, '0');
+                    } else {
+                        if (Functions.ValidaCpf(_cpfMask.PadLeft(11, '0'))) {
+                            _cpfMask = _cpfMask.PadLeft(11, '0');
+                        }
+                    }
+                    _cpfMask = Functions.FormatarCpfCnpj(_cpfMask);
+                }
+                editorViewModel.Cpf_Cnpj = _cpfMask;
+                if (editorViewModel.Nome != null) {
+                    editorViewModel.Seq = model.Lista_Vendedor.Count;
+                    model.Lista_Vendedor.Add(editorViewModel);
+                }
+
+            }
+            model.Vendedor_Cpf_cnpj_tmp = "";
+
             if (action == "btnCodigoCancel") {
                 if (model.Guid != null) {
                     Exception ex = imovelRepository.Excluir_Itbi(model.Guid);
                 }
+                ViewBag.Error = "";
                 model = new ItbiViewModel();
                 return View(model);
             }
@@ -1353,6 +1393,21 @@ namespace GTI_Mvc.Controllers {
                 ListaC.Add(regC);
             }
             ex = imovelRepository.Incluir_Itbi_comprador(ListaC);
+
+            //################### Grava Itbi_Vendedor #####################
+            ex = imovelRepository.Excluir_Itbi_vendedor(model.Guid);
+
+            List<Itbi_vendedor> ListaV = new List<Itbi_vendedor>();
+            foreach (ListVendedorEditorViewModel vend in model.Lista_Vendedor) {
+                Itbi_vendedor regV = new Itbi_vendedor() {
+                    Guid = model.Guid,
+                    Seq = (byte)vend.Seq,
+                    Nome = vend.Nome,
+                    Cpf_cnpj = vend.Cpf_Cnpj
+                };
+                ListaV.Add(regV);
+            }
+            ex = imovelRepository.Incluir_Itbi_vendedor(ListaV);    
             //#########################################################
 
             return _guid;
@@ -1409,6 +1464,18 @@ namespace GTI_Mvc.Controllers {
                 Lista_comprador.Add(itemC);
             }
             itbi.Lista_Comprador = Lista_comprador;
+
+            List<ListVendedorEditorViewModel> Lista_vendedor = new List<ListVendedorEditorViewModel>();
+            List<Itbi_vendedor> listaV = imovelRepository.Retorna_Itbi_vendedor(guid);
+            foreach (Itbi_vendedor item in listaV) {
+                ListVendedorEditorViewModel itemV = new ListVendedorEditorViewModel() {
+                    Seq = item.Seq,
+                    Nome = item.Nome,
+                    Cpf_Cnpj = item.Cpf_cnpj
+                };
+                Lista_vendedor.Add(itemV);
+            }
+            itbi.Lista_Vendedor = Lista_vendedor;
 
             return itbi;
         }

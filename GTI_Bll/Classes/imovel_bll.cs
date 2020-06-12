@@ -538,7 +538,6 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Itbi_Comprador(Guid);
         }
 
-
         public Exception Excluir_Itbi(string Guid) {
             Imovel_Data obj = new Imovel_Data(_connection);
             Exception ex = obj.Excluir_Itbi(Guid);
@@ -562,5 +561,29 @@ namespace GTI_Bll.Classes {
             Exception ex = obj.Excluir_Itbi_comprador(Guid,seq);
             return ex;
         }
+
+        public Exception Excluir_Itbi_vendedor(string Guid) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Excluir_Itbi_vendedor(Guid);
+            return ex;
+        }
+
+        public Exception Excluir_Itbi_vendedor(string Guid, int seq) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Excluir_Itbi_vendedor(Guid, seq);
+            return ex;
+        }
+
+        public Exception Incluir_Itbi_vendedor(List<Itbi_vendedor> Reg) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Incluir_Itbi_vendedor(Reg);
+            return ex;
+        }
+
+        public List<Itbi_vendedor> Retorna_Itbi_vendedor(string Guid) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Itbi_Vendedor(Guid);
+        }
+
     }//end class
 }
