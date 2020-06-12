@@ -1,12 +1,16 @@
 ﻿using GTI_Models.Models;
 using GTI_Mvc.Views.Imovel.EditorTemplates;
+using System;
 using System.Collections.Generic;
 
 namespace GTI_Mvc.ViewModels {
     public class ItbiViewModel {
         public string Guid { get; set; }
+        public DateTime Data_cadastro { get; set; }
         public string Codigo { get; set; }
         public string Inscricao { get; set; }
+        public int Proprietario_codigo { get; set; }
+        public string Proprietario_nome { get; set; }
         public ImovelStruct Dados_Imovel { get; set; }
         public Comprador_Itbi Comprador { get; set; }
         public int Natureza_Codigo { get; set; }

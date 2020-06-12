@@ -300,7 +300,7 @@
                                             @Html.HiddenFor(modelItem => item.Cpf_Cnpj)
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("Itbi_urbano","Imovel",new { @action="remover",@seq=item.Seq})" title="Remover comprador"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                            <a href="@Url.Action("Itbi_urbano","Imovel",new { @a="rc",@s=item.Seq,@guid=Model.Guid})" title="Remover comprador"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                             @*@Ajax.ActionLink("Delete", "Itbi_urbano", new { @action="remover",  @seq = item.Seq }, new AjaxOptions { HttpMethod = "POST" })*@
                                         </td>
                                     </tr>
