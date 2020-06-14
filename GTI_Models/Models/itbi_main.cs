@@ -32,6 +32,8 @@ namespace GTI_Models.Models {
         public string Comprador_uf { get; set; }
         public string Comprador_telefone { get; set; }
         public string Comprador_email { get; set; }
+        public double Valor_Transacao { get; set; }
+        public int Tipo_Financiamento { get; set; }
     }
 }
 

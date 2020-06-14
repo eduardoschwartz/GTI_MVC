@@ -1012,7 +1012,7 @@ namespace GTI_Mvc.Controllers {
                     Exception ex = imovelRepository.Excluir_Itbi_comprador(guid, s);
                 }
                 if (a == "rv") {//remover vendedor
-                    Exception ex = imovelRepository.Excluir_Itbi_comprador(guid, s);
+                    Exception ex = imovelRepository.Excluir_Itbi_vendedor(guid, s);
                 }
 
                 model = Retorna_Itbi_Gravado(guid);
@@ -1077,7 +1077,7 @@ namespace GTI_Mvc.Controllers {
             _find = false;
             if (model.Vendedor_Nome_tmp != null) {
                 for (int i = 0; i < model.Lista_Vendedor.Count; i++) {
-                    if (model.Lista_Vendedor[i].Cpf_Cnpj == model.Vendedor_Cpf_cnpj_tmp) {
+                    if (Functions.RetornaNumero( model.Lista_Vendedor[i].Cpf_Cnpj) == model.Vendedor_Cpf_cnpj_tmp) {
                         _find = true;
                         break;
                     }
@@ -1104,7 +1104,8 @@ namespace GTI_Mvc.Controllers {
                 editorViewModel.Cpf_Cnpj = _cpfMask;
                 if (editorViewModel.Nome != null) {
                     editorViewModel.Seq = model.Lista_Vendedor.Count;
-                    model.Lista_Vendedor.Add(editorViewModel);
+                    if(editorViewModel.Cpf_Cnpj!=null)
+                        model.Lista_Vendedor.Add(editorViewModel);
                 }
 
             }
