@@ -27,7 +27,6 @@
     .show {
         display: block;
     }
-   
 </style>
 
 
@@ -63,7 +62,7 @@
                         @if (@Model.Inscricao == null) {
                             <label style="font-weight:normal;font-size:14px;color:brown">(Encontra-se na capa do carnê de IPTU)&nbsp;&nbsp;</label><br />
                         }
-                        </div>
+                    </div>
                     @if (@Model.Inscricao != null) {
                         <div style="padding-left:7px">
 
@@ -191,7 +190,7 @@
                                         <label style="font-weight:normal;">Nº do Cep:</label>
                                     </td>
                                     <td>
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Comprador.Cep, new { style = "width:90px;height:25px", @onKeyPress = "return formata(this, '§§§§§-§§§', event)" })</label>
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Comprador.Cep, new { @id = "txtCep", style = "width:90px;height:25px" })</label>
                                         <button type="submit" class="btn btn-info" name="action" value="btnCepCompradorOK">Pesquisar</button>
                                         <label style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">aqui</a> para consultar o Cep</label><br />
                                     </td>
@@ -387,7 +386,8 @@
                                     <label style="font-weight:normal;">Valor da transação:</label>
                                 </td>
                                 <td>
-                                    <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, "{0:n2}", new { style = "width:120px;height:25px" })</label>
+                                    @*<label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { @id = "txtValorTransacao", style = "width:120px;height:25px" })</label>*@
+                                    <input class="mask" type="text" />
                                 </td>
                             </tr>
                         </table>
@@ -485,14 +485,17 @@
 
 @section scripts{
 
+ 
 
     <script type="text/javascript">
         $(document).ready(function () {
             $("#MainForm").submit(function () {
                 return ValidateForm();
             });
+            $(".mask").inputmask('Regex', { regex: "^[0-9]{1,6}(\\,\\d{1,2})?$" });
+            $("#txtCep").inputmask("mask", { "mask": "99999-999" });
+            $("#txtValorTransacao").inputmask({ 'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'placeholder': '0.00', rightAlign: true, clearMaskOnLostFocus: !1 });
         });
-
         function cancelarCodigo() {
             if (confirm('Deseja cancelar este ITBI?')) {
                 return true;
@@ -515,8 +518,8 @@
             $('#btnCompradorOk').click(function () {
                 var cpfcompradorback = $("#CompradorModal #cpfcnpjc2Txt").val();
                 var nomecompradorback = $("#CompradorModal #nomec2Txt").val();
-                if (cpfcompradorback.trim() == "" || nomecompradorback.trim() == "" || cpfcompradorback == null || nomecompradorback==null) {
-                    document.getElementById('errorComprador').innerHTML ="Digite o nome e o documento" ;
+                if (cpfcompradorback.trim() == "" || nomecompradorback.trim() == "" || cpfcompradorback == null || nomecompradorback == null) {
+                    document.getElementById('errorComprador').innerHTML = "Digite o nome e o documento";
                 } else {
 
                     var cnpjtmp = cpfcompradorback.padStart(14, '0');
@@ -593,7 +596,7 @@
                 }
             });
         });
-       
+
         function ValidateForm() {
             var _cod = document.getElementById('codigo').value;
 
