@@ -422,6 +422,22 @@
                                 </td>
                             </tr>
                         </table>
+                        <table style="font-size:14px;width:640px">
+                            <tr style="height:30px">
+                                <td style="width:140px;padding-top:5px">
+                                    <label style="font-weight:normal;">Tipo de Instrumento:</label>
+                                </td>
+                                <td style="width:500px">
+                                    @foreach (var tipo in Model.Lista_Instrumento) {
+                                        @Html.RadioButtonFor(model => model.Tipo_Instrumento, tipo) <span>&nbsp;</span>@tipo<span>&nbsp;&nbsp;</span>
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-heading">Inclusão de Anexos </div>
+                    <div class="panel-body">
+                        anexos
                     </div>
                 }
 

@@ -1365,6 +1365,10 @@ namespace GTI_Mvc.Controllers {
             } else {
                 _guid = model.Guid;
                 Itbi_main regMain = imovelRepository.Retorna_Itbi_Main(_guid);
+                regMain.Data_Transacao = model.Data_Transacao;
+                regMain.Tipo_Instrumento = model.Tipo_Instrumento;
+                regMain.Valor_Venal = model.Valor_Venal;
+                regMain.Valor_Avaliacao = model.Valor_Avaliacao;
                 regMain.Valor_Transacao = model.Valor_Transacao;
                 regMain.Tipo_Financiamento = model.Tipo_Financiamento;
                 regMain.Natureza_Codigo = model.Natureza_Codigo;
@@ -1438,7 +1442,12 @@ namespace GTI_Mvc.Controllers {
                 Proprietario_codigo=regMain.Proprietario_Codigo,
                 Proprietario_nome=regMain.Proprietario_Nome,
                 Natureza_Codigo=regMain.Natureza_Codigo,
-                Valor_Transacao=regMain.Valor_Transacao
+                Valor_Transacao=regMain.Valor_Transacao,
+                Data_Transacao = Convert.ToDateTime(regMain.Data_Transacao),
+                Tipo_Financiamento=regMain.Tipo_Financiamento,
+                Valor_Avaliacao=regMain.Valor_Avaliacao,
+                Valor_Venal=regMain.Valor_Venal,
+                Tipo_Instrumento=regMain.Tipo_Instrumento
             };
             if (itbi.Dados_Imovel == null)
                 itbi.Dados_Imovel = new ImovelStruct();

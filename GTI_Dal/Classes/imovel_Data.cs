@@ -1423,6 +1423,7 @@ namespace GTI_Dal.Classes {
                 i.Tipo_Financiamento = Reg.Tipo_Financiamento;
                 i.Data_Transacao = Reg.Data_Transacao;
                 i.Valor_Venal = Reg.Valor_Venal;
+                i.Tipo_Instrumento = Reg.Tipo_Instrumento;
                 i.Natureza_Codigo = Reg.Natureza_Codigo;
                 i.Imovel_endereco = Reg.Imovel_endereco;
                 i.Imovel_numero = Reg.Imovel_numero;

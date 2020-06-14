@@ -26,7 +26,8 @@ namespace GTI_Mvc.ViewModels {
         public decimal Valor_Avaliacao { get; set; }
         public DateTime Data_Transacao { get; set; }
         public decimal Valor_Venal { get; set; }
-
+        public string Tipo_Instrumento { get; set; } = "Particular";
+        public string[] Lista_Instrumento = new[] { "Particular", "Público" };
 
         public ItbiViewModel() {
             Lista_Comprador = new List<ListCompradorEditorViewModel>();

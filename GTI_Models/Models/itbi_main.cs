@@ -35,8 +35,9 @@ namespace GTI_Models.Models {
         public decimal Valor_Transacao { get; set; }
         public int Tipo_Financiamento { get; set; }
         public decimal Valor_Avaliacao { get; set; }
-        public DateTime Data_Transacao { get; set; }
+        public DateTime? Data_Transacao { get; set; }
         public decimal Valor_Venal { get; set; }
+        public string Tipo_Instrumento { get; set; }
     }
 }
 
