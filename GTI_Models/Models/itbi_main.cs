@@ -34,6 +34,9 @@ namespace GTI_Models.Models {
         public string Comprador_email { get; set; }
         public decimal Valor_Transacao { get; set; }
         public int Tipo_Financiamento { get; set; }
+        public decimal Valor_Avaliacao { get; set; }
+        public DateTime Data_Transacao { get; set; }
+        public decimal Valor_Venal { get; set; }
     }
 }
 

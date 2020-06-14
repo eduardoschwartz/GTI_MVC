@@ -23,6 +23,10 @@ namespace GTI_Mvc.ViewModels {
         public List<ListVendedorEditorViewModel> Lista_Vendedor { get; set; }
         public decimal Valor_Transacao { get; set; }
         public int Tipo_Financiamento { get; set; }
+        public decimal Valor_Avaliacao { get; set; }
+        public DateTime Data_Transacao { get; set; }
+        public decimal Valor_Venal { get; set; }
+
 
         public ItbiViewModel() {
             Lista_Comprador = new List<ListCompradorEditorViewModel>();

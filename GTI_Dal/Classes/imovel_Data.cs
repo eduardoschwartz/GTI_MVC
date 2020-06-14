@@ -1419,7 +1419,10 @@ namespace GTI_Dal.Classes {
                 i.Proprietario_Codigo = Reg.Proprietario_Codigo;
                 i.Proprietario_Nome = Reg.Proprietario_Nome;
                 i.Valor_Transacao = Reg.Valor_Transacao;
+                i.Valor_Avaliacao = Reg.Valor_Avaliacao;
                 i.Tipo_Financiamento = Reg.Tipo_Financiamento;
+                i.Data_Transacao = Reg.Data_Transacao;
+                i.Valor_Venal = Reg.Valor_Venal;
                 i.Natureza_Codigo = Reg.Natureza_Codigo;
                 i.Imovel_endereco = Reg.Imovel_endereco;
                 i.Imovel_numero = Reg.Imovel_numero;

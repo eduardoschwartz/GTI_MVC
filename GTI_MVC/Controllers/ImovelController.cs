@@ -1282,6 +1282,10 @@ namespace GTI_Mvc.Controllers {
 
                 string _cpfCnpj = model.Cpf_Cnpj;
 
+                Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+                SpCalculo _calculo = tributarioRepository.Calculo_IPTU(Codigo, DateTime.Now.Year);
+                model.Valor_Venal = _calculo.Vvi;
+
                 int _codcidadao = 0;
                 if (_bcpf) {
                     _codcidadao = cidadaoRepository.Existe_Cidadao_Cpf(_cpfCnpj.PadLeft(11, '0'));

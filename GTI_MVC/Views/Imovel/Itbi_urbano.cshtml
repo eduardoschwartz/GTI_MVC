@@ -380,21 +380,46 @@
 
                     <div class="panel-heading">Outras informações </div>
                     <div class="panel-body">
-                        <table style="font-size:14px;width:680px">
+                        <table style="font-size:14px;width:640px">
                             <tr style="height:30px">
                                 <td style="width:133px">
                                     <label style="font-weight:normal;">Valor da transação:</label>
                                 </td>
-                                <td>
-                                    <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao,  new { @class = "mask", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                <td style="width:105px">
+                                    <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { @class = "mask", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                 </td>
                                 <td style="width:134px">
                                     <label style="font-weight:normal;">Tipo Financiamento:</label>
                                 </td>
-                                <td>
-                                    @Html.DropDownListFor(m => m.Tipo_Financiamento, ViewBag.Lista_Financiamento as SelectList, "(Selecione...)", new { @id = "FinanciamentoDropDown", style = "width:240px;height:25px", rows = 10 })
+                                <td style="width:268px">
+                                    @Html.DropDownListFor(m => m.Tipo_Financiamento, ViewBag.Lista_Financiamento as SelectList, "(Selecione...)", new { @id = "FinanciamentoDropDown", style = "width:255px;height:25px", rows = 10 })
                                 </td>
-
+                            </tr>
+                        </table>
+                        <table style="font-size:14px;width:640px">
+                            <tr style="height:30px">
+                                <td style="width:372px">
+                                    <label style="font-weight:normal">Valor da avaliação do imóvel (resgate alienação fiduciária):</label>
+                                </td>
+                                <td style="width:268px">
+                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                </td>
+                            </tr>
+                        </table>
+                        <table style="font-size:14px;width:640px">
+                            <tr style="height:30px">
+                                <td style="width:130px">
+                                    <label style="font-weight:normal;">Data da transação:</label>
+                                </td>
+                                <td style="width:157px">
+                                    <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Data_Transacao, new { @class = "maskData", style = "width:90px;height:25px;text-align:center", @Value = "" })</label>
+                                </td>
+                                <td style="width: 80px">
+                                    <label style="font-weight:normal;">Valor Venal:</label>
+                                </td>
+                                <td style="width: 263px">
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal, new { style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Venal.ToString("#.#0"), @readonly = true })</label>
+                                </td>
                             </tr>
                         </table>
                     </div>
@@ -498,9 +523,10 @@
             $("#MainForm").submit(function () {
                 return ValidateForm();
             });
-            $(".mask").inputmask('Regex', { regex: "^[0-9]{1,6}(\\,\\d{1,2})?$" });
-            $("#txtCep").inputmask("mask", { "mask": "99999-999" });
-            $("#txtValorTransacao").inputmask({ 'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'placeholder': '0.00', rightAlign: true, clearMaskOnLostFocus: !1 });
+            $(".maskValor").inputmask('Regex', { regex: "^[0-9]{1,7}(\\,\\d{1,2})?$" });
+            $(".maskData").inputmask("99/99/9999");
+            //$("#txtCep").inputmask("mask", { "mask": "99999-999" });
+            //$("#txtValorTransacao").inputmask({ 'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'placeholder': '0.00', rightAlign: true, clearMaskOnLostFocus: !1 });
         });
         function cancelarCodigo() {
             if (confirm('Deseja cancelar este ITBI?')) {
