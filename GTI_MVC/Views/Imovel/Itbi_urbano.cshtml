@@ -380,15 +380,21 @@
 
                     <div class="panel-heading">Outras informações </div>
                     <div class="panel-body">
-                        <table style="font-size:14px;width:640px">
+                        <table style="font-size:14px;width:680px">
                             <tr style="height:30px">
-                                <td style="width:103px">
+                                <td style="width:133px">
                                     <label style="font-weight:normal;">Valor da transação:</label>
                                 </td>
                                 <td>
-                                    @*<label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { @id = "txtValorTransacao", style = "width:120px;height:25px" })</label>*@
-                                    <input class="mask" type="text" />
+                                    <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao,  new { @class = "mask", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                 </td>
+                                <td style="width:134px">
+                                    <label style="font-weight:normal;">Tipo Financiamento:</label>
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(m => m.Tipo_Financiamento, ViewBag.Lista_Financiamento as SelectList, "(Selecione...)", new { @id = "FinanciamentoDropDown", style = "width:240px;height:25px", rows = 10 })
+                                </td>
+
                             </tr>
                         </table>
                     </div>

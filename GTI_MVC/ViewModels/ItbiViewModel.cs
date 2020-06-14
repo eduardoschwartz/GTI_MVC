@@ -21,7 +21,7 @@ namespace GTI_Mvc.ViewModels {
         public string Vendedor_Nome_tmp { get; set; }
         public List<ListCompradorEditorViewModel> Lista_Comprador { get; set; }
         public List<ListVendedorEditorViewModel> Lista_Vendedor { get; set; }
-        public double Valor_Transacao { get; set; }
+        public decimal Valor_Transacao { get; set; }
         public int Tipo_Financiamento { get; set; }
 
         public ItbiViewModel() {

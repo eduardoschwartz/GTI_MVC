@@ -153,6 +153,7 @@ namespace GTI_Dal {
         public DbSet<Usuario_web> Usuario_Web { get; set; }
         public DbSet<Logradouro_bairro> Logradouro_Bairro { get; set; }
         public DbSet<Itbi_natureza> Itbi_Natureza { get; set; }
+        public DbSet<Itbi_financiamento> itbi_Financiamento { get; set; }
         public DbSet<Itbi_main> Itbi_Main { get; set; }
         public DbSet<Itbi_comprador> Itbi_Comprador { get; set; }
         public DbSet<Itbi_vendedor> Itbi_Vendedor { get; set; }

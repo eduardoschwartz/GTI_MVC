@@ -1007,6 +1007,8 @@ namespace GTI_Mvc.Controllers {
                 Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
                 List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
                 ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
+                List<Itbi_financiamento> Lista_Financimento = imovelRepository.Lista_Itbi_Financiamento();
+                ViewBag.Lista_Financiamento = new SelectList(Lista_Financimento, "Codigo", "Descricao");
 
                 if (a == "rc") {//remover comprador
                     Exception ex = imovelRepository.Excluir_Itbi_comprador(guid, s);
@@ -1030,6 +1032,9 @@ namespace GTI_Mvc.Controllers {
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
             ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
+            List<Itbi_financiamento> Lista_Financimento = imovelRepository.Lista_Itbi_Financiamento();
+            ViewBag.Lista_Financiamento = new SelectList(Lista_Financimento, "Codigo", "Descricao");
+
             if (model.Comprador == null) {
                 model.Comprador = new Comprador_Itbi();
             }
@@ -1350,11 +1355,14 @@ namespace GTI_Mvc.Controllers {
                     Inscricao=model.Dados_Imovel.Inscricao,
                     Proprietario_Codigo=(int)model.Dados_Imovel.Proprietario_Codigo,
                     Proprietario_Nome=model.Dados_Imovel.Proprietario_Nome
+                    
                 };
                 ex = imovelRepository.Incluir_Itbi_main(regMain);
             } else {
                 _guid = model.Guid;
                 Itbi_main regMain = imovelRepository.Retorna_Itbi_Main(_guid);
+                regMain.Valor_Transacao = model.Valor_Transacao;
+                regMain.Tipo_Financiamento = model.Tipo_Financiamento;
                 regMain.Natureza_Codigo = model.Natureza_Codigo;
                 regMain.Imovel_endereco = model.Dados_Imovel.NomeLogradouro;
                 regMain.Imovel_numero = (short)model.Dados_Imovel.Numero;
@@ -1425,7 +1433,8 @@ namespace GTI_Mvc.Controllers {
                 Inscricao = regMain.Inscricao,
                 Proprietario_codigo=regMain.Proprietario_Codigo,
                 Proprietario_nome=regMain.Proprietario_Nome,
-                Natureza_Codigo=regMain.Natureza_Codigo
+                Natureza_Codigo=regMain.Natureza_Codigo,
+                Valor_Transacao=regMain.Valor_Transacao
             };
             if (itbi.Dados_Imovel == null)
                 itbi.Dados_Imovel = new ImovelStruct();

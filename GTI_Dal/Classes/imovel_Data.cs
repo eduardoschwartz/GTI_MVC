@@ -1350,6 +1350,13 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<Itbi_financiamento> Lista_Itbi_Financiamento() {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                List<Itbi_financiamento> Sql = (from t in db.itbi_Financiamento orderby t.Codigo select t).ToList();
+                return Sql;
+            }
+        }
+
         public List<Uf> Lista_UF() {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 List<Uf> Sql = (from t in db.Uf orderby t.Siglauf select t).ToList();
@@ -1374,10 +1381,10 @@ namespace GTI_Dal.Classes {
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@data_cadastro", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_cadastro };
                 Parametros[2] = new SqlParameter { ParameterName = "@imovel_codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Imovel_codigo };
-                    Parametros[3] = new SqlParameter { ParameterName = "@inscricao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Inscricao };
+                Parametros[3] = new SqlParameter { ParameterName = "@inscricao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Inscricao };
                 Parametros[4] = new SqlParameter { ParameterName = "@proprietario_codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Proprietario_Codigo };
-                    Parametros[5] = new SqlParameter { ParameterName = "@proprietario_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Proprietario_Nome };
-               
+                Parametros[5] = new SqlParameter { ParameterName = "@proprietario_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Proprietario_Nome };
+
                 db.Database.ExecuteSqlCommand("INSERT INTO itbi_main(guid,data_cadastro,imovel_codigo,inscricao,proprietario_codigo,proprietario_nome) " +
                                               " VALUES(@guid,@data_cadastro,@imovel_codigo,@inscricao,@proprietario_codigo,@proprietario_nome)", Parametros);
                 try {
@@ -1411,6 +1418,8 @@ namespace GTI_Dal.Classes {
                 i.Inscricao = Reg.Inscricao;
                 i.Proprietario_Codigo = Reg.Proprietario_Codigo;
                 i.Proprietario_Nome = Reg.Proprietario_Nome;
+                i.Valor_Transacao = Reg.Valor_Transacao;
+                i.Tipo_Financiamento = Reg.Tipo_Financiamento;
                 i.Natureza_Codigo = Reg.Natureza_Codigo;
                 i.Imovel_endereco = Reg.Imovel_endereco;
                 i.Imovel_numero = Reg.Imovel_numero;
@@ -1509,8 +1518,40 @@ namespace GTI_Dal.Classes {
 
         public Itbi_main Retorna_Itbi_Main(string Guid) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                Itbi_main Sql = (from t in db.Itbi_Main where t.Guid==Guid select t).FirstOrDefault();
-                return Sql;
+                var Sql = (from t in db.Itbi_Main where t.Guid==Guid select t).FirstOrDefault();
+                Itbi_main itbi = new Itbi_main() {
+                    Guid = Sql.Guid,
+                    Inscricao=Sql.Inscricao,
+                    Tipo_Financiamento=Sql.Tipo_Financiamento,
+                    Natureza_Codigo=Sql.Natureza_Codigo,
+                    Valor_Transacao=Sql.Valor_Transacao,
+                    Data_cadastro=Sql.Data_cadastro,
+                    Proprietario_Codigo=Sql.Proprietario_Codigo,
+                    Proprietario_Nome=Sql.Proprietario_Nome,
+                    Imovel_codigo=Sql.Imovel_codigo,
+                    Imovel_endereco=Sql.Imovel_endereco,
+                    Imovel_bairro=Sql.Imovel_bairro,
+                    Imovel_complemento=Sql.Imovel_complemento,
+                    Imovel_cep=Sql.Imovel_cep,
+                    Imovel_numero=Sql.Imovel_numero,
+                    Imovel_Lote=Sql.Imovel_Lote,
+                    Imovel_Quadra=Sql.Imovel_Quadra,
+                    Comprador_codigo=Sql.Comprador_codigo,
+                    Comprador_nome=Sql.Comprador_nome,
+                    Comprador_logradouro_codigo=Sql.Comprador_logradouro_codigo,
+                    Comprador_logradouro_nome=Sql.Comprador_logradouro_nome,
+                    Comprador_bairro_codigo=Sql.Comprador_bairro_codigo,
+                    Comprador_bairro_nome=Sql.Comprador_bairro_nome,
+                    Comprador_cidade_codigo=Sql.Comprador_cidade_codigo,
+                    Comprador_cidade_nome=Sql.Comprador_cidade_nome,
+                    Comprador_uf=Sql.Comprador_uf,
+                    Comprador_email=Sql.Comprador_email,
+                    Comprador_complemento=Sql.Comprador_complemento,
+                    Comprador_cpf_cnpj=Sql.Comprador_cpf_cnpj,
+                    Comprador_numero=Sql.Comprador_numero,
+                    Comprador_telefone=Sql.Comprador_telefone
+                };
+                return itbi;
             }
         }
 
