@@ -1421,9 +1421,11 @@ namespace GTI_Dal.Classes {
                 i.Valor_Transacao = Reg.Valor_Transacao;
                 i.Valor_Avaliacao = Reg.Valor_Avaliacao;
                 i.Tipo_Financiamento = Reg.Tipo_Financiamento;
-                i.Data_Transacao = Reg.Data_Transacao;
+                i.Data_Transacao = Reg.Data_Transacao==DateTime.MinValue?null:Reg.Data_Transacao;
                 i.Valor_Venal = Reg.Valor_Venal;
                 i.Tipo_Instrumento = Reg.Tipo_Instrumento;
+                i.Totalidade = Reg.Totalidade;
+                i.Totalidade_Perc = Reg.Totalidade_Perc;
                 i.Natureza_Codigo = Reg.Natureza_Codigo;
                 i.Imovel_endereco = Reg.Imovel_endereco;
                 i.Imovel_numero = Reg.Imovel_numero;
@@ -1527,6 +1529,9 @@ namespace GTI_Dal.Classes {
                     Guid = Sql.Guid,
                     Inscricao=Sql.Inscricao,
                     Tipo_Financiamento=Sql.Tipo_Financiamento,
+                    Totalidade=Sql.Totalidade,
+                    Totalidade_Perc=Sql.Totalidade_Perc,
+                    Matricula=Sql.Matricula,
                     Natureza_Codigo=Sql.Natureza_Codigo,
                     Valor_Transacao=Sql.Valor_Transacao,
                     Data_cadastro=Sql.Data_cadastro,

@@ -52,7 +52,7 @@
                                         <button id="btnCodigoOk" type="submit" class="btn btn-primary" name="action" value="btnCodigoOK">Consultar</button>
 
                                     } else {
-                                        @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px;color:blue", @onKeyPress = "return formata(this, '§§§§§', event)", @readonly = true })
+                                        @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px;color:blue", @readonly = true })
                                         <label>&nbsp;&nbsp;</label>
                                         <button id="btnCodigoCancel" type="submit" class="btn btn-danger" onclick="return cancelarCodigo()" name="action" value="btnCodigoCancel" data-balloon-length="medium" aria-label="Ao cancelar, todos os dados inseridos neste lançamento de ITBI serão perdidos." data-balloon-pos="right">Cancelar</button>
                                     }
@@ -302,7 +302,7 @@
                                             @Html.HiddenFor(modelItem => item.Cpf_Cnpj)
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("Itbi_urbano","Imovel",new { @a="rc",@s=item.Seq,@guid=Model.Guid})" title="Remover comprador"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                            <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "rc", @s = item.Seq, @guid = Model.Guid })" title="Remover comprador"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                         </td>
                                     </tr>
                                 }
@@ -369,7 +369,7 @@
                                             @Html.HiddenFor(modelItem => item.Cpf_Cnpj)
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("Itbi_urbano","Imovel",new { @a="rv",@s=item.Seq,@guid=Model.Guid})" title="Remover vendedor"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                            <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "rv", @s = item.Seq, @guid = Model.Guid })" title="Remover vendedor"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                         </td>
                                     </tr>
                                 }
@@ -386,7 +386,7 @@
                                     <label style="font-weight:normal;">Valor da transação:</label>
                                 </td>
                                 <td style="width:105px">
-                                    <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { @class = "mask", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                    <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                 </td>
                                 <td style="width:134px">
                                     <label style="font-weight:normal;">Tipo Financiamento:</label>
@@ -430,6 +430,58 @@
                                 <td style="width:500px">
                                     @foreach (var tipo in Model.Lista_Instrumento) {
                                         @Html.RadioButtonFor(model => model.Tipo_Instrumento, tipo) <span>&nbsp;</span>@tipo<span>&nbsp;&nbsp;</span>
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+                        <table style="font-size:14px;width:640px">
+                            <tr style="height:38px">
+                                <td style="width:310px;padding-top:5px">
+                                    <label style="font-weight:normal;">Esta sendo transmitido a totalidade do imóvel?:</label>
+                                </td>
+                                <td style="width:130px">
+                                    @if (Model.Totalidade == "Sim" || Model.Totalidade == null) {
+                                        @Html.RadioButtonFor(model => model.Totalidade, "Sim", new { @id = "totalChk", @onclick = "radioCheck()", @checked = true })<label style="font-weight:normal">&nbsp;Sim&nbsp;&nbsp;</label>
+                                        @Html.RadioButtonFor(model => model.Totalidade, "Não", new { @id = "totalChk", @onclick = "radioCheck()" })<label style="font-weight:normal">&nbsp;Não&nbsp;&nbsp;</label>
+                                    } else {
+                                        @Html.RadioButtonFor(model => model.Totalidade, "Sim", new { @id = "totalChk", @onclick = "radioCheck()" })<label style="font-weight:normal">&nbsp;Sim&nbsp;&nbsp;</label>
+                                        @Html.RadioButtonFor(model => model.Totalidade, "Não", new { @id = "totalChk", @onclick = "radioCheck()", @checked = true })<label style="font-weight:normal">&nbsp;Não&nbsp;&nbsp;</label>
+                                    }
+
+                                </td>
+                                <td style="width:200px;padding-top:5px">
+                                    @if (Model.Totalidade == "Sim" || Model.Totalidade == null) {
+                                        if (Model.Totalidade_Perc > 0) {
+                                            <label style="font-weight:normal;display:none" id="percLabel">% transmitido:&nbsp; @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc })</label>
+                                        } else {
+                                            <label style="font-weight:normal;display:none" id="percLabel">% transmitido:&nbsp; @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right",@Value="" })</label>
+                                        }
+                                    } else {
+                                        if (Model.Totalidade_Perc > 0) {
+                                            <label style="font-weight:normal;display:block" id="percLabel">% transmitido:&nbsp; @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc })</label>
+                                        } else {
+                                            <label style="font-weight:normal;display:block" id="percLabel">% transmitido:&nbsp; @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+                        <table style="font-size:14px;width:640px">
+                            <tr style="height:25px">
+                                <td style="width:200px;padding-top:5px">
+                                    <label style="font-weight:normal;">Cartório de Registro de Imóvel:</label>
+                                </td>
+                                <td style="width:130px;padding-top:5px">
+                                    <label style="font-weight:normal;color:blue">JABOTICABAL</label>      
+                                </td>
+                                <td style="width:206px;padding-top:5px ">
+                                    <label style="font-weight:normal;">Matrícula/Transcrição do imóvel:</label>
+                                </td>
+                                <td style="width:104px">
+                                    @if (Model.Matricula > 0) {
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Matricula, new { style = "width:90px;height:25px;text-align:right", @onKeyPress = "return formata(this, '§§§§§§§', event)",@Value=Model.Matricula })</label>
+                                    } else {
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Matricula, new { style = "width:90px;height:25px;text-align:right", @onKeyPress = "return formata(this, '§§§§§§§', event)",@Value="" })</label>
                                     }
                                 </td>
                             </tr>
@@ -539,11 +591,12 @@
             $("#MainForm").submit(function () {
                 return ValidateForm();
             });
+
             $(".maskValor").inputmask('Regex', { regex: "^[0-9]{1,7}(\\,\\d{1,2})?$" });
+            $(".maskPerc").inputmask('Regex', { regex: "^[0-9]{1,3}(\\d{1,2})?$" });
             $(".maskData").inputmask("99/99/9999");
-            //$("#txtCep").inputmask("mask", { "mask": "99999-999" });
-            //$("#txtValorTransacao").inputmask({ 'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'placeholder': '0.00', rightAlign: true, clearMaskOnLostFocus: !1 });
         });
+
         function cancelarCodigo() {
             if (confirm('Deseja cancelar este ITBI?')) {
                 return true;
@@ -655,6 +708,18 @@
             return true;
         }
 
+
+        function radioCheck() {
+            var index = $("input[id=totalChk]:checked").val();
+//            alert(index);
+//            document.getElementById('percTxt').value = "";
+            if (index=="Não") {
+                document.getElementById('percLabel').style.display = 'block';
+            }
+            else {
+                document.getElementById('percLabel').style.display = 'none';
+            }
+        }
 
     </script>
 }

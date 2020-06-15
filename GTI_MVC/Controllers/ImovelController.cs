@@ -1034,10 +1034,12 @@ namespace GTI_Mvc.Controllers {
             ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
             List<Itbi_financiamento> Lista_Financimento = imovelRepository.Lista_Itbi_Financiamento();
             ViewBag.Lista_Financiamento = new SelectList(Lista_Financimento, "Codigo", "Descricao");
-
+            
             if (model.Comprador == null) {
                 model.Comprador = new Comprador_Itbi();
             }
+            if (model.Totalidade == "Sim")
+                model.Totalidade_Perc = 0;
 
             bool _find = false;    
             if (model.Comprador_Nome_tmp != null) {
@@ -1248,8 +1250,9 @@ namespace GTI_Mvc.Controllers {
             //    ViewBag.Error = "* Natureza da transação não selecionada.";
             //    return View(model);
             //}
-
+            Int64 _matricula = model.Matricula;
             model = ItbiUrbanoLoad(model, _bcpf, _bcnpj);
+            model.Matricula = _matricula;
             if (model.Inscricao == null && Convert.ToInt32(model.Codigo) > 0) {
                 ViewBag.Error = "* Imóvel não cadastrado.";
             }
@@ -1276,7 +1279,7 @@ namespace GTI_Mvc.Controllers {
                 List<ProprietarioStruct> ListaProp = imovelRepository.Lista_Proprietario(Codigo, true);
                 model.Dados_Imovel.Proprietario_Codigo = ListaProp[0].Codigo;
                 model.Dados_Imovel.Proprietario_Nome = ListaProp[0].Nome;
-
+                model.Matricula = imovel.NumMatricula==null?0: (Int64)imovel.NumMatricula;
                 if (model.Comprador == null)
                     model.Comprador = new Comprador_Itbi();
 
@@ -1371,6 +1374,9 @@ namespace GTI_Mvc.Controllers {
                 regMain.Valor_Avaliacao = model.Valor_Avaliacao;
                 regMain.Valor_Transacao = model.Valor_Transacao;
                 regMain.Tipo_Financiamento = model.Tipo_Financiamento;
+                regMain.Totalidade = model.Totalidade;
+                regMain.Totalidade_Perc = model.Totalidade_Perc;
+                regMain.Matricula = model.Matricula;
                 regMain.Natureza_Codigo = model.Natureza_Codigo;
                 regMain.Imovel_endereco = model.Dados_Imovel.NomeLogradouro;
                 regMain.Imovel_numero = (short)model.Dados_Imovel.Numero;

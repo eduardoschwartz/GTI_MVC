@@ -38,6 +38,9 @@ namespace GTI_Models.Models {
         public DateTime? Data_Transacao { get; set; }
         public decimal Valor_Venal { get; set; }
         public string Tipo_Instrumento { get; set; }
+        public string Totalidade { get; set; }
+        public decimal Totalidade_Perc { get; set; }
+        public Int64 Matricula { get; set; }
     }
 }
 

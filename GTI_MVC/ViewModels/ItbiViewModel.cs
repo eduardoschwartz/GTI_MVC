@@ -28,13 +28,19 @@ namespace GTI_Mvc.ViewModels {
         public decimal Valor_Venal { get; set; }
         public string Tipo_Instrumento { get; set; } = "Particular";
         public string[] Lista_Instrumento = new[] { "Particular", "Público" };
+        public string Totalidade { get; set; }
+        public string[] Lista_Totalidade = new[] { "Sim", "Não" };
+        public decimal Totalidade_Perc { get; set; }
+        public Int64 Matricula { get; set; }
 
         public ItbiViewModel() {
             Lista_Comprador = new List<ListCompradorEditorViewModel>();
             Lista_Vendedor = new List<ListVendedorEditorViewModel>();
         }
+
     }
 
+ 
     public class Comprador_Itbi {
         public int Codigo { get; set; }
         public string Nome { get; set; }
