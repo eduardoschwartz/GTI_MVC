@@ -154,9 +154,9 @@
                                     }
                                     <span style="padding-left:10px">
                                         @if (@Model.Cpf_Cnpj != null && @Model.Cpf_Cnpj != "") {
-                                            <button type="submit" class="btn btn-danger" name="action" value="btnCpfCompradorCancel">Trocar Comprador</button>
+                                            <button type="submit" class="btn btn-danger" name="action" value="btnCpfCompradorCancel" data-balloon-length="medium" aria-label="Clique para digitar outro CPF/CNPJ." data-balloon-pos="up">Trocar Comprador</button>
                                         } else {
-                                            <button type="submit" class="btn btn-primary" name="action" value="btnCpfCompradorOK">Consultar</button>
+                                            <button type="submit" class="btn btn-primary" name="action" value="btnCpfCompradorOK" data-balloon-length="medium" aria-label="Clique para verificar o CPF/CNPJ." data-balloon-pos="up">Consultar</button>
                                         }
                                     </span><br />
                                 </td>
@@ -191,7 +191,7 @@
                                     </td>
                                     <td>
                                         <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Comprador.Cep, new { @id = "txtCep", style = "width:90px;height:25px" })</label>
-                                        <button type="submit" class="btn btn-info" name="action" value="btnCepCompradorOK">Pesquisar</button>
+                                        <button type="submit" class="btn btn-info" name="action" value="btnCepCompradorOK" data-balloon-length="medium" aria-label="Digite um Cep válido e clique em pesquisar." data-balloon-pos="up">Pesquisar</button>
                                         <label style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">aqui</a> para consultar o Cep</label><br />
                                     </td>
                                 </tr>
@@ -310,7 +310,7 @@
 
                         </div>
                         <div style="padding-top:7px;">
-                            <button type="button" class="btn btn-info" name="action" value="btnCompradorAdd" onclick="EditarComprador()">Incluir outros compradores</button>
+                            <button type="button" class="btn btn-info" name="action" value="btnCompradorAdd" onclick="EditarComprador()">Incluir compradores</button>
                         </div>
                     </div>
 
@@ -454,7 +454,7 @@
                                         if (Model.Totalidade_Perc > 0) {
                                             <label style="font-weight:normal;display:none" id="percLabel">% transmitido:&nbsp; @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc })</label>
                                         } else {
-                                            <label style="font-weight:normal;display:none" id="percLabel">% transmitido:&nbsp; @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right",@Value="" })</label>
+                                            <label style="font-weight:normal;display:none" id="percLabel">% transmitido:&nbsp; @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                         }
                                     } else {
                                         if (Model.Totalidade_Perc > 0) {
@@ -472,16 +472,16 @@
                                     <label style="font-weight:normal;">Cartório de Registro de Imóvel:</label>
                                 </td>
                                 <td style="width:130px;padding-top:5px">
-                                    <label style="font-weight:normal;color:blue">JABOTICABAL</label>      
+                                    <label style="font-weight:normal;color:blue">JABOTICABAL</label>
                                 </td>
                                 <td style="width:206px;padding-top:5px ">
                                     <label style="font-weight:normal;">Matrícula/Transcrição do imóvel:</label>
                                 </td>
                                 <td style="width:104px">
                                     @if (Model.Matricula > 0) {
-                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Matricula, new { style = "width:90px;height:25px;text-align:right", @onKeyPress = "return formata(this, '§§§§§§§', event)",@Value=Model.Matricula })</label>
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Matricula, new { style = "width:90px;height:25px;text-align:right", @onKeyPress = "return formata(this, '§§§§§§§', event)", @Value = Model.Matricula })</label>
                                     } else {
-                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Matricula, new { style = "width:90px;height:25px;text-align:right", @onKeyPress = "return formata(this, '§§§§§§§', event)",@Value="" })</label>
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Matricula, new { style = "width:90px;height:25px;text-align:right", @onKeyPress = "return formata(this, '§§§§§§§', event)", @Value = "" })</label>
                                     }
                                 </td>
                             </tr>
@@ -493,15 +493,29 @@
                     </div>
                 }
 
-                <div class="form-group row">
-                    <label style="font-weight:normal;color:red;padding-left:28px" id="errorLabel">@ViewBag.Error</label>
-                </div>
+                @if (ViewBag.Erro != null && ViewBag.Erro != "") {
+                    <div class="form-group row">
+                        <label style="font-weight:normal;color:red;padding-left:28px" id="errorLabel">@ViewBag.Error</label>
+                    </div>
+                }
+
+
             </div>
 
         </div>
 
+
+        if (Model.Codigo != null && Model.Codigo.Trim() != "") {
+            <div style="text-align:center">
+                <button type="submit" class="btn btn-primary" name="action" value="btnValida" data-balloon-length="medium" aria-label="Enviar formulário para análise." data-balloon-pos="up">Enviar</button>&nbsp;&nbsp;
+                <button type="submit" class="btn btn-success" name="action" value="btnPrint" data-balloon-length="medium" aria-label="Imprimir os dados do formulário." data-balloon-pos="up">Imprimir</button>
+            </div>
+        }
         <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })</div>
+
+
     }
+
     <!-- Modal Comprador -->
     <div class="modal fade" id="CompradorModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -575,6 +589,29 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" id="btnVendedorOk">Incluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Erro -->
+    <div class="modal fade" id="ErrorModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">A declaração possui os seguintes erros:</h4>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        @foreach (string item in Model.Lista_Erro) {
+                            <li>
+                                @item
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -696,6 +733,11 @@
                     }
                 }
             });
+            var model = @Html.Raw(Json.Encode(Model.Lista_Erro));
+            if (model.length >0) {
+                $('#ErrorModal').modal('show');
+            }
+
         });
 
         function ValidateForm() {
@@ -711,8 +753,6 @@
 
         function radioCheck() {
             var index = $("input[id=totalChk]:checked").val();
-//            alert(index);
-//            document.getElementById('percTxt').value = "";
             if (index=="Não") {
                 document.getElementById('percLabel').style.display = 'block';
             }

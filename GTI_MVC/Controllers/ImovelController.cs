@@ -1003,12 +1003,14 @@ namespace GTI_Mvc.Controllers {
                 model.Codigo = "";
                 model.Cpf_Cnpj = "";
                 model.Comprador = new Comprador_Itbi();
+                model.Lista_Erro = new List<string>();
             } else {
                 Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
                 List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
                 ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
                 List<Itbi_financiamento> Lista_Financimento = imovelRepository.Lista_Itbi_Financiamento();
                 ViewBag.Lista_Financiamento = new SelectList(Lista_Financimento, "Codigo", "Descricao");
+                ViewBag.ListaErro = new List<string>();
 
                 if (a == "rc") {//remover comprador
                     Exception ex = imovelRepository.Excluir_Itbi_comprador(guid, s);
@@ -1034,10 +1036,11 @@ namespace GTI_Mvc.Controllers {
             ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
             List<Itbi_financiamento> Lista_Financimento = imovelRepository.Lista_Itbi_Financiamento();
             ViewBag.Lista_Financiamento = new SelectList(Lista_Financimento, "Codigo", "Descricao");
-            
+            ViewBag.Lista_Erro = new List<string>();
             if (model.Comprador == null) {
                 model.Comprador = new Comprador_Itbi();
             }
+            model.Lista_Erro = new List<string>();
             if (model.Totalidade == "Sim")
                 model.Totalidade_Perc = 0;
 
@@ -1116,7 +1119,6 @@ namespace GTI_Mvc.Controllers {
                 }
 
             }
-            model.Vendedor_Cpf_cnpj_tmp = "";
 
             if (action == "btnCodigoCancel") {
                 if (model.Guid != null) {
@@ -1246,13 +1248,19 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-            //if ((_bcpf || _bcnpj) && model.Natureza_Codigo ==0) {
-            //    ViewBag.Error = "* Natureza da transação não selecionada.";
-            //    return View(model);
-            //}
+            if (action == "btnValida") {
+                model.Lista_Erro = Valida_Itbi(model);
+                if (model.Lista_Erro.Count > 0) {
+                    ViewBag.ListaErro = new SelectList(model.Lista_Erro);
+                    return View(model);
+                }
+            }
+
+            model.Vendedor_Cpf_cnpj_tmp = "";
             Int64 _matricula = model.Matricula;
             model = ItbiUrbanoLoad(model, _bcpf, _bcnpj);
             model.Matricula = _matricula;
+
             if (model.Inscricao == null && Convert.ToInt32(model.Codigo) > 0) {
                 ViewBag.Error = "* Imóvel não cadastrado.";
             }
@@ -1507,6 +1515,23 @@ namespace GTI_Mvc.Controllers {
             itbi.Lista_Vendedor = Lista_vendedor;
 
             return itbi;
+        }
+
+        private List<string>Valida_Itbi(ItbiViewModel model) {
+            List<string> Lista = new List<string>();
+
+            if (model.Natureza_Codigo == 0) {
+                Lista.Add("Natureza da transação não informada");
+            }
+            if (string.IsNullOrWhiteSpace(model.Cpf_Cnpj)) {
+                Lista.Add("Cpf/Cnpj do comprador não informado ou inválido");
+            }
+            if (string.IsNullOrWhiteSpace(model.Comprador.Nome)) {
+                Lista.Add("Nome do comprador não informado");
+            }
+
+
+            return Lista;
         }
 
     }

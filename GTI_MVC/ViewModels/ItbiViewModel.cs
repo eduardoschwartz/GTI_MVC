@@ -32,6 +32,7 @@ namespace GTI_Mvc.ViewModels {
         public string[] Lista_Totalidade = new[] { "Sim", "Não" };
         public decimal Totalidade_Perc { get; set; }
         public Int64 Matricula { get; set; }
+        public List<string> Lista_Erro { get; set; }
 
         public ItbiViewModel() {
             Lista_Comprador = new List<ListCompradorEditorViewModel>();
