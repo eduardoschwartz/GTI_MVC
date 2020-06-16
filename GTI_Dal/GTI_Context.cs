@@ -157,5 +157,6 @@ namespace GTI_Dal {
         public DbSet<Itbi_main> Itbi_Main { get; set; }
         public DbSet<Itbi_comprador> Itbi_Comprador { get; set; }
         public DbSet<Itbi_vendedor> Itbi_Vendedor { get; set; }
+        public DbSet<Itbi_anexo> Itbi_Anexo { get; set; }
     }
 }

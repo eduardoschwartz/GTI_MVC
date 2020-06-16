@@ -24,7 +24,7 @@ namespace GTI_Mvc.ViewModels {
         public decimal Valor_Transacao { get; set; }
         public int Tipo_Financiamento { get; set; }
         public decimal Valor_Avaliacao { get; set; }
-        public DateTime Data_Transacao { get; set; }
+        public DateTime? Data_Transacao { get; set; }
         public decimal Valor_Venal { get; set; }
         public string Tipo_Instrumento { get; set; } = "Particular";
         public string[] Lista_Instrumento = new[] { "Particular", "Público" };
@@ -33,14 +33,24 @@ namespace GTI_Mvc.ViewModels {
         public decimal Totalidade_Perc { get; set; }
         public Int64 Matricula { get; set; }
         public List<string> Lista_Erro { get; set; }
+        public List<ListAnexoEditorViewModel> Lista_Anexo { get; set; }
+        public string Anexo_Nome_tmp { get; set; }
+        public string Anexo_Desc_tmp { get; set; }
 
         public ItbiViewModel() {
             Lista_Comprador = new List<ListCompradorEditorViewModel>();
             Lista_Vendedor = new List<ListVendedorEditorViewModel>();
         }
-
     }
 
+    public class Anexo_Itbi {
+        public int Seq { get; set; }
+        public string Id { get; set; }
+        public string Descricao { get; set; }
+        public string Arquivo { get; set; }
+        public string Ext { get; set; }
+        public Int64 Tamanho { get; set; }
+    }
  
     public class Comprador_Itbi {
         public int Codigo { get; set; }

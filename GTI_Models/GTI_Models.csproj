@@ -138,6 +138,7 @@
     <Compile Include="Models\horariofunc.cs" />
     <Compile Include="Models\horario_funcionamento.cs" />
     <Compile Include="Models\isencao.cs" />
+    <Compile Include="Models\itbi_anexo.cs" />
     <Compile Include="Models\itbi_comprador.cs" />
     <Compile Include="Models\itbi_financiamento.cs" />
     <Compile Include="Models\itbi_main.cs" />

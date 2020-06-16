@@ -590,5 +590,10 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Itbi_Vendedor(Guid);
         }
 
+        public List<Itbi_anexo> Retorna_Itbi_Anexo(string Guid) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Itbi_Anexo(Guid);
+        }
+
     }//end class
 }

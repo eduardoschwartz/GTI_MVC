@@ -32,7 +32,7 @@
 
 <div class="center">
 
-    @using (Html.BeginForm("Itbi_urbano", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+    @using (Html.BeginForm("Itbi_urbano", "Imovel", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
         <div class="container" style="width:700px">
             <div class="panel panel-danger">
@@ -272,7 +272,7 @@
                                         <th style="width:20px;font-weight:normal">
                                             #
                                         </th>
-                                        <th style="width:420px;font-weight:normal">
+                                        <th style="width:435px;font-weight:normal">
                                             Nome do comprador
                                         </th>
                                         <th style="width:150px;font-weight:normal">
@@ -293,7 +293,7 @@
                                             @Html.DisplayFor(modelItem => item.Seq)
                                             @Html.HiddenFor(modelItem => item.Seq)
                                         </td>
-                                        <td style="width:420px;font-weight:normal;color:blue">
+                                        <td style="width:435px;font-weight:normal;color:blue">
                                             @Html.DisplayFor(modelItem => item.Nome)
                                             @Html.HiddenFor(modelItem => item.Nome)
                                         </td>
@@ -340,7 +340,7 @@
                                         <th style="width:20px;font-weight:normal">
                                             #
                                         </th>
-                                        <th style="width:420px;font-weight:normal">
+                                        <th style="width:435px;font-weight:normal">
                                             Nome do comprador
                                         </th>
                                         <th style="width:150px;font-weight:normal">
@@ -360,7 +360,7 @@
                                             @Html.DisplayFor(modelItem => item.Seq)
                                             @Html.HiddenFor(modelItem => item.Seq)
                                         </td>
-                                        <td style="width:420px;font-weight:normal;color:blue">
+                                        <td style="width:435px;font-weight:normal;color:blue">
                                             @Html.DisplayFor(modelItem => item.Nome)
                                             @Html.HiddenFor(modelItem => item.Nome)
                                         </td>
@@ -386,7 +386,11 @@
                                     <label style="font-weight:normal;">Valor da transação:</label>
                                 </td>
                                 <td style="width:105px">
-                                    <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                    @if (Model.Valor_Transacao > 0) {
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Transacao })</label>
+                                    } else {
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                    }
                                 </td>
                                 <td style="width:134px">
                                     <label style="font-weight:normal;">Tipo Financiamento:</label>
@@ -402,7 +406,11 @@
                                     <label style="font-weight:normal">Valor da avaliação do imóvel (resgate alienação fiduciária):</label>
                                 </td>
                                 <td style="width:268px">
-                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                    @if (Model.Valor_Avaliacao > 0) {
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao })</label>
+                                    } else {
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                    }
                                 </td>
                             </tr>
                         </table>
@@ -412,7 +420,11 @@
                                     <label style="font-weight:normal;">Data da transação:</label>
                                 </td>
                                 <td style="width:157px">
-                                    <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Data_Transacao, new { @class = "maskData", style = "width:90px;height:25px;text-align:center", @Value = "" })</label>
+                                    @if (Model.Data_Transacao != null && Model.Data_Transacao != DateTime.MinValue) {
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Data_Transacao, new { @class = "maskData", style = "width:90px;height:25px;text-align:center", @Value = Convert.ToDateTime(@Model.Data_Transacao).ToString("dd/MM/yyyy") })</label>
+                                    } else {
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Data_Transacao, new { @class = "maskData", style = "width:90px;height:25px;text-align:center", @Value = "" })</label>
+                                    }
                                 </td>
                                 <td style="width: 80px">
                                     <label style="font-weight:normal;">Valor Venal:</label>
@@ -489,11 +501,58 @@
                     </div>
                     <div class="panel-heading">Inclusão de Anexos </div>
                     <div class="panel-body">
-                        anexos
+                        <div id="VendedorTable" style="max-height: 247px; overflow: auto;width:640px;padding-top:7px">
+                            <table id="tblVendedor" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                                <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal">
+                                    <tr style="height:12px;">
+                                        <th style="width:20px;font-weight:normal">
+                                            #
+                                        </th>
+                                        <th style="width:585px;font-weight:normal">
+                                            Descrição do anexo
+                                        </th>
+                                        <th style="width:20px;text-align:left">
+
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <div style="display:none">@Html.EditorFor(model => model.Lista_Vendedor)</div>
+                            <table id="tblVendedor" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px">
+                                @foreach (var item in Model.Lista_Anexo) {
+                                    <tr>
+                                        <td style="width:20px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Seq)
+                                            @Html.HiddenFor(modelItem => item.Seq)
+                                        </td>
+                                        <td style="width:420px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Nome)
+                                            @Html.HiddenFor(modelItem => item.Nome)
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "ra", @s = item.Seq, @guid = Model.Guid })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                        <br />
+                        <input type="file" name="file" style="font-size:14px"/><br />
+                        <table>
+                            <tr>
+                                <td style="font-size:14px;width:200px">
+                                    Digite a descrição do arquivo:
+                                </td>
+                                <td style="width:450px">
+                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Anexo_Desc_tmp, new { style = "width:440px;height:25px", @maxlength = "100",@Value="" })</label>
+                                </td>
+                            </tr>
+                        </table>
+                        <div style="padding-top:7px;"><button type="submit" class="btn btn-info" name="action" value="btnAnexoAdd" >Incluir anexo</button></div>
                     </div>
                 }
 
-                @if (ViewBag.Erro != null && ViewBag.Erro != "") {
+                @if (ViewBag.Error != null && ViewBag.Error != "") {
                     <div class="form-group row">
                         <label style="font-weight:normal;color:red;padding-left:28px" id="errorLabel">@ViewBag.Error</label>
                     </div>
@@ -512,6 +571,7 @@
             </div>
         }
         <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })</div>
+        
 
 
     }
@@ -616,6 +676,8 @@
             </div>
         </div>
     </div>
+
+   
 </div>
 
 
@@ -651,6 +713,8 @@
             $('#VendedorModal').modal();
             document.getElementById('errorVendedor').innerHTML = "";
         }
+
+       
 
         $(document).ready(function () {
             $('#btnCompradorOk').click(function () {
@@ -733,11 +797,11 @@
                     }
                 }
             });
+            
             var model = @Html.Raw(Json.Encode(Model.Lista_Erro));
             if (model.length >0) {
                 $('#ErrorModal').modal('show');
             }
-
         });
 
         function ValidateForm() {
@@ -749,7 +813,6 @@
             }
             return true;
         }
-
 
         function radioCheck() {
             var index = $("input[id=totalChk]:checked").val();

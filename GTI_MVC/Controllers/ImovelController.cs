@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using static GTI_Models.modelCore;
@@ -1026,7 +1027,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_urbano")]
         [HttpPost]
-        public ViewResult Itbi_urbano(ItbiViewModel model,string action,int seq=0) {
+        public ActionResult Itbi_urbano(ItbiViewModel model, HttpPostedFileBase file, string action,int seq=0) {
             bool _bcpf = false, _bcnpj = false;
             string _guid = "";
              ModelState.Clear();
@@ -1040,6 +1041,9 @@ namespace GTI_Mvc.Controllers {
             if (model.Comprador == null) {
                 model.Comprador = new Comprador_Itbi();
             }
+            if (model.Lista_Anexo == null)
+                model.Lista_Anexo = new List<ListAnexoEditorViewModel>();
+
             model.Lista_Erro = new List<string>();
             if (model.Totalidade == "Sim")
                 model.Totalidade_Perc = 0;
@@ -1078,7 +1082,8 @@ namespace GTI_Mvc.Controllers {
                 editorViewModel.Cpf_Cnpj = _cpfMask;
                 if (editorViewModel.Nome != null) {
                     editorViewModel.Seq = model.Lista_Comprador.Count;
-                    model.Lista_Comprador.Add(editorViewModel);
+                    if (editorViewModel.Cpf_Cnpj != null)
+                        model.Lista_Comprador.Add(editorViewModel);
                 }
                 
             }
@@ -1251,8 +1256,18 @@ namespace GTI_Mvc.Controllers {
             if (action == "btnValida") {
                 model.Lista_Erro = Valida_Itbi(model);
                 if (model.Lista_Erro.Count > 0) {
+                    Grava_Itbi(model);
                     ViewBag.ListaErro = new SelectList(model.Lista_Erro);
                     return View(model);
+                }
+            }
+
+            if(action== "btnAnexoAdd") {
+                if (file != null) {
+                    if (string.IsNullOrWhiteSpace(model.Anexo_Desc_tmp)) {
+                        ViewBag.Error = "* Digite uma descrição para o anexo (é necessário selecionar novamente o anexo).";
+                        return View(model);
+                    }
                 }
             }
 
@@ -1270,6 +1285,8 @@ namespace GTI_Mvc.Controllers {
             if (_guid == "") {
                 ViewBag.Error = "* Ocorreu um erro ao gravar.";
             }
+
+
 
             return View(model);
         }
@@ -1376,7 +1393,8 @@ namespace GTI_Mvc.Controllers {
             } else {
                 _guid = model.Guid;
                 Itbi_main regMain = imovelRepository.Retorna_Itbi_Main(_guid);
-                regMain.Data_Transacao = model.Data_Transacao;
+                if(Functions.IsDate(model.Data_Transacao))
+                    regMain.Data_Transacao =   model.Data_Transacao;
                 regMain.Tipo_Instrumento = model.Tipo_Instrumento;
                 regMain.Valor_Venal = model.Valor_Venal;
                 regMain.Valor_Avaliacao = model.Valor_Avaliacao;
@@ -1514,6 +1532,18 @@ namespace GTI_Mvc.Controllers {
             }
             itbi.Lista_Vendedor = Lista_vendedor;
 
+
+            List<ListAnexoEditorViewModel> Lista_Anexo = new List<ListAnexoEditorViewModel>();
+            List<Itbi_anexo> listaA = imovelRepository.Retorna_Itbi_Anexo(guid);
+            foreach (Itbi_anexo item in listaA) {
+                ListAnexoEditorViewModel itemA = new ListAnexoEditorViewModel() {
+                    Seq = item.Seq,
+                    Nome = item.Descricao
+                };
+                Lista_Anexo.Add(itemA);
+            }
+            itbi.Lista_Anexo = Lista_Anexo;
+
             return itbi;
         }
 
@@ -1529,7 +1559,35 @@ namespace GTI_Mvc.Controllers {
             if (string.IsNullOrWhiteSpace(model.Comprador.Nome)) {
                 Lista.Add("Nome do comprador não informado");
             }
+            if (string.IsNullOrWhiteSpace(model.Comprador.Logradouro_Nome)) {
+                Lista.Add("Endereço do comprador não informado");
+            }
+            if (model.Lista_Vendedor.Count == 0) {
+                Lista.Add("Nenhum vendedor incluido na declaração");
+            }
+            if (model.Valor_Transacao == 0) {
+                Lista.Add("Valor da transação não informado");
+            }
 
+            if (model.Valor_Avaliacao == 0) {
+                Lista.Add("Valor da avaliação do imóvel não informado");
+            }
+
+            if (model.Tipo_Financiamento == 0) {
+                Lista.Add("Tipo de finaciamento não informado");
+            }
+
+            if (!Functions.IsDate(model.Data_Transacao)) {
+                Lista.Add("Data da transação inválida");
+            }
+
+            if (model.Totalidade == "Não" && model.Totalidade_Perc==0) {
+                Lista.Add("Informe a proporção do imóvel a ser transmitida");
+            }
+
+            if (model.Matricula == 0) {
+                Lista.Add("Informe a matrícula/transcrição do imóvel");
+            }
 
             return Lista;
         }

@@ -1578,6 +1578,13 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<Itbi_anexo> Retorna_Itbi_Anexo(string Guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                List<Itbi_anexo> Sql = (from t in db.Itbi_Anexo orderby t.Seq where t.Guid == Guid select t).ToList();
+                return Sql;
+            }
+        }
+
         public Exception Incluir_Itbi_comprador(List<Itbi_comprador> Lista) {
             using (var db = new GTI_Context(_connection)) {
                 object[] Parametros = new object[4];
