@@ -48,8 +48,6 @@ namespace GTI_Mvc.ViewModels {
         public string Id { get; set; }
         public string Descricao { get; set; }
         public string Arquivo { get; set; }
-        public string Ext { get; set; }
-        public Int64 Tamanho { get; set; }
     }
  
     public class Comprador_Itbi {

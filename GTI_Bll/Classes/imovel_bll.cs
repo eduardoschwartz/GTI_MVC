@@ -595,5 +595,18 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Itbi_Anexo(Guid);
         }
 
+        public byte Retorna_Itbi_Anexo_Disponivel(string Guid) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Itbi_Anexo_Disponivel(Guid);
+        }
+
+        public Exception Incluir_Itbi_Anexo(Itbi_anexo item) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Incluir_Itbi_Anexo(item);
+            return ex;      
+        }
+
+
+
     }//end class
 }

@@ -1633,5 +1633,37 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public byte Retorna_Itbi_Anexo_Disponivel(string Guid) {
+            byte maxCod = 0;
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Itbi_Anexo orderby t.Seq descending where t.Guid == Guid select t).FirstOrDefault();
+                if (Sql != null) {
+                    maxCod = (byte)(Sql.Seq + 1);
+                }
+            }
+            return maxCod;
+        }
+
+        public Exception Incluir_Itbi_Anexo(Itbi_anexo item) {
+            using (var db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[4];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = item.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@seq", SqlDbType = SqlDbType.TinyInt, SqlValue = item.Seq };
+                Parametros[2] = new SqlParameter { ParameterName = "@descricao", SqlDbType = SqlDbType.VarChar, SqlValue = item.Descricao };
+                Parametros[3] = new SqlParameter { ParameterName = "@arquivo", SqlDbType = SqlDbType.VarChar, SqlValue = item.Arquivo };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO itbi_anexo(guid,seq,descricao,arquivo) VALUES(@guid,@seq,@descricao,@arquivo)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+
+                return null;
+            }
+        }
+
+
+
     }//end class
 }

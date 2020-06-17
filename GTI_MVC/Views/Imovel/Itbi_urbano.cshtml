@@ -508,8 +508,11 @@
                                         <th style="width:20px;font-weight:normal">
                                             #
                                         </th>
-                                        <th style="width:585px;font-weight:normal">
+                                        <th style="width:350px;font-weight:normal">
                                             Descrição do anexo
+                                        </th>
+                                        <th style="width:230px;font-weight:normal">
+                                            Nome do Arquivo
                                         </th>
                                         <th style="width:20px;text-align:left">
 
@@ -520,31 +523,37 @@
                             <div style="display:none">@Html.EditorFor(model => model.Lista_Vendedor)</div>
                             <table id="tblVendedor" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px">
                                 @foreach (var item in Model.Lista_Anexo) {
-                                    <tr>
-                                        <td style="width:20px;font-weight:normal;color:blue">
-                                            @Html.DisplayFor(modelItem => item.Seq)
-                                            @Html.HiddenFor(modelItem => item.Seq)
-                                        </td>
-                                        <td style="width:420px;font-weight:normal;color:blue">
-                                            @Html.DisplayFor(modelItem => item.Nome)
-                                            @Html.HiddenFor(modelItem => item.Nome)
-                                        </td>
-                                        <td>
-                                            <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "ra", @s = item.Seq, @guid = Model.Guid })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td style="width:20px;font-weight:normal;color:blue">
+                                        @Html.DisplayFor(modelItem => item.Seq)
+                                        @Html.HiddenFor(modelItem => item.Seq)
+                                    </td>
+                                    <td style="width:350px;font-weight:normal;color:blue">
+                                        @Html.DisplayFor(modelItem => item.Nome)
+                                        @Html.HiddenFor(modelItem => item.Nome)
+                                    </td>
+                                    <td style="width:230px;font-weight:normal;color:blue">
+                                        @Html.DisplayFor(modelItem => item.Arquivo)
+                                        @Html.HiddenFor(modelItem => item.Arquivo)
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "ra", @s = item.Seq, @guid = Model.Guid })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                    </td>
+                                </tr>
                                 }
                             </table>
                         </div>
                         <br />
-                        <input id="fileUpload" type="file" name="file" style="font-size:14px"/><br />
+
+                        
+                        <input style="width:610px" id="imageUpload" type="file" name="file"  /><br /><br />
                         <table>
                             <tr>
                                 <td style="font-size:14px;width:200px">
                                     Digite a descrição do arquivo:
                                 </td>
                                 <td style="width:450px">
-                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Anexo_Desc_tmp, new { style = "width:440px;height:25px", @maxlength = "100",@Value="" })</label>
+                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Anexo_Desc_tmp, new { style = "width:440px;height:25px", @maxlength = "100", @Value = "" })</label>
                                 </td>
                             </tr>
                         </table>
@@ -556,7 +565,7 @@
 
                             </tr>
                         </table>
-                        <div style="padding-top:7px;"><button type="submit" class="btn btn-info" name="action" value="btnAnexoAdd" >Incluir anexo</button></div>
+                        <div style="padding-top:7px;"><button type="submit" class="btn btn-info" name="action" value="btnAnexoAdd">Incluir anexo</button></div>
                     </div>
                 }
 
@@ -685,8 +694,6 @@
 
 @section scripts{
 
- 
-
     <script type="text/javascript">
         $(document).ready(function () {
             $("#MainForm").submit(function () {
@@ -696,6 +703,7 @@
             $(".maskValor").inputmask('Regex', { regex: "^[0-9]{1,7}(\\,\\d{1,2})?$" });
             $(".maskPerc").inputmask('Regex', { regex: "^[0-9]{1,3}(\\d{1,2})?$" });
             $(".maskData").inputmask("99/99/9999");
+            
         });
 
         function cancelarCodigo() {
@@ -715,8 +723,6 @@
             $('#VendedorModal').modal();
             document.getElementById('errorVendedor').innerHTML = "";
         }
-
-       
 
         $(document).ready(function () {
             $('#btnCompradorOk').click(function () {
@@ -826,8 +832,9 @@
             }
         }
 
-        $(function () {
+       
 
+        $(function () {
             $("#fileUpload").change(function () {
 
                 if (undefined != this.files) {

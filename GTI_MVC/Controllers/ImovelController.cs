@@ -1123,7 +1123,6 @@ namespace GTI_Mvc.Controllers {
                     if(editorViewModel.Cpf_Cnpj!=null)
                         model.Lista_Vendedor.Add(editorViewModel);
                 }
-
             }
 
             if (action == "btnCodigoCancel") {
@@ -1274,14 +1273,36 @@ namespace GTI_Mvc.Controllers {
                             return View(model);
                         } else {
                             var fileName = Path.GetFileName(file.FileName);
-                            var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Files/Itbi/"), fileName);
+                            Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath("~/Files/Itbi/") + model.Guid);
+                            var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Files/Itbi/" + model.Guid), fileName);
                             file.SaveAs(path);
+
+                            byte seqA = imovelRepository.Retorna_Itbi_Anexo_Disponivel(model.Guid);
+                            Itbi_anexo regA = new Itbi_anexo() {
+                                Guid=model.Guid,
+                                Seq=seqA,
+                                Descricao=model.Anexo_Desc_tmp,
+                                Arquivo=fileName
+                            };
+                            Exception ex = imovelRepository.Incluir_Itbi_Anexo(regA);
+                            
                         }
                     }
                 } else {
                     ViewBag.Error = "* Nenhum arquivo selecionado.";
                     return View(model);
                 }
+            }
+
+            List<Itbi_anexo>Lista_Anexo = imovelRepository.Retorna_Itbi_Anexo(model.Guid);
+            model.Lista_Anexo.Clear();
+            foreach (Itbi_anexo itemA in Lista_Anexo) {
+                ListAnexoEditorViewModel regA = new ListAnexoEditorViewModel() {
+                    Seq=itemA.Seq,
+                    Nome=itemA.Descricao,
+                    Arquivo=itemA.Arquivo
+                };
+                model.Lista_Anexo.Add(regA);
             }
 
             model.Vendedor_Cpf_cnpj_tmp = "";
@@ -1298,8 +1319,6 @@ namespace GTI_Mvc.Controllers {
             if (_guid == "") {
                 ViewBag.Error = "* Ocorreu um erro ao gravar.";
             }
-
-
 
             return View(model);
         }
@@ -1551,7 +1570,8 @@ namespace GTI_Mvc.Controllers {
             foreach (Itbi_anexo item in listaA) {
                 ListAnexoEditorViewModel itemA = new ListAnexoEditorViewModel() {
                     Seq = item.Seq,
-                    Nome = item.Descricao
+                    Nome = item.Descricao,
+                    Arquivo=item.Arquivo
                 };
                 Lista_Anexo.Add(itemA);
             }
