@@ -537,7 +537,7 @@
                             </table>
                         </div>
                         <br />
-                        <input type="file" name="file" style="font-size:14px"/><br />
+                        <input id="fileUpload" type="file" name="file" style="font-size:14px"/><br />
                         <table>
                             <tr>
                                 <td style="font-size:14px;width:200px">
@@ -546,6 +546,14 @@
                                 <td style="width:450px">
                                     <label style="font-weight:normal">@Html.TextBoxFor(m => m.Anexo_Desc_tmp, new { style = "width:440px;height:25px", @maxlength = "100",@Value="" })</label>
                                 </td>
+                            </tr>
+                        </table>
+                        <table>
+                            <tr>
+                                <td style="color:brown;font-size:14px">
+                                    ** Enviar somente arquivos no formato Pdf ou imagem com tamanho máximo de 4Mb
+                                </td>
+
                             </tr>
                         </table>
                         <div style="padding-top:7px;"><button type="submit" class="btn btn-info" name="action" value="btnAnexoAdd" >Incluir anexo</button></div>
@@ -557,10 +565,7 @@
                         <label style="font-weight:normal;color:red;padding-left:28px" id="errorLabel">@ViewBag.Error</label>
                     </div>
                 }
-
-
             </div>
-
         </div>
 
 
@@ -571,9 +576,6 @@
             </div>
         }
         <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })</div>
-        
-
-
     }
 
     <!-- Modal Comprador -->
@@ -823,6 +825,36 @@
                 document.getElementById('percLabel').style.display = 'none';
             }
         }
+
+        $(function () {
+
+            $("#fileUpload").change(function () {
+
+                if (undefined != this.files) {
+                    var f = this.files[0]
+                    var id = this.id;
+                    var extArray = new Array("dll", "exe");
+                    var ext = f.name.replace(/^.*?\.([a-zA-Z0-9]+)$/, "$1");
+                    if (ext == extArray[0] || ext == extArray[1]) {
+                        alert("O sistema não permite anexar arquivos com extensão(.exe,.dll). Tente anexar outroa rquivo.");
+                        //reset file upload control                            
+                        $("#" + this.id).replaceWith($("#" + this.id).clone(true));
+                        this.value = null;
+                        return false;
+                    }
+                    //here I CHECK if the FILE SIZE is bigger than 5 MB (numbers below are in bytes)
+                    else if (f.size > 4194304 || f.fileSize > 4194304) {
+                        //show an alert to the user
+                        alert("Tamanho máximo excedido. (Max. 4 MB)");
+                        this.value = null;
+                        //reset file upload control                            
+                        $("#" + this.id).replaceWith($("#" + this.id).clone(true));
+                        return false;
+                    }
+                }
+            })
+        });
+
 
     </script>
 }

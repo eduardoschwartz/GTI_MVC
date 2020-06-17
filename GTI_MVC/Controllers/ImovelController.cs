@@ -1029,6 +1029,7 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Itbi_urbano(ItbiViewModel model, HttpPostedFileBase file, string action,int seq=0) {
             bool _bcpf = false, _bcnpj = false;
+            
             string _guid = "";
              ModelState.Clear();
 
@@ -1267,7 +1268,19 @@ namespace GTI_Mvc.Controllers {
                     if (string.IsNullOrWhiteSpace(model.Anexo_Desc_tmp)) {
                         ViewBag.Error = "* Digite uma descrição para o anexo (é necessário selecionar novamente o anexo).";
                         return View(model);
+                    } else {
+                        if (file.ContentType != "application/pdf" && file.ContentType!="image/png" && file.ContentType!="image/jpeg") {
+                            ViewBag.Error = "* Este tipo de arquivo não pode ser enviado como anexo.";
+                            return View(model);
+                        } else {
+                            var fileName = Path.GetFileName(file.FileName);
+                            var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Files/Itbi/"), fileName);
+                            file.SaveAs(path);
+                        }
                     }
+                } else {
+                    ViewBag.Error = "* Nenhum arquivo selecionado.";
+                    return View(model);
                 }
             }
 
