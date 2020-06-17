@@ -1279,6 +1279,30 @@ namespace GTI_Mvc.Controllers {
                         model.Itbi_Numero = _num.Numero;
                         model.Itbi_Ano = _num.Ano;
                     }
+                    ReportDocument rd = new ReportDocument();
+                    rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Itbi_Main.rpt"));
+                    TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+                    TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+                    ConnectionInfo crConnectionInfo = new ConnectionInfo();
+                    Tables CrTables;
+                    crConnectionInfo.ServerName = "200.232.123.115";
+                    crConnectionInfo.DatabaseName = "Tributacao";
+                    crConnectionInfo.UserID = "gtisys";
+                    crConnectionInfo.Password = "everest";
+                    CrTables = rd.Database.Tables;
+                    foreach (Table CrTable in CrTables) {
+                        crtableLogoninfo = CrTable.LogOnInfo;
+                        crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                        CrTable.ApplyLogOnInfo(crtableLogoninfo);
+                    }
+
+                    try {
+                        rd.RecordSelectionFormula = "{itbi_main.guid}='" + model.Guid + "'";
+                        Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                        return File(stream, "application/pdf", "Resumo_Itbi.pdf");
+                    } catch {
+                        throw;
+                    }
                 }
             }
 
