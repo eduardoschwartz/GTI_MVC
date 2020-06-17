@@ -41,6 +41,15 @@ namespace GTI_Models.Models {
         public string Totalidade { get; set; }
         public decimal Totalidade_Perc { get; set; }
         public Int64 Matricula { get; set; }
+        public int Itbi_Numero  { get; set; }
+        public short Itbi_Ano { get; set; }
     }
+
+    public class Itbi_Numero {
+        public int Numero { get; set; }
+        public short Ano { get; set; }
+    }
+
+
 }
 

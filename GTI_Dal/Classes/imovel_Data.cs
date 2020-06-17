@@ -1524,9 +1524,11 @@ namespace GTI_Dal.Classes {
 
         public Itbi_main Retorna_Itbi_Main(string Guid) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from t in db.Itbi_Main where t.Guid==Guid select t).FirstOrDefault();
+                var Sql = (from t in db.Itbi_Main where t.Guid==Guid select t).First();
                 Itbi_main itbi = new Itbi_main() {
                     Guid = Sql.Guid,
+                    Itbi_Ano=Sql.Itbi_Ano,
+                    Itbi_Numero=Sql.Itbi_Numero,
                     Inscricao=Sql.Inscricao,
                     Tipo_Financiamento=Sql.Tipo_Financiamento,
                     Totalidade=Sql.Totalidade,
@@ -1663,6 +1665,37 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public int Retorna_Itbi_Disponivel() {
+            int _numero = 1;
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Itbi_Main orderby t.Itbi_Numero descending where t.Itbi_Ano==DateTime.Now.Year select t).FirstOrDefault();
+                if (Sql != null) {
+                    _numero = (short)(Sql.Itbi_Numero + 1);
+                }
+            }
+            return _numero;
+        }
+
+        public Itbi_Numero Alterar_Itbi_Main(string Guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Itbi_main i = db.Itbi_Main.First(g => g.Guid == Guid);
+                int _numero = Retorna_Itbi_Disponivel();
+                short _ano = (short)DateTime.Now.Year;
+                i.Itbi_Numero = _numero;
+                i.Itbi_Ano =_ano;
+             
+                try {
+                    db.SaveChanges();
+                } catch {
+                }
+
+                Itbi_Numero _ret = new Itbi_Numero() {
+                    Numero = _numero==0?1:_numero,
+                    Ano=_ano
+                };
+                return _ret;
+            }
+        }
 
 
     }//end class

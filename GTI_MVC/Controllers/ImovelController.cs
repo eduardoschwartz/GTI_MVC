@@ -1019,7 +1019,6 @@ namespace GTI_Mvc.Controllers {
                 if (a == "rv") {//remover vendedor
                     Exception ex = imovelRepository.Excluir_Itbi_vendedor(guid, s);
                 }
-
                 model = Retorna_Itbi_Gravado(guid);
             }
             return View(model);
@@ -1259,16 +1258,37 @@ namespace GTI_Mvc.Controllers {
                     Grava_Itbi(model);
                     ViewBag.ListaErro = new SelectList(model.Lista_Erro);
                     return View(model);
+                } else {
+                    if (model.Itbi_Numero == 0) {
+                        Itbi_Numero _num = imovelRepository.Alterar_Itbi_Main(model.Guid);
+                        model.Itbi_Numero = _num.Numero;
+                        model.Itbi_Ano = _num.Ano;
+                    }
                 }
             }
 
-            if(action== "btnAnexoAdd") {
+            if (action == "btnPrint") {
+                model.Lista_Erro = Valida_Itbi(model);
+                if (model.Lista_Erro.Count > 0) {
+                    Grava_Itbi(model);
+                    ViewBag.ListaErro = new SelectList(model.Lista_Erro);
+                    return View(model);
+                } else {
+                    if (model.Itbi_Numero == 0) {
+                        Itbi_Numero _num = imovelRepository.Alterar_Itbi_Main(model.Guid);
+                        model.Itbi_Numero = _num.Numero;
+                        model.Itbi_Ano = _num.Ano;
+                    }
+                }
+            }
+
+            if (action == "btnAnexoAdd") {
                 if (file != null) {
                     if (string.IsNullOrWhiteSpace(model.Anexo_Desc_tmp)) {
                         ViewBag.Error = "* Digite uma descrição para o anexo (é necessário selecionar novamente o anexo).";
                         return View(model);
                     } else {
-                        if (file.ContentType != "application/pdf" && file.ContentType!="image/png" && file.ContentType!="image/jpeg") {
+                        if (file.ContentType != "application/pdf" && file.ContentType != "image/png" && file.ContentType != "image/jpeg") {
                             ViewBag.Error = "* Este tipo de arquivo não pode ser enviado como anexo.";
                             return View(model);
                         } else {
@@ -1279,13 +1299,13 @@ namespace GTI_Mvc.Controllers {
 
                             byte seqA = imovelRepository.Retorna_Itbi_Anexo_Disponivel(model.Guid);
                             Itbi_anexo regA = new Itbi_anexo() {
-                                Guid=model.Guid,
-                                Seq=seqA,
-                                Descricao=model.Anexo_Desc_tmp,
-                                Arquivo=fileName
+                                Guid = model.Guid,
+                                Seq = seqA,
+                                Descricao = model.Anexo_Desc_tmp,
+                                Arquivo = fileName
                             };
                             Exception ex = imovelRepository.Incluir_Itbi_Anexo(regA);
-                            
+
                         }
                     }
                 } else {
@@ -1308,7 +1328,7 @@ namespace GTI_Mvc.Controllers {
             model.Vendedor_Cpf_cnpj_tmp = "";
             Int64 _matricula = model.Matricula;
             model = ItbiUrbanoLoad(model, _bcpf, _bcnpj);
-            model.Matricula = _matricula;
+            model.Matricula = _matricula>0?_matricula:model.Matricula;
 
             if (model.Inscricao == null && Convert.ToInt32(model.Codigo) > 0) {
                 ViewBag.Error = "* Imóvel não cadastrado.";
@@ -1419,7 +1439,6 @@ namespace GTI_Mvc.Controllers {
                     Inscricao=model.Dados_Imovel.Inscricao,
                     Proprietario_Codigo=(int)model.Dados_Imovel.Proprietario_Codigo,
                     Proprietario_Nome=model.Dados_Imovel.Proprietario_Nome
-                    
                 };
                 ex = imovelRepository.Incluir_Itbi_main(regMain);
             } else {
