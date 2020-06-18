@@ -25,6 +25,7 @@ namespace GTI_Models.Models {
         public string Comprador_logradouro_nome { get; set; }
         public int Comprador_numero { get; set; }
         public string Comprador_complemento { get; set; }
+        public int Comprador_cep { get; set; }
         public int Comprador_bairro_codigo { get; set; }
         public string Comprador_bairro_nome { get; set; }
         public int Comprador_cidade_codigo { get; set; }

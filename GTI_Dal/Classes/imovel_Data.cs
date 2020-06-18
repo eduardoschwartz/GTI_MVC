@@ -1441,6 +1441,7 @@ namespace GTI_Dal.Classes {
                 i.Comprador_logradouro_nome = Reg.Comprador_logradouro_nome;
                 i.Comprador_numero = Reg.Comprador_numero;
                 i.Comprador_complemento = Reg.Comprador_complemento;
+                i.Comprador_cep = Reg.Comprador_cep;
                 i.Comprador_bairro_codigo = Reg.Comprador_bairro_codigo;
                 i.Comprador_bairro_nome = Reg.Comprador_bairro_nome;
                 i.Comprador_cidade_codigo = Reg.Comprador_cidade_codigo;
@@ -1518,6 +1519,17 @@ namespace GTI_Dal.Classes {
                 Parametros[1] = new SqlParameter { ParameterName = "@seq", SqlDbType = SqlDbType.TinyInt, SqlValue = seq };
 
                 db.Database.ExecuteSqlCommand("DELETE FROM itbi_vendedor WHERE guid=@guid AND seq=@seq", Parametros);
+                return null;
+            }
+        }
+
+        public Exception Excluir_Itbi_anexo(string guid, int seq) {
+            object[] Parametros = new object[2];
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@seq", SqlDbType = SqlDbType.TinyInt, SqlValue = seq };
+
+                db.Database.ExecuteSqlCommand("DELETE FROM itbi_anexo WHERE guid=@guid AND seq=@seq", Parametros);
                 return null;
             }
         }

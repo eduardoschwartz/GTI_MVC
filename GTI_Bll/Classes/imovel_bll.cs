@@ -579,6 +579,12 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Excluir_Itbi_anexo(string guid, int seq) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Excluir_Itbi_anexo(guid, seq);
+            return ex;
+        }
+
         public Exception Incluir_Itbi_vendedor(List<Itbi_vendedor> Reg) {
             Imovel_Data obj = new Imovel_Data(_connection);
             Exception ex = obj.Incluir_Itbi_vendedor(Reg);

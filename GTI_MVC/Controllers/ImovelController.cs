@@ -1019,6 +1019,9 @@ namespace GTI_Mvc.Controllers {
                 if (a == "rv") {//remover vendedor
                     Exception ex = imovelRepository.Excluir_Itbi_vendedor(guid, s);
                 }
+                if (a == "ra") {//remover anexo
+                    Exception ex = imovelRepository.Excluir_Itbi_anexo(guid, s);
+                }
                 model = Retorna_Itbi_Gravado(guid);
             }
             return View(model);
@@ -1356,6 +1359,7 @@ namespace GTI_Mvc.Controllers {
 
             if (model.Inscricao == null && Convert.ToInt32(model.Codigo) > 0) {
                 ViewBag.Error = "* Imóvel não cadastrado.";
+                return View(model);
             }
 
             _guid = Grava_Itbi(model);
@@ -1373,13 +1377,15 @@ namespace GTI_Mvc.Controllers {
             Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
             ImovelStruct imovel = imovelRepository.Dados_Imovel(Codigo);
 
-            if (imovel != null) {
+            if (imovel != null && imovel.Inscricao!=null )  {
                 model.Codigo = Codigo.ToString();
                 model.Inscricao = imovel.Inscricao;
                 model.Dados_Imovel = imovel;
                 List<ProprietarioStruct> ListaProp = imovelRepository.Lista_Proprietario(Codigo, true);
-                model.Dados_Imovel.Proprietario_Codigo = ListaProp[0].Codigo;
-                model.Dados_Imovel.Proprietario_Nome = ListaProp[0].Nome;
+                if (ListaProp.Count > 0) { 
+                    model.Dados_Imovel.Proprietario_Codigo = ListaProp[0].Codigo;
+                    model.Dados_Imovel.Proprietario_Nome = ListaProp[0].Nome;
+                } 
                 model.Matricula = imovel.NumMatricula==null?0: (Int64)imovel.NumMatricula;
                 if (model.Comprador == null)
                     model.Comprador = new Comprador_Itbi();
@@ -1493,6 +1499,7 @@ namespace GTI_Mvc.Controllers {
                 regMain.Comprador_logradouro_nome = model.Comprador.Logradouro_Nome;
                 regMain.Comprador_numero = model.Comprador.Numero;
                 regMain.Comprador_complemento = model.Comprador.Complemento;
+                regMain.Comprador_cep= Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep));
                 regMain.Comprador_bairro_codigo = model.Comprador.Bairro_Codigo;
                 regMain.Comprador_bairro_nome = model.Comprador.Bairro_Nome;
                 regMain.Comprador_cidade_codigo = model.Comprador.Cidade_Codigo;
