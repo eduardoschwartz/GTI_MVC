@@ -578,6 +578,9 @@
     <Content Include="Views\Imovel\Itbi_urbano.cshtml" />
     <Content Include="Views\Imovel\EditorTemplates\ListCompradorEditorViewModel.cshtml" />
     <Content Include="Views\Imovel\EditorTemplates\ListVendedorEditorViewModel.cshtml" />
+    <Content Include="Views\Imovel\itbi_ok.cshtml" />
+    <Content Include="Views\Imovel\itbi_query.cshtml" />
+    <Content Include="Views\Imovel\itbi_rural.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

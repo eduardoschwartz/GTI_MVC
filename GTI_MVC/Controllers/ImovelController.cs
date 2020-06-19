@@ -1267,6 +1267,7 @@ namespace GTI_Mvc.Controllers {
                         model.Itbi_Numero = _num.Numero;
                         model.Itbi_Ano = _num.Ano;
                     }
+                    return RedirectToAction("itbi_ok");
                 }
             }
 
@@ -1315,7 +1316,7 @@ namespace GTI_Mvc.Controllers {
                         ViewBag.Error = "* Digite uma descrição para o anexo (é necessário selecionar novamente o anexo).";
                         return View(model);
                     } else {
-                        if (file.ContentType != "application/pdf" && file.ContentType != "image/png" && file.ContentType != "image/jpeg") {
+                        if (file.ContentType != "application/pdf" ) {
                             ViewBag.Error = "* Este tipo de arquivo não pode ser enviado como anexo.";
                             return View(model);
                         } else {
@@ -1675,5 +1676,53 @@ namespace GTI_Mvc.Controllers {
             return Lista;
         }
 
+        [Route("Itbi_ok")]
+        [HttpGet]
+        public ActionResult Itbi_ok() {
+            if (Functions.pUserId == 0)
+                return RedirectToAction("Login", "Home");
+            return View();
+        }
+
+        [Route("Itbi_query")]
+        [HttpGet]
+        public ActionResult Itbi_query() {
+            if (Functions.pUserId == 0)
+                return RedirectToAction("Login", "Home");
+            return View();
+        }
+
+        [Route("Itbi_rural")]
+        [HttpGet]
+        public ActionResult Itbi_rural(string guid, string a, int s = 0) {
+            if (Functions.pUserId == 0)
+                return RedirectToAction("Login", "Home");
+            ItbiViewModel model = new ItbiViewModel();
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
+            ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
+            List<Itbi_financiamento> Lista_Financimento = imovelRepository.Lista_Itbi_Financiamento();
+            ViewBag.Lista_Financiamento = new SelectList(Lista_Financimento, "Codigo", "Descricao");
+            ViewBag.ListaErro = new List<string>();
+            if (guid == "" || guid == null) {
+                model.Codigo = "";
+                model.Cpf_Cnpj = "";
+                model.Comprador = new Comprador_Itbi();
+                model.Lista_Erro = new List<string>();
+            } else {
+
+                if (a == "rc") {//remover comprador
+                    Exception ex = imovelRepository.Excluir_Itbi_comprador(guid, s);
+                }
+                if (a == "rv") {//remover vendedor
+                    Exception ex = imovelRepository.Excluir_Itbi_vendedor(guid, s);
+                }
+                if (a == "ra") {//remover anexo
+                    Exception ex = imovelRepository.Excluir_Itbi_anexo(guid, s);
+                }
+                model = Retorna_Itbi_Gravado(guid);
+            }
+            return View(model);
+        }
     }
 }

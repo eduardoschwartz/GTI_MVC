@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "ITBI Urbano";
+    ViewBag.Title = "ITBI Rural";
 }
 <link href="~/Content/Baloon.css" rel="stylesheet" />
 <style>
@@ -27,6 +27,7 @@
     .show {
         display: block;
     }
+
     .ui-datepicker {
         margin-top: 30px;
     }
@@ -35,104 +36,79 @@
 
 <div class="center">
 
-    @using (Html.BeginForm("Itbi_urbano", "Imovel", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @using (Html.BeginForm("Itbi_rural", "Imovel", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
         <div class="container" style="width:700px">
             <div class="panel panel-danger">
-                <div class="panel-heading">Declaração de transações imobiliárias (Imóveis Urbanos) </div>
+                <div class="panel-heading">Declaração de transações imobiliárias (Imóveis Rural) </div>
                 <div class="panel-body">
+
                     <div style="padding-left:7px">
 
                         <table style="font-size:14px;width:640px">
                             <tr style="height:30px">
                                 <td style="width:154px">
-                                    <label style="font-weight:normal">Código do imóvel:</label>
+                                    <label style="font-weight:normal;padding-top:7px">Proprietário principal:</label>
                                 </td>
                                 <td>
-                                    @if (@Model.Inscricao == null) {
-                                        @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)" })
-                                        <label>&nbsp;&nbsp;</label>
-                                        <button id="btnCodigoOk" type="submit" class="btn btn-primary" name="action" value="btnCodigoOK">Consultar</button>
-
-                                    } else {
-                                        @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px;color:blue", @readonly = true })
-                                        <label>&nbsp;&nbsp;</label>
-                                        <button id="btnCodigoCancel" type="submit" class="btn btn-danger" onclick="return cancelarCodigo()" name="action" value="btnCodigoCancel" data-balloon-length="medium" aria-label="Ao cancelar, todos os dados inseridos neste lançamento de ITBI serão perdidos." data-balloon-pos="right">Cancelar</button>
-                                    }
+                                    <label style="font-weight:normal;color:blue;padding-top:7px">@Html.TextBoxFor(m => m.Dados_Imovel.Proprietario_Nome, new { @readonly = true, style = "width:470px;height:25px" })</label>
+                                </td>
+                            </tr>
+                            <tr style="height:30px">
+                                <td style="width:154px">
+                                    <label style="font-weight:normal">Inscrição cadastral:</label>
+                                </td>
+                                <td>
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Inscricao, new { @readonly = true, style = "width:200px;height:25px" })</label>
                                 </td>
                             </tr>
                         </table>
-                        @if (@Model.Inscricao == null) {
-                            <label style="font-weight:normal;font-size:14px;color:brown">(Encontra-se na capa do carnê de IPTU)&nbsp;&nbsp;</label><br />
-                        }
+
+                        <table style="font-size:14px;width:640px">
+                            <tr style="height:30px">
+                                <td style="width:154px">
+                                    <label style="font-weight:normal;">Natureza da transação:</label>
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(m => m.Natureza_Codigo, ViewBag.Lista_Natureza as SelectList, "(Selecione...)", new { @id = "NaturezaDropDown", style = "width:470px;height:25px", rows = 10 })
+                                </td>
+                            </tr>
+                        </table>
+
+                        <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Endereço do Imóvel:</label><br />
+
+                        <table style="font-size:14px;width:640px">
+                            <tr style="height:30px">
+                                <td style="width:62px">
+                                    <label style="font-weight:normal">Cep:</label>
+                                </td>
+                                <td>
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Cep, new { style = "width:80px;height:25px", @readonly = true })</label>
+                                    <label style="font-weight:normal;padding-left:10px">Logradouro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.NomeLogradouro, new { style = "width:385px;height:25px", @readonly = true })</label>
+                                </td>
+                            </tr>
+                            <tr style="height:30px">
+                                <td>
+                                    <label style="font-weight:normal">Número:</label>
+                                </td>
+                                <td>
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Numero, new { style = "width:80px;height:25px", @readonly = true })</label>
+                                    <label style="font-weight:normal;padding-left:10px">Complemento:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Complemento, new { style = "width:369px;height:25px", @readonly = true })</label>
+                                </td>
+                            </tr>
+                            <tr style="height:30px">
+                                <td>
+                                    <label style="font-weight:normal">Quadra:</label>
+                                </td>
+                                <td>
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.QuadraOriginal, new { style = "width:110px;height:25px", @readonly = true })</label>
+                                    <label style="font-weight:normal;padding-left:10px">Lote:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.LoteOriginal, new { style = "width:110px;height:25px", @readonly = true })</label>
+                                    <label style="font-weight:normal;padding-left:10px">Bairro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.NomeBairro, new { style = "width:226px;height:25px", @readonly = true })</label>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                    @if (@Model.Inscricao != null) {
-                        <div style="padding-left:7px">
 
-                            <table style="font-size:14px;width:640px">
-                                <tr style="height:30px">
-                                    <td style="width:154px">
-                                        <label style="font-weight:normal;padding-top:7px">Proprietário principal:</label>
-                                    </td>
-                                    <td>
-                                        <label style="font-weight:normal;color:blue;padding-top:7px">@Html.TextBoxFor(m => m.Dados_Imovel.Proprietario_Nome, new { @readonly = true, style = "width:470px;height:25px" })</label>
-                                    </td>
-                                </tr>
-                                <tr style="height:30px">
-                                    <td style="width:154px">
-                                        <label style="font-weight:normal">Inscrição cadastral:</label>
-                                    </td>
-                                    <td>
-                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Inscricao, new { @readonly = true, style = "width:200px;height:25px" })</label>
-                                    </td>
-                                </tr>
-                            </table>
-
-                            <table style="font-size:14px;width:640px">
-                                <tr style="height:30px">
-                                    <td style="width:154px">
-                                        <label style="font-weight:normal;">Natureza da transação:</label>
-                                    </td>
-                                    <td>
-                                        @Html.DropDownListFor(m => m.Natureza_Codigo, ViewBag.Lista_Natureza as SelectList, "(Selecione...)", new { @id = "NaturezaDropDown", style = "width:470px;height:25px", rows = 10 })
-                                    </td>
-                                </tr>
-                            </table>
-
-                            <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Endereço do Imóvel:</label><br />
-
-                            <table style="font-size:14px;width:640px">
-                                <tr style="height:30px">
-                                    <td style="width:62px">
-                                        <label style="font-weight:normal">Cep:</label>
-                                    </td>
-                                    <td>
-                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Cep, new { style = "width:80px;height:25px", @readonly = true })</label>
-                                        <label style="font-weight:normal;padding-left:10px">Logradouro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.NomeLogradouro, new { style = "width:385px;height:25px", @readonly = true })</label>
-                                    </td>
-                                </tr>
-                                <tr style="height:30px">
-                                    <td>
-                                        <label style="font-weight:normal">Número:</label>
-                                    </td>
-                                    <td>
-                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Numero, new { style = "width:80px;height:25px", @readonly = true })</label>
-                                        <label style="font-weight:normal;padding-left:10px">Complemento:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Complemento, new { style = "width:369px;height:25px", @readonly = true })</label>
-                                    </td>
-                                </tr>
-                                <tr style="height:30px">
-                                    <td>
-                                        <label style="font-weight:normal">Quadra:</label>
-                                    </td>
-                                    <td>
-                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.QuadraOriginal, new { style = "width:110px;height:25px", @readonly = true })</label>
-                                        <label style="font-weight:normal;padding-left:10px">Lote:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.LoteOriginal, new { style = "width:110px;height:25px", @readonly = true })</label>
-                                        <label style="font-weight:normal;padding-left:10px">Bairro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.NomeBairro, new { style = "width:226px;height:25px", @readonly = true })</label>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    }
                 </div>
 
                 @if (@Model.Inscricao != null) {
@@ -424,7 +400,7 @@
                                 </td>
                                 <td style="width:157px">
                                     @if (Model.Data_Transacao != null && Model.Data_Transacao != DateTime.MinValue) {
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Data_Transacao, new {@id="dataTransacao", @class = "maskData", style = "width:90px;height:25px;text-align:center", @Value = Convert.ToDateTime(@Model.Data_Transacao).ToString("dd/MM/yyyy") })</label>
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Data_Transacao, new { @id = "dataTransacao", @class = "maskData", style = "width:90px;height:25px;text-align:center", @Value = Convert.ToDateTime(@Model.Data_Transacao).ToString("dd/MM/yyyy") })</label>
                                     } else {
                                         <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Data_Transacao, new { @id = "dataTransacao", @class = "maskData", style = "width:90px;height:25px;text-align:center", @Value = "" })</label>
                                     }
@@ -526,29 +502,29 @@
                             <div style="display:none">@Html.EditorFor(model => model.Lista_Vendedor)</div>
                             <table id="tblVendedor" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px">
                                 @foreach (var item in Model.Lista_Anexo) {
-                                <tr>
-                                    <td style="width:20px;font-weight:normal;color:blue">
-                                        @Html.DisplayFor(modelItem => item.Seq)
-                                        @Html.HiddenFor(modelItem => item.Seq)
-                                    </td>
-                                    <td style="width:350px;font-weight:normal;color:blue">
-                                        @Html.DisplayFor(modelItem => item.Nome)
-                                        @Html.HiddenFor(modelItem => item.Nome)
-                                    </td>
-                                    <td style="width:230px;font-weight:normal;color:blue">
-                                        @Html.DisplayFor(modelItem => item.Arquivo)
-                                        @Html.HiddenFor(modelItem => item.Arquivo)
-                                    </td>
-                                    <td>
-                                        <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "ra", @s = item.Seq, @guid = Model.Guid })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td style="width:20px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Seq)
+                                            @Html.HiddenFor(modelItem => item.Seq)
+                                        </td>
+                                        <td style="width:350px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Nome)
+                                            @Html.HiddenFor(modelItem => item.Nome)
+                                        </td>
+                                        <td style="width:230px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Arquivo)
+                                            @Html.HiddenFor(modelItem => item.Arquivo)
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "ra", @s = item.Seq, @guid = Model.Guid })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                        </td>
+                                    </tr>
                                 }
                             </table>
                         </div>
                         <br />
 
-                        
+
                         <input style="width:610px" id="imageUpload" type="file" name="file" accept="application/pdf" /><br />
                         <table>
                             <tr>
@@ -694,7 +670,7 @@
         </div>
     </div>
 
-   
+
 </div>
 
 
@@ -833,7 +809,7 @@
                     }
                 }
             });
-            
+
             var model = @Html.Raw(Json.Encode(Model.Lista_Erro));
             if (model.length >0) {
                 $('#ErrorModal').modal('show');
@@ -868,7 +844,7 @@
                     var ext = f.name.replace(/^.*?\.([a-zA-Z0-9]+)$/, "$1");
                     if (ext == extArray[0] || ext == extArray[1]) {
                         alert("O sistema não permite anexar arquivos com extensão(.exe,.dll). Tente anexar outroa rquivo.");
-                        //reset file upload control                            
+                        //reset file upload control
                         $("#" + this.id).replaceWith($("#" + this.id).clone(true));
                         this.value = null;
                         return false;
@@ -878,7 +854,7 @@
                         //show an alert to the user
                         alert("Tamanho máximo excedido. (Max. 4 MB)");
                         this.value = null;
-                        //reset file upload control                            
+                        //reset file upload control
                         $("#" + this.id).replaceWith($("#" + this.id).clone(true));
                         return false;
                     }
