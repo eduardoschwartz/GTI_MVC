@@ -255,7 +255,7 @@
                                         @Html.HiddenFor(modelItem => item.Cpf_Cnpj)
                                     </td>
                                     <td>
-                                        <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "rc", @s = item.Seq, @guid = Model.Guid })" title="Remover comprador"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                        <a href="@Url.Action("Itbi_rural", "Imovel", new { @a = "rc", @s = item.Seq, @guid = Model.Guid })" title="Remover comprador"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                     </td>
                                 </tr>
                             }
@@ -322,7 +322,7 @@
                                         @Html.HiddenFor(modelItem => item.Cpf_Cnpj)
                                     </td>
                                     <td>
-                                        <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "rv", @s = item.Seq, @guid = Model.Guid })" title="Remover vendedor"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                        <a href="@Url.Action("Itbi_rural", "Imovel", new { @a = "rv", @s = item.Seq, @guid = Model.Guid })" title="Remover vendedor"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                     </td>
                                 </tr>
                             }
@@ -480,7 +480,7 @@
                                         @Html.HiddenFor(modelItem => item.Arquivo)
                                     </td>
                                     <td>
-                                        <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "ra", @s = item.Seq, @guid = Model.Guid })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                        <a href="@Url.Action("Itbi_rural", "Imovel", new { @a = "ra", @s = item.Seq, @guid = Model.Guid })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                     </td>
                                 </tr>
                             }
@@ -642,9 +642,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#MainForm").submit(function () {
-                return ValidateForm();
-            });
+           
 
             $(".maskValor").inputmask('Regex', { regex: "^[0-9]{1,7}(\\,\\d{1,2})?$" });
             $(".maskPerc").inputmask('Regex', { regex: "^[0-9]{1,3}(\\d{1,2})?$" });
@@ -663,17 +661,6 @@
             //});
         });
 
-        //$(document).on("click", function (e) {
-        //    var elem = $(e.target);
-        //    if (!elem.hasClass("hasDatepicker") &&
-        //        !elem.hasClass("ui-datepicker") &&
-        //        !elem.hasClass("ui-icon") &&
-        //        !elem.hasClass("ui-datepicker-next") &&
-        //        !elem.hasClass("ui-datepicker-prev") &&
-        //        !$(elem).parents(".ui-datepicker").length) {
-        //        $('.hasDatepicker').datepicker('hide');
-        //    }
-        //});
 
         function cancelarCodigo() {
             if (confirm('Deseja cancelar este ITBI?')) {
@@ -780,16 +767,6 @@
                 $('#ErrorModal').modal('show');
             }
         });
-
-        function ValidateForm() {
-            var _cod = document.getElementById('codigo').value;
-
-            if (_cod == null || _cod == "" || parseInt(_cod) == 0) {
-                document.getElementById('errorLabel').innerHTML = "Digite o código do imóvel";
-                return false;
-            }
-            return true;
-        }
 
         function radioCheck() {
             var index = $("input[id=totalChk]:checked").val();
