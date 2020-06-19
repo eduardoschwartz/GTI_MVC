@@ -1453,6 +1453,69 @@ namespace GTI_Mvc.Controllers {
             return model;
         }
 
+        public ItbiViewModel ItbiRuralLoad(ItbiViewModel model, bool _bcpf, bool _bcnpj) {
+            Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
+
+                if (model.Comprador == null)
+                    model.Comprador = new Comprador_Itbi();
+
+                string _cpfCnpj = model.Cpf_Cnpj;
+
+                int _codcidadao = 0;
+                if (_bcpf) {
+                    _codcidadao = cidadaoRepository.Existe_Cidadao_Cpf(_cpfCnpj.PadLeft(11, '0'));
+                } else {
+                    if (_bcnpj) {
+                        _codcidadao = cidadaoRepository.Existe_Cidadao_Cnpj(_cpfCnpj.PadLeft(14, '0'));
+                    }
+                }
+                if (_codcidadao > 0) {
+                    CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(_codcidadao);
+                    Comprador_Itbi _comprador = new Comprador_Itbi() {
+                        Codigo = _cidadao.Codigo,
+                        Nome = _cidadao.Nome
+                    };
+                    if (_bcpf)
+                        _comprador.Cpf = Functions.FormatarCpfCnpj(model.Cpf_Cnpj);
+                    if (_bcnpj)
+                        _comprador.Cnpj = Functions.FormatarCpfCnpj(model.Cpf_Cnpj);
+
+                    if (_cidadao.EtiquetaR == "S") {
+                        _comprador.Logradouro_Codigo = (int)_cidadao.CodigoLogradouroR;
+                        _comprador.Logradouro_Nome = _cidadao.EnderecoR;
+                        _comprador.Numero = (int)_cidadao.NumeroR;
+                        _comprador.Complemento = _cidadao.ComplementoR;
+                        _comprador.Bairro_Codigo = (int)_cidadao.CodigoBairroR;
+                        _comprador.Bairro_Nome = _cidadao.NomeBairroR;
+                        _comprador.Cidade_Codigo = (int)_cidadao.CodigoCidadeR;
+                        _comprador.Cidade_Nome = _cidadao.NomeCidadeR;
+                        _comprador.UF = _cidadao.UfR;
+                        _comprador.Cep = ((int)_cidadao.CepR).ToString("00000-000");
+                        _comprador.Email = _cidadao.EmailR;
+                        _comprador.Telefone = _cidadao.TelefoneR;
+                    } else {
+                        _comprador.Logradouro_Codigo = (int)_cidadao.CodigoLogradouroC;
+                        _comprador.Logradouro_Nome = _cidadao.EnderecoC;
+                        _comprador.Numero = (int)_cidadao.NumeroC;
+                        _comprador.Complemento = _cidadao.ComplementoC;
+                        _comprador.Bairro_Codigo = (int)_cidadao.CodigoBairroC;
+                        _comprador.Bairro_Nome = _cidadao.NomeBairroC;
+                        _comprador.Cidade_Codigo = (int)_cidadao.CodigoCidadeC;
+                        _comprador.Cidade_Nome = _cidadao.NomeCidadeC;
+                        _comprador.UF = _cidadao.UfC;
+                        _comprador.Cep = ((int)_cidadao.CepC).ToString("00000-000");
+                        _comprador.Email = _cidadao.EmailC;
+                        _comprador.Telefone = _cidadao.TelefoneC;
+                    }
+
+                    model.Comprador = _comprador;
+                } else {
+                    if (model.Comprador == null)
+                        model.Comprador = new Comprador_Itbi();
+                }
+            return model;
+        }
+
         private string Grava_Itbi(ItbiViewModel model) {
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             string _guid;
@@ -1466,9 +1529,9 @@ namespace GTI_Mvc.Controllers {
                     Imovel_codigo = Convert.ToInt32(model.Codigo==null?"0":model.Codigo),
                     Guid=_guid,
                     Data_cadastro=DateTime.Now,
-                    Inscricao=model.Dados_Imovel.Inscricao??"",
+                    Inscricao=model.Dados_Imovel.Inscricao,
                     Proprietario_Codigo= model.Dados_Imovel.Proprietario_Codigo==null?0:(int)model.Dados_Imovel.Proprietario_Codigo,
-                    Proprietario_Nome=model.Dados_Imovel.Proprietario_Nome??""
+                    Proprietario_Nome=model.Dados_Imovel.Proprietario_Nome
                 };
                 ex = imovelRepository.Incluir_Itbi_main(regMain);
             } else {
@@ -1877,8 +1940,10 @@ namespace GTI_Mvc.Controllers {
             }
 
             if (action == "btnCepCompradorOK") {
-                if (model.Comprador.Cep == null || model.Comprador.Cep.Length < 9) {
+                if (model.Comprador.Cep == null || model.Comprador.Cep.Length <9) {
                     ViewBag.Error = "* Cep do comprador inválido.";
+                    if (model.Comprador != null)
+                        model.Comprador.Cep = Convert.ToInt32(model.Comprador.Cep).ToString("00000-000");
                     return View(model);
                 }
 
@@ -2047,7 +2112,7 @@ namespace GTI_Mvc.Controllers {
 
 //            model.Vendedor_Cpf_cnpj_tmp = "";
             Int64 _matricula = model.Matricula;
-//            model = ItbiUrbanoLoad(model, _bcpf, _bcnpj);
+            model = ItbiRuralLoad(model, _bcpf, _bcnpj);
             model.Matricula = _matricula;
 
             //if (model.Inscricao == null && Convert.ToInt32(model.Codigo) > 0) {
