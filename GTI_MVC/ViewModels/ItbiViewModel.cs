@@ -34,6 +34,9 @@ namespace GTI_Mvc.ViewModels {
         public string[] Lista_Totalidade = new[] { "Sim", "Não" };
         public decimal Totalidade_Perc { get; set; }
         public Int64 Matricula { get; set; }
+        public string Inscricao_Incra { get; set; }
+        public string Receita_Federal { get; set; }
+        public string Descricao_Imovel { get; set; }
         public List<string> Lista_Erro { get; set; }
         public List<ListAnexoEditorViewModel> Lista_Anexo { get; set; }
         public string Anexo_Nome_tmp { get; set; }

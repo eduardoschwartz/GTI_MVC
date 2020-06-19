@@ -1381,9 +1381,15 @@ namespace GTI_Dal.Classes {
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@data_cadastro", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_cadastro };
                 Parametros[2] = new SqlParameter { ParameterName = "@imovel_codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Imovel_codigo };
-                Parametros[3] = new SqlParameter { ParameterName = "@inscricao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Inscricao };
+                if(Reg.Inscricao!=null)
+                    Parametros[3] = new SqlParameter { ParameterName = "@inscricao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Inscricao };
+                else
+                    Parametros[3] = new SqlParameter { ParameterName = "@inscricao",  SqlValue = DBNull.Value };
                 Parametros[4] = new SqlParameter { ParameterName = "@proprietario_codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Proprietario_Codigo };
-                Parametros[5] = new SqlParameter { ParameterName = "@proprietario_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Proprietario_Nome };
+                if(Reg.Proprietario_Nome!=null)
+                    Parametros[5] = new SqlParameter { ParameterName = "@proprietario_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Proprietario_Nome };
+                else
+                    Parametros[5] = new SqlParameter { ParameterName = "@proprietario_nome", SqlValue = DBNull.Value};
 
                 db.Database.ExecuteSqlCommand("INSERT INTO itbi_main(guid,data_cadastro,imovel_codigo,inscricao,proprietario_codigo,proprietario_nome) " +
                                               " VALUES(@guid,@data_cadastro,@imovel_codigo,@inscricao,@proprietario_codigo,@proprietario_nome)", Parametros);
@@ -1427,6 +1433,9 @@ namespace GTI_Dal.Classes {
                 i.Totalidade = Reg.Totalidade;
                 i.Totalidade_Perc = Reg.Totalidade_Perc;
                 i.Natureza_Codigo = Reg.Natureza_Codigo;
+                i.Inscricao_Incra = Reg.Inscricao_Incra;
+                i.Receita_Federal = Reg.Receita_Federal;
+                i.Descricao_Imovel = Reg.Descricao_Imovel;
                 i.Imovel_endereco = Reg.Imovel_endereco;
                 i.Imovel_numero = Reg.Imovel_numero;
                 i.Imovel_complemento = Reg.Imovel_complemento;

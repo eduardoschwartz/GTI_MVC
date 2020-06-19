@@ -44,6 +44,9 @@ namespace GTI_Models.Models {
         public Int64 Matricula { get; set; }
         public int Itbi_Numero  { get; set; }
         public short Itbi_Ano { get; set; }
+        public string Inscricao_Incra { get; set; }
+        public string Receita_Federal { get; set; }
+        public string Descricao_Imovel { get; set; }
     }
 
     public class Itbi_Numero {
