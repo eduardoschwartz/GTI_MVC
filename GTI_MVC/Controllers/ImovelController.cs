@@ -1751,7 +1751,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_query")]
         [HttpGet]
-        public ActionResult Itbi_query() {
+        public ActionResult Itbi_query(int p) {
             if (Functions.pUserId == 0)
                 return RedirectToAction("Login", "Home");
             return View();

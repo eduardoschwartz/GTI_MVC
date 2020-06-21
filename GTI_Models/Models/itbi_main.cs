@@ -47,12 +47,14 @@ namespace GTI_Models.Models {
         public string Inscricao_Incra { get; set; }
         public string Receita_Federal { get; set; }
         public string Descricao_Imovel { get; set; }
+        public int Userid { get; set; }
     }
 
     public class Itbi_Numero {
         public int Numero { get; set; }
         public short Ano { get; set; }
     }
+
 
 
 }
