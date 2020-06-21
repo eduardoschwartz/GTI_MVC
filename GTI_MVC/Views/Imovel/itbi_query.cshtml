@@ -1,4 +1,5 @@
-﻿
+﻿@model List<GTI_Mvc.ViewModels.ItbiViewModel>
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Consulta de ITBI's";
@@ -7,9 +8,9 @@
 <style>
 
     .center {
-        text-align: center;
+       // text-align: center;
         margin: auto;
-        width: 660px;
+        width: 700px;
         border: 1px solid rgba(0,0,0,0.24);
         padding: 20px;
         box-shadow: 0 .1em 0.5em #000;
@@ -31,8 +32,40 @@
     <br />
 
     <br />
-    @using (Html.BeginForm("Login_welcome", "Home", FormMethod.Post, new { @id = "MainForm" })) {
-
+    @using (Html.BeginForm("Itbi_query", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+        <table id="tblMain" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+            <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal; white-space: nowrap;
+">
+                <tr style="height:14px;">
+                    <td style="display:none">Guid</td>
+                    <td style="width:100px;font-weight:normal">Itbi nº</td>
+                    <td style="width:90px;font-weight:normal">Data</td>
+                    <td style="width:80px;font-weight:normal">Tipo Itbi</td>
+                    <td style="width:300px;font-weight:normal">Nome do Comprador</td>
+                    <td style="width:110px;font-weight:normal">Situação</td>
+                    <td style="width:140px">
+                    </td>
+                </tr>
+            </thead>
+            <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
+                @foreach (var item in Model) {
+                    <tr style="height:14px;">
+                        <td style="display:none">@Html.DisplayFor(modelItem => item.Guid)</td>
+                        <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.Itbi_NumeroAno)</td>
+                        <td style="width:90px;font-weight:normal"> @DateTime.Parse(Html.DisplayFor(modelItem => item.Data_cadastro).ToString()).ToString("dd/MM/yyyy")</td>
+                        <td style="width:80px;font-weight:normal">@Html.DisplayFor(modelItem => item.Tipo_Imovel)</td>
+                        <td style="width:300px;font-weight:normal">@Html.DisplayFor(modelItem => item.Comprador_Nome_tmp)</td>
+                        <td style="width:110px;font-weight:normal">@Html.DisplayFor(modelItem => item.Status_Itbi)</td>
+                        <td style="width:140px">
+                            <a href="@Url.Action("Receive","Protocolo")" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                            <a href="@Url.Action("Send","Protocolo")" title="Imprimir guia para pagamento"> <img src="@Url.Content("~/images/print.png")"></a>
+                            <a href="@Url.Action("AddPlace","Protocolo" )" title="Acompanhar análise"> <img src="@Url.Content("~/images/observacao.png")"></a>
+                            <a href="@Url.Action("AddPlace","Protocolo" )" title="Alterar o ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
         <br />
         <br />
         <div class="form-group row">
@@ -40,7 +73,6 @@
         </div>
     }
 
-    @Html.ActionLink("Ir para tela de consulta de ITBI", "Login_gti", "Home", null, new { @class = "actionlink" })<br />
     @Html.ActionLink("Preencher outro ITBI", "Itbi_Menu", "Imovel", null, new { @class = "actionlink" })<br />
     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 </div>

@@ -473,6 +473,7 @@
     <Content Include="Images\logobb.png" />
     <Content Include="Images\logopratico.jpg" />
     <Content Include="Images\observacao.png" />
+    <Content Include="Images\print.png" />
     <Content Include="Images\receber.png" />
     <Content Include="Images\remover_local.png" />
     <Content Include="Images\Separator.png" />

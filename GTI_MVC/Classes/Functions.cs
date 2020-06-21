@@ -480,6 +480,15 @@ namespace GTI_Mvc {
             return ds;
         }
 
+        public static string TruncateTo(string word,int lenght) {
+            string new_Word = word;
+            if (word.Length > lenght) {
+                new_Word = word.Substring(0, lenght - 3) + "...";
+            }
+
+            return new_Word;
+        }
+
     }
 
 }

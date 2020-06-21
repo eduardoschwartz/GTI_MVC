@@ -1718,6 +1718,30 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<Itbi_Lista> Retorna_Itbi_Query(int user) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                List<Itbi_Lista> Lista = new List<Itbi_Lista>();
+
+                List<Itbi_main> Sql = (from t in db.Itbi_Main 
+                           orderby new { t.Itbi_Ano, t.Itbi_Numero } where t.Userid == user select t).ToList();
+
+                foreach (Itbi_main reg in Sql) {
+                    Itbi_Lista item = new Itbi_Lista() {
+                        Ano=reg.Itbi_Ano,
+                        Numero=reg.Itbi_Numero,
+                        Numero_Ano=reg.Itbi_Numero.ToString("000000") + "/" + (reg.Itbi_Ano).ToString(),
+                        Guid=reg.Guid,
+                        Data=reg.Data_cadastro,
+                        Tipo=reg.Imovel_codigo>0?"Urbano":"Rural",
+                        Nome_Comprador=reg.Comprador_nome,
+                        Situacao="Em análise"
+                    };
+                    Lista.Add(item);
+                }
+
+                return Lista;
+            }
+        }
 
     }//end class
 }

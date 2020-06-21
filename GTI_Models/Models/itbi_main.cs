@@ -55,7 +55,16 @@ namespace GTI_Models.Models {
         public short Ano { get; set; }
     }
 
-
+    public class Itbi_Lista {
+        public string Guid { get; set; }
+        public short Ano { get; set; }
+        public int Numero { get; set; }
+        public string Numero_Ano { get; set; }
+        public DateTime Data { get; set; }
+        public string Nome_Comprador { get; set; }
+        public string Tipo { get; set; }
+        public string Situacao { get; set; }
+    }
 
 }
 

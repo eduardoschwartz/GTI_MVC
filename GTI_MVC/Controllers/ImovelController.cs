@@ -1751,10 +1751,25 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_query")]
         [HttpGet]
-        public ActionResult Itbi_query(int p) {
+        public ActionResult Itbi_query() {
             if (Functions.pUserId == 0)
                 return RedirectToAction("Login", "Home");
-            return View();
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Query(Functions.pUserId);
+            List<ItbiViewModel> model = new List<ItbiViewModel>();
+            foreach (Itbi_Lista reg in Lista) {
+                ItbiViewModel item = new ItbiViewModel() {
+                    Guid=reg.Guid,
+                    Data_cadastro=Convert.ToDateTime( reg.Data.ToString("dd/MM/yyyy")),
+                    Itbi_NumeroAno=reg.Numero_Ano,
+                    Tipo_Imovel=reg.Tipo,
+                    Comprador_Nome_tmp=Functions.TruncateTo( reg.Nome_Comprador,23),
+                    Status_Itbi=reg.Situacao
+                };
+                model.Add(item);
+            }
+
+            return View(model);
         }
 
         [Route("Itbi_rural")]

@@ -622,5 +622,11 @@ namespace GTI_Bll.Classes {
             return obj.Alterar_Itbi_Main(Guid);
         }
 
+        public List<Itbi_Lista> Retorna_Itbi_Query(int user) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Itbi_Query(user);
+        }
+
+
     }//end class
 }
