@@ -376,6 +376,12 @@
       <DependentUpon>Empresa_Detalhe.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Itbi_Rural.cs">
+      <DependentUpon>Itbi_Rural.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Reports\Itbi_Main.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -705,6 +711,10 @@
     <EmbeddedResource Include="Reports\Empresa_Detalhe.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Empresa_Detalhe.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Itbi_Rural.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Itbi_Rural.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Itbi_Main.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

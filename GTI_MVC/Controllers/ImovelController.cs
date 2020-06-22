@@ -999,7 +999,9 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Itbi_urbano(string guid,string a,int s=0) {
             if (Functions.pUserId == 0)
                 return RedirectToAction("Login", "Home");
-            ItbiViewModel model = new ItbiViewModel();
+            ItbiViewModel model = new ItbiViewModel() {
+                UserId=Functions.pUserId
+            };
             if (guid == "" || guid==null) {
                 model.Codigo = "";
                 model.Cpf_Cnpj = "";
@@ -1539,6 +1541,7 @@ namespace GTI_Mvc.Controllers {
                 Itbi_main regMain = imovelRepository.Retorna_Itbi_Main(_guid);
                 if(Functions.IsDate(model.Data_Transacao))
                     regMain.Data_Transacao =   model.Data_Transacao;
+                regMain.Userid = Functions.pUserId;
                 regMain.Tipo_Instrumento = model.Tipo_Instrumento;
                 regMain.Valor_Venal = model.Valor_Venal;
                 regMain.Valor_Avaliacao = model.Valor_Avaliacao;
@@ -1777,7 +1780,9 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Itbi_rural(string guid, string a, int s = 0) {
             if (Functions.pUserId == 0)
                 return RedirectToAction("Login", "Home");
-            ItbiViewModel model = new ItbiViewModel();
+            ItbiViewModel model = new ItbiViewModel() {
+                UserId = Functions.pUserId
+            };
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
             ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
@@ -2056,7 +2061,7 @@ namespace GTI_Mvc.Controllers {
                         model.Itbi_Ano = _num.Ano;
                     }
                     ReportDocument rd = new ReportDocument();
-                    rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Itbi_Main.rpt"));
+                    rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Itbi_Rural.rpt"));
                     TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
                     TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
                     ConnectionInfo crConnectionInfo = new ConnectionInfo();

@@ -1377,7 +1377,7 @@ namespace GTI_Dal.Classes {
 
         public Exception Incluir_Itbi_main(Itbi_main Reg) {
             using (var db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[6];
+                object[] Parametros = new object[7];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@data_cadastro", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_cadastro };
                 Parametros[2] = new SqlParameter { ParameterName = "@imovel_codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Imovel_codigo };
@@ -1390,9 +1390,9 @@ namespace GTI_Dal.Classes {
                     Parametros[5] = new SqlParameter { ParameterName = "@proprietario_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Proprietario_Nome };
                 else
                     Parametros[5] = new SqlParameter { ParameterName = "@proprietario_nome", SqlValue = DBNull.Value};
-
-                db.Database.ExecuteSqlCommand("INSERT INTO itbi_main(guid,data_cadastro,imovel_codigo,inscricao,proprietario_codigo,proprietario_nome) " +
-                                              " VALUES(@guid,@data_cadastro,@imovel_codigo,@inscricao,@proprietario_codigo,@proprietario_nome)", Parametros);
+                Parametros[6] = new SqlParameter { ParameterName = "@userid", SqlDbType = SqlDbType.Int, SqlValue = Reg.Userid };
+                db.Database.ExecuteSqlCommand("INSERT INTO itbi_main(guid,data_cadastro,imovel_codigo,inscricao,proprietario_codigo,proprietario_nome,userid) " +
+                                              " VALUES(@guid,@data_cadastro,@imovel_codigo,@inscricao,@proprietario_codigo,@proprietario_nome,@userid)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -1420,6 +1420,7 @@ namespace GTI_Dal.Classes {
         public Exception Alterar_Itbi_Main(Itbi_main Reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 Itbi_main i = db.Itbi_Main.First(g => g.Guid == Reg.Guid);
+                i.Userid = Reg.Userid;
                 i.Imovel_codigo = Reg.Imovel_codigo;
                 i.Inscricao = Reg.Inscricao;
                 i.Proprietario_Codigo = Reg.Proprietario_Codigo;

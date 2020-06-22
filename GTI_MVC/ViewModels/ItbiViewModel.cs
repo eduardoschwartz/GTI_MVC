@@ -44,6 +44,7 @@ namespace GTI_Mvc.ViewModels {
         public List<ListAnexoEditorViewModel> Lista_Anexo { get; set; }
         public string Anexo_Nome_tmp { get; set; }
         public string Anexo_Desc_tmp { get; set; }
+        public int UserId { get; set; }
 
         public ItbiViewModel() {
             Lista_Comprador = new List<ListCompradorEditorViewModel>();
