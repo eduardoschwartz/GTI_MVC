@@ -474,6 +474,7 @@
     <Content Include="Images\cancelar.gif" />
     <Content Include="Images\Consultar.gif" />
     <Content Include="Images\decreto.png" />
+    <Content Include="Images\downarrow.gif" />
     <Content Include="Images\enviar.png" />
     <Content Include="Images\inserir_local.png" />
     <Content Include="Images\logobb.png" />
@@ -588,6 +589,8 @@
     <Content Include="Views\Imovel\itbi_ok.cshtml" />
     <Content Include="Views\Imovel\itbi_query.cshtml" />
     <Content Include="Views\Imovel\itbi_rural.cshtml" />
+    <Content Include="Views\Imovel\itbi_rural_q.cshtml" />
+    <Content Include="Views\Imovel\Itbi_urbano_q.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

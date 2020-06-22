@@ -38,7 +38,7 @@ namespace GTI_Mvc.Controllers {
             int _codigo = 0;
             short _ret =0;
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
-            int _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Debito_Doc);
+            int _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Debito);
             bool _existeCod = false;
             string _tipoCertidao = "",_nao="", _sufixo = "XX",_reportName="", _numProcesso = "9222-3/2012", _dataProcesso = "18/04/2012",_cpf,_cnpj; 
             TipoCadastro _tipoCadastro=new TipoCadastro();
@@ -72,11 +72,6 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.Result = "Inscrição não cadastrada.";
                 return View(certidaoViewModel);
             }
-
-            //if (_codigo!=3) {
-            //    ViewBag.Result = "Inscrição não cadastrada.";
-            //    return View(certidaoViewModel);
-            //}
 
 
             //***Verifica débito
@@ -115,7 +110,7 @@ namespace GTI_Mvc.Controllers {
                 }
             }
                       
-            int _numero_certidao =tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Debito_Doc);
+            int _numero_certidao =tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Debito);
             int _ano_certidao = DateTime.Now.Year;
             List<Certidao> certidao = new List<Certidao>();
             Certidao reg = new Certidao();

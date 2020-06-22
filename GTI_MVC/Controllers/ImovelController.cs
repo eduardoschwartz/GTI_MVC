@@ -1619,19 +1619,29 @@ namespace GTI_Mvc.Controllers {
             Itbi_main regMain = imovelRepository.Retorna_Itbi_Main(guid);
             ItbiViewModel itbi = new ItbiViewModel {
                 Guid = regMain.Guid,
-                Data_cadastro=regMain.Data_cadastro,
+                Data_cadastro = regMain.Data_cadastro,
                 Codigo = regMain.Imovel_codigo.ToString(),
                 Inscricao = regMain.Inscricao,
-                Proprietario_codigo=regMain.Proprietario_Codigo,
-                Proprietario_nome=regMain.Proprietario_Nome,
-                Natureza_Codigo=regMain.Natureza_Codigo,
-                Valor_Transacao=regMain.Valor_Transacao,
+                Proprietario_codigo = regMain.Proprietario_Codigo,
+                Proprietario_nome = regMain.Proprietario_Nome,
+                Natureza_Codigo = regMain.Natureza_Codigo,
+                Valor_Transacao = regMain.Valor_Transacao,
                 Data_Transacao = Convert.ToDateTime(regMain.Data_Transacao),
-                Tipo_Financiamento=regMain.Tipo_Financiamento,
-                Valor_Avaliacao=regMain.Valor_Avaliacao,
-                Valor_Venal=regMain.Valor_Venal,
-                Tipo_Instrumento=regMain.Tipo_Instrumento
+                Tipo_Financiamento = regMain.Tipo_Financiamento,
+                Valor_Avaliacao = regMain.Valor_Avaliacao,
+                Valor_Venal = regMain.Valor_Venal,
+                Tipo_Instrumento = regMain.Tipo_Instrumento,
+                Matricula = regMain.Matricula,
+                Totalidade = regMain.Totalidade,
+                Totalidade_Perc = regMain.Totalidade_Perc,
+                Inscricao_Incra = regMain.Inscricao_Incra,
+                Receita_Federal = regMain.Receita_Federal,
+                Itbi_Ano = regMain.Itbi_Ano,
+                Itbi_Numero = regMain.Itbi_Numero,
+                Itbi_NumeroAno = regMain.Itbi_Numero.ToString("000000/") + regMain.Itbi_Ano.ToString()
             };
+            itbi.Natureza_Nome = imovelRepository.Retorna_Itbi_Natureza_nome(regMain.Natureza_Codigo);
+            itbi.Tipo_Financiamento_Nome = imovelRepository.Retorna_Itbi_Financimento_nome(regMain.Tipo_Financiamento);
             if (itbi.Dados_Imovel == null)
                 itbi.Dados_Imovel = new ImovelStruct();
             itbi.Dados_Imovel.NomeLogradouro = regMain.Imovel_endereco;
@@ -1641,6 +1651,7 @@ namespace GTI_Mvc.Controllers {
             itbi.Dados_Imovel.NomeBairro = regMain.Imovel_bairro;
             itbi.Dados_Imovel.QuadraOriginal = regMain.Imovel_Quadra;
             itbi.Dados_Imovel.LoteOriginal = regMain.Imovel_Lote;
+            itbi.Dados_Imovel.Proprietario_Nome = regMain.Proprietario_Nome;
 
             itbi.Cpf_Cnpj = regMain.Comprador_cpf_cnpj;
             if (itbi.Comprador == null)
@@ -1656,6 +1667,7 @@ namespace GTI_Mvc.Controllers {
             itbi.Comprador.Cidade_Codigo = regMain.Comprador_cidade_codigo;
             itbi.Comprador.Cidade_Nome = regMain.Comprador_cidade_nome;
             itbi.Comprador.UF = regMain.Comprador_uf;
+            itbi.Comprador.Cep = regMain.Comprador_cep.ToString("00000-000");
             itbi.Comprador.Telefone = regMain.Comprador_telefone;
             itbi.Comprador.Email = regMain.Comprador_email;
 
@@ -2149,5 +2161,37 @@ namespace GTI_Mvc.Controllers {
             return View(model);
         }
 
+        [Route("Itbi_urbano_q")]
+        [HttpGet]
+        public ActionResult Itbi_urbano_q(string p="") {
+            if (Functions.pUserId == 0)
+                return RedirectToAction("Login", "Home");
+            ItbiViewModel model = Retorna_Itbi_Gravado(p);
+            return View(model);
+        }
+
+        public FileResult Itbi_Download(string p, string f) {
+            string fullName = Server.MapPath("~");
+            fullName = Path.Combine(fullName, "Files");
+            fullName = Path.Combine(fullName, "Itbi");
+            fullName = Path.Combine(fullName, p);
+            fullName = Path.Combine(fullName, f);
+            fullName = fullName.Replace("\\", "/");
+            byte[] fileBytes = GetFile(fullName);
+            return File(
+                fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, f);
+        }
+
+        byte[] GetFile(string s) {
+            System.IO.FileStream fs = System.IO.File.OpenRead(s);
+            byte[] data = new byte[fs.Length];
+            int br = fs.Read(data, 0, data.Length);
+            if (br != fs.Length)
+                throw new System.IO.IOException(s);
+            return data;
+        }
     }
+
+
+
 }

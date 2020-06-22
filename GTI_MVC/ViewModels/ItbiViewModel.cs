@@ -19,6 +19,7 @@ namespace GTI_Mvc.ViewModels {
         public ImovelStruct Dados_Imovel { get; set; }
         public Comprador_Itbi Comprador { get; set; }
         public int Natureza_Codigo { get; set; }
+        public string Natureza_Nome { get; set; }
         public string Cpf_Cnpj { get; set; }
         public string Comprador_Cpf_cnpj_tmp { get; set; }
         public string Comprador_Nome_tmp { get; set; }
@@ -28,6 +29,7 @@ namespace GTI_Mvc.ViewModels {
         public List<ListVendedorEditorViewModel> Lista_Vendedor { get; set; }
         public decimal Valor_Transacao { get; set; }
         public int Tipo_Financiamento { get; set; }
+        public string Tipo_Financiamento_Nome { get; set; }
         public decimal Valor_Avaliacao { get; set; }
         public DateTime? Data_Transacao { get; set; }
         public decimal Valor_Venal { get; set; }

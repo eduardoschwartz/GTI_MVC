@@ -627,6 +627,15 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Itbi_Query(user);
         }
 
+        public string Retorna_Itbi_Natureza_nome(int codigo) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Itbi_Natureza_nome(codigo);
+        }
+
+        public string Retorna_Itbi_Financimento_nome(int codigo) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Itbi_Financimento_nome(codigo);
+        }
 
     }//end class
 }

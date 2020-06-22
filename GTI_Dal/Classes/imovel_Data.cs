@@ -1582,7 +1582,13 @@ namespace GTI_Dal.Classes {
                     Comprador_complemento=Sql.Comprador_complemento,
                     Comprador_cpf_cnpj=Sql.Comprador_cpf_cnpj,
                     Comprador_numero=Sql.Comprador_numero,
-                    Comprador_telefone=Sql.Comprador_telefone
+                    Comprador_cep=Sql.Comprador_cep,
+                    Comprador_telefone=Sql.Comprador_telefone,
+                    Valor_Avaliacao=Sql.Valor_Avaliacao,
+                    Valor_Venal=Sql.Valor_Venal,
+                    Data_Transacao=Sql.Data_Transacao,
+                    Tipo_Instrumento=Sql.Tipo_Instrumento,
+                    Userid=Sql.Userid
                 };
                 return itbi;
             }
@@ -1724,7 +1730,7 @@ namespace GTI_Dal.Classes {
                 List<Itbi_Lista> Lista = new List<Itbi_Lista>();
 
                 List<Itbi_main> Sql = (from t in db.Itbi_Main 
-                           orderby new { t.Itbi_Ano, t.Itbi_Numero } where t.Userid == user select t).ToList();
+                           orderby new { t.Itbi_Ano, t.Itbi_Numero } where t.Userid == user && t.Itbi_Numero>0 select t).ToList();
 
                 foreach (Itbi_main reg in Sql) {
                     Itbi_Lista item = new Itbi_Lista() {
@@ -1741,6 +1747,26 @@ namespace GTI_Dal.Classes {
                 }
 
                 return Lista;
+            }
+        }
+
+        public string Retorna_Itbi_Natureza_nome(int codigo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Itbi_Natureza where t.Codigo == codigo select t.Descricao).FirstOrDefault();
+                if (Sql == null)
+                    return "";
+                else
+                    return Sql;
+            }
+        }
+
+        public string Retorna_Itbi_Financimento_nome(int codigo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.itbi_Financiamento where t.Codigo == codigo select t.Descricao).FirstOrDefault();
+                if (Sql == null)
+                    return "";
+                else
+                    return Sql;
             }
         }
 
