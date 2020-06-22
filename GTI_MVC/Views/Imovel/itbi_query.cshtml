@@ -39,10 +39,10 @@
                     <td style="display:none">Guid</td>
                     <td style="width:100px;font-weight:normal">Itbi nº</td>
                     <td style="width:90px;font-weight:normal">Data</td>
-                    <td style="width:80px;font-weight:normal">Tipo Itbi</td>
-                    <td style="width:300px;font-weight:normal">Nome do Comprador</td>
-                    <td style="width:110px;font-weight:normal">Situação</td>
-                    <td style="width:140px">
+                    <td style="width:60px;font-weight:normal">Tipo</td>
+                    <td style="width:280px;font-weight:normal">Nome do Comprador</td>
+                    <td style="width:130px;font-weight:normal">Situação</td>
+                    <td style="width:160px">
                     </td>
                 </tr>
             </thead>
@@ -52,18 +52,19 @@
                         <td style="display:none">@Html.DisplayFor(modelItem => item.Guid)</td>
                         <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.Itbi_NumeroAno)</td>
                         <td style="width:90px;font-weight:normal"> @DateTime.Parse(Html.DisplayFor(modelItem => item.Data_cadastro).ToString()).ToString("dd/MM/yyyy")</td>
-                        <td style="width:80px;font-weight:normal">@Html.DisplayFor(modelItem => item.Tipo_Imovel)</td>
-                        <td style="width:300px;font-weight:normal">@Html.DisplayFor(modelItem => item.Comprador_Nome_tmp)</td>
-                        <td style="width:110px;font-weight:normal">@Html.DisplayFor(modelItem => item.Status_Itbi)</td>
-                        <td style="width:140px">
+                        <td style="width:60px;font-weight:normal">@Html.DisplayFor(modelItem => item.Tipo_Imovel)</td>
+                        <td style="width:280px;font-weight:normal">@Html.DisplayFor(modelItem => item.Comprador_Nome_tmp)</td>
+                        <td style="width:130px;font-weight:normal">@Html.DisplayFor(modelItem => item.Status_Itbi)</td>
+                        <td style="width:160px">
                             @if (item.Tipo_Imovel == "Urbano") {
                                 <a href="@Url.Action("Itbi_urbano_q", "Imovel", new { p = item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
                             } else {
                                 <a href="@Url.Action("Itbi_rural_q","Imovel",new {p=item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
                             }
-                            <a href="@Url.Action("Send","Protocolo")" title="Imprimir guia para pagamento"> <img src="@Url.Content("~/images/print.png")"></a>
-                            <a href="@Url.Action("AddPlace","Protocolo" )" title="Acompanhar análise"> <img src="@Url.Content("~/images/observacao.png")"></a>
+                            <a href="@Url.Action("Itbi_print","Imovel", new { p = item.Guid,u=item.Tipo_Imovel=="Urbano" })" title="Imprimir a declaração do ITBI"> <img src="@Url.Content("~/images/print.png")"></a>
                             <a href="@Url.Action("AddPlace","Protocolo" )" title="Alterar o ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>
+                            <a href="@Url.Action("AddPlace","Protocolo" )" title="Acompanhar análise"> <img src="@Url.Content("~/images/observacao.png")"></a>
+                            <a href="@Url.Action("AddPlace","Protocolo" )" title="Emitir guia para pagamento"> <img src="@Url.Content("~/images/barcode.gif")"></a>
                         </td>
                     </tr>
                 }
