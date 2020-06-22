@@ -1635,6 +1635,7 @@ namespace GTI_Mvc.Controllers {
                 Totalidade = regMain.Totalidade,
                 Totalidade_Perc = regMain.Totalidade_Perc,
                 Inscricao_Incra = regMain.Inscricao_Incra,
+                Descricao_Imovel=regMain.Descricao_Imovel,
                 Receita_Federal = regMain.Receita_Federal,
                 Itbi_Ano = regMain.Itbi_Ano,
                 Itbi_Numero = regMain.Itbi_Numero,
@@ -2190,6 +2191,18 @@ namespace GTI_Mvc.Controllers {
                 throw new System.IO.IOException(s);
             return data;
         }
+
+        [Route("Itbi_rural_q")]
+        [HttpGet]
+        public ActionResult Itbi_rural_q(string p = "") {
+            if (Functions.pUserId == 0)
+                return RedirectToAction("Login", "Home");
+            ItbiViewModel model = Retorna_Itbi_Gravado(p);
+            return View(model);
+        }
+
+
+
     }
 
 

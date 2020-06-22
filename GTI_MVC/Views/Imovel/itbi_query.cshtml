@@ -8,7 +8,7 @@
 <style>
 
     .center {
-       // text-align: center;
+       /* text-align: center;*/
         margin: auto;
         width: 700px;
         border: 1px solid rgba(0,0,0,0.24);
@@ -56,7 +56,11 @@
                         <td style="width:300px;font-weight:normal">@Html.DisplayFor(modelItem => item.Comprador_Nome_tmp)</td>
                         <td style="width:110px;font-weight:normal">@Html.DisplayFor(modelItem => item.Status_Itbi)</td>
                         <td style="width:140px">
-                            <a href="@Url.Action("Itbi_urbano_q","Imovel",new {p=item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                            @if (item.Tipo_Imovel == "Urbano") {
+                                <a href="@Url.Action("Itbi_urbano_q", "Imovel", new { p = item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                            } else {
+                                <a href="@Url.Action("Itbi_rural_q","Imovel",new {p=item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                            }
                             <a href="@Url.Action("Send","Protocolo")" title="Imprimir guia para pagamento"> <img src="@Url.Content("~/images/print.png")"></a>
                             <a href="@Url.Action("AddPlace","Protocolo" )" title="Acompanhar análise"> <img src="@Url.Content("~/images/observacao.png")"></a>
                             <a href="@Url.Action("AddPlace","Protocolo" )" title="Alterar o ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>

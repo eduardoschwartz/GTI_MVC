@@ -1588,7 +1588,10 @@ namespace GTI_Dal.Classes {
                     Valor_Venal=Sql.Valor_Venal,
                     Data_Transacao=Sql.Data_Transacao,
                     Tipo_Instrumento=Sql.Tipo_Instrumento,
-                    Userid=Sql.Userid
+                    Userid=Sql.Userid,
+                    Inscricao_Incra=Sql.Inscricao_Incra,
+                    Receita_Federal=Sql.Receita_Federal,
+                    Descricao_Imovel=Sql.Descricao_Imovel
                 };
                 return itbi;
             }
