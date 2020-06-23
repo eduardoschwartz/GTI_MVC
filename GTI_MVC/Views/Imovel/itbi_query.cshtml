@@ -63,8 +63,8 @@
                             <a href="@Url.Action("Itbi_print","Imovel", new { p = item.Guid,u=item.Tipo_Imovel=="Urbano" })" title="Imprimir a declaração do ITBI"> <img src="@Url.Content("~/images/print.png")"></a>
                             <a href="@Url.Action("Itbi_urbano_e","Imovel", new { p = item.Guid } )" title="Alterar este ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>
                             <a href="@Url.Action("Itbi_cancel", "Imovel", new { p = item.Guid, s = 4 })" onclick="return confirm('Cancelar este Itbi?')" })" title="Cancelar este ITBI"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
-                            <a href="@Url.Action("AddPlace","Protocolo" )" title="Acompanhar análise"> <img src="@Url.Content("~/images/observacao.png")"></a>
-                            <a href="@Url.Action("AddPlace","Protocolo" )" title="Emitir guia para pagamento"> <img src="@Url.Content("~/images/barcode.gif")"></a>
+                            <a href="@Url.Action("AddPlace","Protocolo" )" title="Análise do ITBI"> <img src="@Url.Content("~/images/observacao.png")"></a>
+                            <a href="@Url.Action("Itbi_guia","Imovel" , new { p = item.Guid })" title="Emitir guia para pagamento"> <img src="@Url.Content("~/images/barcode.gif")"></a>
                         </td>
                     </tr>
                 }
@@ -81,8 +81,20 @@
     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 </div>
 
-@if (!string.IsNullOrWhiteSpace(ViewBag.Erro)) {
+@if (ViewBag.Erro == "C") {
     <script type="text/javascript">
-        alert("@ViewBag.Erro");
+        alert("Apenas Itbis que encontram-se em análise podem ser cancelados!");
     </script>
+} else {
+    if (ViewBag.Erro == "P") {
+        <script type="text/javascript">
+            alert("A guia de pagamento deste Itbi ainda não foi liberada!");
+        </script>
+    } else {
+        if (ViewBag.Erro == "A") {
+            <script type="text/javascript">
+                alert("Apenas Itbis que encontram-se em análise podem ser alterados!");
+            </script>
+        }
+    }
 }
