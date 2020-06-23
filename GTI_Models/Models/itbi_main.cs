@@ -48,6 +48,9 @@ namespace GTI_Models.Models {
         public string Receita_Federal { get; set; }
         public string Descricao_Imovel { get; set; }
         public int Userid { get; set; }
+        public int Situacao_itbi { get; set; }
+        public int? Liberado_por { get; set; }
+        public DateTime? Liberado_em { get; set; }
     }
 
     public class Itbi_Numero {

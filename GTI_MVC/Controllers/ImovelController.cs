@@ -1510,7 +1510,8 @@ namespace GTI_Mvc.Controllers {
                     Data_cadastro=DateTime.Now,
                     Inscricao=model.Dados_Imovel.Inscricao,
                     Proprietario_Codigo= model.Dados_Imovel.Proprietario_Codigo==null?0:(int)model.Dados_Imovel.Proprietario_Codigo,
-                    Proprietario_Nome=model.Dados_Imovel.Proprietario_Nome
+                    Proprietario_Nome=model.Dados_Imovel.Proprietario_Nome,
+                    Situacao_itbi=1
                 };
                 ex = imovelRepository.Incluir_Itbi_main(regMain);
             } else {
@@ -1616,8 +1617,10 @@ namespace GTI_Mvc.Controllers {
                 Receita_Federal = regMain.Receita_Federal,
                 Itbi_Ano = regMain.Itbi_Ano,
                 Itbi_Numero = regMain.Itbi_Numero,
-                Itbi_NumeroAno = regMain.Itbi_Numero.ToString("000000/") + regMain.Itbi_Ano.ToString()
+                Itbi_NumeroAno = regMain.Itbi_Numero.ToString("000000/") + regMain.Itbi_Ano.ToString(),
+                Situacao_Itbi_codigo=regMain.Situacao_itbi
             };
+            itbi.Situacao_Itbi_Nome = imovelRepository.Retorna_Itbi_Situacao(regMain.Situacao_itbi);
             itbi.Natureza_Nome = imovelRepository.Retorna_Itbi_Natureza_nome(regMain.Natureza_Codigo);
             itbi.Tipo_Financiamento_Nome = imovelRepository.Retorna_Itbi_Financimento_nome(regMain.Tipo_Financiamento);
             if (itbi.Dados_Imovel == null)
@@ -1744,7 +1747,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_query")]
         [HttpGet]
-        public ActionResult Itbi_query() {
+        public ActionResult Itbi_query(string e="") {
             if (Functions.pUserId == 0)
                 return RedirectToAction("Login", "Home");
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
@@ -1757,11 +1760,11 @@ namespace GTI_Mvc.Controllers {
                     Itbi_NumeroAno=reg.Numero_Ano,
                     Tipo_Imovel=reg.Tipo,
                     Comprador_Nome_tmp=Functions.TruncateTo( reg.Nome_Comprador,26),
-                    Status_Itbi=reg.Situacao
+                    Situacao_Itbi_Nome= reg.Situacao
                 };
                 model.Add(item);
             }
-
+            ViewBag.Erro = e;
             return View(model);
         }
 
@@ -2183,6 +2186,18 @@ namespace GTI_Mvc.Controllers {
             } catch {
                 throw;
             }
+        }
+
+        public ActionResult Itbi_cancel(string p, int s) {
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Itbi_status stat = imovelRepository.Retorna_Itbi_Situacao(p);
+            if (stat.Codigo == 4) {
+                return RedirectToAction("Itbi_query", new { e = "Este Itbi encontra-se cancelado!" });
+            } else {
+                Exception ex = imovelRepository.Alterar_Itbi_Situacao(p, s);
+                return RedirectToAction("Itbi_query");
+            }
+            
         }
 
     }

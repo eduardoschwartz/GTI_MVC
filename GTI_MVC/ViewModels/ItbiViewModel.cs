@@ -10,7 +10,8 @@ namespace GTI_Mvc.ViewModels {
         public short Itbi_Ano { get; set; }
         public string Itbi_NumeroAno { get; set; }
         public string Tipo_Imovel { get; set; }
-        public string Status_Itbi { get; set; }
+        public int Situacao_Itbi_codigo { get; set; }
+        public string Situacao_Itbi_Nome { get; set; }
         public DateTime Data_cadastro { get; set; }
         public string Codigo { get; set; }
         public string Inscricao { get; set; }

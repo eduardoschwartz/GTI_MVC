@@ -1377,7 +1377,7 @@ namespace GTI_Dal.Classes {
 
         public Exception Incluir_Itbi_main(Itbi_main Reg) {
             using (var db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[7];
+                object[] Parametros = new object[8];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@data_cadastro", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_cadastro };
                 Parametros[2] = new SqlParameter { ParameterName = "@imovel_codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Imovel_codigo };
@@ -1391,8 +1391,9 @@ namespace GTI_Dal.Classes {
                 else
                     Parametros[5] = new SqlParameter { ParameterName = "@proprietario_nome", SqlValue = DBNull.Value};
                 Parametros[6] = new SqlParameter { ParameterName = "@userid", SqlDbType = SqlDbType.Int, SqlValue = Reg.Userid };
-                db.Database.ExecuteSqlCommand("INSERT INTO itbi_main(guid,data_cadastro,imovel_codigo,inscricao,proprietario_codigo,proprietario_nome,userid) " +
-                                              " VALUES(@guid,@data_cadastro,@imovel_codigo,@inscricao,@proprietario_codigo,@proprietario_nome,@userid)", Parametros);
+                Parametros[7] = new SqlParameter { ParameterName = "@situacao_itbi", SqlDbType = SqlDbType.Int, SqlValue = Reg.Situacao_itbi };
+                db.Database.ExecuteSqlCommand("INSERT INTO itbi_main(guid,data_cadastro,imovel_codigo,inscricao,proprietario_codigo,proprietario_nome,userid,situacao_itbi) " +
+                                              " VALUES(@guid,@data_cadastro,@imovel_codigo,@inscricao,@proprietario_codigo,@proprietario_nome,@userid,@situacao_itbi)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -1744,7 +1745,7 @@ namespace GTI_Dal.Classes {
                         Data=reg.Data_cadastro,
                         Tipo=reg.Imovel_codigo>0?"Urbano":"Rural",
                         Nome_Comprador=reg.Comprador_nome,
-                        Situacao="Em análise"
+                        Situacao=Retorna_Itbi_Situacao(reg.Situacao_itbi)
                     };
                     Lista.Add(item);
                 }
@@ -1770,6 +1771,43 @@ namespace GTI_Dal.Classes {
                     return "";
                 else
                     return Sql;
+            }
+        }
+
+        public string Retorna_Itbi_Situacao(int codigo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Itbi_Status where t.Codigo == codigo select t.Descricao).FirstOrDefault();
+                if (Sql == null)
+                    return "";
+                else
+                    return Sql;
+            }
+        }
+
+        public Itbi_status Retorna_Itbi_Situacao(string guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Itbi_Main 
+                           join s in db.Itbi_Status on t.Situacao_itbi equals s.Codigo into  ts from s in ts 
+                           where t.Guid == guid
+                           select new { Codigo = t.Situacao_itbi, Descricao = s.Descricao }).FirstOrDefault();
+                Itbi_status ret = new Itbi_status {
+                    Codigo = Sql.Codigo,
+                    Descricao = Sql.Descricao
+                };
+                return ret;
+            }
+        }
+
+        public Exception Alterar_Itbi_Situacao(string p,int s) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Itbi_main i = db.Itbi_Main.First(g => g.Guid == p);
+                i.Situacao_itbi = s;
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
             }
         }
 
