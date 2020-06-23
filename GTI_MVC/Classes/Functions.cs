@@ -482,6 +482,8 @@ namespace GTI_Mvc {
 
         public static string TruncateTo(string word,int lenght) {
             string new_Word = word;
+            if (word == null)
+                return "";
             if (word.Length > lenght) {
                 new_Word = word.Substring(0, lenght - 3) + "...";
             }

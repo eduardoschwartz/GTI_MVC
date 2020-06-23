@@ -2200,6 +2200,30 @@ namespace GTI_Mvc.Controllers {
             
         }
 
+        [Route("Itbi_urbano_e")]
+        [HttpGet]
+        public ActionResult Itbi_urbano_e(string p = "") {
+            if (Functions.pUserId == 0)
+                return RedirectToAction("Login", "Home");
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
+            ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
+            List<Itbi_financiamento> Lista_Financimento = imovelRepository.Lista_Itbi_Financiamento();
+            ViewBag.Lista_Financiamento = new SelectList(Lista_Financimento, "Codigo", "Descricao");
+            ViewBag.ListaErro = new List<string>();
+
+            ItbiViewModel model = Retorna_Itbi_Gravado(p);
+            if(model.Inscricao!=null)
+                return View("Itbi_urbano_e", model);
+            else
+                return View("Itbi_rural_e", model);
+        }
+
+
+
+
+
+
     }
 
 
