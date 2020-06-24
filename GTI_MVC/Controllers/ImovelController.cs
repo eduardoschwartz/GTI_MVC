@@ -1275,8 +1275,8 @@ namespace GTI_Mvc.Controllers {
 
             if (action == "btnPrint") {
                 model.Lista_Erro = Valida_Itbi(model);
+                Grava_Itbi(model);
                 if (model.Lista_Erro.Count > 0) {
-                    Grava_Itbi(model);
                     ViewBag.ListaErro = new SelectList(model.Lista_Erro);
                     return View(model);
                 } else {
@@ -1714,15 +1714,9 @@ namespace GTI_Mvc.Controllers {
                 model.Lista_Anexo.Add(regA);
             }
 
-//            model.Vendedor_Cpf_cnpj_tmp = "";
             Int64 _matricula = model.Matricula;
             model = ItbiRuralLoad(model, _bcpf, _bcnpj);
             model.Matricula = _matricula;
-
-            //if (model.Inscricao == null && Convert.ToInt32(model.Codigo) > 0) {
-            //    ViewBag.Error = "* Imóvel não cadastrado.";
-            //    return View(model);
-            //}
 
             _guid = Grava_Itbi(model);
             model.Guid = _guid;
@@ -1829,7 +1823,45 @@ namespace GTI_Mvc.Controllers {
             return View(model);
         }
 
+        [Route("Itbi_forum")]
+        [HttpPost]
+        public ActionResult Itbi_forum(List<Itbi_Forum> model) {
+            if (Functions.pUserId == 0)
+                return RedirectToAction("Login", "Home");
+            ModelState.Clear();
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            if (model[0].Action == "btnOkMsg") {
+                Itbi_forum reg = new Itbi_forum() {
+                    Guid=model[0].Guid,
+                    Datahora=DateTime.Now,
+                    Mensagem=model[0].Mensagem,
+                    Userid=Functions.pUserId
+                };
+                Exception ex = imovelRepository.Incluir_Itbi_Forum(reg);
+            }
+            //model.Clear();
+            //ItbiViewModel gravado = Retorna_Itbi_Gravado(model[0].Guid);
+            //List<Itbi_forum> lista = imovelRepository.Retorna_Itbi_Forum(model[0].Guid);
+            //foreach (Itbi_forum reg in lista) {
+            //        Itbi_Forum item = new Itbi_Forum() {
+            //            Guid = reg.Guid,
+            //            Seq = reg.Seq,
+            //            Datahora = reg.Datahora,
+            //            User_id = reg.Userid,
+            //            User_Name = sistemaRepository.Retorna_User_FullName(reg.Userid),
+            //            Mensagem = reg.Mensagem,
+            //            Tipo_Itbi = gravado.Tipo_Imovel,
+            //            Data_Itbi = gravado.Data_cadastro,
+            //            Comprador_Nome = gravado.Comprador.Nome,
+            //            Ano_Numero = gravado.Itbi_Numero.ToString("000000/") + gravado.Itbi_Ano.ToString()
+            //        };
+            //        model.Add(item);
+            //    }
 
+
+            return RedirectToAction("Itbi_forum", new { p = model[0].Guid });
+        }
 
         public ItbiViewModel ItbiUrbanoLoad(ItbiViewModel model, bool _bcpf, bool _bcnpj) {
             int Codigo = Convert.ToInt32(model.Codigo);
@@ -2189,21 +2221,9 @@ namespace GTI_Mvc.Controllers {
             if (string.IsNullOrWhiteSpace(model.Comprador.Logradouro_Nome)) {
                 Lista.Add("Endereço do comprador não informado");
             }
-            if (model.Lista_Vendedor.Count == 0) {
-                Lista.Add("Nenhum vendedor incluido na declaração");
-            }
             if (model.Valor_Transacao == 0) {
                 Lista.Add("Valor da transação não informado");
             }
-
-            if (model.Valor_Avaliacao == 0) {
-                Lista.Add("Valor da avaliação do imóvel não informado");
-            }
-
-            if (model.Tipo_Financiamento == 0) {
-                Lista.Add("Tipo de finaciamento não informado");
-            }
-
             if (!Functions.IsDate(model.Data_Transacao)) {
                 Lista.Add("Data da transação inválida");
             }

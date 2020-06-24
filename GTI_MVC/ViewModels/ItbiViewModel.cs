@@ -92,7 +92,7 @@ namespace GTI_Mvc.ViewModels {
         public string Tipo_Itbi { get; set; }
         public string Comprador_Nome { get; set; }
         public DateTime Data_Itbi { get; set; }
-
+        public string Action { get; set; }
     }
 
 }

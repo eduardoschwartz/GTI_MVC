@@ -1431,6 +1431,7 @@ namespace GTI_Dal.Classes {
                 i.Tipo_Financiamento = Reg.Tipo_Financiamento;
                 i.Data_Transacao = Reg.Data_Transacao==DateTime.MinValue?null:Reg.Data_Transacao;
                 i.Valor_Venal = Reg.Valor_Venal;
+                i.Matricula = Reg.Matricula;
                 i.Tipo_Instrumento = Reg.Tipo_Instrumento;
                 i.Totalidade = Reg.Totalidade;
                 i.Totalidade_Perc = Reg.Totalidade_Perc;
@@ -1813,14 +1814,22 @@ namespace GTI_Dal.Classes {
 
         public Exception Incluir_Itbi_Forum(Itbi_forum item) {
             using (var db = new GTI_Context(_connection)) {
+               // int _seq = 0;
+//                var Sql = (from t in db.Itbi_Forum where t.Guid == item.Guid select t.Seq).Max();
+               int _seq = db.Itbi_Forum.Where(x => x.Guid == item.Guid)
+                         .Select(x => x.Seq)
+                         .DefaultIfEmpty((short)0)
+                         .Max();
+                _seq++;
+
                 object[] Parametros = new object[5];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = item.Guid };
-                Parametros[1] = new SqlParameter { ParameterName = "@seq", SqlDbType = SqlDbType.SmallInt, SqlValue = item.Seq };
+                Parametros[1] = new SqlParameter { ParameterName = "@seq", SqlDbType = SqlDbType.SmallInt, SqlValue =_seq };
                 Parametros[2] = new SqlParameter { ParameterName = "@datahora", SqlDbType = SqlDbType.DateTime, SqlValue = item.Datahora };
                 Parametros[3] = new SqlParameter { ParameterName = "@userid", SqlDbType = SqlDbType.Int, SqlValue = item.Userid };
                 Parametros[4] = new SqlParameter { ParameterName = "@mensagem", SqlDbType = SqlDbType.VarChar, SqlValue = item.Mensagem };
 
-                db.Database.ExecuteSqlCommand("INSERT INTO itbi_anexo(guid,seq,datahora,userid,mensagem) VALUES(@guid,@seq,@datahora,@userid,@mensagem)", Parametros);
+                db.Database.ExecuteSqlCommand("INSERT INTO itbi_forum(guid,seq,datahora,userid,mensagem) VALUES(@guid,@seq,@datahora,@userid,@mensagem)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {

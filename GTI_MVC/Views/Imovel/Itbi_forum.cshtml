@@ -36,32 +36,90 @@
         </div>
         <div class="panel-body"></div>
         @using (Html.BeginForm("Itbi_forum", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
-            if (Model.Count > 1) { 
-            foreach (var item in Model) {
-                <div class="panel panel-info">
-                    <div class="panel-heading">Mensagem enviada em: @item.Datahora por @item.User_Name </div>
-                    <div class="panel-body">
-                        <table>
-                            <tr>
-                                <td style="font-size:13px;color:dodgerblue">
-                                    @item.Mensagem
-                                </td>
-                            </tr>
-                        </table>
+            if (Model.Count > 0 && Model[0].Mensagem!=null) {
+                foreach (var item in Model) {
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Mensagem enviada em: @item.Datahora por @item.User_Name </div>
+                        <div class="panel-body">
+                            <table>
+                                <tr>
+                                    <td style="font-size:13px;color:dodgerblue">
+                                        @item.Mensagem
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-                </div>
                 }
             }
+            @Html.HiddenFor(m => m[0].Mensagem, new { @id = "mensagem_tmp" })
+            @Html.HiddenFor(m => m[0].Action, new { @id = "action_tmp" })
+            @Html.HiddenFor(m => m[0].Guid)
+
         }
         <div class="panel-footer">
             <div style="text-align:center">
-                <button type="submit" class="btn btn-primary" name="action" value="btnValida" data-balloon-length="medium" aria-label="Enviar formulário para análise." data-balloon-pos="up">Escrever nova mensagem</button>&nbsp;&nbsp;
+                <button type="button" class="btn btn-primary" onclick="EditarMsg()">Escrever nova mensagem</button>&nbsp;&nbsp;
             </div>
         </div>
 
     </div>
-        @Html.ActionLink("Voltar a consulta de ITBI", "Itbi_query", "Imovel", null, new { @class = "actionlink" })<br />
-        @Html.ActionLink("Preencher outro ITBI", "Itbi_Menu", "Imovel", null, new { @class = "actionlink" })<br />
-        @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
-    </div>
+    @Html.ActionLink("Voltar a consulta de ITBI", "Itbi_query", "Imovel", null, new { @class = "actionlink" })<br />
+    @Html.ActionLink("Preencher outro ITBI", "Itbi_Menu", "Imovel", null, new { @class = "actionlink" })<br />
+    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+</div>
 
+<div class="modal fade" id="MsgModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Digite o texto da mensagem</h4>
+            </div>
+            <div class="modal-body">
+
+                <table>
+                    <tr style="height:30px">
+                        <td>
+                            <textarea id="MsgTxt" name="MsgTxt" cols="68" rows="5" maxlength="5000"></textarea>
+                        </td>
+                    </tr>
+                </table>
+                <br />
+
+                <label style="font-weight:normal;color:red;padding-left:7px" id="errorMsg">@ViewBag.Error</label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnMsgOk" >Gravar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        function EditarMsg() {
+            $('#MsgModal').modal();
+        }
+
+         $(document).ready(function () {
+           
+            $('#btnMsgOk').click(function () {
+                var Msgback = $("#MsgModal #MsgTxt").val();
+                if (Msgback.trim() == "" || Msgback == null) {
+                    document.getElementById('errorMsg').innerHTML = "Digite a mensagem";
+                } else {
+                    $("#MsgModal #MsgTxt").val("");
+                    document.getElementById('mensagem_tmp').value = Msgback;
+                    document.getElementById('action_tmp').value = "btnOkMsg";
+                    $("#MainForm").submit();
+                }
+            });
+        });
+
+
+
+    </script>
+}
