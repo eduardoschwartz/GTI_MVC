@@ -81,5 +81,13 @@ namespace GTI_Mvc.ViewModels {
         public string Email { get; set; }
     }
 
+    public class Itbi_Forum {
+        public string Guid { get; set; }
+        public short Seq { get; set; }
+        public DateTime Datahora { get; set; }
+        public int User_id { get; set; }
+        public string User_Name { get; set; }
+        public string Mensagem { get; set; }
+    }
 
 }

@@ -1787,6 +1787,32 @@ namespace GTI_Mvc.Controllers {
                 return View("Itbi_rural_e", model);
         }
 
+        [Route("Itbi_forum")]
+        [HttpGet]
+        public ActionResult Itbi_forum(string p = "") {
+            if (Functions.pUserId == 0)
+                return RedirectToAction("Login", "Home");
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            List<Itbi_forum> lista = imovelRepository.Retorna_Itbi_Forum(p);
+            List<Itbi_Forum> model = new List<Itbi_Forum>();
+            foreach (Itbi_forum reg in lista) {
+                Itbi_Forum item = new Itbi_Forum() {
+                    Guid=reg.Guid,
+                    Seq=reg.Seq,
+                    Datahora=reg.Datahora,
+                    User_id=reg.Userid,
+                    User_Name=sistemaRepository.Retorna_User_FullName(reg.Userid),
+                    Mensagem=reg.Mensagem
+                };
+                model.Add(item);
+            }
+
+            return View(model);
+        }
+
+
+
         public ItbiViewModel ItbiUrbanoLoad(ItbiViewModel model, bool _bcpf, bool _bcnpj) {
             int Codigo = Convert.ToInt32(model.Codigo);
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");

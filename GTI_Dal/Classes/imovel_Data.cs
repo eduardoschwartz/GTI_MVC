@@ -1811,5 +1811,57 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Incluir_Itbi_Forum(Itbi_forum item) {
+            using (var db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[5];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = item.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@seq", SqlDbType = SqlDbType.SmallInt, SqlValue = item.Seq };
+                Parametros[2] = new SqlParameter { ParameterName = "@datahora", SqlDbType = SqlDbType.DateTime, SqlValue = item.Datahora };
+                Parametros[3] = new SqlParameter { ParameterName = "@userid", SqlDbType = SqlDbType.Int, SqlValue = item.Userid };
+                Parametros[4] = new SqlParameter { ParameterName = "@mensagem", SqlDbType = SqlDbType.VarChar, SqlValue = item.Mensagem };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO itbi_anexo(guid,seq,datahora,userid,mensagem) VALUES(@guid,@seq,@datahora,@userid,@mensagem)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Alterar_Itbi_Forum(string p, short s,string msg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Itbi_forum i = db.Itbi_Forum.First(g => g.Guid == p && g.Seq==s );
+                i.Mensagem = msg;
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Excluir_Itbi_Forum(string p, short s) {
+            object[] Parametros = new object[2];
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = p};
+                Parametros[1] = new SqlParameter { ParameterName = "@seq", SqlDbType = SqlDbType.SmallInt, SqlValue = s };
+
+                db.Database.ExecuteSqlCommand("DELETE FROM itbi_forum WHERE guid=@guid AND seq=@seq", Parametros);
+                return null;
+            }
+        }
+
+        public List<Itbi_forum> Retorna_Itbi_Forum(string p) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                List<Itbi_forum> Sql = (from t in db.Itbi_Forum orderby t.Seq where t.Guid == p select t).ToList();
+                return Sql;
+            }
+        }
+
+
+
     }//end class
 }

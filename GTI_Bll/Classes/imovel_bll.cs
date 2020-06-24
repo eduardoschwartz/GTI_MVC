@@ -652,5 +652,28 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Itbi_Situacao(guid);
         }
 
+        public Exception Incluir_Itbi_Forum(Itbi_forum item) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Incluir_Itbi_Forum(item);
+            return ex;
+        }
+
+        public Exception Alterar_Itbi_Forum(string p, short s, string msg) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Alterar_Itbi_Forum(p,s,msg);
+            return ex;
+        }
+
+        public Exception Excluir_Itbi_Forum(string p, short s) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Excluir_Itbi_Forum(p, s);
+            return ex;
+        }
+
+        public List<Itbi_forum> Retorna_Itbi_Forum(string p) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Itbi_Forum(p);
+        }
+
     }//end class
 }

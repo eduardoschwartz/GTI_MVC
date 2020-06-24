@@ -1,0 +1,54 @@
+﻿@model List<GTI_Mvc.ViewModels.Itbi_Forum>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Análise de ITBI's";
+}
+
+<style>
+
+    .center {
+        margin: auto;
+        width: 780px;
+        border: 1px solid rgba(0,0,0,0.24);
+        padding: 20px;
+        box-shadow: 0 .1em 0.5em #000;
+        border-radius: 13px;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+</style>
+
+<div class="center">
+    <br />
+    <label style="color: brown;font-size: 16px;font-style: italic">Análise de ITBI</label>
+    <br />
+
+    <br />
+    @using (Html.BeginForm("Itbi_forum", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+        foreach (var item in Model) {
+<div class="panel panel-info">
+    <div class="panel-heading">Mensagem enviada em: @item.Datahora por @item.User_Name </div>
+    <div class="panel-body">
+        <table>
+            <tr>
+                <td>
+                    @item.Mensagem
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+                }
+                }
+
+                @Html.ActionLink("Preencher outro ITBI", "Itbi_Menu", "Imovel", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
+
