@@ -88,6 +88,11 @@ namespace GTI_Mvc.ViewModels {
         public int User_id { get; set; }
         public string User_Name { get; set; }
         public string Mensagem { get; set; }
+        public string Ano_Numero { get; set; }
+        public string Tipo_Itbi { get; set; }
+        public string Comprador_Nome { get; set; }
+        public DateTime Data_Itbi { get; set; }
+
     }
 
 }

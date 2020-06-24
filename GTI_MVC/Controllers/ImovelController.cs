@@ -1794,18 +1794,36 @@ namespace GTI_Mvc.Controllers {
                 return RedirectToAction("Login", "Home");
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            ItbiViewModel gravado = Retorna_Itbi_Gravado(p);
             List<Itbi_forum> lista = imovelRepository.Retorna_Itbi_Forum(p);
             List<Itbi_Forum> model = new List<Itbi_Forum>();
-            foreach (Itbi_forum reg in lista) {
+            if (lista.Count == 0) {
                 Itbi_Forum item = new Itbi_Forum() {
-                    Guid=reg.Guid,
-                    Seq=reg.Seq,
-                    Datahora=reg.Datahora,
-                    User_id=reg.Userid,
-                    User_Name=sistemaRepository.Retorna_User_FullName(reg.Userid),
-                    Mensagem=reg.Mensagem
+                    Guid=gravado.Guid,
+                    User_id=gravado.UserId,
+                    User_Name = sistemaRepository.Retorna_User_FullName(gravado.UserId),
+                    Tipo_Itbi = gravado.Tipo_Imovel,
+                    Data_Itbi = gravado.Data_cadastro,
+                    Comprador_Nome = gravado.Comprador.Nome,
+                    Ano_Numero = gravado.Itbi_Numero.ToString("000000/") + gravado.Itbi_Ano.ToString()
                 };
                 model.Add(item);
+            } else {
+                foreach (Itbi_forum reg in lista) {
+                    Itbi_Forum item = new Itbi_Forum() {
+                        Guid = reg.Guid,
+                        Seq = reg.Seq,
+                        Datahora = reg.Datahora,
+                        User_id = reg.Userid,
+                        User_Name = sistemaRepository.Retorna_User_FullName(reg.Userid),
+                        Mensagem = reg.Mensagem,
+                        Tipo_Itbi = gravado.Tipo_Imovel,
+                        Data_Itbi = gravado.Data_cadastro,
+                        Comprador_Nome = gravado.Comprador.Nome,
+                        Ano_Numero = gravado.Itbi_Numero.ToString("000000/") + gravado.Itbi_Ano.ToString()
+                    };
+                    model.Add(item);
+                }
             }
 
             return View(model);
@@ -2080,7 +2098,9 @@ namespace GTI_Mvc.Controllers {
                 Itbi_Ano = regMain.Itbi_Ano,
                 Itbi_Numero = regMain.Itbi_Numero,
                 Itbi_NumeroAno = regMain.Itbi_Numero.ToString("000000/") + regMain.Itbi_Ano.ToString(),
-                Situacao_Itbi_codigo = regMain.Situacao_itbi
+                Situacao_Itbi_codigo = regMain.Situacao_itbi,
+                Tipo_Imovel=regMain.Inscricao==null?"Rural":"Urbano",
+                UserId=regMain.Userid
             };
             itbi.Situacao_Itbi_Nome = imovelRepository.Retorna_Itbi_Situacao(regMain.Situacao_itbi);
             itbi.Natureza_Nome = imovelRepository.Retorna_Itbi_Natureza_nome(regMain.Natureza_Codigo);

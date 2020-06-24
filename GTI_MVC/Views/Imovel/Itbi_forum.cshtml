@@ -26,29 +26,42 @@
 </style>
 
 <div class="center">
-    <br />
-    <label style="color: brown;font-size: 16px;font-style: italic">Análise de ITBI</label>
-    <br />
 
     <br />
-    @using (Html.BeginForm("Itbi_forum", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
-        foreach (var item in Model) {
-<div class="panel panel-info">
-    <div class="panel-heading">Mensagem enviada em: @item.Datahora por @item.User_Name </div>
-    <div class="panel-body">
-        <table>
-            <tr>
-                <td>
-                    @item.Mensagem
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            Processo de análise do ITBI nº:&nbsp;<span style="font-weight:bold">@Model[0].Ano_Numero</span> &nbsp;&nbsp;Tipo de ITBI:&nbsp;<span style="font-weight:bold">@Model[0].Tipo_Itbi</span><br />
+            Declarado em:&nbsp;<span style="font-weight:bold">@Model[0].Data_Itbi</span> &nbsp;&nbsp;Declarado por:&nbsp;<span style="font-weight:bold">@Model[0].User_Name</span><br />
+            Nome do Comprador:&nbsp;<span style="font-weight:bold">@Model[0].Comprador_Nome</span>
+        </div>
+        <div class="panel-body"></div>
+        @using (Html.BeginForm("Itbi_forum", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+            if (Model.Count > 1) { 
+            foreach (var item in Model) {
+                <div class="panel panel-info">
+                    <div class="panel-heading">Mensagem enviada em: @item.Datahora por @item.User_Name </div>
+                    <div class="panel-body">
+                        <table>
+                            <tr>
+                                <td style="font-size:13px;color:dodgerblue">
+                                    @item.Mensagem
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
                 }
-                }
-
-                @Html.ActionLink("Preencher outro ITBI", "Itbi_Menu", "Imovel", null, new { @class = "actionlink" })<br />
-                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            }
+        }
+        <div class="panel-footer">
+            <div style="text-align:center">
+                <button type="submit" class="btn btn-primary" name="action" value="btnValida" data-balloon-length="medium" aria-label="Enviar formulário para análise." data-balloon-pos="up">Escrever nova mensagem</button>&nbsp;&nbsp;
             </div>
+        </div>
+
+    </div>
+        @Html.ActionLink("Voltar a consulta de ITBI", "Itbi_query", "Imovel", null, new { @class = "actionlink" })<br />
+        @Html.ActionLink("Preencher outro ITBI", "Itbi_Menu", "Imovel", null, new { @class = "actionlink" })<br />
+        @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+    </div>
 
