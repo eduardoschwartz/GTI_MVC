@@ -61,16 +61,6 @@
 
                         </table>
 
-                        <table style="font-size:14px;width:640px">
-                            <tr style="height:30px">
-                                <td style="width:154px">
-                                    <label style="font-weight:normal;">Natureza da transação:</label>
-                                </td>
-                                <td style="blue">
-                                    @Html.TextBoxFor(m => m.Natureza_Nome, new { @readonly = true, style = "width:470px;height:25px" })
-                                </td>
-                            </tr>
-                        </table>
 
                         <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Dados do Imóvel:</label><br />
 
@@ -305,6 +295,17 @@
                 <div class="panel-body">
                     <table style="font-size:14px;width:640px">
                         <tr style="height:30px">
+                            <td style="width:157px">
+                                <label style="font-weight:normal;">Natureza da transação:</label>
+                            </td>
+                            <td style="color:blue">
+                                @Html.TextBoxFor(m => m.Natureza_Nome, new { @readonly = true, style = "width:470px;height:25px" })
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table style="font-size:14px;width:640px">
+                        <tr style="height:30px">
                             <td style="width:133px">
                                 <label style="font-weight:normal;">Valor da transação:</label>
                             </td>
@@ -338,10 +339,8 @@
                                 <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Data_Transacao, new { @id = "dataTransacao", @class = "maskData", style = "width:90px;height:25px;text-align:center", @Value = Convert.ToDateTime(@Model.Data_Transacao).ToString("dd/MM/yyyy"), @readonly = true })</label>
                             </td>
                             <td style="width: 80px">
-                                
                             </td>
                             <td style="width: 263px">
-                                
                             </td>
                         </tr>
                     </table>

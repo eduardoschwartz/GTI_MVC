@@ -278,5 +278,10 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public bool Existe_Usuario_Web(string Email) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            return obj.Existe_Usuario_Web(Email);
+        }
+
     }
 }

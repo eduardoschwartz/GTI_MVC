@@ -88,16 +88,7 @@
                                 </tr>
                             </table>
 
-                            <table style="font-size:14px;width:640px">
-                                <tr style="height:30px">
-                                    <td style="width:154px">
-                                        <label style="font-weight:normal;">Natureza da transação:</label>
-                                    </td>
-                                    <td>
-                                        @Html.DropDownListFor(m => m.Natureza_Codigo, ViewBag.Lista_Natureza as SelectList, "(Selecione...)", new { @id = "NaturezaDropDown", style = "width:470px;height:25px", rows = 10 })
-                                    </td>
-                                </tr>
-                            </table>
+                           
 
                             <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Endereço do Imóvel:</label><br />
 
@@ -385,10 +376,20 @@
                     <div class="panel-body">
                         <table style="font-size:14px;width:640px">
                             <tr style="height:30px">
-                                <td style="width:133px">
+                                <td style="width:157px">
+                                    <label style="font-weight:normal;">Natureza da transação:</label>
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(m => m.Natureza_Codigo, ViewBag.Lista_Natureza as SelectList, "(Selecione...)", new { @id = "NaturezaDropDown", style = "width:470px;height:25px", rows = 10 })
+                                </td>
+                            </tr>
+                        </table>
+                        <table style="font-size:14px;width:640px">
+                            <tr style="height:30px">
+                                <td style="width:133px;padding-top:3px">
                                     <label style="font-weight:normal;">Valor da transação:</label>
                                 </td>
-                                <td style="width:105px">
+                                <td style="width:105px;padding-top:3px">
                                     @if (Model.Valor_Transacao > 0) {
                                         <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Transacao })</label>
                                     } else {
@@ -408,7 +409,7 @@
                                 <td style="width:372px">
                                     <label style="font-weight:normal">Valor da avaliação do imóvel (resgate alienação fiduciária):</label>
                                 </td>
-                                <td style="width:268px">
+                                <td style="width:268px;padding-top:2px">
                                     @if (Model.Valor_Avaliacao > 0) {
                                         <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao })</label>
                                     } else {
@@ -424,7 +425,7 @@
                                 </td>
                                 <td style="width:157px">
                                     @if (Model.Data_Transacao != null && Model.Data_Transacao != DateTime.MinValue) {
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Data_Transacao, new {@id="dataTransacao", @class = "maskData", style = "width:90px;height:25px;text-align:center", @Value = Convert.ToDateTime(@Model.Data_Transacao).ToString("dd/MM/yyyy") })</label>
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Data_Transacao, new { @id = "dataTransacao", @class = "maskData", style = "width:90px;height:25px;text-align:center", @Value = Convert.ToDateTime(@Model.Data_Transacao).ToString("dd/MM/yyyy") })</label>
                                     } else {
                                         <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Data_Transacao, new { @id = "dataTransacao", @class = "maskData", style = "width:90px;height:25px;text-align:center", @Value = "" })</label>
                                     }

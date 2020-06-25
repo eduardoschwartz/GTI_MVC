@@ -1259,8 +1259,8 @@ namespace GTI_Mvc.Controllers {
 
             if (action == "btnValida") {
                 model.Lista_Erro = Valida_Itbi(model);
+                Grava_Itbi(model);
                 if (model.Lista_Erro.Count > 0) {
-                    Grava_Itbi(model);
                     ViewBag.ListaErro = new SelectList(model.Lista_Erro);
                     return View(model);
                 } else {
@@ -1641,8 +1641,8 @@ namespace GTI_Mvc.Controllers {
 
             if (action == "btnValida") {
                 model.Lista_Erro = Valida_Itbi(model);
+                Grava_Itbi(model);
                 if (model.Lista_Erro.Count > 0) {
-                    Grava_Itbi(model);
                     ViewBag.ListaErro = new SelectList(model.Lista_Erro);
                     return View(model);
                 } else {
@@ -1657,8 +1657,8 @@ namespace GTI_Mvc.Controllers {
 
             if (action == "btnPrint") {
                 model.Lista_Erro = Valida_Itbi(model);
+                Grava_Itbi(model);
                 if (model.Lista_Erro.Count > 0) {
-                    Grava_Itbi(model);
                     ViewBag.ListaErro = new SelectList(model.Lista_Erro);
                     return View(model);
                 } else {

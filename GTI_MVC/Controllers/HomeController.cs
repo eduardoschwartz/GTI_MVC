@@ -206,8 +206,13 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.Result = "Código de verificação inválido.";
                 return View(model);
             }
-
             Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+
+            if (sistemaRepository.Existe_Usuario_Web(model.Email)) {
+                ViewBag.Result = "Este email já esta cadastrado.";
+                return View(model);
+            }
+
             Usuario_web reg = new Usuario_web() {
                 Nome = model.Usuario,
                 Email = model.Email,

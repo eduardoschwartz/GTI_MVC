@@ -697,6 +697,15 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public bool Existe_Usuario_Web(string Email) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                bool _ret = false;
+                var Sql = (from t in db.Usuario_Web where t.Email == Email select t).FirstOrDefault();
+                if (Sql != null)
+                    _ret = true;
+                return _ret;
+            }
+        }
 
     }
 }
