@@ -63,7 +63,7 @@
                             </tr>
                         </table>
                         @if (@Model.Inscricao == null) {
-                            <label style="font-weight:normal;font-size:14px;color:brown">(Encontra-se na capa do carnê de IPTU)&nbsp;&nbsp;</label><br />
+                            <label style="font-weight:normal;font-size:13px;color:brown">(Encontra-se na capa do carnê de IPTU)&nbsp;&nbsp;</label><br />
                         }
                     </div>
                     @if (@Model.Inscricao != null) {
@@ -88,7 +88,7 @@
                                 </tr>
                             </table>
 
-                           
+
 
                             <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Endereço do Imóvel:</label><br />
 
@@ -527,29 +527,29 @@
                             <div style="display:none">@Html.EditorFor(model => model.Lista_Vendedor)</div>
                             <table id="tblVendedor" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px">
                                 @foreach (var item in Model.Lista_Anexo) {
-                                <tr>
-                                    <td style="width:20px;font-weight:normal;color:blue">
-                                        @Html.DisplayFor(modelItem => item.Seq)
-                                        @Html.HiddenFor(modelItem => item.Seq)
-                                    </td>
-                                    <td style="width:350px;font-weight:normal;color:blue">
-                                        @Html.DisplayFor(modelItem => item.Nome)
-                                        @Html.HiddenFor(modelItem => item.Nome)
-                                    </td>
-                                    <td style="width:230px;font-weight:normal;color:blue">
-                                        @Html.DisplayFor(modelItem => item.Arquivo)
-                                        @Html.HiddenFor(modelItem => item.Arquivo)
-                                    </td>
-                                    <td>
-                                        <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "ra", @s = item.Seq, @guid = Model.Guid })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td style="width:20px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Seq)
+                                            @Html.HiddenFor(modelItem => item.Seq)
+                                        </td>
+                                        <td style="width:350px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Nome)
+                                            @Html.HiddenFor(modelItem => item.Nome)
+                                        </td>
+                                        <td style="width:230px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Arquivo)
+                                            @Html.HiddenFor(modelItem => item.Arquivo)
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "ra", @s = item.Seq, @guid = Model.Guid })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                        </td>
+                                    </tr>
                                 }
                             </table>
                         </div>
                         <br />
 
-                        
+
                         <input style="width:610px" id="imageUpload" type="file" name="file" accept="application/pdf" /><br />
                         <table>
                             <tr>
@@ -572,7 +572,32 @@
                         </table>
                         <div style="padding-top:7px;"><button type="submit" class="btn btn-info" name="action" value="btnAnexoAdd">Incluir anexo</button></div>
                     </div>
+                    <div class="panel-heading">Valor da guia para pagamento </div>
+                    <div class="panel-body">
+
+                        <table style="font-size:14px;width:640px">
+                            <tr style="height:30px">
+                                <td style="width:103px">
+                                    <label style="font-weight:normal;">Valor da guia:</label>
+                                </td>
+                                <td>
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal, new { style = "width:90px;height:25px;text-align:right", @readonly = true })</label>
+                                </td>
+                            </tr>
+                        </table>
+                        <table>
+                            <tr>
+                                <td style="color:brown;font-size:12px">
+                                    Atenção: Este valor é simulado com base nas informações digitadas.<br />
+                                    O valor da guia poderá ser alterado conforme análise da documentação pelo fiscal.
+                                </td>
+
+                            </tr>
+                        </table>
+                    </div>
+
                 }
+
 
                 @if (ViewBag.Error != null && ViewBag.Error != "") {
                     <div class="form-group row">

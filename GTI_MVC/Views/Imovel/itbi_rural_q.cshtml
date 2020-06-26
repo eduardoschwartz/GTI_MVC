@@ -339,8 +339,10 @@
                                 <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Data_Transacao, new { @id = "dataTransacao", @class = "maskData", style = "width:90px;height:25px;text-align:center", @Value = Convert.ToDateTime(@Model.Data_Transacao).ToString("dd/MM/yyyy"), @readonly = true })</label>
                             </td>
                             <td style="width: 80px">
+                                <label style="font-weight:normal;">Valor ITR:</label>
                             </td>
                             <td style="width: 263px">
+                                <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal, new { style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Venal.ToString("#.#0"), @readonly = true })</label>
                             </td>
                         </tr>
                     </table>

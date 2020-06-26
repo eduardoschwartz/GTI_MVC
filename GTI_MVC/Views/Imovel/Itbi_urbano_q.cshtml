@@ -350,7 +350,7 @@
                             <td style="width:133px">
                                 <label style="font-weight:normal;">Valor da transação:</label>
                             </td>
-                            <td style="width:105px">
+                            <td style="width:105px;padding-top:3px">
                                 <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Transacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Transacao, @readonly = true })</label>
                             </td>
                             <td style="width:134px">
@@ -488,14 +488,29 @@
 
                 </div>
 
+                <div class="panel-heading">Dados da guia para pagamento </div>
+                <div class="panel-body">
 
-                @if (ViewBag.Error != null && ViewBag.Error != "") {
-                    <div class="form-group row">
-                        <label style="font-weight:normal;color:red;padding-left:28px" id="errorLabel">@ViewBag.Error</label>
-                    </div>
-                }
+                    <table style="font-size:14px;width:640px">
+                        <tr style="height:30px">
+                            <td style="width:103px">
+                                <label style="font-weight:normal;">Valor da guia:</label>
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m => m.Cpf_Cnpj, new { @style = "max-width:200px;height:25px;color:blue", @readonly = true })
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+
+                    @if (ViewBag.Error != null && ViewBag.Error != "") {
+                        <div class="form-group row">
+                            <label style="font-weight:normal;color:red;padding-left:28px" id="errorLabel">@ViewBag.Error</label>
+                        </div>
+                    }
+                </div>
             </div>
-        </div>
 
         <div style="padding-left:15px">@Html.ActionLink("Consultar outro ITBI", "Itbi_query", "Imovel", null, new { @class = "actionlink" })</div>
         <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })</div>

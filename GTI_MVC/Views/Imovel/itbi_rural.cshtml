@@ -371,20 +371,30 @@
                     </table>
                     <table style="font-size:14px;width:640px">
                         <tr style="height:30px">
-                            <td style="width:147px">
+                            <td style="width:130px">
                                 <label style="font-weight:normal;">Data da transação:</label>
                             </td>
-                            <td style="width:105px">
+                            <td style="width:157px">
                                 @if (Model.Data_Transacao != null && Model.Data_Transacao != DateTime.MinValue) {
                                     <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Data_Transacao, new { @id = "dataTransacao", @class = "maskData", style = "width:90px;height:25px;text-align:center", @Value = Convert.ToDateTime(@Model.Data_Transacao).ToString("dd/MM/yyyy") })</label>
                                 } else {
                                     <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Data_Transacao, new { @id = "dataTransacao", @class = "maskData", style = "width:90px;height:25px;text-align:center", @Value = "" })</label>
                                 }
                             </td>
-                            <td style="width: 160px">
-                                <label style="font-weight:normal;padding-top:5px">Tipo de Instrumento:</label>
+                            <td style="width: 80px">
+                                <label style="font-weight:normal;">Valor ITR:</label>
                             </td>
-                            <td style="width:288px">
+                            <td style="width: 263px">
+                                <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal, new { style = "width:90px;height:25px;text-align:right" })</label>
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="font-size:14px;width:640px">
+                        <tr style="height:30px">
+                            <td style="width:140px;padding-top:5px">
+                                <label style="font-weight:normal;">Tipo de Instrumento:</label>
+                            </td>
+                            <td style="width:500px">
                                 @foreach (var tipo in Model.Lista_Instrumento) {
                                     @Html.RadioButtonFor(model => model.Tipo_Instrumento, tipo) <span>&nbsp;</span>@tipo<span>&nbsp;&nbsp;</span>
                                 }
