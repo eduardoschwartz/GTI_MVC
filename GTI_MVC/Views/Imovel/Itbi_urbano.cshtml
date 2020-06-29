@@ -399,7 +399,7 @@
                                     <label style="font-weight:normal;">Tipo Financiamento:</label>
                                 </td>
                                 <td style="width:265px">
-                                    @Html.DropDownListFor(m => m.Tipo_Financiamento, ViewBag.Lista_Financiamento as SelectList, "(Selecione...)", new { @id = "FinanciamentoDropDown", style = "width:255px;height:25px", rows = 10 })
+                                    @Html.DropDownListFor(m => m.Tipo_Financiamento, ViewBag.Lista_Financiamento as SelectList, "(Selecione se for financiamento...)", new { @id = "FinanciamentoDropDown", style = "width:255px;height:25px", rows = 10 })
                                 </td>
                             </tr>
                         </table>
@@ -409,7 +409,7 @@
                                     <label style="font-weight:normal;">Recursos próprios:</label>
                                 </td>
                                 <td style="width: 100px">
-                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Recursos_proprios_valor, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_proprios_valor.ToString("0.#0") })</label>
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Recursos_proprios_valor, new {id="txtRecursoProprio",@class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_proprios_valor.ToString("0.#0"), @readonly = true })</label>
                                 </td>
                                 <td style="width: 34px">
                                     <label style="font-weight:normal;">Aliq.:</label>
@@ -421,7 +421,7 @@
                                     <label style="font-weight:normal;">Valor:</label>
                                 </td>
                                 <td style="width: 100px">
-                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Recursos_proprios_atual, new {@id="txtRecursosPropriosAtual", style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_proprios_atual.ToString("0.#0"), @readonly = true })</label>
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Recursos_proprios_atual, new { id = "txtRecursoProprioAtual", style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_proprios_atual.ToString("0.#0"), @readonly = true })</label>
                                 </td>
                             </tr>
                             <tr style="height:30px">
@@ -429,7 +429,7 @@
                                     <label style="font-weight:normal;">Recursos conta vinculada do FGTS:</label>
                                 </td>
                                 <td style="width: 100px">
-                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Recursos_conta_valor, new { style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_conta_valor.ToString("0.#0") })</label>
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Recursos_conta_valor, new { id = "txtRecursoConta", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_conta_valor.ToString("0.#0"), @readonly = true })</label>
                                 </td>
                                 <td style="width: 34px">
                                     <label style="font-weight:normal;">Aliq.:</label>
@@ -441,7 +441,7 @@
                                     <label style="font-weight:normal;">Valor:</label>
                                 </td>
                                 <td style="width: 100px">
-                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Recursos_conta_atual, new { style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_conta_atual.ToString("0.#0"), @readonly = true })</label>
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Recursos_conta_atual, new { id = "txtRecursoContaAtual", style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_conta_atual.ToString("0.#0"), @readonly = true })</label>
                                 </td>
                             </tr>
                             <tr style="height:30px">
@@ -449,7 +449,7 @@
                                     <label style="font-weight:normal;">Recursos concedidos pelo FGTS na forma de desconto:</label>
                                 </td>
                                 <td style="width: 100px">
-                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Recursos_concedido_valor, new { style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_concedido_valor.ToString("0.#0") })</label>
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Recursos_concedido_valor, new { id = "txtRecursoConcedido", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_concedido_valor.ToString("0.#0"), @readonly = true })</label>
                                 </td>
                                 <td style="width: 34px">
                                     <label style="font-weight:normal;">Aliq.:</label>
@@ -461,7 +461,7 @@
                                     <label style="font-weight:normal;">Valor:</label>
                                 </td>
                                 <td style="width: 100px">
-                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Recursos_concedido_atual, new { style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_concedido_atual.ToString("0.#0"), @readonly = true })</label>
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Recursos_concedido_atual, new { id = "txtRecursoConcedidoAtual", style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_concedido_atual.ToString("0.#0"), @readonly = true })</label>
                                 </td>
                             </tr>
                             <tr style="height:30px">
@@ -469,7 +469,7 @@
                                     <label style="font-weight:normal;">Financiamento concedido pala CREDORA:</label>
                                 </td>
                                 <td style="width: 100px">
-                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Financiamento_valor, new { style = "width:90px;height:25px;text-align:right", @Value = Model.Financiamento_valor.ToString("0.#0") })</label>
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Financiamento_valor, new { id = "txtFinanciamento", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Financiamento_valor.ToString("0.#0"), @readonly = true })</label>
                                 </td>
                                 <td style="width: 34px">
                                     <label style="font-weight:normal;">Aliq.:</label>
@@ -481,7 +481,7 @@
                                     <label style="font-weight:normal;">Valor:</label>
                                 </td>
                                 <td style="width: 100px">
-                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Financiamento_atual, new { style = "width:90px;height:25px;text-align:right", @Value = Model.Financiamento_atual.ToString("0.#0"), @readonly = true })</label>
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Financiamento_atual, new { id = "txtFinanciamentoAtual", style = "width:90px;height:25px;text-align:right", @Value = Model.Financiamento_atual.ToString("0.#0"), @readonly = true })</label>
                                 </td>
                             </tr>
                         </table>
@@ -502,9 +502,9 @@
                                 </td>
                                 <td style="width:332px">
                                     @if (Model.Valor_Venal > 0) {
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Transacao.ToString("0.#0") })</label>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Transacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Transacao.ToString("0.#0"), @readonly = true })</label>
                                     } else {
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Transacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
                                     }
                                 </td>
                             </tr>
@@ -850,8 +850,85 @@
             $(".maskPerc").inputmask('Regex', { regex: "^[0-9]{1,3}(\\,\\d{1,2})?$" });
             $(".maskData").inputmask("99/99/9999");
             $(".maskCep").inputmask("99999-999");
+
+            $("#FinanciamentoDropDown").change(function () {
+                if (this.value != '') {
+                    $("input[name='Recursos_proprios_valor']").css({ "color": "black" });
+                    $("input[name='Recursos_proprios_valor']").prop('readonly', false);
+                    $("input[name='Recursos_conta_valor']").css({ "color": "black" });
+                    $("input[name='Recursos_conta_valor']").prop('readonly', false);
+                    $("input[name='Recursos_concedido_valor']").css({ "color": "black" });
+                    $("input[name='Recursos_concedido_valor']").prop('readonly', false);
+                    $("input[name='Financiamento_valor']").css({ "color": "black" });
+                    $("input[name='Financiamento_valor']").prop('readonly', false);
+                    $("input[name='Valor_Transacao']").css({ "color": "blue" });
+                    $("input[name='Valor_Transacao']").prop('readonly', true);
+                }
+                else {
+                    $("input[name='Recursos_proprios_valor']").val('0,00');
+                    $("input[name='Recursos_proprios_valor']").css({ "color": "blue" });
+                    $("input[name='Recursos_proprios_valor']").prop('readonly', true);
+                    $("input[name='Recursos_conta_valor']").val('0,00');
+                    $("input[name='Recursos_conta_valor']").css({ "color": "blue" });
+                    $("input[name='Recursos_conta_valor']").prop('readonly', true);
+                    $("input[name='Recursos_concedido_valor']").val('0,00');
+                    $("input[name='Recursos_concedido_valor']").css({ "color": "blue" });
+                    $("input[name='Recursos_concedido_valor']").prop('readonly', true);
+                    $("input[name='Financiamento_valor']").val('0,00');
+                    $("input[name='Financiamento_valor']").css({ "color": "blue" });
+                    $("input[name='Financiamento_valor']").prop('readonly', true);
+                    $("input[name='Valor_Transacao']").css({ "color": "black" });
+                    $("input[name='Valor_Transacao']").prop('readonly', false);
+                    $("input[name='Valor_Transacao']").val('0,00');
+                }
+            });
+
+            $("#txtRecursoProprio").on('input', function () {
+                var _rp = document.getElementById('txtRecursoProprio').value;
+                var _rp2 = Number(_rp.replace(/[^0-9.-]+/g, "."));
+                var _rp3 = parseFloat(_rp2) ;
+                $("input[name='Recursos_proprios_atual']").val((_rp3 * 0.03).toFixed(2));
+                calcula_guia();
+            });
+
+            $("#txtRecursoConta").on('input', function () {
+                var _rc = document.getElementById('txtRecursoConta').value;
+                var _rc2 = Number(_rc.replace(/[^0-9.-]+/g, "."));
+                var _rc3 = parseFloat(_rc2);
+                $("input[name='Recursos_conta_atual']").val((_rc3 * 0.03).toFixed(2));
+                calcula_guia();
+            });
+
+            $("#txtRecursoConcedido").on('input', function () {
+                var _rd = document.getElementById('txtRecursoConcedido').value;
+                var _rd2 = Number(_rd.replace(/[^0-9.-]+/g, "."));
+                var _rd3 = parseFloat(_rd2);
+                $("input[name='Recursos_concedido_atual']").val((_rd3 * 0.03).toFixed(2));
+                calcula_guia();
+            });
+
+            $("#txtFinanciamento").on('input', function () {
+                var _fn = document.getElementById('txtFinanciamento').value;
+                var _fn2 = Number(_fn.replace(/[^0-9.-]+/g, "."));
+                var _fn3 = parseFloat(_fn2);
+                $("input[name='Financiamento_atual']").val((_fn3 * 0.03).toFixed(2));
+                calcula_guia();
+            });
+
         });
 
+        function calcula_guia() {
+            var _rp = document.getElementById('txtRecursoProprioAtual').value;
+            var _rp2 = Number(_rp.replace(/[^0-9.-]+/g, "."));
+            var _rc = document.getElementById('txtRecursoContaAtual').value;
+            var _rc2 = Number(_rc.replace(/[^0-9.-]+/g, "."));
+            var _rd = document.getElementById('txtRecursoConcedidoAtual').value;
+            var _rd2 = Number(_rd.replace(/[^0-9.-]+/g, "."));
+            var _fn = document.getElementById('txtFinanciamentoAtual').value;
+            var _fn2 = Number(_fn.replace(/[^0-9.-]+/g, "."));
+            var _soma = (parseFloat(_rp2) + parseFloat(_rc2) + parseFloat(_rd2) + parseFloat(_fn2));
+            $("input[name='Valor_Transacao']").val(_soma.toFixed(2));
+        }
 
         function cancelarCodigo() {
             if (confirm('Deseja cancelar este ITBI?')) {
