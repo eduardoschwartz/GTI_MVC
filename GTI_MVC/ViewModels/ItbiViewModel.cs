@@ -29,11 +29,24 @@ namespace GTI_Mvc.ViewModels {
         public List<ListCompradorEditorViewModel> Lista_Comprador { get; set; }
         public List<ListVendedorEditorViewModel> Lista_Vendedor { get; set; }
         public decimal Valor_Transacao { get; set; }
+        public decimal Valor_Avaliacao { get; set; }
+        public decimal Valor_Avaliacao_atual { get; set; }
+        public decimal Valor_Venal { get; set; }
+        public decimal Recursos_proprios_valor { get; set; }
+        public decimal Recursos_proprios_aliq { get; set; }
+        public decimal Recursos_proprios_atual { get; set; }
+        public decimal Recursos_conta_valor { get; set; }
+        public decimal Recursos_conta_aliq { get; set; }
+        public decimal Recursos_conta_atual { get; set; }
+        public decimal Recursos_concedido_valor { get; set; }
+        public decimal Recursos_concedido_aliq { get; set; }
+        public decimal Recursos_concedido_atual { get; set; }
+        public decimal Financiamento_valor { get; set; }
+        public decimal Financiamento_aliq { get; set; }
+        public decimal Financiamento_atual { get; set; }
         public int Tipo_Financiamento { get; set; }
         public string Tipo_Financiamento_Nome { get; set; }
-        public decimal Valor_Avaliacao { get; set; }
         public DateTime? Data_Transacao { get; set; }
-        public decimal Valor_Venal { get; set; }
         public string Tipo_Instrumento { get; set; } = "Particular";
         public string[] Lista_Instrumento = new[] { "Particular", "Público" };
         public string Totalidade { get; set; }
@@ -48,6 +61,9 @@ namespace GTI_Mvc.ViewModels {
         public string Anexo_Nome_tmp { get; set; }
         public string Anexo_Desc_tmp { get; set; }
         public int UserId { get; set; }
+        public decimal Valor_guia { get; set; }
+        public decimal Valor_guia_atual { get; set; }
+
 
         public ItbiViewModel() {
             Lista_Comprador = new List<ListCompradorEditorViewModel>();

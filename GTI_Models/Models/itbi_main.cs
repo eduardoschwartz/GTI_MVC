@@ -33,12 +33,25 @@ namespace GTI_Models.Models {
         public string Comprador_uf { get; set; }
         public string Comprador_telefone { get; set; }
         public string Comprador_email { get; set; }
-        public decimal Valor_Transacao { get; set; }
         public int Tipo_Financiamento { get; set; }
-        public decimal Valor_Avaliacao { get; set; }
-        public DateTime? Data_Transacao { get; set; }
-        public decimal Valor_Venal { get; set; }
         public string Tipo_Instrumento { get; set; }
+        public DateTime? Data_Transacao { get; set; }
+        public decimal Valor_Transacao { get; set; }
+        public decimal Valor_Avaliacao { get; set; }
+        public decimal Valor_Avaliacao_atual { get; set; }
+        public decimal Valor_Venal { get; set; }
+        public decimal Recursos_proprios_valor { get; set; }
+        public decimal Recursos_proprios_aliq { get; set; }
+        public decimal Recursos_proprios_atual { get; set; }
+        public decimal Recursos_conta_valor { get; set; }
+        public decimal Recursos_conta_aliq { get; set; }
+        public decimal Recursos_conta_atual { get; set; }
+        public decimal Recursos_concedido_valor { get; set; }
+        public decimal Recursos_concedido_aliq { get; set; }
+        public decimal Recursos_concedido_atual { get; set; }
+        public decimal Financiamento_valor { get; set; }
+        public decimal Financiamento_aliq { get; set; }
+        public decimal Financiamento_atual { get; set; }
         public string Totalidade { get; set; }
         public decimal Totalidade_Perc { get; set; }
         public Int64 Matricula { get; set; }
@@ -51,6 +64,8 @@ namespace GTI_Models.Models {
         public int Situacao_itbi { get; set; }
         public int? Liberado_por { get; set; }
         public DateTime? Liberado_em { get; set; }
+        public decimal  Valor_guia { get; set; }
+        public decimal Valor_guia_atual { get; set; }
     }
 
     public class Itbi_Numero {
