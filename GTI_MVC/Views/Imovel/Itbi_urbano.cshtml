@@ -887,7 +887,7 @@
                 var _rp = document.getElementById('txtRecursoProprio').value;
                 var _rp2 = Number(_rp.replace(/[^0-9.-]+/g, "."));
                 var _rp3 = parseFloat(_rp2) ;
-                $("input[name='Recursos_proprios_atual']").val((_rp3 * 0.03).toFixed(2));
+                $("input[name='Recursos_proprios_atual']").val((_rp3 * 0.03).toFixed(2).replace(".", ","));
                 calcula_guia();
             });
 
@@ -895,7 +895,7 @@
                 var _rc = document.getElementById('txtRecursoConta').value;
                 var _rc2 = Number(_rc.replace(/[^0-9.-]+/g, "."));
                 var _rc3 = parseFloat(_rc2);
-                $("input[name='Recursos_conta_atual']").val((_rc3 * 0.03).toFixed(2));
+                $("input[name='Recursos_conta_atual']").val((_rc3 * 0.03).toFixed(2).replace(".", ","));
                 calcula_guia();
             });
 
@@ -903,7 +903,7 @@
                 var _rd = document.getElementById('txtRecursoConcedido').value;
                 var _rd2 = Number(_rd.replace(/[^0-9.-]+/g, "."));
                 var _rd3 = parseFloat(_rd2);
-                $("input[name='Recursos_concedido_atual']").val((_rd3 * 0.03).toFixed(2));
+                $("input[name='Recursos_concedido_atual']").val((_rd3 * 0.03).toFixed(2).replace(".", ","));
                 calcula_guia();
             });
 
@@ -911,7 +911,7 @@
                 var _fn = document.getElementById('txtFinanciamento').value;
                 var _fn2 = Number(_fn.replace(/[^0-9.-]+/g, "."));
                 var _fn3 = parseFloat(_fn2);
-                $("input[name='Financiamento_atual']").val((_fn3 * 0.03).toFixed(2));
+                $("input[name='Financiamento_atual']").val((_fn3 * 0.03).toFixed(2).replace(".", ","));
                 calcula_guia();
             });
 
@@ -927,7 +927,7 @@
             var _fn = document.getElementById('txtFinanciamentoAtual').value;
             var _fn2 = Number(_fn.replace(/[^0-9.-]+/g, "."));
             var _soma = (parseFloat(_rp2) + parseFloat(_rc2) + parseFloat(_rd2) + parseFloat(_fn2));
-            $("input[name='Valor_Transacao']").val(_soma.toFixed(2));
+            $("input[name='Valor_Transacao']").val(_soma.toFixed(2).replace(".", ","));
         }
 
         function cancelarCodigo() {
