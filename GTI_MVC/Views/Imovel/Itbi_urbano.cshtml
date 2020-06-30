@@ -492,9 +492,9 @@
                                 </td>
                                 <td style="width:130px">
                                     @if (Model.Valor_Transacao > 0) {
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Transacao.ToString("0.#0") })</label>
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Transacao.ToString("0.#0") })</label>
                                     } else {
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
                                     }
                                 </td>
                                 <td style="width:82px">
@@ -502,9 +502,9 @@
                                 </td>
                                 <td style="width:332px">
                                     @if (Model.Valor_Venal > 0) {
-                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Transacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Transacao.ToString("0.#0"), @readonly = true })</label>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Venal.ToString("0.#0"), @readonly = true })</label>
                                     } else {
-                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Transacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
                                     }
                                 </td>
                             </tr>
@@ -529,10 +529,10 @@
                                     <label style="font-weight:normal">Valor da avaliação do imóvel corrigido pelo IPCA(IPC-A 1980) - atualizado pelo fiscal:</label>
                                 </td>
                                 <td style="width:100px;padding-top:2px">
-                                    @if (Model.Valor_Avaliacao > 0) {
-                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao })</label>
+                                    @if (Model.Valor_Avaliacao_atual > 0) {
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao })</label>
                                     } else {
-                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                     }
                                 </td>
                             </tr>
@@ -614,9 +614,9 @@
                                 </td>
                                 <td style="width:130px;padding-top:3px">
                                     @if (Model.Valor_guia > 0) {
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_guia, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_guia.ToString("0.#0") })</label>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_guia, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_guia.ToString("0.#0"), @readonly = true })</label>
                                     } else {
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_guia, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_guia, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
                                     }
                                 </td>
                                 <td style="width:174px;padding-top:3px">
@@ -863,6 +863,7 @@
                     $("input[name='Financiamento_valor']").prop('readonly', false);
                     $("input[name='Valor_Transacao']").css({ "color": "blue" });
                     $("input[name='Valor_Transacao']").prop('readonly', true);
+                    
                 }
                 else {
                     $("input[name='Recursos_proprios_valor']").val('0,00');
@@ -879,8 +880,12 @@
                     $("input[name='Financiamento_valor']").prop('readonly', true);
                     $("input[name='Valor_Transacao']").css({ "color": "black" });
                     $("input[name='Valor_Transacao']").prop('readonly', false);
-                    $("input[name='Valor_Transacao']").val('0,00');
                 }
+            });
+            calcula_guia();
+
+            $("#txtValorTransacao").on('input', function () {
+                calcula_guia();
             });
 
             $("#txtRecursoProprio").on('input', function () {
@@ -918,16 +923,37 @@
         });
 
         function calcula_guia() {
-            var _rp = document.getElementById('txtRecursoProprioAtual').value;
-            var _rp2 = Number(_rp.replace(/[^0-9.-]+/g, "."));
-            var _rc = document.getElementById('txtRecursoContaAtual').value;
-            var _rc2 = Number(_rc.replace(/[^0-9.-]+/g, "."));
-            var _rd = document.getElementById('txtRecursoConcedidoAtual').value;
-            var _rd2 = Number(_rd.replace(/[^0-9.-]+/g, "."));
-            var _fn = document.getElementById('txtFinanciamentoAtual').value;
-            var _fn2 = Number(_fn.replace(/[^0-9.-]+/g, "."));
-            var _soma = (parseFloat(_rp2) + parseFloat(_rc2) + parseFloat(_rd2) + parseFloat(_fn2));
-            $("input[name='Valor_Transacao']").val(_soma.toFixed(2).replace(".", ","));
+
+            var _tf = document.getElementById('FinanciamentoDropDown').value;
+            if (_tf != "") {
+                var _rpa = document.getElementById('txtRecursoProprioAtual').value;
+                var _rpa2 = Number(_rpa.replace(/[^0-9.-]+/g, "."));
+                var _rca = document.getElementById('txtRecursoContaAtual').value;
+                var _rca2 = Number(_rca.replace(/[^0-9.-]+/g, "."));
+                var _rda = document.getElementById('txtRecursoConcedidoAtual').value;
+                var _rda2 = Number(_rda.replace(/[^0-9.-]+/g, "."));
+                var _fna = document.getElementById('txtFinanciamentoAtual').value;
+                var _fna2 = Number(_fna.replace(/[^0-9.-]+/g, "."));
+                var _somaa = (parseFloat(_rpa2) + parseFloat(_rca2) + parseFloat(_rda2) + parseFloat(_fna2));
+
+                var _rp = document.getElementById('txtRecursoProprio').value;
+                var _rp2 = Number(_rp.replace(/[^0-9.-]+/g, "."));
+                var _rc = document.getElementById('txtRecursoConta').value;
+                var _rc2 = Number(_rc.replace(/[^0-9.-]+/g, "."));
+                var _rd = document.getElementById('txtRecursoConcedido').value;
+                var _rd2 = Number(_rd.replace(/[^0-9.-]+/g, "."));
+                var _fn = document.getElementById('txtFinanciamento').value;
+                var _fn2 = Number(_fn.replace(/[^0-9.-]+/g, "."));
+                var _soma = (parseFloat(_rp2) + parseFloat(_rc2) + parseFloat(_rd2) + parseFloat(_fn2));
+                $("input[name='Valor_Transacao']").val(_soma.toFixed(2).replace(".", ","));
+            }
+            var _vv = document.getElementById('txtValorVenal').value;
+            var _vv2 = Number(_vv.replace(/[^0-9.-]+/g, "."));
+            var _somavv = (parseFloat(_vv2));
+            if (_soma > _somavv)
+                $("input[name='Valor_guia']").val((_soma * 0.03).toFixed(2).replace(".", ","));
+            else
+                $("input[name='Valor_guia']").val((_somavv * 0.03).toFixed(2).replace(".", ","));
         }
 
         function cancelarCodigo() {
