@@ -117,6 +117,8 @@ namespace GTI_Mvc {
         }
 
         public static bool IsDate(object date) {
+            if (date == null)
+                return false;
             try {
                 DateTime dt = DateTime.Parse(date.ToString());
                 return true;

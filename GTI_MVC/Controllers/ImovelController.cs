@@ -2066,6 +2066,25 @@ namespace GTI_Mvc.Controllers {
                 regMain.Comprador_uf = model.Comprador.UF;
                 regMain.Comprador_telefone = model.Comprador.Telefone;
                 regMain.Comprador_email = model.Comprador.Email;
+                regMain.Recursos_proprios_valor = model.Recursos_proprios_valor;
+                regMain.Recursos_proprios_aliq = model.Recursos_proprios_aliq;
+                regMain.Recursos_proprios_atual = model.Recursos_proprios_atual;
+                regMain.Recursos_conta_valor = model.Recursos_conta_valor;
+                regMain.Recursos_conta_aliq = model.Recursos_conta_aliq;
+                regMain.Recursos_conta_atual = model.Recursos_conta_atual;
+                regMain.Recursos_concedido_valor = model.Recursos_concedido_valor;
+                regMain.Recursos_concedido_aliq = model.Recursos_concedido_aliq;
+                regMain.Recursos_concedido_atual = model.Recursos_concedido_atual;
+                regMain.Financiamento_valor = model.Financiamento_valor;
+                regMain.Financiamento_aliq = model.Financiamento_aliq;
+                regMain.Financiamento_atual = model.Financiamento_atual;
+                regMain.Valor_Avaliacao = model.Valor_Avaliacao;
+                regMain.Valor_Avaliacao_atual = model.Valor_Avaliacao_atual;
+                regMain.Valor_guia = model.Valor_guia;
+                regMain.Valor_guia_atual = model.Valor_guia_atual;
+                regMain.Valor_Transacao = model.Valor_Transacao;
+                regMain.Valor_Venal = model.Valor_Venal;
+
                 ex = imovelRepository.Alterar_Itbi_Main(regMain);
             }
 
@@ -2131,8 +2150,23 @@ namespace GTI_Mvc.Controllers {
                 Itbi_Numero = regMain.Itbi_Numero,
                 Itbi_NumeroAno = regMain.Itbi_Numero.ToString("000000/") + regMain.Itbi_Ano.ToString(),
                 Situacao_Itbi_codigo = regMain.Situacao_itbi,
-                Tipo_Imovel=regMain.Inscricao==null?"Rural":"Urbano",
-                UserId=regMain.Userid
+                Tipo_Imovel = regMain.Inscricao == null ? "Rural" : "Urbano",
+                UserId = regMain.Userid,
+                Financiamento_valor = regMain.Financiamento_valor,
+                Financiamento_aliq = regMain.Financiamento_aliq,
+                Financiamento_atual = regMain.Financiamento_atual,
+                Recursos_conta_valor = regMain.Recursos_conta_valor,
+                Recursos_conta_aliq = regMain.Recursos_conta_aliq,
+                Recursos_conta_atual = regMain.Recursos_conta_atual,
+                Recursos_concedido_valor = regMain.Recursos_concedido_valor,
+                Recursos_concedido_aliq = regMain.Recursos_concedido_aliq,
+                Recursos_concedido_atual=regMain.Recursos_concedido_atual,
+                Recursos_proprios_valor=regMain.Recursos_proprios_valor,
+                Recursos_proprios_aliq=regMain.Recursos_proprios_aliq,
+                Recursos_proprios_atual=regMain.Recursos_proprios_atual,
+                Valor_Avaliacao_atual=regMain.Valor_Avaliacao_atual,
+                Valor_guia=regMain.Valor_guia,
+                Valor_guia_atual=regMain.Valor_guia_atual
             };
             itbi.Situacao_Itbi_Nome = imovelRepository.Retorna_Itbi_Situacao(regMain.Situacao_itbi);
             itbi.Natureza_Nome = imovelRepository.Retorna_Itbi_Natureza_nome(regMain.Natureza_Codigo);

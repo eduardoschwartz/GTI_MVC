@@ -524,7 +524,7 @@
                                     }
                                 </td>
                             </tr>
-                            <tr style="height:30px">
+                            @*<tr style="height:30px">
                                 <td style="width:544px">
                                     <label style="font-weight:normal">Valor da avaliação do imóvel corrigido pelo IPCA(IPC-A 1980) - atualizado pelo fiscal:</label>
                                 </td>
@@ -535,7 +535,7 @@
                                         <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                     }
                                 </td>
-                            </tr>
+                            </tr>*@
                         </table>
 
 
@@ -556,7 +556,7 @@
                                 <td style="width:310px;padding-top:5px">
                                     <label style="font-weight:normal;">Esta sendo transmitido a totalidade do imóvel?:</label>
                                 </td>
-                                <td style="width:144px">
+                                <td style="width:136px">
                                     @if (Model.Totalidade == "Sim" || Model.Totalidade == null) {
                                         @Html.RadioButtonFor(model => model.Totalidade, "Sim", new { @id = "totalChk", @onclick = "radioCheck()", @checked = true })<label style="font-weight:normal">&nbsp;Sim&nbsp;&nbsp;</label>
                                         @Html.RadioButtonFor(model => model.Totalidade, "Não", new { @id = "totalChk", @onclick = "radioCheck()" })<label style="font-weight:normal">&nbsp;Não&nbsp;&nbsp;</label>
@@ -566,18 +566,25 @@
                                     }
 
                                 </td>
-                                <td style="width:190px;padding-top:5px">
+                                <td style="width:97px;padding-top:5px">
+                                    @if (Model.Totalidade == "Sim" || Model.Totalidade == null) {
+                                            <label style="font-weight:normal;display:none" id="percLabel">% transmitido:</label>
+                                    } else {
+                                            <label style="font-weight:normal;display:block" id="percLabel">% transmitido:</label>
+                                    }
+                                </td>
+                                <td style="width:101px;padding-top:5px">
                                     @if (Model.Totalidade == "Sim" || Model.Totalidade == null) {
                                         if (Model.Totalidade_Perc > 0) {
-                                            <label style="font-weight:normal;display:none" id="percLabel">% transmitido:&nbsp; @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc })</label>
+                                            <label style="font-weight:normal;display:none" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc })</label>
                                         } else {
-                                            <label style="font-weight:normal;display:none" id="percLabel">% transmitido:&nbsp; @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                            <label style="font-weight:normal;display:none" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                         }
                                     } else {
                                         if (Model.Totalidade_Perc > 0) {
-                                            <label style="font-weight:normal;display:block" id="percLabel">% transmitido:&nbsp; @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc })</label>
+                                            <label style="font-weight:normal;display:block" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc })</label>
                                         } else {
-                                            <label style="font-weight:normal;display:block" id="percLabel">% transmitido:&nbsp; @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                            <label style="font-weight:normal;display:block" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                         }
                                     }
                                 </td>
@@ -609,26 +616,26 @@
 
                         <table style="font-size:13px;width:640px">
                             <tr style="height:30px">
-                                <td style="width:130px;padding-top:3px">
+                                <td style="width:100px;padding-top:3px">
                                     <label style="font-weight:normal;">Valor da guia:</label>
                                 </td>
-                                <td style="width:130px;padding-top:3px">
+                                <td style="width:540px;padding-top:3px">
                                     @if (Model.Valor_guia > 0) {
                                         <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_guia, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_guia.ToString("0.#0"), @readonly = true })</label>
                                     } else {
                                         <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_guia, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
                                     }
                                 </td>
-                                <td style="width:174px;padding-top:3px">
+                                @*<td style="width:194px;padding-top:3px">
                                     <label style="font-weight:normal;">Valor atualizado pelo fiscal:</label>
                                 </td>
-                                <td style="width:240px;padding-top:3px">
+                                <td style="width:220px;padding-top:3px">
                                     @if (Model.Valor_guia_atual > 0) {
                                         <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_guia_atual.ToString("0.#0") })</label>
                                     } else {
                                         <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
                                     }
-                                </td>
+                                </td>*@
                             </tr>
 
                         </table>
@@ -867,19 +874,25 @@
                 }
                 else {
                     $("input[name='Recursos_proprios_valor']").val('0,00');
+                    $("input[name='Recursos_proprios_atual']").val('0,00');
                     $("input[name='Recursos_proprios_valor']").css({ "color": "blue" });
                     $("input[name='Recursos_proprios_valor']").prop('readonly', true);
                     $("input[name='Recursos_conta_valor']").val('0,00');
+                    $("input[name='Recursos_conta_atual']").val('0,00');
                     $("input[name='Recursos_conta_valor']").css({ "color": "blue" });
                     $("input[name='Recursos_conta_valor']").prop('readonly', true);
                     $("input[name='Recursos_concedido_valor']").val('0,00');
+                    $("input[name='Recursos_concedido_atual']").val('0,00');
                     $("input[name='Recursos_concedido_valor']").css({ "color": "blue" });
                     $("input[name='Recursos_concedido_valor']").prop('readonly', true);
                     $("input[name='Financiamento_valor']").val('0,00');
+                    $("input[name='Financiamento_atual']").val('0,00');
                     $("input[name='Financiamento_valor']").css({ "color": "blue" });
                     $("input[name='Financiamento_valor']").prop('readonly', true);
                     $("input[name='Valor_Transacao']").css({ "color": "black" });
                     $("input[name='Valor_Transacao']").prop('readonly', false);
+                    $("input[name='Valor_Transacao']").val('0,00');
+                    calcula_guia();
                 }
             });
             calcula_guia();
@@ -923,7 +936,6 @@
         });
 
         function calcula_guia() {
-
             var _tf = document.getElementById('FinanciamentoDropDown').value;
             if (_tf != "") {
                 var _rpa = document.getElementById('txtRecursoProprioAtual').value;
@@ -935,7 +947,6 @@
                 var _fna = document.getElementById('txtFinanciamentoAtual').value;
                 var _fna2 = Number(_fna.replace(/[^0-9.-]+/g, "."));
                 var _somaa = (parseFloat(_rpa2) + parseFloat(_rca2) + parseFloat(_rda2) + parseFloat(_fna2));
-
                 var _rp = document.getElementById('txtRecursoProprio').value;
                 var _rp2 = Number(_rp.replace(/[^0-9.-]+/g, "."));
                 var _rc = document.getElementById('txtRecursoConta').value;
@@ -946,6 +957,9 @@
                 var _fn2 = Number(_fn.replace(/[^0-9.-]+/g, "."));
                 var _soma = (parseFloat(_rp2) + parseFloat(_rc2) + parseFloat(_rd2) + parseFloat(_fn2));
                 $("input[name='Valor_Transacao']").val(_soma.toFixed(2).replace(".", ","));
+            } else {
+                var _vt = document.getElementById('txtValorTransacao').value;
+                _soma = parseFloat(_vt);
             }
             var _vv = document.getElementById('txtValorVenal').value;
             var _vv2 = Number(_vv.replace(/[^0-9.-]+/g, "."));
@@ -1076,9 +1090,11 @@
             var index = $("input[id=totalChk]:checked").val();
             if (index=="Não") {
                 document.getElementById('percLabel').style.display = 'block';
+                document.getElementById('percLabel2').style.display = 'block';
             }
             else {
                 document.getElementById('percLabel').style.display = 'none';
+                document.getElementById('percLabel2').style.display = 'none';
             }
         }
 
