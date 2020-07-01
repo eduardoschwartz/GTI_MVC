@@ -487,10 +487,10 @@
                         </table>
                         <table style="font-size:13px;width:644px">
                             <tr style="height:30px">
-                                <td style="width:130px">
+                                <td style="width:150px">
                                     <label style="font-weight:normal;">Valor da transação:</label>
                                 </td>
-                                <td style="width:130px">
+                                <td style="width:114px">
                                     @if (Model.Valor_Transacao > 0) {
                                         <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Transacao.ToString("0.#0") })</label>
                                     } else {
@@ -500,7 +500,7 @@
                                 <td style="width:82px">
                                     <label style="font-weight:normal;">Valor Venal:</label>
                                 </td>
-                                <td style="width:332px">
+                                <td style="width:338px">
                                     @if (Model.Valor_Venal > 0) {
                                         <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Venal.ToString("0.#0"), @readonly = true })</label>
                                     } else {
