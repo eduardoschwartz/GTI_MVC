@@ -1273,21 +1273,21 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-            if (action == "btnPrint") {
-                model.Lista_Erro = Valida_Itbi(model);
-                Grava_Itbi(model);
-                if (model.Lista_Erro.Count > 0) {
-                    ViewBag.ListaErro = new SelectList(model.Lista_Erro);
-                    return View(model);
-                } else {
-                    if (model.Itbi_Numero == 0) {
-                        Itbi_Numero _num = imovelRepository.Alterar_Itbi_Main(model.Guid);
-                        model.Itbi_Numero = _num.Numero;
-                        model.Itbi_Ano = _num.Ano;
-                    }
-                    Itbi_print(model.Guid,true);
-                }
-            }
+            //if (action == "btnPrint") {
+            //    model.Lista_Erro = Valida_Itbi(model);
+            //    Grava_Itbi(model);
+            //    if (model.Lista_Erro.Count > 0) {
+            //        ViewBag.ListaErro = new SelectList(model.Lista_Erro);
+            //        return View(model);
+            //    } else {
+            //        if (model.Itbi_Numero == 0) {
+            //            Itbi_Numero _num = imovelRepository.Alterar_Itbi_Main(model.Guid);
+            //            model.Itbi_Numero = _num.Numero;
+            //            model.Itbi_Ano = _num.Ano;
+            //        }
+            //        Itbi_print(model.Guid,true);
+            //    }
+            //}
 
             if (action == "btnAnexoAdd") {
                 if (file != null) {
@@ -1655,21 +1655,21 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-            if (action == "btnPrint") {
-                model.Lista_Erro = Valida_Itbi(model);
-                Grava_Itbi(model);
-                if (model.Lista_Erro.Count > 0) {
-                    ViewBag.ListaErro = new SelectList(model.Lista_Erro);
-                    return View(model);
-                } else {
-                    if (model.Itbi_Numero == 0) {
-                        Itbi_Numero _num = imovelRepository.Alterar_Itbi_Main(model.Guid);
-                        model.Itbi_Numero = _num.Numero;
-                        model.Itbi_Ano = _num.Ano;
-                    }
-                    Itbi_print(model.Guid,false);
-                }
-            }
+            //if (action == "btnPrint") {
+            //    model.Lista_Erro = Valida_Itbi(model);
+            //    Grava_Itbi(model);
+            //    if (model.Lista_Erro.Count > 0) {
+            //        ViewBag.ListaErro = new SelectList(model.Lista_Erro);
+            //        return View(model);
+            //    } else {
+            //        if (model.Itbi_Numero == 0) {
+            //            Itbi_Numero _num = imovelRepository.Alterar_Itbi_Main(model.Guid);
+            //            model.Itbi_Numero = _num.Numero;
+            //            model.Itbi_Ano = _num.Ano;
+            //        }
+            //        Itbi_print(model.Guid,false);
+            //    }
+            //}
 
             if (action == "btnAnexoAdd") {
                 if (file != null) {
@@ -1736,6 +1736,15 @@ namespace GTI_Mvc.Controllers {
             return View(model);
         }
 
+        [Route("Itbi_urbano_q")]
+        [HttpPost]
+        public ActionResult Itbi_urbano_q(ItbiViewModel model) {
+            if (Functions.pUserId == 0)
+                return RedirectToAction("Login", "Home");
+            return Itbi_print(model.Guid, true);
+        }
+
+
         public FileResult Itbi_Download(string p, string f) {
             string fullName = Server.MapPath("~");
             fullName = Path.Combine(fullName, "Files");
@@ -1756,6 +1765,15 @@ namespace GTI_Mvc.Controllers {
             ItbiViewModel model = Retorna_Itbi_Gravado(p);
             return View(model);
         }
+
+        [Route("Itbi_rural_q")]
+        [HttpPost]
+        public ActionResult Itbi_rural_q(ItbiViewModel model) {
+            if (Functions.pUserId == 0)
+                return RedirectToAction("Login", "Home");
+            return Itbi_print(model.Guid, false);
+        }
+
 
         [Route("Itbi_urbano_e")]
         [HttpGet]
@@ -2317,8 +2335,8 @@ namespace GTI_Mvc.Controllers {
                 rd.RecordSelectionFormula = "{itbi_main.guid}='" + p + "'";
                 Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
                 return File(stream, "application/pdf", "Resumo_Itbi.pdf");
-            } catch {
-                throw;
+            } catch (Exception ex) {
+                throw ;
             }
         }
 

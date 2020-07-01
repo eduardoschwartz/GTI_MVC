@@ -724,7 +724,7 @@
         if (Model.Codigo != null && Model.Codigo.Trim() != "") {
             <div style="text-align:center">
                 <button type="submit" class="btn btn-primary" name="action" value="btnValida" data-balloon-length="medium" aria-label="Enviar formulário para análise." data-balloon-pos="up">Enviar</button>&nbsp;&nbsp;
-                <button type="submit" class="btn btn-success" name="action" value="btnPrint" data-balloon-length="medium" aria-label="Imprimir os dados do formulário." data-balloon-pos="up">Imprimir</button>
+                @*<button type="submit" class="btn btn-success" name="action" value="btnPrint" data-balloon-length="medium" aria-label="Imprimir os dados do formulário." data-balloon-pos="up">Imprimir</button>*@
             </div>
         }
         <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })</div>
@@ -843,14 +843,130 @@
                 return ValidateForm();
             });
 
-            $(".maskValor").inputmask('Regex', { regex: "^[0-9]{1,7}(\\,\\d{1,2})?$" });
-            $(".maskPerc").inputmask('Regex', { regex: "^[0-9]{1,3}(\\d{1,2})?$" });
+            $(".maskValor").inputmask('Regex', { regex: "^[0-9]{1,8}(\\,\\d{1,2})?$" });
+            $(".maskPerc").inputmask('Regex', { regex: "^[0-9]{1,3}(\\,\\d{1,2})?$" });
             $(".maskData").inputmask("99/99/9999");
             $(".maskCep").inputmask("99999-999");
 
+            $("#FinanciamentoDropDown").change(function () {
+                if (this.value != '') {
+                    $("input[name='Recursos_proprios_valor']").css({ "color": "black" });
+                    $("input[name='Recursos_proprios_valor']").prop('readonly', false);
+                    $("input[name='Recursos_conta_valor']").css({ "color": "black" });
+                    $("input[name='Recursos_conta_valor']").prop('readonly', false);
+                    $("input[name='Recursos_concedido_valor']").css({ "color": "black" });
+                    $("input[name='Recursos_concedido_valor']").prop('readonly', false);
+                    $("input[name='Financiamento_valor']").css({ "color": "black" });
+                    $("input[name='Financiamento_valor']").prop('readonly', false);
+                    $("input[name='Valor_Transacao']").css({ "color": "blue" });
+                    $("input[name='Valor_Transacao']").prop('readonly', true);
+
+                }
+                else {
+                    $("input[name='Recursos_proprios_valor']").val('0,00');
+                    $("input[name='Recursos_proprios_atual']").val('0,00');
+                    $("input[name='Recursos_proprios_valor']").css({ "color": "blue" });
+                    $("input[name='Recursos_proprios_valor']").prop('readonly', true);
+                    $("input[name='Recursos_conta_valor']").val('0,00');
+                    $("input[name='Recursos_conta_atual']").val('0,00');
+                    $("input[name='Recursos_conta_valor']").css({ "color": "blue" });
+                    $("input[name='Recursos_conta_valor']").prop('readonly', true);
+                    $("input[name='Recursos_concedido_valor']").val('0,00');
+                    $("input[name='Recursos_concedido_atual']").val('0,00');
+                    $("input[name='Recursos_concedido_valor']").css({ "color": "blue" });
+                    $("input[name='Recursos_concedido_valor']").prop('readonly', true);
+                    $("input[name='Financiamento_valor']").val('0,00');
+                    $("input[name='Financiamento_atual']").val('0,00');
+                    $("input[name='Financiamento_valor']").css({ "color": "blue" });
+                    $("input[name='Financiamento_valor']").prop('readonly', true);
+                    $("input[name='Valor_Transacao']").css({ "color": "black" });
+                    $("input[name='Valor_Transacao']").prop('readonly', false);
+                    $("input[name='Valor_Transacao']").val('0,00');
+                    calcula_guia();
+                }
+            });
+            calcula_guia();
+
+            $("#txtValorTransacao").on('input', function () {
+                calcula_guia();
+            });
+
+            $("#txtRecursoProprio").on('input', function () {
+                var _rp = document.getElementById('txtRecursoProprio').value;
+                var _rp2 = Number(_rp.replace(/[^0-9.-]+/g, "."));
+                var _rp3 = parseFloat(_rp2) ;
+                $("input[name='Recursos_proprios_atual']").val((_rp3 * 0.03).toFixed(2).replace(".", ","));
+                calcula_guia();
+            });
+
+            $("#txtRecursoConta").on('input', function () {
+                var _rc = document.getElementById('txtRecursoConta').value;
+                var _rc2 = Number(_rc.replace(/[^0-9.-]+/g, "."));
+                var _rc3 = parseFloat(_rc2);
+                $("input[name='Recursos_conta_atual']").val((_rc3 * 0.03).toFixed(2).replace(".", ","));
+                calcula_guia();
+            });
+
+            $("#txtRecursoConcedido").on('input', function () {
+                var _rd = document.getElementById('txtRecursoConcedido').value;
+                var _rd2 = Number(_rd.replace(/[^0-9.-]+/g, "."));
+                var _rd3 = parseFloat(_rd2);
+                $("input[name='Recursos_concedido_atual']").val((_rd3 * 0.03).toFixed(2).replace(".", ","));
+                calcula_guia();
+            });
+
+            $("#txtFinanciamento").on('input', function () {
+                var _fn = document.getElementById('txtFinanciamento').value;
+                var _fn2 = Number(_fn.replace(/[^0-9.-]+/g, "."));
+                var _fn3 = parseFloat(_fn2);
+                $("input[name='Financiamento_atual']").val((_fn3 * 0.03).toFixed(2).replace(".", ","));
+                calcula_guia();
+            });
+
         });
 
+        function calcula_guia() {
+            var _tf = document.getElementById('FinanciamentoDropDown').value;
+            if (_tf != "") {
+                var _rpa = document.getElementById('txtRecursoProprioAtual').value;
+                var _rpa2 = Number(_rpa.replace(/[^0-9.-]+/g, "."));
+                var _rca = document.getElementById('txtRecursoContaAtual').value;
+                var _rca2 = Number(_rca.replace(/[^0-9.-]+/g, "."));
+                var _rda = document.getElementById('txtRecursoConcedidoAtual').value;
+                var _rda2 = Number(_rda.replace(/[^0-9.-]+/g, "."));
+                var _fna = document.getElementById('txtFinanciamentoAtual').value;
+                var _fna2 = Number(_fna.replace(/[^0-9.-]+/g, "."));
+                var _somaa = (parseFloat(_rpa2) + parseFloat(_rca2) + parseFloat(_rda2) + parseFloat(_fna2));
+                var _rp = document.getElementById('txtRecursoProprio').value;
+                var _rp2 = Number(_rp.replace(/[^0-9.-]+/g, "."));
+                var _rc = document.getElementById('txtRecursoConta').value;
+                var _rc2 = Number(_rc.replace(/[^0-9.-]+/g, "."));
+                var _rd = document.getElementById('txtRecursoConcedido').value;
+                var _rd2 = Number(_rd.replace(/[^0-9.-]+/g, "."));
+                var _fn = document.getElementById('txtFinanciamento').value;
+                var _fn2 = Number(_fn.replace(/[^0-9.-]+/g, "."));
+                var _soma = (parseFloat(_rp2) + parseFloat(_rc2) + parseFloat(_rd2) + parseFloat(_fn2));
+                $("input[name='Valor_Transacao']").val(_soma.toFixed(2).replace(".", ","));
+            } else {
+                var _vt = document.getElementById('txtValorTransacao').value;
+                _soma = parseFloat(_vt);
+            }
+            var _vv = document.getElementById('txtValorVenal').value;
+            var _vv2 = Number(_vv.replace(/[^0-9.-]+/g, "."));
+            var _somavv = (parseFloat(_vv2));
+            if (_soma > _somavv)
+                $("input[name='Valor_guia']").val((_soma * 0.03).toFixed(2).replace(".", ","));
+            else
+                $("input[name='Valor_guia']").val((_somavv * 0.03).toFixed(2).replace(".", ","));
+        }
 
+        function cancelarCodigo() {
+            if (confirm('Deseja cancelar este ITBI?')) {
+                return true;
+            } else {
+                return false;
+            }
+        }
 
         function EditarComprador() {
             $('#CompradorModal').modal();

@@ -1455,6 +1455,8 @@ namespace GTI_Dal.Classes {
                 i.Valor_Avaliacao = Reg.Valor_Avaliacao;
                 i.Valor_Avaliacao_atual = Reg.Valor_Avaliacao_atual;
                 i.Valor_Venal = Reg.Valor_Venal;
+                i.Valor_guia = Reg.Valor_guia;
+                i.Valor_guia_atual = Reg.Valor_guia_atual;
                 i.Recursos_proprios_valor = Reg.Recursos_proprios_valor;
                 i.Recursos_proprios_aliq = Reg.Recursos_proprios_aliq;
                 i.Recursos_proprios_atual = Reg.Recursos_proprios_atual;
@@ -1598,6 +1600,8 @@ namespace GTI_Dal.Classes {
                     Valor_Avaliacao = Sql.Valor_Avaliacao,
                     Valor_Avaliacao_atual = Sql.Valor_Avaliacao_atual,
                     Valor_Venal = Sql.Valor_Venal,
+                    Valor_guia=Sql.Valor_guia,
+                    Valor_guia_atual=Sql.Valor_guia_atual,
                     Recursos_proprios_valor=Sql.Recursos_proprios_valor,
                     Recursos_proprios_aliq=Sql.Recursos_proprios_aliq,
                     Recursos_proprios_atual=Sql.Recursos_proprios_atual,
