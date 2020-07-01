@@ -1352,7 +1352,7 @@ namespace GTI_Dal.Classes {
 
         public List<Itbi_financiamento> Lista_Itbi_Financiamento() {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                List<Itbi_financiamento> Sql = (from t in db.itbi_Financiamento orderby t.Codigo select t).ToList();
+                List<Itbi_financiamento> Sql = (from t in db.itbi_Financiamento where t.Codigo>0 orderby t.Codigo select t).ToList();
                 return Sql;
             }
         }
