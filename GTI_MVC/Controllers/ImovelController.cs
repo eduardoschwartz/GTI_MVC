@@ -5,7 +5,6 @@ using GTI_Models.Models;
 using GTI_Models.ReportModels;
 using GTI_Mvc.ViewModels;
 using GTI_Mvc.Views.Imovel.EditorTemplates;
-using Microsoft.Ajax.Utilities;
 using Microsoft.Reporting.WebForms;
 using QRCoder;
 using System;
@@ -15,7 +14,6 @@ using System.Drawing;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
 using static GTI_Models.modelCore;
 
 namespace GTI_Mvc.Controllers {

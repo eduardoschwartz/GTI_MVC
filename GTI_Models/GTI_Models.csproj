@@ -90,6 +90,7 @@
     <Compile Include="Models\chaveStruct.cs" />
     <Compile Include="Models\dados_imovel_web.cs" />
     <Compile Include="Models\encargo_cvd.cs" />
+    <Compile Include="Models\itbi_guia.cs" />
     <Compile Include="Models\Integrativa\cadastro.cs" />
     <Compile Include="Models\cadimob.cs" />
     <Compile Include="Models\calculo_resumo.cs" />

@@ -1902,6 +1902,84 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Incluir_Itbi_Guia(Itbi_Guia Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                object[] Parametros2 = new object[1];
+                Parametros2[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                db.Database.ExecuteSqlCommand("DELETE FROM itbi_forum WHERE guid=@guid AND seq=@seq", Parametros2);
+                db.SaveChanges();
+
+                object[] Parametros = new object[48];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@data_cadastro", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_Cadastro };
+                Parametros[2] = new SqlParameter { ParameterName = "@imovel_codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Imovel_Codigo };
+                Parametros[3] = new SqlParameter { ParameterName = "@inscricao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Inscricao };
+                Parametros[4] = new SqlParameter { ParameterName = "@proprietario_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Proprietario_Nome };
+                Parametros[5] = new SqlParameter { ParameterName = "@imovel_endereco", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Imovel_Endereco };
+                Parametros[6] = new SqlParameter { ParameterName = "@imovel_numero", SqlDbType = SqlDbType.Int, SqlValue = Reg.Imovel_Numero };
+                Parametros[7] = new SqlParameter { ParameterName = "@imovel_complemento", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Imovel_Complemento };
+                Parametros[8] = new SqlParameter { ParameterName = "@imovel_cep", SqlDbType = SqlDbType.Int, SqlValue = Reg.Imovel_Cep };
+                Parametros[9] = new SqlParameter { ParameterName = "@imovel_bairro", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Imovel_Bairro };
+                Parametros[10] = new SqlParameter { ParameterName = "@imovel_quadra", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Imovel_Quadra };
+                Parametros[11] = new SqlParameter { ParameterName = "@imovel_lote", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Imovel_Lote };
+                Parametros[12] = new SqlParameter { ParameterName = "@comprador_cpf_cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Comprador_Cpf_Cnpj };
+                Parametros[13] = new SqlParameter { ParameterName = "@comprador_codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Comprador_Codigo };
+                Parametros[14] = new SqlParameter { ParameterName = "@comprador_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Comprador_Nome };
+                Parametros[15] = new SqlParameter { ParameterName = "@comprador_logradouro", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Comprador_Logradouro };
+                Parametros[16] = new SqlParameter { ParameterName = "@comprador_numero", SqlDbType = SqlDbType.Int, SqlValue = Reg.Comprador_Numero };
+                Parametros[17] = new SqlParameter { ParameterName = "@comprador_complemento", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Comprador_Complemento };
+                Parametros[18] = new SqlParameter { ParameterName = "@comprador_cep", SqlDbType = SqlDbType.Int, SqlValue = Reg.Comprador_Cep };
+                Parametros[19] = new SqlParameter { ParameterName = "@comprador_bairro", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Comprador_Bairro };
+                Parametros[20] = new SqlParameter { ParameterName = "@comprador_cidade", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Comprador_Cidade };
+                Parametros[21] = new SqlParameter { ParameterName = "@comprador_uf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Comprador_Uf };
+                Parametros[22] = new SqlParameter { ParameterName = "@tipo_instrumento", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Tipo_Instrumento };
+                Parametros[23] = new SqlParameter { ParameterName = "@data_tranasacao", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_Transacao };
+                Parametros[24] = new SqlParameter { ParameterName = "@valor_transacao", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Transacao };
+                Parametros[25] = new SqlParameter { ParameterName = "@valor_avaliacao", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Avaliacao };
+                Parametros[26] = new SqlParameter { ParameterName = "@valor_venal", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Venal };
+                Parametros[27] = new SqlParameter { ParameterName = "@recursos_proprios_valor", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Recursos_proprios_Valor };
+                Parametros[28] = new SqlParameter { ParameterName = "@recursos_proprios_atual", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Recursos_proprios_Atual };
+                Parametros[29] = new SqlParameter { ParameterName = "@recursos_conta_valor", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Recursos_conta_Valor };
+                Parametros[30] = new SqlParameter { ParameterName = "@recursos_conta_atual", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Recursos_conta_Atual };
+                Parametros[31] = new SqlParameter { ParameterName = "@recursos_concedido_valor", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Recursos_concedido_Valor };
+                Parametros[32] = new SqlParameter { ParameterName = "@recursos_concedido_atual", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Recursos_concedido_Atual};
+                Parametros[33] = new SqlParameter { ParameterName = "@financiamento_valor", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Financiamento_Valor };
+                Parametros[34] = new SqlParameter { ParameterName = "@financiamento_atual", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Financiamento_Atual };
+                Parametros[35] = new SqlParameter { ParameterName = "@totalidade", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Totalidade };
+                Parametros[36] = new SqlParameter { ParameterName = "@totalidade_perc", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Totalidade_Perc };
+                Parametros[37] = new SqlParameter { ParameterName = "@matricula", SqlDbType = SqlDbType.BigInt, SqlValue = Reg.Matricula };
+                Parametros[38] = new SqlParameter { ParameterName = "@itbi_numero", SqlDbType = SqlDbType.Int, SqlValue = Reg.Itbi_Numero };
+                Parametros[39] = new SqlParameter { ParameterName = "@itbi_ano", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Itbi_Ano };
+                Parametros[40] = new SqlParameter { ParameterName = "@inscricao_incra", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Inscricao_Incra };
+                Parametros[41] = new SqlParameter { ParameterName = "@receita_federal", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Receita_Federal };
+                Parametros[42] = new SqlParameter { ParameterName = "@descricao_imovel", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Descricao_Imovel };
+                Parametros[43] = new SqlParameter { ParameterName = "@valor_guia", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Guia };
+                Parametros[44] = new SqlParameter { ParameterName = "@numero_guia", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_guia };
+                Parametros[45] = new SqlParameter { ParameterName = "@nosso_numero", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nosso_Numero };
+                Parametros[46] = new SqlParameter { ParameterName = "@linha_digitavel", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Linha_Digitavel };
+                Parametros[47] = new SqlParameter { ParameterName = "@codigo_barra", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Codigo_Barra };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO itbi_guia(guid,data_cadastro,imovel_codigo,inscricao,proprietario_nome,imovel_endereco,imovel_numero,imovel_complemento,imovel_cep," +
+                                            "imovel_bairro,imovel_quadra,imovel_lote,comprador_cpf_cnpj,comprador_codigo,comprador_nome,comprador_logradouro,comprador_numero,comprador_complemento," +
+                                            "comprador_cep,comprador_bairro,comprador_cidade,comprador_uf,tipo_instrumento,data_transacao,valor_transacao,valor_avaliacao,valor_venal,recursos_proprios_valor," +
+                                            "recursos_proprios_atual,recursos_conta_valor,recursos_conta_atual,recursos_concedido_valor,recursos_concedido_atual,financiamento_valor,financiamento_atual," +
+                                            "totalidade,totalidade_perc,matricula,itbi_numero,itbi_ano,inscricao_incra,receita_federal,descricao_imovel,valor_guia,numero_guia,nosso_numero,linha_digitavel," +
+                                            "codigo_barra) VALUES(@guid,@data_cadastro,@imovel_codigo,@inscricao,@proprietario_nome,@imovel_endereco,@imovel_numero,@imovel_complemento,@imovel_cep," +
+                                            "@imovel_bairro,@imovel_quadra,@imovel_lote,@comprador_cpf_cnpj,@comprador_codigo,@comprador_nome,@comprador_logradouro,@comprador_numero,@comprador_complemento," +
+                                            "@comprador_cep,@comprador_bairro,@comprador_cidade,@comprador_uf,@tipo_instrumento,@data_transacao,@valor_transacao,@valor_avaliacao,@valor_venal,@recursos_proprios_valor," +
+                                            "@recursos_proprios_atual,@recursos_conta_valor,@recursos_conta_atual,@recursos_concedido_valor,@recursos_concedido_atual,@financiamento_valor,@financiamento_atual," +
+                                            "@totalidade,@totalidade_perc,@matricula,@itbi_numero,@itbi_ano,@inscricao_incra,@receita_federal,@descricao_imovel,@valor_guia,@numero_guia,@nosso_numero,@linha_digitavel,@codigo_barra)", Parametros);
+                try { 
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+
+                return null;
+            }
+        }
+
+
 
 
     }//end class

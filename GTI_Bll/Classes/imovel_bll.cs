@@ -675,5 +675,11 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Itbi_Forum(p);
         }
 
+        public Exception Incluir_Itbi_Guia(Itbi_Guia Reg) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Incluir_Itbi_Guia(Reg);
+            return ex;
+        }
+
     }//end class
 }
