@@ -617,7 +617,7 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Itbi_Disponivel();
         }
 
-        public Itbi_Numero Alterar_Itbi_Main(string Guid) {
+        public ItbiAnoNumero Alterar_Itbi_Main(string Guid) {
             Imovel_Data obj = new Imovel_Data(_connection);
             return obj.Alterar_Itbi_Main(Guid);
         }

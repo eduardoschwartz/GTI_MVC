@@ -52,5 +52,7 @@ namespace GTI_Models.Models {
         public string Nosso_Numero { get; set; }
         public string Linha_Digitavel { get; set; }
         public string Codigo_Barra { get; set; }
+        public DateTime Data_Vencimento { get; set; }
+        public string Natureza { get; set; }
     }
 }

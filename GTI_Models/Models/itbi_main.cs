@@ -68,7 +68,7 @@ namespace GTI_Models.Models {
         public decimal Valor_guia_atual { get; set; }
     }
 
-    public class Itbi_Numero {
+    public class ItbiAnoNumero {
         public int Numero { get; set; }
         public short Ano { get; set; }
     }

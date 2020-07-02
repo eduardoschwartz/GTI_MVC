@@ -1741,7 +1741,7 @@ namespace GTI_Dal.Classes {
             return _numero;
         }
 
-        public Itbi_Numero Alterar_Itbi_Main(string Guid) {
+        public ItbiAnoNumero Alterar_Itbi_Main(string Guid) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 Itbi_main i = db.Itbi_Main.First(g => g.Guid == Guid);
                 int _numero = Retorna_Itbi_Disponivel();
@@ -1754,7 +1754,7 @@ namespace GTI_Dal.Classes {
                 } catch {
                 }
 
-                Itbi_Numero _ret = new Itbi_Numero() {
+                ItbiAnoNumero _ret = new ItbiAnoNumero() {
                     Numero = _numero==0?1:_numero,
                     Ano=_ano
                 };
@@ -1906,10 +1906,10 @@ namespace GTI_Dal.Classes {
             using (var db = new GTI_Context(_connection)) {
                 object[] Parametros2 = new object[1];
                 Parametros2[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
-                db.Database.ExecuteSqlCommand("DELETE FROM itbi_forum WHERE guid=@guid AND seq=@seq", Parametros2);
+                db.Database.ExecuteSqlCommand("DELETE FROM itbi_guia WHERE guid=@guid", Parametros2);
                 db.SaveChanges();
 
-                object[] Parametros = new object[48];
+                object[] Parametros = new object[49];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@data_cadastro", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_Cadastro };
                 Parametros[2] = new SqlParameter { ParameterName = "@imovel_codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Imovel_Codigo };
@@ -1933,7 +1933,7 @@ namespace GTI_Dal.Classes {
                 Parametros[20] = new SqlParameter { ParameterName = "@comprador_cidade", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Comprador_Cidade };
                 Parametros[21] = new SqlParameter { ParameterName = "@comprador_uf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Comprador_Uf };
                 Parametros[22] = new SqlParameter { ParameterName = "@tipo_instrumento", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Tipo_Instrumento };
-                Parametros[23] = new SqlParameter { ParameterName = "@data_tranasacao", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_Transacao };
+                Parametros[23] = new SqlParameter { ParameterName = "@data_transacao", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_Transacao };
                 Parametros[24] = new SqlParameter { ParameterName = "@valor_transacao", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Transacao };
                 Parametros[25] = new SqlParameter { ParameterName = "@valor_avaliacao", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Avaliacao };
                 Parametros[26] = new SqlParameter { ParameterName = "@valor_venal", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Venal };
@@ -1958,17 +1958,19 @@ namespace GTI_Dal.Classes {
                 Parametros[45] = new SqlParameter { ParameterName = "@nosso_numero", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nosso_Numero };
                 Parametros[46] = new SqlParameter { ParameterName = "@linha_digitavel", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Linha_Digitavel };
                 Parametros[47] = new SqlParameter { ParameterName = "@codigo_barra", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Codigo_Barra };
+                Parametros[48] = new SqlParameter { ParameterName = "@data_vencimento", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_Vencimento };
 
                 db.Database.ExecuteSqlCommand("INSERT INTO itbi_guia(guid,data_cadastro,imovel_codigo,inscricao,proprietario_nome,imovel_endereco,imovel_numero,imovel_complemento,imovel_cep," +
                                             "imovel_bairro,imovel_quadra,imovel_lote,comprador_cpf_cnpj,comprador_codigo,comprador_nome,comprador_logradouro,comprador_numero,comprador_complemento," +
                                             "comprador_cep,comprador_bairro,comprador_cidade,comprador_uf,tipo_instrumento,data_transacao,valor_transacao,valor_avaliacao,valor_venal,recursos_proprios_valor," +
                                             "recursos_proprios_atual,recursos_conta_valor,recursos_conta_atual,recursos_concedido_valor,recursos_concedido_atual,financiamento_valor,financiamento_atual," +
                                             "totalidade,totalidade_perc,matricula,itbi_numero,itbi_ano,inscricao_incra,receita_federal,descricao_imovel,valor_guia,numero_guia,nosso_numero,linha_digitavel," +
-                                            "codigo_barra) VALUES(@guid,@data_cadastro,@imovel_codigo,@inscricao,@proprietario_nome,@imovel_endereco,@imovel_numero,@imovel_complemento,@imovel_cep," +
+                                            "codigo_barra,data_vencimento) VALUES(@guid,@data_cadastro,@imovel_codigo,@inscricao,@proprietario_nome,@imovel_endereco,@imovel_numero,@imovel_complemento,@imovel_cep," +
                                             "@imovel_bairro,@imovel_quadra,@imovel_lote,@comprador_cpf_cnpj,@comprador_codigo,@comprador_nome,@comprador_logradouro,@comprador_numero,@comprador_complemento," +
                                             "@comprador_cep,@comprador_bairro,@comprador_cidade,@comprador_uf,@tipo_instrumento,@data_transacao,@valor_transacao,@valor_avaliacao,@valor_venal,@recursos_proprios_valor," +
                                             "@recursos_proprios_atual,@recursos_conta_valor,@recursos_conta_atual,@recursos_concedido_valor,@recursos_concedido_atual,@financiamento_valor,@financiamento_atual," +
-                                            "@totalidade,@totalidade_perc,@matricula,@itbi_numero,@itbi_ano,@inscricao_incra,@receita_federal,@descricao_imovel,@valor_guia,@numero_guia,@nosso_numero,@linha_digitavel,@codigo_barra)", Parametros);
+                                            "@totalidade,@totalidade_perc,@matricula,@itbi_numero,@itbi_ano,@inscricao_incra,@receita_federal,@descricao_imovel,@valor_guia,@numero_guia,@nosso_numero,@linha_digitavel," +
+                                            "@codigo_barra,@data_vencimento)", Parametros);
                 try { 
                     db.SaveChanges();
                 } catch (Exception ex) {

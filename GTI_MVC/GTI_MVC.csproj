@@ -216,6 +216,11 @@
       <DependentUpon>dsBoletoGuia.xsd</DependentUpon>
     </Compile>
     <Compile Include="Classes\Functions.cs" />
+    <Compile Include="Datasets\dsGuia_Itbi.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsGuia_Itbi.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -499,6 +504,17 @@
     </None>
     <Content Include="Datasets\dsBoletoGuia.xss">
       <DependentUpon>dsBoletoGuia.xsd</DependentUpon>
+    </Content>
+    <Content Include="Datasets\dsGuia_Itbi.xsc">
+      <DependentUpon>dsGuia_Itbi.xsd</DependentUpon>
+    </Content>
+    <None Include="Datasets\dsGuia_Itbi.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsGuia_Itbi.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Datasets\dsGuia_Itbi.xss">
+      <DependentUpon>dsGuia_Itbi.xsd</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />

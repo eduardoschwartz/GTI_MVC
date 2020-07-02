@@ -1263,7 +1263,7 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 } else {
                     if (model.Itbi_Numero == 0) {
-                        Itbi_Numero _num = imovelRepository.Alterar_Itbi_Main(model.Guid);
+                        ItbiAnoNumero _num = imovelRepository.Alterar_Itbi_Main(model.Guid);
                         model.Itbi_Numero = _num.Numero;
                         model.Itbi_Ano = _num.Ano;
                     }
@@ -1645,7 +1645,7 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 } else {
                     if (model.Itbi_Numero == 0) {
-                        Itbi_Numero _num = imovelRepository.Alterar_Itbi_Main(model.Guid);
+                        ItbiAnoNumero _num = imovelRepository.Alterar_Itbi_Main(model.Guid);
                         model.Itbi_Numero = _num.Numero;
                         model.Itbi_Ano = _num.Ano;
                     }
@@ -2304,6 +2304,110 @@ namespace GTI_Mvc.Controllers {
             if (stat.Codigo != 2) {
                 return RedirectToAction("Itbi_query", new { e = "P" });
             } else {
+                Itbi_main _itbi = imovelRepository.Retorna_Itbi_Main(p);
+                Itbi_Guia _guia = new Itbi_Guia() {
+                    Guid = _itbi.Guid,
+                    Inscricao = _itbi.Inscricao,
+                    Imovel_Codigo = _itbi.Imovel_codigo,
+                    Imovel_Endereco = _itbi.Imovel_endereco,
+                    Imovel_Numero = _itbi.Imovel_numero,
+                    Imovel_Complemento = _itbi.Imovel_complemento ?? "",
+                    Imovel_Bairro = _itbi.Imovel_bairro ?? "",
+                    Imovel_Cep = _itbi.Imovel_cep,
+                    Imovel_Lote = _itbi.Imovel_Lote ?? "",
+                    Imovel_Quadra = _itbi.Imovel_Quadra ?? "",
+                    Proprietario_Nome = _itbi.Proprietario_Nome,
+                    Itbi_Ano = _itbi.Itbi_Ano,
+                    Itbi_Numero = _itbi.Itbi_Numero,
+                    Data_Cadastro = _itbi.Data_cadastro,
+                    Data_Transacao = Convert.ToDateTime(_itbi.Data_Transacao),
+                    Comprador_Codigo = _itbi.Comprador_codigo,
+                    Comprador_Nome = _itbi.Comprador_nome,
+                    Comprador_Cpf_Cnpj = _itbi.Comprador_cpf_cnpj,
+                    Comprador_Logradouro = _itbi.Comprador_logradouro_nome,
+                    Comprador_Numero = _itbi.Comprador_numero,
+                    Comprador_Complemento = _itbi.Imovel_complemento ?? "",
+                    Comprador_Bairro = _itbi.Comprador_bairro_nome ?? "",
+                    Comprador_Cep = _itbi.Comprador_cep,
+                    Comprador_Cidade = _itbi.Comprador_cidade_nome,
+                    Comprador_Uf = _itbi.Comprador_uf,
+                    Inscricao_Incra = _itbi.Inscricao_Incra ?? "",
+                    Receita_Federal = _itbi.Receita_Federal ?? "",
+                    Descricao_Imovel = _itbi.Descricao_Imovel ?? "",
+                    Matricula = _itbi.Matricula,
+                    Valor_Avaliacao = _itbi.Valor_Avaliacao_atual,
+                    Valor_Guia = _itbi.Valor_guia_atual,
+                    Valor_Transacao = _itbi.Valor_Transacao,
+                    Valor_Venal = _itbi.Valor_Venal,
+                    Recursos_proprios_Valor = _itbi.Recursos_proprios_valor,
+                    Recursos_proprios_Atual = _itbi.Recursos_proprios_atual,
+                    Recursos_conta_Valor = _itbi.Recursos_conta_valor,
+                    Recursos_conta_Atual = _itbi.Recursos_conta_atual,
+                    Recursos_concedido_Valor = _itbi.Recursos_concedido_valor,
+                    Recursos_concedido_Atual = _itbi.Recursos_concedido_atual,
+                    Tipo_Instrumento = _itbi.Tipo_Instrumento,
+                    Financiamento_Valor = _itbi.Financiamento_valor,
+                    Financiamento_Atual = _itbi.Financiamento_atual,
+                    Totalidade = _itbi.Totalidade,
+                    Totalidade_Perc = _itbi.Totalidade_Perc,
+                    Numero_guia = 17898123,
+                    Data_Vencimento = DateTime.Now,
+                    Natureza= imovelRepository.Retorna_Itbi_Natureza_nome( _itbi.Natureza_Codigo)
+                };
+                _guia.Nosso_Numero = "287353200" + _guia.Numero_guia.ToString();
+
+                string _convenio = "2873532";
+                //***** GERA CÓDIGO DE BARRAS BOLETO REGISTRADO*****
+                DateTime _data_base = Convert.ToDateTime("07/10/1997");
+                TimeSpan ts = Convert.ToDateTime(_guia.Data_Vencimento) - _data_base;
+                int _fator_vencto = ts.Days;
+                string _quinto_grupo = String.Format("{0:D4}", _fator_vencto);
+                string _valor_boleto_str = string.Format("{0:0.00}", _guia.Valor_Guia);
+                _quinto_grupo += string.Format("{0:D10}", Convert.ToInt64(Functions.RetornaNumero(_valor_boleto_str)));
+                string _barra = "0019" + _quinto_grupo + String.Format("{0:D13}", Convert.ToInt32(_convenio));
+                _barra += String.Format("{0:D10}", Convert.ToInt64(_guia.Numero_guia)) + "17";
+                string _campo1 = "0019" + _barra.Substring(19, 5);
+                string _digitavel = _campo1 + Functions.Calculo_DV10(_campo1).ToString();
+                string _campo2 = _barra.Substring(23, 10);
+                _digitavel += _campo2 + Functions.Calculo_DV10(_campo2).ToString();
+                string _campo3 = _barra.Substring(33, 10);
+                _digitavel += _campo3 + Functions.Calculo_DV10(_campo3).ToString();
+                string _campo5 = _quinto_grupo;
+                string _campo4 = Functions.Calculo_DV11(_barra).ToString();
+                _digitavel += _campo4 + _campo5;
+                _barra = _barra.Substring(0, 4) + _campo4 + _barra.Substring(4, _barra.Length - 4);
+                //**Resultado final**
+                string _linha_digitavel = _digitavel.Substring(0, 5) + "." + _digitavel.Substring(5, 5) + " " + _digitavel.Substring(10, 5) + "." + _digitavel.Substring(15, 6) + " ";
+                _linha_digitavel += _digitavel.Substring(21, 5) + "." + _digitavel.Substring(26, 6) + " " + _digitavel.Substring(32, 1) + " " + Functions.StringRight(_digitavel, 14);
+                string _codigo_barra = Functions.Gera2of5Str(_barra);
+                //**************************************************
+
+                _guia.Codigo_Barra = _codigo_barra;
+                _guia.Linha_Digitavel = _linha_digitavel;
+
+                Exception ex = imovelRepository.Incluir_Itbi_Guia(_guia);
+                List<Itbi_Guia> Lista = new List<Itbi_Guia>();
+                Lista.Add(_guia);
+
+                Warning[] warnings;
+                string[] streamIds;
+                string mimeType = string.Empty, encoding = string.Empty, extension = string.Empty;
+                DataSet Ds = Functions.ToDataSet(Lista);
+                ReportDataSource rdsAct = new ReportDataSource("dsGuia_Itbi", Ds.Tables[0]);
+                ReportViewer viewer = new ReportViewer();
+                viewer.LocalReport.Refresh();
+                viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Boleto_ITBI.rdlc"); ;
+                viewer.LocalReport.DataSources.Add(rdsAct);     
+
+                byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
+                Response.Buffer = true;
+                Response.Clear();
+                Response.ContentType = mimeType;
+                Response.AddHeader("content-disposition", "attachment; filename= guia_itbi" + "." + extension);
+                Response.OutputStream.Write(bytes, 0, bytes.Length);
+                Response.Flush();
+                Response.End();
+
                 return RedirectToAction("Itbi_query");
             }
         }
