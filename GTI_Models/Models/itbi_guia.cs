@@ -54,5 +54,6 @@ namespace GTI_Models.Models {
         public string Codigo_Barra { get; set; }
         public DateTime Data_Vencimento { get; set; }
         public string Natureza { get; set; }
+        public string Tipo_Financiamento { get; set; }
     }
 }

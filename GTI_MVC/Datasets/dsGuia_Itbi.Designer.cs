@@ -379,6 +379,8 @@ namespace GTI_MVC.Datasets {
             
             private global::System.Data.DataColumn columnnatureza;
             
+            private global::System.Data.DataColumn columntipo_financiamento;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public itbi_guiaDataTable() {
@@ -814,6 +816,14 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn tipo_financiamentoColumn {
+                get {
+                    return this.columntipo_financiamento;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -899,7 +909,8 @@ namespace GTI_MVC.Datasets {
                         string linha_digitavel, 
                         string codigo_barra, 
                         System.DateTime data_vencimento, 
-                        string natureza) {
+                        string natureza, 
+                        string tipo_financiamento) {
                 itbi_guiaRow rowitbi_guiaRow = ((itbi_guiaRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         guid,
@@ -951,7 +962,8 @@ namespace GTI_MVC.Datasets {
                         linha_digitavel,
                         codigo_barra,
                         data_vencimento,
-                        natureza};
+                        natureza,
+                        tipo_financiamento};
                 rowitbi_guiaRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowitbi_guiaRow);
                 return rowitbi_guiaRow;
@@ -1031,6 +1043,7 @@ namespace GTI_MVC.Datasets {
                 this.columncodigo_barra = base.Columns["codigo_barra"];
                 this.columndata_vencimento = base.Columns["data_vencimento"];
                 this.columnnatureza = base.Columns["natureza"];
+                this.columntipo_financiamento = base.Columns["tipo_financiamento"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1136,6 +1149,8 @@ namespace GTI_MVC.Datasets {
                 base.Columns.Add(this.columndata_vencimento);
                 this.columnnatureza = new global::System.Data.DataColumn("natureza", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnnatureza);
+                this.columntipo_financiamento = new global::System.Data.DataColumn("tipo_financiamento", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columntipo_financiamento);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnguid}, true));
                 this.columnguid.AllowDBNull = false;
@@ -1166,6 +1181,7 @@ namespace GTI_MVC.Datasets {
                 this.columnlinha_digitavel.MaxLength = 60;
                 this.columncodigo_barra.MaxLength = 60;
                 this.columnnatureza.MaxLength = 50;
+                this.columntipo_financiamento.MaxLength = 50;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2093,6 +2109,22 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string tipo_financiamento {
+                get {
+                    try {
+                        return ((string)(this[this.tableitbi_guia.tipo_financiamentoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'tipo_financiamento\' in table \'itbi_guia\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableitbi_guia.tipo_financiamentoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsinscricaoNull() {
                 return this.IsNull(this.tableitbi_guia.inscricaoColumn);
             }
@@ -2653,6 +2685,18 @@ namespace GTI_MVC.Datasets {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetnaturezaNull() {
                 this[this.tableitbi_guia.naturezaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool Istipo_financiamentoNull() {
+                return this.IsNull(this.tableitbi_guia.tipo_financiamentoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void Settipo_financiamentoNull() {
+                this[this.tableitbi_guia.tipo_financiamentoColumn] = global::System.Convert.DBNull;
             }
         }
         

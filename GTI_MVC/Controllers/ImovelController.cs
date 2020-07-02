@@ -2352,7 +2352,8 @@ namespace GTI_Mvc.Controllers {
                     Totalidade_Perc = _itbi.Totalidade_Perc,
                     Numero_guia = 17898123,
                     Data_Vencimento = DateTime.Now,
-                    Natureza= imovelRepository.Retorna_Itbi_Natureza_nome( _itbi.Natureza_Codigo)
+                    Natureza= imovelRepository.Retorna_Itbi_Natureza_nome( _itbi.Natureza_Codigo),
+                    Tipo_Financiamento = imovelRepository.Retorna_Itbi_Financimento_nome(_itbi.Tipo_Financiamento),
                 };
                 _guia.Nosso_Numero = "287353200" + _guia.Numero_guia.ToString();
 

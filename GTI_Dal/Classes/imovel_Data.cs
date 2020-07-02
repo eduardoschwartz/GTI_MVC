@@ -1909,7 +1909,7 @@ namespace GTI_Dal.Classes {
                 db.Database.ExecuteSqlCommand("DELETE FROM itbi_guia WHERE guid=@guid", Parametros2);
                 db.SaveChanges();
 
-                object[] Parametros = new object[49];
+                object[] Parametros = new object[51];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@data_cadastro", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_Cadastro };
                 Parametros[2] = new SqlParameter { ParameterName = "@imovel_codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Imovel_Codigo };
@@ -1959,18 +1959,20 @@ namespace GTI_Dal.Classes {
                 Parametros[46] = new SqlParameter { ParameterName = "@linha_digitavel", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Linha_Digitavel };
                 Parametros[47] = new SqlParameter { ParameterName = "@codigo_barra", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Codigo_Barra };
                 Parametros[48] = new SqlParameter { ParameterName = "@data_vencimento", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_Vencimento };
+                Parametros[49] = new SqlParameter { ParameterName = "@natureza", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Natureza };
+                Parametros[50] = new SqlParameter { ParameterName = "@tipo_financiamento", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Tipo_Financiamento };
 
                 db.Database.ExecuteSqlCommand("INSERT INTO itbi_guia(guid,data_cadastro,imovel_codigo,inscricao,proprietario_nome,imovel_endereco,imovel_numero,imovel_complemento,imovel_cep," +
                                             "imovel_bairro,imovel_quadra,imovel_lote,comprador_cpf_cnpj,comprador_codigo,comprador_nome,comprador_logradouro,comprador_numero,comprador_complemento," +
                                             "comprador_cep,comprador_bairro,comprador_cidade,comprador_uf,tipo_instrumento,data_transacao,valor_transacao,valor_avaliacao,valor_venal,recursos_proprios_valor," +
                                             "recursos_proprios_atual,recursos_conta_valor,recursos_conta_atual,recursos_concedido_valor,recursos_concedido_atual,financiamento_valor,financiamento_atual," +
                                             "totalidade,totalidade_perc,matricula,itbi_numero,itbi_ano,inscricao_incra,receita_federal,descricao_imovel,valor_guia,numero_guia,nosso_numero,linha_digitavel," +
-                                            "codigo_barra,data_vencimento) VALUES(@guid,@data_cadastro,@imovel_codigo,@inscricao,@proprietario_nome,@imovel_endereco,@imovel_numero,@imovel_complemento,@imovel_cep," +
+                                            "codigo_barra,data_vencimento,natureza,tipo_financiamento) VALUES(@guid,@data_cadastro,@imovel_codigo,@inscricao,@proprietario_nome,@imovel_endereco,@imovel_numero,@imovel_complemento,@imovel_cep," +
                                             "@imovel_bairro,@imovel_quadra,@imovel_lote,@comprador_cpf_cnpj,@comprador_codigo,@comprador_nome,@comprador_logradouro,@comprador_numero,@comprador_complemento," +
                                             "@comprador_cep,@comprador_bairro,@comprador_cidade,@comprador_uf,@tipo_instrumento,@data_transacao,@valor_transacao,@valor_avaliacao,@valor_venal,@recursos_proprios_valor," +
                                             "@recursos_proprios_atual,@recursos_conta_valor,@recursos_conta_atual,@recursos_concedido_valor,@recursos_concedido_atual,@financiamento_valor,@financiamento_atual," +
                                             "@totalidade,@totalidade_perc,@matricula,@itbi_numero,@itbi_ano,@inscricao_incra,@receita_federal,@descricao_imovel,@valor_guia,@numero_guia,@nosso_numero,@linha_digitavel," +
-                                            "@codigo_barra,@data_vencimento)", Parametros);
+                                            "@codigo_barra,@data_vencimento,@natureza,@tipo_financiamento)", Parametros);
                 try { 
                     db.SaveChanges();
                 } catch (Exception ex) {

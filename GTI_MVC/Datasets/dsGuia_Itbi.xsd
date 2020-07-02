@@ -197,7 +197,7 @@
   <xs:element name="dsGuia_Itbi" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsGuia_Itbi" msprop:Generator_UserDSName="dsGuia_Itbi">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="itbi_guia" msprop:Generator_TableClassName="itbi_guiaDataTable" msprop:Generator_TableVarName="tableitbi_guia" msprop:Generator_TablePropName="itbi_guia" msprop:Generator_RowDeletingName="itbi_guiaRowDeleting" msprop:Generator_RowChangingName="itbi_guiaRowChanging" msprop:Generator_RowEvHandlerName="itbi_guiaRowChangeEventHandler" msprop:Generator_RowDeletedName="itbi_guiaRowDeleted" msprop:Generator_UserTableName="itbi_guia" msprop:Generator_RowChangedName="itbi_guiaRowChanged" msprop:Generator_RowEvArgName="itbi_guiaRowChangeEvent" msprop:Generator_RowClassName="itbi_guiaRow">
+        <xs:element name="itbi_guia" msprop:Generator_TableClassName="itbi_guiaDataTable" msprop:Generator_TableVarName="tableitbi_guia" msprop:Generator_RowChangedName="itbi_guiaRowChanged" msprop:Generator_TablePropName="itbi_guia" msprop:Generator_RowDeletingName="itbi_guiaRowDeleting" msprop:Generator_RowChangingName="itbi_guiaRowChanging" msprop:Generator_RowEvHandlerName="itbi_guiaRowChangeEventHandler" msprop:Generator_RowDeletedName="itbi_guiaRowDeleted" msprop:Generator_RowClassName="itbi_guiaRow" msprop:Generator_UserTableName="itbi_guia" msprop:Generator_RowEvArgName="itbi_guiaRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="guid" msprop:Generator_ColumnVarNameInTable="columnguid" msprop:Generator_ColumnPropNameInRow="guid" msprop:Generator_ColumnPropNameInTable="guidColumn" msprop:Generator_UserColumnName="guid">
@@ -388,6 +388,13 @@
               </xs:element>
               <xs:element name="data_vencimento" msprop:Generator_ColumnVarNameInTable="columndata_vencimento" msprop:Generator_ColumnPropNameInRow="data_vencimento" msprop:Generator_ColumnPropNameInTable="data_vencimentoColumn" msprop:Generator_UserColumnName="data_vencimento" type="xs:dateTime" minOccurs="0" />
               <xs:element name="natureza" msprop:Generator_ColumnVarNameInTable="columnnatureza" msprop:Generator_ColumnPropNameInRow="natureza" msprop:Generator_ColumnPropNameInTable="naturezaColumn" msprop:Generator_UserColumnName="natureza" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="tipo_financiamento" msprop:Generator_ColumnVarNameInTable="columntipo_financiamento" msprop:Generator_ColumnPropNameInRow="tipo_financiamento" msprop:Generator_ColumnPropNameInTable="tipo_financiamentoColumn" msprop:Generator_UserColumnName="tipo_financiamento" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
