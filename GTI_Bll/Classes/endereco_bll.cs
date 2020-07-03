@@ -123,6 +123,11 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Bairro(UF, Cidade,Bairro);
         }
 
+        public int Retorna_Bairro(string UF, int Cidade, string Bairro) {
+            Endereco_Data obj = new Endereco_Data(_connection);
+            return obj.Retorna_Bairro(UF, Cidade, Bairro);
+        }
+
         public int RetornaCep(int CodigoLogradouro, short Numero) {
             Endereco_Data obj = new Endereco_Data(_connection);
             return obj.RetornaCep(CodigoLogradouro, Numero);

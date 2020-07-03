@@ -1,6 +1,8 @@
 ﻿using GTI_Models.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace GTI_Dal.Classes {
@@ -274,7 +276,7 @@ namespace GTI_Dal.Classes {
             }
         }
         
-        public CidadaoStruct LoadReg(Int32 nCodigo) {
+        public CidadaoStruct LoadReg(int nCodigo) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var reg = (from c in db.Cidadao
                            join l in db.Logradouro on c.Codlogradouro equals l.Codlogradouro into cl1 from l in cl1.DefaultIfEmpty()
@@ -411,7 +413,6 @@ namespace GTI_Dal.Classes {
             }
         }
 
-
         public bool Existe_Cidadao_Cnpj(int Codigo, string Cnpj) {
             bool bRet = false;
             using (GTI_Context db = new GTI_Context(_connection)) {
@@ -446,6 +447,34 @@ namespace GTI_Dal.Classes {
                 return _cod;
             }
         }
+
+        public int Incluir_Cidadao_Itbi(Cidadao reg) {
+            using (var db = new GTI_Context(_connection)) {
+                int _codigo = db.Cidadao.Select(x => x.Codcidadao).Max();
+                _codigo++;
+
+                object[] Parametros = new object[13];
+                Parametros[0] = new SqlParameter { ParameterName = "@codcidadao", SqlDbType = SqlDbType.Int, SqlValue = _codigo };
+                Parametros[1] = new SqlParameter { ParameterName = "@nomecidadao", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Nomecidadao };
+                Parametros[2] = new SqlParameter { ParameterName = "@cpf", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cpf };
+                Parametros[3] = new SqlParameter { ParameterName = "@cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnpj};
+                Parametros[4] = new SqlParameter { ParameterName = "@codlogradouro", SqlDbType = SqlDbType.Int, SqlValue = reg.Codlogradouro };
+                Parametros[5] = new SqlParameter { ParameterName = "@numimovel", SqlDbType = SqlDbType.SmallInt, SqlValue = reg.Numimovel };
+                Parametros[6] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Complemento };
+                Parametros[7] = new SqlParameter { ParameterName = "@codbairro", SqlDbType = SqlDbType.SmallInt, SqlValue = reg.Codbairro };
+                Parametros[8] = new SqlParameter { ParameterName = "@codcidade", SqlDbType = SqlDbType.SmallInt, SqlValue = reg.Codcidade };
+                Parametros[9] = new SqlParameter { ParameterName = "@siglauf", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Siglauf };
+                Parametros[10] = new SqlParameter { ParameterName = "@telefone", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Telefone };
+                Parametros[11] = new SqlParameter { ParameterName = "@email", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Email };
+                Parametros[12] = new SqlParameter { ParameterName = "@etiqueta", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Etiqueta };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO cidadao(codcidadao,nomecidadao,cpf,cnpj,codlogradouro,numimovel,complemento,codbairro,codcidade,siglauf,telefone," +
+                    "email,etiqueta) VALUES(@codcidadao,@nomecidadao,@cpf,@cnpj,@codlogradouro,@numimovel,@complemento,@codbairro,@codcidade,@siglauf,@telefone,@email,@etiqueta)", Parametros);
+                db.SaveChanges();
+                return _codigo;
+            }
+        }
+
 
     }
 }

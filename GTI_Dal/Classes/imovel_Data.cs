@@ -1846,8 +1846,6 @@ namespace GTI_Dal.Classes {
 
         public Exception Incluir_Itbi_Forum(Itbi_forum item) {
             using (var db = new GTI_Context(_connection)) {
-               // int _seq = 0;
-//                var Sql = (from t in db.Itbi_Forum where t.Guid == item.Guid select t.Seq).Max();
                int _seq = db.Itbi_Forum.Where(x => x.Guid == item.Guid)
                          .Select(x => x.Seq)
                          .DefaultIfEmpty((short)0)

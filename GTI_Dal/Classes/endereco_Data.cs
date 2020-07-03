@@ -158,6 +158,13 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public int Retorna_Bairro(string UF, int Cidade, string Bairro) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                int Sql = (from c in db.Bairro where c.Siglauf == UF && c.Codcidade == Cidade && c.Descbairro == Bairro select c.Codbairro).FirstOrDefault();
+                return Sql;
+            }
+        }
+
         public Exception Incluir_Pais(Pais reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 int cntCod = (from c in db.Pais select c).Count();
