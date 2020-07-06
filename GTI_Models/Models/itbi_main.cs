@@ -66,6 +66,8 @@ namespace GTI_Models.Models {
         public DateTime? Liberado_em { get; set; }
         public decimal  Valor_guia { get; set; }
         public decimal Valor_guia_atual { get; set; }
+        public int Numero_Guia { get; set; }
+        public DateTime? Data_Vencimento { get; set; }
     }
 
     public class ItbiAnoNumero {

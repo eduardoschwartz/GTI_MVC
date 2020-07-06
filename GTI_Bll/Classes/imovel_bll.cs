@@ -485,6 +485,11 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Foto_Imovel(Codigo);
         }
 
+        public List<Uf> Lista_UF() {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Lista_UF();
+        }
+
         public Exception Insert_Dados_Imovel(dados_imovel_web Reg) {
             Imovel_Data obj = new Imovel_Data(_connection);
             Exception ex = obj.Insert_Dados_Imovel(Reg);
@@ -511,10 +516,7 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Itbi_Financiamento();
         }
 
-        public List<Uf> Lista_UF() {
-            Imovel_Data obj = new Imovel_Data(_connection);
-            return obj.Lista_UF();
-        }
+        #region ITBI
 
         public bool Existe_Itbi(string guid) {
             Imovel_Data obj = new Imovel_Data(_connection);
@@ -680,6 +682,8 @@ namespace GTI_Bll.Classes {
             Exception ex = obj.Incluir_Itbi_Guia(Reg);
             return ex;
         }
+
+        #endregion
 
     }//end class
 }

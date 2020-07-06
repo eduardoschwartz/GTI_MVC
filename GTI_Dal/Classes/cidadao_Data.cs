@@ -453,11 +453,17 @@ namespace GTI_Dal.Classes {
                 int _codigo = db.Cidadao.Select(x => x.Codcidadao).Max();
                 _codigo++;
 
-                object[] Parametros = new object[13];
+                object[] Parametros = new object[14];
                 Parametros[0] = new SqlParameter { ParameterName = "@codcidadao", SqlDbType = SqlDbType.Int, SqlValue = _codigo };
                 Parametros[1] = new SqlParameter { ParameterName = "@nomecidadao", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Nomecidadao };
-                Parametros[2] = new SqlParameter { ParameterName = "@cpf", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cpf };
-                Parametros[3] = new SqlParameter { ParameterName = "@cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnpj};
+                if(reg.Cpf=="" || reg.Cpf=="0")
+                    Parametros[2] = new SqlParameter { ParameterName = "@cpf",SqlValue =DBNull.Value };
+                else
+                    Parametros[2] = new SqlParameter { ParameterName = "@cpf", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cpf };
+                if (reg.Cnpj == "" || reg.Cnpj == "0")
+                    Parametros[3] = new SqlParameter { ParameterName = "@cnpj", SqlValue = DBNull.Value};
+                else
+                    Parametros[3] = new SqlParameter { ParameterName = "@cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnpj };
                 Parametros[4] = new SqlParameter { ParameterName = "@codlogradouro", SqlDbType = SqlDbType.Int, SqlValue = reg.Codlogradouro };
                 Parametros[5] = new SqlParameter { ParameterName = "@numimovel", SqlDbType = SqlDbType.SmallInt, SqlValue = reg.Numimovel };
                 Parametros[6] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Complemento };
@@ -467,9 +473,11 @@ namespace GTI_Dal.Classes {
                 Parametros[10] = new SqlParameter { ParameterName = "@telefone", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Telefone };
                 Parametros[11] = new SqlParameter { ParameterName = "@email", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Email };
                 Parametros[12] = new SqlParameter { ParameterName = "@etiqueta", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Etiqueta };
+                Parametros[13] = new SqlParameter { ParameterName = "@nomelogradouro", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Nomelogradouro };
 
                 db.Database.ExecuteSqlCommand("INSERT INTO cidadao(codcidadao,nomecidadao,cpf,cnpj,codlogradouro,numimovel,complemento,codbairro,codcidade,siglauf,telefone," +
-                    "email,etiqueta) VALUES(@codcidadao,@nomecidadao,@cpf,@cnpj,@codlogradouro,@numimovel,@complemento,@codbairro,@codcidade,@siglauf,@telefone,@email,@etiqueta)", Parametros);
+                    "email,etiqueta,nomelogradouro) VALUES(@codcidadao,@nomecidadao,@cpf,@cnpj,@codlogradouro,@numimovel,@complemento,@codbairro,@codcidade,@siglauf,@telefone," +
+                    "@email,@etiqueta,@nomelogradouro)", Parametros);
                 db.SaveChanges();
                 return _codigo;
             }

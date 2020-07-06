@@ -16,6 +16,7 @@ namespace GTI_Mvc {
         public static string pUserLoginName { get; set; }
         public static string pUserFullName { get; set; }
         public static bool pUserGTI { get; set; }
+        public static bool pFiscalItbi { get; set; }
 
         public static bool ValidaCpf(string cpf) {
             cpf = RetornaNumero(cpf);

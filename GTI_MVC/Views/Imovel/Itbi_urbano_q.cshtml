@@ -531,7 +531,7 @@
                         </tr>
                     </table>
                 </div>
-                <div class="panel-heading">Valor da guia para pagamento </div>
+                <div class="panel-heading">Dados da guia para pagamento </div>
                 <div class="panel-body">
 
                     <table style="font-size:13px;width:640px">
@@ -549,7 +549,6 @@
                                 <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_guia_atual.ToString("0.#0"), @readonly = true })</label>
                             </td>
                         </tr>
-
                     </table>
                     <table>
                         <tr>
@@ -558,6 +557,31 @@
                             </td>
 
                         </tr>
+                    </table>
+                    <table style="font-size:13px;width:644px">
+                        <tr style="height:30px">
+                            <td style="width:133px">
+                                <label style="font-weight:normal;">Data de Vencimento:</label>
+                            </td>
+                            <td style="width:116px">
+                                @if (Model.Data_Vencimento.HasValue) {
+                                    <label style="color:blue">@Model.Data_Vencimento.Value.ToString("dd/MM/yyyy")</label>
+                                } else {
+                                    <label style="color:blue">N/D</label>
+                                }
+                            </td>
+                            <td style="width:80px">
+                                <label style="font-weight:normal;">Nº da Guia:</label>
+                            </td>
+                            <td style="width:315px">
+                                @if (Model.Numero_Guia > 0) {
+                                    <label style="color:blue">@Model.Numero_Guia</label>
+                                } else {
+                                    <label style="color:blue">N/D</label>
+                                }
+                            </td>
+                        </tr>
+
                     </table>
                 </div>
                 <div class="panel-heading">Inclusão de Anexos </div>
@@ -619,6 +643,9 @@
         </div>
         <div style="text-align:center">
             <button type="submit" class="btn btn-success" data-balloon-length="medium" aria-label="Imprimir os dados do formulário." data-balloon-pos="up">Imprimir</button>
+            @if (ViewBag.Fiscal == "S") {
+                <span style="padding-left:5px"><button type="submit" class="btn btn-primary data-balloon-length="medium" aria-label="Liberar a guia para pagamento." data-balloon-pos="up">Liberar Guia</button></span>
+            }
         </div>
 
         <div style="padding-left:15px">@Html.ActionLink("Consultar outro ITBI", "Itbi_query", "Imovel", null, new { @class = "actionlink" })</div>

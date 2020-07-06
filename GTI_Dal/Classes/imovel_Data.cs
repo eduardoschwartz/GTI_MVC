@@ -1626,6 +1626,8 @@ namespace GTI_Dal.Classes {
                     Situacao_itbi=Sql.Situacao_itbi,
                     Liberado_por=Sql.Liberado_por,
                     Liberado_em=Sql.Liberado_em,
+                    Data_Vencimento=Sql.Data_Vencimento,
+                    Numero_Guia=Sql.Numero_Guia
                 };
                 return itbi;
             }

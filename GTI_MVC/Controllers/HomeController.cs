@@ -104,6 +104,7 @@ namespace GTI_Mvc.Controllers {
                 } else {
                     Functions.pUserLoginName = _user.Nome_login;
                     Functions.pUserFullName = _user.Nome_completo;
+                    Functions.pFiscalItbi = _user.Fiscal_Itbi ;
                     return View("../Home/SysMenu");
                 }
             } else {

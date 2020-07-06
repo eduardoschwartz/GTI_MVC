@@ -491,7 +491,7 @@ namespace GTI_Dal.Classes {
                            join cc in db.Centrocusto on t.Setor_atual equals cc.Codigo into tcc from cc in tcc.DefaultIfEmpty()
                            where t.Id==Id
                            orderby t.Nomelogin select new usuarioStruct {Nome_login= t.Nomelogin,  Nome_completo=t.Nomecompleto,Ativo= t.Ativo,
-                               Id=  t.Id, Senha= t.Senha,Senha2= t.Senha2, Setor_atual= t.Setor_atual, Nome_setor= cc.Descricao }).FirstOrDefault();
+                               Id=  t.Id, Senha= t.Senha,Senha2= t.Senha2, Setor_atual= t.Setor_atual, Nome_setor= cc.Descricao ,Fiscal_Itbi= (bool)t.Fiscal_Itbi}).FirstOrDefault();
                 usuarioStruct Sql = new usuarioStruct {
                     Id = reg.Id,
                     Nome_completo = reg.Nome_completo,
@@ -500,7 +500,8 @@ namespace GTI_Dal.Classes {
                     Senha2=reg.Senha2,
                     Setor_atual = reg.Setor_atual,
                     Nome_setor = reg.Nome_setor,
-                    Ativo = reg.Ativo
+                    Ativo = reg.Ativo,
+                    Fiscal_Itbi=reg.Fiscal_Itbi
                 };
                 return Sql;
             }
