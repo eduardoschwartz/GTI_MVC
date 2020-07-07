@@ -470,7 +470,7 @@
                                 @if (Model.Totalidade == "Sim" || Model.Totalidade == null) {
                                     <label style="font-weight:normal;display:none" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc, @readonly = true })</label>
                                 } else {
-                                    <label style="font-weight:normal;display:block" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc, @readonly = true })</label>
+                                    <label style="font-weight:normal;display:block;color:blue" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc, @readonly = true })</label>
                                 }
                             </td>
                         </tr>
@@ -606,7 +606,7 @@
         </div>
         <div style="text-align:center">
             <button type="submit" class="btn btn-success" data-balloon-length="medium" aria-label="Imprimir os dados do formulário." data-balloon-pos="up" name="button" value="print">Imprimir</button>
-            @if (ViewBag.Fiscal == "S") {
+            @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo==1) {
                 <span style="padding-left:5px"><button type="submit" class="btn btn-primary" data-balloon-length="medium" aria-label="Liberar a guia para pagamento." data-balloon-pos="up", name="button" value="guia">Liberar Guia</button></span>
             }
         </div>

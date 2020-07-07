@@ -1764,12 +1764,13 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public List<Itbi_Lista> Retorna_Itbi_Query(int user) {
+        public List<Itbi_Lista> Retorna_Itbi_Query(int user,bool f) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 List<Itbi_Lista> Lista = new List<Itbi_Lista>();
 
-                List<Itbi_main> Sql = (from t in db.Itbi_Main 
-                           orderby new { t.Itbi_Ano, t.Itbi_Numero } where t.Userid == user && t.Itbi_Numero>0 select t).ToList();
+                List<Itbi_main> Sql = (from t in db.Itbi_Main  orderby new { t.Itbi_Ano, t.Itbi_Numero } where t.Itbi_Numero>0 select t).ToList();
+                if (f)//se for fiscal pode consultar qualquer ITBI
+                    Sql.Where(m => m.Userid == user);
 
                 foreach (Itbi_main reg in Sql) {
                     Itbi_Lista item = new Itbi_Lista() {
@@ -1983,11 +1984,13 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public Exception Alterar_Itbi_Guia(string p, int n, DateTime d) {
+        public Exception Alterar_Itbi_Guia(string p, int n, DateTime d,int f) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 Itbi_main i = db.Itbi_Main.First(g => g.Guid == p);
                 i.Data_Vencimento = d;
                 i.Numero_Guia = n;
+                i.Liberado_por = f;
+                i.Liberado_em = DateTime.Now;
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {

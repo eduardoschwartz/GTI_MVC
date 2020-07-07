@@ -624,9 +624,9 @@ namespace GTI_Bll.Classes {
             return obj.Alterar_Itbi_Main(Guid);
         }
 
-        public List<Itbi_Lista> Retorna_Itbi_Query(int user) {
+        public List<Itbi_Lista> Retorna_Itbi_Query(int user,bool f) {
             Imovel_Data obj = new Imovel_Data(_connection);
-            return obj.Retorna_Itbi_Query(user);
+            return obj.Retorna_Itbi_Query(user,f);
         }
 
         public string Retorna_Itbi_Natureza_nome(int codigo) {
@@ -683,9 +683,9 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
-        public Exception Alterar_Itbi_Guia(string p, int n, DateTime d) {
+        public Exception Alterar_Itbi_Guia(string p, int n, DateTime d,int f) {
             Imovel_Data obj = new Imovel_Data(_connection);
-            Exception ex = obj.Alterar_Itbi_Guia(p,n,d);
+            Exception ex = obj.Alterar_Itbi_Guia(p,n,d,f);
             return ex;
         }
 

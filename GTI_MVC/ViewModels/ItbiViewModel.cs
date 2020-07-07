@@ -65,6 +65,7 @@ namespace GTI_Mvc.ViewModels {
         public decimal Valor_guia_atual { get; set; }
         public int Numero_Guia { get; set; }
         public DateTime? Data_Vencimento { get; set; }
+        public bool Funcionario { get; set; }
 
 
         public ItbiViewModel() {

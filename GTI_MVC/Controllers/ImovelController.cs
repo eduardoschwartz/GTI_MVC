@@ -1372,7 +1372,7 @@ namespace GTI_Mvc.Controllers {
             if (Functions.pUserId == 0)
                 return RedirectToAction("Login", "Home");
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
-            List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Query(Functions.pUserId);
+            List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Query(Functions.pUserId,Functions.pFiscalItbi);
             List<ItbiViewModel> model = new List<ItbiViewModel>();
             foreach (Itbi_Lista reg in Lista) {
                 ItbiViewModel item = new ItbiViewModel() {
@@ -1758,12 +1758,12 @@ namespace GTI_Mvc.Controllers {
             if (Functions.pUserId == 0)
                 return RedirectToAction("Login", "Home");
             ViewBag.Fiscal = Functions.pFiscalItbi ? "S" : "N";
-            if (button == "print")
+            if (button==null || button == "print")
                 return Itbi_print(model.Guid, true);
             else {
                 Itbi_gravar_guia(model);
                 model = Retorna_Itbi_Gravado(model.Guid);
-                return View(model);
+                return RedirectToAction("Itbi_query");
             }
         }
 
@@ -1795,12 +1795,12 @@ namespace GTI_Mvc.Controllers {
             if (Functions.pUserId == 0)
                 return RedirectToAction("Login", "Home");
             ViewBag.Fiscal = Functions.pFiscalItbi ? "S" : "N";
-            if (button == "print")
+            if (button == null || button == "print")
                 return Itbi_print(model.Guid, false);
             else {
                 Itbi_gravar_guia(model);
                 model = Retorna_Itbi_Gravado(model.Guid);
-                return View(model);
+                return RedirectToAction("Itbi_query");
             }
         }
 
@@ -1842,12 +1842,17 @@ namespace GTI_Mvc.Controllers {
                 Itbi_Forum item = new Itbi_Forum() {
                     Guid = gravado.Guid,
                     User_id = gravado.UserId,
-                    User_Name = sistemaRepository.Retorna_User_FullName(gravado.UserId),
                     Tipo_Itbi = gravado.Tipo_Imovel,
                     Data_Itbi = gravado.Data_cadastro,
                     Comprador_Nome = gravado.Comprador.Nome,
                     Ano_Numero = gravado.Itbi_Numero.ToString("000000/") + gravado.Itbi_Ano.ToString()
                 };
+                if (gravado.Funcionario)
+                    item.User_Name = sistemaRepository.Retorna_User_FullName(gravado.UserId);
+                else {
+                    Usuario_web uw = sistemaRepository.Retorna_Usuario_Web(gravado.UserId);
+                    item.User_Name = uw.Nome;
+                }
                 model.Add(item);
             } else {
                 foreach (Itbi_forum reg in lista) {
@@ -1856,13 +1861,18 @@ namespace GTI_Mvc.Controllers {
                         Seq = reg.Seq,
                         Datahora = reg.Datahora,
                         User_id = reg.Userid,
-                        User_Name = sistemaRepository.Retorna_User_FullName(reg.Userid),
                         Mensagem = reg.Mensagem,
                         Tipo_Itbi = gravado.Tipo_Imovel,
                         Data_Itbi = gravado.Data_cadastro,
                         Comprador_Nome = gravado.Comprador.Nome,
                         Ano_Numero = gravado.Itbi_Numero.ToString("000000/") + gravado.Itbi_Ano.ToString()
                     };
+                    if (gravado.Funcionario)
+                        item.User_Name = sistemaRepository.Retorna_User_FullName(gravado.UserId);
+                    else {
+                        Usuario_web uw = sistemaRepository.Retorna_Usuario_Web(gravado.UserId);
+                        item.User_Name = uw.Nome;
+                    }
                     model.Add(item);
                 }
             }
@@ -1877,36 +1887,17 @@ namespace GTI_Mvc.Controllers {
                 return RedirectToAction("Login", "Home");
             ModelState.Clear();
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
-            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
             if (model[0].Action == "btnOkMsg") {
                 Itbi_forum reg = new Itbi_forum() {
                     Guid = model[0].Guid,
                     Datahora = DateTime.Now,
                     Mensagem = model[0].Mensagem,
-                    Userid = Functions.pUserId
+                    Userid = Functions.pUserId,
+                    Funcionario=Functions.pUserGTI
                 };
                 Exception ex = imovelRepository.Incluir_Itbi_Forum(reg);
             }
-            //model.Clear();
-            //ItbiViewModel gravado = Retorna_Itbi_Gravado(model[0].Guid);
-            //List<Itbi_forum> lista = imovelRepository.Retorna_Itbi_Forum(model[0].Guid);
-            //foreach (Itbi_forum reg in lista) {
-            //        Itbi_Forum item = new Itbi_Forum() {
-            //            Guid = reg.Guid,
-            //            Seq = reg.Seq,
-            //            Datahora = reg.Datahora,
-            //            User_id = reg.Userid,
-            //            User_Name = sistemaRepository.Retorna_User_FullName(reg.Userid),
-            //            Mensagem = reg.Mensagem,
-            //            Tipo_Itbi = gravado.Tipo_Imovel,
-            //            Data_Itbi = gravado.Data_cadastro,
-            //            Comprador_Nome = gravado.Comprador.Nome,
-            //            Ano_Numero = gravado.Itbi_Numero.ToString("000000/") + gravado.Itbi_Ano.ToString()
-            //        };
-            //        model.Add(item);
-            //    }
-
-
+          
             return RedirectToAction("Itbi_forum", new { p = model[0].Guid });
         }
 
@@ -2071,7 +2062,8 @@ namespace GTI_Mvc.Controllers {
                     Proprietario_Codigo = model.Dados_Imovel.Proprietario_Codigo == null ? 0 : (int)model.Dados_Imovel.Proprietario_Codigo,
                     Proprietario_Nome = model.Dados_Imovel.Proprietario_Nome,
                     Situacao_itbi = 1,
-                    Userid = Functions.pUserId
+                    Userid = Functions.pUserId,
+                    Funcionario=Functions.pUserGTI
                 };
                 ex = imovelRepository.Incluir_Itbi_main(regMain);
             } else {
@@ -2586,6 +2578,7 @@ namespace GTI_Mvc.Controllers {
 
         private void Itbi_gravar_guia(ItbiViewModel model){
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            int _fiscal = Functions.pUserId;
             int _codigo = Convert.ToInt32(model.Comprador.Codigo);
             short _ano = (short)DateTime.Now.Year;
             short _seq = tributarioRepository.Retorna_Proxima_Seq_Itbi(_codigo, _ano);
@@ -2606,7 +2599,7 @@ namespace GTI_Mvc.Controllers {
                 Statuslanc = 3,
                 Datavencimento = _dataVencto,
                 Datadebase = DateTime.Now,
-                Userid = model.UserId
+                Userid = _fiscal
             };
             Exception ex = tributarioRepository.Insert_Debito_Parcela(regParcela);
 
@@ -2659,7 +2652,7 @@ namespace GTI_Mvc.Controllers {
                 Numparcela = 1,
                 Codcomplemento = 0,
                 Obs = "Referente ao ITBI nº" + model.Itbi_Numero.ToString("000000") + "/" + model.Itbi_Ano.ToString(),
-                Userid=model.UserId,
+                Userid=_fiscal,
                 Data=DateTime.Now
             };
             ex = tributarioRepository.Insert_Observacao_Parcela(ObsReg);
@@ -2681,8 +2674,8 @@ namespace GTI_Mvc.Controllers {
 
             //Alterar Itbi
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
-            ex = imovelRepository.Alterar_Itbi_Guia(model.Guid, _novo_documento, _dataVencto);
-
+            ex = imovelRepository.Alterar_Itbi_Guia(model.Guid, _novo_documento, _dataVencto,_fiscal);
+            ex = imovelRepository.Alterar_Itbi_Situacao(model.Guid, 2);
             return;
         }
         

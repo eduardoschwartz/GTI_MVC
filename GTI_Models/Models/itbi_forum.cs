@@ -13,5 +13,6 @@ namespace GTI_Models.Models {
         public DateTime Datahora { get; set; }
         public int Userid { get; set; }
         public string Mensagem { get; set; }
+        public bool Funcionario { get; set; }
     }
 }
