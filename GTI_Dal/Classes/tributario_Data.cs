@@ -640,6 +640,17 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public short Retorna_Proxima_Seq_Itbi(int Codigo, int Ano) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from c in db.Debitoparcela where c.Codreduzido == Codigo && c.Anoexercicio == Ano && c.Codlancamento == 36 orderby c.Seqlancamento descending select c).FirstOrDefault();
+                if (Sql == null)
+                    return (short)0;
+                else {
+                    return (short)(((Debitoparcela) Sql).Seqlancamento+1);
+                }
+            }
+        }
+
         public Exception Alterar_Observacao_Codigo(Debitoobservacao reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 Debitoobservacao b = db.Debitoobservacao.First(i => i.Codreduzido == reg.Codreduzido && i.Seq==reg.Seq);

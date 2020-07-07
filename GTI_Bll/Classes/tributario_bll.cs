@@ -1321,7 +1321,6 @@ namespace GTI_Bll.Classes {
             return reg;
         }
 
-
         public chaveStruct Valida_Certidao(string Chave) {
             bool _valido = false;
             if (Chave.Trim().Length < 8)
@@ -1437,6 +1436,11 @@ namespace GTI_Bll.Classes {
             Tributario_Data obj = new Tributario_Data(_connection);
             Exception ex = obj.Insert_Certidao_Impressao(Reg);
             return ex;
+        }
+
+        public short Retorna_Proxima_Seq_Itbi(int Codigo, int Ano) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Retorna_Proxima_Seq_Itbi(Codigo, Ano);
         }
 
     }//end class

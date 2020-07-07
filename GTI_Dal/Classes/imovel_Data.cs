@@ -1983,6 +1983,19 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Alterar_Itbi_Guia(string p, int n, DateTime d) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Itbi_main i = db.Itbi_Main.First(g => g.Guid == p);
+                i.Data_Vencimento = d;
+                i.Numero_Guia = n;
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
 
 
 

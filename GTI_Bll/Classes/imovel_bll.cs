@@ -683,6 +683,12 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Alterar_Itbi_Guia(string p, int n, DateTime d) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Alterar_Itbi_Guia(p,n,d);
+            return ex;
+        }
+
         #endregion
 
     }//end class

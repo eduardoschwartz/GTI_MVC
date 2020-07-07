@@ -1754,11 +1754,17 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_urbano_q")]
         [HttpPost]
-        public ActionResult Itbi_urbano_q(ItbiViewModel model) {
+        public ActionResult Itbi_urbano_q(ItbiViewModel model, string button) {
             if (Functions.pUserId == 0)
                 return RedirectToAction("Login", "Home");
             ViewBag.Fiscal = Functions.pFiscalItbi ? "S" : "N";
-            return Itbi_print(model.Guid, true);
+            if (button == "print")
+                return Itbi_print(model.Guid, true);
+            else {
+                Itbi_gravar_guia(model);
+                model = Retorna_Itbi_Gravado(model.Guid);
+                return View(model);
+            }
         }
 
         public FileResult Itbi_Download(string p, string f) {
@@ -1792,7 +1798,8 @@ namespace GTI_Mvc.Controllers {
             if (button == "print")
                 return Itbi_print(model.Guid, false);
             else {
-                model= Itbi_gravar_guia(model);
+                Itbi_gravar_guia(model);
+                model = Retorna_Itbi_Gravado(model.Guid);
                 return View(model);
             }
         }
@@ -1957,7 +1964,7 @@ namespace GTI_Mvc.Controllers {
                         _comprador.Cidade_Codigo = (int)_cidadao.CodigoCidadeR;
                         _comprador.Cidade_Nome = _cidadao.NomeCidadeR;
                         _comprador.UF = _cidadao.UfR;
-                        _comprador.Cep = ((int)_cidadao.CepR).ToString("00000-000");
+                        _comprador.Cep = _cidadao.CepR == null ? "" : ((int)_cidadao.CepR).ToString("00000-000");
                         _comprador.Email = _cidadao.EmailR;
                         _comprador.Telefone = _cidadao.TelefoneR;
                     } else {
@@ -1970,7 +1977,7 @@ namespace GTI_Mvc.Controllers {
                         _comprador.Cidade_Codigo = (int)_cidadao.CodigoCidadeC;
                         _comprador.Cidade_Nome = _cidadao.NomeCidadeC;
                         _comprador.UF = _cidadao.UfC;
-                        _comprador.Cep = ((int)_cidadao.CepC).ToString("00000-000");
+                        _comprador.Cep = _cidadao.CepC == null ? "" : ((int)_cidadao.CepC).ToString("00000-000");
                         _comprador.Email = _cidadao.EmailC;
                         _comprador.Telefone = _cidadao.TelefoneC;
                     }
@@ -2021,7 +2028,7 @@ namespace GTI_Mvc.Controllers {
                     _comprador.Cidade_Codigo = (int)_cidadao.CodigoCidadeR;
                     _comprador.Cidade_Nome = _cidadao.NomeCidadeR;
                     _comprador.UF = _cidadao.UfR;
-                    _comprador.Cep = ((int)_cidadao.CepR).ToString("00000-000");
+                    _comprador.Cep =_cidadao.CepR==null?"": ((int)_cidadao.CepR).ToString("00000-000");
                     _comprador.Email = _cidadao.EmailR;
                     _comprador.Telefone = _cidadao.TelefoneR;
                 } else {
@@ -2034,7 +2041,7 @@ namespace GTI_Mvc.Controllers {
                     _comprador.Cidade_Codigo = (int)_cidadao.CodigoCidadeC;
                     _comprador.Cidade_Nome = _cidadao.NomeCidadeC;
                     _comprador.UF = _cidadao.UfC;
-                    _comprador.Cep = ((int)_cidadao.CepC).ToString("00000-000");
+                    _comprador.Cep = _cidadao.CepC==null?"":  ((int)_cidadao.CepC).ToString("00000-000");
                     _comprador.Email = _cidadao.EmailC;
                     _comprador.Telefone = _cidadao.TelefoneC;
                 }
@@ -2121,7 +2128,7 @@ namespace GTI_Mvc.Controllers {
                 regMain.Valor_Avaliacao = model.Valor_Avaliacao;
                 regMain.Valor_Avaliacao_atual = model.Valor_Avaliacao_atual;
                 regMain.Valor_guia = model.Valor_guia;
-                regMain.Valor_guia_atual = model.Valor_guia_atual;
+                regMain.Valor_guia_atual = model.Valor_guia_atual == 0 ? model.Valor_guia : model.Valor_guia_atual;
                 regMain.Valor_Transacao = model.Valor_Transacao;
                 regMain.Valor_Venal = model.Valor_Venal;
 
@@ -2311,10 +2318,9 @@ namespace GTI_Mvc.Controllers {
                 Lista.Add("Data da transação inválida");
             }
 
-            if (model.Data_Transacao != null && model.Data_Transacao.Value.Year < 1990) {
+            if (model.Data_Transacao != null && model.Data_Transacao.Value.Year < 1960) {
                 Lista.Add("Data da transação inválida");
             }
-
 
             if (model.Totalidade == "Não" && model.Totalidade_Perc == 0) {
                 Lista.Add("Informe a proporção do imóvel a ser transmitida");
@@ -2578,24 +2584,29 @@ namespace GTI_Mvc.Controllers {
             return _data;
         }
 
-        private ItbiViewModel Itbi_gravar_guia(ItbiViewModel model){
+        private void Itbi_gravar_guia(ItbiViewModel model){
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             int _codigo = Convert.ToInt32(model.Comprador.Codigo);
             short _ano = (short)DateTime.Now.Year;
+            short _seq = tributarioRepository.Retorna_Proxima_Seq_Itbi(_codigo, _ano);
             DateTime _dataVencto = Retorna_Data_Vencimento_Itbi();
+            string _nome = model.Comprador.Nome.Length > 40 ? model.Comprador.Nome.Substring(0, 40) : model.Comprador.Nome;
+            string _endereco = model.Comprador.Logradouro_Nome.Length > 40 ? model.Comprador.Logradouro_Nome.Substring(0, 40) : model.Comprador.Logradouro_Nome;
+            string _bairro = model.Comprador.Bairro_Nome.Length > 40 ? model.Comprador.Bairro_Nome.Substring(0, 40) : model.Comprador.Bairro_Nome;
+            string _cidade = model.Comprador.Cidade_Nome.Length > 40 ? model.Comprador.Cidade_Nome.Substring(0, 40) : model.Comprador.Cidade_Nome;
 
             //grava parcela
             Debitoparcela regParcela = new Debitoparcela {
                 Codreduzido = _codigo,
                 Anoexercicio = _ano,
                 Codlancamento = 36,
-                Seqlancamento = _seqDec,
+                Seqlancamento = _seq,
                 Numparcela = 1,
                 Codcomplemento = 0,
                 Statuslanc = 3,
                 Datavencimento = _dataVencto,
                 Datadebase = DateTime.Now,
-                Userid = 236
+                Userid = model.UserId
             };
             Exception ex = tributarioRepository.Insert_Debito_Parcela(regParcela);
 
@@ -2604,17 +2615,17 @@ namespace GTI_Mvc.Controllers {
                 Codreduzido = _codigo,
                 Anoexercicio = _ano,
                 Codlancamento = 36,
-                Seqlancamento = _seqDec,
+                Seqlancamento = _seq,
                 Numparcela = 1,
                 Codcomplemento = 0,
                 Codtributo = 84,
-                Valortributo = deb.Soma_Multa_Hidden
+                Valortributo = model.Valor_guia_atual
             };
             Exception ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
 
             //grava o documento
             Numdocumento regDoc = new Numdocumento();
-            regDoc.Valorguia = item.Soma_Principal;
+            regDoc.Valorguia = model.Valor_guia_atual;
             regDoc.Emissor = "Gti.Web/ITBI";
             regDoc.Datadocumento = DateTime.Now;
             regDoc.Registrado = false;
@@ -2622,13 +2633,14 @@ namespace GTI_Mvc.Controllers {
             regDoc.Percisencao = 0;
             int _novo_documento = tributarioRepository.Insert_Documento(regDoc);
             model.Numero_Guia = _novo_documento;
+            model.Data_Vencimento = _dataVencto;
 
             //grava o documento na parcela
             Parceladocumento regParc = new Parceladocumento();
             regParc.Codreduzido = _codigo;
             regParc.Anoexercicio = _ano;
             regParc.Codlancamento = 36;
-            regParc.Seqlancamento = Convert.ToInt16(item.Sequencia_Lancamento);
+            regParc.Seqlancamento =_seq;
             regParc.Numparcela = 1;
             regParc.Codcomplemento = 0;
             regParc.Numdocumento = _novo_documento;
@@ -2638,23 +2650,42 @@ namespace GTI_Mvc.Controllers {
             regParc.Plano = 0;
             tributarioRepository.Insert_Parcela_Documento(regParc);
 
+            //Alterar a observação da parcela
+            Obsparcela ObsReg = new Obsparcela() {
+                Codreduzido = _codigo,
+                Anoexercicio = _ano,
+                Codlancamento = 36,
+                Seqlancamento = _seq,
+                Numparcela = 1,
+                Codcomplemento = 0,
+                Obs = "Referente ao ITBI nº" + model.Itbi_Numero.ToString("000000") + "/" + model.Itbi_Ano.ToString(),
+                Userid=model.UserId,
+                Data=DateTime.Now
+            };
+            ex = tributarioRepository.Insert_Observacao_Parcela(ObsReg);
+
             //Enviar para registrar 
             Ficha_compensacao_documento ficha = new Ficha_compensacao_documento();
-            ficha.Nome = _nome.Length > 40 ? _nome.Substring(0, 40) : _nome;
+            ficha.Nome = _nome;
             ficha.Endereco = _endereco.Length > 40 ? _endereco.Substring(0, 40) : _endereco;
             ficha.Bairro = _bairro.Length > 15 ? _bairro.Substring(0, 15) : _bairro;
             ficha.Cidade = _cidade.Length > 30 ? _cidade.Substring(0, 30) : _cidade;
-            ficha.Cep = _cep ?? "14870000";
-            ficha.Cpf = _cpfcnpj;
-            ficha.Numero_documento = _novo_documento;
+            ficha.Cep = Functions.RetornaNumero( model.Comprador.Cep) ?? "14870000";
+            ficha.Cpf = Functions.RetornaNumero( model.Cpf_Cnpj);
+            ficha.Numero_documento =  _novo_documento;
             ficha.Data_vencimento = _dataVencto;
-            ficha.Valor_documento = Convert.ToDecimal(item.Soma_Principal);
-            ficha.Uf = _uf;
-            Exception ex = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
-            if (ex == null)
-                ex = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
-        }
+            ficha.Valor_documento = Convert.ToDecimal(model.Valor_guia_atual);
+            ficha.Uf = model.Comprador.UF;
+            ex = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
+            ex = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
 
+            //Alterar Itbi
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            ex = imovelRepository.Alterar_Itbi_Guia(model.Guid, _novo_documento, _dataVencto);
+
+            return;
+        }
+        
 
     }
 }
