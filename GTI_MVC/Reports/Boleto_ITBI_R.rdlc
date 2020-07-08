@@ -5637,7 +5637,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.6cm</Height>
+                  <Height>2.53146cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -5677,24 +5677,23 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox22">
-                          <CanGrow>true</CanGrow>
+                        <Textbox Name="descricao_imovel">
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!descricao_imovel.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <TextDecoration>Underline</TextDecoration>
+                                    <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox22</rd:DefaultName>
+                          <rd:DefaultName>descricao_imovel</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -5749,13 +5748,33 @@
             <DataSetName>dsGuia_Itbi</DataSetName>
             <Top>3.11457cm</Top>
             <Left>0.55245cm</Left>
-            <Height>3cm</Height>
+            <Height>4.93146cm</Height>
             <Width>19.81675cm</Width>
             <ZIndex>4</ZIndex>
             <Style>
               <Border>
-                <Style>None</Style>
+                <Style>Solid</Style>
               </Border>
+              <TopBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </TopBorder>
+              <BottomBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </BottomBorder>
+              <LeftBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </LeftBorder>
+              <RightBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </RightBorder>
             </Style>
           </Tablix>
           <Tablix Name="Tablix3">
@@ -7073,7 +7092,7 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>dsGuia_Itbi</DataSetName>
-            <Top>6.97888cm</Top>
+            <Top>8.21713cm</Top>
             <Left>0.54187cm</Left>
             <Height>3.6cm</Height>
             <Width>19.85413cm</Width>
@@ -10650,7 +10669,7 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>dsGuia_Itbi</DataSetName>
-            <Top>10.76829cm</Top>
+            <Top>12.00654cm</Top>
             <Left>0.54851cm</Left>
             <Height>6.18521cm</Height>
             <Width>19.82069cm</Width>

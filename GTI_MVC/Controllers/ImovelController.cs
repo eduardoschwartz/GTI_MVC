@@ -1867,10 +1867,10 @@ namespace GTI_Mvc.Controllers {
                         Comprador_Nome = gravado.Comprador.Nome,
                         Ano_Numero = gravado.Itbi_Numero.ToString("000000/") + gravado.Itbi_Ano.ToString()
                     };
-                    if (gravado.Funcionario)
-                        item.User_Name = sistemaRepository.Retorna_User_FullName(gravado.UserId);
+                    if (reg.Funcionario)
+                        item.User_Name = sistemaRepository.Retorna_User_FullName(reg.Userid);
                     else {
-                        Usuario_web uw = sistemaRepository.Retorna_Usuario_Web(gravado.UserId);
+                        Usuario_web uw = sistemaRepository.Retorna_Usuario_Web(reg.Userid);
                         item.User_Name = uw.Nome;
                     }
                     model.Add(item);
@@ -2344,16 +2344,16 @@ namespace GTI_Mvc.Controllers {
 
                 Itbi_Guia _guia = new Itbi_Guia() {
                     Guid = _itbi.Guid,
-                    Inscricao = _itbi.Inscricao,
+                    Inscricao = _itbi.Inscricao??"",
                     Imovel_Codigo = _itbi.Imovel_codigo,
-                    Imovel_Endereco = _itbi.Imovel_endereco,
+                    Imovel_Endereco = _itbi.Imovel_endereco??"",
                     Imovel_Numero = _itbi.Imovel_numero,
                     Imovel_Complemento = _itbi.Imovel_complemento ?? "",
                     Imovel_Bairro = _itbi.Imovel_bairro ?? "",
                     Imovel_Cep = _itbi.Imovel_cep,
                     Imovel_Lote = _itbi.Imovel_Lote ?? "",
                     Imovel_Quadra = _itbi.Imovel_Quadra ?? "",
-                    Proprietario_Nome = _itbi.Proprietario_Nome,
+                    Proprietario_Nome = _itbi.Proprietario_Nome??"",
                     Itbi_Ano = _itbi.Itbi_Ano,
                     Itbi_Numero = _itbi.Itbi_Numero,
                     Data_Cadastro = _itbi.Data_cadastro,
@@ -2434,7 +2434,7 @@ namespace GTI_Mvc.Controllers {
                 ReportDataSource rdsAct = new ReportDataSource("dsGuia_Itbi", Ds.Tables[0]);
                 ReportViewer viewer = new ReportViewer();
                 viewer.LocalReport.Refresh();
-                if (_itbi.Descricao_Imovel == "")
+                if (string.IsNullOrWhiteSpace( _itbi.Descricao_Imovel ))
                     viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Boleto_ITBI.rdlc");
                 else
                     viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Boleto_ITBI_R.rdlc");

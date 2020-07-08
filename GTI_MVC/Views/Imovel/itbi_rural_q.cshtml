@@ -58,7 +58,16 @@
                             </tr>
 
                         </table>
-
+                        <table style="font-size:13px;width:640px">
+                            <tr style="height:30px">
+                                <td style="width:154px">
+                                    <label style="font-weight:normal;padding-top:7px">Proprietário principal:</label>
+                                </td>
+                                <td>
+                                    <label style="font-weight:normal;padding-top:7px;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Proprietario_Nome, new {@readonly=true, style = "width:470px;height:25px" })</label>
+                                </td>
+                            </tr>
+                        </table>
 
                         <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Dados do Imóvel:</label><br />
 

@@ -1855,14 +1855,15 @@ namespace GTI_Dal.Classes {
                          .Max();
                 _seq++;
 
-                object[] Parametros = new object[5];
+                object[] Parametros = new object[6];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = item.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@seq", SqlDbType = SqlDbType.SmallInt, SqlValue =_seq };
                 Parametros[2] = new SqlParameter { ParameterName = "@datahora", SqlDbType = SqlDbType.DateTime, SqlValue = item.Datahora };
                 Parametros[3] = new SqlParameter { ParameterName = "@userid", SqlDbType = SqlDbType.Int, SqlValue = item.Userid };
                 Parametros[4] = new SqlParameter { ParameterName = "@mensagem", SqlDbType = SqlDbType.VarChar, SqlValue = item.Mensagem };
+                Parametros[5] = new SqlParameter { ParameterName = "@funcionario", SqlDbType = SqlDbType.Bit, SqlValue = item.Funcionario };
 
-                db.Database.ExecuteSqlCommand("INSERT INTO itbi_forum(guid,seq,datahora,userid,mensagem) VALUES(@guid,@seq,@datahora,@userid,@mensagem)", Parametros);
+                db.Database.ExecuteSqlCommand("INSERT INTO itbi_forum(guid,seq,datahora,userid,mensagem,funcionario) VALUES(@guid,@seq,@datahora,@userid,@mensagem,@funcionario)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
