@@ -430,7 +430,7 @@ namespace GTI_Mvc.Controllers {
             }
             if (_tributo.Length > 0)
                 _tributo = _tributo.Substring(0, _tributo.Length - 1);
-            int _numero_certidao = tributario_Class.Retorna_Codigo_Certidao(TipoCertidao.Debito_Doc);
+            int _numero_certidao = tributario_Class.Retorna_Codigo_Certidao(TipoCertidao.Debito);
             int _ano_certidao = DateTime.Now.Year;
             Certidao cert = new Certidao();
             cert.Ano = (short)_ano_certidao;

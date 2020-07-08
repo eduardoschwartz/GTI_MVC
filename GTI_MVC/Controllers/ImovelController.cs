@@ -2571,7 +2571,13 @@ namespace GTI_Mvc.Controllers {
 
         public DateTime Retorna_Data_Vencimento_Itbi() {
             DateTime _data = DateTime.Now;
-
+            _data = _data.AddDays(30);
+            if (_data.DayOfWeek == DayOfWeek.Saturday)
+                _data.AddDays(2);
+            else {
+                if (_data.DayOfWeek == DayOfWeek.Sunday)
+                    _data.AddDays(1);
+            }
 
             return _data;
         }
