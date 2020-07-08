@@ -1190,7 +1190,7 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 }
 
-                var cepObj = Classes.Cep.Busca(Functions.RetornaNumero(model.Comprador.Cep));
+                var cepObj = Classes.Cep.Busca_Correio(Functions.RetornaNumero(model.Comprador.Cep));
                 if (cepObj.CEP != null) {
                     string rua = cepObj.Endereco;
                     if (rua.IndexOf('-') > 0) {
@@ -1581,7 +1581,7 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 }
 
-                var cepObj = Classes.Cep.Busca(Functions.RetornaNumero(model.Comprador.Cep));
+                var cepObj = Classes.Cep.Busca_Correio(Functions.RetornaNumero(model.Comprador.Cep));
                 if (cepObj.CEP != null) {
                     string rua = cepObj.Endereco;
                     if (rua.IndexOf('-') > 0) {
