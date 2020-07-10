@@ -522,6 +522,7 @@
     <Content Include="Datasets\dsGuia_Itbi.xss">
       <DependentUpon>dsGuia_Itbi.xsd</DependentUpon>
     </Content>
+    <Content Include="Files\ITBI Manual do Usuario.pdf" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\cep.js" />

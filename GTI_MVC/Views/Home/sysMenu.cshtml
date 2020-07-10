@@ -29,6 +29,15 @@
         @Html.ActionLink("Tramitação de processos", "Tramite_Processo", "Protocolo", null, new { @class = "actionlink" })<br />
     }
     @Html.ActionLink("Imposto sobre Transmissão de Bens Imóveis (ITBI)", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })<br />
+    <table>
+        <tr>
+            <td style="color:red;font-size:12px">
+                Atenção: A Emissão de ITBI encontra-se em fase de testes e portanto não deve ser utilizada para preenchimento de ITBI's reais. Fique a vontade para testar o sistema ciente de que as informações digitadas serão excluídas ao término da fase de testes.
+            </td>
+
+        </tr>
+    </table>
+
 
     <br />
     @if (Functions.pUserGTI) {

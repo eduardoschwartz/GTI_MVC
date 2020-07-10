@@ -2106,10 +2106,10 @@ namespace GTI_Mvc.Controllers {
                 regMain.Comprador_telefone = model.Comprador.Telefone;
                 regMain.Comprador_email = model.Comprador.Email;
                 regMain.Recursos_proprios_valor = model.Recursos_proprios_valor;
-                regMain.Recursos_proprios_aliq = 3;
+                regMain.Recursos_proprios_aliq = 1.5M;
                 regMain.Recursos_proprios_atual = model.Recursos_proprios_atual;
                 regMain.Recursos_conta_valor = model.Recursos_conta_valor;
-                regMain.Recursos_conta_aliq = 3;
+                regMain.Recursos_conta_aliq = 1.5M;
                 regMain.Recursos_conta_atual = model.Recursos_conta_atual;
                 regMain.Recursos_concedido_valor = model.Recursos_concedido_valor;
                 regMain.Recursos_concedido_aliq = 0.5M;
