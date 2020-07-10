@@ -12,11 +12,11 @@ namespace GTI_Mvc {
     public static class Functions {
         private static readonly byte[] key = new byte[8] { 1, 2, 3, 4, 5, 6, 7, 8 };
         private static readonly byte[] iv = new byte[8] { 1, 2, 3, 4, 5, 6, 7, 8 };
-        public static int pUserId { get; set; }
-        public static string pUserLoginName { get; set; }
-        public static string pUserFullName { get; set; }
-        public static bool pUserGTI { get; set; }
-        public static bool pFiscalItbi { get; set; }
+        //public static int pUserId { get; set; }
+        //public static string pUserLoginName { get; set; }
+        //public static string pUserFullName { get; set; }
+        //public static bool pUserGTI { get; set; }
+        //public static bool pFiscalItbi { get; set; }
 
         public static bool ValidaCpf(string cpf) {
             cpf = RetornaNumero(cpf);

@@ -42,13 +42,20 @@ namespace GTI_Mvc.Classes {
             CepSearch _cep = new CepSearch();
             string jsonResult = _cep.GetAddressByCep(cep);
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            JsonCepCorreioObject cepJson = json_serializer.Deserialize<JsonCepCorreioObject>(jsonResult);
-
-            cepObj.Endereco = cepJson.Rua;
-            cepObj.Bairro = cepJson.Bairro;
-            cepObj.CEP = cepJson.Cep;
-            cepObj.Cidade = cepJson.Cidade;
-
+            try { 
+                JsonCepCorreioObject cepJson = json_serializer.Deserialize<JsonCepCorreioObject>(jsonResult);
+                cepObj.Endereco = cepJson.Rua;
+                cepObj.Bairro = cepJson.Bairro;
+                cepObj.CEP = cepJson.Cep;
+                cepObj.Cidade = cepJson.Cidade.Substring(0, cepJson.Cidade.Length - 3);
+                cepObj.Estado = Functions.StringRight(cepJson.Cidade, 2);
+            } catch {
+                cepObj.Endereco = "";
+                cepObj.Bairro = "";
+                cepObj.CEP = "";
+                cepObj.Cidade = "";
+                cepObj.Estado = "";
+            }
 
             return cepObj;
 

@@ -15,7 +15,7 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult Tramite_Processo() {
             ProcessoViewModel model = new ProcessoViewModel();
-            if (Functions.pUserId == 0) 
+            if (Session["hashid"] == null) 
                 return View("../Home/Login");
             else 
                 return View(model);
@@ -51,7 +51,7 @@ namespace GTI_Mvc.Controllers {
             }
             ModelState.Clear();
 
-            if (Functions.pUserId == 0)
+            if (Session["hashid"] == null)
                 return View("../Home/Login");
 
             if (_ano == 0) 
@@ -68,7 +68,8 @@ namespace GTI_Mvc.Controllers {
         private ProcessoViewModel Exibe_Tramite(string Numero_Ano,int Seq=0) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
             ProcessoViewModel processoViewModel = new ProcessoViewModel();
-            int _userId = Functions.pUserId;
+            //int _userId = Functions.pUserId;
+            int _userId = Convert.ToInt32(Session["hashid"]);
             if (_userId > 0) {
 
                 List<UsuariocentroCusto> _listaCC = protocoloRepository.ListaCentrocustoUsuario(_userId);
@@ -162,7 +163,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Receive/{Ano}/{Numero}/{Seq}")]
         [HttpGet]
         public ViewResult Receive(string p1 = "", string p2 = "", string p3 = "") {
-            if (Functions.pUserId == 0) {
+            if (Session["hashid"] == null) {
                 LoginViewModel model = new LoginViewModel();
                 return View("../Home/Login", model);
             }
@@ -197,14 +198,14 @@ namespace GTI_Mvc.Controllers {
                 model.Despacho_Codigo = 0;
             }
 
-            if (Functions.pUserId > 0) {
+            if (Session["hashid"]!= null) {
                 if (model.Despacho_Codigo > 0) {
                     Tramitacao reg = new Tramitacao() {
                         Ano = (short)model.Ano,
                         Numero = model.Numero,
                         Seq = (byte)model.Seq,
                         Despacho = (short)model.Despacho_Codigo,
-                        Userid = Functions.pUserId,
+                        Userid =  Convert.ToInt32(Session["hashid"]),
                         Datahora = DateTime.Now,
                         Ccusto = (short)model.CCusto_Codigo
                     };
@@ -220,7 +221,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Send/{Ano}/{Numero}/{Seq}")]
         [HttpGet]
         public ViewResult Send(string p1="", string p2="", string p3="") {
-            if (Functions.pUserId == 0) {
+            if (Session["hashid"] == null) {
                 LoginViewModel model = new LoginViewModel();
                 return View("../Home/Login", model);
             }
@@ -248,19 +249,19 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Send(ProcessoViewModel model) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
 
-            if (Functions.pUserId > 0 ) {
-            
+            if (Session["hashid"] != null) {
+
                 List<TramiteStruct> _regOld = protocoloRepository.DadosTramite((short)model.Ano, model.Numero, model.Seq);
                 Tramitacao reg = new Tramitacao() {
                     Ano = (short)model.Ano,
                     Numero = model.Numero,
                     Seq = (byte)model.Seq,
-                    Despacho = (short)model.Despacho_Codigo ,
+                    Despacho = (short)model.Despacho_Codigo,
                     Userid = _regOld[0].Userid1,
                     Datahora = Convert.ToDateTime(_regOld[0].DataEntrada + " " + _regOld[0].HoraEntrada),
                     Ccusto = _regOld[0].CentroCustoCodigo,
                     Dataenvio = DateTime.Now,
-                    Userid2 = Functions.pUserId
+                    Userid2 = Convert.ToInt32(Session["hashid"])
                 };
                 Exception ex = protocoloRepository.Enviar_Processo(reg);
                 if (ex != null)
@@ -272,7 +273,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("AddPlace/{Ano}/{Numero}/{Seq}/{CentroCustoCodigo}")]
         [HttpGet]
-        public ViewResult AddPlace(int Ano=0, int Numero=0, int Seq=0) {
+        public ViewResult AddPlace(int Ano = 0, int Numero = 0, int Seq = 0) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
 
             string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
@@ -305,7 +306,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Obs/{Ano}/{Numero}/{Seq}")]
         [HttpGet]
         public ViewResult Obs(int Ano, int Numero, int Seq=0) {
-            if (Functions.pUserId == 0)
+            if (Session["hashid"] == null)
                 return View("../Home/Login");
 
             string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
@@ -321,7 +322,7 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Obs(ProcessoViewModel model) {
             Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
-            if (Functions.pUserId == 0)
+            if (Session["hashid"] == null)
                 return Json(Url.Action("Login_gti", "Home"));
 
             Tramitacao reg = new Tramitacao() {

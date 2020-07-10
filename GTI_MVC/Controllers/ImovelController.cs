@@ -987,7 +987,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_menu")]
         [HttpGet]
         public ActionResult Itbi_menu() {
-            if (Functions.pUserId == 0)
+            if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             return View();
         }
@@ -995,10 +995,11 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_urbano")]
         [HttpGet]
         public ActionResult Itbi_urbano(string guid, string a, int s = 0) {
-            if (Functions.pUserId == 0)
+            if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             ItbiViewModel model = new ItbiViewModel() {
-                UserId = Functions.pUserId
+                UserId = Convert.ToInt32(Session["hashid"])
+                //UserId = Functions.pUserId
             };
             if (guid == "" || guid == null) {
                 model.Codigo = "";
@@ -1361,7 +1362,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_ok")]
         [HttpGet]
         public ActionResult Itbi_ok() {
-            if (Functions.pUserId == 0)
+            if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             return View();
         }
@@ -1369,10 +1370,13 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_query")]
         [HttpGet]
         public ActionResult Itbi_query(string e = "") {
-            if (Functions.pUserId == 0)
+            if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
-            List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Query(Functions.pUserId,Functions.pFiscalItbi);
+            int _userId = Convert.ToInt32(Session["hashid"]);
+            bool _fiscal = Session["hashfiscalitbi"].ToString() == "S" ? true : false;
+            //List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Query(Functions.pUserId,Functions.pFiscalItbi);
+            List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Query(_userId, _fiscal);
             List<ItbiViewModel> model = new List<ItbiViewModel>();
             foreach (Itbi_Lista reg in Lista) {
                 ItbiViewModel item = new ItbiViewModel() {
@@ -1392,10 +1396,11 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_rural")]
         [HttpGet]
         public ActionResult Itbi_rural(string guid, string a, int s = 0) {
-            if (Functions.pUserId == 0)
+            if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             ItbiViewModel model = new ItbiViewModel() {
-                UserId = Functions.pUserId
+                UserId = Convert.ToInt32(Session["hashid"])
+                //UserId = Functions.pUserId
             };
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
@@ -1745,9 +1750,10 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_urbano_q")]
         [HttpGet]
         public ActionResult Itbi_urbano_q(string p = "") {
-            if (Functions.pUserId == 0)
+            if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
-            ViewBag.Fiscal = Functions.pFiscalItbi ? "S" : "N";
+            ViewBag.Fiscal = Session["hashfiscalitbi"].ToString();
+            //ViewBag.Fiscal = Functions.pFiscalItbi ? "S" : "N";
             ItbiViewModel model = Retorna_Itbi_Gravado(p);
             return View(model);
         }
@@ -1755,9 +1761,10 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_urbano_q")]
         [HttpPost]
         public ActionResult Itbi_urbano_q(ItbiViewModel model, string button) {
-            if (Functions.pUserId == 0)
+            if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
-            ViewBag.Fiscal = Functions.pFiscalItbi ? "S" : "N";
+            ViewBag.Fiscal = Session["hashfiscalitbi"].ToString();
+            //ViewBag.Fiscal = Functions.pFiscalItbi ? "S" : "N";
             if (button==null || button == "print")
                 return Itbi_print(model.Guid, true);
             else {
@@ -1782,9 +1789,10 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_rural_q")]
         [HttpGet]
         public ActionResult Itbi_rural_q(string p = "") {
-            if (Functions.pUserId == 0)
+            if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
-            ViewBag.Fiscal = Functions.pFiscalItbi ? "S" : "N";
+            ViewBag.Fiscal = Session["hashfiscalitbi"].ToString();
+            //ViewBag.Fiscal = Functions.pFiscalItbi ? "S" : "N";
             ItbiViewModel model = Retorna_Itbi_Gravado(p);
             return View(model);
         }
@@ -1792,9 +1800,10 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_rural_q")]
         [HttpPost]
         public ActionResult Itbi_rural_q(ItbiViewModel model, string button) {
-            if (Functions.pUserId == 0)
+            if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
-            ViewBag.Fiscal = Functions.pFiscalItbi ? "S" : "N";
+            ViewBag.Fiscal = Session["hashfiscalitbi"].ToString();
+            //ViewBag.Fiscal = Functions.pFiscalItbi ? "S" : "N";
             if (button == null || button == "print")
                 return Itbi_print(model.Guid, false);
             else {
@@ -1807,7 +1816,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_urbano_e")]
         [HttpGet]
         public ActionResult Itbi_urbano_e(string p = "") {
-            if (Functions.pUserId == 0)
+            if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             Itbi_status stat = imovelRepository.Retorna_Itbi_Situacao(p);
@@ -1831,7 +1840,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_forum")]
         [HttpGet]
         public ActionResult Itbi_forum(string p = "") {
-            if (Functions.pUserId == 0)
+            if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
@@ -1883,7 +1892,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_forum")]
         [HttpPost]
         public ActionResult Itbi_forum(List<Itbi_Forum> model) {
-            if (Functions.pUserId == 0)
+            if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             ModelState.Clear();
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
@@ -1892,8 +1901,10 @@ namespace GTI_Mvc.Controllers {
                     Guid = model[0].Guid,
                     Datahora = DateTime.Now,
                     Mensagem = model[0].Mensagem,
-                    Userid = Functions.pUserId,
-                    Funcionario=Functions.pUserGTI
+                    Userid = Convert.ToInt32( Session["hashid"]),
+                    Funcionario=Session["hashfunc"].ToString()=="S"?true:false
+                    //Userid = Functions.pUserId,
+                    //Funcionario = Functions.pUserGTI
                 };
                 Exception ex = imovelRepository.Incluir_Itbi_Forum(reg);
             }
@@ -2062,8 +2073,10 @@ namespace GTI_Mvc.Controllers {
                     Proprietario_Codigo = model.Dados_Imovel.Proprietario_Codigo == null ? 0 : (int)model.Dados_Imovel.Proprietario_Codigo,
                     Proprietario_Nome = model.Dados_Imovel.Proprietario_Nome,
                     Situacao_itbi = 1,
-                    Userid = Functions.pUserId,
-                    Funcionario=Functions.pUserGTI
+                    Userid = Convert.ToInt32(Session["hashid"]),
+                    Funcionario = Session["hashfunc"].ToString() == "S" ? true : false
+                    //Userid = Functions.pUserId,
+                    //Funcionario=Functions.pUserGTI
                 };
                 ex = imovelRepository.Incluir_Itbi_main(regMain);
             } else {
@@ -2584,7 +2597,8 @@ namespace GTI_Mvc.Controllers {
 
         private void Itbi_gravar_guia(ItbiViewModel model){
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
-            int _fiscal = Functions.pUserId;
+            int _fiscal = Convert.ToInt32(Session["hashid"]);
+            //int _fiscal = Functions.pUserId;
             int _codigo = Convert.ToInt32(model.Comprador.Codigo);
             short _ano = (short)DateTime.Now.Year;
             short _seq = tributarioRepository.Retorna_Proxima_Seq_Itbi(_codigo, _ano);

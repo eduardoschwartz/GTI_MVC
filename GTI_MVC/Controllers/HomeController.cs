@@ -16,8 +16,9 @@ namespace GTI_Mvc.Controllers {
 
           public ViewResult Login_gti() {
             LoginViewModel model = new LoginViewModel();
-            if (Functions.pUserId == 0) {
-                Functions.pUserFullName = "Visitante";
+            if (Session["hashid"] == null) {
+                Session.Remove("hashfname");
+                //Functions.pUserFullName = "Visitante";
             }
             return View(model);
         }
@@ -30,11 +31,13 @@ namespace GTI_Mvc.Controllers {
         [Route("Login")]
         [HttpGet]
         public ViewResult Login() {
-            if (Functions.pUserId > 0) {
+            
+            if (Session["hashid"]!= null) {
                 return View("SysMenu");
             }
-            Functions.pUserId = 0;
-            Functions.pUserFullName = "Visitante";
+            Session.Remove("hashid");
+            Session.Remove("hashfname");
+//            Functions.pUserFullName = "Visitante";
             LoginViewModel model = new LoginViewModel();
             return View(model);
         }
@@ -42,9 +45,11 @@ namespace GTI_Mvc.Controllers {
         [Route("Logout")]
         [HttpGet]
         public ViewResult Logout() {
-            Functions.pUserFullName = "Visitante";
-            Functions.pUserLoginName = "";
-            Functions.pUserId = 0;
+            Session.Remove("hashfname");
+            Session.Remove("hashlname");
+//            Functions.pUserFullName = "Visitante";
+ //           Functions.pUserLoginName = "";
+            Session.Remove("hashid");
             return View("Login_gti");
         }
 
@@ -52,7 +57,7 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult SysMenu() {
 
-            if (Functions.pUserId == 0) {
+            if (Session["hashid"] == null) {
                 LoginViewModel model = new LoginViewModel();
                 return View("Login",model);
             } else {
@@ -70,25 +75,27 @@ namespace GTI_Mvc.Controllers {
             TAcessoFunction tacesso_Class = new TAcessoFunction();
 
             bool bFuncionario = model.Usuario.LastIndexOf('@') > 1 ? false : true;
-            Functions.pUserGTI = bFuncionario;
+            Session["hashfunc"] = bFuncionario ? "S" : "N";
+           // Functions.pUserGTI = bFuncionario;
             Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
 
             if (bFuncionario) {
                 sOldPwd = sistema_Class.Retorna_User_Password(sLogin);
                 int UserId = sistema_Class.Retorna_User_LoginId(sLogin);
                 if (sOldPwd == null) {
-                    Functions.pUserId = 0;
+                    Session.Remove("hashid");
                     ViewBag.Result = "Usuário/Senha inválido!";
                     return View(loginViewModel);
                 } else {
                     sOldPwd2 = tacesso_Class.DecryptGTI(sOldPwd);
                     if (sOldPwd2 != sNewPwd) {
                         ViewBag.Result = "Usuário/Senha inválido!";
-                        Functions.pUserId = 0;
+                        Session.Remove("hashid");
                         return View(loginViewModel);
                     } else {
                         ViewBag.Result = "";
-                        Functions.pUserId = UserId;
+                        Session["hashid"] = UserId;
+//                        Functions.pUserId = UserId;
                     }
                 }
                 
@@ -102,9 +109,19 @@ namespace GTI_Mvc.Controllers {
                     ViewBag.Result = "Usuário inativo.";
                     return View(loginViewModel);
                 } else {
-                    Functions.pUserLoginName = _user.Nome_login;
-                    Functions.pUserFullName = _user.Nome_completo;
-                    Functions.pFiscalItbi = _user.Fiscal_Itbi ;
+                    Session["hashlname"] = _user.Nome_login;
+                    Session["hashfname"] = _user.Nome_completo;
+                    Session["hashfiscalitbi"] = _user.Fiscal_Itbi ? "S" : "N";
+                    //Functions.pUserLoginName = _user.Nome_login;
+                    //Functions.pUserFullName = _user.Nome_completo;
+                    //Functions.pFiscalItbi = _user.Fiscal_Itbi ;
+                    if (Session["hashid"] == null) {
+                        Session.Add("hashid", _user.Id);
+                        Session.Add("hashfname", _user.Nome_completo);
+                        Session.Add("hashlname", _user.Nome_login);
+                        Session.Add("hashfiscalitbi", "N");
+                        Session.Add("hashfunc", "N");
+                    }
                     return View("../Home/SysMenu");
                 }
             } else {
@@ -125,9 +142,19 @@ namespace GTI_Mvc.Controllers {
                                 ViewBag.Result = "Esta conta encontra-se bloqueada.";
                                 return View(loginViewModel);
                             } else {
-                                Functions.pUserId = user_web.Id;
-                                Functions.pUserLoginName = user_web.Email;
-                                Functions.pUserFullName = user_web.Nome;
+                                Session["hashid"] = user_web.Id;
+                                Session["hashlname"] = user_web.Email;
+                                Session["hashfname"] = user_web.Nome;
+                                //Functions.pUserId = user_web.Id;
+                                //Functions.pUserLoginName = user_web.Email;
+                                //Functions.pUserFullName = user_web.Nome;
+                                if (Session["hashid"] == null) {
+                                    Session.Add("hashid", user_web.Id);
+                                    Session.Add("hashfname", user_web.Email);
+                                    Session.Add("hashlname", user_web.Nome);
+                                    Session.Add("hashfiscalitbi", "N");
+                                    Session.Add("hashfunc", "N");
+                                }
                                 return View("../Home/SysMenu");
                             }
                         }
@@ -139,7 +166,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Login_update")]
         [HttpGet]
         public ViewResult Login_update() {
-            if (Functions.pUserId == 0)
+            if (Session["hashid"] == null)
                 return View("Login");
             LoginViewModel model = new LoginViewModel();
             return View(model);
@@ -150,13 +177,15 @@ namespace GTI_Mvc.Controllers {
         public ViewResult Login_update(LoginViewModel model) {
             Sistema_bll sistema_Class = new Sistema_bll("GTIconnection");
             TAcessoFunction tacesso_Class = new TAcessoFunction();
-            string _oldPwd = tacesso_Class.DecryptGTI(sistema_Class.Retorna_User_Password(Functions.pUserLoginName));
+            //string _oldPwd = tacesso_Class.DecryptGTI(sistema_Class.Retorna_User_Password(Functions.pUserLoginName));
+            string _oldPwd = tacesso_Class.DecryptGTI(sistema_Class.Retorna_User_Password(Session["hashlname"].ToString()));
             if (model.Senha != _oldPwd) {
                 ViewBag.Result = "Senha atual não confere!";
             } else {
 
                 Usuario reg = new Usuario {
-                    Nomelogin = Functions.pUserLoginName,
+                    //Nomelogin = Functions.pUserLoginName,
+                    Nomelogin = Session["hashlname"].ToString(),
                     Senha = tacesso_Class.Encrypt128(model.Senha2)
                 };
                 Exception ex = sistema_Class.Alterar_Senha(reg);
@@ -416,7 +445,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Login_reset")]
         [HttpPost]
         public ActionResult Login_reset(LoginViewModel model) {
-            //if (Functions.pUserId == 0) {
+            //if (Session["hashid"] == null) {
             //    Functions.pUserFullName = "Visitante";
             //    return View(model);
             //}
