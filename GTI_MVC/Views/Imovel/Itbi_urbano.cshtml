@@ -900,6 +900,11 @@
                 calcula_guia();
             });
 
+            $("#percTxt").on('input', function () {
+                calcula_guia();
+            });
+
+
             $("#txtRecursoProprio").on('input', function () {
                 var _rp = document.getElementById('txtRecursoProprio').value;
                 var _rp2 = Number(_rp.replace(/[^0-9.-]+/g, "."));
@@ -963,6 +968,17 @@
             var _vv = document.getElementById('txtValorVenal').value;
             var _vv2 = Number(_vv.replace(/[^0-9.-]+/g, "."));
             var _somavv = (parseFloat(_vv2));
+
+            var _perc = document.getElementById('percTxt').value;
+            var _perc2 = Number(_perc.replace(/[^0-9.-]+/g, "."));
+            var _percvv = (parseFloat(_perc2));
+            if (_percvv > 0) {
+                _percvv = 100;
+            }
+            if (_percvv > 0) {
+                _somavv = _somavv * _percvv / 100;
+            }
+            
             if (_soma > _somavv)
                 $("input[name='Valor_guia']").val((_soma * 0.015).toFixed(2).replace(".", ","));
             else
