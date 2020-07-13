@@ -5,6 +5,7 @@
     ViewBag.Title = "ITBI Urbano";
 }
 <link href="~/Content/Baloon.css" rel="stylesheet" />
+
 <style>
     .center {
         margin: auto;
@@ -27,6 +28,7 @@
     .show {
         display: block;
     }
+
     .ui-datepicker {
         margin-top: 30px;
     }
@@ -518,24 +520,24 @@
                                 </td>
                                 <td style="width:100px;padding-top:2px">
                                     @if (Model.Valor_Avaliacao > 0) {
-                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao })</label>
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { id = "txtAvaliacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao })</label>
                                     } else {
-                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { id = "txtAvaliacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                     }
                                 </td>
                             </tr>
                             @*<tr style="height:30px">
-                <td style="width:544px">
-                    <label style="font-weight:normal">Valor da avaliação do imóvel corrigido pelo IPCA(IPC-A 1980) - atualizado pelo fiscal:</label>
-                </td>
-                <td style="width:100px;padding-top:2px">
-                    @if (Model.Valor_Avaliacao_atual > 0) {
-                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao })</label>
-                    } else {
-                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
-                    }
-                </td>
-            </tr>*@
+                                    <td style="width:544px">
+                                        <label style="font-weight:normal">Valor da avaliação do imóvel corrigido pelo IPCA(IPC-A 1980) - atualizado pelo fiscal:</label>
+                                    </td>
+                                    <td style="width:100px;padding-top:2px">
+                                        @if (Model.Valor_Avaliacao_atual > 0) {
+                                            <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao })</label>
+                                        } else {
+                                            <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                        }
+                                    </td>
+                                </tr>*@
                         </table>
 
                         <table style="font-size:13px;width:640px">
@@ -626,15 +628,15 @@
                                     }
                                 </td>
                                 @*<td style="width:194px;padding-top:3px">
-                                    <label style="font-weight:normal;">Valor atualizado pelo fiscal:</label>
-                                </td>
-                                <td style="width:220px;padding-top:3px">
-                                    @if (Model.Valor_guia_atual > 0) {
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_guia_atual.ToString("0.#0") })</label>
-                                    } else {
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
-                                    }
-                                </td>*@
+                                        <label style="font-weight:normal;">Valor atualizado pelo fiscal:</label>
+                                    </td>
+                                    <td style="width:220px;padding-top:3px">
+                                        @if (Model.Valor_guia_atual > 0) {
+                                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_guia_atual.ToString("0.#0") })</label>
+                                        } else {
+                                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
+                                        }
+                                    </td>*@
                             </tr>
 
                         </table>
@@ -869,7 +871,7 @@
                     $("input[name='Financiamento_valor']").prop('readonly', false);
                     $("input[name='Valor_Transacao']").css({ "color": "blue" });
                     $("input[name='Valor_Transacao']").prop('readonly', true);
-                    
+
                 }
                 else {
                     $("input[name='Recursos_proprios_valor']").val('0,00');
@@ -897,6 +899,10 @@
             calcula_guia();
 
             $("#txtValorTransacao").on('input', function () {
+                calcula_guia();
+            });
+
+            $("#txtAvaliacao").on('input', function () {
                 calcula_guia();
             });
 
@@ -969,20 +975,30 @@
             var _vv2 = Number(_vv.replace(/[^0-9.-]+/g, "."));
             var _somavv = (parseFloat(_vv2));
 
+            var _av = document.getElementById('txtAvaliacao').value;
+            var _av2 = Number(_av.replace(/[^0-9.-]+/g, "."));
+            var _somaav = (parseFloat(_av2));
+
             var _perc = document.getElementById('percTxt').value;
             var _perc2 = Number(_perc.replace(/[^0-9.-]+/g, "."));
             var _percvv = (parseFloat(_perc2));
-            if (_percvv > 0) {
+            if (_percvv = 0)
                 _percvv = 100;
-            }
+            else
+                _percvv = (parseFloat(_perc2));
+
             if (_percvv > 0) {
                 _somavv = _somavv * _percvv / 100;
             }
-            
+
             if (_soma > _somavv)
                 $("input[name='Valor_guia']").val((_soma * 0.015).toFixed(2).replace(".", ","));
             else
                 $("input[name='Valor_guia']").val((_somavv * 0.015).toFixed(2).replace(".", ","));
+
+            if (_somaav > _soma && _somaav > _somavv)
+                $("input[name='Valor_guia']").val((_somaav * 0.015).toFixed(2).replace(".", ","));
+
         }
 
         function cancelarCodigo() {
@@ -1084,7 +1100,7 @@
                     }
                 }
             });
-            
+
             var model = @Html.Raw(Json.Encode(Model.Lista_Erro));
             if (model.length >0) {
                 $('#ErrorModal').modal('show');
@@ -1121,7 +1137,7 @@
                     var ext = f.name.replace(/^.*?\.([a-zA-Z0-9]+)$/, "$1");
                     if (ext == extArray[0] || ext == extArray[1]) {
                         alert("O sistema não permite anexar arquivos com extensão(.exe,.dll). Tente anexar outroa rquivo.");
-                        //reset file upload control                            
+                        //reset file upload control
                         $("#" + this.id).replaceWith($("#" + this.id).clone(true));
                         this.value = null;
                         return false;
@@ -1131,7 +1147,7 @@
                         //show an alert to the user
                         alert("Tamanho máximo excedido. (Max. 4 MB)");
                         this.value = null;
-                        //reset file upload control                            
+                        //reset file upload control
                         $("#" + this.id).replaceWith($("#" + this.id).clone(true));
                         return false;
                     }
@@ -1139,6 +1155,92 @@
             })
         });
 
+        function valida_Cpf(cpf) {
+            cpf = cpf.split("").filter(n => (Number(n) || n == 0)).join("");
+            var numeros, digitos, soma, i, resultado, digitos_iguais;
+            digitos_iguais = 1;
+            if (cpf.length < 11)
+                return false;
+            for (i = 0; i < cpf.length - 1; i++)
+                if (cpf.charAt(i) != cpf.charAt(i + 1)) {
+                    digitos_iguais = 0;
+                    break;
+                }
+            if (!digitos_iguais) {
+                numeros = cpf.substring(0, 9);
+                digitos = cpf.substring(9);
+                soma = 0;
+                for (i = 10; i > 1; i--)
+                    soma += numeros.charAt(10 - i) * i;
+                resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+                if (resultado != digitos.charAt(0))
+                    return false;
+                numeros = cpf.substring(0, 10);
+                soma = 0;
+                for (i = 11; i > 1; i--)
+                    soma += numeros.charAt(11 - i) * i;
+                resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+                if (resultado != digitos.charAt(1))
+                    return false;
+                return true;
+            }
+            else
+                return false;
+        }
+
+        function valida_Cnpj(cnpj) {
+
+            cnpj = cnpj.replace(/[^\d]+/g, '');
+
+            if (cnpj == '') return false;
+
+            if (cnpj.length != 14)
+                return false;
+
+            // Elimina CNPJs invalidos conhecidos
+            if (cnpj == "00000000000000" ||
+                cnpj == "11111111111111" ||
+                cnpj == "22222222222222" ||
+                cnpj == "33333333333333" ||
+                cnpj == "44444444444444" ||
+                cnpj == "55555555555555" ||
+                cnpj == "66666666666666" ||
+                cnpj == "77777777777777" ||
+                cnpj == "88888888888888" ||
+                cnpj == "99999999999999")
+                return false;
+
+            // Valida DVs
+            tamanho = cnpj.length - 2
+            numeros = cnpj.substring(0, tamanho);
+            digitos = cnpj.substring(tamanho);
+            soma = 0;
+            pos = tamanho - 7;
+            for (i = tamanho; i >= 1; i--) {
+                soma += numeros.charAt(tamanho - i) * pos--;
+                if (pos < 2)
+                    pos = 9;
+            }
+            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+            if (resultado != digitos.charAt(0))
+                return false;
+
+            tamanho = tamanho + 1;
+            numeros = cnpj.substring(0, tamanho);
+            soma = 0;
+            pos = tamanho - 7;
+            for (i = tamanho; i >= 1; i--) {
+                soma += numeros.charAt(tamanho - i) * pos--;
+                if (pos < 2)
+                    pos = 9;
+            }
+            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+            if (resultado != digitos.charAt(1))
+                return false;
+
+            return true;
+
+        }
 
     </script>
 }

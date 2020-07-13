@@ -479,9 +479,9 @@
                             </td>
                             <td style="width:100px;padding-top:2px">
                                 @if (Model.Valor_Avaliacao > 0) {
-                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao })</label>
+                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new {id="txtAvaliacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao })</label>
                                 } else {
-                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { id = "txtAvaliacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                 }
                             </td>
                         </tr>
@@ -491,9 +491,9 @@
                             </td>
                             <td style="width:100px;padding-top:2px">
                                 @if (Model.Valor_Avaliacao_atual > 0) {
-                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao })</label>
+                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new {id="txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao })</label>
                                 } else {
-                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                 }
                             </td>
                         </tr>
@@ -862,6 +862,14 @@
                 calcula_guia();
             });
 
+            $("#txtAvaliacao").on('input', function () {
+                calcula_guia();
+            });
+
+            $("#txtAvaliacao2").on('input', function () {
+                calcula_guia();
+            });
+
             $("#percTxt").on('input', function () {
                 calcula_guia();
             });
@@ -934,12 +942,22 @@
             var _vv2 = Number(_vv.replace(/[^0-9.-]+/g, "."));
             var _somavv = (parseFloat(_vv2));
 
+            var _av = document.getElementById('txtAvaliacao').value;
+            var _av2 = Number(_av.replace(/[^0-9.-]+/g, "."));
+            var _somaav = (parseFloat(_av2));
+
+            var _ava = document.getElementById('txtAvaliacao2').value;
+            var _ava2 = Number(_ava.replace(/[^0-9.-]+/g, "."));
+            var _somaava = (parseFloat(_ava2));
+
             var _perc = document.getElementById('percTxt').value;
             var _perc2 = Number(_perc.replace(/[^0-9.-]+/g, "."));
             var _percvv = (parseFloat(_perc2));
-            if (_percvv > 0) {
+            if (_percvv = 0)
                 _percvv = 100;
-            }
+            else
+                _percvv = (parseFloat(_perc2));
+
             if (_percvv > 0) {
                 _somavv = _somavv * _percvv / 100;
             }
@@ -948,6 +966,13 @@
                 $("input[name='Valor_guia']").val((_soma * 0.015).toFixed(2).replace(".", ","));
             else
                 $("input[name='Valor_guia']").val((_somavv * 0.015).toFixed(2).replace(".", ","));
+
+            if (_somaav > _soma && _somaav > _somavv)
+                $("input[name='Valor_guia']").val((_somaav * 0.015).toFixed(2).replace(".", ","));
+
+            if (_somava > _somaav && _somaava > _soma && _somaava > _somavv)
+                $("input[name='Valor_guia']").val((_somaava * 0.015).toFixed(2).replace(".", ","));
+
         }
 
         function cancelarCodigo() {
@@ -1104,6 +1129,92 @@
             })
         });
 
+        function valida_Cpf(cpf) {
+            cpf = cpf.split("").filter(n => (Number(n) || n == 0)).join("");
+            var numeros, digitos, soma, i, resultado, digitos_iguais;
+            digitos_iguais = 1;
+            if (cpf.length < 11)
+                return false;
+            for (i = 0; i < cpf.length - 1; i++)
+                if (cpf.charAt(i) != cpf.charAt(i + 1)) {
+                    digitos_iguais = 0;
+                    break;
+                }
+            if (!digitos_iguais) {
+                numeros = cpf.substring(0, 9);
+                digitos = cpf.substring(9);
+                soma = 0;
+                for (i = 10; i > 1; i--)
+                    soma += numeros.charAt(10 - i) * i;
+                resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+                if (resultado != digitos.charAt(0))
+                    return false;
+                numeros = cpf.substring(0, 10);
+                soma = 0;
+                for (i = 11; i > 1; i--)
+                    soma += numeros.charAt(11 - i) * i;
+                resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+                if (resultado != digitos.charAt(1))
+                    return false;
+                return true;
+            }
+            else
+                return false;
+        }
+
+        function valida_Cnpj(cnpj) {
+
+            cnpj = cnpj.replace(/[^\d]+/g, '');
+
+            if (cnpj == '') return false;
+
+            if (cnpj.length != 14)
+                return false;
+
+            // Elimina CNPJs invalidos conhecidos
+            if (cnpj == "00000000000000" ||
+                cnpj == "11111111111111" ||
+                cnpj == "22222222222222" ||
+                cnpj == "33333333333333" ||
+                cnpj == "44444444444444" ||
+                cnpj == "55555555555555" ||
+                cnpj == "66666666666666" ||
+                cnpj == "77777777777777" ||
+                cnpj == "88888888888888" ||
+                cnpj == "99999999999999")
+                return false;
+
+            // Valida DVs
+            tamanho = cnpj.length - 2
+            numeros = cnpj.substring(0, tamanho);
+            digitos = cnpj.substring(tamanho);
+            soma = 0;
+            pos = tamanho - 7;
+            for (i = tamanho; i >= 1; i--) {
+                soma += numeros.charAt(tamanho - i) * pos--;
+                if (pos < 2)
+                    pos = 9;
+            }
+            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+            if (resultado != digitos.charAt(0))
+                return false;
+
+            tamanho = tamanho + 1;
+            numeros = cnpj.substring(0, tamanho);
+            soma = 0;
+            pos = tamanho - 7;
+            for (i = tamanho; i >= 1; i--) {
+                soma += numeros.charAt(tamanho - i) * pos--;
+                if (pos < 2)
+                    pos = 9;
+            }
+            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+            if (resultado != digitos.charAt(1))
+                return false;
+
+            return true;
+
+        }
 
     </script>
 }
