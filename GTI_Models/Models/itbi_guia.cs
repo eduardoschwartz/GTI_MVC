@@ -30,6 +30,7 @@ namespace GTI_Models.Models {
         public DateTime Data_Transacao { get; set; }
         public decimal Valor_Transacao { get; set; }
         public decimal Valor_Avaliacao { get; set; }
+        public decimal Valor_Avaliacao_Atual { get; set; }
         public decimal Valor_Venal { get; set; }
         public decimal Recursos_proprios_Valor { get; set; }
         public decimal Recursos_proprios_Atual { get; set; }
@@ -48,6 +49,7 @@ namespace GTI_Models.Models {
         public string Receita_Federal { get; set; }
         public string Descricao_Imovel { get; set; }
         public decimal Valor_Guia { get; set; }
+        public decimal Valor_Guia_Atual { get; set; }
         public int Numero_guia { get; set; }
         public string Nosso_Numero { get; set; }
         public string Linha_Digitavel { get; set; }

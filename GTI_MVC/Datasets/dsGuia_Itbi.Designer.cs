@@ -331,6 +331,10 @@ namespace GTI_MVC.Datasets {
             
             private global::System.Data.DataColumn columnvalor_avaliacao;
             
+            private global::System.Data.DataColumn columnvalor_guia_atual;
+            
+            private global::System.Data.DataColumn columnvalor_avaliacao_atual;
+            
             private global::System.Data.DataColumn columnvalor_venal;
             
             private global::System.Data.DataColumn columnrecursos_proprios_valor;
@@ -624,6 +628,22 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn valor_guia_atualColumn {
+                get {
+                    return this.columnvalor_guia_atual;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn valor_avaliacao_atualColumn {
+                get {
+                    return this.columnvalor_avaliacao_atual;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public global::System.Data.DataColumn valor_venalColumn {
                 get {
                     return this.columnvalor_venal;
@@ -886,6 +906,8 @@ namespace GTI_MVC.Datasets {
                         System.DateTime data_transacao, 
                         decimal valor_transacao, 
                         decimal valor_avaliacao, 
+                        decimal valor_guia_atual, 
+                        decimal valor_avaliacao_atual, 
                         decimal valor_venal, 
                         decimal recursos_proprios_valor, 
                         decimal recursos_proprios_atual, 
@@ -939,6 +961,8 @@ namespace GTI_MVC.Datasets {
                         data_transacao,
                         valor_transacao,
                         valor_avaliacao,
+                        valor_guia_atual,
+                        valor_avaliacao_atual,
                         valor_venal,
                         recursos_proprios_valor,
                         recursos_proprios_atual,
@@ -1019,6 +1043,8 @@ namespace GTI_MVC.Datasets {
                 this.columndata_transacao = base.Columns["data_transacao"];
                 this.columnvalor_transacao = base.Columns["valor_transacao"];
                 this.columnvalor_avaliacao = base.Columns["valor_avaliacao"];
+                this.columnvalor_guia_atual = base.Columns["valor_guia_atual"];
+                this.columnvalor_avaliacao_atual = base.Columns["valor_avaliacao_atual"];
                 this.columnvalor_venal = base.Columns["valor_venal"];
                 this.columnrecursos_proprios_valor = base.Columns["recursos_proprios_valor"];
                 this.columnrecursos_proprios_atual = base.Columns["recursos_proprios_atual"];
@@ -1101,6 +1127,10 @@ namespace GTI_MVC.Datasets {
                 base.Columns.Add(this.columnvalor_transacao);
                 this.columnvalor_avaliacao = new global::System.Data.DataColumn("valor_avaliacao", typeof(decimal), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnvalor_avaliacao);
+                this.columnvalor_guia_atual = new global::System.Data.DataColumn("valor_guia_atual", typeof(decimal), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnvalor_guia_atual);
+                this.columnvalor_avaliacao_atual = new global::System.Data.DataColumn("valor_avaliacao_atual", typeof(decimal), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnvalor_avaliacao_atual);
                 this.columnvalor_venal = new global::System.Data.DataColumn("valor_venal", typeof(decimal), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnvalor_venal);
                 this.columnrecursos_proprios_valor = new global::System.Data.DataColumn("recursos_proprios_valor", typeof(decimal), null, global::System.Data.MappingType.Element);
@@ -1720,6 +1750,38 @@ namespace GTI_MVC.Datasets {
                 }
                 set {
                     this[this.tableitbi_guia.valor_avaliacaoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public decimal valor_guia_atual {
+                get {
+                    try {
+                        return ((decimal)(this[this.tableitbi_guia.valor_guia_atualColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'valor_guia_atual\' in table \'itbi_guia\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableitbi_guia.valor_guia_atualColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public decimal valor_avaliacao_atual {
+                get {
+                    try {
+                        return ((decimal)(this[this.tableitbi_guia.valor_avaliacao_atualColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'valor_avaliacao_atual\' in table \'itbi_guia\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableitbi_guia.valor_avaliacao_atualColumn] = value;
                 }
             }
             
@@ -2401,6 +2463,30 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool Isvalor_guia_atualNull() {
+                return this.IsNull(this.tableitbi_guia.valor_guia_atualColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void Setvalor_guia_atualNull() {
+                this[this.tableitbi_guia.valor_guia_atualColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool Isvalor_avaliacao_atualNull() {
+                return this.IsNull(this.tableitbi_guia.valor_avaliacao_atualColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void Setvalor_avaliacao_atualNull() {
+                this[this.tableitbi_guia.valor_avaliacao_atualColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool Isvalor_venalNull() {
                 return this.IsNull(this.tableitbi_guia.valor_venalColumn);
             }
@@ -2885,6 +2971,8 @@ namespace GTI_MVC.Datasets.dsGuia_ItbiTableAdapters {
             tableMapping.ColumnMappings.Add("data_transacao", "data_transacao");
             tableMapping.ColumnMappings.Add("valor_transacao", "valor_transacao");
             tableMapping.ColumnMappings.Add("valor_avaliacao", "valor_avaliacao");
+            tableMapping.ColumnMappings.Add("valor_guia_atual", "valor_guia_atual");
+            tableMapping.ColumnMappings.Add("valor_avaliacao_atual", "valor_avaliacao_atual");
             tableMapping.ColumnMappings.Add("valor_venal", "valor_venal");
             tableMapping.ColumnMappings.Add("recursos_proprios_valor", "recursos_proprios_valor");
             tableMapping.ColumnMappings.Add("recursos_proprios_atual", "recursos_proprios_atual");
@@ -2907,6 +2995,9 @@ namespace GTI_MVC.Datasets.dsGuia_ItbiTableAdapters {
             tableMapping.ColumnMappings.Add("nosso_numero", "nosso_numero");
             tableMapping.ColumnMappings.Add("linha_digitavel", "linha_digitavel");
             tableMapping.ColumnMappings.Add("codigo_barra", "codigo_barra");
+            tableMapping.ColumnMappings.Add("data_vencimento", "data_vencimento");
+            tableMapping.ColumnMappings.Add("natureza", "natureza");
+            tableMapping.ColumnMappings.Add("tipo_financiamento", "tipo_financiamento");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
@@ -2921,23 +3012,25 @@ namespace GTI_MVC.Datasets.dsGuia_ItbiTableAdapters {
                 "f_cnpj], [comprador_codigo], [comprador_nome], [comprador_logradouro], [comprado" +
                 "r_numero], [comprador_complemento], [comprador_cep], [comprador_bairro], [compra" +
                 "dor_cidade], [comprador_uf], [tipo_instrumento], [data_transacao], [valor_transa" +
-                "cao], [valor_avaliacao], [valor_venal], [recursos_proprios_valor], [recursos_pro" +
-                "prios_atual], [recursos_conta_valor], [recursos_conta_atual], [recursos_concedid" +
-                "o_valor], [recursos_concedido_atual], [financiamento_valor], [financiamento_atua" +
-                "l], [totalidade], [totalidade_perc], [matricula], [itbi_numero], [itbi_ano], [in" +
-                "scricao_incra], [receita_federal], [descricao_imovel], [valor_guia], [numero_gui" +
-                "a], [nosso_numero], [linha_digitavel], [codigo_barra]) VALUES (@guid, @data_cada" +
-                "stro, @imovel_codigo, @inscricao, @proprietario_nome, @imovel_endereco, @imovel_" +
-                "numero, @imovel_complemento, @imovel_cep, @imovel_bairro, @imovel_quadra, @imove" +
-                "l_lote, @comprador_cpf_cnpj, @comprador_codigo, @comprador_nome, @comprador_logr" +
-                "adouro, @comprador_numero, @comprador_complemento, @comprador_cep, @comprador_ba" +
-                "irro, @comprador_cidade, @comprador_uf, @tipo_instrumento, @data_transacao, @val" +
-                "or_transacao, @valor_avaliacao, @valor_venal, @recursos_proprios_valor, @recurso" +
-                "s_proprios_atual, @recursos_conta_valor, @recursos_conta_atual, @recursos_conced" +
-                "ido_valor, @recursos_concedido_atual, @financiamento_valor, @financiamento_atual" +
-                ", @totalidade, @totalidade_perc, @matricula, @itbi_numero, @itbi_ano, @inscricao" +
-                "_incra, @receita_federal, @descricao_imovel, @valor_guia, @numero_guia, @nosso_n" +
-                "umero, @linha_digitavel, @codigo_barra)";
+                "cao], [valor_avaliacao], [valor_guia_atual], [valor_avaliacao_atual], [valor_ven" +
+                "al], [recursos_proprios_valor], [recursos_proprios_atual], [recursos_conta_valor" +
+                "], [recursos_conta_atual], [recursos_concedido_valor], [recursos_concedido_atual" +
+                "], [financiamento_valor], [financiamento_atual], [totalidade], [totalidade_perc]" +
+                ", [matricula], [itbi_numero], [itbi_ano], [inscricao_incra], [receita_federal], " +
+                "[descricao_imovel], [valor_guia], [numero_guia], [nosso_numero], [linha_digitave" +
+                "l], [codigo_barra], [data_vencimento], [natureza], [tipo_financiamento]) VALUES " +
+                "(@guid, @data_cadastro, @imovel_codigo, @inscricao, @proprietario_nome, @imovel_" +
+                "endereco, @imovel_numero, @imovel_complemento, @imovel_cep, @imovel_bairro, @imo" +
+                "vel_quadra, @imovel_lote, @comprador_cpf_cnpj, @comprador_codigo, @comprador_nom" +
+                "e, @comprador_logradouro, @comprador_numero, @comprador_complemento, @comprador_" +
+                "cep, @comprador_bairro, @comprador_cidade, @comprador_uf, @tipo_instrumento, @da" +
+                "ta_transacao, @valor_transacao, @valor_avaliacao, @valor_guia_atual, @valor_aval" +
+                "iacao_atual, @valor_venal, @recursos_proprios_valor, @recursos_proprios_atual, @" +
+                "recursos_conta_valor, @recursos_conta_atual, @recursos_concedido_valor, @recurso" +
+                "s_concedido_atual, @financiamento_valor, @financiamento_atual, @totalidade, @tot" +
+                "alidade_perc, @matricula, @itbi_numero, @itbi_ano, @inscricao_incra, @receita_fe" +
+                "deral, @descricao_imovel, @valor_guia, @numero_guia, @nosso_numero, @linha_digit" +
+                "avel, @codigo_barra, @data_vencimento, @natureza, @tipo_financiamento)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@guid", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "guid", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@data_cadastro", global::System.Data.SqlDbType.SmallDateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "data_cadastro", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -2965,6 +3058,8 @@ namespace GTI_MVC.Datasets.dsGuia_ItbiTableAdapters {
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@data_transacao", global::System.Data.SqlDbType.SmallDateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "data_transacao", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@valor_transacao", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "valor_transacao", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@valor_avaliacao", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "valor_avaliacao", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@valor_guia_atual", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "valor_guia_atual", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@valor_avaliacao_atual", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "valor_avaliacao_atual", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@valor_venal", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "valor_venal", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@recursos_proprios_valor", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "recursos_proprios_valor", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@recursos_proprios_atual", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "recursos_proprios_atual", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -2987,6 +3082,9 @@ namespace GTI_MVC.Datasets.dsGuia_ItbiTableAdapters {
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@nosso_numero", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "nosso_numero", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@linha_digitavel", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "linha_digitavel", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@codigo_barra", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "codigo_barra", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@data_vencimento", global::System.Data.SqlDbType.SmallDateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "data_vencimento", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@natureza", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "natureza", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@tipo_financiamento", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "tipo_financiamento", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
             this._adapter.UpdateCommand.CommandText = "UPDATE [dbo].[itbi_guia] SET [guid] = @guid, [data_cadastro] = @data_cadastro, [i" +
@@ -3001,18 +3099,20 @@ namespace GTI_MVC.Datasets.dsGuia_ItbiTableAdapters {
                 "ador_bairro] = @comprador_bairro, [comprador_cidade] = @comprador_cidade, [compr" +
                 "ador_uf] = @comprador_uf, [tipo_instrumento] = @tipo_instrumento, [data_transaca" +
                 "o] = @data_transacao, [valor_transacao] = @valor_transacao, [valor_avaliacao] = " +
-                "@valor_avaliacao, [valor_venal] = @valor_venal, [recursos_proprios_valor] = @rec" +
-                "ursos_proprios_valor, [recursos_proprios_atual] = @recursos_proprios_atual, [rec" +
-                "ursos_conta_valor] = @recursos_conta_valor, [recursos_conta_atual] = @recursos_c" +
-                "onta_atual, [recursos_concedido_valor] = @recursos_concedido_valor, [recursos_co" +
-                "ncedido_atual] = @recursos_concedido_atual, [financiamento_valor] = @financiamen" +
-                "to_valor, [financiamento_atual] = @financiamento_atual, [totalidade] = @totalida" +
-                "de, [totalidade_perc] = @totalidade_perc, [matricula] = @matricula, [itbi_numero" +
-                "] = @itbi_numero, [itbi_ano] = @itbi_ano, [inscricao_incra] = @inscricao_incra, " +
-                "[receita_federal] = @receita_federal, [descricao_imovel] = @descricao_imovel, [v" +
-                "alor_guia] = @valor_guia, [numero_guia] = @numero_guia, [nosso_numero] = @nosso_" +
-                "numero, [linha_digitavel] = @linha_digitavel, [codigo_barra] = @codigo_barra WHE" +
-                "RE (([guid] = @Original_guid))";
+                "@valor_avaliacao, [valor_guia_atual] = @valor_guia_atual, [valor_avaliacao_atual" +
+                "] = @valor_avaliacao_atual, [valor_venal] = @valor_venal, [recursos_proprios_val" +
+                "or] = @recursos_proprios_valor, [recursos_proprios_atual] = @recursos_proprios_a" +
+                "tual, [recursos_conta_valor] = @recursos_conta_valor, [recursos_conta_atual] = @" +
+                "recursos_conta_atual, [recursos_concedido_valor] = @recursos_concedido_valor, [r" +
+                "ecursos_concedido_atual] = @recursos_concedido_atual, [financiamento_valor] = @f" +
+                "inanciamento_valor, [financiamento_atual] = @financiamento_atual, [totalidade] =" +
+                " @totalidade, [totalidade_perc] = @totalidade_perc, [matricula] = @matricula, [i" +
+                "tbi_numero] = @itbi_numero, [itbi_ano] = @itbi_ano, [inscricao_incra] = @inscric" +
+                "ao_incra, [receita_federal] = @receita_federal, [descricao_imovel] = @descricao_" +
+                "imovel, [valor_guia] = @valor_guia, [numero_guia] = @numero_guia, [nosso_numero]" +
+                " = @nosso_numero, [linha_digitavel] = @linha_digitavel, [codigo_barra] = @codigo" +
+                "_barra, [data_vencimento] = @data_vencimento, [natureza] = @natureza, [tipo_fina" +
+                "nciamento] = @tipo_financiamento WHERE (([guid] = @Original_guid))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@guid", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "guid", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@data_cadastro", global::System.Data.SqlDbType.SmallDateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "data_cadastro", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -3040,6 +3140,8 @@ namespace GTI_MVC.Datasets.dsGuia_ItbiTableAdapters {
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@data_transacao", global::System.Data.SqlDbType.SmallDateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "data_transacao", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@valor_transacao", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "valor_transacao", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@valor_avaliacao", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "valor_avaliacao", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@valor_guia_atual", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "valor_guia_atual", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@valor_avaliacao_atual", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "valor_avaliacao_atual", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@valor_venal", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "valor_venal", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@recursos_proprios_valor", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "recursos_proprios_valor", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@recursos_proprios_atual", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 2, "recursos_proprios_atual", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -3062,6 +3164,9 @@ namespace GTI_MVC.Datasets.dsGuia_ItbiTableAdapters {
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@nosso_numero", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "nosso_numero", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@linha_digitavel", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "linha_digitavel", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@codigo_barra", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "codigo_barra", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@data_vencimento", global::System.Data.SqlDbType.SmallDateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "data_vencimento", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@natureza", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "natureza", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@tipo_financiamento", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "tipo_financiamento", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_guid", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "guid", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
         }
         
@@ -3078,7 +3183,7 @@ namespace GTI_MVC.Datasets.dsGuia_ItbiTableAdapters {
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT guid, data_cadastro, imovel_codigo, inscricao, proprietario_nome, imovel_endereco, imovel_numero, imovel_complemento, imovel_cep, imovel_bairro, imovel_quadra, imovel_lote, comprador_cpf_cnpj, comprador_codigo, comprador_nome, comprador_logradouro, comprador_numero, comprador_complemento, comprador_cep, comprador_bairro, comprador_cidade, comprador_uf, tipo_instrumento, data_transacao, valor_transacao, valor_avaliacao, valor_venal, recursos_proprios_valor, recursos_proprios_atual, recursos_conta_valor, recursos_conta_atual, recursos_concedido_valor, recursos_concedido_atual, financiamento_valor, financiamento_atual, totalidade, totalidade_perc, matricula, itbi_numero, itbi_ano, inscricao_incra, receita_federal, descricao_imovel, valor_guia, numero_guia, nosso_numero, linha_digitavel, codigo_barra FROM dbo.itbi_guia";
+            this._commandCollection[0].CommandText = @"SELECT guid, data_cadastro, imovel_codigo, inscricao, proprietario_nome, imovel_endereco, imovel_numero, imovel_complemento, imovel_cep, imovel_bairro, imovel_quadra, imovel_lote, comprador_cpf_cnpj, comprador_codigo, comprador_nome, comprador_logradouro, comprador_numero, comprador_complemento, comprador_cep, comprador_bairro, comprador_cidade, comprador_uf, tipo_instrumento, data_transacao, valor_transacao, valor_avaliacao, valor_guia_atual, valor_avaliacao_atual, valor_venal, recursos_proprios_valor, recursos_proprios_atual, recursos_conta_valor, recursos_conta_atual, recursos_concedido_valor, recursos_concedido_atual, financiamento_valor, financiamento_atual, totalidade, totalidade_perc, matricula, itbi_numero, itbi_ano, inscricao_incra, receita_federal, descricao_imovel, valor_guia, numero_guia, nosso_numero, linha_digitavel, codigo_barra, data_vencimento, natureza, tipo_financiamento FROM dbo.itbi_guia";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -3193,6 +3298,8 @@ namespace GTI_MVC.Datasets.dsGuia_ItbiTableAdapters {
                     global::System.Nullable<global::System.DateTime> data_transacao, 
                     global::System.Nullable<decimal> valor_transacao, 
                     global::System.Nullable<decimal> valor_avaliacao, 
+                    global::System.Nullable<decimal> valor_guia_atual, 
+                    global::System.Nullable<decimal> valor_avaliacao_atual, 
                     global::System.Nullable<decimal> valor_venal, 
                     global::System.Nullable<decimal> recursos_proprios_valor, 
                     global::System.Nullable<decimal> recursos_proprios_atual, 
@@ -3214,7 +3321,10 @@ namespace GTI_MVC.Datasets.dsGuia_ItbiTableAdapters {
                     global::System.Nullable<int> numero_guia, 
                     string nosso_numero, 
                     string linha_digitavel, 
-                    string codigo_barra) {
+                    string codigo_barra, 
+                    global::System.Nullable<global::System.DateTime> data_vencimento, 
+                    string natureza, 
+                    string tipo_financiamento) {
             if ((guid == null)) {
                 throw new global::System.ArgumentNullException("guid");
             }
@@ -3361,137 +3471,167 @@ namespace GTI_MVC.Datasets.dsGuia_ItbiTableAdapters {
             else {
                 this.Adapter.InsertCommand.Parameters[25].Value = global::System.DBNull.Value;
             }
-            if ((valor_venal.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[26].Value = ((decimal)(valor_venal.Value));
+            if ((valor_guia_atual.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[26].Value = ((decimal)(valor_guia_atual.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[26].Value = global::System.DBNull.Value;
             }
-            if ((recursos_proprios_valor.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[27].Value = ((decimal)(recursos_proprios_valor.Value));
+            if ((valor_avaliacao_atual.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[27].Value = ((decimal)(valor_avaliacao_atual.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[27].Value = global::System.DBNull.Value;
             }
-            if ((recursos_proprios_atual.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[28].Value = ((decimal)(recursos_proprios_atual.Value));
+            if ((valor_venal.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[28].Value = ((decimal)(valor_venal.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[28].Value = global::System.DBNull.Value;
             }
-            if ((recursos_conta_valor.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[29].Value = ((decimal)(recursos_conta_valor.Value));
+            if ((recursos_proprios_valor.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[29].Value = ((decimal)(recursos_proprios_valor.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[29].Value = global::System.DBNull.Value;
             }
-            if ((recursos_conta_atual.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[30].Value = ((decimal)(recursos_conta_atual.Value));
+            if ((recursos_proprios_atual.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[30].Value = ((decimal)(recursos_proprios_atual.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[30].Value = global::System.DBNull.Value;
             }
-            if ((recursos_concedido_valor.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[31].Value = ((decimal)(recursos_concedido_valor.Value));
+            if ((recursos_conta_valor.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[31].Value = ((decimal)(recursos_conta_valor.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[31].Value = global::System.DBNull.Value;
             }
-            if ((recursos_concedido_atual.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[32].Value = ((decimal)(recursos_concedido_atual.Value));
+            if ((recursos_conta_atual.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[32].Value = ((decimal)(recursos_conta_atual.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[32].Value = global::System.DBNull.Value;
             }
-            if ((financiamento_valor.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[33].Value = ((decimal)(financiamento_valor.Value));
+            if ((recursos_concedido_valor.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[33].Value = ((decimal)(recursos_concedido_valor.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[33].Value = global::System.DBNull.Value;
             }
-            if ((financiamento_atual.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[34].Value = ((decimal)(financiamento_atual.Value));
+            if ((recursos_concedido_atual.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[34].Value = ((decimal)(recursos_concedido_atual.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[34].Value = global::System.DBNull.Value;
             }
-            if ((totalidade == null)) {
-                this.Adapter.InsertCommand.Parameters[35].Value = global::System.DBNull.Value;
+            if ((financiamento_valor.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[35].Value = ((decimal)(financiamento_valor.Value));
             }
             else {
-                this.Adapter.InsertCommand.Parameters[35].Value = ((string)(totalidade));
+                this.Adapter.InsertCommand.Parameters[35].Value = global::System.DBNull.Value;
             }
-            if ((totalidade_perc.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[36].Value = ((decimal)(totalidade_perc.Value));
+            if ((financiamento_atual.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[36].Value = ((decimal)(financiamento_atual.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[36].Value = global::System.DBNull.Value;
             }
-            if ((matricula.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[37].Value = ((long)(matricula.Value));
-            }
-            else {
+            if ((totalidade == null)) {
                 this.Adapter.InsertCommand.Parameters[37].Value = global::System.DBNull.Value;
             }
-            if ((itbi_numero.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[38].Value = ((int)(itbi_numero.Value));
+            else {
+                this.Adapter.InsertCommand.Parameters[37].Value = ((string)(totalidade));
+            }
+            if ((totalidade_perc.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[38].Value = ((decimal)(totalidade_perc.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[38].Value = global::System.DBNull.Value;
             }
-            if ((itbi_ano.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[39].Value = ((short)(itbi_ano.Value));
+            if ((matricula.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[39].Value = ((long)(matricula.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[39].Value = global::System.DBNull.Value;
             }
-            if ((inscricao_incra == null)) {
+            if ((itbi_numero.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[40].Value = ((int)(itbi_numero.Value));
+            }
+            else {
                 this.Adapter.InsertCommand.Parameters[40].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.InsertCommand.Parameters[40].Value = ((string)(inscricao_incra));
+            if ((itbi_ano.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[41].Value = ((short)(itbi_ano.Value));
             }
-            if ((receita_federal == null)) {
+            else {
                 this.Adapter.InsertCommand.Parameters[41].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.InsertCommand.Parameters[41].Value = ((string)(receita_federal));
-            }
-            if ((descricao_imovel == null)) {
+            if ((inscricao_incra == null)) {
                 this.Adapter.InsertCommand.Parameters[42].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[42].Value = ((string)(descricao_imovel));
+                this.Adapter.InsertCommand.Parameters[42].Value = ((string)(inscricao_incra));
             }
-            if ((valor_guia.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[43].Value = ((decimal)(valor_guia.Value));
-            }
-            else {
+            if ((receita_federal == null)) {
                 this.Adapter.InsertCommand.Parameters[43].Value = global::System.DBNull.Value;
             }
-            if ((numero_guia.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[44].Value = ((int)(numero_guia.Value));
-            }
             else {
+                this.Adapter.InsertCommand.Parameters[43].Value = ((string)(receita_federal));
+            }
+            if ((descricao_imovel == null)) {
                 this.Adapter.InsertCommand.Parameters[44].Value = global::System.DBNull.Value;
             }
-            if ((nosso_numero == null)) {
+            else {
+                this.Adapter.InsertCommand.Parameters[44].Value = ((string)(descricao_imovel));
+            }
+            if ((valor_guia.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[45].Value = ((decimal)(valor_guia.Value));
+            }
+            else {
                 this.Adapter.InsertCommand.Parameters[45].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.InsertCommand.Parameters[45].Value = ((string)(nosso_numero));
+            if ((numero_guia.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[46].Value = ((int)(numero_guia.Value));
             }
-            if ((linha_digitavel == null)) {
+            else {
                 this.Adapter.InsertCommand.Parameters[46].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.InsertCommand.Parameters[46].Value = ((string)(linha_digitavel));
-            }
-            if ((codigo_barra == null)) {
+            if ((nosso_numero == null)) {
                 this.Adapter.InsertCommand.Parameters[47].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[47].Value = ((string)(codigo_barra));
+                this.Adapter.InsertCommand.Parameters[47].Value = ((string)(nosso_numero));
+            }
+            if ((linha_digitavel == null)) {
+                this.Adapter.InsertCommand.Parameters[48].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[48].Value = ((string)(linha_digitavel));
+            }
+            if ((codigo_barra == null)) {
+                this.Adapter.InsertCommand.Parameters[49].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[49].Value = ((string)(codigo_barra));
+            }
+            if ((data_vencimento.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[50].Value = ((System.DateTime)(data_vencimento.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[50].Value = global::System.DBNull.Value;
+            }
+            if ((natureza == null)) {
+                this.Adapter.InsertCommand.Parameters[51].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[51].Value = ((string)(natureza));
+            }
+            if ((tipo_financiamento == null)) {
+                this.Adapter.InsertCommand.Parameters[52].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[52].Value = ((string)(tipo_financiamento));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -3540,6 +3680,8 @@ namespace GTI_MVC.Datasets.dsGuia_ItbiTableAdapters {
                     global::System.Nullable<global::System.DateTime> data_transacao, 
                     global::System.Nullable<decimal> valor_transacao, 
                     global::System.Nullable<decimal> valor_avaliacao, 
+                    global::System.Nullable<decimal> valor_guia_atual, 
+                    global::System.Nullable<decimal> valor_avaliacao_atual, 
                     global::System.Nullable<decimal> valor_venal, 
                     global::System.Nullable<decimal> recursos_proprios_valor, 
                     global::System.Nullable<decimal> recursos_proprios_atual, 
@@ -3562,6 +3704,9 @@ namespace GTI_MVC.Datasets.dsGuia_ItbiTableAdapters {
                     string nosso_numero, 
                     string linha_digitavel, 
                     string codigo_barra, 
+                    global::System.Nullable<global::System.DateTime> data_vencimento, 
+                    string natureza, 
+                    string tipo_financiamento, 
                     string Original_guid) {
             if ((guid == null)) {
                 throw new global::System.ArgumentNullException("guid");
@@ -3709,143 +3854,173 @@ namespace GTI_MVC.Datasets.dsGuia_ItbiTableAdapters {
             else {
                 this.Adapter.UpdateCommand.Parameters[25].Value = global::System.DBNull.Value;
             }
-            if ((valor_venal.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[26].Value = ((decimal)(valor_venal.Value));
+            if ((valor_guia_atual.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[26].Value = ((decimal)(valor_guia_atual.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[26].Value = global::System.DBNull.Value;
             }
-            if ((recursos_proprios_valor.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[27].Value = ((decimal)(recursos_proprios_valor.Value));
+            if ((valor_avaliacao_atual.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[27].Value = ((decimal)(valor_avaliacao_atual.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[27].Value = global::System.DBNull.Value;
             }
-            if ((recursos_proprios_atual.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[28].Value = ((decimal)(recursos_proprios_atual.Value));
+            if ((valor_venal.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[28].Value = ((decimal)(valor_venal.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[28].Value = global::System.DBNull.Value;
             }
-            if ((recursos_conta_valor.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[29].Value = ((decimal)(recursos_conta_valor.Value));
+            if ((recursos_proprios_valor.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[29].Value = ((decimal)(recursos_proprios_valor.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[29].Value = global::System.DBNull.Value;
             }
-            if ((recursos_conta_atual.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[30].Value = ((decimal)(recursos_conta_atual.Value));
+            if ((recursos_proprios_atual.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[30].Value = ((decimal)(recursos_proprios_atual.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[30].Value = global::System.DBNull.Value;
             }
-            if ((recursos_concedido_valor.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[31].Value = ((decimal)(recursos_concedido_valor.Value));
+            if ((recursos_conta_valor.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[31].Value = ((decimal)(recursos_conta_valor.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[31].Value = global::System.DBNull.Value;
             }
-            if ((recursos_concedido_atual.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[32].Value = ((decimal)(recursos_concedido_atual.Value));
+            if ((recursos_conta_atual.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[32].Value = ((decimal)(recursos_conta_atual.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[32].Value = global::System.DBNull.Value;
             }
-            if ((financiamento_valor.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[33].Value = ((decimal)(financiamento_valor.Value));
+            if ((recursos_concedido_valor.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[33].Value = ((decimal)(recursos_concedido_valor.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[33].Value = global::System.DBNull.Value;
             }
-            if ((financiamento_atual.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[34].Value = ((decimal)(financiamento_atual.Value));
+            if ((recursos_concedido_atual.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[34].Value = ((decimal)(recursos_concedido_atual.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[34].Value = global::System.DBNull.Value;
             }
-            if ((totalidade == null)) {
-                this.Adapter.UpdateCommand.Parameters[35].Value = global::System.DBNull.Value;
+            if ((financiamento_valor.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[35].Value = ((decimal)(financiamento_valor.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[35].Value = ((string)(totalidade));
+                this.Adapter.UpdateCommand.Parameters[35].Value = global::System.DBNull.Value;
             }
-            if ((totalidade_perc.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[36].Value = ((decimal)(totalidade_perc.Value));
+            if ((financiamento_atual.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[36].Value = ((decimal)(financiamento_atual.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[36].Value = global::System.DBNull.Value;
             }
-            if ((matricula.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[37].Value = ((long)(matricula.Value));
-            }
-            else {
+            if ((totalidade == null)) {
                 this.Adapter.UpdateCommand.Parameters[37].Value = global::System.DBNull.Value;
             }
-            if ((itbi_numero.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[38].Value = ((int)(itbi_numero.Value));
+            else {
+                this.Adapter.UpdateCommand.Parameters[37].Value = ((string)(totalidade));
+            }
+            if ((totalidade_perc.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[38].Value = ((decimal)(totalidade_perc.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[38].Value = global::System.DBNull.Value;
             }
-            if ((itbi_ano.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[39].Value = ((short)(itbi_ano.Value));
+            if ((matricula.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[39].Value = ((long)(matricula.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[39].Value = global::System.DBNull.Value;
             }
-            if ((inscricao_incra == null)) {
+            if ((itbi_numero.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[40].Value = ((int)(itbi_numero.Value));
+            }
+            else {
                 this.Adapter.UpdateCommand.Parameters[40].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.UpdateCommand.Parameters[40].Value = ((string)(inscricao_incra));
+            if ((itbi_ano.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[41].Value = ((short)(itbi_ano.Value));
             }
-            if ((receita_federal == null)) {
+            else {
                 this.Adapter.UpdateCommand.Parameters[41].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.UpdateCommand.Parameters[41].Value = ((string)(receita_federal));
-            }
-            if ((descricao_imovel == null)) {
+            if ((inscricao_incra == null)) {
                 this.Adapter.UpdateCommand.Parameters[42].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[42].Value = ((string)(descricao_imovel));
+                this.Adapter.UpdateCommand.Parameters[42].Value = ((string)(inscricao_incra));
             }
-            if ((valor_guia.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[43].Value = ((decimal)(valor_guia.Value));
-            }
-            else {
+            if ((receita_federal == null)) {
                 this.Adapter.UpdateCommand.Parameters[43].Value = global::System.DBNull.Value;
             }
-            if ((numero_guia.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[44].Value = ((int)(numero_guia.Value));
-            }
             else {
+                this.Adapter.UpdateCommand.Parameters[43].Value = ((string)(receita_federal));
+            }
+            if ((descricao_imovel == null)) {
                 this.Adapter.UpdateCommand.Parameters[44].Value = global::System.DBNull.Value;
             }
-            if ((nosso_numero == null)) {
+            else {
+                this.Adapter.UpdateCommand.Parameters[44].Value = ((string)(descricao_imovel));
+            }
+            if ((valor_guia.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[45].Value = ((decimal)(valor_guia.Value));
+            }
+            else {
                 this.Adapter.UpdateCommand.Parameters[45].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.UpdateCommand.Parameters[45].Value = ((string)(nosso_numero));
+            if ((numero_guia.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[46].Value = ((int)(numero_guia.Value));
             }
-            if ((linha_digitavel == null)) {
+            else {
                 this.Adapter.UpdateCommand.Parameters[46].Value = global::System.DBNull.Value;
             }
-            else {
-                this.Adapter.UpdateCommand.Parameters[46].Value = ((string)(linha_digitavel));
-            }
-            if ((codigo_barra == null)) {
+            if ((nosso_numero == null)) {
                 this.Adapter.UpdateCommand.Parameters[47].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[47].Value = ((string)(codigo_barra));
+                this.Adapter.UpdateCommand.Parameters[47].Value = ((string)(nosso_numero));
+            }
+            if ((linha_digitavel == null)) {
+                this.Adapter.UpdateCommand.Parameters[48].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[48].Value = ((string)(linha_digitavel));
+            }
+            if ((codigo_barra == null)) {
+                this.Adapter.UpdateCommand.Parameters[49].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[49].Value = ((string)(codigo_barra));
+            }
+            if ((data_vencimento.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[50].Value = ((System.DateTime)(data_vencimento.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[50].Value = global::System.DBNull.Value;
+            }
+            if ((natureza == null)) {
+                this.Adapter.UpdateCommand.Parameters[51].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[51].Value = ((string)(natureza));
+            }
+            if ((tipo_financiamento == null)) {
+                this.Adapter.UpdateCommand.Parameters[52].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[52].Value = ((string)(tipo_financiamento));
             }
             if ((Original_guid == null)) {
                 throw new global::System.ArgumentNullException("Original_guid");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[48].Value = ((string)(Original_guid));
+                this.Adapter.UpdateCommand.Parameters[53].Value = ((string)(Original_guid));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -3893,6 +4068,8 @@ namespace GTI_MVC.Datasets.dsGuia_ItbiTableAdapters {
                     global::System.Nullable<global::System.DateTime> data_transacao, 
                     global::System.Nullable<decimal> valor_transacao, 
                     global::System.Nullable<decimal> valor_avaliacao, 
+                    global::System.Nullable<decimal> valor_guia_atual, 
+                    global::System.Nullable<decimal> valor_avaliacao_atual, 
                     global::System.Nullable<decimal> valor_venal, 
                     global::System.Nullable<decimal> recursos_proprios_valor, 
                     global::System.Nullable<decimal> recursos_proprios_atual, 
@@ -3915,8 +4092,11 @@ namespace GTI_MVC.Datasets.dsGuia_ItbiTableAdapters {
                     string nosso_numero, 
                     string linha_digitavel, 
                     string codigo_barra, 
+                    global::System.Nullable<global::System.DateTime> data_vencimento, 
+                    string natureza, 
+                    string tipo_financiamento, 
                     string Original_guid) {
-            return this.Update(Original_guid, data_cadastro, imovel_codigo, inscricao, proprietario_nome, imovel_endereco, imovel_numero, imovel_complemento, imovel_cep, imovel_bairro, imovel_quadra, imovel_lote, comprador_cpf_cnpj, comprador_codigo, comprador_nome, comprador_logradouro, comprador_numero, comprador_complemento, comprador_cep, comprador_bairro, comprador_cidade, comprador_uf, tipo_instrumento, data_transacao, valor_transacao, valor_avaliacao, valor_venal, recursos_proprios_valor, recursos_proprios_atual, recursos_conta_valor, recursos_conta_atual, recursos_concedido_valor, recursos_concedido_atual, financiamento_valor, financiamento_atual, totalidade, totalidade_perc, matricula, itbi_numero, itbi_ano, inscricao_incra, receita_federal, descricao_imovel, valor_guia, numero_guia, nosso_numero, linha_digitavel, codigo_barra, Original_guid);
+            return this.Update(Original_guid, data_cadastro, imovel_codigo, inscricao, proprietario_nome, imovel_endereco, imovel_numero, imovel_complemento, imovel_cep, imovel_bairro, imovel_quadra, imovel_lote, comprador_cpf_cnpj, comprador_codigo, comprador_nome, comprador_logradouro, comprador_numero, comprador_complemento, comprador_cep, comprador_bairro, comprador_cidade, comprador_uf, tipo_instrumento, data_transacao, valor_transacao, valor_avaliacao, valor_guia_atual, valor_avaliacao_atual, valor_venal, recursos_proprios_valor, recursos_proprios_atual, recursos_conta_valor, recursos_conta_atual, recursos_concedido_valor, recursos_concedido_atual, financiamento_valor, financiamento_atual, totalidade, totalidade_perc, matricula, itbi_numero, itbi_ano, inscricao_incra, receita_federal, descricao_imovel, valor_guia, numero_guia, nosso_numero, linha_digitavel, codigo_barra, data_vencimento, natureza, tipo_financiamento, Original_guid);
         }
     }
     

@@ -2415,6 +2415,8 @@ namespace GTI_Mvc.Controllers {
                     Data_Vencimento = Convert.ToDateTime(_itbi.Data_Vencimento),
                     Natureza = imovelRepository.Retorna_Itbi_Natureza_nome(_itbi.Natureza_Codigo),
                     Tipo_Financiamento = imovelRepository.Retorna_Itbi_Financimento_nome(_itbi.Tipo_Financiamento),
+                    Valor_Avaliacao_Atual=_itbi.Valor_Avaliacao_atual,
+                    Valor_Guia_Atual=_itbi.Valor_guia_atual
                 };
                 _guia.Numero_guia = _itbi.Numero_Guia;
                 _guia.Nosso_Numero = "287353200" + _guia.Numero_guia.ToString();
