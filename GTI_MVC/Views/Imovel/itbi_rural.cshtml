@@ -68,7 +68,7 @@
                                     <label style="font-weight:normal;padding-top:7px">Proprietário principal:</label>
                                 </td>
                                 <td>
-                                    <label style="font-weight:normal;padding-top:7px">@Html.TextBoxFor(m => m.Dados_Imovel.Proprietario_Nome, new {  style = "width:470px;height:25px" })</label>
+                                    <label style="font-weight:normal;padding-top:7px">@Html.TextBoxFor(m => m.Dados_Imovel.Proprietario_Nome, new { style = "width:470px;height:25px" })</label>
                                 </td>
                             </tr>
                         </table>
@@ -280,6 +280,7 @@
                 @Html.HiddenFor(m => m.Guid)
                 @Html.HiddenFor(m => m.Itbi_Ano)
                 @Html.HiddenFor(m => m.Itbi_Numero)
+                @Html.HiddenFor(m => m.Lista_Anexo)
 
 
                 @*#############VENDEDORES###############*@
@@ -479,24 +480,24 @@
                             </td>
                             <td style="width:100px;padding-top:2px">
                                 @if (Model.Valor_Avaliacao > 0) {
-                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new {id="txtAvaliacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao })</label>
+                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { id = "txtAvaliacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao })</label>
                                 } else {
                                     <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { id = "txtAvaliacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                 }
                             </td>
                         </tr>
                         @*<tr style="height:30px">
-                                <td style="width:544px">
-                                    <label style="font-weight:normal">Valor da avaliação do imóvel corrigido pelo IPCA(IPC-A 1980) - atualizado pelo fiscal:</label>
-                                </td>
-                                <td style="width:100px;padding-top:2px">
-                                    @if (Model.Valor_Avaliacao_atual > 0) {
-                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao })</label>
-                                    } else {
-                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
-                                    }
-                                </td>
-                            </tr>*@
+                    <td style="width:544px">
+                        <label style="font-weight:normal">Valor da avaliação do imóvel corrigido pelo IPCA(IPC-A 1980) - atualizado pelo fiscal:</label>
+                    </td>
+                    <td style="width:100px;padding-top:2px">
+                        @if (Model.Valor_Avaliacao_atual > 0) {
+                            <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao })</label>
+                        } else {
+                            <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                        }
+                    </td>
+                </tr>*@
                     </table>
 
 
@@ -588,15 +589,15 @@
                                 }
                             </td>
                             @*<td style="width:194px;padding-top:3px">
-                                    <label style="font-weight:normal;">Valor atualizado pelo fiscal:</label>
-                                </td>
-                                <td style="width:220px;padding-top:3px">
-                                    @if (Model.Valor_guia_atual > 0) {
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_guia_atual.ToString("0.#0") })</label>
-                                    } else {
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
-                                    }
-                                </td>*@
+                        <label style="font-weight:normal;">Valor atualizado pelo fiscal:</label>
+                    </td>
+                    <td style="width:220px;padding-top:3px">
+                        @if (Model.Valor_guia_atual > 0) {
+                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_guia_atual.ToString("0.#0") })</label>
+                        } else {
+                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
+                        }
+                    </td>*@
                         </tr>
 
                     </table>

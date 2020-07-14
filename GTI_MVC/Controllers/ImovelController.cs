@@ -1045,8 +1045,20 @@ namespace GTI_Mvc.Controllers {
             if (model.Comprador == null) {
                 model.Comprador = new Comprador_Itbi();
             }
-            if (model.Lista_Anexo == null)
+            if (model.Lista_Anexo == null )
                 model.Lista_Anexo = new List<ListAnexoEditorViewModel>();
+            else {
+                List<Itbi_anexo> Lista_Anexo_tmp = imovelRepository.Retorna_Itbi_Anexo(model.Guid);
+                model.Lista_Anexo.Clear();
+                foreach (Itbi_anexo itemA in Lista_Anexo_tmp) {
+                    ListAnexoEditorViewModel regA = new ListAnexoEditorViewModel() {
+                        Seq = itemA.Seq,
+                        Nome = itemA.Descricao,
+                        Arquivo = itemA.Arquivo
+                    };
+                    model.Lista_Anexo.Add(regA);
+                }
+            }
 
             model.Lista_Erro = new List<string>();
             if (model.Totalidade == "Sim")
@@ -1281,22 +1293,6 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-            //if (action == "btnPrint") {
-            //    model.Lista_Erro = Valida_Itbi(model);
-            //    Grava_Itbi(model);
-            //    if (model.Lista_Erro.Count > 0) {
-            //        ViewBag.ListaErro = new SelectList(model.Lista_Erro);
-            //        return View(model);
-            //    } else {
-            //        if (model.Itbi_Numero == 0) {
-            //            Itbi_Numero _num = imovelRepository.Alterar_Itbi_Main(model.Guid);
-            //            model.Itbi_Numero = _num.Numero;
-            //            model.Itbi_Ano = _num.Ano;
-            //        }
-            //        Itbi_print(model.Guid,true);
-            //    }
-            //}
-
             if (action == "btnAnexoAdd") {
                 if (file != null) {
                     if (string.IsNullOrWhiteSpace(model.Anexo_Desc_tmp)) {
@@ -1320,7 +1316,15 @@ namespace GTI_Mvc.Controllers {
                                 Arquivo = fileName
                             };
                             Exception ex = imovelRepository.Incluir_Itbi_Anexo(regA);
+                            ListAnexoEditorViewModel Anexo = new ListAnexoEditorViewModel() {
+                                Seq=model.Lista_Anexo.Count,
+                                Arquivo=fileName,
+                                Nome=model.Anexo_Desc_tmp
+                            };
+                            model.Lista_Anexo.Add(Anexo);
 
+                            Itbi_Save(model);
+                            return View(model);
                         }
                     }
                 } else {
@@ -1449,6 +1453,18 @@ namespace GTI_Mvc.Controllers {
             }
             if (model.Lista_Anexo == null)
                 model.Lista_Anexo = new List<ListAnexoEditorViewModel>();
+            else {
+                List<Itbi_anexo> Lista_Anexo_tmp = imovelRepository.Retorna_Itbi_Anexo(model.Guid);
+                model.Lista_Anexo.Clear();
+                foreach (Itbi_anexo itemA in Lista_Anexo_tmp) {
+                    ListAnexoEditorViewModel regA = new ListAnexoEditorViewModel() {
+                        Seq = itemA.Seq,
+                        Nome = itemA.Descricao,
+                        Arquivo = itemA.Arquivo
+                    };
+                    model.Lista_Anexo.Add(regA);
+                }
+            }
 
             model.Lista_Erro = new List<string>();
             if (model.Totalidade == "Sim")
@@ -1675,22 +1691,6 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-            //if (action == "btnPrint") {
-            //    model.Lista_Erro = Valida_Itbi(model);
-            //    Grava_Itbi(model);
-            //    if (model.Lista_Erro.Count > 0) {
-            //        ViewBag.ListaErro = new SelectList(model.Lista_Erro);
-            //        return View(model);
-            //    } else {
-            //        if (model.Itbi_Numero == 0) {
-            //            Itbi_Numero _num = imovelRepository.Alterar_Itbi_Main(model.Guid);
-            //            model.Itbi_Numero = _num.Numero;
-            //            model.Itbi_Ano = _num.Ano;
-            //        }
-            //        Itbi_print(model.Guid,false);
-            //    }
-            //}
-
             if (action == "btnAnexoAdd") {
                 if (file != null) {
                     if (string.IsNullOrWhiteSpace(model.Anexo_Desc_tmp)) {
@@ -1714,7 +1714,15 @@ namespace GTI_Mvc.Controllers {
                                 Arquivo = fileName
                             };
                             Exception ex = imovelRepository.Incluir_Itbi_Anexo(regA);
+                            ListAnexoEditorViewModel Anexo = new ListAnexoEditorViewModel() {
+                                Seq = model.Lista_Anexo.Count,
+                                Arquivo = fileName,
+                                Nome = model.Anexo_Desc_tmp
+                            };
+                            model.Lista_Anexo.Add(Anexo);
 
+                            Itbi_Save(model);
+                            return View(model);
                         }
                     }
                 } else {
@@ -2333,6 +2341,10 @@ namespace GTI_Mvc.Controllers {
 
             if (model.Matricula == 0) {
                 Lista.Add("Informe a matrícula/transcrição do imóvel");
+            }
+
+            if (model.Lista_Anexo.Count == 0) {
+                Lista.Add("Nenhum documento foi anexado");
             }
 
             return Lista;

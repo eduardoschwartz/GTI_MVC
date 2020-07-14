@@ -280,6 +280,7 @@
                 @Html.HiddenFor(m => m.Guid)
                 @Html.HiddenFor(m => m.Itbi_Ano)
                 @Html.HiddenFor(m => m.Itbi_Numero)
+                @Html.HiddenFor(m => m.Lista_Anexo)
 
 
                 @*#############VENDEDORES###############*@
@@ -465,7 +466,7 @@
                                 @if (Model.Valor_Venal > 0) {
                                     <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Venal, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Venal.ToString("0.#0") })</label>
                                 } else {
-                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Venal, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00"})</label>
+                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Venal, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
                                 }
                             </td>
                         </tr>
@@ -479,7 +480,7 @@
                             </td>
                             <td style="width:100px;padding-top:2px">
                                 @if (Model.Valor_Avaliacao > 0) {
-                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new {id="txtAvaliacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao.ToString("0.#0") })</label>
+                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { id = "txtAvaliacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao.ToString("0.#0") })</label>
                                 } else {
                                     <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { id = "txtAvaliacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                 }
@@ -491,7 +492,7 @@
                             </td>
                             <td style="width:100px;padding-top:2px">
                                 @if (Model.Valor_Avaliacao_atual > 0) {
-                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new {id="txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao_atual.ToString("0.#0") })</label>
+                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao_atual.ToString("0.#0") })</label>
                                 } else {
                                     <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                 }
@@ -680,7 +681,7 @@
                 </div>
 
 
-                
+
                 @if (ViewBag.Error != null && ViewBag.Error != "") {
                     <div class="form-group row">
                         <label style="font-weight:normal;color:red;padding-left:28px" id="errorLabel">@ViewBag.Error</label>
