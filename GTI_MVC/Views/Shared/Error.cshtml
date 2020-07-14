@@ -1,13 +1,26 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Error</title>
-</head>
-<body>
-    <hgroup>
-        <h1>Error.</h1>
-        <h2>An error occurred while processing your request.</h2>
-    </hgroup>
-</body>
-</html>
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Erro";
+}
+<style>
+    .center {
+        margin: auto;
+        width: 500px;
+        border: 1px solid rgba(0,0,0,0.24);
+        padding: 20px;
+        box-shadow: 0 .1em 0.5em #000;
+        border-radius: 13px;
+    }
+</style>
+
+<div class="center">
+    <br />
+    <label style="color: brown;font-size: 14px;font-weight:normal">Sua solicitação não pode ser processada.<br /> Por favor reportar este erro ao nosso  <a href="mailto:gti@jaboticabal.sp.gov.br">suporte</a></label>
+    <br />
+    <br />
+  
+
+    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+</div>
+

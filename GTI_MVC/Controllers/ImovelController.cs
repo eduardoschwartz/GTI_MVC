@@ -2400,11 +2400,11 @@ namespace GTI_Mvc.Controllers {
                     Financiamento_Atual = _itbi.Financiamento_atual,
                     Totalidade = _itbi.Totalidade,
                     Totalidade_Perc = _itbi.Totalidade_Perc,
-                    Data_Vencimento = DateTime.Now,
+                    Data_Vencimento = Convert.ToDateTime(_itbi.Data_Vencimento),
                     Natureza = imovelRepository.Retorna_Itbi_Natureza_nome(_itbi.Natureza_Codigo),
                     Tipo_Financiamento = imovelRepository.Retorna_Itbi_Financimento_nome(_itbi.Tipo_Financiamento),
                 };
-                _guia.Numero_guia = 17898123;
+                _guia.Numero_guia = _itbi.Numero_Guia;
                 _guia.Nosso_Numero = "287353200" + _guia.Numero_guia.ToString();
 
                 string _convenio = "2873532";

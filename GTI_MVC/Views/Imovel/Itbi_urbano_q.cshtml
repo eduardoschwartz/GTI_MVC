@@ -510,9 +510,9 @@
                             </td>
                             <td style="width:101px;padding-top:5px">
                                 @if (Model.Totalidade == "Sim" || Model.Totalidade == null) {
-                                    <label style="font-weight:normal;display:none" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc, @readonly = true })</label>
+                                    <label style="font-weight:normal;display:none" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc.ToString("0.#0"), @readonly = true })</label>
                                 } else {
-                                    <label style="font-weight:normal;display:block;color:blue" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc, @readonly = true })</label>
+                                    <label style="font-weight:normal;display:block;color:blue" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc.ToString("0.#0"), @readonly = true })</label>
                                 }
                             </td>
                         </tr>
