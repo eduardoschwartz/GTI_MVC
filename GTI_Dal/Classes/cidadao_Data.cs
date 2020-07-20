@@ -453,7 +453,7 @@ namespace GTI_Dal.Classes {
                 int _codigo = db.Cidadao.Select(x => x.Codcidadao).Max();
                 _codigo++;
 
-                object[] Parametros = new object[14];
+                object[] Parametros = new object[15];
                 Parametros[0] = new SqlParameter { ParameterName = "@codcidadao", SqlDbType = SqlDbType.Int, SqlValue = _codigo };
                 Parametros[1] = new SqlParameter { ParameterName = "@nomecidadao", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Nomecidadao };
                 if (reg.Cpf == "" || reg.Cpf == "0")
@@ -486,10 +486,10 @@ namespace GTI_Dal.Classes {
                     Parametros[13] = new SqlParameter { ParameterName = "@nomelogradouro", SqlValue = DBNull.Value };
                 else
                     Parametros[13] = new SqlParameter { ParameterName = "@nomelogradouro", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Nomelogradouro };
-
+                Parametros[14] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.Int, SqlValue = reg.Cep };
                 db.Database.ExecuteSqlCommand("INSERT INTO cidadao(codcidadao,nomecidadao,cpf,cnpj,codlogradouro,numimovel,complemento,codbairro,codcidade,siglauf,telefone," +
-                    "email,etiqueta,nomelogradouro) VALUES(@codcidadao,@nomecidadao,@cpf,@cnpj,@codlogradouro,@numimovel,@complemento,@codbairro,@codcidade,@siglauf,@telefone," +
-                    "@email,@etiqueta,@nomelogradouro)", Parametros);
+                    "email,etiqueta,nomelogradouro,cep) VALUES(@codcidadao,@nomecidadao,@cpf,@cnpj,@codlogradouro,@numimovel,@complemento,@codbairro,@codcidade,@siglauf,@telefone," +
+                    "@email,@etiqueta,@nomelogradouro,@cep)", Parametros);
                 db.SaveChanges();
                 return _codigo;
             }

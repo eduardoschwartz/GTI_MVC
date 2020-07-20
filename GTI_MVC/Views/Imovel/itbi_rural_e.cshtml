@@ -504,13 +504,21 @@
                         </tr>
                         <tr style="height:30px">
                             <td style="width:544px">
-                                <label style="font-weight:normal">Valor da avaliação do imóvel corrigido pelo IPCA(IPC-A 1980) - atualizado pelo fiscal:</label>
+                                <label style="font-weight:normal">Valor da transação atualizado pelo fisco:</label>
                             </td>
                             <td style="width:100px;padding-top:2px">
-                                @if (Model.Valor_Avaliacao_atual > 0) {
-                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao_atual.ToString("0.#0") })</label>
+                                @if (ViewBag.Fiscal == "S") {
+                                    if (Model.Valor_Avaliacao_atual > 0) {
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao_atual.ToString("0.#0") })</label>
+                                    } else {
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                    }
                                 } else {
-                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                    if (Model.Valor_Avaliacao_atual > 0) {
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao_atual.ToString("0.#0"), @readonly = true })</label>
+                                    } else {
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "", @readonly = true })</label>
+                                    }
                                 }
                             </td>
                         </tr>
@@ -915,7 +923,7 @@
                 var _rd = document.getElementById('txtRecursoConcedido').value;
                 var _rd2 = Number(_rd.replace(/[^0-9.-]+/g, "."));
                 var _rd3 = parseFloat(_rd2);
-                $("input[name='Recursos_concedido_atual']").val((_rd3 * 0.015).toFixed(2).replace(".", ","));
+                $("input[name='Recursos_concedido_atual']").val((_rd3 * 0.005).toFixed(2).replace(".", ","));
                 calcula_guia();
             });
 
@@ -923,7 +931,7 @@
                 var _fn = document.getElementById('txtFinanciamento').value;
                 var _fn2 = Number(_fn.replace(/[^0-9.-]+/g, "."));
                 var _fn3 = parseFloat(_fn2);
-                $("input[name='Financiamento_atual']").val((_fn3 * 0.015).toFixed(2).replace(".", ","));
+                $("input[name='Financiamento_atual']").val((_fn3 * 0.005).toFixed(2).replace(".", ","));
                 calcula_guia();
             });
 

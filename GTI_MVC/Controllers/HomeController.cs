@@ -112,9 +112,6 @@ namespace GTI_Mvc.Controllers {
                     Session["hashlname"] = _user.Nome_login;
                     Session["hashfname"] = _user.Nome_completo;
                     Session["hashfiscalitbi"] = _user.Fiscal_Itbi ? "S" : "N";
-                    //Functions.pUserLoginName = _user.Nome_login;
-                    //Functions.pUserFullName = _user.Nome_completo;
-                    //Functions.pFiscalItbi = _user.Fiscal_Itbi ;
                     if (Session["hashid"] == null) {
                         Session.Add("hashid", _user.Id);
                         Session.Add("hashfname", _user.Nome_completo);
@@ -145,16 +142,8 @@ namespace GTI_Mvc.Controllers {
                                 Session["hashid"] = user_web.Id;
                                 Session["hashlname"] = user_web.Email;
                                 Session["hashfname"] = user_web.Nome;
-                                //Functions.pUserId = user_web.Id;
-                                //Functions.pUserLoginName = user_web.Email;
-                                //Functions.pUserFullName = user_web.Nome;
-                                if (Session["hashid"] == null) {
-                                    Session.Add("hashid", user_web.Id);
-                                    Session.Add("hashfname", user_web.Email);
-                                    Session.Add("hashlname", user_web.Nome);
-                                    Session.Add("hashfiscalitbi", "N");
-                                    Session.Add("hashfunc", "N");
-                                }
+                                Session.Add("hashfiscalitbi", "N");
+                                Session.Add("hashfunc", "N");
                                 return View("../Home/SysMenu");
                             }
                         }

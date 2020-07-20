@@ -1837,7 +1837,7 @@ namespace GTI_Mvc.Controllers {
             List<Itbi_financiamento> Lista_Financimento = imovelRepository.Lista_Itbi_Financiamento();
             ViewBag.Lista_Financiamento = new SelectList(Lista_Financimento, "Codigo", "Descricao");
             ViewBag.ListaErro = new List<string>();
-
+            ViewBag.Fiscal = Session["hashfiscalitbi"] == null ? "N" : Session["hashfiscalitbi"].ToString();
             ItbiViewModel model = Retorna_Itbi_Gravado(p);
             return View("Itbi_urbano_e", model);
         }
@@ -1858,7 +1858,7 @@ namespace GTI_Mvc.Controllers {
             List<Itbi_financiamento> Lista_Financimento = imovelRepository.Lista_Itbi_Financiamento();
             ViewBag.Lista_Financiamento = new SelectList(Lista_Financimento, "Codigo", "Descricao");
             ViewBag.ListaErro = new List<string>();
-
+            ViewBag.Fiscal = Session["hashfiscalitbi"] == null ? "N" : Session["hashfiscalitbi"].ToString();
             ItbiViewModel model = Retorna_Itbi_Gravado(p);
             return View("Itbi_rural_e", model);
         }
@@ -2102,8 +2102,6 @@ namespace GTI_Mvc.Controllers {
                     Situacao_itbi = 1,
                     Userid = Convert.ToInt32(Session["hashid"]),
                     Funcionario = Session["hashfunc"].ToString() == "S" ? true : false
-                    //Userid = Functions.pUserId,
-                    //Funcionario=Functions.pUserGTI
                 };
                 ex = imovelRepository.Incluir_Itbi_main(regMain);
             } else {
@@ -2416,8 +2414,8 @@ namespace GTI_Mvc.Controllers {
                     Receita_Federal = _itbi.Receita_Federal ?? "",
                     Descricao_Imovel = _itbi.Descricao_Imovel ?? "",
                     Matricula = _itbi.Matricula,
-                    Valor_Avaliacao = _itbi.Valor_Avaliacao_atual,
-                    Valor_Guia = _itbi.Valor_guia_atual,
+                    Valor_Avaliacao = _itbi.Valor_Avaliacao,
+                    Valor_Guia =    _itbi.Valor_guia_atual>0? _itbi.Valor_guia_atual: _itbi.Valor_guia,
                     Valor_Transacao = _itbi.Valor_Transacao,
                     Valor_Venal = _itbi.Valor_Venal,
                     Recursos_proprios_Valor = _itbi.Recursos_proprios_valor,
@@ -2435,7 +2433,7 @@ namespace GTI_Mvc.Controllers {
                     Natureza = imovelRepository.Retorna_Itbi_Natureza_nome(_itbi.Natureza_Codigo),
                     Tipo_Financiamento = imovelRepository.Retorna_Itbi_Financimento_nome(_itbi.Tipo_Financiamento),
                     Valor_Avaliacao_Atual=_itbi.Valor_Avaliacao_atual,
-                    Valor_Guia_Atual=_itbi.Valor_guia_atual
+                    Valor_Guia_Atual= _itbi.Valor_guia_atual > 0 ? _itbi.Valor_guia_atual : _itbi.Valor_guia,
                 };
                 _guia.Numero_guia = _itbi.Numero_Guia;
                 _guia.Nosso_Numero = "287353200" + _guia.Numero_guia.ToString();

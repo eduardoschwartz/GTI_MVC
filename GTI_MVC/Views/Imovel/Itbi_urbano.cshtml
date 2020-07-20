@@ -533,7 +533,7 @@
                         <table style="font-size:13px;width:644px">
                             <tr style="height:30px">
                                 <td style="width:544px">
-                                    <label style="font-weight:normal">Valor da avaliação do imóvel (resgate alienação fiduciária): <span style="color:brown;font-size:12px">A base de cálculo do imposto <br /> poderá sofrer atualização monetária conforme disposto no §7º,artigo 118 da Lei Complementar 07/1992, introduzido pela Lei Complementar 162/2015.</span></label>
+                                    <label style="font-weight:normal">Valor da avaliação do imóvel (resgate alienação fiduciária): <span style="color:brown;font-size:12px">Valor da transação poderá sofrer <br /> atualização monetária conforme disposto no §7º,artigo 118 da Lei Complementar 07/1992, intro-<br />duzido pela Lei Complementar 162/2015.</span></label>
                                 </td>
                                 <td style="width:100px;padding-top:2px">
                                     @if (Model.Valor_Avaliacao > 0) {
@@ -926,7 +926,7 @@
                 var _rd = document.getElementById('txtRecursoConcedido').value;
                 var _rd2 = Number(_rd.replace(/[^0-9.-]+/g, "."));
                 var _rd3 = parseFloat(_rd2);
-                $("input[name='Recursos_concedido_atual']").val((_rd3 * 0.015).toFixed(2).replace(".", ","));
+                $("input[name='Recursos_concedido_atual']").val((_rd3 * 0.005).toFixed(2).replace(".", ","));
                 calcula_guia();
             });
 
@@ -934,7 +934,7 @@
                 var _fn = document.getElementById('txtFinanciamento').value;
                 var _fn2 = Number(_fn.replace(/[^0-9.-]+/g, "."));
                 var _fn3 = parseFloat(_fn2);
-                $("input[name='Financiamento_atual']").val((_fn3 * 0.015).toFixed(2).replace(".", ","));
+                $("input[name='Financiamento_atual']").val((_fn3 * 0.005).toFixed(2).replace(".", ","));
                 calcula_guia();
             });
 
