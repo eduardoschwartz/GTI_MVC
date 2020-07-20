@@ -43,7 +43,7 @@
 <table width="500px">
     <tr style="height:40px">
         <td style="width:150px"><label style="font-weight:normal">Nome completo:</label></td>
-        <td style="width:300px">@Html.TextBoxFor(m => m.Usuario, new { @id = "nome", @class = "textBoxBlue", @style = "max-width:400px;width:300px" })</td>
+        <td style="width:300px">@Html.TextBoxFor(m => m.Usuario, new { @id = "nome", @class = "textBoxBlue", @style = "max-width:400px;width:300px", @maxlength = "200" })</td>
     </tr>
     <tr style="height:40px">
         <td >
@@ -57,15 +57,15 @@
     </tr>
     <tr style="height:40px">
         <td ><label style="font-weight:normal">Nº de Telefone:</label></td>
-        <td >@Html.TextBoxFor(m => m.Telefone, new { @id = "telefone", @class = "textBoxBlue", @style = "max-width:400px;width:300px" })</td>
+        <td >@Html.TextBoxFor(m => m.Telefone, new { @id = "telefone", @class = "textBoxBlue", @style = "max-width:400px;width:300px", @maxlength = "50" })</td>
     </tr>
     <tr style="height:40px">
         <td ><label style="font-weight:normal">Endereço de Email:</label></td>
-        <td >@Html.TextBoxFor(m => m.Email, new { @id = "email", @class = "textBoxBlue", @style = "max-width:400px;width:300px" })</td>
+        <td >@Html.TextBoxFor(m => m.Email, new { @id = "email", @class = "textBoxBlue", @style = "max-width:400px;width:300px", @maxlength = "250" })</td>
     </tr>
     <tr style="height:40px">
         <td ><label style="font-weight:normal">Digite a Senha:</label></td>
-        <td >@Html.TextBoxFor(m => m.Senha2, new { @type = "password", @id = "senha2", @class = "textBoxBlue", @style = "max-width:400px" })</td>
+        <td >@Html.TextBoxFor(m => m.Senha2, new { @type = "password", @id = "senha2", @class = "textBoxBlue", @style = "max-width:400px", @maxlength = "50" })</td>
     </tr>
     <tr style="height:40px">
         <td ><label style="font-weight:normal">Confirme a Senha:</label></td>

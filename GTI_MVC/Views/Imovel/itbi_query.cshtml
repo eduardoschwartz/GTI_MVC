@@ -61,7 +61,11 @@
                                 <a href="@Url.Action("Itbi_rural_q","Imovel",new {p=item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
                             }
                             <a href="@Url.Action("Itbi_print","Imovel", new { p = item.Guid,u=item.Tipo_Imovel=="Urbano" })" title="Imprimir a declaração do ITBI"> <img src="@Url.Content("~/images/print.png")"></a>
-                            <a href="@Url.Action("Itbi_urbano_e","Imovel", new { p = item.Guid } )" title="Alterar este ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>
+                            @if (item.Tipo_Imovel == "Urbano") {
+                                <a href="@Url.Action("Itbi_urbano_e","Imovel", new { p = item.Guid } )" title="Alterar este ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>
+                            } else {
+                                <a href="@Url.Action("Itbi_rural_e","Imovel", new { p = item.Guid } )" title="Alterar este ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>
+                            }
                             <a href="@Url.Action("Itbi_cancel", "Imovel", new { p = item.Guid, s = 4 })" onclick="return confirm('Cancelar este Itbi?')" })" title="Cancelar este ITBI"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
                             <a href="@Url.Action("Itbi_forum","Imovel" , new { p = item.Guid } )" title="Processo de análise do ITBI"> <img src="@Url.Content("~/images/observacao.png")"></a>
                             <a href="@Url.Action("Itbi_guia","Imovel" , new { p = item.Guid })" title="Emitir guia para pagamento"> <img src="@Url.Content("~/images/barcode.gif")"></a>

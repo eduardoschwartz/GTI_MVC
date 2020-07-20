@@ -400,7 +400,11 @@
                                     <label style="font-weight:normal;">Recursos próprios:</label>
                                 </td>
                                 <td style="width: 100px">
-                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Recursos_proprios_valor, new { id = "txtRecursoProprio", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_proprios_valor.ToString("0.#0"), @readonly = true })</label>
+                                    @if (Model.Tipo_Financiamento == 0) {
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Recursos_proprios_valor, new { id = "txtRecursoProprio", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_proprios_valor.ToString("0.#0"), @readonly = true })</label>
+                                    } else {
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Recursos_proprios_valor, new { id = "txtRecursoProprio", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_proprios_valor.ToString("0.#0") })</label>
+                                    }
                                 </td>
                                 <td style="width: 34px">
                                     <label style="font-weight:normal;">Aliq.:</label>
@@ -420,7 +424,11 @@
                                     <label style="font-weight:normal;">Recursos conta vinculada do FGTS:</label>
                                 </td>
                                 <td style="width: 100px">
-                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Recursos_conta_valor, new { id = "txtRecursoConta", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_conta_valor.ToString("0.#0"), @readonly = true })</label>
+                                    @if (Model.Tipo_Financiamento == 0) {
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Recursos_conta_valor, new { id = "txtRecursoConta", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_conta_valor.ToString("0.#0"), @readonly = true })</label>
+                                    } else {
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Recursos_conta_valor, new { id = "txtRecursoConta", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_conta_valor.ToString("0.#0") })</label>
+                                    }
                                 </td>
                                 <td style="width: 34px">
                                     <label style="font-weight:normal;">Aliq.:</label>
@@ -440,7 +448,11 @@
                                     <label style="font-weight:normal;">Recursos concedidos pelo FGTS na forma de desconto:</label>
                                 </td>
                                 <td style="width: 100px">
-                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Recursos_concedido_valor, new { id = "txtRecursoConcedido", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_concedido_valor.ToString("0.#0"), @readonly = true })</label>
+                                    @if (Model.Tipo_Financiamento == 0) {
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Recursos_concedido_valor, new { id = "txtRecursoConcedido", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_concedido_valor.ToString("0.#0"), @readonly = true })</label>
+                                    } else {
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Recursos_concedido_valor, new { id = "txtRecursoConcedido", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Recursos_concedido_valor.ToString("0.#0") })</label>
+                                    }
                                 </td>
                                 <td style="width: 34px">
                                     <label style="font-weight:normal;">Aliq.:</label>
@@ -460,7 +472,11 @@
                                     <label style="font-weight:normal;">Financiamento concedido pala CREDORA:</label>
                                 </td>
                                 <td style="width: 100px">
-                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Financiamento_valor, new { id = "txtFinanciamento", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Financiamento_valor.ToString("0.#0"), @readonly = true })</label>
+                                    @if (Model.Tipo_Financiamento == 0) {
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Financiamento_valor, new { id = "txtFinanciamento", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Financiamento_valor.ToString("0.#0"), @readonly = true })</label>
+                                    } else {
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Financiamento_valor, new { id = "txtFinanciamento", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Financiamento_valor.ToString("0.#0") })</label>
+                                    }
                                 </td>
                                 <td style="width: 34px">
                                     <label style="font-weight:normal;">Aliq.:</label>
@@ -996,7 +1012,7 @@
             if (_somaav > _soma && _somaav > _somavv)
                 $("input[name='Valor_guia']").val((_somaav * 0.015).toFixed(2).replace(".", ","));
 
-            if (_somava>_somaav && _somaava > _soma && _somaava > _somavv)
+            if (_somaava>_somaav && _somaava > _soma && _somaava > _somavv)
                 $("input[name='Valor_guia']").val((_somaava * 0.015).toFixed(2).replace(".", ","));
 
         }

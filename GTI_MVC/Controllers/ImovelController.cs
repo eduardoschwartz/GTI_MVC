@@ -1839,11 +1839,30 @@ namespace GTI_Mvc.Controllers {
             ViewBag.ListaErro = new List<string>();
 
             ItbiViewModel model = Retorna_Itbi_Gravado(p);
-            if (model.Inscricao != null)
-                return View("Itbi_urbano_e", model);
-            else
-                return View("Itbi_rural_e", model);
+            return View("Itbi_urbano_e", model);
         }
+
+        [Route("Itbi_rural_e")]
+        [HttpGet]
+        public ActionResult Itbi_rural_e(string p = "") {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Itbi_status stat = imovelRepository.Retorna_Itbi_Situacao(p);
+            if (stat.Codigo > 1) {
+                return RedirectToAction("Itbi_query", new { e = "A" });
+            }
+
+            List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
+            ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
+            List<Itbi_financiamento> Lista_Financimento = imovelRepository.Lista_Itbi_Financiamento();
+            ViewBag.Lista_Financiamento = new SelectList(Lista_Financimento, "Codigo", "Descricao");
+            ViewBag.ListaErro = new List<string>();
+
+            ItbiViewModel model = Retorna_Itbi_Gravado(p);
+            return View("Itbi_rural_e", model);
+        }
+
 
         [Route("Itbi_forum")]
         [HttpGet]
@@ -2141,7 +2160,7 @@ namespace GTI_Mvc.Controllers {
                 regMain.Valor_Avaliacao = model.Valor_Avaliacao;
                 regMain.Valor_Avaliacao_atual = model.Valor_Avaliacao_atual;
                 regMain.Valor_guia = model.Valor_guia;
-                regMain.Valor_guia_atual = model.Valor_guia_atual == 0 ? model.Valor_guia : model.Valor_guia_atual;
+                regMain.Valor_guia_atual =  model.Valor_guia_atual ;
                 regMain.Valor_Transacao = model.Valor_Transacao;
                 regMain.Valor_Venal = model.Valor_Venal;
 
