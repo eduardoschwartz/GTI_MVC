@@ -2116,7 +2116,7 @@ namespace GTI_Mvc.Controllers {
                 regMain.Valor_Transacao = model.Valor_Transacao;
                 regMain.Tipo_Financiamento = model.Tipo_Financiamento;
                 regMain.Totalidade = model.Totalidade;
-                regMain.Totalidade_Perc = model.Totalidade_Perc;
+                regMain.Totalidade_Perc = model.Totalidade=="Sim"?100:  model.Totalidade_Perc;
                 regMain.Matricula = model.Matricula;
                 regMain.Inscricao_Incra = model.Inscricao_Incra;
                 regMain.Receita_Federal = model.Receita_Federal;

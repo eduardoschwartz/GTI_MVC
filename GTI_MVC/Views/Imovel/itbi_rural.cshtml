@@ -496,7 +496,7 @@
                             </td>
                             <td style="width:100px;padding-top:2px">
                                 @if (Model.Valor_Avaliacao > 0) {
-                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { id = "txtAvaliacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao })</label>
+                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { id = "txtAvaliacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao.ToString("0.#0") })</label>
                                 } else {
                                     <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { id = "txtAvaliacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                 }
