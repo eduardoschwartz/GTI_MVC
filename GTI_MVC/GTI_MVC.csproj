@@ -222,6 +222,11 @@
       <DependentUpon>dsBoletoGuia.xsd</DependentUpon>
     </Compile>
     <Compile Include="Classes\Functions.cs" />
+    <Compile Include="Datasets\dsDAM.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsDAM.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Datasets\dsGuia_Itbi.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -514,6 +519,17 @@
     <Content Include="Datasets\dsGuia_Itbi.xsc">
       <DependentUpon>dsGuia_Itbi.xsd</DependentUpon>
     </Content>
+    <Content Include="Datasets\dsDAM.xsc">
+      <DependentUpon>dsDAM.xsd</DependentUpon>
+    </Content>
+    <None Include="Datasets\dsDAM.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsDAM.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Datasets\dsDAM.xss">
+      <DependentUpon>dsDAM.xsd</DependentUpon>
+    </Content>
     <None Include="Datasets\dsGuia_Itbi.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -752,6 +768,7 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Itbi_Main.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptDetalheBoleto.rdlc" />
     <EmbeddedResource Include="Reports\Situacao_Pagamento.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Situacao_Pagamento.cs</LastGenOutput>

@@ -2092,6 +2092,7 @@ namespace GTI_Mvc.Controllers {
 
             if (model.Guid == null) {
                 _guid = Guid.NewGuid().ToString("N");
+                model.Guid = _guid;
                 Itbi_main regMain = new Itbi_main() {
                     Imovel_codigo = Convert.ToInt32(model.Codigo == null ? "0" : model.Codigo),
                     Guid = _guid,

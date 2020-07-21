@@ -101,6 +101,12 @@ namespace GTI_Dal.Classes {
                 else
                     reg.Tipodoc = 2;
 
+                if(Sql.Codlogradouro>0 && Sql.Cep == null) {
+                    Endereco_Data enderecoRepository = new Endereco_Data("GTIconnection");
+                    reg.CepR =  enderecoRepository.RetornaCep((int)Sql.Codlogradouro, (short)Sql.Numimovel);
+                }
+
+
                 return reg;
             }
         }
