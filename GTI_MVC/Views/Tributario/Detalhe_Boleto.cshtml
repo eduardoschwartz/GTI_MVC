@@ -1,0 +1,237 @@
+﻿@model GTI_Mvc.ViewModels.CertidaoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Detalhe de Boleto";
+}
+
+<style>
+    .textBoxBlue {
+        height: 25px;
+        position: relative;
+        border: 1px solid #0094ff;
+        border-color: rgba(0, 0, 0, .14);
+        background-color: white;
+        font-size: 14px;
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
+    }
+    .center {
+        margin: auto;
+        width: 400px;
+        border: 1px solid rgba(0,0,0,0.24);
+        padding: 20px;
+        box-shadow: 0 .1em 0.5em #000;
+        border-radius: 13px;
+    }
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+</style>
+
+<div class="center">
+    <label style="color: brown;font-size: 16px;font-style: italic">Detalhe de Boleto</label>
+    <br />
+
+    @using (Html.BeginForm("Detalhe_Boleto", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
+
+        <table width="500px">
+            <tr style="height:40px">
+                <td style="width:150px">Cpf/Cnpj:</td>
+                <td style="width:300px">@Html.TextBoxFor(m => m.CpfCnpjLabel, new { @id = "cpfcnpjTxt",@onpaste="return false", @class = "textBoxBlue", @style = "max-width:250px", @onKeyPress = "return formata(this, '§§§§§§§§§§§§§§', event)" })</td>
+            </tr>
+            <tr style="height:40px">
+                <td style="width:150px">Nº do Documento:</td>
+                <td style="width:300px">@Html.TextBoxFor(m => m.Documento, new { @id = "documento", @class = "textBoxBlue", @style = "max-width:250px", @onKeyPress = "return formata(this, '§§§§§§§§§§§§§§§§§', event)" })</td>
+            </tr>
+
+            <tr style="height:40px">
+                <td style="width:150px" valign="middle">
+                    <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+                </td>
+                <td style="width:150px" valign="middle">
+                    @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
+                </td>
+            </tr>
+        </table>
+
+        <br />
+            <button type="submit" class="btn btn-primary"> Consultar</button>
+        <br />
+        <br />
+
+
+        <br />
+        <div class="form-group row">
+            <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+        </div>
+
+    }
+
+    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+</div>
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+        });
+
+        function ValidateForm() {
+            ClearError();
+            var _cpfcnpj = document.getElementById('cpfcnpjTxt').value;
+            var _doc = document.getElementById('documento').value;
+            var _captcha = document.getElementById('captchaTxt').value;
+
+            var _consultar = false;
+            var _autenticar = false;
+
+            if ((_cpfcnpj != "" ))
+                _consultar = true;
+
+            if (_consultar == false && _autenticar == false) {
+                document.getElementById('errorLabel').innerHTML = "Informe o nº de CPF ou CNPJ.";
+                return false;
+            }
+
+            if (_doc == "" || parseInt(_doc) == 0) {
+                document.getElementById('errorLabel').innerHTML = "Digite o nº do documento confome consta no boleto";
+                return false;
+            }
+
+            if (_consultar == true && _captcha == "") {
+                document.getElementById('errorLabel').innerHTML = "Digite o código de validação.";
+                return false;
+            }
+
+            var cnpjtmp = _cpfcnpj.padStart(14, '0');
+            var cpftmp = _cpfcnpj.padStart(11, '0');
+            var cpfcnpj = "";
+            if (_cpfcnpj.length > 11) {
+                if (!valida_Cnpj(cnpjtmp)) {
+                    document.getElementById('errorLabel').innerHTML = "Nº de Cnpj inválido.";
+                    return false;
+                } else {
+                    cpfcnpj = cnpjtmp;
+                }
+            } else {
+                if (valida_Cnpj(cnpjtmp)) {
+                    cpfcnpj = cnpjtmp;
+                } else {
+                    if (!valida_Cpf(cpftmp)) {
+                        document.getElementById('errorLabel').innerHTML = "Nº de Cpf inválido.";
+                        return false;
+                    } else {
+                        cpfcnpj = cpftmp;
+                    }
+                }
+            }
+            if (cpfcnpj == "") {
+                document.getElementById('errorLabel').innerHTML = "Nº de Cpf/Cnpj inválido.";
+                return false;
+            }
+
+
+            return true;
+        }
+
+  
+
+        function ClearError() {
+            document.getElementById('errorLabel').innerHTML = "";
+        }
+
+        function valida_Cpf(cpf) {
+            cpf = cpf.split("").filter(n => (Number(n) || n == 0)).join("");
+            var numeros, digitos, soma, i, resultado, digitos_iguais;
+            digitos_iguais = 1;
+            if (cpf.length < 11)
+                return false;
+            for (i = 0; i < cpf.length - 1; i++)
+                if (cpf.charAt(i) != cpf.charAt(i + 1)) {
+                    digitos_iguais = 0;
+                    break;
+                }
+            if (!digitos_iguais) {
+                numeros = cpf.substring(0, 9);
+                digitos = cpf.substring(9);
+                soma = 0;
+                for (i = 10; i > 1; i--)
+                    soma += numeros.charAt(10 - i) * i;
+                resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+                if (resultado != digitos.charAt(0))
+                    return false;
+                numeros = cpf.substring(0, 10);
+                soma = 0;
+                for (i = 11; i > 1; i--)
+                    soma += numeros.charAt(11 - i) * i;
+                resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+                if (resultado != digitos.charAt(1))
+                    return false;
+                return true;
+            }
+            else
+                return false;
+        }
+
+        function valida_Cnpj(cnpj) {
+
+            cnpj = cnpj.replace(/[^\d]+/g, '');
+
+            if (cnpj == '') return false;
+
+            if (cnpj.length != 14)
+                return false;
+
+            // Elimina CNPJs invalidos conhecidos
+            if (cnpj == "00000000000000" ||
+                cnpj == "11111111111111" ||
+                cnpj == "22222222222222" ||
+                cnpj == "33333333333333" ||
+                cnpj == "44444444444444" ||
+                cnpj == "55555555555555" ||
+                cnpj == "66666666666666" ||
+                cnpj == "77777777777777" ||
+                cnpj == "88888888888888" ||
+                cnpj == "99999999999999")
+                return false;
+
+            // Valida DVs
+            tamanho = cnpj.length - 2
+            numeros = cnpj.substring(0, tamanho);
+            digitos = cnpj.substring(tamanho);
+            soma = 0;
+            pos = tamanho - 7;
+            for (i = tamanho; i >= 1; i--) {
+                soma += numeros.charAt(tamanho - i) * pos--;
+                if (pos < 2)
+                    pos = 9;
+            }
+            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+            if (resultado != digitos.charAt(0))
+                return false;
+
+            tamanho = tamanho + 1;
+            numeros = cnpj.substring(0, tamanho);
+            soma = 0;
+            pos = tamanho - 7;
+            for (i = tamanho; i >= 1; i--) {
+                soma += numeros.charAt(tamanho - i) * pos--;
+                if (pos < 2)
+                    pos = 9;
+            }
+            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+            if (resultado != digitos.charAt(1))
+                return false;
+
+            return true;
+
+        }
+
+    </script>
+}

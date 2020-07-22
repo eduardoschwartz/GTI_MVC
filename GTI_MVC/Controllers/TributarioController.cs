@@ -24,6 +24,7 @@ namespace GTI_Mvc.Controllers {
     [Route("Tributario")]
     public class TributarioController : Controller
     {
+        private readonly object gtiCore;
 
         [Route("Certidao/Certidao_Debito_Codigo")]
         [HttpGet]
@@ -1674,8 +1675,180 @@ namespace GTI_Mvc.Controllers {
             return View(model);
         }
 
+        [Route("Detalhe_Boleto")]
+        [HttpGet]
+        public ViewResult Detalhe_Boleto() {
+            CertidaoViewModel model = new CertidaoViewModel();
+            return View(model);
+        }
+
+        [Route("Detalhe_Boleto")]
+        [HttpPost]
+        public ActionResult Detalhe_Boleto(CertidaoViewModel model) {
+            string _cpfMask = model.CpfCnpjLabel;    
+            if (Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
+                _cpfMask = _cpfMask.PadLeft(14, '0');
+            } else {
+                if (Functions.ValidaCpf(_cpfMask.PadLeft(11, '0'))) {
+                    _cpfMask = _cpfMask.PadLeft(11, '0');
+                }
+            }
+
+            string _cpf = model.CpfCnpjLabel ;
+            string _cnpj = model.CnpjValue;
+            bool _bCpf = _cpf == null ? false : true;
+            int _documento;
+            if (model.Documento.Length < 8) {
+                ViewBag.Result = "Nº de documento inválido.";
+                return View(model);
+            } else
+                if (model.Documento.Length > 8)
+                _documento = Convert.ToInt32(model.Documento.Substring(model.Documento.Length - 8, 8));
+            else
+                _documento = Convert.ToInt32(model.Documento);
+
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            bool _existe = tributarioRepository.Existe_Documento(_documento);
+            if (!_existe) {
+                ViewBag.Result = "Documento não cadastrado.";
+                return View(model);
+            }
+
+            int _codigo = tributarioRepository.Retorna_Codigo_por_Documento(_documento);
+            Numdocumento DadosDoc = tributarioRepository.Retorna_Dados_Documento(_documento);
+            DateTime dDataDoc = Convert.ToDateTime(DadosDoc.Datadocumento);
+            decimal nValorGuia = Convert.ToDecimal(DadosDoc.Valorguia);
+
+            if (_codigo < 100000) {
+                Imovel_bll imovel_Class = new Imovel_bll("GTIconnection");
+                ImovelStruct reg = imovel_Class.Dados_Imovel(_codigo);
+                List<ProprietarioStruct> regProp = imovel_Class.Lista_Proprietario(_codigo, true);
+                if (_bCpf) {
+                    if (Convert.ToInt64(Functions.RetornaNumero(regProp[0].CPF)).ToString("00000000000") != _cpf) {
+                        ViewBag.Result = "CPF informado não pertence a este documento.";
+                        return View(model);
+                    }
+                } else {
+                    if (Convert.ToInt64(Functions.RetornaNumero(regProp[0].CPF)).ToString("00000000000000") != _cnpj) {
+                        ViewBag.Result = "CNPJ informado não pertence a este documento.";
+                        return View(model);
+                    }
+                }
+            } else {
+                if (_codigo >= 100000 && _codigo < 500000) {
+                    Empresa_bll empresa_Class = new Empresa_bll("GTIconnection");
+                    EmpresaStruct reg = empresa_Class.Retorna_Empresa(_codigo);
+                    if (_bCpf) {
+                        if (Convert.ToInt64(Functions.RetornaNumero(reg.Cpf_cnpj)).ToString("00000000000") != _cpf) {
+                            ViewBag.Result = "CPF informado não pertence a este documento.";
+                            return View(model);
+                        }
+                    } else {
+                        if (Convert.ToInt64(Functions.RetornaNumero(reg.Cpf_cnpj)).ToString("00000000000000") != _cnpj) {
+                            ViewBag.Result = "CNPJ informado não pertence a este documento.";
+                            return View(model);
+                        }
+                    }
+                } else {
+                    Cidadao_bll cidadao_Class = new Cidadao_bll("GTIconnection");
+                    CidadaoStruct reg = cidadao_Class.LoadReg(_codigo);
+                    if (_bCpf) {
+                        if (Convert.ToInt64(Functions.RetornaNumero(reg.Cpf)).ToString("00000000000") != _cpf) {
+                            ViewBag.Result = "CPF informado não pertence a este documento.";
+                            return View(model);
+                        }
+                    } else {
+                        if (Convert.ToInt64(Functions.RetornaNumero(reg.Cnpj)).ToString("00000000000000") != _cnpj) {
+                            ViewBag.Result = "CNPJ informado não pertence a este documento.";
+                            return View(model);
+                        }
+                    }
+                }
+            }
+
+            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+                ViewBag.Result = "Código de verificação inválido.";
+                return View(model);
+            }
+
+            ViewBag.Result = "";
+
+            List<DebitoStructure> ListaParcelas = Carregaparcelas(_documento, dDataDoc);
+            int nSid = tributarioRepository.Insert_Boleto_DAM(ListaParcelas, _documento, dDataDoc);
 
 
+            Warning[] warnings;
+            string[] streamIds;
+            string mimeType = string.Empty;
+            string encoding = string.Empty;
+            string extension = string.Empty;
+            Session["sid"] = "";
+            Tributario_bll tributario_Repository = new Tributario_bll("GTIconnection");
+            List<GTI_Models.Models.Boleto> ListaBoleto = tributarioRepository.Lista_Boleto_DAM(nSid);
+            DataSet Ds = Functions.ToDataSet(ListaBoleto);
+            ReportDataSource rdsAct = new ReportDataSource("dsDam", Ds.Tables[0]);
+            ReportViewer viewer = new ReportViewer();
+            viewer.LocalReport.Refresh();
+            viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/rptDetalheBoleto.rdlc"); ;
+            viewer.LocalReport.DataSources.Add(rdsAct);          
+            byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
+            tributario_Repository.Excluir_Carne(nSid);
+            Response.Buffer = true;
+            Response.Clear();
+            Response.ContentType = mimeType;
+            Response.AddHeader("content-disposition", "attachment; filename= detalhe_guia" + "." + extension);
+            Response.OutputStream.Write(bytes, 0, bytes.Length);
+            Response.Flush();
+            Response.End();
+            return View(model);
+        }
+
+        private List<DebitoStructure> Carregaparcelas(int nNumDoc, DateTime dDataDoc) {
+            int i = 0;
+            Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
+            List<DebitoStructure> ListaParcelas = tributario_Class.Lista_Tabela_Parcela_Documento(nNumDoc);
+            foreach (DebitoStructure Linha in ListaParcelas) {
+                List<SpExtrato> ListaTributo = tributario_Class.Lista_Extrato_Tributo(Linha.Codigo_Reduzido, (short)Linha.Ano_Exercicio, (short)Linha.Ano_Exercicio, (short)Linha.Codigo_Lancamento, (short)Linha.Codigo_Lancamento,
+                    (short)Linha.Sequencia_Lancamento, (short)Linha.Sequencia_Lancamento, (short)Linha.Numero_Parcela, (short)Linha.Numero_Parcela, Linha.Complemento, Linha.Complemento, 0, 99, dDataDoc, "Web");
+                List<SpExtrato> ListaParcela = tributario_Class.Lista_Extrato_Parcela(ListaTributo);
+
+                for (i = 0; i < ListaParcelas.Count; i++) {
+                    if (ListaParcelas[i].Ano_Exercicio == Linha.Ano_Exercicio & ListaParcelas[i].Codigo_Lancamento == Linha.Codigo_Lancamento & ListaParcelas[i].Sequencia_Lancamento == Linha.Sequencia_Lancamento &
+                        ListaParcelas[i].Numero_Parcela == Linha.Numero_Parcela & ListaParcelas[i].Complemento == Linha.Complemento)
+                        break;
+                }
+                ListaParcelas[i].Soma_Principal = ListaParcela[0].Valortributo;
+                ListaParcelas[i].Soma_Multa = ListaParcela[0].Valormulta;
+                ListaParcelas[i].Soma_Juros = ListaParcela[0].Valorjuros;
+                ListaParcelas[i].Soma_Correcao = ListaParcela[0].Valorcorrecao;
+                ListaParcelas[i].Soma_Total = ListaParcela[0].Valortotal;
+                ListaParcelas[i].Descricao_Lancamento = ListaParcela[0].Desclancamento;
+                string DescTributo = "";
+
+                List<int> aTributos = new List<int>();
+                foreach (SpExtrato Trib in ListaTributo) {
+                    bool bFind = false;
+                    for (int b = 0; b < aTributos.Count; b++) {
+                        if (aTributos[b] == Trib.Codtributo) {
+                            bFind = true;
+                            break;
+                        }
+                    }
+                    if (!bFind)
+                        aTributos.Add(Trib.Codtributo);
+                }
+
+                for (int c = 0; c < aTributos.Count; c++)
+                    DescTributo += aTributos[c].ToString("000") + "-" + tributario_Class.Lista_Tributo(aTributos[c])[0].Abrevtributo + ",";
+
+                DescTributo = DescTributo.Substring(0, DescTributo.Length - 1);
+                ListaParcelas[i].Descricao_Tributo = DescTributo;
+                ListaParcelas[i].Data_Vencimento = ListaParcela[0].Datavencimento;
+            }
+
+            return ListaParcelas;
+
+        }
 
     }
 
