@@ -634,6 +634,7 @@
     <Content Include="Views\Imovel\Itbi_urbano_e.cshtml" />
     <Content Include="Views\Imovel\Itbi_rural_e.cshtml" />
     <Content Include="Views\Imovel\Itbi_forum.cshtml" />
+    <Content Include="Views\Tributario\Detalhe_Boleto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
