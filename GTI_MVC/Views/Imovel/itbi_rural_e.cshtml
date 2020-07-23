@@ -36,7 +36,7 @@
 
 <div class="center">
 
-    @using (Html.BeginForm("Itbi_rural", "Imovel", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @using (Html.BeginForm("Itbi_rural_e", "Imovel", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
         <div class="container" style="width:700px">
             <div class="panel panel-danger">
@@ -488,9 +488,9 @@
                             </td>
                             <td style="width:338px">
                                 @if (Model.Valor_Venal > 0) {
-                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Venal.ToString("0.#0"), @readonly = true })</label>
+                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Venal, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Venal.ToString("0.#0") })</label>
                                 } else {
-                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
+                                    <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Venal, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
                                 }
                             </td>
                         </tr>
@@ -624,14 +624,21 @@
                                 <label style="font-weight:normal;">Valor atualizado pelo fiscal:</label>
                             </td>
                             <td style="width:120px;padding-top:3px">
-                                @if (Model.Valor_guia_atual > 0) {
-                                    <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_guia_atual.ToString("0.#0") })</label>
+                                @if (ViewBag.Fiscal == "S") {
+                                    if (Model.Valor_guia_atual > 0) {
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_guia_atual.ToString("0.#0") })</label>
+                                    } else {
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
+                                    }
                                 } else {
-                                    <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
+                                    if (Model.Valor_guia_atual > 0) {
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_guia_atual.ToString("0.#0"), @readonly = true })</label>
+                                    } else {
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
+                                    }
                                 }
                             </td>
                         </tr>
-
                     </table>
                     <table>
                         <tr>
@@ -713,7 +720,7 @@
                 </div>
 
 
-             
+
 
 
                 @if (ViewBag.Error != null && ViewBag.Error != "") {
@@ -844,9 +851,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#MainForm").submit(function () {
-                return ValidateForm();
-            });
+           
 
             $(".maskValor").inputmask('Regex', { regex: "^[0-9]{1,8}(\\,\\d{1,2})?$" });
             $(".maskPerc").inputmask('Regex', { regex: "^[0-9]{1,3}(\\,\\d{1,2})?$" });
@@ -901,6 +906,10 @@
             });
 
             $("#txtAvaliacao2").on('input', function () {
+                calcula_guia();
+            });
+
+            $("#txtValorVenal").on('input', function () {
                 calcula_guia();
             });
 
@@ -992,16 +1001,21 @@
                 _somavv = _somavv * _percvv / 100;
             }
 
-            if (_soma > _somavv)
-                $("input[name='Valor_guia']").val((_somaa ).toFixed(2).replace(".", ","));
+            if (_soma > _somavv) {
+                if (_tf == "") {
+                    $("input[name='Valor_guia']").val((_soma * 0.015).toFixed(2).replace(".", ","));
+                } else {
+                    $("input[name='Valor_guia']").val((_somaa).toFixed(2).replace(".", ","));
+                }
+            }
             else
                 $("input[name='Valor_guia']").val((_somavv * 0.015).toFixed(2).replace(".", ","));
 
             if (_somaav > _soma && _somaav > _somavv)
-                $("input[name='Valor_guia']").val((_somaav * 0.005).toFixed(2).replace(".", ","));
+                $("input[name='Valor_guia']").val((_somaav * 0.015).toFixed(2).replace(".", ","));
 
             if (_somaava>_somaav && _somaava > _soma && _somaava > _somavv)
-                $("input[name='Valor_guia']").val((_somaava * 0.005).toFixed(2).replace(".", ","));
+                $("input[name='Valor_guia']").val((_somaava * 0.015).toFixed(2).replace(".", ","));
 
         }
 
@@ -1111,16 +1125,7 @@
             }
         });
 
-        function ValidateForm() {
-            var _cod = document.getElementById('codigo').value;
-
-            if (_cod == null || _cod == "" || parseInt(_cod) == 0) {
-                document.getElementById('errorLabel').innerHTML = "Digite o código do imóvel";
-                return false;
-            }
-            return true;
-        }
-
+     
         function radioCheck() {
             var index = $("input[id=totalChk]:checked").val();
             if (index=="Não") {

@@ -643,18 +643,35 @@
 
                         <table style="font-size:13px;width:640px">
                             <tr style="height:30px">
-                                <td style="width:100px;padding-top:3px">
+                                <td style="width:60px;padding-top:3px">
                                     <label style="font-weight:normal;">Valor da guia:</label>
                                 </td>
-                                <td style="width:540px;padding-top:3px">
+                                <td style="width:120px;padding-top:3px">
                                     @if (Model.Valor_guia > 0) {
                                         <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_guia, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_guia.ToString("0.#0"), @readonly = true })</label>
                                     } else {
                                         <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_guia, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
                                     }
                                 </td>
+                                <td style="width:110px;padding-top:3px">
+                                    <label style="font-weight:normal;">Valor atualizado pelo fiscal:</label>
+                                </td>
+                                <td style="width:120px;padding-top:3px">
+                                    @if (ViewBag.Fiscal == "S") {
+                                        if (Model.Valor_guia_atual > 0) {
+                                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_guia_atual.ToString("0.#0") })</label>
+                                        } else {
+                                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
+                                        }
+                                    } else {
+                                        if (Model.Valor_guia_atual > 0) {
+                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_guia_atual.ToString("0.#0"), @readonly = true })</label>
+                                        } else {
+                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_guia_atual, new { @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
+                                        }
+                                    }
+                                </td>
                             </tr>
-
                         </table>
                         <table>
                             <tr>
