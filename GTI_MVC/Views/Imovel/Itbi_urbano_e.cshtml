@@ -36,7 +36,7 @@
 
 <div class="center">
 
-    @using (Html.BeginForm("Itbi_urbano", "Imovel", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @using (Html.BeginForm("Itbi_urbano_e", "Imovel", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
         <div class="container" style="width:700px">
             <div class="panel panel-danger">
@@ -1031,10 +1031,10 @@
                 $("input[name='Valor_guia']").val((_somavv * 0.015).toFixed(2).replace(".", ","));
 
             if (_somaav > _soma && _somaav > _somavv)
-                $("input[name='Valor_guia']").val((_somaav * 0.005).toFixed(2).replace(".", ","));
+                $("input[name='Valor_guia']").val((_somaav * 0.015).toFixed(2).replace(".", ","));
 
             if (_somaava>_somaav && _somaava > _soma && _somaava > _somavv)
-                $("input[name='Valor_guia']").val((_somaava * 0.005).toFixed(2).replace(".", ","));
+                $("input[name='Valor_guia']").val((_somaava * 0.015).toFixed(2).replace(".", ","));
 
         }
 

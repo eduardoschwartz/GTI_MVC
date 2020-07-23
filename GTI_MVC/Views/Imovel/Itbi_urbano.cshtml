@@ -322,7 +322,7 @@
                     @Html.HiddenFor(m => m.Vendedor_Cpf_cnpj_tmp, new { @id = "Vendedor_Cpf_cnpj_tmp" })
                     @Html.HiddenFor(m => m.Vendedor_Nome_tmp, new { @id = "Vendedor_Nome_tmp" })
                     @Html.HiddenFor(m => m.Guid)
-                    @Html.HiddenFor(m=>m.Lista_Anexo)
+                    @Html.HiddenFor(m => m.Lista_Anexo)
 
                     @*#############VENDEDORES###############*@
                     <div class="panel-heading">Dados dos Vendedores </div>
@@ -533,7 +533,7 @@
                         <table style="font-size:13px;width:644px">
                             <tr style="height:30px">
                                 <td style="width:544px">
-                                    <label style="font-weight:normal">Valor da avaliação do imóvel (resgate alienação fiduciária): <span style="color:brown;font-size:12px">Valor da transação poderá sofrer <br /> atualização monetária conforme disposto no §7º,artigo 118 da Lei Complementar 07/1992, intro-<br />duzido pela Lei Complementar 162/2015.</span></label>
+                                    <label style="font-weight:normal">Valor da avaliação do imóvel (resgate alienação fiduciária):</label>
                                 </td>
                                 <td style="width:100px;padding-top:2px">
                                     @if (Model.Valor_Avaliacao > 0) {
@@ -543,6 +543,27 @@
                                     }
                                 </td>
                             </tr>
+                            <tr style="height:30px">
+                                <td style="width:544px">
+                                    <label style="font-weight:normal">Valor da transação atualizado pelo fisco:<span style="color:brown;font-size:12px">Valor da transação poderá sofrer atualização monetária <br />conforme disposto no §7º,artigo 118 da Lei Complementar 07/1992, introduzido pela Lei Complementar 162/2015.</span></label>
+                                </td>
+                                <td style="width:100px;padding-top:2px">
+                                    @if (ViewBag.Fiscal == "S") {
+                                        if (Model.Valor_Avaliacao_atual > 0) {
+                                            <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao_atual.ToString("0.#0") })</label>
+                                        } else {
+                                            <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
+                                        }
+                                    } else {
+                                        if (Model.Valor_Avaliacao_atual > 0) {
+                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao_atual.ToString("0.#0"), @readonly = true })</label>
+                                        } else {
+                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+
                         </table>
 
                         <table style="font-size:13px;width:640px">
@@ -901,10 +922,13 @@
                 calcula_guia();
             });
 
-            $("#percTxt").on('input', function () {
+            $("#txtAvaliacao2").on('input', function () {
                 calcula_guia();
             });
 
+            $("#percTxt").on('input', function () {
+                calcula_guia();
+            });
 
             $("#txtRecursoProprio").on('input', function () {
                 var _rp = document.getElementById('txtRecursoProprio').value;
@@ -974,6 +998,10 @@
             var _av2 = Number(_av.replace(/[^0-9.-]+/g, "."));
             var _somaav = (parseFloat(_av2));
 
+            var _ava = document.getElementById('txtAvaliacao2').value;
+            var _ava2 = Number(_ava.replace(/[^0-9.-]+/g, "."));
+            var _somaava = (parseFloat(_ava2));
+
             var _perc = document.getElementById('percTxt').value;
             var _perc2 = Number(_perc.replace(/[^0-9.-]+/g, "."));
             var _percvv = (parseFloat(_perc2));
@@ -986,13 +1014,21 @@
                 _somavv = _somavv * _percvv / 100;
             }
 
-            if (_soma > _somavv)
-                $("input[name='Valor_guia']").val((_somaa).toFixed(2).replace(".", ","));
+            if (_soma > _somavv) {
+                if (_tf == "") {
+                    $("input[name='Valor_guia']").val((_soma * 0.015).toFixed(2).replace(".", ","));
+                } else {
+                    $("input[name='Valor_guia']").val((_somaa).toFixed(2).replace(".", ","));
+                }
+            }
             else
                 $("input[name='Valor_guia']").val((_somavv * 0.015).toFixed(2).replace(".", ","));
 
             if (_somaav > _soma && _somaav > _somavv)
                 $("input[name='Valor_guia']").val((_somaav * 0.015).toFixed(2).replace(".", ","));
+
+            if (_somaava>_somaav && _somaava > _soma && _somaava > _somavv)
+                $("input[name='Valor_guia']").val((_somaava * 0.015).toFixed(2).replace(".", ","));
 
         }
 
