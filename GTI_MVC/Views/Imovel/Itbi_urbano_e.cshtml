@@ -498,10 +498,18 @@
                                     <label style="font-weight:normal;">Valor da transação:</label>
                                 </td>
                                 <td style="width:114px">
-                                    @if (Model.Valor_Transacao > 0) {
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Transacao.ToString("0.#0") })</label>
+                                    @if (Model.Tipo_Financiamento == 0) {
+                                        if (Model.Valor_Transacao > 0) {
+                                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Transacao.ToString("0.#0") })</label>
+                                        } else {
+                                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
+                                        }
                                     } else {
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
+                                        if (Model.Valor_Transacao > 0) {
+                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Transacao.ToString("0.#0"), @readonly = true })</label>
+                                        } else {
+                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
+                                        }
                                     }
                                 </td>
                                 <td style="width:82px">
@@ -527,7 +535,7 @@
                                     @if (Model.Valor_Avaliacao > 0) {
                                         <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { id = "txtAvaliacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao.ToString("0.#0") })</label>
                                     } else {
-                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { id = "txtAvaliacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao, new { id = "txtAvaliacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
                                     }
                                 </td>
                             </tr>
@@ -540,13 +548,13 @@
                                         if (Model.Valor_Avaliacao_atual > 0) {
                                             <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao_atual.ToString("0.#0") })</label>
                                         } else {
-                                            <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
+                                            <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
                                         }
                                     } else {
                                         if (Model.Valor_Avaliacao_atual > 0) {
                                             <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao_atual.ToString("0.#0"), @readonly = true })</label>
                                         } else {
-                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "", @readonly = true })</label>
+                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
                                         }
                                     }
                                 </td>
@@ -1012,16 +1020,21 @@
                 _somavv = _somavv * _percvv / 100;
             }
 
-            if (_soma > _somavv)
-                $("input[name='Valor_guia']").val((_somaa).toFixed(2).replace(".", ","));
+            if (_soma > _somavv) {
+                if (_tf == "") {
+                    $("input[name='Valor_guia']").val((_soma * 0.015).toFixed(2).replace(".", ","));
+                } else {
+                    $("input[name='Valor_guia']").val((_somaa).toFixed(2).replace(".", ","));
+                }
+            }
             else
                 $("input[name='Valor_guia']").val((_somavv * 0.015).toFixed(2).replace(".", ","));
 
             if (_somaav > _soma && _somaav > _somavv)
-                $("input[name='Valor_guia']").val((_somaav * 0.015).toFixed(2).replace(".", ","));
+                $("input[name='Valor_guia']").val((_somaav * 0.005).toFixed(2).replace(".", ","));
 
             if (_somaava>_somaav && _somaava > _soma && _somaava > _somavv)
-                $("input[name='Valor_guia']").val((_somaava * 0.015).toFixed(2).replace(".", ","));
+                $("input[name='Valor_guia']").val((_somaava * 0.005).toFixed(2).replace(".", ","));
 
         }
 
