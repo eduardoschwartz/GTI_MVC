@@ -111,6 +111,7 @@
                                 </td>
                             </tr>
                         </table>
+
                     </div>
 
                 </div>
@@ -533,6 +534,15 @@
                             </td>
                         </tr>
                     </table>
+                    <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Observação:</label><br />
+                    <table style="font-size:14px;width:640px">
+                        <tr style="height:30px">
+                            <td>
+                                <label style="font-weight:normal;padding-top:7px;color:blue">@Html.TextAreaFor(m => m.Descricao_Imovel, new { @maxlength = "5000", @cols = 86, @rows = 5, @style = "resize:none", @readonly = true })</label>
+                            </td>
+                        </tr>
+                    </table>
+
                 </div>
                 <div class="panel-heading">Dados da guia para pagamento </div>
                 <div class="panel-body">

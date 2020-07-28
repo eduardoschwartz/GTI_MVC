@@ -1768,9 +1768,9 @@ namespace GTI_Dal.Classes {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 List<Itbi_Lista> Lista = new List<Itbi_Lista>();
 
-                List<Itbi_main> Sql = (from t in db.Itbi_Main  orderby new { t.Itbi_Ano, t.Itbi_Numero } where t.Itbi_Numero>0 select t).ToList();
-                if (f)//se for fiscal pode consultar qualquer ITBI
-                    Sql.Where(m => m.Userid == user);
+               var Sql = (from t in db.Itbi_Main  orderby new { t.Itbi_Ano, t.Itbi_Numero } where t.Itbi_Numero>0 select t);
+                if (!f)//se for fiscal pode consultar qualquer ITBI
+                    Sql=Sql.Where(m => m.Userid == user);
 
                 foreach (Itbi_main reg in Sql) {
                     Itbi_Lista item = new Itbi_Lista() {

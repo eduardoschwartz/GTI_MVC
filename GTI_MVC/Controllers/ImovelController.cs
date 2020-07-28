@@ -2488,7 +2488,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_urbano_e")]
         [HttpGet]
-        public ActionResult Itbi_urbano_e(string p = "") {
+        public ActionResult Itbi_urbano_e(string p = "", string a="", int s = 0) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
@@ -2503,13 +2503,24 @@ namespace GTI_Mvc.Controllers {
             ViewBag.Lista_Financiamento = new SelectList(Lista_Financimento, "Codigo", "Descricao");
             ViewBag.ListaErro = new List<string>();
             ViewBag.Fiscal = Session["hashfiscalitbi"] == null ? "N" : Session["hashfiscalitbi"].ToString();
+            
+
+            if (a == "rc") {//remover comprador
+                Exception ex = imovelRepository.Excluir_Itbi_comprador(p, s);
+            }
+            if (a == "rv") {//remover vendedor
+                Exception ex = imovelRepository.Excluir_Itbi_vendedor(p, s);
+            }
+            if (a == "ra") {//remover anexo
+                Exception ex = imovelRepository.Excluir_Itbi_anexo(p, s);
+            }
             ItbiViewModel model = Retorna_Itbi_Gravado(p);
             return View("Itbi_urbano_e", model);
         }
 
         [Route("Itbi_rural_e")]
         [HttpGet]
-        public ActionResult Itbi_rural_e(string p = "") {
+        public ActionResult Itbi_rural_e(string p = "", string a = "", int s = 0) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
@@ -2524,7 +2535,17 @@ namespace GTI_Mvc.Controllers {
             ViewBag.Lista_Financiamento = new SelectList(Lista_Financimento, "Codigo", "Descricao");
             ViewBag.ListaErro = new List<string>();
             ViewBag.Fiscal = Session["hashfiscalitbi"] == null ? "N" : Session["hashfiscalitbi"].ToString();
+            if (a == "rc") {//remover comprador
+                Exception ex = imovelRepository.Excluir_Itbi_comprador(p, s);
+            }
+            if (a == "rv") {//remover vendedor
+                Exception ex = imovelRepository.Excluir_Itbi_vendedor(p, s);
+            }
+            if (a == "ra") {//remover anexo
+                Exception ex = imovelRepository.Excluir_Itbi_anexo(p, s);
+            }
             ItbiViewModel model = Retorna_Itbi_Gravado(p);
+
             return View("Itbi_rural_e", model);
         }
 
@@ -3145,7 +3166,7 @@ namespace GTI_Mvc.Controllers {
                 ReportDataSource rdsAct = new ReportDataSource("dsGuia_Itbi", Ds.Tables[0]);
                 ReportViewer viewer = new ReportViewer();
                 viewer.LocalReport.Refresh();
-                if (string.IsNullOrWhiteSpace( _itbi.Descricao_Imovel ))
+                if (_itbi.Imovel_codigo>0)
                     viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Boleto_ITBI.rdlc");
                 else
                     viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Boleto_ITBI_R.rdlc");

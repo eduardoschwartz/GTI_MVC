@@ -109,6 +109,7 @@
                                 </td>
                             </tr>
                         </table>
+
                     </div>
                 </div>
 
@@ -282,7 +283,7 @@
                                             @Html.HiddenFor(modelItem => item.Cpf_Cnpj)
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "rc", @s = item.Seq, @guid = Model.Guid })" title="Remover comprador"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                            <a href="@Url.Action("Itbi_urbano_e", "Imovel", new { @p=Model.Guid, @a = "rc", @s = item.Seq, @guid = Model.Guid })" title="Remover comprador"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                         </td>
                                     </tr>
                                 }
@@ -352,7 +353,7 @@
                                             @Html.HiddenFor(modelItem => item.Cpf_Cnpj)
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "rv", @s = item.Seq, @guid = Model.Guid })" title="Remover vendedor"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                            <a href="@Url.Action("Itbi_urbano_e", "Imovel", new { @p=Model.Guid, @a = "rv", @s = item.Seq, @guid = Model.Guid })" title="Remover vendedor"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                         </td>
                                     </tr>
                                 }
@@ -633,6 +634,15 @@
                                 </td>
                             </tr>
                         </table>
+                        <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Observação:</label><br />
+                        <table style="font-size:14px;width:640px">
+                            <tr style="height:30px">
+                                <td>
+                                    <label style="font-weight:normal;padding-top:7px">@Html.TextAreaFor(m => m.Descricao_Imovel, new { @maxlength = "5000", @cols = 86, @rows = 5, @style = "resize:none" })</label>
+                                </td>
+                            </tr>
+                        </table>
+
                     </div>
                     <div class="panel-heading">Valor da guia para pagamento </div>
                     <div class="panel-body">
