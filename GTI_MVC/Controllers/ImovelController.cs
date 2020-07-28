@@ -1359,7 +1359,7 @@ namespace GTI_Mvc.Controllers {
             if (_guid == "") {
                 ViewBag.Error = "* Ocorreu um erro ao gravar.";
             }
-
+            ViewBag.Fiscal = Session["hashfiscalitbi"].ToString();
             return View(model);
         }
 
