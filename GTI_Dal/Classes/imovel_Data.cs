@@ -453,6 +453,13 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Testada Retorna_Testada_principal(int Codigo,int Face) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Testada reg = (from t in db.Testada where t.Codreduzido == Codigo && t.Numface==Face   orderby t.Numface select t).FirstOrDefault();
+                return reg;
+            }
+        }
+
         public List<AreaStruct> Lista_Area(int Codigo) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var reg = (from a in db.Areas

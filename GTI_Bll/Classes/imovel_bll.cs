@@ -506,6 +506,13 @@ namespace GTI_Bll.Classes {
             return obj.Existe_Imovel_Cnpj(Codigo, Cnpj);
         }
 
+        public Testada Retorna_Testada_principal(int Codigo, int Face) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Testada_principal(Codigo, Face);
+        }
+
+
+        #region ITBI
         public List<Itbi_natureza> Lista_Itbi_Natureza() {
             Imovel_Data obj = new Imovel_Data(_connection);
             return obj.Lista_Itbi_Natureza();
@@ -516,7 +523,7 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Itbi_Financiamento();
         }
 
-        #region ITBI
+        
 
         public bool Existe_Itbi(string guid) {
             Imovel_Data obj = new Imovel_Data(_connection);

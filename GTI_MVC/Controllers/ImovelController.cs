@@ -504,7 +504,7 @@ namespace GTI_Mvc.Controllers {
                 Numero_Processo = _numero_processo,
                 Area = SomaArea
             };
-            if (ListaIsencao.Count > 0) {
+            if (ListaIsencao!=null &&   ListaIsencao.Count > 0) {
                 reg.Percentual_Isencao = (decimal)ListaIsencao[0].Percisencao;
                 reg.Data_Processo = (DateTime)ListaIsencao[0].dataprocesso;
             }
@@ -552,7 +552,7 @@ namespace GTI_Mvc.Controllers {
                 Numero = reg.Numero,
                 Area = SomaArea,
                 Numprocesso = reg.Numero_Processo ?? "",
-                Dataprocesso = reg.Data_Processo,
+                Dataprocesso = reg.Data_Processo==DateTime.MinValue?DateTime.Now:   reg.Data_Processo,
                 Percisencao = nPerc
             };
             reg.Numero_Ano = reg.Numero.ToString("00000") + "/" + reg.Ano;
@@ -708,7 +708,9 @@ namespace GTI_Mvc.Controllers {
 
             ImovelStruct _dados = imovelRepository.Dados_Imovel(_codigo);
             Laseriptu _calc = imovelRepository.Dados_IPTU(_codigo, DateTime.Now.Year);
-
+            Testada _testada = imovelRepository.Retorna_Testada_principal(_codigo,_dados.Seq);
+            
+            
             Imovel_Detalhe _reg = new Imovel_Detalhe() {
                 Codigo = _codigo,
                 Inscricao = _dados.Inscricao,
@@ -725,7 +727,7 @@ namespace GTI_Mvc.Controllers {
                 Lote_Original = _dados.LoteOriginal ?? "",
                 Area_Terreno = (decimal)_dados.Area_Terreno,
                 Fracao_Ideal = (decimal)_dados.FracaoIdeal,
-                Testada = (decimal)_calc.Testadaprinc,
+                Testada = (decimal)_testada.Areatestada,
                 Agrupamento = (decimal)_calc.Agrupamento,
                 Soma_Fatores = (decimal)(_calc.Fatorgle * _calc.Fatorped * _calc.Fatorpro * _calc.Fatorsit * _calc.Fatortop),
                 Area_Predial = (decimal)_calc.Areaconstrucao,
