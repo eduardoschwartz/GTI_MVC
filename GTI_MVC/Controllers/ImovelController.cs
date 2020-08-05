@@ -710,7 +710,6 @@ namespace GTI_Mvc.Controllers {
             Laseriptu _calc = imovelRepository.Dados_IPTU(_codigo, DateTime.Now.Year);
             Testada _testada = imovelRepository.Retorna_Testada_principal(_codigo,_dados.Seq);
             
-            
             Imovel_Detalhe _reg = new Imovel_Detalhe() {
                 Codigo = _codigo,
                 Inscricao = _dados.Inscricao,
@@ -3182,7 +3181,7 @@ namespace GTI_Mvc.Controllers {
                 Response.OutputStream.Write(bytes, 0, bytes.Length);
                 Response.Flush();
                 Response.End();
-
+                ViewBag.Erro = "M";
                 return RedirectToAction("Itbi_query");
             }
         }
@@ -3408,7 +3407,7 @@ namespace GTI_Mvc.Controllers {
             ficha.Cpf = Functions.RetornaNumero( model.Cpf_Cnpj);
             ficha.Numero_documento =  _novo_documento;
             ficha.Data_vencimento = _dataVencto;
-            ficha.Valor_documento = Convert.ToDecimal(model.Valor_guia_atual);
+            ficha.Valor_documento = Convert.ToDecimal(model.Valor_guia_atual==0?model.Valor_guia:model.Valor_guia_atual);
             ficha.Uf = model.Comprador.UF;
             ex = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
             ex = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
