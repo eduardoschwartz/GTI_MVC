@@ -177,7 +177,7 @@ namespace GTI_Bll.Classes {
 
         public int Existe_Cidadao_Cnpj(string Cnpj) {
             Cidadao_Data obj = new Cidadao_Data(_connection);
-            return obj.Existe_Cidadao_Cpf(Cnpj);
+            return obj.Existe_Cidadao_Cnpj(Cnpj);
         }
 
         public int Incluir_Cidadao_Itbi(Cidadao reg) {

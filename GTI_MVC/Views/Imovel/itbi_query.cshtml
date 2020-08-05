@@ -68,7 +68,7 @@
                             }
                             <a href="@Url.Action("Itbi_cancel", "Imovel", new { p = item.Guid, s = 4 })" onclick="return confirm('Cancelar este Itbi?')" })" title="Cancelar este ITBI"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
                             <a href="@Url.Action("Itbi_forum","Imovel" , new { p = item.Guid } )" title="Processo de análise do ITBI"> <img src="@Url.Content("~/images/observacao.png")"></a>
-                            <a href="@Url.Action("Itbi_guia","Imovel" , new { p = item.Guid })" onclick="return confirm('A guia estará liberada para pagamento somente 24 horas após a liberação em decorrência do registro bancário, você deseja emitir o boleto?')" })" title="Emitir guia para pagamento"> <img src="@Url.Content("~/images/barcode.gif")"></a>
+                            <a href="@Url.Action("Itbi_guia","Imovel" , new { p = item.Guid })" onclick="return confirm('Este boleto somente poderá ser quitado a partir do dia seguinte de sua liberação, você deseja emitir o boleto?')" })" title="Emitir guia para pagamento"> <img src="@Url.Content("~/images/barcode.gif")"></a>
                         </td>
                     </tr>
                 }
@@ -99,11 +99,6 @@
             <script type="text/javascript">
                 alert("Apenas Itbis que encontram-se em análise podem ser alterados!");
             </script>
-        } else { if (ViewBag.Erro == "M") {
-            <script type="text/javascript">
-                alert("A guia estará liberada para pagamento somente 24 horas após a liberação em decorrência do registro bancário");
-            </script>
-            }
-        }
+        } 
     }
 }

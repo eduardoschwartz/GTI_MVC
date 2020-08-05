@@ -2653,10 +2653,10 @@ namespace GTI_Mvc.Controllers {
 
                 int _codcidadao = 0;
                 if (_bcpf) {
-                    _codcidadao = cidadaoRepository.Existe_Cidadao_Cpf(_cpfCnpj.PadLeft(11, '0'));
+                    _codcidadao = cidadaoRepository.Existe_Cidadao_Cpf(Functions.RetornaNumero(_cpfCnpj).PadLeft(11, '0'));
                 } else {
                     if (_bcnpj) {
-                        _codcidadao = cidadaoRepository.Existe_Cidadao_Cnpj(_cpfCnpj.PadLeft(14, '0'));
+                        _codcidadao = cidadaoRepository.Existe_Cidadao_Cnpj(Functions.RetornaNumero( _cpfCnpj).PadLeft(14, '0'));
                     }
                 }
                 if (_codcidadao > 0) {
@@ -2717,10 +2717,10 @@ namespace GTI_Mvc.Controllers {
 
             int _codcidadao = 0;
             if (_bcpf) {
-                _codcidadao = cidadaoRepository.Existe_Cidadao_Cpf(_cpfCnpj.PadLeft(11, '0'));
+                _codcidadao = cidadaoRepository.Existe_Cidadao_Cpf(Functions.RetornaNumero(_cpfCnpj).PadLeft(11, '0'));
             } else {
                 if (_bcnpj) {
-                    _codcidadao = cidadaoRepository.Existe_Cidadao_Cnpj(_cpfCnpj.PadLeft(14, '0'));
+                    _codcidadao = cidadaoRepository.Existe_Cidadao_Cnpj(Functions.RetornaNumero(_cpfCnpj).PadLeft(14, '0'));
                 }
             }
             if (_codcidadao > 0) {
@@ -3352,13 +3352,13 @@ namespace GTI_Mvc.Controllers {
                 Numparcela = 1,
                 Codcomplemento = 0,
                 Codtributo = 84,
-                Valortributo = model.Valor_guia_atual
+                Valortributo = model.Valor_guia_atual == 0 ? model.Valor_guia : model.Valor_guia_atual
             };
             Exception ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
 
             //grava o documento
             Numdocumento regDoc = new Numdocumento();
-            regDoc.Valorguia = model.Valor_guia_atual;
+            regDoc.Valorguia = model.Valor_guia_atual == 0 ? model.Valor_guia : model.Valor_guia_atual;
             regDoc.Emissor = "Gti.Web/ITBI";
             regDoc.Datadocumento = DateTime.Now;
             regDoc.Registrado = false;
