@@ -51,6 +51,9 @@
                                 </td>
                                 <td style="color:blue">
                                     @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px;color:blue", @readonly = true })
+                                    <label>&nbsp;&nbsp;</label>
+                                    <button id="btnAtualizarImovel" type="submit" class="btn btn-danger"  name="action" value="btnAtualizarImovel" >Atualizar os dados do imóvel</button>
+
                                 </td>
                             </tr>
                         </table>
@@ -516,12 +519,16 @@
                                 <td style="width:82px">
                                     <label style="font-weight:normal;">Valor Venal:</label>
                                 </td>
-                                <td style="width:338px">
+                                <td style="width:114px;padding-left:3px">
                                     @if (Model.Valor_Venal > 0) {
                                         <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Venal.ToString("0.#0"), @readonly = true })</label>
                                     } else {
                                         <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
                                     }
+                                </td>
+                                <td style="width:224px">
+                                    <label style="font-weight:normal;">Utilizar o valor venal territorial:&nbsp;</label>
+                                    @Html.CheckBoxFor(m => m.Utilizar_VVT)
                                 </td>
                             </tr>
                         </table>

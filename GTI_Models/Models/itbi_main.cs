@@ -69,6 +69,7 @@ namespace GTI_Models.Models {
         public int Numero_Guia { get; set; }
         public DateTime? Data_Vencimento { get; set; }
         public bool Funcionario { get; set; }
+        public bool Utilizar_vvt { get; set; }
     }
 
     public class ItbiAnoNumero {

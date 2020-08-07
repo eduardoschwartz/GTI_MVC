@@ -32,6 +32,7 @@ namespace GTI_Mvc.ViewModels {
         public decimal Valor_Avaliacao { get; set; }
         public decimal Valor_Avaliacao_atual { get; set; }
         public decimal Valor_Venal { get; set; }
+        public decimal Valor_Venal_Territorial { get; set; }
         public decimal Recursos_proprios_valor { get; set; }
         public decimal Recursos_proprios_aliq { get; set; }
         public decimal Recursos_proprios_atual { get; set; }
@@ -66,6 +67,7 @@ namespace GTI_Mvc.ViewModels {
         public int Numero_Guia { get; set; }
         public DateTime? Data_Vencimento { get; set; }
         public bool Funcionario { get; set; }
+        public bool Utilizar_VVT { get; set; }
 
 
         public ItbiViewModel() {

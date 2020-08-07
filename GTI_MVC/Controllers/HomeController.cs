@@ -164,27 +164,44 @@ namespace GTI_Mvc.Controllers {
         [Route("Login_update")]
         [HttpPost]
         public ViewResult Login_update(LoginViewModel model) {
+            int _id=0;
             Sistema_bll sistema_Class = new Sistema_bll("GTIconnection");
+            string sLogin = Session["hashfname"].ToString();
             TAcessoFunction tacesso_Class = new TAcessoFunction();
-            //string _oldPwd = tacesso_Class.DecryptGTI(sistema_Class.Retorna_User_Password(Functions.pUserLoginName));
-            string _oldPwd = tacesso_Class.DecryptGTI(sistema_Class.Retorna_User_Password(Session["hashlname"].ToString()));
+            string _oldPwd = "";
+            if (Session["hashfunc"].ToString() == "S")
+                _oldPwd = tacesso_Class.DecryptGTI(sistema_Class.Retorna_User_Password(Session["hashlname"].ToString()));
+            else {
+                Usuario_web user = sistema_Class.Retorna_Usuario_Web(Session["hashlname"].ToString());
+                _id = user.Id;
+                _oldPwd = Functions.Decrypt(user.Senha);
+            }
+
+
             if (model.Senha != _oldPwd) {
                 ViewBag.Result = "Senha atual não confere!";
             } else {
-
-                Usuario reg = new Usuario {
-                    //Nomelogin = Functions.pUserLoginName,
-                    Nomelogin = Session["hashlname"].ToString(),
-                    Senha = tacesso_Class.Encrypt128(model.Senha2)
-                };
-                Exception ex = sistema_Class.Alterar_Senha(reg);
-                if (ex != null) {
-                    ViewBag.Result = "Erro, senha não alterada";
+                if (Session["hashfunc"].ToString() == "N") {
+                    Exception ex = sistema_Class.Alterar_Usuario_Web_Senha(_id, Functions.Encrypt( model.Senha2));
+                    if (ex != null) {
+                        ViewBag.Result = "Erro, senha não alterada";
+                    } else {
+                        ViewBag.Result = "Sua senha foi alterada, por favor efetue login novamente";
+                        return View("sysMenu");
+                    }
                 } else {
-                    ViewBag.Result = "Sua senha foi alterada, por favor efetue login novamente";
+                    Usuario reg = new Usuario {
+                        Nomelogin = Session["hashlname"].ToString(),
+                        Senha = tacesso_Class.Encrypt128(model.Senha2)
+                    };
+                    Exception ex = sistema_Class.Alterar_Senha(reg);
+                    if (ex != null) {
+                        ViewBag.Result = "Erro, senha não alterada";
+                    } else {
+                        ViewBag.Result = "Sua senha foi alterada, por favor efetue login novamente";
+                    }
                 }
             }
-
             return View(model);
         }
 

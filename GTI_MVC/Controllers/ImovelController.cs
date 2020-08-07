@@ -1141,6 +1141,7 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
+
             if (action == "btnCodigoCancel") {
                 if (model.Guid != null) {
                     Exception ex = imovelRepository.Excluir_Itbi(model.Guid);
@@ -1473,6 +1474,18 @@ namespace GTI_Mvc.Controllers {
                     editorViewModel.Seq = model.Lista_Vendedor.Count;
                     if (editorViewModel.Cpf_Cnpj != null)
                         model.Lista_Vendedor.Add(editorViewModel);
+                }
+            }
+
+            if (action == "btnAtualizarImovel") {
+                if (model.Guid != null) {
+                    ImovelStruct imovel = imovelRepository.Dados_Imovel(Convert.ToInt32(model.Codigo));
+                    model.Dados_Imovel = imovel;
+                    List<ProprietarioStruct> ListaProp = imovelRepository.Lista_Proprietario(Convert.ToInt32(model.Codigo), true);
+                    if (ListaProp.Count > 0) {
+                        model.Dados_Imovel.Proprietario_Codigo = ListaProp[0].Codigo;
+                        model.Dados_Imovel.Proprietario_Nome = ListaProp[0].Nome;
+                    }
                 }
             }
 
@@ -2650,6 +2663,7 @@ namespace GTI_Mvc.Controllers {
                 Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
                 SpCalculo _calculo = tributarioRepository.Calculo_IPTU(Codigo, DateTime.Now.Year);
                 model.Valor_Venal = _calculo.Vvi;
+                model.Valor_Venal_Territorial = _calculo.Vvt;
 
                 int _codcidadao = 0;
                 if (_bcpf) {
@@ -2849,6 +2863,7 @@ namespace GTI_Mvc.Controllers {
                 regMain.Valor_guia_atual =  model.Valor_guia_atual ;
                 regMain.Valor_Transacao = model.Valor_Transacao;
                 regMain.Valor_Venal = model.Valor_Venal;
+                regMain.Utilizar_vvt = model.Utilizar_VVT;
 
                 ex = imovelRepository.Alterar_Itbi_Main(regMain);
             }

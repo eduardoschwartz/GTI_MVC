@@ -458,9 +458,14 @@
                             <td style="width:82px">
                                 <label style="font-weight:normal;">Valor Venal:</label>
                             </td>
-                            <td style="width:338px">
+                            <td style="width:114px;padding-left:3px">
                                 <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Venal.ToString("0.#0"), @readonly = true })</label>
                             </td>
+                            <td style="width:224px">
+                                <label style="font-weight:normal;">Utilizar o valor venal territorial:&nbsp;</label>
+                                @Html.CheckBoxFor(m => m.Utilizar_VVT,new {  @readonly = true })
+                            </td>
+
                         </tr>
                     </table>
 

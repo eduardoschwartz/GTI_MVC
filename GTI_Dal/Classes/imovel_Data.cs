@@ -1482,6 +1482,7 @@ namespace GTI_Dal.Classes {
                 i.Receita_Federal = Reg.Receita_Federal;
                 i.Descricao_Imovel = Reg.Descricao_Imovel;
                 i.Userid = Reg.Userid;
+                i.Utilizar_vvt = Reg.Utilizar_vvt;
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
