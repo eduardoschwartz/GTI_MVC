@@ -520,16 +520,26 @@
                                     <label style="font-weight:normal;">Valor Venal:</label>
                                 </td>
                                 <td style="width:114px;padding-left:3px">
-                                    @if (Model.Valor_Venal > 0) {
-                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Venal.ToString("0.#0"), @readonly = true })</label>
+                                    @if (Model.Utilizar_VVT) {
+                                        if (Model.Valor_Venal_Territorial > 0) {
+                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal_Territorial, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Venal_Territorial.ToString("0.#0"), @readonly = true })</label>
+                                        } else {
+                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal_Territorial, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
+                                        }
                                     } else {
-                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
+                                        if (Model.Valor_Venal > 0) {
+                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Venal.ToString("0.#0"), @readonly = true })</label>
+                                        } else {
+                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
+                                        }
                                     }
                                 </td>
                                 <td style="width:224px">
                                     <label style="font-weight:normal;">Utilizar o valor venal territorial:&nbsp;</label>
-                                    @Html.CheckBoxFor(m => m.Utilizar_VVT)
+                                    @Html.CheckBoxFor(m => m.Utilizar_VVT, new { id = "chkValorVenal" ,@Value=Model.Utilizar_VVT})
+                                    @Html.HiddenFor(m=>m.Utilizar_VVT)
                                 </td>
+
                             </tr>
                         </table>
 
@@ -1160,6 +1170,9 @@
                         $("#MainForm").submit();
                     }
                 }
+            });
+            $('#chkValorVenal').click(function () {
+                $("#MainForm").submit();
             });
 
             var model = @Html.Raw(Json.Encode(Model.Lista_Erro));

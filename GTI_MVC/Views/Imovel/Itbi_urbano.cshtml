@@ -523,7 +523,7 @@
                                 </td>
                                 <td style="width:114px;padding-left:3px">
                                     @if (Model.Utilizar_VVT) {
-                                        if (Model.Valor_Venal > 0) {
+                                        if (Model.Valor_Venal_Territorial > 0) {
                                             <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal_Territorial, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Venal_Territorial.ToString("0.#0"), @readonly = true })</label>
                                         } else {
                                             <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Venal_Territorial, new { id = "txtValorVenal", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>

@@ -1714,6 +1714,7 @@ namespace GTI_Mvc.Controllers {
 
             return View(model);
         }
+       
         [Route("Itbi_ok")]
         [HttpGet]
         public ActionResult Itbi_ok() {
@@ -2484,6 +2485,7 @@ namespace GTI_Mvc.Controllers {
             return View(model);
         }
 
+
         [Route("Itbi_rural_q")]
         [HttpPost]
         public ActionResult Itbi_rural_q(ItbiViewModel model, string button) {
@@ -2862,7 +2864,7 @@ namespace GTI_Mvc.Controllers {
                 regMain.Valor_guia = model.Valor_guia;
                 regMain.Valor_guia_atual =  model.Valor_guia_atual ;
                 regMain.Valor_Transacao = model.Valor_Transacao;
-                regMain.Valor_Venal = model.Valor_Venal;
+                regMain.Valor_Venal =  model.Utilizar_VVT?model.Valor_Venal_Territorial:  model.Valor_Venal;
                 regMain.Utilizar_vvt = model.Utilizar_VVT;
 
                 ex = imovelRepository.Alterar_Itbi_Main(regMain);
@@ -2948,7 +2950,8 @@ namespace GTI_Mvc.Controllers {
                 Valor_guia = regMain.Valor_guia,
                 Valor_guia_atual = regMain.Valor_guia_atual,
                 Data_Vencimento = regMain.Data_Vencimento,
-                Numero_Guia = regMain.Numero_Guia
+                Numero_Guia = regMain.Numero_Guia,
+                Utilizar_VVT=regMain.Utilizar_vvt
             };
             itbi.Situacao_Itbi_Nome = imovelRepository.Retorna_Itbi_Situacao(regMain.Situacao_itbi);
             itbi.Natureza_Nome = imovelRepository.Retorna_Itbi_Natureza_nome(regMain.Natureza_Codigo);
@@ -3044,7 +3047,7 @@ namespace GTI_Mvc.Controllers {
             if (model.Valor_Transacao == 0) {
                 Lista.Add("Valor da transação não informado");
             }
-            if (model.Valor_Venal == 0) {
+            if (model.Valor_Venal == 0 && model.Valor_Venal_Territorial==0) {
                 Lista.Add("Valor venal/ITR não informado");
             }
             if (!Functions.IsDate(model.Data_Transacao)) {
