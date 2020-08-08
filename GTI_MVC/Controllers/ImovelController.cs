@@ -967,19 +967,20 @@ namespace GTI_Mvc.Controllers {
 
         public ImovelDetailsViewModel HomeLoad(int Codigo) {
             ImovelDetailsViewModel model = new ImovelDetailsViewModel();
-            Imovel_bll imovel_Class = new Imovel_bll("GTIconnection");
-            model.ImovelStruct = imovel_Class.Dados_Imovel(Codigo);
-            model.Lista_Proprietario = imovel_Class.Lista_Proprietario(Codigo, false);
-            model.Lista_Areas = imovel_Class.Lista_Area(Codigo);
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            model.ImovelStruct = imovelRepository.Dados_Imovel(Codigo);
+            model.Lista_Proprietario = imovelRepository.Lista_Proprietario(Codigo, false);
+            model.Lista_Areas = imovelRepository.Lista_Area(Codigo);
+            model.Lista_Testada = imovelRepository.Lista_Testada(Codigo);
             if (model.ImovelStruct.EE_TipoEndereco != null) {
                 short _tipoEE = (short)model.ImovelStruct.EE_TipoEndereco;
                 if (_tipoEE == 0)
-                    model.Endereco_Entrega = imovel_Class.Dados_Endereco(Codigo, TipoEndereco.Local);
+                    model.Endereco_Entrega = imovelRepository.Dados_Endereco(Codigo, TipoEndereco.Local);
                 else {
                     if (_tipoEE == 1)
-                        model.Endereco_Entrega = imovel_Class.Dados_Endereco(Codigo, TipoEndereco.Proprietario);
+                        model.Endereco_Entrega = imovelRepository.Dados_Endereco(Codigo, TipoEndereco.Proprietario);
                     else
-                        model.Endereco_Entrega = imovel_Class.Dados_Endereco(Codigo, TipoEndereco.Entrega);
+                        model.Endereco_Entrega = imovelRepository.Dados_Endereco(Codigo, TipoEndereco.Entrega);
                 }
             }
             return model;

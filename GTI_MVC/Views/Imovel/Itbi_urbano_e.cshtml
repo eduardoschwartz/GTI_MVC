@@ -536,7 +536,7 @@
                                 </td>
                                 <td style="width:224px">
                                     <label style="font-weight:normal;">Utilizar o valor venal territorial:&nbsp;</label>
-                                    @Html.EditorFor(m => m.Utilizar_VVT, new { id = "chkValorVenal" , @onchange = "StateChange()" })
+                                    @Html.EditorFor(m => m.Utilizar_VVT, new { htmlAttributes = new { @onclick = "StateChange()" } })
                                 </td>
 
                             </tr>

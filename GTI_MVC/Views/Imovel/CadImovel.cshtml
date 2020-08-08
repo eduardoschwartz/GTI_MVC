@@ -5,6 +5,9 @@
     ViewBag.Title = "Cadastro de imóvel";
 }
 
+
+
+
 <style>
     .textBoxBlue {
         height: 25px;
@@ -15,6 +18,7 @@
         font-size: 14px;
         box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
     }
+
     .actionlink:hover {
         color: darkgreen;
     }
@@ -27,7 +31,8 @@
 <label style="color: brown;font-size: 16px;font-style: italic">Cadastro de imóvel</label>
 <br />
 @using (Html.BeginForm("CadImovel", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
-    <label style="font-weight:normal">Código Reduzido:&nbsp;&nbsp;</label>@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§', event)" })
+    <label style="font-weight:normal">Código Reduzido:&nbsp;&nbsp;</label>
+    @Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§', event)" })
     <label>&nbsp;&nbsp;</label>
     <button type="submit" class="btn btn-primary"> Consultar</button>
     <br />
@@ -43,6 +48,48 @@
             <td>Condomínio:&nbsp; <span style="font-weight:bold">@Model.ImovelStruct.NomeCondominio</span> </td>
         </tr>
     </table>
+    <table style="font-size:12px">
+        <tr>
+            <td style="font-weight:normal;width:165px">
+                Imóvel possui imunidade:
+            </td>
+            <td style="font-weight:bold">
+                @if (Model.ImovelStruct.Imunidade == true) {
+                    @Html.Raw("Sim")
+                } else {
+                    @Html.Raw("Não")
+                }
+            </td>
+        </tr>
+        <tr>
+            <td style="font-weight:normal;width:165px">
+                Imóvel isento da CIP:
+            </td>
+            <td style="font-weight:bold">
+                @if (Model.ImovelStruct.ResideImovel == true) {
+                    @Html.Raw("Sim")
+                } else {
+                    @Html.Raw("Não")
+                }
+            </td>
+        </tr>
+        <tr>
+            <td style="font-weight:normal;width:165px">
+                Imóvel conjuado:
+            </td>
+            <td style="font-weight:bold">
+                @if (Model.ImovelStruct.Conjugado == true) {
+                    @Html.Raw("Sim")
+                } else {
+                    @Html.Raw("Não")
+                }
+            </td>
+        </tr>
+
+    </table>
+
+
+
     <br />
     <label style="font-weight:normal;font-style:italic;text-decoration:underline;color:indigo">Proprietário(s)</label>
     <br />
@@ -140,45 +187,81 @@
     </table>
 
     <br />
-    <label style="font-weight:normal;font-style:italic;text-decoration:underline;color:indigo">Áreas Construidas</label>
+    <label style="font-weight:normal;font-style:italic;text-decoration:underline;color:indigo">Testadas do imóvel</label>
     <br />
-    <table class="table table-condensed" style="font-size:12px;width:500px">
+    <table class="table table-condensed" style="font-size:12px;width:90px">
         <thead style="background-color:darkslateblue;color:whitesmoke">
             <tr style="height:10px">
-                <td style="text-align:center">Seq</td>
-                <td>Uso</td>
-                <td>Tipo</td>
-                <td>Categoria</td>
-                <td style="text-align:right">Área m²</td>
+                <td style="width:20px;text-align:right">Face</td>
+                <td style="width:70px;text-align:left">Metros</td>
             </tr>
         </thead>
-        @foreach (GTI_Models.Models.AreaStruct area in Model.Lista_Areas) {
+        @foreach (GTI_Models.Models.Testada testada in Model.Lista_Testada) {
             @Html.Raw(" <tr>")
-            @Html.Raw("<td style=" + "text-align:center" + " >")
-            @area.Seq ;
+            @Html.Raw("<td style=" + "width:20px;text-align:right" + " >")
+            @testada.Numface.ToString("00") ;
             @Html.Raw("</td>")
-            @Html.Raw(" <td>")
-            @area.Uso_Nome ;
-            @Html.Raw("</td>")
-            @Html.Raw(" <td>")
-            @area.Tipo_Nome ;
-            @Html.Raw("</td>")
-            @Html.Raw(" <td>")
-            @area.Categoria_Nome ;
-            @Html.Raw("</td>")
-            @Html.Raw("<td style=" + "text-align:right" + " >")
-            @area.Area ;
+            @Html.Raw(" <td style=" + "width:70px;text-align:right" + " >")
+            @testada.Areatestada.ToString("#0.00") ;
             @Html.Raw("</td>")
             @Html.Raw("</tr>")
         }
     </table>
 
+
+    <br />
+    <label style="font-weight:normal;font-style:italic;text-decoration:underline;color:indigo">Áreas Construidas</label>
+    <br />
+    <table class="table table-condensed" style="font-size:12px;width:420px">
+        <thead style="background-color:darkslateblue;color:whitesmoke">
+            <tr style="height:10px">
+                <td style="width:20px;text-align:right">Seq</td>
+                <td style="width:50px;text-align:left">Uso</td>
+                <td style="width:50px;text-align:left">Tipo</td>
+                <td style="width:50px;text-align:left">Categoria</td>
+                <td style="width:200px;text-align:right">Área m²</td>
+                <td style="width:50px;text-align:center">Data</td>
+                <td style="width:40px;text-align:right">Pav.</td>
+            </tr>
+        </thead>
+        @foreach (GTI_Models.Models.AreaStruct area in Model.Lista_Areas) {
+            @Html.Raw(" <tr>")
+            @Html.Raw("<td style=" + "width:20px;text-align:right" + " >")
+            @area.Seq ;
+            @Html.Raw("</td>")
+            @Html.Raw(" <td style=" + "width:50px;text-align:left" + " >")
+            @area.Uso_Nome ;
+            @Html.Raw("</td>")
+            @Html.Raw(" <td style=" + "width:50px;text-align:left" + " >")
+            @area.Tipo_Nome ;
+            @Html.Raw("</td>")
+            @Html.Raw(" <td style=" + "width:50px;text-align:left" + " >")
+            @area.Categoria_Nome ;
+            @Html.Raw("</td>")
+            @Html.Raw("<td style=" + "width:160px;text-align:right" + " >")
+            @area.Area ;
+            @Html.Raw("</td>")
+            @Html.Raw("<td style=" + "width:50px;text-align:center" + " >")
+            @Convert.ToDateTime(area.Data_Aprovacao).ToString("dd/MM/yyyy");
+            @Html.Raw("</td>")
+            @Html.Raw("<td style=" + "width:40px;text-align:right" + " >")
+            @area.Pavimentos;
+            @Html.Raw("</td>")
+            @Html.Raw("</tr>")
+        }
+    </table>
+
+
 }
 
 <br />
-<div class="form-group row">
-    <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
-</div>
+
+
+
+
+@*<div class="form-group row">*@
+<label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+@*</div>*@
 <br />
 @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 
