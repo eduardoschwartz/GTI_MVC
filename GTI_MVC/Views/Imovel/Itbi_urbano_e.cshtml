@@ -536,8 +536,7 @@
                                 </td>
                                 <td style="width:224px">
                                     <label style="font-weight:normal;">Utilizar o valor venal territorial:&nbsp;</label>
-                                    @Html.CheckBoxFor(m => m.Utilizar_VVT, new { id = "chkValorVenal" ,@Value=Model.Utilizar_VVT})
-                                    @Html.HiddenFor(m=>m.Utilizar_VVT)
+                                    @Html.EditorFor(m => m.Utilizar_VVT, new { id = "chkValorVenal" , @onchange = "StateChange()" })
                                 </td>
 
                             </tr>
@@ -563,18 +562,18 @@
                                 </td>
                                 <td style="width:100px;padding-top:2px">
                                     @if (ViewBag.Fiscal == "S") {
-                                        if (Model.Valor_Avaliacao_atual > 0) {
+                                                    if (Model.Valor_Avaliacao_atual > 0) {
                                             <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao_atual.ToString("0.#0") })</label>
-                                        } else {
+                                                    } else {
                                             <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
                                         }
-                                    } else {
-                                        if (Model.Valor_Avaliacao_atual > 0) {
+                                                } else {
+                                                    if (Model.Valor_Avaliacao_atual > 0) {
                                             <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao_atual.ToString("0.#0"), @readonly = true })</label>
-                                        } else {
+                                                    } else {
                                             <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
                                         }
-                                    }
+                                                }
                                 </td>
                             </tr>
                         </table>
@@ -587,7 +586,7 @@
                                 </td>
                                 <td style="width:500px">
                                     @foreach (var tipo in Model.Lista_Instrumento) {
-                                        @Html.RadioButtonFor(model => model.Tipo_Instrumento, tipo) <span>&nbsp;</span>@tipo<span>&nbsp;&nbsp;</span>
+                                                    @Html.RadioButtonFor(model => model.Tipo_Instrumento, tipo) <span>&nbsp;</span>@tipo<span>&nbsp;&nbsp;</span>
                                     }
                                 </td>
                             </tr>
@@ -599,11 +598,11 @@
                                 </td>
                                 <td style="width:136px">
                                     @if (Model.Totalidade == "Sim" || Model.Totalidade == null) {
-                                        @Html.RadioButtonFor(model => model.Totalidade, "Sim", new { @id = "totalChk", @onclick = "radioCheck()", @checked = true })<label style="font-weight:normal">&nbsp;Sim&nbsp;&nbsp;</label>
-                                        @Html.RadioButtonFor(model => model.Totalidade, "Não", new { @id = "totalChk", @onclick = "radioCheck()" })<label style="font-weight:normal">&nbsp;Não&nbsp;&nbsp;</label>
+                                                    @Html.RadioButtonFor(model => model.Totalidade, "Sim", new { @id = "totalChk", @onclick = "radioCheck()", @checked = true })<label style="font-weight:normal">&nbsp;Sim&nbsp;&nbsp;</label>
+                                                    @Html.RadioButtonFor(model => model.Totalidade, "Não", new { @id = "totalChk", @onclick = "radioCheck()" })<label style="font-weight:normal">&nbsp;Não&nbsp;&nbsp;</label>
                                     } else {
-                                        @Html.RadioButtonFor(model => model.Totalidade, "Sim", new { @id = "totalChk", @onclick = "radioCheck()" })<label style="font-weight:normal">&nbsp;Sim&nbsp;&nbsp;</label>
-                                        @Html.RadioButtonFor(model => model.Totalidade, "Não", new { @id = "totalChk", @onclick = "radioCheck()", @checked = true })<label style="font-weight:normal">&nbsp;Não&nbsp;&nbsp;</label>
+                                                    @Html.RadioButtonFor(model => model.Totalidade, "Sim", new { @id = "totalChk", @onclick = "radioCheck()" })<label style="font-weight:normal">&nbsp;Sim&nbsp;&nbsp;</label>
+                                                    @Html.RadioButtonFor(model => model.Totalidade, "Não", new { @id = "totalChk", @onclick = "radioCheck()", @checked = true })<label style="font-weight:normal">&nbsp;Não&nbsp;&nbsp;</label>
                                     }
 
                                 </td>
@@ -616,18 +615,18 @@
                                 </td>
                                 <td style="width:101px;padding-top:5px">
                                     @if (Model.Totalidade == "Sim" || Model.Totalidade == null) {
-                                        if (Model.Totalidade_Perc > 0) {
+                                                    if (Model.Totalidade_Perc > 0) {
                                             <label style="font-weight:normal;display:none" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc.ToString("0.#0") })</label>
-                                        } else {
+                                                    } else {
                                             <label style="font-weight:normal;display:none" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                         }
-                                    } else {
-                                        if (Model.Totalidade_Perc > 0) {
+                                                } else {
+                                                    if (Model.Totalidade_Perc > 0) {
                                             <label style="font-weight:normal;display:block" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc.ToString("#.#0") })</label>
-                                        } else {
+                                                    } else {
                                             <label style="font-weight:normal;display:block" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                         }
-                                    }
+                                                }
                                 </td>
                             </tr>
                         </table>
@@ -1171,9 +1170,9 @@
                     }
                 }
             });
-            $('#chkValorVenal').click(function () {
-                $("#MainForm").submit();
-            });
+            //$('#chkValorVenal').click(function () {
+            //    $("#MainForm").submit();
+            //});
 
             var model = @Html.Raw(Json.Encode(Model.Lista_Erro));
             if (model.length >0) {
@@ -1201,6 +1200,10 @@
                 document.getElementById('percLabel').style.display = 'none';
                 document.getElementById('percLabel2').style.display = 'none';
             }
+        }
+
+        function StateChange() {
+            document.getElementById('MainForm').submit();
         }
 
         $(function () {$("#fileUpload").change(function () {
