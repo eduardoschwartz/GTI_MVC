@@ -28,6 +28,7 @@ namespace GTI_Mvc.ViewModels {
         public string CaptchaCode { get; set; }
         public string Cadastro { get; set; } = "Imóvel";
         public string[] Tipo_Cadastro = new[] { "Imóvel", "Empresa", "Cidadão" };
+        public List<Contribuinte_Header_Struct> Lista_Header  { get; set; }
     }
 
 }

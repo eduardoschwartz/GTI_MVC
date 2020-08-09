@@ -220,10 +220,10 @@ namespace GTI_Mvc.Controllers {
             string cnpj = model.CnpjValue == null ? "" : Functions.RetornaNumero(model.CnpjValue);
             string name =  model.Nome==null?"":  model.Nome.Trim();
 
-
             Sistema_bll sistemaClass = new Sistema_bll("GTIconnection");
-            List<Contribuinte_Header_Struct> ListaCodigo = sistemaClass.CodigoHeader(tipo, cpf, cnpj, name);
-
+            model.Lista_Header=sistemaClass.CodigoHeader(tipo, cpf, cnpj, name);
+            if (model.Lista_Header.Count == 0)
+                ViewBag.Erro = "Nenhum contribuinte localizado.";
             return View( model);
         }
 

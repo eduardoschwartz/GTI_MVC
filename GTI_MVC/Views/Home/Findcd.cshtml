@@ -79,15 +79,33 @@
             <br />
         </div>
         <br />
-        if (@Model.Inscricao != null) {
-            <label style="color: brown;font-size: 14px;font-weight: normal">Resultado</label>
-            <br />
-
+        if (@Model.Lista_Header != null && @Model.Lista_Header.Count > 0) {
+            <table class="table table-condensed" style="font-size:12px;width:400px">
+                <thead style="background-color:darkslateblue;color:whitesmoke">
+                    <tr style="height:10px">
+                        <td style="width:30px;text-align:right">Código</td>
+                        <td style="width:250px;text-align:left">Nome/Razão Social</td>
+                        <td style="width:120px;text-align:left">Cpf/Cnpj</td>
+                    </tr>
+                </thead>
+                @foreach (GTI_Models.Models.Contribuinte_Header_Struct item in Model.Lista_Header) {
+                    @Html.Raw(" <tr>")
+                    @Html.Raw("<td style=" + "width:30px;text-align:right" + " >")
+                    @item.Codigo.ToString("000000") ;
+                    @Html.Raw("</td>")
+                    @Html.Raw(" <td style=" + "width:250px;text-align:left" + " >")
+                    @item.Nome;
+                    @Html.Raw("</td>")
+                    @Html.Raw(" <td style=" + "width:120;text-align:left" + " >")
+                    @item.Cpf_cnpj;
+                    @Html.Raw("</td>")
+                    @Html.Raw("</tr>")
+                }
+            </table>
         }
 
 
-
-        <label style="font-weight:normal;color:red;padding-left:1px" id="errorLabel">@ViewBag.Result</label>
+        <label style="font-weight:normal;color:red;padding-left:1px" id="errorLabel">@ViewBag.Erro</label>
 
     }
 
