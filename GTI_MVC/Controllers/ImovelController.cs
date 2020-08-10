@@ -1486,6 +1486,7 @@ namespace GTI_Mvc.Controllers {
                     if (ListaProp.Count > 0) {
                         model.Dados_Imovel.Proprietario_Codigo = ListaProp[0].Codigo;
                         model.Dados_Imovel.Proprietario_Nome = ListaProp[0].Nome;
+                        Itbi_Save(model);
                     }
                 }
             }
@@ -2814,6 +2815,8 @@ namespace GTI_Mvc.Controllers {
                 Itbi_main regMain = imovelRepository.Retorna_Itbi_Main(_guid);
                 if (Functions.IsDate(model.Data_Transacao))
                     regMain.Data_Transacao = model.Data_Transacao;
+                regMain.Proprietario_Codigo =(int) model.Dados_Imovel.Proprietario_Codigo;
+                regMain.Proprietario_Nome = model.Dados_Imovel.Proprietario_Nome;
                 regMain.Tipo_Instrumento = model.Tipo_Instrumento;
                 regMain.Valor_Venal = model.Valor_Venal;
                 regMain.Valor_Avaliacao = model.Valor_Avaliacao;
