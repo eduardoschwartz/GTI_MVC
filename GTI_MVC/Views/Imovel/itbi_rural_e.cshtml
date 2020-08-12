@@ -63,7 +63,7 @@
 
                         </table>
 
-                        <table style="font-size:13px;width:640px">
+                        @*<table style="font-size:13px;width:640px">
                             <tr style="height:30px">
                                 <td style="width:154px">
                                     <label style="font-weight:normal;padding-top:7px">Proprietário principal:</label>
@@ -72,7 +72,8 @@
                                     <label style="font-weight:normal;padding-top:7px">@Html.TextBoxFor(m => m.Dados_Imovel.Proprietario_Nome, new { style = "width:470px;height:25px" })</label>
                                 </td>
                             </tr>
-                        </table>
+                        </table>*@
+                        @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Nome)
                         <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Dados do Imóvel:</label><br />
 
                         <table style="font-size:14px;width:640px">

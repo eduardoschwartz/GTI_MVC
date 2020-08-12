@@ -3477,7 +3477,6 @@
                           </Style>
                         </Textbox>
                         <ColSpan>7</ColSpan>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />
@@ -5330,6 +5329,9 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox84</rd:DefaultName>
+                          <Visibility>
+                            <Hidden>true</Hidden>
+                          </Visibility>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -5362,6 +5364,9 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>proprietario_nome</rd:DefaultName>
+                          <Visibility>
+                            <Hidden>true</Hidden>
+                          </Visibility>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -5373,6 +5378,7 @@
                           </Style>
                         </Textbox>
                         <ColSpan>7</ColSpan>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />

@@ -61,14 +61,15 @@
                     <div style="padding-left:7px">
 
                         <table style="font-size:14px;width:640px">
-                            <tr style="height:30px">
+                            @*<tr style="height:30px">
                                 <td style="width:154px">
                                     <label style="font-weight:normal;padding-top:2px">Proprietário principal:</label>
                                 </td>
                                 <td>
                                     <label style="font-weight:normal;color:blue;padding-top:2px">@Html.TextBoxFor(m => m.Dados_Imovel.Proprietario_Nome, new { @readonly = true, style = "width:470px;height:25px" })</label>
                                 </td>
-                            </tr>
+                            </tr>*@
+                            @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Nome)
                             <tr style="height:30px">
                                 <td style="width:154px">
                                     <label style="font-weight:normal">Inscrição cadastral:</label>
