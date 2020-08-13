@@ -442,20 +442,21 @@ namespace GTI_Mvc.Controllers {
             cert.Numero_Ano = _numero_certidao.ToString("00000") + "/" + _ano_certidao.ToString();
             if (_tipo_Certidao == RetornoCertidaoDebito.Negativa) {
                 cert.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "-IN";
-                cert.Tributo = "Não consta débito apurado contra o(a) mesmo(a).";
+//                cert.Tributo = "Não consta débito apurado contra o(a) mesmo(a).";
                 _tipo_certidao = "Negativa";
                 cert.Nao = "NÃO";
             } else {
                 if (_tipo_Certidao == RetornoCertidaoDebito.Positiva) {
                     cert.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "-IP";
-                    cert.Tributo = "Consta débito apurado contra o(a) mesmo(a) com referência a: " + _tributo;
+                    //                    cert.Tributo = "Consta débito apurado contra o(a) mesmo(a) com referência a: " + _tributo;
+                    cert.Tributo =  _tributo;
                     cert.Nao = "";
                     _tipo_certidao = "Positiva";
                     _reportName = "CertidaoDebitoDocumentoP.rpt";
                 } else {
                     if (_tipo_Certidao == RetornoCertidaoDebito.NegativaPositiva) {
                         cert.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "-IS";
-                        cert.Tributo = "Consta débito apurado contra o(a) mesmo(a) com referência a: " + _tributo + " que se encontram em sua exigibilidade suspensa, em razão de parcelamento dos débitos";
+//                        cert.Tributo = "Consta débito apurado contra o(a) mesmo(a) com referência a: " + _tributo + " que se encontram em sua exigibilidade suspensa, em razão de parcelamento dos débitos";
                         _reportName = "CertidaoDebitoDocumentoPN.rpt";
                         _tipo_certidao = "Positiva com efeito negativa";
                         cert.Nao = "";
@@ -1157,76 +1158,76 @@ namespace GTI_Mvc.Controllers {
 
             //######### Decreto 7186 ###########
 
-            foreach (ListDebitoEditorViewModel deb in model.Debito) {
-                if (Convert.ToDateTime(deb.Data_Vencimento).Year == 2020 && Convert.ToDateTime(deb.Data_Vencimento).Month > 3 && Convert.ToDateTime(deb.Data_Vencimento).Month < 7) {
-                    short _seqDec = tributarioRepository.Retorna_Ultima_Seq_Decreto(model.Inscricao, DateTime.Now.Year);
-                    _seqDec++;
+            //foreach (ListDebitoEditorViewModel deb in model.Debito) {
+            //    if (Convert.ToDateTime(deb.Data_Vencimento).Year == 2020 && Convert.ToDateTime(deb.Data_Vencimento).Month > 3 && Convert.ToDateTime(deb.Data_Vencimento).Month < 7) {
+            //        short _seqDec = tributarioRepository.Retorna_Ultima_Seq_Decreto(model.Inscricao, DateTime.Now.Year);
+            //        _seqDec++;
 
-                    if (deb.Soma_Multa_Hidden > 0 || deb.Soma_Juros_Hidden > 0) {
-                        Debitoparcela regParcela = new Debitoparcela {
-                            Codreduzido = model.Inscricao,
-                            Anoexercicio = 2020,
-                            Codlancamento = 85,
-                            Seqlancamento = _seqDec,
-                            Numparcela = 1,
-                            Codcomplemento = 0,
-                            Statuslanc = 3,
-                            Datavencimento = Convert.ToDateTime("30/12/2020"),
-                            Datadebase = DateTime.Now,
-                            Userid = 236
-                        };
+            //        if (deb.Soma_Multa_Hidden > 0 || deb.Soma_Juros_Hidden > 0) {
+            //            Debitoparcela regParcela = new Debitoparcela {
+            //                Codreduzido = model.Inscricao,
+            //                Anoexercicio = 2020,
+            //                Codlancamento = 85,
+            //                Seqlancamento = _seqDec,
+            //                Numparcela = 1,
+            //                Codcomplemento = 0,
+            //                Statuslanc = 3,
+            //                Datavencimento = Convert.ToDateTime("30/12/2020"),
+            //                Datadebase = DateTime.Now,
+            //                Userid = 236
+            //            };
 
-                        Exception ex = tributarioRepository.Insert_Debito_Parcela(regParcela);
-                    }
-                    if (deb.Soma_Multa_Hidden > 0) { 
-                        Debitotributo regTributo = new Debitotributo {
-                            Codreduzido = model.Inscricao,
-                            Anoexercicio = 2020,
-                            Codlancamento = 85,
-                            Seqlancamento = _seqDec,
-                            Numparcela = 1,
-                            Codcomplemento = 0,
-                            Codtributo = 112,
-                            Valortributo = deb.Soma_Multa_Hidden
-                        };
-                        Exception ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
-                    }
+            //            Exception ex = tributarioRepository.Insert_Debito_Parcela(regParcela);
+            //        }
+            //        if (deb.Soma_Multa_Hidden > 0) { 
+            //            Debitotributo regTributo = new Debitotributo {
+            //                Codreduzido = model.Inscricao,
+            //                Anoexercicio = 2020,
+            //                Codlancamento = 85,
+            //                Seqlancamento = _seqDec,
+            //                Numparcela = 1,
+            //                Codcomplemento = 0,
+            //                Codtributo = 112,
+            //                Valortributo = deb.Soma_Multa_Hidden
+            //            };
+            //            Exception ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
+            //        }
 
-                    if (deb.Soma_Juros_Hidden > 0) {
-                        Debitotributo regTributo = new Debitotributo {
-                            Codreduzido = model.Inscricao,
-                            Anoexercicio = 2020,
-                            Codlancamento = 85,
-                            Seqlancamento = _seqDec,
-                            Numparcela = 1,
-                            Codcomplemento = 0,
-                            Codtributo = 113,
-                            Valortributo = deb.Soma_Juros_Hidden
-                        };
-                        Exception ex3 = tributarioRepository.Insert_Debito_Tributo(regTributo);
-                    }
-                    if (deb.Soma_Multa_Hidden > 0 || deb.Soma_Juros_Hidden > 0) {
-                        Encargo_cvd regCvd = new Encargo_cvd {
-                            Codigo = model.Inscricao,
-                            Exercicio = (short)deb.Exercicio,
-                            Lancamento = (short)deb.Lancamento,
-                            Sequencia = (short)deb.Seq,
-                            Parcela = (byte)deb.Parcela,
-                            Complemento = (byte)deb.Complemento,
-                            Exercicio_enc = 2020,
-                            Lancamento_enc = 85,
-                            Sequencia_enc = _seqDec,
-                            Parcela_enc = 1,
-                            Complemento_enc = 0,
-                            Documento = _documento
-                        };
-                        Exception ex = tributarioRepository.Insert_Encargo_CVD(regCvd);
+            //        if (deb.Soma_Juros_Hidden > 0) {
+            //            Debitotributo regTributo = new Debitotributo {
+            //                Codreduzido = model.Inscricao,
+            //                Anoexercicio = 2020,
+            //                Codlancamento = 85,
+            //                Seqlancamento = _seqDec,
+            //                Numparcela = 1,
+            //                Codcomplemento = 0,
+            //                Codtributo = 113,
+            //                Valortributo = deb.Soma_Juros_Hidden
+            //            };
+            //            Exception ex3 = tributarioRepository.Insert_Debito_Tributo(regTributo);
+            //        }
+            //        if (deb.Soma_Multa_Hidden > 0 || deb.Soma_Juros_Hidden > 0) {
+            //            Encargo_cvd regCvd = new Encargo_cvd {
+            //                Codigo = model.Inscricao,
+            //                Exercicio = (short)deb.Exercicio,
+            //                Lancamento = (short)deb.Lancamento,
+            //                Sequencia = (short)deb.Seq,
+            //                Parcela = (byte)deb.Parcela,
+            //                Complemento = (byte)deb.Complemento,
+            //                Exercicio_enc = 2020,
+            //                Lancamento_enc = 85,
+            //                Sequencia_enc = _seqDec,
+            //                Parcela_enc = 1,
+            //                Complemento_enc = 0,
+            //                Documento = _documento
+            //            };
+            //            Exception ex = tributarioRepository.Insert_Encargo_CVD(regCvd);
 
-                        ex = tributarioRepository.Atualiza_Plano_Documento(_documento, 40);
-                    }
+            //            ex = tributarioRepository.Atualiza_Plano_Documento(_documento, 40);
+            //        }
 
-                }
-            }
+            //    }
+            //}
             //##################################
             model.Data_Vencimento_String = Convert.ToDateTime(value.Data_Vencimento.ToString()).ToString("ddMMyyyy");
             model.RefTran = "287353200" + _documento.ToString();
