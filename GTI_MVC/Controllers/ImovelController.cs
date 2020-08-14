@@ -948,6 +948,163 @@ namespace GTI_Mvc.Controllers {
             return null;
         }
 
+        [Route("Carne_Cip")]
+        [HttpGet]
+        public ViewResult Carne_Cip() {
+            CertidaoViewModel model = new CertidaoViewModel();
+            return View(model);
+        }
+
+        [Route("Carne_Cip")]
+        [HttpPost]
+        public ActionResult Carne_Cip(CertidaoViewModel model) {
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            int _codigo = 0;
+            bool _existeCod = false;
+            ImovelDetailsViewModel imovelDetailsViewModel = new ImovelDetailsViewModel();
+
+            if (model.Inscricao != null) {
+                _codigo = Convert.ToInt32(model.Inscricao);
+                if (_codigo < 50000)
+                    _existeCod = imovelRepository.Existe_Imovel(_codigo);
+            } else {
+                if (model.CnpjValue != null) {
+                    string _cnpj = model.CnpjValue;
+                    bool _valida = Functions.ValidaCNPJ(_cnpj); //CNPJ válido?
+                    if (_valida) {
+                        _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo, _cnpj);
+                    } else {
+                        imovelDetailsViewModel.ErrorMessage = "Cnpj inválido.";
+                        return View(imovelDetailsViewModel);
+                    }
+                } else {
+                    if (model.CpfValue != null) {
+                        string _cpf = model.CpfValue;
+                        bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
+                        if (_valida) {
+                            _existeCod = imovelRepository.Existe_Imovel_Cpf(_codigo, _cpf);
+                        } else {
+                            imovelDetailsViewModel.ErrorMessage = "Cpf inválido.";
+                            return View(imovelDetailsViewModel);
+                        }
+                    }
+                }
+            }
+
+            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+                imovelDetailsViewModel.ErrorMessage = "Código de verificação inválido.";
+                return View(imovelDetailsViewModel);
+            }
+
+            Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
+            List<AreaStruct> areas = imovelRepository.Lista_Area(_codigo);
+
+            ImovelStruct _dados = imovelRepository.Dados_Imovel(_codigo);
+            List<ProprietarioStruct> _prop = imovelRepository.Lista_Proprietario(_codigo, true);
+
+            List<DebitoStructure> Extrato_Lista = tributario_Class.Lista_Parcelas_CIP(_codigo, DateTime.Now.Year);
+            if (Extrato_Lista.Count == 0) {
+                imovelDetailsViewModel.ErrorMessage = "Não é possível emitir 2ª via da CIP para este contribuinte.";
+                return View(imovelDetailsViewModel);
+            }
+
+            List<Boletoguia> ListaBoleto = new List<Boletoguia>();
+            foreach (DebitoStructure item in Extrato_Lista) {
+                Boletoguia reg = new Boletoguia() {
+                    Codreduzido = _codigo.ToString("000000"),
+                    Nome = _prop[0].Nome,
+                    Inscricao_cadastral = _dados.Inscricao,
+                    Bairro = _dados.NomeBairro,
+                    Cep = _dados.Cep,
+                    Cidade = "JABOTICABAL",
+                    Cpf = _prop[0].CPF,
+                    Datadoc = DateTime.Now,
+                    Endereco = _dados.NomeLogradouroAbreviado + "," + _dados.Numero.ToString() + " " + _dados.Complemento,
+                    Lote = _dados.LoteOriginal,
+                    Quadra = _dados.QuadraOriginal,
+                    Totparcela = 3,
+                    Numdoc = item.Numero_Documento.ToString(),
+                    Nossonumero = "287353200" + item.Numero_Documento.ToString(),
+                    Datavencto = Convert.ToDateTime(item.Data_Vencimento),
+                    Valorguia = Convert.ToDecimal(item.Soma_Principal),
+                    Desclanc = "CONTRIBUIÇÃO DE ILUMINAÇÃO PÚBLICA (CIP-2020)"
+                };
+
+                if (item.Numero_Parcela == 0) {
+                    if (item.Complemento == 0)
+                        reg.Parcela = "Única 5%";
+                    else {
+                        if (item.Complemento == 91)
+                            reg.Parcela = "Única 4%";
+                        else
+                            reg.Parcela = "Única 3%";
+                    }
+                } else
+                    reg.Parcela = ((int)item.Numero_Parcela).ToString("00") + "/" + reg.Totparcela.ToString("00");
+
+                string _convenio = "2950230";
+                //***** GERA CÓDIGO DE BARRAS BOLETO REGISTRADO*****
+                DateTime _data_base = Convert.ToDateTime("07/10/1997");
+                TimeSpan ts = Convert.ToDateTime(item.Data_Vencimento) - _data_base;
+                int _fator_vencto = ts.Days;
+                string _quinto_grupo = String.Format("{0:D4}", _fator_vencto);
+                string _valor_boleto_str = string.Format("{0:0.00}", reg.Valorguia);
+                _quinto_grupo += string.Format("{0:D10}", Convert.ToInt64(Functions.RetornaNumero(_valor_boleto_str)));
+                string _barra = "0019" + _quinto_grupo + String.Format("{0:D13}", Convert.ToInt32(_convenio));
+                _barra += String.Format("{0:D10}", Convert.ToInt64(reg.Numdoc)) + "17";
+                string _campo1 = "0019" + _barra.Substring(19, 5);
+                string _digitavel = _campo1 + Functions.Calculo_DV10(_campo1).ToString();
+                string _campo2 = _barra.Substring(23, 10);
+                _digitavel += _campo2 + Functions.Calculo_DV10(_campo2).ToString();
+                string _campo3 = _barra.Substring(33, 10);
+                _digitavel += _campo3 + Functions.Calculo_DV10(_campo3).ToString();
+                string _campo5 = _quinto_grupo;
+                string _campo4 = Functions.Calculo_DV11(_barra).ToString();
+                _digitavel += _campo4 + _campo5;
+                _barra = _barra.Substring(0, 4) + _campo4 + _barra.Substring(4, _barra.Length - 4);
+                //**Resultado final**
+                string _linha_digitavel = _digitavel.Substring(0, 5) + "." + _digitavel.Substring(5, 5) + " " + _digitavel.Substring(10, 5) + "." + _digitavel.Substring(15, 6) + " ";
+                _linha_digitavel += _digitavel.Substring(21, 5) + "." + _digitavel.Substring(26, 6) + " " + _digitavel.Substring(32, 1) + " " + Functions.StringRight(_digitavel, 14);
+                string _codigo_barra = Functions.Gera2of5Str(_barra);
+                //**************************************************
+
+                reg.Codbarra = _codigo_barra;
+                reg.Digitavel = _digitavel;
+
+                if (reg.Datavencto >= DateTime.Now)
+                    ListaBoleto.Add(reg);
+            }
+
+            Warning[] warnings;
+            string[] streamIds;
+            string mimeType = string.Empty;
+            string encoding = string.Empty;
+            string extension = string.Empty;
+            Session["sid"] = "";
+            if (ListaBoleto.Count > 0) {
+                tributario_Class.Insert_Carne_Web(Convert.ToInt32(ListaBoleto[0].Codreduzido), 2020);
+                DataSet Ds = Functions.ToDataSet(ListaBoleto);
+                ReportDataSource rdsAct = new ReportDataSource("dsBoletoGuia", Ds.Tables[0]);
+                ReportViewer viewer = new ReportViewer();
+                viewer.LocalReport.Refresh();
+                viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Carne_CIP.rdlc"); ;
+                viewer.LocalReport.DataSources.Add(rdsAct); // Add  datasource here       
+
+
+
+                byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
+                Response.Buffer = true;
+                Response.Clear();
+                Response.ContentType = mimeType;
+                Response.AddHeader("content-disposition", "attachment; filename= guia_pmj" + "." + extension);
+                Response.OutputStream.Write(bytes, 0, bytes.Length);
+                Response.Flush();
+                Response.End();
+            }
+            return null;
+        }
+
+
         [Route("CadImovel")]
         [HttpGet]
         public ViewResult CadImovel() {
