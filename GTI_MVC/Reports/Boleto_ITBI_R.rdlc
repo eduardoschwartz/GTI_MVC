@@ -3458,7 +3458,9 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>="Referente ao ITBI nº: " &amp; Format(Fields!itbi_numero.Value, "000000")+"/"+Fields!itbi_ano.Value.ToString()</Value>
-                                  <Style />
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -3477,6 +3479,7 @@
                           </Style>
                         </Textbox>
                         <ColSpan>7</ColSpan>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />
@@ -3615,14 +3618,14 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox107">
+                        <Textbox Name="Textbox8">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>*** COBRANÇA COM REGISTRO ***</Value>
+                                  <Value />
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                   </Style>
@@ -3633,7 +3636,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox107</rd:DefaultName>
+                          <rd:DefaultName>Textbox8</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -5378,7 +5381,6 @@
                           </Style>
                         </Textbox>
                         <ColSpan>7</ColSpan>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />

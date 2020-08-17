@@ -2881,7 +2881,7 @@ namespace GTI_Mvc.Controllers {
                         _comprador.Cnpj = Functions.FormatarCpfCnpj(model.Cpf_Cnpj);
 
                     if (_cidadao.EtiquetaR == "S") {
-                        _comprador.Logradouro_Codigo = (int)_cidadao.CodigoLogradouroR;
+                        _comprador.Logradouro_Codigo = _cidadao.CodigoLogradouroR==null?0:(int)_cidadao.CodigoLogradouroR;
                         _comprador.Logradouro_Nome = _cidadao.EnderecoR;
                         _comprador.Numero = (int)_cidadao.NumeroR;
                         _comprador.Complemento = _cidadao.ComplementoR;
@@ -2894,7 +2894,7 @@ namespace GTI_Mvc.Controllers {
                         _comprador.Email = _cidadao.EmailR;
                         _comprador.Telefone = _cidadao.TelefoneR;
                     } else {
-                        _comprador.Logradouro_Codigo = (int)_cidadao.CodigoLogradouroC;
+                        _comprador.Logradouro_Codigo = _cidadao.CodigoLogradouroC==null?0:(int)_cidadao.CodigoLogradouroC;
                         _comprador.Logradouro_Nome = _cidadao.EnderecoC;
                         _comprador.Numero = (int)_cidadao.NumeroC;
                         _comprador.Complemento = _cidadao.ComplementoC;
