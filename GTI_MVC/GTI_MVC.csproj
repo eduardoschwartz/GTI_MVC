@@ -428,6 +428,7 @@
     <Compile Include="ViewModels\ImovelDetailsViewModel.cs" />
     <Compile Include="ViewModels\ItbiViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\MemoryViewModel.cs" />
     <Compile Include="ViewModels\ProcessoViewModel.cs" />
     <Compile Include="Views\Imovel\EditorTemplates\ListAnexoEditorViewModel.cs" />
     <Compile Include="Views\Imovel\EditorTemplates\ListCompradorEditorViewModel.cs" />

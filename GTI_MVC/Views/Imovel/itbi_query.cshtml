@@ -26,12 +26,22 @@
 </style>
 
 <div class="center">
-    <br />
-    <label style="color: brown;font-size: 16px;font-style: italic">Consulta de ITBI</label>
-    <br />
 
-    <br />
     @using (Html.BeginForm("Itbi_query", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+        <br />
+        <label style="color: brown;font-size: 16px;font-style: italic">Consulta de ITBI</label>
+
+        {
+            var selectList = new SelectList(new List<SelectListItem>{
+            new SelectListItem {Text = "Enviado para análise", Value = "1" },
+            new SelectListItem {Text = "Aguardando pagamento", Value = "2"},
+            new SelectListItem {Text = "Itbi's concluídos", Value = "3" },
+            new SelectListItem {Text = "Itbi's cancelados", Value = "4"},
+                    }, "Value", "Text");
+            <Label style="padding-left:10px">Exibir:&nbsp;</Label>@Html.DropDownListFor(m => m[0].Status_Query, selectList, "(Exibir todos os ITBI's)", new { onchange = "this.form.submit()" })
+        }
+        <br />
+        <br />
         <table id="tblMain" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
             <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal; white-space: nowrap;">
                 <tr style="height:14px;">

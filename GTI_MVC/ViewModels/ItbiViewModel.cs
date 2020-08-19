@@ -68,7 +68,8 @@ namespace GTI_Mvc.ViewModels {
         public DateTime? Data_Vencimento { get; set; }
         public bool Funcionario { get; set; }
         public bool Utilizar_VVT { get; set; }
-
+        public string[] Lista_Status = new[] { "0-Exibir todos os ITBI's", "1-Enviado para análise","2-Aguardando pagamento","3-ITBI's Concluídos","4-ITBI's Cancelados" };
+        public string Status_Query { get; set; }
 
         public ItbiViewModel() {
             Lista_Comprador = new List<ListCompradorEditorViewModel>();

@@ -1183,9 +1183,6 @@ namespace GTI_Mvc.Controllers {
             }
         }
 
-
-
-
         [Route("Itbi_urbano")]
         [HttpGet]
         public ActionResult Itbi_urbano(string guid, string a, int s = 0) {
@@ -1925,8 +1922,7 @@ namespace GTI_Mvc.Controllers {
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             int _userId = Convert.ToInt32(Session["hashid"]);
             bool _fiscal = Session["hashfiscalitbi"]!=null && Session["hashfiscalitbi"].ToString() == "S" ? true : false;
-            //List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Query(Functions.pUserId,Functions.pFiscalItbi);
-            List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Query(_userId, _fiscal);
+            List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Query(_userId, _fiscal,  0);
             List<ItbiViewModel> model = new List<ItbiViewModel>();
             foreach (Itbi_Lista reg in Lista) {
                 ItbiViewModel item = new ItbiViewModel() {
@@ -1940,6 +1936,28 @@ namespace GTI_Mvc.Controllers {
                 model.Add(item);
             }
             ViewBag.Erro = e;
+            return View(model);
+        }
+
+        [Route("Itbi_query")]
+        [HttpPost]
+        public ViewResult Itbi_query(List<ItbiViewModel> model) {
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            int _userId = Convert.ToInt32(Session["hashid"]);
+            bool _fiscal = Session["hashfiscalitbi"] != null && Session["hashfiscalitbi"].ToString() == "S" ? true : false;
+            List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Query(_userId, _fiscal,Convert.ToInt32(model[0].Status_Query));
+            model.Clear();
+            foreach (Itbi_Lista reg in Lista) {
+                ItbiViewModel item = new ItbiViewModel() {
+                    Guid = reg.Guid,
+                    Data_cadastro = Convert.ToDateTime(reg.Data.ToString("dd/MM/yyyy")),
+                    Itbi_NumeroAno = reg.Numero_Ano,
+                    Tipo_Imovel = reg.Tipo,
+                    Comprador_Nome_tmp = Functions.TruncateTo(reg.Nome_Comprador, 26),
+                    Situacao_Itbi_Nome = reg.Situacao
+                };
+                model.Add(item);
+            }
             return View(model);
         }
 

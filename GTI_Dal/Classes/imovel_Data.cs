@@ -1773,11 +1773,13 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public List<Itbi_Lista> Retorna_Itbi_Query(int user,bool f) {
+        public List<Itbi_Lista> Retorna_Itbi_Query(int user,bool f,int status) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 List<Itbi_Lista> Lista = new List<Itbi_Lista>();
 
-               var Sql = (from t in db.Itbi_Main  orderby new { t.Itbi_Ano, t.Itbi_Numero } where t.Itbi_Numero>0 select t);
+               var Sql = (from t in db.Itbi_Main  orderby new { t.Itbi_Ano, t.Itbi_Numero } where t.Itbi_Numero>0  select t);
+                if(status>0)
+                    Sql = Sql.Where(m => m.Situacao_itbi == status);
                 if (!f)//se for fiscal pode consultar qualquer ITBI
                     Sql=Sql.Where(m => m.Userid == user);
 
