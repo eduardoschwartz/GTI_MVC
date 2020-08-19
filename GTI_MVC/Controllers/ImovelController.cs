@@ -707,9 +707,15 @@ namespace GTI_Mvc.Controllers {
             List<AreaStruct> areas = imovelRepository.Lista_Area(_codigo);
 
             ImovelStruct _dados = imovelRepository.Dados_Imovel(_codigo);
-            Laseriptu _calc = imovelRepository.Dados_IPTU(_codigo, DateTime.Now.Year);
+//            Laseriptu _calc = imovelRepository.Dados_IPTU(_codigo, DateTime.Now.Year);
             Testada _testada = imovelRepository.Retorna_Testada_principal(_codigo,_dados.Seq);
-            
+//            if (_calc == null) {
+                SpCalculo _calc = tributario_Class.Calculo_IPTU(_codigo, DateTime.Now.Year);
+//                _calc.Agrupamento = _newcalc.Agrupamento;
+ //               _calc.Fatorcat = _newcalc.Fcat;
+  //              _calc.f
+   //         }
+
             Imovel_Detalhe _reg = new Imovel_Detalhe() {
                 Codigo = _codigo,
                 Inscricao = _dados.Inscricao,
@@ -728,8 +734,8 @@ namespace GTI_Mvc.Controllers {
                 Fracao_Ideal = (decimal)_dados.FracaoIdeal,
                 Testada = (decimal)_testada.Areatestada,
                 Agrupamento = (decimal)_calc.Agrupamento,
-                Soma_Fatores = (decimal)(_calc.Fatorgle * _calc.Fatorped * _calc.Fatorpro * _calc.Fatorsit * _calc.Fatortop),
-                Area_Predial = (decimal)_calc.Areaconstrucao,
+                Soma_Fatores = (decimal)(_calc.Fgle * _calc.Fped * _calc.Fpro * _calc.Fsit * _calc.Ftop),
+                Area_Predial = (decimal)_calc.Areapredial,
                 Benfeitoria = _dados.Benfeitoria_Nome,
                 Categoria = _dados.Categoria_Nome,
                 Pedologia = _dados.Pedologia_Nome,
@@ -737,10 +743,10 @@ namespace GTI_Mvc.Controllers {
                 Situacao = _dados.Situacao_Nome,
                 Uso_Terreno = _dados.Uso_terreno_Nome,
                 Condominio = _dados.NomeCondominio == "NÃO CADASTRADO" ? "" : _dados.NomeCondominio,
-                Iptu = _calc.Impostopredial == 0 ? (decimal)_calc.Impostoterritorial : (decimal)_calc.Impostopredial,
+                Iptu = _calc.Valoriptu == 0 ? (decimal)_calc.Valoritu : (decimal)_calc.Valoriptu,
                 Qtde_Edif = areas.Count,
                 Vvt = (decimal)_calc.Vvt,
-                Vvp = (decimal)_calc.Vvc,
+                Vvp = (decimal)_calc.Vvp,
                 Vvi = (decimal)_calc.Vvi,
                 Isento_Cip = _dados.Cip == true ? "Sim" : "Não",
                 Reside_Imovel = _dados.ResideImovel == true ? "Sim" : "Não",

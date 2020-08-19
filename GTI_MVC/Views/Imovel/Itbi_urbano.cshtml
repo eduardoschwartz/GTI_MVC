@@ -1028,10 +1028,12 @@
                 var _fn = document.getElementById('txtFinanciamento').value;
                 var _fn2 = Number(_fn.replace(/[^0-9.-]+/g, "."));
                 var _soma = (parseFloat(_rp2) + parseFloat(_rc2) + parseFloat(_rd2) + parseFloat(_fn2));
-                $("input[name='Valor_Transacao']").val(_soma.toFixed(2).replace(".", ","));
+
+                $("input[name='Valor_Transacao']").val((_soma ).toFixed(2).replace(".", ","));
             } else {
                 var _vt = document.getElementById('txtValorTransacao').value;
-                _soma = parseFloat(_vt);
+                _soma = _vt;
+                _soma = parseFloat(_vt.replace(",","."));
             }
             var _vv = document.getElementById('txtValorVenal').value;
             var _vv2 = Number(_vv.replace(/[^0-9.-]+/g, "."));

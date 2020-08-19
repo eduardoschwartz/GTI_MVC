@@ -976,7 +976,9 @@
                 $("input[name='Valor_Transacao']").val(_soma.toFixed(2).replace(".", ","));
             } else {
                 var _vt = document.getElementById('txtValorTransacao').value;
-                _soma = parseFloat(_vt);
+                _soma = _vt;
+                _soma = parseFloat(_vt.replace(",", "."));
+
             }
             var _vv = document.getElementById('txtValorVenal').value;
             var _vv2 = Number(_vv.replace(/[^0-9.-]+/g, "."));
