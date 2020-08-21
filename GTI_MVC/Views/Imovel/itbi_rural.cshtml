@@ -845,7 +845,8 @@
         $(document).ready(function () {
 
 
-            $(".maskValor").inputmask('Regex', { regex: "^[0-9]{1,8}(\\,\\d{1,2})?$" });
+            //$(".maskValor").inputmask('Regex', { regex: "^[0-9]{1,8}(\\,\\d{1,2})?$" });
+            $(".maskValor").mask("99999999,00", { reverse: true });
             $(".maskPerc").inputmask('Regex', { regex: "^[0-9]{1,3}(\\,\\d{1,2})?$" });
             $(".maskData").inputmask("99/99/9999");
             $(".maskCep").inputmask("99999-999");
