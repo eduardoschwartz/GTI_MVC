@@ -536,6 +536,14 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
+            List<AreaStruct> ListaArea = imovelRepository.Lista_Area(_codigo);
+            foreach (AreaStruct item in ListaArea) {
+                if (item.Tipo_Codigo == 2) {
+                    ViewBag.Result = "Este imóvel não esta isento da cobrança de IPTU no ano atual.";
+                    return View(certidaoViewModel);
+                }
+            }
+
             List<Certidao> certidao = new List<Certidao>();
             Certidao_isencao regCert = new Certidao_isencao() {
                 Ano = reg.Ano,
@@ -2808,6 +2816,8 @@ namespace GTI_Mvc.Controllers {
                 else {
                     Usuario_web uw = sistemaRepository.Retorna_Usuario_Web(gravado.UserId);
                     item.User_Name = uw.Nome;
+                    item.User_Email = uw.Email;
+                    item.User_Fone = uw.Telefone;
                 }
                 model.Add(item);
             } else {
