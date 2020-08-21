@@ -392,7 +392,7 @@ namespace GTI_Mvc.Controllers {
 
                 List<SpExtrato> ListaTributo = tributarioRepository.Lista_Extrato_Tributo(_codigo, 1980, 2050, 0, 99, 0, 99, 0, 999, 0, 99, 0, 99, DateTime.Now, "Web");
                 List<SpExtrato> ListaParcela = tributarioRepository.Lista_Extrato_Parcela(ListaTributo);
-                Certidao regCert = new Certidao();
+                
 
                 foreach (SpExtrato item in ListaParcela.Where(x => (x.Codlancamento == 2 || x.Codlancamento == 6 || x.Codlancamento == 14) && x.Statuslanc < 3)) {
                     Certidao_inscricao_extrato regExt = new Certidao_inscricao_extrato {
@@ -414,6 +414,7 @@ namespace GTI_Mvc.Controllers {
                     ex = tributarioRepository.Insert_Certidao_Inscricao_Extrato(regExt);
                     if (ex != null)
                         throw ex;
+                    Certidao regCert = new Certidao();
                     regCert.Controle = _numero.ToString("00000") + DateTime.Now.Year.ToString("0000") + "/" + _codigo.ToString() + "-" + _sufixo;
                     regCert.Codigo = _codigo;
                     regCert.Razao_Social = reg2.Nome;
