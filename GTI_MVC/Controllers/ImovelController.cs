@@ -3680,7 +3680,35 @@ namespace GTI_Mvc.Controllers {
             return View(model);
         }
 
+        [Route("Itbi_isencao")]
+        [HttpPost]
+        public ActionResult Itbi_isencao(ItbiViewModel model) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
 
+            int _codigo = Convert.ToInt32(model.Inscricao);
+            bool _urbano= model.Tipo_Imovel == "Urbano" ;
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            if (_urbano) {
+                if (!imovelRepository.Existe_Imovel(_codigo)) {
+                    ViewBag.Result = "Imóvel não cadastrado.";
+                    return View(model);
+                } else {
+                    ImovelStruct imovel = imovelRepository.Dados_Imovel(_codigo);
+                    model.Codigo = imovel.Codigo.ToString("00000");
+                    model.Inscricao = imovel.Inscricao;
+                    model.Dados_Imovel = imovel;
+
+                }
+            }
+
+            
+
+
+            return View("Itbi_isencao_b",model);
+        }
+
+    
 
         #endregion
     }

@@ -50,6 +50,7 @@ namespace GTI_Mvc.ViewModels {
         public DateTime? Data_Transacao { get; set; }
         public string Tipo_Instrumento { get; set; } = "Particular";
         public string[] Lista_Instrumento = new[] { "Particular", "Público" };
+        public string[] Lista_Tipo_Imovel = new[] { "Urbano", "Rural" };
         public string Totalidade { get; set; }
         public string[] Lista_Totalidade = new[] { "Sim", "Não" };
         public decimal Totalidade_Perc { get; set; }

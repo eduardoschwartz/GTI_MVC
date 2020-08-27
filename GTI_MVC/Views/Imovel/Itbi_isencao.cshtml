@@ -27,17 +27,103 @@
 
 <div class="center">
 
-    @using (Html.BeginForm("Itbi_query", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+    @using (Html.BeginForm("Itbi_isencao", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
         <br />
-        <label style="color: brown;font-size: 16px;font-style: italic">Certidão de não incidência de ITBI</label>
+        <label style="color: brown;font-size: 16px;font-style: italic">Certidão de não incidência de ITBI </label>
 
-        <br />
-        <br />
+        <br /><br />
+        <table style="font-size:13px;width:500px">
+            <tr style="height:38px">
+                <td style="width:200px;padding-top:5px">
+                    <label style="font-weight:normal;">Selecione o tipo de imóvel:</label>
+                </td>
+                <td style="width:200px">
+                    @if (Model.Tipo_Imovel == "Rural" || Model.Tipo_Imovel == null) {
+                        @Html.RadioButtonFor(model => model.Tipo_Imovel, "Rural", new { @id = "totalChk", @onclick = "radioCheck()", @checked = true })<label style="font-weight:normal">&nbsp;Rural&nbsp;&nbsp;</label>
+                        @Html.RadioButtonFor(model => model.Tipo_Imovel, "Urbano", new { @id = "totalChk", @onclick = "radioCheck()" })<label style="font-weight:normal">&nbsp;Urbano&nbsp;&nbsp;</label>
+                    } else {
+                        @Html.RadioButtonFor(model => model.Tipo_Imovel, "Rural", new { @id = "totalChk", @onclick = "radioCheck()" })<label style="font-weight:normal">&nbsp;Rural&nbsp;&nbsp;</label>
+                        @Html.RadioButtonFor(model => model.Tipo_Imovel, "Urbano", new { @id = "totalChk", @onclick = "radioCheck()", @checked = true })<label style="font-weight:normal">&nbsp;Urbano&nbsp;&nbsp;</label>
+                    }
+
+                </td>
+                <td style="width:130px;padding-top:5px">
+                    @if (Model.Tipo_Imovel == "Urbano") {
+                        <label style="font-weight:normal;display:block" id="percLabel">Código do imóvel:</label>
+                    } else {
+                        <label style="font-weight:normal;display:none" id="percLabel">Código do imóvel:</label>
+                    }
+
+                </td>
+                <td style="width:60px;padding-top:5px">
+                    @if (Model.Tipo_Imovel == "Urbano") {
+                        <label style="font-weight:normal;display:block" id="percLabel2"> @Html.TextBoxFor(m => m.Inscricao, new { @id = "Codigo", @class = "maskValor", style = "width:60px;height:25px;text-align:left", @Value = Model.Inscricao })</label>
+                    } else {
+                        <label style="font-weight:normal;display:none" id="percLabel2"> @Html.TextBoxFor(m => m.Inscricao, new { @id = "Codigo", @class = "maskValor", style = "width:60px;height:25px;text-align:left", @Value = "" })</label>
+                    }
+
+
+    </table>
+        <label id="lblObs" style="font-weight:normal;color:brown;font-size:12px;display:none">*** O código do imóvel se encontra na capa do carnê de IPTU</label>
+
+
         <div class="form-group row">
             <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
         </div>
+
+        <div style="text-align:center">
+            <button type="submit" class="btn btn-primary" name="action" value="btnValida" >Enviar</button>&nbsp;&nbsp;
+        </div>
+
+
     }
 
     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 </div>
+
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+
+            $(".maskValor").mask("99999")
+        });
+
+        function ValidateForm() {
+            var _cod = document.getElementById('Codigo').value;
+            var index = $("input[id=totalChk]:checked").val();
+
+            if (index == "Urbano") {
+                if (_cod == null || _cod == "" || parseInt(_cod) == 0) {
+                    document.getElementById('errorLabel').innerHTML = "Digite o código do imóvel";
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function radioCheck() {
+            $("#errorLabel").text("");
+            var index = $("input[id=totalChk]:checked").val();
+            if (index=="Urbano") {
+                document.getElementById('percLabel').style.display = 'block';
+                document.getElementById('percLabel2').style.display = 'block';
+                document.getElementById('lblObs').style.display = 'block';
+            }
+            else {
+                document.getElementById('percLabel').style.display = 'none';
+                document.getElementById('percLabel2').style.display = 'none';
+                document.getElementById('lblObs').style.display = 'none';
+            }
+        }
+
+
+    </script>
+}
+
 
