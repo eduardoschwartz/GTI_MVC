@@ -1,0 +1,43 @@
+﻿@model GTI_Mvc.ViewModels.ItbiViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Certidão de não incidência de ITBI";
+}
+
+<style>
+
+    .center {
+        margin: auto;
+        width: 780px;
+        border: 1px solid rgba(0,0,0,0.24);
+        padding: 20px;
+        box-shadow: 0 .1em 0.5em #000;
+        border-radius: 13px;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+</style>
+
+<div class="center">
+
+    @using (Html.BeginForm("Itbi_query", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+        <br />
+        <label style="color: brown;font-size: 16px;font-style: italic">Certidão de não incidência de ITBI</label>
+
+        <br />
+        <br />
+        <div class="form-group row">
+            <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
+        </div>
+    }
+
+    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+</div>
+

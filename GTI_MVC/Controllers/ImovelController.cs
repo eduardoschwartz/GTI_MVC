@@ -519,7 +519,7 @@ namespace GTI_Mvc.Controllers {
                     reportName = "Certidao_Isencao_Processo.rpt";
                     nPerc = (decimal)ListaIsencao[0].Percisencao;
                 } else {
-                    if (SomaArea <= 65) {
+                    if (SomaArea <= 65 && SomaArea>0) {
                         //Se tiver área < 65m² mas tiver mais de 1 imóvel, perde a isenção.
                         int nQtdeImovel = imovelRepository.Qtde_Imovel_Cidadao(_codigo);
                         if (nQtdeImovel > 1) {
@@ -1156,6 +1156,8 @@ namespace GTI_Mvc.Controllers {
             }
             return model;
         }
+
+        #region Emissão de Itbi
 
         [Route("Itbi_menu")]
         [HttpGet]
@@ -3666,7 +3668,20 @@ namespace GTI_Mvc.Controllers {
             ex = imovelRepository.Alterar_Itbi_Situacao(model.Guid, 2);
             return;
         }
-        
 
+        [Route("Itbi_isencao")]
+        [HttpGet]
+        public ActionResult Itbi_isencao() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            ItbiViewModel model = new ItbiViewModel() {
+                UserId = Convert.ToInt32(Session["hashid"])
+            };
+            return View(model);
+        }
+
+
+
+        #endregion
     }
 }
