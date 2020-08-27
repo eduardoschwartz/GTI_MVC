@@ -52,12 +52,13 @@
                         <table style="font-size:13px;width:640px">
 
                             @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Nome)
+                            @Html.HiddenFor(m => m.Dados_Imovel.Area_Terreno)
                             <tr style="height:30px">
                                 <td style="width:154px">
                                     <label style="font-weight:normal">Inscrição cadastral:</label>
                                 </td>
                                 <td>
-                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Inscricao, new { @readonly = true, style = "width:200px;height:25px" ,@Value=Model.Inscricao})</label>
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Inscricao, new { @readonly = true, style = "width:200px;height:25px", @Value = Model.Inscricao })</label>
                                 </td>
                             </tr>
                         </table>
