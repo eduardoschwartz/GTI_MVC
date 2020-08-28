@@ -59,6 +59,7 @@ namespace GTI_Mvc.ViewModels {
         public string Receita_Federal { get; set; }
         public string Descricao_Imovel { get; set; }
         public List<string> Lista_Erro { get; set; }
+        public List<Imovel_Isencao> Lista_Isencao { get; set; }
         public List<ListAnexoEditorViewModel> Lista_Anexo { get; set; }
         public string Anexo_Nome_tmp { get; set; }
         public string Anexo_Desc_tmp { get; set; }
@@ -119,5 +120,14 @@ namespace GTI_Mvc.ViewModels {
         public DateTime Data_Itbi { get; set; }
         public string Action { get; set; }
     }
+
+    public class Imovel_Isencao {
+        public int Seq { get; set; }
+        public string Tipo { get; set; }
+        public string Codigo { get; set; }
+        public string Descricao { get; set; }
+    }
+
+
 
 }

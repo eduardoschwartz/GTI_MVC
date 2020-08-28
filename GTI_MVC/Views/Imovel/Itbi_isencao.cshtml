@@ -59,22 +59,22 @@
                             </thead>
                         </table>
                         <table id="tblVendedor" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px">
-                            @foreach (var item in Model.Lista_Vendedor) {
+                            @foreach (var item in Model.Lista_Isencao) {
                                 <tr>
                                     <td style="width:20px;font-weight:normal;color:blue">
                                         @Html.DisplayFor(modelItem => item.Seq)
                                         @Html.HiddenFor(modelItem => item.Seq)
                                     </td>
                                     <td style="width:435px;font-weight:normal;color:blue">
-                                        @Html.DisplayFor(modelItem => item.Nome)
-                                        @Html.HiddenFor(modelItem => item.Nome)
+                                        @Html.DisplayFor(modelItem => item.Tipo)
+                                        @Html.HiddenFor(modelItem => item.Tipo)
                                     </td>
                                     <td style="width:150px;font-weight:normal;color:blue">
-                                        @Html.DisplayFor(modelItem => item.Cpf_Cnpj)
-                                        @Html.HiddenFor(modelItem => item.Cpf_Cnpj)
+                                        @Html.DisplayFor(modelItem => item.Descricao)
+                                        @Html.HiddenFor(modelItem => item.Descricao)
                                     </td>
                                     <td>
-                                        <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "rv", @s = item.Seq, @guid = Model.Guid })" title="Remover vendedor"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                        <a href="@Url.Action("Itbi_isencao", "Imovel", new { @a = "rv", @s = item.Seq, @guid = Model.Guid })" title="Remover imóvel"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                     </td>
                                 </tr>
                             }
