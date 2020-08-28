@@ -3683,8 +3683,6 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_isencao")]
         [HttpPost]
         public ActionResult Itbi_isencao(ItbiViewModel model) {
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
 
             int _codigo = Convert.ToInt32(model.Inscricao);
             bool _urbano= model.Tipo_Imovel == "Urbano" ;

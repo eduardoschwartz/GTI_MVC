@@ -29,55 +29,150 @@
 
     @using (Html.BeginForm("Itbi_isencao", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
 
+        <div class="container" style="width:700px">
+            <div class="panel panel-danger">
+                <div class="panel-heading">Certidão de não incidência de ITBI (Imóvel Urbano) </div>
+                <div class="panel-body">
 
-        @*<br /><br />
-        <table style="font-size:13px;width:500px">
-            <tr style="height:38px">
-                <td style="width:200px;padding-top:5px">
-                    <label style="font-weight:normal;">Selecione o tipo de imóvel:</label>
-                </td>
-                <td style="width:200px">
-                    @if (Model.Tipo_Imovel == "Rural" || Model.Tipo_Imovel == null) {
-                        @Html.RadioButtonFor(model => model.Tipo_Imovel, "Rural", new { @id = "totalChk", @onclick = "radioCheck()", @checked = true })<label style="font-weight:normal">&nbsp;Rural&nbsp;&nbsp;</label>
-                        @Html.RadioButtonFor(model => model.Tipo_Imovel, "Urbano", new { @id = "totalChk", @onclick = "radioCheck()" })<label style="font-weight:normal">&nbsp;Urbano&nbsp;&nbsp;</label>
-                    } else {
-                        @Html.RadioButtonFor(model => model.Tipo_Imovel, "Rural", new { @id = "totalChk", @onclick = "radioCheck()" })<label style="font-weight:normal">&nbsp;Rural&nbsp;&nbsp;</label>
-                        @Html.RadioButtonFor(model => model.Tipo_Imovel, "Urbano", new { @id = "totalChk", @onclick = "radioCheck()", @checked = true })<label style="font-weight:normal">&nbsp;Urbano&nbsp;&nbsp;</label>
-                    }
+                    @Html.HiddenFor(m => m.Vendedor_Cpf_cnpj_tmp, new { @id = "Vendedor_Cpf_cnpj_tmp" })
+                    @Html.HiddenFor(m => m.Vendedor_Nome_tmp, new { @id = "Vendedor_Nome_tmp" })
+                    <div id="VendedorTable" style="max-height: 247px; overflow: auto;width:630px;padding-top:7px">
+                        <table id="tblVendedor" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                            <thead style="background-color:brown;color:white;font-size:13px;font-weight:normal">
+                                <tr style="height:12px;">
+                                    <th style="width:20px;font-weight:normal">
+                                        #
+                                    </th>
+                                    <th style="width:60px;font-weight:normal">
+                                        Tipo
+                                    </th>
+                                    <th style="width:60px;font-weight:normal">
+                                        Código
+                                    </th>
+                                    <th style="width:490px;font-weight:normal">
+                                        Descrição
+                                    </th>
+                                    <th style="width:20px;text-align:left">
 
-                </td>
-                <td style="width:130px;padding-top:5px">
-                    @if (Model.Tipo_Imovel == "Urbano") {
-                        <label style="font-weight:normal;display:block" id="percLabel">Código do imóvel:</label>
-                    } else {
-                        <label style="font-weight:normal;display:none" id="percLabel">Código do imóvel:</label>
-                    }
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <table id="tblVendedor" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px">
+                            @foreach (var item in Model.Lista_Vendedor) {
+                                <tr>
+                                    <td style="width:20px;font-weight:normal;color:blue">
+                                        @Html.DisplayFor(modelItem => item.Seq)
+                                        @Html.HiddenFor(modelItem => item.Seq)
+                                    </td>
+                                    <td style="width:435px;font-weight:normal;color:blue">
+                                        @Html.DisplayFor(modelItem => item.Nome)
+                                        @Html.HiddenFor(modelItem => item.Nome)
+                                    </td>
+                                    <td style="width:150px;font-weight:normal;color:blue">
+                                        @Html.DisplayFor(modelItem => item.Cpf_Cnpj)
+                                        @Html.HiddenFor(modelItem => item.Cpf_Cnpj)
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "rv", @s = item.Seq, @guid = Model.Guid })" title="Remover vendedor"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
 
-                </td>
-                <td style="width:60px;padding-top:5px">
-                    @if (Model.Tipo_Imovel == "Urbano") {
-                        <label style="font-weight:normal;display:block" id="percLabel2"> @Html.TextBoxFor(m => m.Inscricao, new { @id = "Codigo", @class = "maskValor", style = "width:60px;height:25px;text-align:left", @Value = Model.Inscricao })</label>
-                    } else {
-                        <label style="font-weight:normal;display:none" id="percLabel2"> @Html.TextBoxFor(m => m.Inscricao, new { @id = "Codigo", @class = "maskValor", style = "width:60px;height:25px;text-align:left", @Value = "" })</label>
-                    }
+
+                    <br />
+                    <button type="button" class="btn btn-info" name="action" value="btnUrbanoAdd" onclick="EditarUrbano()">Incluir imóvel urbano</button>
+                    <button style="padding-left:5px" type="button" class="btn btn-info" name="action" value="btnRuralAdd" onclick="EditarRural()">Incluir imóvel rural</button>
+                </div>
+            </div>
+        </div>
 
 
-    </table>
-        <label id="lblObs" style="font-weight:normal;color:brown;font-size:12px;display:none">*** O código do imóvel se encontra na capa do carnê de IPTU</label>
-
+        <br />
 
         <div class="form-group row">
             <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
         </div>
 
         <div style="text-align:center">
-            <button type="submit" class="btn btn-primary" name="action" value="btnValida" >Enviar</button>&nbsp;&nbsp;
-        </div>*@
-
+            <button type="submit" class="btn btn-primary" name="action" value="btnValida">Enviar</button>&nbsp;&nbsp;
+        </div>
 
     }
 
     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+</div>
+
+
+<!-- Modal Urbano -->
+<div class="modal fade" id="UrbanoModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Adicionar imóvel urbano</h4>
+            </div>
+            <div class="modal-body">
+
+                <table>
+                    <tr style="height:30px">
+                        <td>
+                            <label style="font-weight:normal;font-size:13px">Digite o Código:&nbsp;&nbsp;</label>
+                        </td>
+                        <td>
+                            <input id="codigoTxt" name="CodigoUrbano" onKeyPress="return formata(this, '§§§§§', event)" onpaste="return false" style="width:90px;height:25px;font-size:13px" type="text" value="" />
+                        </td>
+                    </tr>
+
+                </table>
+                <br />
+                <label style="font-weight:normal;font-size:13px;color:brown">*** O código do imóvel encontra-se na capa do carnê de IPTU</label>
+                <br />
+
+                <label style="font-weight:normal;color:red;padding-left:7px" id="errorUrbano">@ViewBag.Error</label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnUrbanoOk">Incluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Rural -->
+<div class="modal fade" id="RuralModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Adicionar imóvel rural</h4>
+            </div>
+            <div class="modal-body">
+
+                <table>
+                    <tr style="height:30px">
+                        <td>
+                            <label style="font-weight:normal;font-size:13px">Digite a descrição do imóvel&nbsp;&nbsp;</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="descTxt" name="descRural" style="width:550px;height:25px;font-size:13px" type="text" value="" />
+                        </td>
+
+                    </tr>
+
+                </table>
+                <br />
+
+                <label style="font-weight:normal;color:red;padding-left:7px" id="errorRural">@ViewBag.Error</label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnRuralOk">Incluir</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -90,36 +185,49 @@
                 return ValidateForm();
             });
 
-            $(".maskValor").mask("99999")
+            $(".maskValor").mask("99999");
+
+            $('#btnUrbanoOk').click(function () {
+                var codurbanoback = $("#UrbanoModal #codigoTxt").val();
+                if (codurbanoback.trim() == "") {
+                    document.getElementById('errorUrbano').innerHTML = "Digite o código do imóvel";
+                } else {
+                    document.getElementById('Vendedor_Cpf_cnpj_tmp').value = codurbanoback;
+                    $('#UrbanoModal').modal('hide');
+                    $("#MainForm").submit();
+                }
+            });
+            $('#btnRuralOk').click(function () {
+                var descruralback = $("#RuralModal #descTxt").val();
+                if (descruralback.trim() == "") {
+                    document.getElementById('errorRural').innerHTML = "Digite a descrição do imóvel";
+                } else {
+                    document.getElementById('Vendedor_Nome_tmp').value = descruralback;
+                    $('#RuralModal').modal('hide');
+                    $("#MainForm").submit();
+                }
+            });
         });
 
-        function ValidateForm() {
-            var _cod = document.getElementById('Codigo').value;
-            var index = $("input[id=totalChk]:checked").val();
 
-            if (index == "Urbano") {
-                if (_cod == null || _cod == "" || parseInt(_cod) == 0) {
-                    document.getElementById('errorLabel').innerHTML = "Digite o código do imóvel";
-                    return false;
-                }
-            }
+
+        function EditarRural() {
+            $('#RuralModal').modal();
+            document.getElementById('errorRural').innerHTML = "";
+            $('input').val('');
+        }
+
+        function EditarUrbano() {
+            $('#UrbanoModal').modal();
+            document.getElementById('errorUrbano').innerHTML = "";
+            $('input').val('');
+        }
+
+        function ValidateForm() {
+        
             return true;
         }
 
-        function radioCheck() {
-            $("#errorLabel").text("");
-            var index = $("input[id=totalChk]:checked").val();
-            if (index=="Urbano") {
-                document.getElementById('percLabel').style.display = 'block';
-                document.getElementById('percLabel2').style.display = 'block';
-                document.getElementById('lblObs').style.display = 'block';
-            }
-            else {
-                document.getElementById('percLabel').style.display = 'none';
-                document.getElementById('percLabel2').style.display = 'none';
-                document.getElementById('lblObs').style.display = 'none';
-            }
-        }
 
 
     </script>
