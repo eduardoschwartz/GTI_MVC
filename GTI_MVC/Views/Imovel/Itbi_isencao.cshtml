@@ -6,7 +6,6 @@
 }
 
 <style>
-
     .center {
         margin: auto;
         width: 780px;
@@ -34,8 +33,10 @@
                 <div class="panel-heading">Certidão de não incidência de ITBI (Imóvel Urbano) </div>
                 <div class="panel-body">
 
-                    @Html.HiddenFor(m => m.Vendedor_Cpf_cnpj_tmp, new { @id = "Vendedor_Cpf_cnpj_tmp" })
-                    @Html.HiddenFor(m => m.Vendedor_Nome_tmp, new { @id = "Vendedor_Nome_tmp" })
+                    @Html.HiddenFor(m => m.Vendedor_Cpf_cnpj_tmp, new { @id = "Vendedor_Cpf_cnpj_tmp" })@*Armazenar o código do imóvel*@
+                    @Html.HiddenFor(m => m.Vendedor_Nome_tmp, new { @id = "Vendedor_Nome_tmp" })@*Armazenar a descrição do imóvel*@
+                    @Html.HiddenFor(m=>m.Guid)
+                    @Html.HiddenFor(m=>m.Lista_Isencao)
                     <div id="VendedorTable" style="max-height: 247px; overflow: auto;width:630px;padding-top:7px">
                         <table id="tblVendedor" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
                             <thead style="background-color:brown;color:white;font-size:13px;font-weight:normal">

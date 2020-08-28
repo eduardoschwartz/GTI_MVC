@@ -3675,7 +3675,8 @@ namespace GTI_Mvc.Controllers {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             ItbiViewModel model = new ItbiViewModel() {
-                UserId = Convert.ToInt32(Session["hashid"])
+                UserId = Convert.ToInt32(Session["hashid"]),
+                Lista_Isencao=new List<Imovel_Isencao>()
             };
             return View(model);
         }
@@ -3700,10 +3701,35 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-            
+            bool bFuncionario = Session["hashfunc"].ToString() == "S" ? true : false;
+            int nId = Convert.ToInt32(Session["hashid"]);
+            int nUserId = bFuncionario ? 0 : nId;
+            string usuario_Nome = "",usuario_Doc="";
+            if (nUserId > 0) {
+                Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+                Usuario_web _user = sistemaRepository.Retorna_Usuario_Web(nUserId);
+                usuario_Nome = _user.Nome;
+                usuario_Doc = Functions.FormatarCpfCnpj(_user.Cpf_Cnpj);
+            }
 
+            if (model.Guid == null) {
+                string _guid = Guid.NewGuid().ToString("N");
+                model.Guid = _guid;
+                Itbi_isencao_main regMain = new Itbi_isencao_main() {
+                    Guid = _guid,
+                    Data_cadastro = DateTime.Now,
+                    Situacao = 1,
+                    Fiscal_id=0,
+                    Usuario_nome=usuario_Nome,
+                    Usuario_doc=usuario_Doc,
+                    Natureza=0,
+                    Isencao_ano=0,
+                    Isencao_numero=0
+                };
+                Exception ex = imovelRepository.Incluir_isencao_main(regMain);
+            }
 
-            return View("Itbi_isencao_b",model);
+            return View(model);
         }
 
     

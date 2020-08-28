@@ -2012,6 +2012,39 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Incluir_isencao_main(Itbi_isencao_main Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[9];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@isencao_numero", SqlDbType = SqlDbType.Int, SqlValue = Reg.Isencao_numero };
+                Parametros[2] = new SqlParameter { ParameterName = "@isencao_ano", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Isencao_ano };
+                Parametros[3] = new SqlParameter { ParameterName = "@fiscal_id", SqlDbType = SqlDbType.Int, SqlValue = Reg.Fiscal_id };
+                Parametros[4] = new SqlParameter { ParameterName = "@usuario_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Usuario_nome };
+                Parametros[5] = new SqlParameter { ParameterName = "@usuario_doc", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Usuario_doc };
+                Parametros[6] = new SqlParameter { ParameterName = "@natureza", SqlDbType = SqlDbType.Int, SqlValue = Reg.Natureza };
+                Parametros[7] = new SqlParameter { ParameterName = "@data_cadastro", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_cadastro };
+                Parametros[8] = new SqlParameter { ParameterName = "@situacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Situacao };
+                db.Database.ExecuteSqlCommand("INSERT INTO itbi_isencao_main(guid,isencao_numero,isencao_ano,fiscal_id,usuario_nome,usuario_doc,natureza,data_cadastro,situacao) " +
+                                              " VALUES(@guid,@isencao_numero,@isencao_ano,@fiscal_id,@usuario_nome,@usuario_doc,@natureza,@data_cadastro,@situacao)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+
+                //try {
+                //    db.Itbi_Comprador.RemoveRange(db.Itbi_Comprador.Where(i => i.Guid == Reg.Guid));
+                //    db.SaveChanges();
+                //} catch (Exception ex) {
+                //    return ex;
+                //}
+
+                return null;
+            }
+        }
+
+
+
 
 
     }//end class
