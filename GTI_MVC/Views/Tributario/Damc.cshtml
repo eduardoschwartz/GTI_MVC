@@ -30,7 +30,7 @@
 
     <br />
     @using (Html.BeginForm("SubmitSelected", "Tributario", FormMethod.Post, new { id = "formField", encType = "multipart/form-data", name = "frmExtrato", @Class = "mt-3" })) {
-
+        @Html.HiddenFor(m=>m.Plano)
         <table id="tblHeader" style="font-size:13px">
             <tr>
                 @Html.HiddenFor(m => m.Data_Vencimento)

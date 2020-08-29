@@ -836,25 +836,25 @@ namespace GTI_Mvc.Controllers {
             List<SpExtrato> ListaParcela = tributarioRepository.Lista_Extrato_Parcela(ListaTributo);
             List<DebitoStructure> Lista_debitos = new List<DebitoStructure>();
 
-            bool IsRefis = false;
+            bool IsRefis = true;
             int nIndex = 0, nPlano = 0;
             decimal nPerc=0, nSomaPrincipal = 0, nSomaJuros = 0, nSomaMulta = 0, nSomaCorrecao = 0, nSomaTotal = 0, nSomaHonorario = 0;
 
             if (IsRefis) {
                 foreach (var item in ListaParcela) {
-                    if (Convert.ToDateTime(item.Datavencimento) <= Convert.ToDateTime("30/06/2019")) {
+                    if (Convert.ToDateTime(item.Datavencimento) <= Convert.ToDateTime("30/06/2020")) {
                         short CodLanc = item.Codlancamento;
                         if (CodLanc != 48 || CodLanc != 69 || CodLanc != 78) {
 
-                            if (_dataVencto <= Convert.ToDateTime("18/10/2019")) {
+                            if (_dataVencto <= Convert.ToDateTime("19/10/2020")) {
                                 nPerc = 1M;
-                                nPlano = 33;
-                            } else if (Convert.ToDateTime(_dataVencto) > Convert.ToDateTime("18/10/2019") && Convert.ToDateTime(_dataVencto) <= Convert.ToDateTime("29/11/2019")) {
-                                nPerc = 0.9M;
-                                nPlano = 34;
-                            } else if (Convert.ToDateTime(_dataVencto) > Convert.ToDateTime("29/11/2019") && Convert.ToDateTime(_dataVencto) <= Convert.ToDateTime("20/12/2019")) {
+                                nPlano = 41;
+                            } else if (Convert.ToDateTime(_dataVencto) > Convert.ToDateTime("19/10/2020") && Convert.ToDateTime(_dataVencto) <= Convert.ToDateTime("30/11/2020")) {
                                 nPerc = 0.8M;
-                                nPlano = 35;
+                                nPlano = 42;
+                            } else if (Convert.ToDateTime(_dataVencto) > Convert.ToDateTime("30/11/2020") && Convert.ToDateTime(_dataVencto) <= Convert.ToDateTime("22/12/2020")) {
+                                nPerc = 0.7M;
+                                nPlano = 43;
                             }
                             if (nPlano > 0) {
                                 item.Valorjuros = Convert.ToDecimal(item.Valorjuros) - (Convert.ToDecimal(item.Valorjuros) * nPerc);
@@ -1087,8 +1087,8 @@ namespace GTI_Mvc.Controllers {
 
         public ActionResult Damd() {
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
-            DebitoListViewModel value =(DebitoListViewModel) TempData["debito"];
-            DebitoListViewModel model = value as DebitoListViewModel;
+            DebitoListViewModel model =(DebitoListViewModel) TempData["debito"];
+            //DebitoListViewModel model = value;
 
             //grava o documento
             Numdocumento docReg = new Numdocumento() { 
@@ -1108,7 +1108,7 @@ namespace GTI_Mvc.Controllers {
                     Seqlancamento=(short)_debitos.Seq,
                     Numparcela=(byte)_debitos.Parcela,
                     Codcomplemento=(byte)_debitos.Complemento,
-                    Plano=Convert.ToInt16(value.Plano.ToString()),
+                    Plano=Convert.ToInt16(model.Plano.ToString()),
                     Numdocumento=_documento
                 };
                 Exception ex = tributarioRepository.Insert_Parcela_Documento(parcReg);
@@ -1149,7 +1149,7 @@ namespace GTI_Mvc.Controllers {
                         Seqlancamento = _seqHon,
                         Numparcela = 1,
                         Codcomplemento = 0,
-                        Plano = Convert.ToInt16(value.Plano.ToString()),
+                        Plano = Convert.ToInt16(model.Plano.ToString()),
                         Numdocumento = _documento
                     };
                     ex2 = tributarioRepository.Insert_Parcela_Documento(parcReg);
@@ -1229,7 +1229,7 @@ namespace GTI_Mvc.Controllers {
             //    }
             //}
             //##################################
-            model.Data_Vencimento_String = Convert.ToDateTime(value.Data_Vencimento.ToString()).ToString("ddMMyyyy");
+            model.Data_Vencimento_String = Convert.ToDateTime(model.Data_Vencimento.ToString()).ToString("ddMMyyyy");
             model.RefTran = "287353200" + _documento.ToString();
             if (model == null)
                 return RedirectToAction("Login_gti", "Home");
