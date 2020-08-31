@@ -702,6 +702,16 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Incluir_Itbi_isencao_imovel(List<Itbi_isencao_imovel> Lista) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Incluir_Itbi_isencao_imovel(Lista);
+            return ex;
+        }
+
+        public Itbi_isencao_main Retorna_Itbi_Isencao_Main(string Guid) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Itbi_Isencao_Main(Guid);
+        }
 
 
         #endregion

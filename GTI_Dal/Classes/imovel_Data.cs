@@ -2032,18 +2032,58 @@ namespace GTI_Dal.Classes {
                     return ex;
                 }
 
-                //try {
-                //    db.Itbi_Comprador.RemoveRange(db.Itbi_Comprador.Where(i => i.Guid == Reg.Guid));
-                //    db.SaveChanges();
-                //} catch (Exception ex) {
-                //    return ex;
-                //}
+                try {
+                    db.Itbi_Isencao_Imovel.RemoveRange(db.Itbi_Isencao_Imovel.Where(i => i.Guid == Reg.Guid));
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
 
                 return null;
             }
         }
 
+        public Exception Incluir_Itbi_isencao_imovel(List<Itbi_isencao_imovel> Lista) {
+            using (var db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[5];
+                foreach (Itbi_isencao_imovel item in Lista) {
+                    Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = item.Guid };
+                    Parametros[1] = new SqlParameter { ParameterName = "@seq", SqlDbType = SqlDbType.TinyInt, SqlValue = item.Seq };
+                    Parametros[2] = new SqlParameter { ParameterName = "@tipo", SqlDbType = SqlDbType.VarChar, SqlValue = item.Tipo };
+                    Parametros[3] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = item.Codigo };
+                    Parametros[4] = new SqlParameter { ParameterName = "@descricao", SqlDbType = SqlDbType.VarChar, SqlValue = item.Descricao };
 
+                    db.Database.ExecuteSqlCommand("INSERT INTO Itbi_isencao_imovel(guid,seq,tipo,codigo,descricao) " +
+                                                  " VALUES(@guid,@seq,@tipo,@codigo,@descricao)", Parametros);
+                    try {
+                        db.SaveChanges();
+                    } catch (Exception ex) {
+                        return ex;
+                    }
+                }
+
+                return null;
+            }
+        }
+
+        public Itbi_isencao_main Retorna_Itbi_Isencao_Main(string Guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Itbi_Isencao_Main where t.Guid == Guid select t).First();
+                Itbi_isencao_main itbi = new Itbi_isencao_main() {
+                    Guid = Sql.Guid,
+                    Data_cadastro = Sql.Data_cadastro,
+                    Natureza = Sql.Natureza,
+                    Usuario_nome = Sql.Usuario_nome,
+                    Usuario_doc = Sql.Usuario_doc,
+                    Fiscal_id=Sql.Fiscal_id,
+                    Isencao_ano=Sql.Isencao_ano,
+                    Isencao_numero=Sql.Isencao_numero,
+                    Situacao=Sql.Situacao
+                };
+                return itbi;
+            }
+
+        }
 
 
 
