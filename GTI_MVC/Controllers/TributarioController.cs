@@ -1809,16 +1809,16 @@ namespace GTI_Mvc.Controllers {
             Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
             List<DebitoStructure> ListaParcelas = tributario_Class.Lista_Tabela_Parcela_Documento(nNumDoc);
 
-//            short _plano = tributario_Class.Retorna_Plano_Desconto(nNumDoc);
- //           decimal _perc = 0;
+            short _plano = tributario_Class.Retorna_Plano_Desconto(nNumDoc);
+            decimal _perc = 0;
 
             foreach (DebitoStructure Linha in ListaParcelas) {
-                //if (_plano > 0) {
-                //    _perc = tributario_Class.Retorna_Plano_Desconto_Perc(_plano);
-                //    ListaParcelas[i].Soma_Juros = Convert.ToDecimal(ListaParcelas[i].Soma_Juros) - (Convert.ToDecimal(ListaParcelas[i].Soma_Juros) * _perc);
-                //    ListaParcelas[i].Soma_Multa = Convert.ToDecimal(ListaParcelas[i].Soma_Multa) - (Convert.ToDecimal(ListaParcelas[i].Soma_Multa) * _perc);
-                //    ListaParcelas[i].Soma_Total = ListaParcelas[i].Soma_Principal + ListaParcelas[i].Soma_Correcao;
-                //}
+                if (_plano > 0) {
+                    _perc = tributario_Class.Retorna_Plano_Desconto_Perc(_plano);
+                    ListaParcelas[i].Soma_Juros = Convert.ToDecimal(ListaParcelas[i].Soma_Juros) - (Convert.ToDecimal(ListaParcelas[i].Soma_Juros) * _perc/100);
+                    ListaParcelas[i].Soma_Multa = Convert.ToDecimal(ListaParcelas[i].Soma_Multa) - (Convert.ToDecimal(ListaParcelas[i].Soma_Multa) * _perc/100);
+                    ListaParcelas[i].Soma_Total = ListaParcelas[i].Soma_Principal + ListaParcelas[i].Soma_Correcao;
+                }
 
 
                 List<SpExtrato> ListaTributo = tributario_Class.Lista_Extrato_Tributo(Linha.Codigo_Reduzido, (short)Linha.Ano_Exercicio, (short)Linha.Ano_Exercicio, (short)Linha.Codigo_Lancamento, (short)Linha.Codigo_Lancamento,

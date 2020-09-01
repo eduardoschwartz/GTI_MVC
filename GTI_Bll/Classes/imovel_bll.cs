@@ -713,6 +713,10 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Itbi_Isencao_Main(Guid);
         }
 
+        public List<Itbi_isencao_imovel> Retorna_Itbi_Isencao_Imovel(string Guid) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Itbi_Isencao_Imovel(Guid);
+        }
 
         #endregion
 

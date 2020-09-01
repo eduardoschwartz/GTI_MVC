@@ -3671,13 +3671,42 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_isencao")]
         [HttpGet]
-        public ActionResult Itbi_isencao() {
+        public ActionResult Itbi_isencao(string guid, string a, int s = 0) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
-            ItbiViewModel model = new ItbiViewModel() {
-                UserId = Convert.ToInt32(Session["hashid"])
-                //Lista_Isencao=new List<Imovel_Isencao>()
-            };
+            ItbiViewModel model = new ItbiViewModel();
+            if (String.IsNullOrWhiteSpace( guid)) {
+                bool bFuncionario = Session["hashfunc"].ToString() == "S" ? true : false;
+                int nId = Convert.ToInt32(Session["hashid"]);
+                int nUserId = bFuncionario ? 0 : nId;
+                string usuario_Nome = "", usuario_Doc = "";
+                if (nUserId > 0) {
+                    Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+                    Usuario_web _user = sistemaRepository.Retorna_Usuario_Web(nUserId);
+                    usuario_Nome = _user.Nome;
+                    usuario_Doc = Functions.FormatarCpfCnpj(_user.Cpf_Cnpj);
+                }
+
+                model.UserId = Convert.ToInt32(Session["hashid"]);
+                model.Guid = Guid.NewGuid().ToString("N");
+                model.Data_cadastro = DateTime.Now;
+
+                Itbi_isencao_main regMain = new Itbi_isencao_main() {
+                    Guid = model.Guid,
+                    Data_cadastro = DateTime.Now,
+                    Situacao = 1,
+                    Fiscal_id = 0,
+                    Usuario_nome = usuario_Nome,
+                    Usuario_doc = usuario_Doc,
+                    Natureza = 0,
+                    Isencao_ano = 0,
+                    Isencao_numero = 0
+                };
+                Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+                Exception ex = imovelRepository.Incluir_isencao_main(regMain);
+            } else {
+                model = Retorna_Itbi_Isencao_Gravado(guid);
+            }
             return View(model);
         }
 
@@ -3686,38 +3715,38 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Itbi_isencao(ItbiViewModel model) {
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
 
-            bool bFuncionario = Session["hashfunc"].ToString() == "S" ? true : false;
-            int nId = Convert.ToInt32(Session["hashid"]);
-            int nUserId = bFuncionario ? 0 : nId;
-            string usuario_Nome = "",usuario_Doc="";
-            if (nUserId > 0) {
-                Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
-                Usuario_web _user = sistemaRepository.Retorna_Usuario_Web(nUserId);
-                usuario_Nome = _user.Nome;
-                usuario_Doc = Functions.FormatarCpfCnpj(_user.Cpf_Cnpj);
-            }
-            Exception ex = null;
-            if (model.Guid == null) {
-                string _guid = Guid.NewGuid().ToString("N");
-                model.Guid = _guid;
-                Itbi_isencao_main regMain = new Itbi_isencao_main() {
-                    Guid = _guid,
-                    Data_cadastro = DateTime.Now,
-                    Situacao = 1,
-                    Fiscal_id=0,
-                    Usuario_nome=usuario_Nome,
-                    Usuario_doc=usuario_Doc,
-                    Natureza=0,
-                    Isencao_ano=0,
-                    Isencao_numero=0
-                };
-                 ex = imovelRepository.Incluir_isencao_main(regMain);
-            }
+            //bool bFuncionario = Session["hashfunc"].ToString() == "S" ? true : false;
+            //int nId = Convert.ToInt32(Session["hashid"]);
+            //int nUserId = bFuncionario ? 0 : nId;
+            //string usuario_Nome = "",usuario_Doc="";
+            //if (nUserId > 0) {
+            //    Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            //    Usuario_web _user = sistemaRepository.Retorna_Usuario_Web(nUserId);
+            //    usuario_Nome = _user.Nome;
+            //    usuario_Doc = Functions.FormatarCpfCnpj(_user.Cpf_Cnpj);
+            //}
+            //Exception ex = null;
+            //if (model.Guid == "teste" ) {
+            //    string _guid = Guid.NewGuid().ToString("N");
+            //    model.Guid = _guid;
+            //    Itbi_isencao_main regMain = new Itbi_isencao_main() {
+            //        Guid = _guid,
+            //        Data_cadastro = DateTime.Now,
+            //        Situacao = 1,
+            //        Fiscal_id=0,
+            //        Usuario_nome=usuario_Nome,
+            //        Usuario_doc=usuario_Doc,
+            //        Natureza=0,
+            //        Isencao_ano=0,
+            //        Isencao_numero=0
+            //    };
+            //     ex = imovelRepository.Incluir_isencao_main(regMain);
+            //}
 
             int _codigo = Convert.ToInt32(model.Vendedor_Cpf_cnpj_tmp);
-            model.Tipo_Imovel =_codigo == 0 ? "Rural" : "Urbano";
+            model.Tipo_Imovel = _codigo == 0 ? "Rural" : "Urbano";
             bool _urbano = model.Tipo_Imovel == "Urbano";
-            
+
             if (_urbano) {
                 if (!imovelRepository.Existe_Imovel(_codigo)) {
                     ViewBag.Result = "Imóvel não cadastrado.";
@@ -3728,9 +3757,9 @@ namespace GTI_Mvc.Controllers {
                     model.Inscricao = imovel.Inscricao;
                     model.Dados_Imovel = imovel;
                     Imovel_Isencao reg = new Imovel_Isencao() {
-                        Tipo= model.Tipo_Imovel,
-                        Codigo =_codigo.ToString(),
-                        Descricao="Um imóvel localizado no(a) " + imovel.NomeLogradouroAbreviado + ", " + imovel.Numero.ToString()
+                        Tipo = model.Tipo_Imovel,
+                        Codigo = _codigo.ToString(),
+                        Descricao = "Um imóvel localizado no(a) " + imovel.NomeLogradouroAbreviado + ", " + imovel.Numero.ToString()
                     };
                     model.Lista_Isencao.Add(reg);
                 }
@@ -3751,9 +3780,9 @@ namespace GTI_Mvc.Controllers {
                     y++;
                 }
             }
-            ex = imovelRepository.Incluir_Itbi_isencao_imovel(Lista);
+            Exception ex = imovelRepository.Incluir_Itbi_isencao_imovel(Lista);
 
-//            model = imovelRepository.Retorna_Itbi_Isencao_Main(model.Guid);
+            model = Retorna_Itbi_Isencao_Gravado(model.Guid);
 
             return View(model);
         }
@@ -3766,6 +3795,21 @@ namespace GTI_Mvc.Controllers {
                 Guid = regMain.Guid,
                 Data_cadastro = regMain.Data_cadastro
             };
+
+            List<Itbi_isencao_imovel> ListaImovel = imovelRepository.Retorna_Itbi_Isencao_Imovel(guid);
+            List<Imovel_Isencao> ListaIsencao = new List<Imovel_Isencao>();
+
+            foreach (Itbi_isencao_imovel item in ListaImovel) {
+                Imovel_Isencao reg = new Imovel_Isencao() {
+                    Seq=item.Seq,
+                    Codigo=item.Codigo.ToString(),
+                    Tipo=item.Tipo,
+                    Descricao=item.Descricao
+                };
+                ListaIsencao.Add(reg);
+            }
+            itbi.Lista_Isencao = ListaIsencao;
+
             return itbi;
         }
 

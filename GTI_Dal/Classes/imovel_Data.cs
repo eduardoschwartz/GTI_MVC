@@ -2085,7 +2085,12 @@ namespace GTI_Dal.Classes {
 
         }
 
-
+        public List<Itbi_isencao_imovel> Retorna_Itbi_Isencao_Imovel(string Guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                List<Itbi_isencao_imovel> Sql = (from t in db.Itbi_Isencao_Imovel orderby t.Seq where t.Guid == Guid select t).ToList();
+                return Sql;
+            }
+        }
 
     }//end class
 }
