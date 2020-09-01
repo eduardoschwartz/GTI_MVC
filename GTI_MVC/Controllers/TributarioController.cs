@@ -1808,7 +1808,19 @@ namespace GTI_Mvc.Controllers {
             int i = 0;
             Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
             List<DebitoStructure> ListaParcelas = tributario_Class.Lista_Tabela_Parcela_Documento(nNumDoc);
+
+//            short _plano = tributario_Class.Retorna_Plano_Desconto(nNumDoc);
+ //           decimal _perc = 0;
+
             foreach (DebitoStructure Linha in ListaParcelas) {
+                //if (_plano > 0) {
+                //    _perc = tributario_Class.Retorna_Plano_Desconto_Perc(_plano);
+                //    ListaParcelas[i].Soma_Juros = Convert.ToDecimal(ListaParcelas[i].Soma_Juros) - (Convert.ToDecimal(ListaParcelas[i].Soma_Juros) * _perc);
+                //    ListaParcelas[i].Soma_Multa = Convert.ToDecimal(ListaParcelas[i].Soma_Multa) - (Convert.ToDecimal(ListaParcelas[i].Soma_Multa) * _perc);
+                //    ListaParcelas[i].Soma_Total = ListaParcelas[i].Soma_Principal + ListaParcelas[i].Soma_Correcao;
+                //}
+
+
                 List<SpExtrato> ListaTributo = tributario_Class.Lista_Extrato_Tributo(Linha.Codigo_Reduzido, (short)Linha.Ano_Exercicio, (short)Linha.Ano_Exercicio, (short)Linha.Codigo_Lancamento, (short)Linha.Codigo_Lancamento,
                     (short)Linha.Sequencia_Lancamento, (short)Linha.Sequencia_Lancamento, (short)Linha.Numero_Parcela, (short)Linha.Numero_Parcela, Linha.Complemento, Linha.Complemento, 0, 99, dDataDoc, "Web");
                 List<SpExtrato> ListaParcela = tributario_Class.Lista_Extrato_Parcela(ListaTributo);
@@ -1825,6 +1837,7 @@ namespace GTI_Mvc.Controllers {
                 ListaParcelas[i].Soma_Total = ListaParcela[0].Valortotal;
                 ListaParcelas[i].Descricao_Lancamento = ListaParcela[0].Desclancamento;
                 string DescTributo = "";
+
 
                 List<int> aTributos = new List<int>();
                 foreach (SpExtrato Trib in ListaTributo) {

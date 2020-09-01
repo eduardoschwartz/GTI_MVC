@@ -2494,6 +2494,25 @@ Proximo:;
         }
 
 
+        public short Retorna_Plano_Desconto(int Documento) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from c in db.Parceladocumento where c.Numdocumento == Documento select c.Plano).FirstOrDefault();
+                if (Sql == null)
+                    return (short)0;
+                else {
+                    short _plano = (short) Sql.Value;
+                    return _plano;
+                }
+            }
+        }
+
+        public decimal Retorna_Plano_Desconto_Perc(short Plano) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from c in db.Plano where c.Codigo == Plano select c.Desconto).FirstOrDefault();
+               return  Sql;
+            }
+        }
+
 
     }//end class
 }

@@ -1443,6 +1443,15 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Proxima_Seq_Itbi(Codigo, Ano);
         }
 
+        public short Retorna_Plano_Desconto(int Documento) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Retorna_Plano_Desconto(Documento);
+        }
+
+        public decimal Retorna_Plano_Desconto_Perc(short Plano) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Retorna_Plano_Desconto_Perc(Plano);
+        }
     }//end class
 }
 
