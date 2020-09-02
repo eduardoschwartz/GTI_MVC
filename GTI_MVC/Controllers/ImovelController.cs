@@ -3675,6 +3675,7 @@ namespace GTI_Mvc.Controllers {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             ItbiViewModel model = new ItbiViewModel();
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             if (String.IsNullOrWhiteSpace( guid)) {
                 bool bFuncionario = Session["hashfunc"].ToString() == "S" ? true : false;
                 int nId = Convert.ToInt32(Session["hashid"]);
@@ -3702,9 +3703,12 @@ namespace GTI_Mvc.Controllers {
                     Isencao_ano = 0,
                     Isencao_numero = 0
                 };
-                Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
                 Exception ex = imovelRepository.Incluir_isencao_main(regMain);
             } else {
+                if (a == "rv") {//remover imóvel
+                    Exception ex = imovelRepository.Excluir_Itbi_Isencao_Imovel(guid, s);
+                }
+
                 model = Retorna_Itbi_Isencao_Gravado(guid);
             }
             return View(model);
@@ -3715,34 +3719,6 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Itbi_isencao(ItbiViewModel model) {
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
 
-            //bool bFuncionario = Session["hashfunc"].ToString() == "S" ? true : false;
-            //int nId = Convert.ToInt32(Session["hashid"]);
-            //int nUserId = bFuncionario ? 0 : nId;
-            //string usuario_Nome = "",usuario_Doc="";
-            //if (nUserId > 0) {
-            //    Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
-            //    Usuario_web _user = sistemaRepository.Retorna_Usuario_Web(nUserId);
-            //    usuario_Nome = _user.Nome;
-            //    usuario_Doc = Functions.FormatarCpfCnpj(_user.Cpf_Cnpj);
-            //}
-            //Exception ex = null;
-            //if (model.Guid == "teste" ) {
-            //    string _guid = Guid.NewGuid().ToString("N");
-            //    model.Guid = _guid;
-            //    Itbi_isencao_main regMain = new Itbi_isencao_main() {
-            //        Guid = _guid,
-            //        Data_cadastro = DateTime.Now,
-            //        Situacao = 1,
-            //        Fiscal_id=0,
-            //        Usuario_nome=usuario_Nome,
-            //        Usuario_doc=usuario_Doc,
-            //        Natureza=0,
-            //        Isencao_ano=0,
-            //        Isencao_numero=0
-            //    };
-            //     ex = imovelRepository.Incluir_isencao_main(regMain);
-            //}
-
             int _codigo = Convert.ToInt32(model.Vendedor_Cpf_cnpj_tmp);
             model.Tipo_Imovel = _codigo == 0 ? "Rural" : "Urbano";
             bool _urbano = model.Tipo_Imovel == "Urbano";
@@ -3750,6 +3726,7 @@ namespace GTI_Mvc.Controllers {
             if (_urbano) {
                 if (!imovelRepository.Existe_Imovel(_codigo)) {
                     ViewBag.Result = "Imóvel não cadastrado.";
+                    model = Retorna_Itbi_Isencao_Gravado(model.Guid);
                     return View(model);
                 } else {
                     ImovelStruct imovel = imovelRepository.Dados_Imovel(_codigo);
@@ -3765,13 +3742,17 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-            int y = 1;
-            List<Itbi_isencao_imovel> Lista = new List<Itbi_isencao_imovel>();
+            byte y = 1;
+            List<Itbi_isencao_imovel> Lista = imovelRepository.Retorna_Itbi_Isencao_Imovel(model.Guid);
+            foreach (Itbi_isencao_imovel i in Lista) {
+                i.Seq = y;
+                y++;
+            }
             foreach (Imovel_Isencao item in model.Lista_Isencao) {
                 if (item != null) {
                     Itbi_isencao_imovel regC = new Itbi_isencao_imovel() {
                         Guid = model.Guid,
-                        Seq = (byte)y,
+                        Seq = y,
                         Tipo = item.Tipo,
                         Codigo = Convert.ToInt32(item.Codigo),
                         Descricao = item.Descricao

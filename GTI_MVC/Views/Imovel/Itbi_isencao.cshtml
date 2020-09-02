@@ -34,8 +34,8 @@
             <div class="panel panel-danger">
                 <div class="panel-heading">Certidão de não incidência de ITBI (Imóvel Urbano) </div>
                 <div class="panel-body">
-                    <label id="Guidtmp">@Model.Guid</label>
-                    @Html.HiddenFor(m => m.Guid)@*Armazenar o guid*@
+                    <label id="Guidtmp" style = "display: none">@Model.Guid</label>
+                    @Html.HiddenFor(m => m.Guid, new { @id = "Guid" })@*Armazenar o guid*@
                     @Html.HiddenFor(m => m.Vendedor_Cpf_cnpj_tmp, new { @id = "Vendedor_Cpf_cnpj_tmp" })@*Armazenar o código do imóvel*@
                     @Html.HiddenFor(m => m.Vendedor_Nome_tmp, new { @id = "Vendedor_Nome_tmp" })@*Armazenar a descrição do imóvel*@
                     @Html.HiddenFor(m => m.Lista_Isencao)
@@ -208,6 +208,7 @@
                 if (codurbanoback.trim() == "") {
                     document.getElementById('errorUrbano').innerHTML = "Digite o código do imóvel";
                 } else {
+                    document.getElementById('Guid').value = document.getElementById('Guidtmp').innerHTML;
                     document.getElementById('Vendedor_Cpf_cnpj_tmp').value = codurbanoback;
                     $('#UrbanoModal').modal('hide');
                     $("#MainForm").submit();

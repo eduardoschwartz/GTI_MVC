@@ -2031,20 +2031,20 @@ namespace GTI_Dal.Classes {
                 } catch (Exception ex) {
                     return ex;
                 }
-
-                try {
-                    db.Itbi_Isencao_Imovel.RemoveRange(db.Itbi_Isencao_Imovel.Where(i => i.Guid == Reg.Guid));
-                    db.SaveChanges();
-                } catch (Exception ex) {
-                    return ex;
-                }
-
                 return null;
             }
         }
 
         public Exception Incluir_Itbi_isencao_imovel(List<Itbi_isencao_imovel> Lista) {
             using (var db = new GTI_Context(_connection)) {
+                string guid = Lista[0].Guid;
+                try {
+                    db.Itbi_Isencao_Imovel.RemoveRange(db.Itbi_Isencao_Imovel.Where(i => i.Guid == guid));
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+
                 object[] Parametros = new object[5];
                 foreach (Itbi_isencao_imovel item in Lista) {
                     Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = item.Guid };
@@ -2089,6 +2089,17 @@ namespace GTI_Dal.Classes {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 List<Itbi_isencao_imovel> Sql = (from t in db.Itbi_Isencao_Imovel orderby t.Seq where t.Guid == Guid select t).ToList();
                 return Sql;
+            }
+        }
+
+        public Exception Excluir_Itbi_Isencao_Imovel(string guid, int seq) {
+            object[] Parametros = new object[2];
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@seq", SqlDbType = SqlDbType.TinyInt, SqlValue = seq };
+
+                db.Database.ExecuteSqlCommand("DELETE FROM itbi_isencao_imovel WHERE guid=@guid AND seq=@seq", Parametros);
+                return null;
             }
         }
 

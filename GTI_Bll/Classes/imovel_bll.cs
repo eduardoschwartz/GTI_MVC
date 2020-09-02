@@ -718,6 +718,12 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Itbi_Isencao_Imovel(Guid);
         }
 
+        public Exception Excluir_Itbi_Isencao_Imovel(string guid, int seq) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Excluir_Itbi_Isencao_Imovel(guid,seq);
+            return ex;
+        }
+
         #endregion
 
     }//end class
