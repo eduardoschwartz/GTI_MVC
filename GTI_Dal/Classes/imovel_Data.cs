@@ -2103,5 +2103,29 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Excluir_Itbi_Guia(string guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[2];
+                var Sql = (from t in db.Itbi_Guia where t.Guid == guid  select t.Numero_guia).First();
+                int documento = 0;
+                if (Sql >0)
+                    documento = Convert.ToInt32( Sql);
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@numero_guia", SqlDbType = SqlDbType.Int, SqlValue = documento };
+
+                if(Sql>0)
+                    db.Database.ExecuteSqlCommand("DELETE FROM itbi_guia WHERE guid=@guid and numero_guia=@numero_guia", Parametros);
+
+                db.Database.ExecuteSqlCommand("UPDATE itbi_main set situacao_itbi=1, liberado_por=0,liberado_em=null,numero_guia=0,data_vencimento=null WHERE guid=@guid", Parametros);
+
+
+
+                return null;
+            }
+        }
+
+
+
+
     }//end class
 }

@@ -39,7 +39,7 @@ namespace GTI_Dal.Classes {
                            join l in db.Logradouro on c.Codlogradouro equals l.Codlogradouro into lc from l in lc.DefaultIfEmpty()
                            join l2 in db.Logradouro on c.Codlogradouro2 equals l2.Codlogradouro into l2c from l2 in l2c.DefaultIfEmpty()
                            join a in db.Cidade on new { p1 = c.Siglauf, p2 = (short)c.Codcidade } equals new { p1 = a.Siglauf, p2 = a.Codcidade } into ac from a in ac.DefaultIfEmpty()
-                           join a2 in db.Cidade on new { p1 = c.Siglauf, p2 = (short)c.Codcidade } equals new { p1 = a2.Siglauf, p2 = a2.Codcidade } into a2c from a2 in a2c.DefaultIfEmpty()
+                           join a2 in db.Cidade on new { p1 = c.Siglauf2, p2 = (short)c.Codcidade2 } equals new { p1 = a2.Siglauf, p2 = a2.Codcidade } into a2c from a2 in a2c.DefaultIfEmpty()
                            join b in db.Bairro on new {p1=c.Siglauf,p2=(short)c.Codcidade, p3= (short)c.Codbairro } equals new {p1=b.Siglauf,p2=b.Codcidade, p3= b.Codbairro } into bc from b in bc.DefaultIfEmpty()
                            join b2 in db.Bairro on new { p1 = c.Siglauf2, p2 = (short)c.Codcidade2, p3 = (short)c.Codbairro2 } equals new { p1 = b2.Siglauf, p2 = b2.Codcidade, p3 = b2.Codbairro } into b2c from b2 in b2c.DefaultIfEmpty()
                            where c.Codcidadao == _codigo

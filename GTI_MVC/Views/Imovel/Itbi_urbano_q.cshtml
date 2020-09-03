@@ -27,6 +27,7 @@
     .show {
         display: block;
     }
+
     .ui-datepicker {
         margin-top: 30px;
     }
@@ -61,13 +62,13 @@
 
                         <table style="font-size:14px;width:640px">
                             @*<tr style="height:30px">
-                                <td style="width:154px">
-                                    <label style="font-weight:normal;padding-top:7px">Proprietário principal:</label>
-                                </td>
-                                <td>
-                                    <label style="font-weight:normal;color:blue;padding-top:7px">@Html.TextBoxFor(m => m.Dados_Imovel.Proprietario_Nome, new { @readonly = true, style = "width:470px;height:25px" })</label>
-                                </td>
-                            </tr>*@
+                                    <td style="width:154px">
+                                        <label style="font-weight:normal;padding-top:7px">Proprietário principal:</label>
+                                    </td>
+                                    <td>
+                                        <label style="font-weight:normal;color:blue;padding-top:7px">@Html.TextBoxFor(m => m.Dados_Imovel.Proprietario_Nome, new { @readonly = true, style = "width:470px;height:25px" })</label>
+                                    </td>
+                                </tr>*@
                             @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Nome)
                             <tr style="height:30px">
                                 <td style="width:154px">
@@ -464,7 +465,7 @@
                             </td>
                             <td style="width:224px">
                                 <label style="font-weight:normal;">Utilizar o valor venal territorial:&nbsp;</label>
-                                @Html.CheckBoxFor(m => m.Utilizar_VVT,new { @disabled = "disabled" })
+                                @Html.CheckBoxFor(m => m.Utilizar_VVT, new { @disabled = "disabled" })
                             </td>
 
                         </tr>
@@ -665,6 +666,9 @@
             @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo == 1) {
                 <span style="padding-left:5px"><button type="submit" class="btn btn-primary" data-balloon-length="medium" aria-label="Liberar a guia para pagamento." data-balloon-pos="up" , name="button" value="guia">Liberar Guia</button></span>
             }
+            @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo == 2) {
+                <span style="padding-left:5px"><button type="submit" onclick="return cancelarCodigo()" class="btn btn-danger" data-balloon-length="medium" aria-label="Excluir a guia e reenviar o processo para análise." data-balloon-pos="up" , name="button" value="excluir_guia">Excluir a Guia</button></span>
+            }
         </div>
 
         <div style="padding-left:15px">@Html.ActionLink("Consultar outro ITBI", "Itbi_query", "Imovel", null, new { @class = "actionlink" })</div>
@@ -672,3 +676,17 @@
     }
 
 </div>
+
+
+@section scripts{
+
+    <script type="text/javascript">
+        function cancelarCodigo() {
+            if (confirm('Deseja cancelar esta guia e reenviar o processo para análise?')) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
+}

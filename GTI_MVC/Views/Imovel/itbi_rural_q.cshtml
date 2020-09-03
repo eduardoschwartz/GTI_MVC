@@ -59,15 +59,15 @@
 
                         </table>
                         @*<table style="font-size:13px;width:640px">
-                            <tr style="height:30px">
-                                <td style="width:154px">
-                                    <label style="font-weight:normal;padding-top:7px">Proprietário principal:</label>
-                                </td>
-                                <td>
-                                    <label style="font-weight:normal;padding-top:7px;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Proprietario_Nome, new { @readonly = true, style = "width:470px;height:25px" })</label>
-                                </td>
-                            </tr>
-                        </table>*@
+                                <tr style="height:30px">
+                                    <td style="width:154px">
+                                        <label style="font-weight:normal;padding-top:7px">Proprietário principal:</label>
+                                    </td>
+                                    <td>
+                                        <label style="font-weight:normal;padding-top:7px;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Proprietario_Nome, new { @readonly = true, style = "width:470px;height:25px" })</label>
+                                    </td>
+                                </tr>
+                            </table>*@
                         @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Nome)
                         <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Dados do Imóvel:</label><br />
 
@@ -615,8 +615,11 @@
         </div>
         <div style="text-align:center">
             <button type="submit" class="btn btn-success" data-balloon-length="medium" aria-label="Imprimir os dados do formulário." data-balloon-pos="up" name="button" value="print">Imprimir</button>
-            @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo==1) {
-                <span style="padding-left:5px"><button type="submit" class="btn btn-primary" data-balloon-length="medium" aria-label="Liberar a guia para pagamento." data-balloon-pos="up", name="button" value="guia">Liberar Guia</button></span>
+            @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo == 1) {
+                <span style="padding-left:5px"><button type="submit" class="btn btn-primary" data-balloon-length="medium" aria-label="Liberar a guia para pagamento." data-balloon-pos="up" , name="button" value="guia">Liberar Guia</button></span>
+            }
+            @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo == 2) {
+                <span style="padding-left:5px"><button type="submit" onclick="return cancelarCodigo()" class="btn btn-danger" data-balloon-length="medium" aria-label="Excluir a guia e reenviar o processo para análise." data-balloon-pos="up" , name="button" value="excluir_guia">Excluir a Guia</button></span>
             }
         </div>
 
@@ -625,3 +628,17 @@
     }
 
 </div>
+
+
+@section scripts{
+
+    <script type="text/javascript">
+        function cancelarCodigo() {
+            if (confirm('Deseja cancelar esta guia e reenviar o processo para análise?')) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
+}
