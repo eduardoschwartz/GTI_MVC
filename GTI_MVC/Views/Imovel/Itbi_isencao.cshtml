@@ -52,7 +52,7 @@
                                     <th style="width:60px;font-weight:normal">
                                         Código
                                     </th>
-                                    <th style="width:490px;font-weight:normal">
+                                    <th style="width:490px;font-weight:normal;text-align:left">
                                         Descrição
                                     </th>
                                     <th style="width:20px;text-align:left">
@@ -70,19 +70,19 @@
                                                 @Html.DisplayFor(modelItem => item.Seq)
                                                 @Html.HiddenFor(modelItem => item.Seq)
                                             </td>
-                                            <td style="width:100px;font-weight:normal;color:blue">
+                                            <td style="width:60px;font-weight:normal;color:blue">
                                                 @Html.DisplayFor(modelItem => item.Tipo)
                                                 @Html.HiddenFor(modelItem => item.Tipo)
                                             </td>
-                                            <td style="width:100px;font-weight:normal;color:blue;text-align:left">
+                                            <td style="width:60px;font-weight:normal;color:blue;text-align:left">
                                                 @Html.DisplayFor(modelItem => item.Codigo)
                                                 @Html.HiddenFor(modelItem => item.Codigo)
                                             </td>
-                                            <td style="width:410px;font-weight:normal;color:blue;text-align:left">
+                                            <td style="width:490px;font-weight:normal;color:blue;text-align:left">
                                                 @Html.DisplayFor(modelItem => item.Descricao)
                                                 @Html.HiddenFor(modelItem => item.Descricao)
                                             </td>
-                                            <td>
+                                            <td style="width:20px">
                                                 <a href="@Url.Action("Itbi_isencao", "Imovel", new { @a = "rv", @s = item.Seq, @guid = Model.Guid })" title="Remover imóvel"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                             </td>
                                         </tr>
@@ -219,6 +219,7 @@
                 if (descruralback.trim() == "") {
                     document.getElementById('errorRural').innerHTML = "Digite a descrição do imóvel";
                 } else {
+                    document.getElementById('Guid').value = document.getElementById('Guidtmp').innerHTML;
                     document.getElementById('Vendedor_Nome_tmp').value = descruralback;
                     $('#RuralModal').modal('hide');
                     $("#MainForm").submit();

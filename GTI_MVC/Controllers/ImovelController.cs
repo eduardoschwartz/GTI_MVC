@@ -105,9 +105,7 @@ namespace GTI_Mvc.Controllers {
                 Li_quadras = reg.Quadra_Original,
                 Numero = reg.Numero
             };
-
             Exception ex = tributarioRepository.Insert_Certidao_Endereco(regCert);
-
 
             Certidao_impressao cimp = new Certidao_impressao() {
                 Ano = reg.Ano,
@@ -2743,7 +2741,6 @@ namespace GTI_Mvc.Controllers {
                     return RedirectToAction("Itbi_query");
                 }
             }
-
         }
 
         [Route("Itbi_urbano_e")]
@@ -2808,7 +2805,6 @@ namespace GTI_Mvc.Controllers {
 
             return View("Itbi_rural_e", model);
         }
-
 
         [Route("Itbi_forum")]
         [HttpGet]
@@ -3741,12 +3737,13 @@ namespace GTI_Mvc.Controllers {
             model.Tipo_Imovel = _codigo == 0 ? "Rural" : "Urbano";
             bool _urbano = model.Tipo_Imovel == "Urbano";
 
-            if (_urbano) {
-                if (!imovelRepository.Existe_Imovel(_codigo)) {
-                    ViewBag.Result = "Imóvel não cadastrado.";
-                    model = Retorna_Itbi_Isencao_Gravado(model.Guid);
-                    return View(model);
-                } else {
+
+            if (_urbano &&  !imovelRepository.Existe_Imovel(_codigo)) {
+                ViewBag.Result = "Imóvel não cadastrado.";
+                model = Retorna_Itbi_Isencao_Gravado(model.Guid);
+                return View(model);
+            } else {
+                if (_urbano) {
                     ImovelStruct imovel = imovelRepository.Dados_Imovel(_codigo);
                     model.Codigo = imovel.Codigo.ToString("00000");
                     model.Inscricao = imovel.Inscricao;
@@ -3763,14 +3760,28 @@ namespace GTI_Mvc.Controllers {
                     else
                         _descricao = "Um terreno ";
 
-                    _descricao += "com "  +  imovel.Area_Terreno.ToString("#.#0")   +  "m² localizado no(a) " + imovel.NomeLogradouroAbreviado + ", " + imovel.Numero.ToString();
+                    _descricao += "com " + imovel.Area_Terreno.ToString("#.#0") + "m² localizado no(a) " + imovel.NomeLogradouroAbreviado + ", " + imovel.Numero.ToString();
                     if (imovel.Complemento != "")
                         _descricao += " " + imovel.Complemento;
-                    if (imovel.QuadraOriginal!="")
-                        _descricao += " Quadra: " + imovel.Complemento + " Lote: " + imovel.LoteOriginal;
+                    if (imovel.QuadraOriginal != "")
+                        _descricao += " Quadra: " + imovel.QuadraOriginal + " Lote: " + imovel.LoteOriginal;
 
                     _descricao += " no bairro " + imovel.NomeBairro + " na cidade de JABOTICABAL/SP.";
-                    model.Descricao_Imovel = _descricao;
+                    reg.Descricao = _descricao;
+                    model.Lista_Isencao.Add(reg);
+                } else {
+                    model.Codigo = "0";
+                    model.Inscricao = "";
+                    //model.Dados_Imovel = imovel;
+                    decimal _somaarea = 0;
+                    bool _predial = _somaarea > 0;
+                    string _descricao = model.Descricao_Imovel;
+                    Imovel_Isencao reg = new Imovel_Isencao() {
+                        Tipo = model.Tipo_Imovel,
+                        Codigo = _codigo.ToString(),
+                        Descricao=model.Vendedor_Nome_tmp
+                    };
+
                     model.Lista_Isencao.Add(reg);
                 }
             }
@@ -3812,7 +3823,6 @@ namespace GTI_Mvc.Controllers {
 
             List<Itbi_isencao_imovel> ListaImovel = imovelRepository.Retorna_Itbi_Isencao_Imovel(guid);
             List<Imovel_Isencao> ListaIsencao = new List<Imovel_Isencao>();
-
             foreach (Itbi_isencao_imovel item in ListaImovel) {
                 Imovel_Isencao reg = new Imovel_Isencao() {
                     Seq=item.Seq,
@@ -3826,7 +3836,6 @@ namespace GTI_Mvc.Controllers {
 
             return itbi;
         }
-
 
         #endregion
     }

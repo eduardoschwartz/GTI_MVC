@@ -125,7 +125,7 @@ namespace GTI_Mvc.Controllers {
                 reg.Endereco = _dados.NomeLogradouro;
                 reg.Endereco_Numero = (int)_dados.Numero;
                 reg.Endereco_Complemento = _dados.Complemento;
-                reg.Bairro = _dados.NomeBairro ?? "";
+//                reg.Bairro = _dados.NomeBairro ?? "";
                 reg.Cidade = "JABOTICABAL";
                 reg.Uf = "SP";
                 reg.Atividade_Extenso = "";
@@ -138,6 +138,12 @@ namespace GTI_Mvc.Controllers {
                 reg.Tipo_Certidao = _tipoCertidao;
                 reg.Nao = _nao;
                 reg.Tributo = _tributo;
+
+                Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+                Bairro _bairro = enderecoRepository.RetornaLogradouroBairro((int)_dados.CodigoLogradouro, (short)_dados.Numero);
+                reg.Bairro = _bairro.Descbairro ?? "";
+
+
             } else {
                 EmpresaStruct _dados = empresaRepository.Retorna_Empresa(_codigo);
 
@@ -340,7 +346,6 @@ namespace GTI_Mvc.Controllers {
 
             //####################################
 
-
             string sData = "18/04/2012", sTributo = "", sNao = "", sCertifica = "",_reportName="",_tipo_certidao="";
             short nRet = 0;
             List < Certidao_debito_documento> _lista_certidao = new List<Certidao_debito_documento>();
@@ -534,9 +539,7 @@ namespace GTI_Mvc.Controllers {
                 }
 
             }
-
         }
-
 
         [Route("Comprovante_Pagamento")]
         [HttpGet]
