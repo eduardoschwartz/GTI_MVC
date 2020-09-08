@@ -3706,6 +3706,22 @@ namespace GTI_Mvc.Controllers {
                 model.Guid = Guid.NewGuid().ToString("N");
                 model.Data_cadastro = DateTime.Now;
 
+                model.Lista_Natureza_Isencao = new List<SelectListItem>();
+                List<Itbi_natureza_isencao> lista_natureza_isencao = imovelRepository.Lista_itbi_natureza_isencao();
+                foreach (Itbi_natureza_isencao temp in lista_natureza_isencao) {
+                    SelectListGroup _grupo = new SelectListGroup() {
+                        Name = temp.Artigo
+                    };
+                    SelectListItem item = new SelectListItem() {
+                        Group=_grupo,
+                        Text = temp.Descricao,
+                        Value = temp.Codigo.ToString()
+                    };
+
+                    model.Lista_Natureza_Isencao.Add(item);
+                }
+
+
                 Itbi_isencao_main regMain = new Itbi_isencao_main() {
                     Guid = model.Guid,
                     Data_cadastro = DateTime.Now,

@@ -2,6 +2,7 @@
 using GTI_Mvc.Views.Imovel.EditorTemplates;
 using System;
 using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace GTI_Mvc.ViewModels {
     public class ItbiViewModel {
@@ -72,6 +73,8 @@ namespace GTI_Mvc.ViewModels {
         public bool Utilizar_VVT { get; set; }
         public string[] Lista_Status = new[] { "0-Exibir todos os ITBI's", "1-Enviado para análise","2-Aguardando pagamento","3-ITBI's Concluídos","4-ITBI's Cancelados" };
         public string Status_Query { get; set; }
+        public List<SelectListItem> Lista_Natureza_Isencao { get; set; }
+        public int Natureza_Isencao_Codigo { get; set; }
 
         public ItbiViewModel() {
             Lista_Comprador = new List<ListCompradorEditorViewModel>();

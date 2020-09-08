@@ -2124,6 +2124,12 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<Itbi_natureza_isencao> Lista_itbi_natureza_isencao() {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                List<Itbi_natureza_isencao> Sql = (from t in db.Itbi_Natureza_Isencao orderby t.Codigo select t).ToList();
+                return Sql;
+            }
+        }
 
 
 

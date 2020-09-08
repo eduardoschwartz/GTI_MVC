@@ -730,6 +730,10 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public List<Itbi_natureza_isencao> Lista_itbi_natureza_isencao() {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Lista_itbi_natureza_isencao();
+        }
 
         #endregion
 

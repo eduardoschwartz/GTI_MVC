@@ -34,7 +34,7 @@
             <div class="panel panel-danger">
                 <div class="panel-heading">Certidão de não incidência de ITBI (Imóvel Urbano) </div>
                 <div class="panel-body">
-                    <label id="Guidtmp" style = "display: none">@Model.Guid</label>
+                    <label id="Guidtmp" style="display: none">@Model.Guid</label>
                     @Html.HiddenFor(m => m.Guid, new { @id = "Guid" })@*Armazenar o guid*@
                     @Html.HiddenFor(m => m.Vendedor_Cpf_cnpj_tmp, new { @id = "Vendedor_Cpf_cnpj_tmp" })@*Armazenar o código do imóvel*@
                     @Html.HiddenFor(m => m.Vendedor_Nome_tmp, new { @id = "Vendedor_Nome_tmp" })@*Armazenar a descrição do imóvel*@
@@ -96,7 +96,8 @@
                     <br />
                     <button type="button" class="btn btn-info" name="action" value="btnUrbanoAdd" onclick="EditarUrbano()">Incluir imóvel urbano</button>
                     <button style="padding-left:5px" type="button" class="btn btn-info" name="action" value="btnRuralAdd" onclick="EditarRural()">Incluir imóvel rural</button>
-
+                    <br /><br />
+                    @Html.DropDownListFor(x => x.Natureza_Isencao_Codigo, Model.Lista_Natureza_Isencao)
                 </div>
             </div>
         </div>

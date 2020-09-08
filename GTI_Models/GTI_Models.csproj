@@ -147,6 +147,7 @@
     <Compile Include="Models\itbi_isencao_main.cs" />
     <Compile Include="Models\itbi_main.cs" />
     <Compile Include="Models\itbi_natureza.cs" />
+    <Compile Include="Models\itbi_natureza_isencao.cs" />
     <Compile Include="Models\itbi_status.cs" />
     <Compile Include="Models\itbi_vendedor.cs" />
     <Compile Include="Models\lancamento.cs" />
