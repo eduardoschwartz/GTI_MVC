@@ -1053,11 +1053,12 @@
             else
                 _percvv = (parseFloat(_perc2));
 
+            var _somavvoriginal = _somavv;
             if (_percvv > 0) {
                 _somavv = _somavv * _percvv / 100;
             }
 
-            if (_soma > _somavv) {
+            if (_soma > _somavvoriginal) {
                 if (_tf == "") {
                     $("input[name='Valor_guia']").val((_soma * 0.015).toFixed(2).replace(".", ","));
                 } else {

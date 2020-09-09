@@ -4,7 +4,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Certidão de não incidência de ITBI";
 }
+    <script src="~/Scripts/jquery.giantdropdown.js"></script>
 
+    <script type="text/javascript">
+        // <![CDATA[
+        $(function () { $("select").giantDropdown(); });
+        // ]]>
+    </script>
+
+    <link href="~/Content/giantdropdown.css" rel="stylesheet" />
 <style>
     .center {
         margin: auto;
@@ -36,6 +44,7 @@
                 <div class="panel-body">
                     <label id="Guidtmp" style="display: none">@Model.Guid</label>
                     @Html.HiddenFor(m => m.Guid, new { @id = "Guid" })@*Armazenar o guid*@
+                    @Html.HiddenFor(m => m.Natureza_Isencao_Codigo, new { @id = "Natureza_Isencao_Codigo" })@*Armazenar o guid*@
                     @Html.HiddenFor(m => m.Vendedor_Cpf_cnpj_tmp, new { @id = "Vendedor_Cpf_cnpj_tmp" })@*Armazenar o código do imóvel*@
                     @Html.HiddenFor(m => m.Vendedor_Nome_tmp, new { @id = "Vendedor_Nome_tmp" })@*Armazenar a descrição do imóvel*@
                     @Html.HiddenFor(m => m.Lista_Isencao)
@@ -97,7 +106,60 @@
                     <button type="button" class="btn btn-info" name="action" value="btnUrbanoAdd" onclick="EditarUrbano()">Incluir imóvel urbano</button>
                     <button style="padding-left:5px" type="button" class="btn btn-info" name="action" value="btnRuralAdd" onclick="EditarRural()">Incluir imóvel rural</button>
                     <br /><br />
-                    @Html.DropDownListFor(x => x.Natureza_Isencao_Codigo, Model.Lista_Natureza_Isencao)
+                    @*@Html.DropDownListFor(x => x.Natureza_Isencao_Codigo, Model.Lista_Natureza_Isencao, new { style = "width: 650px;" })*@
+
+                    <h3>Selecione a natureza </h3>
+                    <select id="natureza">
+                        <optgroup label="Artigo 3">
+                            @foreach (var item in Model.Lista_Natureza_Isencao) {
+
+                                if (item.Group.Name == "Artigo 3") {
+                                    <option value=@item.Value>@item.Text</option>
+                                }
+
+                            }
+                        </optgroup>
+
+                        <optgroup label="Artigo 110">
+                            @foreach (var item in Model.Lista_Natureza_Isencao) {
+
+                                if (item.Group.Name == "Artigo 110") {
+                                    <option value=@item.Value>@item.Text</option>
+                                }
+
+                            }
+                        </optgroup>
+                        <optgroup label="Artigo 111">
+                            @foreach (var item in Model.Lista_Natureza_Isencao) {
+
+                                if (item.Group.Name == "Artigo 111") {
+                                    <option value=@item.Value>@item.Text</option>
+                                }
+
+                            }
+                        </optgroup>
+                        <optgroup label="Artigo 150">
+                            @foreach (var item in Model.Lista_Natureza_Isencao) {
+
+                                if (item.Group.Name == "Artigo 150") {
+                                    <option value=@item.Value>@item.Text</option>
+                                }
+
+                            }
+                        </optgroup>
+                        <optgroup label="Artigo 150b">
+                            @foreach (var item in Model.Lista_Natureza_Isencao) {
+
+                                if (item.Group.Name == "Artigo 150b") {
+                                    <option value=@item.Value>@item.Text</option>
+                                }
+
+                            }
+                        </optgroup>
+                    </select>
+
+
+
                 </div>
             </div>
         </div>
@@ -200,7 +262,10 @@
             $("#MainForm").submit(function () {
                 return ValidateForm();
             });
-
+            $("#natureza").change(function () {
+                var tp_codigo = $(this).val();
+                document.getElementById('Natureza_Isencao_Codigo').value = tp_codigo;
+            });
             $(".maskValor").mask("99999");
            
 
