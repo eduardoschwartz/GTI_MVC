@@ -42,7 +42,7 @@
         <table width="500px">
             <tr style="height:40px">
                 @*<td style="width:150px">@Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })</td>*@
-                <td style="width:150px"><label style = "font-weight:normal">Código do imóvel:</label></td>
+                <td style="width:150px"><label style="font-weight:normal">Código do imóvel:</label></td>
                 <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
             </tr>
             <tr style="height:40px">
@@ -67,8 +67,12 @@
         </table>
 
         <br />
-            <button type="submit" class="btn btn-primary"> Consultar</button>
+        <button type="submit" class="btn btn-primary"> Consultar</button>
         <br />
+        <br />
+        <div class="form-group row">
+            <label style="font-weight:normal;color:red" id="errorLabel">@Model.ErrorMessage</label>
+        </div>
 
     }
 

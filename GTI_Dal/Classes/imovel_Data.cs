@@ -1777,22 +1777,29 @@ namespace GTI_Dal.Classes {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 List<Itbi_Lista> Lista = new List<Itbi_Lista>();
 
-               var Sql = (from t in db.Itbi_Main  orderby new { t.Itbi_Ano, t.Itbi_Numero } where t.Itbi_Numero>0  select t);
+               var Sql = (from t in db.Itbi_Main
+                          join c in db.Itbi_Status on t.Situacao_itbi equals c.Codigo into tc from c in tc.DefaultIfEmpty()
+                          orderby new { t.Itbi_Ano, t.Itbi_Numero } where t.Itbi_Numero>0  select new {Ano= t.Itbi_Ano,Numero=t.Itbi_Numero,Guid=t.Guid,UserId = t.Userid,
+                              DataCadastro=t.Data_cadastro,ImovelCodigo=t.Imovel_codigo,NomeComprador=t.Comprador_nome,SituacaoCodigo=t.Situacao_itbi,SituacaoNome=c.Descricao });
                 if(status>0)
-                    Sql = Sql.Where(m => m.Situacao_itbi == status);
+                    Sql = Sql.Where(m => m.SituacaoCodigo == status);
                 if (!f)//se for fiscal pode consultar qualquer ITBI
-                    Sql=Sql.Where(m => m.Userid == user);
+                    Sql=Sql.Where(m => m.UserId == user);
+                else {
+                    Sql = Sql.Where(m => m.SituacaoCodigo <3);//Só consultar ITBIs abertos
+                }
 
-                foreach (Itbi_main reg in Sql) {
+                foreach (var reg in Sql) {
                     Itbi_Lista item = new Itbi_Lista() {
-                        Ano=reg.Itbi_Ano,
-                        Numero=reg.Itbi_Numero,
-                        Numero_Ano=reg.Itbi_Numero.ToString("000000") + "/" + (reg.Itbi_Ano).ToString(),
+                        Ano=reg.Ano,
+                        Numero=reg.Numero,
+                        Numero_Ano=reg.Numero.ToString("000000") + "/" + (reg.Ano).ToString(),
                         Guid=reg.Guid,
-                        Data=reg.Data_cadastro,
-                        Tipo=reg.Imovel_codigo>0?"Urbano":"Rural",
-                        Nome_Comprador=reg.Comprador_nome,
-                        Situacao=Retorna_Itbi_Situacao(reg.Situacao_itbi)
+                        Data=reg.DataCadastro,
+                        Tipo=reg.ImovelCodigo>0?"Urbano":"Rural",
+                        Nome_Comprador=reg.NomeComprador,
+                        Situacao=reg.SituacaoNome,
+                        Situacao_Codigo=reg.SituacaoCodigo
                     };
                     Lista.Add(item);
                 }
@@ -2106,7 +2113,7 @@ namespace GTI_Dal.Classes {
         public Exception Excluir_Itbi_Guia(string guid) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 object[] Parametros = new object[2];
-                var Sql = (from t in db.Itbi_Guia where t.Guid == guid  select t.Numero_guia).First();
+                var Sql = (from t in db.Itbi_Guia where t.Guid == guid  select t.Numero_guia).FirstOrDefault();
                 int documento = 0;
                 if (Sql >0)
                     documento = Convert.ToInt32( Sql);

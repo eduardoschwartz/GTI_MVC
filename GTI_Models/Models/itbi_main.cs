@@ -86,6 +86,7 @@ namespace GTI_Models.Models {
         public string Nome_Comprador { get; set; }
         public string Tipo { get; set; }
         public string Situacao { get; set; }
+        public int Situacao_Codigo { get; set; }
     }
 
 }

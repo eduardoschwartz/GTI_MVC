@@ -839,39 +839,8 @@ namespace GTI_Mvc.Controllers {
             List<SpExtrato> ListaParcela = tributarioRepository.Lista_Extrato_Parcela(ListaTributo);
             List<DebitoStructure> Lista_debitos = new List<DebitoStructure>();
 
-            bool IsRefis = true;
-            int nIndex = 0, nPlano = 0;
-            decimal nPerc=0, nSomaPrincipal = 0, nSomaJuros = 0, nSomaMulta = 0, nSomaCorrecao = 0, nSomaTotal = 0, nSomaHonorario = 0;
-
-            if (IsRefis) {
-                foreach (var item in ListaParcela) {
-                    if (Convert.ToDateTime(item.Datavencimento) <= Convert.ToDateTime("30/06/2020")) {
-                        short CodLanc = item.Codlancamento;
-                        if (CodLanc != 48 || CodLanc != 69 || CodLanc != 78) {
-
-                            if (_dataVencto <= Convert.ToDateTime("19/10/2020")) {
-                                nPerc = 1M;
-                                nPlano = 41;
-                            } else if (Convert.ToDateTime(_dataVencto) > Convert.ToDateTime("19/10/2020") && Convert.ToDateTime(_dataVencto) <= Convert.ToDateTime("30/11/2020")) {
-                                nPerc = 0.8M;
-                                nPlano = 42;
-                            } else if (Convert.ToDateTime(_dataVencto) > Convert.ToDateTime("30/11/2020") && Convert.ToDateTime(_dataVencto) <= Convert.ToDateTime("22/12/2020")) {
-                                nPerc = 0.7M;
-                                nPlano = 43;
-                            }
-                            if (nPlano > 0) {
-                                item.Valorjuros = Convert.ToDecimal(item.Valorjuros) - (Convert.ToDecimal(item.Valorjuros) * nPerc);
-                                item.Valormulta = Convert.ToDecimal(item.Valormulta) - (Convert.ToDecimal(item.Valormulta) * nPerc);
-                                item.Valortotal = item.Valortributo + item.Valorjuros + item.Valormulta + item.Valorcorrecao;
-                            }
-                            ListaParcela[nIndex].Valorjuros = item.Valorjuros;
-                            ListaParcela[nIndex].Valormulta = item.Valormulta;
-                            ListaParcela[nIndex].Valortotal = item.Valortotal;
-                        }
-                    }
-                    nIndex++;
-                }
-            }
+            int nPlano = 0;
+            decimal nSomaPrincipal = 0, nSomaJuros = 0, nSomaMulta = 0, nSomaCorrecao = 0, nSomaTotal = 0, nSomaHonorario = 0;
 
             foreach (var item in ListaParcela) {
                 if (item.Statuslanc == 3 || item.Statuslanc == 19 || item.Statuslanc == 38 || item.Statuslanc == 39 || item.Statuslanc == 42 || item.Statuslanc == 43) {
@@ -1044,6 +1013,20 @@ namespace GTI_Mvc.Controllers {
                 Cep=RetornaNumero( _cep)
             };
             decimal _somaP = 0,_somaJ=0,_somaM=0,_somaC=0,_somaT=0,_somaH=0;
+
+            bool IsRefis = true, DebitoAnoAtual = false; ;
+            int nPlano = 0;
+            decimal nPerc = 0;
+
+            foreach (SelectDebitoEditorViewModel _debitos in model.Debito.Where(m => m.Selected == true)) {
+                if (Convert.ToDateTime(_debitos.Data_Vencimento) >= Convert.ToDateTime("30/06/2020")) {
+                    if (_debitos.Lancamento != 78 && _debitos.Lancamento != 41) {
+                        DebitoAnoAtual = true;
+                    }
+                }
+            }
+
+
             foreach (SelectDebitoEditorViewModel _debitos in model.Debito.Where(m=>m.Selected==true)) {
                 var editorViewModel = new ListDebitoEditorViewModel() {
                     Exercicio = _debitos.Exercicio,
@@ -1064,6 +1047,31 @@ namespace GTI_Mvc.Controllers {
                     Aj=_debitos.Aj,
                     Da=_debitos.Da
                 };
+
+                if (IsRefis && !DebitoAnoAtual) {
+                    if (Convert.ToDateTime( _debitos.Data_Vencimento) <= Convert.ToDateTime("19/10/2020")) {
+                        nPerc = 1M;
+                        nPlano = 41;
+                    } else if (Convert.ToDateTime(_debitos.Data_Vencimento) > Convert.ToDateTime("19/10/2020") && Convert.ToDateTime(_debitos.Data_Vencimento) <= Convert.ToDateTime("30/11/2020")) {
+                        nPerc = 0.8M;
+                        nPlano = 42;
+                    } else if (Convert.ToDateTime(_debitos.Data_Vencimento) > Convert.ToDateTime("30/11/2020") && Convert.ToDateTime(_debitos.Data_Vencimento) <= Convert.ToDateTime("22/12/2020")) {
+                        nPerc = 0.7M;
+                        nPlano = 43;
+                    }
+                    if (nPlano > 0) {
+                        editorViewModel.Soma_Juros = Convert.ToDecimal(editorViewModel.Soma_Juros) - (Convert.ToDecimal(editorViewModel.Soma_Juros) * nPerc);
+                        editorViewModel.Soma_Multa = Convert.ToDecimal(editorViewModel.Soma_Multa) - (Convert.ToDecimal(editorViewModel.Soma_Multa) * nPerc);
+                        editorViewModel.Soma_Total = editorViewModel.Soma_Principal + editorViewModel.Soma_Juros + editorViewModel.Soma_Multa + editorViewModel.Soma_Correcao;
+                        editorViewModel.Soma_Juros_Hidden = editorViewModel.Soma_Juros;
+                        editorViewModel.Soma_Multa_Hidden = editorViewModel.Soma_Multa;
+                        _debitos.Soma_Juros = editorViewModel.Soma_Juros;
+                        _debitos.Soma_Multa = editorViewModel.Soma_Multa;
+                        if(_debitos.Aj=="S")
+                        _debitos.Soma_Honorario = ((editorViewModel.Soma_Principal + editorViewModel.Soma_Juros + editorViewModel.Soma_Multa + editorViewModel.Soma_Correcao)*10)/100;
+                    }
+                }
+
                 _somaP += Math.Round(_debitos.Soma_Principal, 2, MidpointRounding.AwayFromZero);
                 _somaJ += Math.Round(_debitos.Soma_Juros, 2, MidpointRounding.AwayFromZero);
                 _somaM += Math.Round(_debitos.Soma_Multa, 2, MidpointRounding.AwayFromZero);
@@ -1074,7 +1082,8 @@ namespace GTI_Mvc.Controllers {
             }
             modelt.Inscricao = model.Inscricao;
             modelt.Data_Vencimento = model.Data_Vencimento;
-            modelt.Plano = model.Plano;
+            //modelt.Plano = model.Plano;
+            modelt.Plano = nPlano;
             modelt.Soma_Principal = _somaP;
             modelt.Soma_Juros = _somaJ;
             modelt.Soma_Multa = _somaM;
@@ -1090,6 +1099,8 @@ namespace GTI_Mvc.Controllers {
 
         public ActionResult Damd() {
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            if(TempData["debito"]==null)
+                return RedirectToAction("Login_gti", "Home");
             DebitoListViewModel model =(DebitoListViewModel) TempData["debito"];
             //DebitoListViewModel model = value;
 

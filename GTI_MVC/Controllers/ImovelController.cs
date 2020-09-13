@@ -803,8 +803,8 @@ namespace GTI_Mvc.Controllers {
                     if (_valida) {
                         _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo, _cnpj);
                     } else {
-                        imovelDetailsViewModel.ErrorMessage = "Cnpj inválido.";
-                        return View(imovelDetailsViewModel);
+                        model.ErrorMessage = "Cnpj inválido.";
+                        return View(model);
                     }
                 } else {
                     if (model.CpfValue != null) {
@@ -813,16 +813,16 @@ namespace GTI_Mvc.Controllers {
                         if (_valida) {
                             _existeCod = imovelRepository.Existe_Imovel_Cpf(_codigo, _cpf);
                         } else {
-                            imovelDetailsViewModel.ErrorMessage = "Cpf inválido.";
-                            return View(imovelDetailsViewModel);
+                            model.ErrorMessage = "Cpf inválido.";
+                            return View(model);
                         }
                     }
                 }
             }
 
             if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-                imovelDetailsViewModel.ErrorMessage = "Código de verificação inválido.";
-                return View(imovelDetailsViewModel);
+                model.ErrorMessage = "Código de verificação inválido.";
+                return View(model);
             }
 
             Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
@@ -834,8 +834,8 @@ namespace GTI_Mvc.Controllers {
 
             List<DebitoStructure> Extrato_Lista = tributario_Class.Lista_Parcelas_IPTU(_codigo, DateTime.Now.Year);
             if (Extrato_Lista.Count == 0) {
-                imovelDetailsViewModel.ErrorMessage = "Não é possível emitir 2ª via de IPTU para este contribuinte.";
-                return View(imovelDetailsViewModel);
+                model.ErrorMessage = "Não é possível emitir 2ª via de IPTU para este contribuinte.";
+                return View(model);
             }
 
             List<Boletoguia> ListaBoleto = new List<Boletoguia>();
@@ -1948,7 +1948,8 @@ namespace GTI_Mvc.Controllers {
                     Itbi_NumeroAno = reg.Numero_Ano,
                     Tipo_Imovel = reg.Tipo,
                     Comprador_Nome_tmp = Functions.TruncateTo(reg.Nome_Comprador, 26),
-                    Situacao_Itbi_Nome = reg.Situacao
+                    Situacao_Itbi_Nome = reg.Situacao,
+                    Situacao_Itbi_codigo=reg.Situacao_Codigo
                 };
                 model.Add(item);
             }
@@ -3334,6 +3335,9 @@ namespace GTI_Mvc.Controllers {
                 return RedirectToAction("Itbi_query", new { e = "P" });
             } else {
                 Itbi_main _itbi = imovelRepository.Retorna_Itbi_Main(p);
+                if (_itbi.Data_Vencimento < DateTime.Now) {
+                    return RedirectToAction("Itbi_query", new { e = "V" });
+                }
 
                 Itbi_Guia _guia = new Itbi_Guia() {
                     Guid = _itbi.Guid,
