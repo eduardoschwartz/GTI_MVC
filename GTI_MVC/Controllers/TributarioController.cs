@@ -1528,7 +1528,7 @@ namespace GTI_Mvc.Controllers {
                                 string _descricao_lancamento = "PARCELAMENTO DE DÉBITOS";
                                 int nSid = Functions.GetRandomNumber();
                                 int nPos = 0;
-                                foreach (DebitoStructure item in ListaDebito) {
+                                foreach (DebitoStructure item in ListaDebito.Where(m => m.Codigo_Situacao == 3)) {
 
                                     //criamos um documento novo para cada parcela da vigilância
                                     Numdocumento regDoc = new Numdocumento();
@@ -1580,7 +1580,7 @@ namespace GTI_Mvc.Controllers {
                                 short _index = 0;
                                 string _convenio = "2873532";
                                 List<Boletoguia> ListaBoleto = new List<Boletoguia>();
-                                foreach (DebitoStructure item in ListaDebito) {
+                                foreach (DebitoStructure item in ListaDebito.Where(m => m.Codigo_Situacao == 3)) {
                                     if (item.Data_Vencimento >= DateTime.Now) {
                                         Boletoguia reg = new Boletoguia();
                                         reg.Usuario = "Gti.Web/LibParc";
