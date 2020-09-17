@@ -3689,7 +3689,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_isencao")]
         [HttpGet]
-        public ActionResult Itbi_isencao(string guid, string a, int s = 0) {
+        public ActionResult Itbi_isencao(string guid, string a, int s = 0,string natureza="27") {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             ItbiViewModel model = new ItbiViewModel();
@@ -3710,7 +3710,7 @@ namespace GTI_Mvc.Controllers {
                 model.Guid = Guid.NewGuid().ToString("N");
                 model.Data_cadastro = DateTime.Now;
 
-                model.Lista_Natureza_Isencao = Lista_Natureza_Isencao();
+                model.Lista_Natureza_Isencao = Lista_Natureza_Isencao(natureza);
 
                 Itbi_isencao_main regMain = new Itbi_isencao_main() {
                     Guid = model.Guid,
@@ -3736,7 +3736,21 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_isencao")]
         [HttpPost]
-        public ActionResult Itbi_isencao(ItbiViewModel model) {
+        public ActionResult Itbi_isencao(ItbiViewModel model,string natureza) {
+
+            
+            //if (model.Lista_Isencao.Count == 0) {
+            //    ViewBag.Result = "Nenhum imóvel foi adicionado a lista";
+            //    model.Lista_Natureza_Isencao = Lista_Natureza_Isencao(natureza);
+            //    return View(model);
+            //} else {
+            //    if (model.Lista_Isencao.Count == 1 && model.Lista_Isencao[0]==null) {
+            //        ViewBag.Result = "Nenhum imóvel foi adicionado a lista";
+            //        model.Lista_Natureza_Isencao = Lista_Natureza_Isencao(natureza);
+            //        return View(model);
+            //    }
+            //}
+
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
 
             int _codigo = Convert.ToInt32(model.Vendedor_Cpf_cnpj_tmp);
@@ -3812,9 +3826,9 @@ namespace GTI_Mvc.Controllers {
                 }
             }
             Exception ex = imovelRepository.Incluir_Itbi_isencao_imovel(Lista);
-
+            
             model = Retorna_Itbi_Isencao_Gravado(model.Guid);
-
+            model.Lista_Natureza_Isencao = Lista_Natureza_Isencao(natureza);
             return View(model);
         }
 
@@ -3843,7 +3857,7 @@ namespace GTI_Mvc.Controllers {
             return itbi;
         }
 
-        private List<SelectListItem>Lista_Natureza_Isencao(){
+        private List<SelectListItem>Lista_Natureza_Isencao(string selectedValue){
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             List < SelectListItem >Lista = new List<SelectListItem>();
             List<Itbi_natureza_isencao> lista_natureza_isencao = imovelRepository.Lista_itbi_natureza_isencao();
@@ -3869,7 +3883,8 @@ namespace GTI_Mvc.Controllers {
                         SelectListItem item = new SelectListItem() {
                             Group = _grupo,
                             Text = temp.Descricao,
-                            Value = temp.Codigo.ToString()
+                            Value = temp.Codigo.ToString(),
+                            Selected= temp.Codigo.ToString()==selectedValue?true:false
                         };
                         Lista.Add(item);
                         break;

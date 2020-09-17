@@ -490,6 +490,7 @@
     <Content Include="Images\abaixo.gif" />
     <Content Include="Images\acima.gif" />
     <Content Include="Images\alterar.gif" />
+    <Content Include="Images\AvisoRefis.png" />
     <Content Include="Images\barcode.gif" />
     <Content Include="Images\bege.jpg" />
     <Content Include="Images\brasaocor.png" />

@@ -25,12 +25,12 @@
   }
 
   function scrollToFirstSelected($ul) {
-    var $first = $ul.find("li.selected:first");
+//    var $first = $ul.find("li.selected:first");
     
-    if ($first.length > 0) {
-      var initialPosition = $first.offset().top - $ul.offset().top;
-      $ul.scrollTop(initialPosition);
-    }
+  //  if ($first.length > 0) {
+ //     var initialPosition = $first.offset().top - $ul.offset().top;
+  //    $ul.scrollTop(initialPosition);
+ //   }
   }
 
   var methods = {
