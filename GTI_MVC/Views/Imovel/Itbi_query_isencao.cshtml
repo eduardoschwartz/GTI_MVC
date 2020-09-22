@@ -1,0 +1,99 @@
+﻿@model List<GTI_Mvc.ViewModels.ItbiViewModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Consulta de certidões de isenção de ITBI";
+}
+
+<style>
+
+    .center {
+        margin: auto;
+        width: 780px;
+        border: 1px solid rgba(0,0,0,0.24);
+        padding: 20px;
+        box-shadow: 0 .1em 0.5em #000;
+        border-radius: 13px;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+</style>
+
+<div class="center">
+
+    @using (Html.BeginForm("Itbi_query", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+        <br />
+        <label style="color: brown;font-size: 16px;font-style: italic">Consulta de certidões de isenção de ITBI</label>
+
+        <br />
+        <br />
+        <table id="tblMain" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+            <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal; white-space: nowrap;">
+                <tr style="height:14px;">
+                    <td style="display:none">Guid</td>
+                    <td style="width:100px;font-weight:normal">Itbi nº</td>
+                    <td style="width:90px;font-weight:normal">Data</td>
+                    <td style="width:60px;font-weight:normal">Tipo</td>
+                    <td style="width:270px;font-weight:normal">Nome do Comprador</td>
+                    <td style="width:170px;font-weight:normal">Situação</td>
+                    <td style="width:160px">
+                    </td>
+                </tr>
+            </thead>
+            <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
+                @foreach (var item in Model) {
+                    <tr style="height:14px;">
+                        <td style="display:none">@Html.DisplayFor(modelItem => item.Guid)</td>
+                        <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.Itbi_NumeroAno)</td>
+                        <td style="width:90px;font-weight:normal"> @DateTime.Parse(Html.DisplayFor(modelItem => item.Data_cadastro).ToString()).ToString("dd/MM/yyyy")</td>
+                        <td style="width:60px;font-weight:normal">@Html.DisplayFor(modelItem => item.Tipo_Imovel)</td>
+                        <td style="width:270px;font-weight:normal">@Html.DisplayFor(modelItem => item.Comprador_Nome_tmp)</td>
+                        <td style="width:170px;font-weight:normal">@Html.DisplayFor(modelItem => item.Situacao_Itbi_Nome)</td>
+                        <td style="width:130px">
+                            <a href="@Url.Action("Itbi_urbano_q", "Imovel", new { p = item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                            <a href="@Url.Action("Itbi_print","Imovel", new { p = item.Guid,u=item.Tipo_Imovel=="Urbano" })" title="Imprimir a declaração do ITBI"> <img src="@Url.Content("~/images/print.png")"></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <br />
+        <br />
+        <div class="form-group row">
+            <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
+        </div>
+    }
+
+    @Html.ActionLink("Preencher outro ITBI", "Itbi_Menu", "Imovel", null, new { @class = "actionlink" })<br />
+    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+</div>
+
+@if (ViewBag.Erro == "C") {
+    <script type="text/javascript">
+        alert("Apenas Itbis que encontram-se em análise podem ser cancelados!");
+    </script>
+} else {
+    if (ViewBag.Erro == "P") {
+        <script type="text/javascript">
+            alert("A guia de pagamento deste Itbi ainda não foi liberada!");
+        </script>
+    } else {
+        if (ViewBag.Erro == "A") {
+            <script type="text/javascript">
+                alert("Apenas Itbis que encontram-se em análise podem ser alterados!");
+            </script>
+        } else {
+            if (ViewBag.Erro == "V") {
+                <script type="text/javascript">
+                    alert("Este boleto esta vencido e não pode ser mais emitido!");
+                </script>
+            }
+        }
+    }
+}

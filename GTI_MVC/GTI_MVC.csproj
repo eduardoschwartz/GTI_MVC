@@ -657,6 +657,8 @@
     <Content Include="Views\Imovel\Carne_Cip.cshtml" />
     <Content Include="Views\Empresa\Deca.cshtml" />
     <Content Include="Views\Imovel\Itbi_isencao.cshtml" />
+    <Content Include="Views\Imovel\Itbi_query_isencao.cshtml" />
+    <Content Include="Views\Imovel\Itbi_isencao_ok.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

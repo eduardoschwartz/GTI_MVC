@@ -2138,6 +2138,18 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Alterar_Itbi_Isencao(Itbi_isencao_main reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Itbi_isencao_main i = db.Itbi_Isencao_Main.First(g => g.Guid == reg.Guid);
+                i.Natureza = reg.Natureza;
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
 
 
     }//end class

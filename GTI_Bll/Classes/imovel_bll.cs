@@ -735,6 +735,13 @@ namespace GTI_Bll.Classes {
             return obj.Lista_itbi_natureza_isencao();
         }
 
+        public Exception Alterar_Itbi_Isencao(Itbi_isencao_main reg) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Alterar_Itbi_Isencao(reg);
+            return ex;
+        }
+
+
         #endregion
 
     }//end class

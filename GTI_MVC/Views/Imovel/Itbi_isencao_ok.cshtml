@@ -1,0 +1,46 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Gravação de Certidão de Isenção de ITBI";
+}
+
+<style>
+
+    .center {
+        text-align: center;
+        margin: auto;
+        width: 660px;
+        border: 1px solid rgba(0,0,0,0.24);
+        padding: 20px;
+        box-shadow: 0 .1em 0.5em #000;
+        border-radius: 13px;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+</style>
+
+<div class="center">
+    <br />
+    <label style="color: brown;font-size: 16px;font-style: italic">Gravação da certidão de isenção de ITBI efetuada com sucesso</label>
+    <br />
+
+    <br />
+    @using (Html.BeginForm("Login_welcome", "Home", FormMethod.Post, new { @id = "MainForm" })) {
+        <label style="font-weight:normal;color:brown">A solicitação da certidão de isenção de ITBI foi enviada para análise. <br />Utilize a tela de consulta de certidões para emitir a certidão assim que for liberada pelo fiscal.</label>
+
+        <br />
+        <br />
+        <div class="form-group row">
+            <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
+        </div>
+    }
+
+    @Html.ActionLink("Ir para tela de consulta de certidões", "Itbi_query", "Imovel", null, new { @class = "actionlink" })<br />
+    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+</div>

@@ -1014,7 +1014,7 @@ namespace GTI_Mvc.Controllers {
             };
             decimal _somaP = 0,_somaJ=0,_somaM=0,_somaC=0,_somaT=0,_somaH=0;
 
-            bool IsRefis = true, DebitoAnoAtual = false; ;
+            bool IsRefis = true, DebitoAnoAtual = false, DebitoNoRefis=false;
             int nPlano = 0;
             decimal nPerc = 0;
 
@@ -1024,6 +1024,17 @@ namespace GTI_Mvc.Controllers {
                         DebitoAnoAtual = true;
                     }
                 }
+            }
+
+            foreach (SelectDebitoEditorViewModel _debitos in model.Debito.Where(m => m.Selected == true)) {
+                if (Convert.ToDateTime(_debitos.Data_Vencimento) < Convert.ToDateTime("30/06/2020")) {
+                     DebitoNoRefis = true;
+                }
+            }
+
+            if(IsRefis && DebitoNoRefis && DebitoAnoAtual) {
+                ViewBag.Result = "Não é permitido emitir guia com débitos anteriores à 30/06/2020 junto com débitos posteriores, durante o período do Refis. Por favor emitir em guias separadas.";
+                return View("Damc",model);
             }
 
 

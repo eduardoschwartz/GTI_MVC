@@ -212,7 +212,7 @@
                     <button type="submit" id="enviar" title="Exibir o resumo do boleto" class="btn btn-primary" onclick="return Verifica_Ajuizado()">Próximo</button>
                 </div>
                 <div class="input-group">
-                    <Label style="color:red">*** Selecione os débitos e clique no botão próximo para calcular o desconto no valor da multa, dos juros e o valor dos honorários (se houver).</Label>
+                    <Label style="color:blue">*** Selecione os débitos e clique no botão próximo para calcular o desconto no valor da multa, dos juros e o valor dos honorários (se houver).</Label>
                 </div>
             </div>
         </div>
@@ -246,7 +246,7 @@
 
     }
 
-    <label class="text-danger" id="errorLabel">@ViewBag.Result</label>
+    <label style="color:red" id="errorLabel">@ViewBag.Result</label>
     <br />
     @Html.ActionLink("Consultar outra inscrição", "Dama", "Tributario", null, new { @class = "actionlink" })
     <br />
