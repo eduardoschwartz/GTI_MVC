@@ -37,29 +37,29 @@
             <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal; white-space: nowrap;">
                 <tr style="height:14px;">
                     <td style="display:none">Guid</td>
-                    <td style="width:100px;font-weight:normal">Itbi nº</td>
+                    <td style="width:100px;font-weight:normal">Certidão nº</td>
                     <td style="width:90px;font-weight:normal">Data</td>
-                    <td style="width:60px;font-weight:normal">Tipo</td>
-                    <td style="width:270px;font-weight:normal">Nome do Comprador</td>
+                    <td style="width:270px;font-weight:normal">Requerida por</td>
+                    <td style="width:90px;font-weight:normal">Valida até</td>
                     <td style="width:170px;font-weight:normal">Situação</td>
-                    <td style="width:160px">
-                    </td>
+                    <td style="width:130px"></td>
                 </tr>
             </thead>
             <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
                 @foreach (var item in Model) {
-                    <tr style="height:14px;">
-                        <td style="display:none">@Html.DisplayFor(modelItem => item.Guid)</td>
-                        <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.Itbi_NumeroAno)</td>
-                        <td style="width:90px;font-weight:normal"> @DateTime.Parse(Html.DisplayFor(modelItem => item.Data_cadastro).ToString()).ToString("dd/MM/yyyy")</td>
-                        <td style="width:60px;font-weight:normal">@Html.DisplayFor(modelItem => item.Tipo_Imovel)</td>
-                        <td style="width:270px;font-weight:normal">@Html.DisplayFor(modelItem => item.Comprador_Nome_tmp)</td>
-                        <td style="width:170px;font-weight:normal">@Html.DisplayFor(modelItem => item.Situacao_Itbi_Nome)</td>
-                        <td style="width:130px">
-                            <a href="@Url.Action("Itbi_urbano_q", "Imovel", new { p = item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
-                            <a href="@Url.Action("Itbi_print","Imovel", new { p = item.Guid,u=item.Tipo_Imovel=="Urbano" })" title="Imprimir a declaração do ITBI"> <img src="@Url.Content("~/images/print.png")"></a>
-                        </td>
-                    </tr>
+                <tr style="height:14px;">
+                    <td style="display:none">@Html.DisplayFor(modelItem => item.Guid)</td>
+                    <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.Itbi_NumeroAno)</td>
+                    <td style="width:90px;font-weight:normal"> @DateTime.Parse(Html.DisplayFor(modelItem => item.Data_cadastro).ToString()).ToString("dd/MM/yyyy")</td>
+                    <td style="width:270px;font-weight:normal">@Html.DisplayFor(modelItem => item.Comprador_Nome_tmp)</td>
+                    <td style="width:90px;font-weight:normal">@Html.DisplayFor(modelItem => item.Data_Validade)</td>
+                    <td style="width:170px;font-weight:normal">@Html.DisplayFor(modelItem => item.Situacao_Itbi_Nome)</td>
+                    <td style="width:130px">
+                        <a href="@Url.Action("Itbi_urbano_q", "Imovel", new { p = item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                        <a href="@Url.Action("Itbi_cancel", "Imovel", new { p = item.Guid, s = 4 })" onclick="return confirm('Cancelar esta certidão?')" })" title="Cancelar este ITBI"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
+                        <a href="@Url.Action("Itbi_print","Imovel", new { p = item.Guid,u=item.Tipo_Imovel=="Urbano" })" title="Imprimir a declaração do ITBI"> <img src="@Url.Content("~/images/print.png")"></a>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
@@ -70,7 +70,7 @@
         </div>
     }
 
-    @Html.ActionLink("Preencher outro ITBI", "Itbi_Menu", "Imovel", null, new { @class = "actionlink" })<br />
+    @Html.ActionLink("Retornar ao menu de opções", "Itbi_Menu", "Imovel", null, new { @class = "actionlink" })<br />
     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 </div>
 

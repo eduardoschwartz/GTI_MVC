@@ -3827,6 +3827,11 @@ namespace GTI_Mvc.Controllers {
             Itbi_isencao_main regM = new Itbi_isencao_main();
             regM.Guid = model.Guid;
             regM.Natureza = Convert.ToInt32(natureza);
+            if (regM.Isencao_numero == 0) {
+                regM.Isencao_numero = imovelRepository.Retorna_Itbi_Isencao_Disponivel();
+                regM.Isencao_ano = (short)DateTime.Now.Year;
+            }
+
             ex = imovelRepository.Alterar_Itbi_Isencao(regM);
 
             if (action=="btnValida")
@@ -3902,7 +3907,7 @@ namespace GTI_Mvc.Controllers {
             return Lista;
         }
 
-        [Route("Itbi_query")]
+        [Route("Itbi_query_isencao")]
         [HttpGet]
         public ActionResult Itbi_query_isencao(string e = "") {
             if (Session["hashid"] == null)
@@ -3910,7 +3915,7 @@ namespace GTI_Mvc.Controllers {
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             int _userId = Convert.ToInt32(Session["hashid"]);
             bool _fiscal = Session["hashfiscalitbi"] != null && Session["hashfiscalitbi"].ToString() == "S" ? true : false;
-            List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Query(_userId, _fiscal, 0);
+            List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Isencao_Query(_userId, _fiscal, 0);
             List<ItbiViewModel> model = new List<ItbiViewModel>();
             foreach (Itbi_Lista reg in Lista) {
                 ItbiViewModel item = new ItbiViewModel() {
@@ -3922,6 +3927,8 @@ namespace GTI_Mvc.Controllers {
                     Situacao_Itbi_Nome = reg.Situacao,
                     Situacao_Itbi_codigo = reg.Situacao_Codigo
                 };
+                if (!string.IsNullOrEmpty(reg.Validade))
+                    item.Data_Validade = Convert.ToDateTime(reg.Validade).ToString("dd/MM/yyyy");
                 model.Add(item);
             }
             ViewBag.Erro = e;

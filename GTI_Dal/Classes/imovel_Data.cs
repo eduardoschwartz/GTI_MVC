@@ -2142,6 +2142,8 @@ namespace GTI_Dal.Classes {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 Itbi_isencao_main i = db.Itbi_Isencao_Main.First(g => g.Guid == reg.Guid);
                 i.Natureza = reg.Natureza;
+                i.Isencao_ano = reg.Isencao_ano;
+                i.Isencao_numero = reg.Isencao_numero;
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -2149,6 +2151,55 @@ namespace GTI_Dal.Classes {
                 }
                 return null;
             }
+        }
+
+        public List<Itbi_Lista> Retorna_Itbi_Isencao_Query(int user, bool f, int status) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                List<Itbi_Lista> Lista = new List<Itbi_Lista>();
+
+                var Sql = (from t in db.Itbi_Isencao_Main
+                           join c in db.Itbi_Status on t.Situacao equals c.Codigo into tc from c in tc.DefaultIfEmpty()
+                           orderby new { t.Isencao_ano, t.Isencao_numero } where t.Isencao_numero > 0 select new {
+                               Ano = t.Isencao_ano, Numero = t.Isencao_numero, Guid = t.Guid, UserId = t.Usuario_id,UsuarioNome=t.Usuario_nome,
+                               DataCadastro = t.Data_cadastro, SituacaoCodigo = t.Situacao, SituacaoNome = c.Descricao,t.Data_validade
+                           });
+                if (status > 0)
+                    Sql = Sql.Where(m => m.SituacaoCodigo == status);
+                if (!f)//se for fiscal pode consultar qualquer ITBI
+                    Sql = Sql.Where(m => m.UserId == user);
+                else {
+                    Sql = Sql.Where(m => m.SituacaoCodigo < 3);//Só consultar certidões abertas
+                }
+
+                foreach (var reg in Sql) {
+                    Itbi_Lista item = new Itbi_Lista() {
+                        Ano = reg.Ano,
+                        Numero = reg.Numero,
+                        Numero_Ano = reg.Numero.ToString("000000") + "/" + (reg.Ano).ToString(),
+                        Guid = reg.Guid,
+                        Data = reg.DataCadastro,
+                        Nome_Requerente = reg.UsuarioNome,
+                        Situacao = reg.SituacaoNome,
+                        Situacao_Codigo = reg.SituacaoCodigo,
+                        Usuario_Id=reg.UserId,
+                        Validade=reg.Data_validade
+                    };
+                    Lista.Add(item);
+                }
+
+                return Lista;
+            }
+        }
+
+        public int Retorna_Itbi_Isencao_Disponivel() {
+            int _numero = 1;
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Itbi_Isencao_Main orderby t.Isencao_numero descending where t.Isencao_ano == DateTime.Now.Year select t).FirstOrDefault();
+                if (Sql != null) {
+                    _numero = (short)(Sql.Isencao_numero + 1);
+                }
+            }
+            return _numero;
         }
 
 

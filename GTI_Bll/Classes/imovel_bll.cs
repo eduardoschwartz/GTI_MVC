@@ -741,6 +741,16 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public List<Itbi_Lista> Retorna_Itbi_Isencao_Query(int user, bool f, int status) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Itbi_Isencao_Query(user,f,status);
+        }
+
+        public int Retorna_Itbi_Isencao_Disponivel() {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Itbi_Isencao_Disponivel();
+        }
+
 
         #endregion
 

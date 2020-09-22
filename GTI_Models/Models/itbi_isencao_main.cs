@@ -13,5 +13,7 @@ namespace GTI_Models.Models {
         public int Natureza { get; set; }
         public DateTime Data_cadastro { get; set; }
         public int Situacao { get; set; }
+        public int Usuario_id { get; set; }
+        public string Data_validade { get; set; }
     }
 }

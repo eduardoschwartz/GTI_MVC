@@ -87,6 +87,9 @@ namespace GTI_Models.Models {
         public string Tipo { get; set; }
         public string Situacao { get; set; }
         public int Situacao_Codigo { get; set; }
+        public string Validade { get; set; }
+        public string Nome_Requerente { get; set; }
+        public int Usuario_Id { get; set; }
     }
 
 }
