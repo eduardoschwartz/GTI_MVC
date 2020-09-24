@@ -659,6 +659,7 @@
     <Content Include="Views\Imovel\Itbi_isencao.cshtml" />
     <Content Include="Views\Imovel\Itbi_query_isencao.cshtml" />
     <Content Include="Views\Imovel\Itbi_isencao_ok.cshtml" />
+    <Content Include="Views\Imovel\Itbi_isencao_q.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

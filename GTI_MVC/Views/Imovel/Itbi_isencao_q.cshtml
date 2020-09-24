@@ -1,0 +1,124 @@
+﻿@model GTI_Mvc.ViewModels.ItbiViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Certidão de não incidência de ITBI";
+}
+
+
+<style>
+    .center {
+        margin: auto;
+        width: 780px;
+        border: 1px solid rgba(0,0,0,0.24);
+        padding: 20px;
+        box-shadow: 0 .1em 0.5em #000;
+        border-radius: 13px;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+</style>
+
+<div class="center">
+
+    @using (Html.BeginForm("Itbi_isencao", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+
+    <div class="container" style="width:700px">
+        <div class="panel panel-danger">
+            <div class="panel-heading">Certidão de não incidência de ITBI nº @Model.Itbi_NumeroAno </div>
+            <div class="panel-body">
+                <label id="Guidtmp" style="display: none">@Model.Guid</label>
+                @Html.HiddenFor(m => m.Guid, new { @id = "Guid" })@*Armazenar o guid*@
+                @Html.HiddenFor(m => m.Natureza_Isencao_Codigo, new { @id = "Natureza_Isencao_Codigo" })@*Armazenar o guid*@
+                @Html.HiddenFor(m => m.Vendedor_Cpf_cnpj_tmp, new { @id = "Vendedor_Cpf_cnpj_tmp" })@*Armazenar o código do imóvel*@
+                @Html.HiddenFor(m => m.Vendedor_Nome_tmp, new { @id = "Vendedor_Nome_tmp" })@*Armazenar a descrição do imóvel*@
+                @Html.HiddenFor(m => m.Lista_Isencao)
+                <div id="VendedorTable" style="max-height: 247px; overflow: auto;width:630px;padding-top:7px">
+                    <table id="tblVendedor" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                        <thead style="background-color:brown;color:white;font-size:13px;font-weight:normal">
+                            <tr style="height:12px;">
+                                <th style="width:20px;font-weight:normal">
+                                    #
+                                </th>
+                                <th style="width:60px;font-weight:normal">
+                                    Tipo
+                                </th>
+                                <th style="width:60px;font-weight:normal">
+                                    Código
+                                </th>
+                                <th style="width:490px;font-weight:normal;text-align:left">
+                                    Descrição
+                                </th>
+                                <th style="width:20px;text-align:left">
+
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <table id="tblVendedor" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px">
+                        @if (Model.Lista_Isencao != null) {
+                            foreach (var item in Model.Lista_Isencao) {
+                                if (item != null) {
+                                    <tr>
+                                        <td style="width:20px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Seq)
+                                            @Html.HiddenFor(modelItem => item.Seq)
+                                        </td>
+                                        <td style="width:60px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Tipo)
+                                            @Html.HiddenFor(modelItem => item.Tipo)
+                                        </td>
+                                        <td style="width:60px;font-weight:normal;color:blue;text-align:left">
+                                            @Html.DisplayFor(modelItem => item.Codigo)
+                                            @Html.HiddenFor(modelItem => item.Codigo)
+                                        </td>
+                                        <td style="width:490px;font-weight:normal;color:blue;text-align:left">
+                                            @Html.DisplayFor(modelItem => item.Descricao)
+                                            @Html.HiddenFor(modelItem => item.Descricao)
+                                        </td>
+                                        <td style="width:20px">
+                                            
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </table>
+                </div>
+
+
+                <br /><br />
+
+
+                <Label style="font-size:14px">Natureza:&nbsp;@Model.Natureza_Nome  </Label>
+
+
+
+            </div>
+        </div>
+        <div class="form-group row">
+            <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
+        </div>
+
+        @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo == 1) {
+            <span style="padding-left:5px"><button type="submit" class="btn btn-primary"  , name="button" value="guia">Liberar Certidão</button></span>
+        }
+
+    </div>
+
+
+
+    }
+
+    <div style="padding-left:15px">@Html.ActionLink("Consultar outra certidão", "Itbi_query_isencao", "Imovel", null, new { @class = "actionlink" })</div>
+    <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })</div>
+</div>
+
+
+

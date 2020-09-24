@@ -55,7 +55,7 @@
                     <td style="width:90px;font-weight:normal">@Html.DisplayFor(modelItem => item.Data_Validade)</td>
                     <td style="width:170px;font-weight:normal">@Html.DisplayFor(modelItem => item.Situacao_Itbi_Nome)</td>
                     <td style="width:130px">
-                        <a href="@Url.Action("Itbi_urbano_q", "Imovel", new { p = item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                        <a href="@Url.Action("Itbi_isencao_q", "Imovel", new { p = item.Guid })" title="Visualizar certidão"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
                         <a href="@Url.Action("Itbi_cancel", "Imovel", new { p = item.Guid, s = 4 })" onclick="return confirm('Cancelar esta certidão?')" })" title="Cancelar este ITBI"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
                         <a href="@Url.Action("Itbi_print","Imovel", new { p = item.Guid,u=item.Tipo_Imovel=="Urbano" })" title="Imprimir a declaração do ITBI"> <img src="@Url.Content("~/images/print.png")"></a>
                     </td>

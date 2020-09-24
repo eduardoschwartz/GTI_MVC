@@ -708,7 +708,7 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
-        public Itbi_isencao_main Retorna_Itbi_Isencao_Main(string Guid) {
+        public Itbi_isencao_main_Struct Retorna_Itbi_Isencao_Main(string Guid) {
             Imovel_Data obj = new Imovel_Data(_connection);
             return obj.Retorna_Itbi_Isencao_Main(Guid);
         }

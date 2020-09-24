@@ -2073,19 +2073,26 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public Itbi_isencao_main Retorna_Itbi_Isencao_Main(string Guid) {
+        public Itbi_isencao_main_Struct Retorna_Itbi_Isencao_Main(string Guid) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from t in db.Itbi_Isencao_Main where t.Guid == Guid select t).First();
-                Itbi_isencao_main itbi = new Itbi_isencao_main() {
-                    Guid = Sql.Guid,
-                    Data_cadastro = Sql.Data_cadastro,
-                    Natureza = Sql.Natureza,
-                    Usuario_nome = Sql.Usuario_nome,
-                    Usuario_doc = Sql.Usuario_doc,
-                    Fiscal_id=Sql.Fiscal_id,
-                    Isencao_ano=Sql.Isencao_ano,
-                    Isencao_numero=Sql.Isencao_numero,
-                    Situacao=Sql.Situacao
+                var Sql = (from t in db.Itbi_Isencao_Main
+                           join c in db.Itbi_Status on t.Situacao equals c.Codigo into tc from c in tc.DefaultIfEmpty()
+                           join n in db.Itbi_Natureza_Isencao on t.Natureza equals n.Codigo into tn from n in tn.DefaultIfEmpty()
+                           where t.Guid == Guid select new {guid= t.Guid,data_cadastro=t.Data_cadastro,natureza_codigo=t.Natureza,usuario_nome=t.Usuario_nome,usuario_doc=t.Usuario_doc,validade=t.Data_validade,
+                           fiscal_id=t.Fiscal_id,isencao_ano=t.Isencao_ano,isencao_numero=t.Isencao_numero,natureza_nome=n.Descricao,situacao_nome=c.Descricao,situacao_codigo=t.Situacao}).First();
+                Itbi_isencao_main_Struct itbi = new Itbi_isencao_main_Struct() {
+                    Guid = Sql.guid,
+                    Data_cadastro = Sql.data_cadastro,
+                    Natureza = Sql.natureza_codigo,
+                    Usuario_nome = Sql.usuario_nome,
+                    Usuario_doc = Sql.usuario_doc,
+                    Fiscal_id=Sql.fiscal_id,
+                    Isencao_ano=Sql.isencao_ano,
+                    Isencao_numero=Sql.isencao_numero,
+                    Situacao=Sql.situacao_codigo,
+                    Situacao_Nome=Sql.situacao_nome,
+                    Natureza_Nome=Sql.natureza_nome,
+                    Data_validade=Sql.validade
                 };
                 return itbi;
             }

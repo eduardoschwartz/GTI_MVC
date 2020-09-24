@@ -3851,10 +3851,14 @@ ActionPos:
         private ItbiViewModel Retorna_Itbi_Isencao_Gravado(string guid) {
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
 
-            Itbi_isencao_main regMain = imovelRepository.Retorna_Itbi_Isencao_Main(guid);
+            Itbi_isencao_main_Struct regMain = imovelRepository.Retorna_Itbi_Isencao_Main(guid);
             ItbiViewModel itbi = new ItbiViewModel {
                 Guid = regMain.Guid,
-                Data_cadastro = regMain.Data_cadastro
+                Data_cadastro = regMain.Data_cadastro,
+                Itbi_NumeroAno = regMain.Isencao_numero.ToString("00000") + "/" + regMain.Isencao_ano.ToString(),
+                Natureza_Nome=regMain.Natureza_Nome,
+                Situacao_Itbi_codigo=regMain.Situacao,
+                Situacao_Itbi_Nome=regMain.Situacao_Nome
             };
 
             List<Itbi_isencao_imovel> ListaImovel = imovelRepository.Retorna_Itbi_Isencao_Imovel(guid);
@@ -3938,6 +3942,15 @@ ActionPos:
             return View(model);
         }
 
+        [Route("Itbi_isencao_q")]
+        [HttpGet]
+        public ActionResult Itbi_isencao_q(string p = "") {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            ViewBag.Fiscal = Session["hashfiscalitbi"] == null ? "N" : Session["hashfiscalitbi"].ToString();
+            ItbiViewModel model = Retorna_Itbi_Isencao_Gravado(p);
+            return View(model);
+        }
 
 
         #endregion
