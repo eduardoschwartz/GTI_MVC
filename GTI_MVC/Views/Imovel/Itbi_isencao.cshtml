@@ -264,7 +264,7 @@
                 return ValidateForm();
             });
             $(".maskValor").mask("99999");
-           
+            
 
             $('#btnUrbanoOk').click(function () {
                 var codurbanoback = $("#UrbanoModal #codigoTxt").val();
@@ -273,6 +273,7 @@
                 } else {
                     document.getElementById('Guid').value = document.getElementById('Guidtmp').innerHTML;
                     document.getElementById('Vendedor_Cpf_cnpj_tmp').value = codurbanoback;
+                    
                     $('#UrbanoModal').modal('hide');
                     $("#MainForm").submit();
                 }
@@ -288,6 +289,7 @@
                     $("#MainForm").submit();
                 }
             });
+            
         });
 
 
@@ -312,6 +314,7 @@
                 document.getElementById('errorLabel').innerHTML = "Nenhum imóvel selecionado!";
                 return false;
             }
+            $("#UrbanoModal #codigoTxt").val("");
             return true;
         }
 

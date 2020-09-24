@@ -3748,17 +3748,20 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_isencao")]
         [HttpPost]
         public ActionResult Itbi_isencao(ItbiViewModel model,string natureza,string action) {
-
+            if (action == "btnValida")
+                goto ActionPos;
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
 
             int _codigo = Convert.ToInt32(model.Vendedor_Cpf_cnpj_tmp);
             model.Tipo_Imovel = _codigo == 0 ? "Rural" : "Urbano";
             bool _urbano = model.Tipo_Imovel == "Urbano";
 
-
+            List<Itbi_isencao_imovel> Lista = imovelRepository.Retorna_Itbi_Isencao_Imovel(model.Guid);
             if (_urbano && !imovelRepository.Existe_Imovel(_codigo)) {
                 ViewBag.Result = "Imóvel não cadastrado.";
                 model = Retorna_Itbi_Isencao_Gravado(model.Guid);
+                model.Vendedor_Cpf_cnpj_tmp = "";
+                model.Lista_Natureza_Isencao = Lista_Natureza_Isencao(natureza);
                 return View(model);
             } else {
                 if (_urbano) {
@@ -3804,7 +3807,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             byte y = 1;
-            List<Itbi_isencao_imovel> Lista = imovelRepository.Retorna_Itbi_Isencao_Imovel(model.Guid);
+//            List<Itbi_isencao_imovel> Lista = imovelRepository.Retorna_Itbi_Isencao_Imovel(model.Guid);
             foreach (Itbi_isencao_imovel i in Lista) {
                 i.Seq = y;
                 y++;
@@ -3833,7 +3836,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             ex = imovelRepository.Alterar_Itbi_Isencao(regM);
-
+ActionPos:
             if (action=="btnValida")
                 return RedirectToAction("itbi_isencao_ok");
             else {

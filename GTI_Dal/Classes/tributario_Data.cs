@@ -1518,7 +1518,7 @@ namespace GTI_Dal.Classes {
                     }
 
                     //*** suspensos ou em julgamento
-                    if ((item.Statuslanc == 18 | item.Statuslanc == 19 | item.Statuslanc == 20) && item.Datavencimento < DateTime.Now) {
+                     if ((item.Statuslanc == 18 | item.Statuslanc == 19 | item.Statuslanc == 20) && item.Datavencimento < DateTime.Now) {
                         bSuspenso = true;
                         if (item.Codtributo == 26 || item.Codtributo == 90 || item.Codtributo == 112 || item.Codtributo == 113 || item.Codtributo == 585 || item.Codtributo == 587 || item.Codtributo == 24 || item.Codtributo == 28) {
                             bFind = true;
