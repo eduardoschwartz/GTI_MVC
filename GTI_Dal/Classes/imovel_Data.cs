@@ -1865,6 +1865,23 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Liberar_Itbi_Isencao(string p,int FiscalId) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Itbi_isencao_main i = db.Itbi_Isencao_Main.First(g => g.Guid == p);
+                i.Situacao = 5;
+                i.Fiscal_id = FiscalId;
+                DateTime newDate = DateTime.Today.AddDays(30);
+                i.Data_validade = newDate.ToString("dd/MM/yyyy");
+
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
         public Exception Incluir_Itbi_Forum(Itbi_forum item) {
             using (var db = new GTI_Context(_connection)) {
                int _seq = db.Itbi_Forum.Where(x => x.Guid == item.Guid)
@@ -2174,9 +2191,7 @@ namespace GTI_Dal.Classes {
                     Sql = Sql.Where(m => m.SituacaoCodigo == status);
                 if (!f)//se for fiscal pode consultar qualquer ITBI
                     Sql = Sql.Where(m => m.UserId == user);
-                else {
-                    Sql = Sql.Where(m => m.SituacaoCodigo < 3);//Só consultar certidões abertas
-                }
+                
 
                 foreach (var reg in Sql) {
                     Itbi_Lista item = new Itbi_Lista() {

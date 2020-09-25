@@ -1955,7 +1955,7 @@ namespace GTI_Mvc.Controllers {
                     Data_cadastro = Convert.ToDateTime(reg.Data.ToString("dd/MM/yyyy")),
                     Itbi_NumeroAno = reg.Numero_Ano,
                     Tipo_Imovel = reg.Tipo,
-                    Comprador_Nome_tmp = Functions.TruncateTo(reg.Nome_Comprador, 26),
+                    Comprador_Nome_tmp = Functions.TruncateTo(reg.Nome_Comprador, 25),
                     Situacao_Itbi_Nome = reg.Situacao,
                     Situacao_Itbi_codigo=reg.Situacao_Codigo
                 };
@@ -3930,7 +3930,7 @@ ActionPos:
                     Data_cadastro = Convert.ToDateTime(reg.Data.ToString("dd/MM/yyyy")),
                     Itbi_NumeroAno = reg.Numero_Ano,
                     Tipo_Imovel = reg.Tipo,
-                    Comprador_Nome_tmp = Functions.TruncateTo(reg.Nome_Comprador, 26),
+                    Comprador_Nome_tmp = Functions.TruncateTo(reg.Nome_Requerente, 26),
                     Situacao_Itbi_Nome = reg.Situacao,
                     Situacao_Itbi_codigo = reg.Situacao_Codigo
                 };
@@ -3952,6 +3952,16 @@ ActionPos:
             return View(model);
         }
 
+        [Route("Itbi_isencao_q")]
+        [HttpPost]
+        public ActionResult Itbi_isencao_q(ItbiViewModel model, string button) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            ViewBag.Fiscal = Session["hashfiscalitbi"].ToString();
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Exception ex = imovelRepository.Liberar_Itbi_Isencao(model.Guid, Convert.ToInt32(Session["hashid"]));
+            return RedirectToAction("Itbi_query_isencao");
+        }
 
         #endregion
     }

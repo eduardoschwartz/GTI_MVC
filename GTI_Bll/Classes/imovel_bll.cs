@@ -751,6 +751,11 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Itbi_Isencao_Disponivel();
         }
 
+        public Exception Liberar_Itbi_Isencao(string p,int FiscalId) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Liberar_Itbi_Isencao(p,FiscalId);
+            return ex;
+        }
 
         #endregion
 

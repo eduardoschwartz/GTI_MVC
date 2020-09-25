@@ -688,7 +688,7 @@
                                         @Html.HiddenFor(modelItem => item.Arquivo)
                                     </td>
                                     <td>
-                                        <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "ra", @s = item.Seq, @guid = Model.Guid })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                        <a href="@Url.Action("Itbi_rural_e", "Imovel", new { @a = "ra", @s = item.Seq, @p = Model.Guid })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                     </td>
                                 </tr>
                             }
