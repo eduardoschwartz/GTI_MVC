@@ -359,6 +359,12 @@
       <DependentUpon>Certidao_Valor_Venal_Valida.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Certidao_Isencao_Itbi.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Certidao_Isencao_Itbi.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\Comprovante_Inscricao.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -394,12 +400,6 @@
       <AutoGen>True</AutoGen>
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Reports\Itbi_Main.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Itbi_Main.rpt</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Resumo_Pagto_Itbi.cs">
       <AutoGen>True</AutoGen>
@@ -767,6 +767,10 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Valor_Venal_Valida.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Certidao_Isencao_Itbi.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Certidao_Isencao_Itbi.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Comprovante_Inscricao.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Comprovante_Inscricao.cs</LastGenOutput>
@@ -790,10 +794,6 @@
     <EmbeddedResource Include="Reports\Itbi_Rural.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Itbi_Rural.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Itbi_Main.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>Itbi_Main.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Resumo_Pagto_Itbi.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

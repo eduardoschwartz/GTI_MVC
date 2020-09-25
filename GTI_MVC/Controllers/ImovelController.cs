@@ -3777,9 +3777,9 @@ namespace GTI_Mvc.Controllers {
                         Codigo = _codigo.ToString()
                     };
                     if (_predial)
-                        _descricao = "Um imóvel ";
+                        _descricao = "um imóvel ";
                     else
-                        _descricao = "Um terreno ";
+                        _descricao = "um terreno ";
 
                     _descricao += "com " + imovel.Area_Terreno.ToString("#.#0") + "m² localizado no(a) " + imovel.NomeLogradouroAbreviado + ", " + imovel.Numero.ToString();
                     if (imovel.Complemento != "")
@@ -3787,7 +3787,8 @@ namespace GTI_Mvc.Controllers {
                     if (imovel.QuadraOriginal != "")
                         _descricao += " Quadra: " + imovel.QuadraOriginal + " Lote: " + imovel.LoteOriginal;
 
-                    _descricao += " no bairro " + imovel.NomeBairro + " na cidade de JABOTICABAL/SP.";
+                    _descricao += " no bairro " + imovel.NomeBairro + " na cidade de JABOTICABAL/SP, ";
+                    _descricao += "inscrição municipal: " + imovel.Inscricao + ", cadastro municipal: " + imovel.Codigo.ToString() + ",";
                     reg.Descricao = _descricao;
                     model.Lista_Isencao.Add(reg);
                 } else {
@@ -3807,7 +3808,6 @@ namespace GTI_Mvc.Controllers {
             }
 
             byte y = 1;
-//            List<Itbi_isencao_imovel> Lista = imovelRepository.Retorna_Itbi_Isencao_Imovel(model.Guid);
             foreach (Itbi_isencao_imovel i in Lista) {
                 i.Seq = y;
                 y++;
@@ -3961,6 +3961,68 @@ ActionPos:
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             Exception ex = imovelRepository.Liberar_Itbi_Isencao(model.Guid, Convert.ToInt32(Session["hashid"]));
             return RedirectToAction("Itbi_query_isencao");
+        }
+
+        public ActionResult Itbi_isencao_cancel(string p, int s) {
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Exception ex = imovelRepository.Alterar_Itbi_Isencao_Situacao(p, 4);
+            return RedirectToAction("Itbi_query_isencao");
+        }
+
+        public ActionResult Itbi_isencao_print(string p) {
+            ReportDocument rd = new ReportDocument();
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Certidao_Isencao_Itbi.rpt"));
+            TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+            TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+            ConnectionInfo crConnectionInfo = new ConnectionInfo();
+            Tables CrTables;
+            crConnectionInfo.ServerName = "200.232.123.115";
+            crConnectionInfo.DatabaseName = "Tributacao";
+            crConnectionInfo.UserID = "gtisys";
+            crConnectionInfo.Password = "everest";
+            CrTables = rd.Database.Tables;
+            foreach (Table CrTable in CrTables) {
+                crtableLogoninfo = CrTable.LogOnInfo;
+                crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                CrTable.ApplyLogOnInfo(crtableLogoninfo);
+            }
+
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            //##### QRCode ##########################################################
+            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkguid?p=" + p;
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
+            using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+                using (MemoryStream ms = new MemoryStream()) {
+                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    byte[] byteImage = ms.ToArray();
+                    Exception ex = imovelRepository.Alterar_Itbi_Isencao_QRCode(p, byteImage);
+                }
+            }
+                        
+            Itbi_isencao_main_Struct reg = imovelRepository.Retorna_Itbi_Isencao_Main(p);
+            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Assinatura assinatura= sistemaRepository.Retorna_Usuario_Assinatura(reg.Fiscal_id);
+            usuarioStruct usuario = sistemaRepository.Retorna_Usuario(reg.Fiscal_id);
+            rd.SetParameterValue("ANONUMERO", reg.Isencao_numero.ToString("00000") + "/" + reg.Isencao_ano.ToString("0000"));
+            rd.SetParameterValue("NATUREZA", reg.Natureza_Nome);
+            rd.SetParameterValue("NOMEFISCAL", usuario.Nome_completo);
+            rd.SetParameterValue("CARGO", assinatura.Cargo);
+
+            string imovel = "";
+            List<Itbi_isencao_imovel> Lista = imovelRepository.Retorna_Itbi_Isencao_Imovel(p);
+            foreach (Itbi_isencao_imovel item in Lista) {
+                imovel += item.Descricao + ", ";
+            }
+            imovel = imovel.Substring(0, imovel.Length - 2);
+            rd.SetParameterValue("IMOVEL", imovel);
+            try {
+                rd.RecordSelectionFormula = "{itbi_isencao_main.guid}='" + p + "'";
+                Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                return File(stream, "application/pdf", "Certidao_Isencao_Itbi.pdf");
+            } catch (Exception ex) {
+                throw;
+            }
         }
 
         #endregion

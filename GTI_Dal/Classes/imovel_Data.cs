@@ -2216,7 +2216,9 @@ namespace GTI_Dal.Classes {
         public int Retorna_Itbi_Isencao_Disponivel() {
             int _numero = 1;
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from t in db.Itbi_Isencao_Main orderby t.Isencao_numero descending where t.Isencao_ano == DateTime.Now.Year select t).FirstOrDefault();
+                var Sql = (from t in db.Itbi_Isencao_Main orderby t.Isencao_numero descending where t.Isencao_ano == DateTime.Now.Year
+                           select new { t.Guid, t.Data_cadastro, t.Data_validade, t.Fiscal_id, t.Isencao_ano, t.Isencao_numero, t.Natureza,
+                               t.QRCode, t.Situacao, t.Usuario_doc, t.Usuario_nome }).FirstOrDefault();
                 if (Sql != null) {
                     _numero = (short)(Sql.Isencao_numero + 1);
                 }
@@ -2224,6 +2226,31 @@ namespace GTI_Dal.Classes {
             return _numero;
         }
 
+        public Exception Alterar_Itbi_Isencao_Situacao(string p, int s) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Itbi_isencao_main i = db.Itbi_Isencao_Main.First(g => g.Guid == p);
+                i.Situacao = s;
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Alterar_Itbi_Isencao_QRCode(string p, byte[] code) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Itbi_isencao_main i = db.Itbi_Isencao_Main.First(g => g.Guid == p);
+                i.QRCode = code;
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
 
     }//end class
 }

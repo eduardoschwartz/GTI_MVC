@@ -757,6 +757,19 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Alterar_Itbi_Isencao_Situacao(string p, int s) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Alterar_Itbi_Isencao_Situacao(p, s);
+            return ex;
+        }
+
+        public Exception Alterar_Itbi_Isencao_QRCode(string p, byte[] code) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Alterar_Itbi_Isencao_QRCode(p, code);
+            return ex;
+        }
+
+
         #endregion
 
     }//end class

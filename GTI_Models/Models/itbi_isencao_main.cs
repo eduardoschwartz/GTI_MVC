@@ -15,6 +15,7 @@ namespace GTI_Models.Models {
         public int Situacao { get; set; }
         public int Usuario_id { get; set; }
         public string Data_validade { get; set; }
+        public byte[] QRCode { get; set; }
     }
 
     public class Itbi_isencao_main_Struct {

@@ -708,5 +708,12 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Assinatura Retorna_Usuario_Assinatura(int Codigo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Assinatura Sql = (from a in db.Assinatura where a.Codigo == Codigo select a).FirstOrDefault();
+                return Sql;
+            }
+        }
+
     }
 }

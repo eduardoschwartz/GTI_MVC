@@ -47,21 +47,23 @@
             </thead>
             <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
                 @foreach (var item in Model) {
-                <tr style="height:14px;">
-                    <td style="display:none">@Html.DisplayFor(modelItem => item.Guid)</td>
-                    <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.Itbi_NumeroAno)</td>
-                    <td style="width:90px;font-weight:normal"> @DateTime.Parse(Html.DisplayFor(modelItem => item.Data_cadastro).ToString()).ToString("dd/MM/yyyy")</td>
-                    <td style="width:270px;font-weight:normal">@Html.DisplayFor(modelItem => item.Comprador_Nome_tmp)</td>
-                    <td style="width:90px;font-weight:normal">@Html.DisplayFor(modelItem => item.Data_Validade)</td>
-                    <td style="width:170px;font-weight:normal">@Html.DisplayFor(modelItem => item.Situacao_Itbi_Nome)</td>
-                    <td style="width:130px">
-                        <a href="@Url.Action("Itbi_isencao_q", "Imovel", new { p = item.Guid })" title="Visualizar certidão"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
-                        <a href="@Url.Action("Itbi_isencao_cancel", "Imovel", new { p = item.Guid, s = 4 })" onclick="return confirm('Cancelar esta certidão?')" })" title="Cancelar este ITBI"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
-                        @if (item.Situacao_Itbi_codigo == 5) {
-                        <a href="@Url.Action("Itbi_isencao_print", "Imovel", new { p = item.Guid, u = item.Tipo_Imovel == "Urbano" })" title="Imprimir a certidão"> <img src="@Url.Content("~/images/print.png")"></a>
-                        }
-                    </td>
-                </tr>
+                    <tr style="height:14px;">
+                        <td style="display:none">@Html.DisplayFor(modelItem => item.Guid)</td>
+                        <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.Itbi_NumeroAno)</td>
+                        <td style="width:90px;font-weight:normal"> @DateTime.Parse(Html.DisplayFor(modelItem => item.Data_cadastro).ToString()).ToString("dd/MM/yyyy")</td>
+                        <td style="width:270px;font-weight:normal">@Html.DisplayFor(modelItem => item.Comprador_Nome_tmp)</td>
+                        <td style="width:90px;font-weight:normal">@Html.DisplayFor(modelItem => item.Data_Validade)</td>
+                        <td style="width:170px;font-weight:normal">@Html.DisplayFor(modelItem => item.Situacao_Itbi_Nome)</td>
+                        <td style="width:130px">
+                            <a href="@Url.Action("Itbi_isencao_q", "Imovel", new { p = item.Guid })" title="Visualizar certidão"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                            @if (item.Situacao_Itbi_codigo == 1) {
+                                <a href="@Url.Action("Itbi_isencao_cancel", "Imovel", new { p = item.Guid, s = 4 })" onclick="return confirm('Cancelar esta certidão?')" })" title="Cancelar este ITBI"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
+                            }
+                            @if (item.Situacao_Itbi_codigo == 5) {
+                                <a href="@Url.Action("Itbi_isencao_print", "Imovel", new { p = item.Guid, u = item.Tipo_Imovel == "Urbano" })" title="Imprimir a certidão"> <img src="@Url.Content("~/images/print.png")"></a>
+                            }
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>

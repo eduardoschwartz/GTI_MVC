@@ -283,5 +283,9 @@ namespace GTI_Bll.Classes {
             return obj.Existe_Usuario_Web(Email);
         }
 
+        public Assinatura Retorna_Usuario_Assinatura(int Codigo) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            return obj.Retorna_Usuario_Assinatura(Codigo);
+        }
     }
 }
