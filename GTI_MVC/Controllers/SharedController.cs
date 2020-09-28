@@ -4,6 +4,7 @@ using GTI_Bll.Classes;
 using GTI_Models.Models;
 using GTI_Models.ReportModels;
 using GTI_Mvc.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Web.Mvc;
@@ -160,6 +161,63 @@ namespace GTI_MVC.Controllers {
             return null;
 
         }
+
+        [Route("Checkguid")]
+        [HttpGet]
+        public ActionResult Checkguid(string c) {
+            ViewBag.c = c;
+            return View();
+        }
+
+
+        [Route("Checkguid")]
+        [HttpPost]
+        public ActionResult Checkguid(CertidaoViewModel model, string c) {
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Itbi_isencao_main_Struct _itbi = imovelRepository.Retorna_Itbi_Isencao_Main(c);
+            List<Itbi_isencao_imovel> _Lista = imovelRepository.Retorna_Itbi_Isencao_Imovel(c);
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Certidao_Isencao_Itbi_Valida.rpt"));
+            TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+            TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+            ConnectionInfo crConnectionInfo = new ConnectionInfo();
+            Tables CrTables;
+            crConnectionInfo.ServerName = "200.232.123.115";
+            crConnectionInfo.DatabaseName = "Tributacao";
+            crConnectionInfo.UserID = "gtisys";
+            crConnectionInfo.Password = "everest";
+            CrTables = rd.Database.Tables;
+            foreach (Table CrTable in CrTables) {
+                crtableLogoninfo = CrTable.LogOnInfo;
+                crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                CrTable.ApplyLogOnInfo(crtableLogoninfo);
+            }
+
+            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Assinatura assinatura = sistemaRepository.Retorna_Usuario_Assinatura(_itbi.Fiscal_id);
+            usuarioStruct usuario = sistemaRepository.Retorna_Usuario(_itbi.Fiscal_id);
+            rd.SetParameterValue("ANONUMERO", _itbi.Isencao_numero.ToString("00000") + "/" + _itbi.Isencao_ano.ToString("0000"));
+            rd.SetParameterValue("NATUREZA", _itbi.Natureza_Nome);
+            rd.SetParameterValue("NOMEFISCAL", usuario.Nome_completo);
+            rd.SetParameterValue("CARGO", assinatura.Cargo);
+
+            string imovel = "";
+            foreach (Itbi_isencao_imovel item in _Lista) {
+                imovel += item.Descricao + ", ";
+            }
+            imovel = imovel.Substring(0, imovel.Length - 2);
+            rd.SetParameterValue("IMOVEL", imovel);
+            try {
+                rd.RecordSelectionFormula = "{itbi_isencao_main.guid}='" + c + "'";
+                Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                return File(stream, "application/pdf", "Certidao_Isencao_Itbi_Valida.pdf");
+            } catch (Exception ex) {
+                throw;
+            }
+
+        }
+
 
     }
 }

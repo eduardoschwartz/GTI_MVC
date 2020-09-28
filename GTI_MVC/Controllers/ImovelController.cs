@@ -3731,7 +3731,8 @@ namespace GTI_Mvc.Controllers {
                     Usuario_doc = usuario_Doc,
                     Natureza = 0,
                     Isencao_ano = 0,
-                    Isencao_numero = 0
+                    Isencao_numero = 0,
+                    Usuario_id=nId
                 };
                 Exception ex = imovelRepository.Incluir_isencao_main(regMain);
             } else {

@@ -335,6 +335,12 @@
       <DependentUpon>Certidao_Isencao_65metros.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Certidao_Isencao_Itbi_valida.cs">
+      <DependentUpon>Certidao_Isencao_Itbi_valida.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Reports\Certidao_Isencao_Processo.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -660,6 +666,7 @@
     <Content Include="Views\Imovel\Itbi_query_isencao.cshtml" />
     <Content Include="Views\Imovel\Itbi_isencao_ok.cshtml" />
     <Content Include="Views\Imovel\Itbi_isencao_q.cshtml" />
+    <Content Include="Views\Shared\Checkguid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -750,6 +757,10 @@
     <EmbeddedResource Include="Reports\Certidao_Isencao_65metros.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Isencao_65metros.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Certidao_Isencao_Itbi_valida.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Certidao_Isencao_Itbi_valida.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Certidao_Isencao_Processo.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

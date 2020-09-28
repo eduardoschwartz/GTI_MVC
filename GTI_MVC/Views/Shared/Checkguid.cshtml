@@ -1,0 +1,38 @@
+﻿@model GTI_Mvc.ViewModels.CertidaoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Validação de Certidão";
+}
+
+<style>
+    .center {
+        text-align: center;
+        margin: auto;
+        width: 350px;
+        border: 1px solid rgba(0,0,0,0.24);
+        padding: 20px;
+        box-shadow: 0 .1em 0.5em #000;
+        border-radius: 13px;
+    }
+</style>
+
+<div class="center">
+    <label style="color: brown;font-size: 16px;font-style: italic">Validação de Certidão</label>
+    <br />
+    <br />
+
+    @using (Html.BeginForm("Checkguid", "Shared", FormMethod.Post, new { @id = "MainForm" })) {
+        <input type="hidden" name="c" value="@ViewBag.c" />
+        <br />
+        <button type="submit" class="btn btn-primary"> Clique para Validar</button>
+        <br />
+        <br />
+        <div class="form-group row">
+            <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+        </div>
+    }
+    <br />
+    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+</div>
+

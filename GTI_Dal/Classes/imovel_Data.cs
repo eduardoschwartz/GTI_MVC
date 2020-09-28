@@ -2038,7 +2038,7 @@ namespace GTI_Dal.Classes {
 
         public Exception Incluir_isencao_main(Itbi_isencao_main Reg) {
             using (var db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[9];
+                object[] Parametros = new object[10];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@isencao_numero", SqlDbType = SqlDbType.Int, SqlValue = Reg.Isencao_numero };
                 Parametros[2] = new SqlParameter { ParameterName = "@isencao_ano", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Isencao_ano };
@@ -2048,8 +2048,9 @@ namespace GTI_Dal.Classes {
                 Parametros[6] = new SqlParameter { ParameterName = "@natureza", SqlDbType = SqlDbType.Int, SqlValue = Reg.Natureza };
                 Parametros[7] = new SqlParameter { ParameterName = "@data_cadastro", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_cadastro };
                 Parametros[8] = new SqlParameter { ParameterName = "@situacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Situacao };
-                db.Database.ExecuteSqlCommand("INSERT INTO itbi_isencao_main(guid,isencao_numero,isencao_ano,fiscal_id,usuario_nome,usuario_doc,natureza,data_cadastro,situacao) " +
-                                              " VALUES(@guid,@isencao_numero,@isencao_ano,@fiscal_id,@usuario_nome,@usuario_doc,@natureza,@data_cadastro,@situacao)", Parametros);
+                Parametros[9] = new SqlParameter { ParameterName = "@usuario_id", SqlDbType = SqlDbType.Int, SqlValue = Reg.Usuario_id};
+                db.Database.ExecuteSqlCommand("INSERT INTO itbi_isencao_main(guid,isencao_numero,isencao_ano,fiscal_id,usuario_nome,usuario_doc,natureza,data_cadastro,situacao,usuario_id) " +
+                                              " VALUES(@guid,@isencao_numero,@isencao_ano,@fiscal_id,@usuario_nome,@usuario_doc,@natureza,@data_cadastro,@situacao,@usuario_id)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -2190,8 +2191,9 @@ namespace GTI_Dal.Classes {
                 if (status > 0)
                     Sql = Sql.Where(m => m.SituacaoCodigo == status);
                 if (!f)//se for fiscal pode consultar qualquer ITBI
-                    Sql = Sql.Where(m => m.UserId == user);
-                
+                    Sql = Sql.Where(m => m.UserId == user );
+                else
+                    Sql = Sql.Where(m=> m.SituacaoCodigo == 1 || m.SituacaoCodigo==5);
 
                 foreach (var reg in Sql) {
                     Itbi_Lista item = new Itbi_Lista() {
