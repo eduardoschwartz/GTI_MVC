@@ -894,15 +894,15 @@
                 calcula_guia();
             });
 
+            $("#txtValorVenal").on('input', function () {
+                calcula_guia();
+            });
+
             $("#txtAvaliacao").on('input', function () {
                 calcula_guia();
             });
 
             $("#txtAvaliacao2").on('input', function () {
-                calcula_guia();
-            });
-
-            $("#txtValorVenal").on('input', function () {
                 calcula_guia();
             });
 
@@ -913,7 +913,7 @@
             $("#txtRecursoProprio").on('input', function () {
                 var _rp = document.getElementById('txtRecursoProprio').value;
                 var _rp2 = Number(_rp.replace(/[^0-9.-]+/g, "."));
-                var _rp3 = parseFloat(_rp2) ;
+                var _rp3 = parseFloat(_rp2);
                 $("input[name='Recursos_proprios_atual']").val((_rp3 * 0.015).toFixed(2).replace(".", ","));
                 calcula_guia();
             });
@@ -941,7 +941,6 @@
                 $("input[name='Financiamento_atual']").val((_fn3 * 0.005).toFixed(2).replace(".", ","));
                 calcula_guia();
             });
-
         });
 
         function calcula_guia() {

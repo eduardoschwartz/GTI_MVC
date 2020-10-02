@@ -2781,6 +2781,8 @@ namespace GTI_Mvc.Controllers {
                 Exception ex = imovelRepository.Excluir_Itbi_anexo(p, s);
             }
             ItbiViewModel model = Retorna_Itbi_Gravado(p);
+            if (model.Utilizar_VVT)
+                model.Valor_Venal_Territorial = model.Valor_Venal;
             return View("Itbi_urbano_e", model);
         }
 
