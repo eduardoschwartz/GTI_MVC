@@ -966,6 +966,7 @@
                 var _soma = (parseFloat(_rp2) + parseFloat(_rc2) + parseFloat(_rd2) + parseFloat(_fn2));
                 $("input[name='Valor_Transacao']").val(_soma.toFixed(2).replace(".", ","));
             } else {
+                var _somaa = 0;
                 var _vt = document.getElementById('txtValorTransacao').value;
                 _soma = _vt;
                 _soma = parseFloat(_vt.replace(",", "."));
@@ -996,21 +997,32 @@
                 _somavv = _somavv * _percvv / 100;
             }
 
-            if (_soma > _somavvoriginal) {
-                if (_tf == "") {
-                    $("input[name='Valor_guia']").val((_soma * 0.015).toFixed(2).replace(".", ","));
-                } else {
+            if (_somaa > 0 && _somavv > 0) {
+                _somavv = _somavv * 0.015;
+                if (_somaa > _somavv) {
                     $("input[name='Valor_guia']").val((_somaa).toFixed(2).replace(".", ","));
+                } else {
+                    $("input[name='Valor_guia']").val((_somavv).toFixed(2).replace(".", ","));
                 }
+            } else {
+                if (_soma > _somavvoriginal) {
+                    if (_tf == "") {
+                        $("input[name='Valor_guia']").val((_soma * 0.015).toFixed(2).replace(".", ","));
+                    } else {
+                        $("input[name='Valor_guia']").val((_somaa).toFixed(2).replace(".", ","));
+                    }
+                }
+                else
+                    $("input[name='Valor_guia']").val((_somavv * 0.015).toFixed(2).replace(".", ","));
+
+                if (_somaav > _soma && _somaav > _somavv)
+                    $("input[name='Valor_guia']").val((_somaav * 0.015).toFixed(2).replace(".", ","));
+
+                if (_somaava > _somaav && _somaava > _soma && _somaava > _somavv)
+                    $("input[name='Valor_guia']").val((_somaava * 0.015).toFixed(2).replace(".", ","));
+
             }
-            else
-                $("input[name='Valor_guia']").val((_somavv * 0.015).toFixed(2).replace(".", ","));
 
-            if (_somaav > _soma && _somaav > _somavv)
-                $("input[name='Valor_guia']").val((_somaav * 0.015).toFixed(2).replace(".", ","));
-
-            if (_somaava>_somaav && _somaava > _soma && _somaava > _somavv)
-                $("input[name='Valor_guia']").val((_somaava * 0.015).toFixed(2).replace(".", ","));
 
         }
 
