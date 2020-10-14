@@ -1524,75 +1524,82 @@ namespace GTI_Mvc.Controllers {
                         ViewBag.Result = "Não existem parcelas a serem impressas.";
                         return View(model);
                     } else {
-                      //  if (ListaDebito[0].Numero_Parcela == 1) {
-                            bool _find = false;
-                            foreach (DebitoStructure itemtmp in ListaDebito) {
-                                if (itemtmp.Codigo_Situacao < 3) {
-                                    _find = true;
-                                    break;
-                                }
+                        //  if (ListaDebito[0].Numero_Parcela == 1) {
+                        bool _find = false;
+                        foreach (DebitoStructure itemtmp in ListaDebito) {
+                            if (itemtmp.Codigo_Situacao < 3) {
+                                _find = true;
+                                break;
                             }
-                            if (!_find) {
-                                ViewBag.Result = "Liberação do carnê somente após o pagamento da primeira parcela.";
-                                return View(model);
-                            } else {
-                                string _descricao_lancamento = "PARCELAMENTO DE DÉBITOS";
-                                int nSid = Functions.GetRandomNumber();
-                                int nPos = 0;
-                                foreach (DebitoStructure item in ListaDebito.Where(m => m.Codigo_Situacao == 3)) {
+                        }
+                        if (!_find) {
+                            ViewBag.Result = "Liberação do carnê somente após o pagamento da primeira parcela.";
+                            return View(model);
+                        } else {
+                            string _descricao_lancamento = "PARCELAMENTO DE DÉBITOS";
+                            int nSid = Functions.GetRandomNumber();
+                            int nPos = 0;
+                            foreach (DebitoStructure item in ListaDebito.Where(m => m.Codigo_Situacao == 3)) {
 
-                                    //criamos um documento novo para cada parcela da vigilância
-                                    Numdocumento regDoc = new Numdocumento();
-                                    regDoc.Valorguia = item.Soma_Principal;
-                                    regDoc.Emissor = "Gti.Web/2ViaVS";
-                                    regDoc.Datadocumento = DateTime.Now;
-                                    regDoc.Registrado = false;
-                                    regDoc.Percisencao = 0;
-                                    regDoc.Percisencao = 0;
-                                    int _novo_documento = tributario_class.Insert_Documento(regDoc);
-                                    regDoc.numdocumento = _novo_documento;
-                                    ListaDebito[nPos].Numero_Documento = _novo_documento;
-
-                                    //grava o documento na parcela
-                                    Parceladocumento regParc = new Parceladocumento();
-                                    regParc.Codreduzido = item.Codigo_Reduzido;
-                                    regParc.Anoexercicio = Convert.ToInt16(item.Ano_Exercicio);
-                                    regParc.Codlancamento = Convert.ToInt16(item.Codigo_Lancamento);
-                                    regParc.Seqlancamento = Convert.ToInt16(item.Sequencia_Lancamento);
-                                    regParc.Numparcela = Convert.ToByte(item.Numero_Parcela);
-                                    regParc.Codcomplemento = Convert.ToByte(item.Complemento);
-                                    regParc.Numdocumento = _novo_documento;
-                                    regParc.Valorjuros = 0;
-                                    regParc.Valormulta = 0;
-                                    regParc.Valorcorrecao = 0;
-                                    regParc.Plano = 0;
-                                    tributario_class.Insert_Parcela_Documento(regParc);
-
-                                    //Registrar os novos documentos
-                                    Ficha_compensacao_documento ficha = new Ficha_compensacao_documento();
-                                    ficha.Nome = _nome.Length > 40 ? _nome.Substring(0, 40) : _nome;
-                                    ficha.Endereco = _endereco.Length > 40 ? _endereco.Substring(0, 40) : _endereco;
-                                    ficha.Bairro = _bairro.Length > 15 ? _bairro.Substring(0, 15) : _bairro;
-                                    ficha.Cidade = _cidade.Length > 30 ? _cidade.Substring(0, 30) : _cidade;
-                                    ficha.Cep = _cep ?? "14870000";
-                                    ficha.Cpf = _cpfcnpj;
-                                    ficha.Numero_documento = _novo_documento;
-                                    ficha.Data_vencimento = Convert.ToDateTime(item.Data_Vencimento);
-                                    ficha.Valor_documento = Convert.ToDecimal(item.Soma_Principal);
-                                    ficha.Uf = _uf;
-                                    if (item.Data_Vencimento > DateTime.Now) {
-                                        Exception ex = tributario_class.Insert_Ficha_Compensacao_Documento(ficha);
-                                        if (ex == null)
-                                            ex = tributario_class.Marcar_Documento_Registrado(_novo_documento);
+                                //criamos um documento novo para cada parcela da vigilância
+                                Numdocumento regDoc = new Numdocumento();
+                                regDoc.Valorguia = item.Soma_Principal;
+                                regDoc.Emissor = "Gti.Web/2ViaVS";
+                                regDoc.Datadocumento = DateTime.Now;
+                                regDoc.Registrado = false;
+                                regDoc.Percisencao = 0;
+                                regDoc.Percisencao = 0;
+                                int _novo_documento = tributario_class.Insert_Documento(regDoc);
+                                regDoc.numdocumento = _novo_documento;
+                                for (int i = 0; i < ListaDebito.Count; i++) {
+                                    if (ListaDebito[i].Numero_Parcela == item.Numero_Parcela) {
+                                        ListaDebito[i].Numero_Documento = _novo_documento;
+                                        break;
                                     }
-                                    nPos++;
                                 }
+                                //}
 
-                                short _index = 0;
-                                string _convenio = "2873532";
+
+                                //grava o documento na parcela
+                                Parceladocumento regParc = new Parceladocumento();
+                                regParc.Codreduzido = item.Codigo_Reduzido;
+                                regParc.Anoexercicio = Convert.ToInt16(item.Ano_Exercicio);
+                                regParc.Codlancamento = Convert.ToInt16(item.Codigo_Lancamento);
+                                regParc.Seqlancamento = Convert.ToInt16(item.Sequencia_Lancamento);
+                                regParc.Numparcela = Convert.ToByte(item.Numero_Parcela);
+                                regParc.Codcomplemento = Convert.ToByte(item.Complemento);
+                                regParc.Numdocumento = _novo_documento;
+                                regParc.Valorjuros = 0;
+                                regParc.Valormulta = 0;
+                                regParc.Valorcorrecao = 0;
+                                regParc.Plano = 0;
+                                tributario_class.Insert_Parcela_Documento(regParc);
+
+                                //Registrar os novos documentos
+                                Ficha_compensacao_documento ficha = new Ficha_compensacao_documento();
+                                ficha.Nome = _nome.Length > 40 ? _nome.Substring(0, 40) : _nome;
+                                ficha.Endereco = _endereco.Length > 40 ? _endereco.Substring(0, 40) : _endereco;
+                                ficha.Bairro = _bairro.Length > 15 ? _bairro.Substring(0, 15) : _bairro;
+                                ficha.Cidade = _cidade.Length > 30 ? _cidade.Substring(0, 30) : _cidade;
+                                ficha.Cep = _cep ?? "14870000";
+                                ficha.Cpf = _cpfcnpj;
+                                ficha.Numero_documento = _novo_documento;
+                                ficha.Data_vencimento = Convert.ToDateTime(item.Data_Vencimento);
+                                ficha.Valor_documento = Convert.ToDecimal(item.Soma_Principal);
+                                ficha.Uf = _uf;
+                                if (item.Data_Vencimento >= Convert.ToDateTime( DateTime.Now.ToString("dd/MM/yyyy"))) {
+                                    Exception ex = tributario_class.Insert_Ficha_Compensacao_Documento(ficha);
+                                    if (ex == null)
+                                        ex = tributario_class.Marcar_Documento_Registrado(_novo_documento);
+                                }
+                                nPos++;
+                            }
+
+                            short _index = 0;
+                            string _convenio = "2873532";
                                 List<Boletoguia> ListaBoleto = new List<Boletoguia>();
                                 foreach (DebitoStructure item in ListaDebito.Where(m => m.Codigo_Situacao == 3)) {
-                                    if (item.Data_Vencimento >= DateTime.Now) {
+                                    if (item.Data_Vencimento >= Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy"))) {
                                         Boletoguia reg = new Boletoguia();
                                         reg.Usuario = "Gti.Web/LibParc";
                                         reg.Computer = "web";
