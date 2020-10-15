@@ -1896,6 +1896,14 @@ namespace GTI_Mvc.Controllers {
 
         }
 
-    }
+        [Route("Notificacao_iss")]
+        [HttpGet]
+        public ViewResult Notificacao_iss() {
+            NotificacaoIssViewModel model = new NotificacaoIssViewModel();
+            return View(model);
+        }
 
+
+
+    }
 }

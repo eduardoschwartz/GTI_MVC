@@ -432,6 +432,7 @@
     <Compile Include="ViewModels\ItbiViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MemoryViewModel.cs" />
+    <Compile Include="ViewModels\NotificacaoIssViewModel.cs" />
     <Compile Include="ViewModels\ProcessoViewModel.cs" />
     <Compile Include="Views\Imovel\EditorTemplates\ListAnexoEditorViewModel.cs" />
     <Compile Include="Views\Imovel\EditorTemplates\ListCompradorEditorViewModel.cs" />
@@ -667,6 +668,7 @@
     <Content Include="Views\Imovel\Itbi_isencao_ok.cshtml" />
     <Content Include="Views\Imovel\Itbi_isencao_q.cshtml" />
     <Content Include="Views\Shared\Checkguid.cshtml" />
+    <Content Include="Views\Tributario\Notificacao_iss.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

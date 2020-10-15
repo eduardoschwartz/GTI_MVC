@@ -1,0 +1,170 @@
+﻿@model GTI_Mvc.ViewModels.NotificacaoIssViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Notificação de ISS";
+}
+
+<style>
+    .textBoxBlue {
+        height: 25px;
+        position: relative;
+        border: 1px solid #0094ff;
+        border-color: rgba(0, 0, 0, .14);
+        background-color: white;
+        font-size: 14px;
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
+    }
+    .center {
+        margin: auto;
+/*        width: 700px;*/
+        border: 1px solid rgba(0,0,0,0.24);
+        padding: 20px;
+        box-shadow: 0 .1em 0.5em #000;
+        border-radius: 13px;
+    }
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+</style>
+
+<div class="center" style="width:620px">
+
+    @using (Html.BeginForm("Notificacao_iss", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
+
+    <div class="container" style="width:580px">
+        <div class="panel panel-danger">
+            <div class="panel-heading">Notificação de ISS Construção Civil</div>
+            <div class="panel-body">
+
+                <div>
+
+                    <table style="font-size:14px;width:500px">
+                        <tr style="height:30px">
+                            <td style="width:120px">
+                                <label style="font-weight:normal;padding-top:7px">Exercício:</label>
+                            </td>
+                            <td style="width:150px">
+                                @Html.TextBoxFor(m => m.Ano_Notificacao, new { style = "width:70px;" })
+                            </td>
+                            <td style="width:110px">
+                                <label style="font-weight:normal;padding-top:7px">Nº Notificação:</label>
+                            </td>
+                            <td style="width:100px">
+                                @Html.TextBoxFor(m => m.Numero_Notificacao, new { style = "width:70px;" })
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="font-size:14px;width:500px">
+                        <tr style="height:30px">
+                            <td style="width:120px">
+                                <label style="font-weight:normal;padding-top:7px">Código Imóvel:</label>
+                            </td>
+                            <td style="width:150px">
+                                @Html.TextBoxFor(m => m.Codigo_Imovel, new { style = "width:70px;" })
+                            </td>
+                            <td style="width:110px">
+                                <label style="font-weight:normal;padding-top:7px">Código Cidadão:</label>
+                            </td>
+                            <td style="width:100px">
+                                @Html.TextBoxFor(m => m.Codigo_Cidadao, new { style = "width:70px;" })
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="font-size:14px;width:500px">
+                        <tr style="height:30px">
+                            <td style="width:120px">
+                                <label style="font-weight:normal;padding-top:7px">Nº Processo:</label>
+                            </td>
+                            <td style="width:150px">
+                                @Html.TextBoxFor(m => m.Numero_Processo, new { style = "width:70px;" })
+                            </td>
+                            <td style="width:110px">
+                                <label style="font-weight:normal;padding-top:7px">Área Notificada:</label>
+                            </td>
+                            <td style="width:100px">
+                                @Html.TextBoxFor(m => m.Area_Notificada, new { style = "width:70px;" })
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="font-size:14px;width:500px">
+                        <tr style="height:30px">
+                            <td style="width:120px">
+                                <label style="font-weight:normal;padding-top:7px">Uso construção:</label>
+                            </td>
+                            <td style="width:150px">
+                                @Html.TextBoxFor(m => m.Uso_Construcao, new { style = "width:70px;" })
+                            </td>
+                            <td style="width:110px">
+                                <label style="font-weight:normal;padding-top:7px">ISS Pago:</label>
+                            </td>
+                            <td style="width:100px">
+                                @Html.TextBoxFor(m => m.Iss_Pago, new { style = "width:70px;" })
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="font-size:14px;width:500px">
+                        <tr style="height:30px">
+                            <td style="width:120px">
+                                <label style="font-weight:normal;padding-top:7px">Cat. construção:</label>
+                            </td>
+                            <td style="width:150px">
+                                @Html.TextBoxFor(m => m.Categoria_Construcao, new { style = "width:70px;" })
+                            </td>
+                            <td style="width:110px">
+                                <label style="font-weight:normal;padding-top:7px">Habite-se:</label>
+                            </td>
+                            <td style="width:100px">
+                                @Html.TextBoxFor(m => m.Habitese, new { style = "width:70px;" })
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+        @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+    </div>
+
+    }
+</div>
+
+        @section scripts{
+
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $("#MainForm").submit(function () {
+                        return ValidateForm();
+                    });
+                });
+
+                function ValidateForm() {
+                    ClearError();
+                    var _cod = document.getElementById('codigo').value;
+                    var _captcha = document.getElementById('captchaTxt').value;
+                    var _chave = document.getElementById('chave').value;
+
+                    if ((_cod == "" || parseInt(_cod) == 0) && _chave == "") {
+                        document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal ou a chave de autenticação da certidão";
+                        return false;
+                    }
+
+
+
+
+                    return true;
+                }
+
+                function ClearError() {
+                    document.getElementById('errorLabel').innerHTML = "";
+                }
+
+
+
+            </script>
+        }
