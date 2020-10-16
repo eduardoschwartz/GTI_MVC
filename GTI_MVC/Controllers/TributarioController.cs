@@ -1900,6 +1900,72 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult Notificacao_iss() {
             NotificacaoIssViewModel model = new NotificacaoIssViewModel();
+
+            List<Usoconstr> Lista_Uso = new List<Usoconstr>();
+            Lista_Uso.Add(new Usoconstr() { Codusoconstr = 1, Descusoconstr = "Residencial" });
+            Lista_Uso.Add(new Usoconstr() { Codusoconstr = 2, Descusoconstr = "Industrial" });
+            Lista_Uso.Add(new Usoconstr() { Codusoconstr = 3, Descusoconstr = "Comercial" });
+            ViewBag.Lista_Uso = new SelectList(Lista_Uso, "Codusoconstr", "Descusoconstr");
+
+            List<Categconstr> Lista_Cat = new List<Categconstr>();
+
+            List<int> Lista_Ano = new List<int>();
+            for (int i = 2000; i <= DateTime.Now.Year; i++) {
+                Lista_Ano.Add(i);
+            }
+            ViewBag.Lista_Ano = new SelectList(Lista_Ano);
+            model.Ano_Notificacao = DateTime.Now.Year;
+            DateTime _data = DateTime.Now.AddDays(30);
+            model.Data_vencimento = _data;
+            ViewBag.Lista_Cat = new SelectList(Lista_Cat, "Codcategconstr", "Desccategconstr");
+            return View(model);
+        }
+
+        [Route("Notificacao_iss")]
+        [HttpPost]
+        public ViewResult Notificacao_iss(NotificacaoIssViewModel model) {
+            List<Usoconstr> Lista_Uso = new List<Usoconstr>();
+            Lista_Uso.Add(new Usoconstr() { Codusoconstr = 1, Descusoconstr = "Residencial" });
+            Lista_Uso.Add(new Usoconstr() { Codusoconstr = 2, Descusoconstr = "Industrial" });
+            Lista_Uso.Add(new Usoconstr() { Codusoconstr = 3, Descusoconstr = "Comercial" });
+            ViewBag.Lista_Uso = new SelectList(Lista_Uso, "Codusoconstr", "Descusoconstr");
+
+            List<int> Lista_Ano = new List<int>();
+            for (int i = 2000; i <= DateTime.Now.Year; i++) {
+                Lista_Ano.Add(i);
+            }
+            ViewBag.Lista_Ano = new SelectList(Lista_Ano);
+
+            List<Categconstr> Lista_Cat = new List<Categconstr>();
+            switch (model.Uso_Construcao) {
+                case 1:
+                    Lista_Cat.Add(new Categconstr() { Codcategconstr = 179, Desccategconstr = "Baixo" });
+                    Lista_Cat.Add(new Categconstr() { Codcategconstr = 691, Desccategconstr = "Popular" });
+                    Lista_Cat.Add(new Categconstr() { Codcategconstr = 180, Desccategconstr = "Médio" });
+                    Lista_Cat.Add(new Categconstr() { Codcategconstr = 181, Desccategconstr = "Alto" });
+                    Lista_Cat.Add(new Categconstr() { Codcategconstr = 676, Desccategconstr = "Fino" });
+                    Lista_Cat.Add(new Categconstr() { Codcategconstr = 670, Desccategconstr = "Luxuoso" });
+                    break;
+                case 2:
+                    Lista_Cat.Add(new Categconstr() { Codcategconstr = 185, Desccategconstr = "Único" });
+                    Lista_Cat.Add(new Categconstr() { Codcategconstr = 671, Desccategconstr = "Barracão" });
+                    Lista_Cat.Add(new Categconstr() { Codcategconstr = 672, Desccategconstr = "Popular" });
+                    Lista_Cat.Add(new Categconstr() { Codcategconstr = 673, Desccategconstr = "Médio" });
+                    Lista_Cat.Add(new Categconstr() { Codcategconstr = 674, Desccategconstr = "Bom" });
+                    break;
+                case 3:
+                    Lista_Cat.Add(new Categconstr() { Codcategconstr = 182, Desccategconstr = "Baixo" });
+                    Lista_Cat.Add(new Categconstr() { Codcategconstr = 689, Desccategconstr = "Barracão" });
+                    Lista_Cat.Add(new Categconstr() { Codcategconstr = 690, Desccategconstr = "Popular" });
+                    Lista_Cat.Add(new Categconstr() { Codcategconstr = 183, Desccategconstr = "Médio" });
+                    Lista_Cat.Add(new Categconstr() { Codcategconstr = 184, Desccategconstr = "Alto" });
+                    Lista_Cat.Add(new Categconstr() { Codcategconstr = 675, Desccategconstr = "Fino" });
+                    break;
+                default:
+                    break;
+            }
+
+            ViewBag.Lista_Cat = new SelectList(Lista_Cat, "Codcategconstr", "Desccategconstr");
             return View(model);
         }
 

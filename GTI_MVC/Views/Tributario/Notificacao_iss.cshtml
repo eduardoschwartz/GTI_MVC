@@ -42,20 +42,25 @@
             <div class="panel-body">
 
                 <div>
-
+                    @Html.HiddenFor(m=>m.Valor_m2)
+                    @Html.HiddenFor(m=>m.Valor_Total)
                     <table style="font-size:14px;width:500px">
                         <tr style="height:30px">
                             <td style="width:120px">
                                 <label style="font-weight:normal;padding-top:7px">Exercício:</label>
                             </td>
                             <td style="width:150px">
-                                @Html.TextBoxFor(m => m.Ano_Notificacao, new { style = "width:70px;" })
+                                @Html.DropDownListFor(m => m.Ano_Notificacao, ViewBag.Lista_Ano as SelectList, null, new { @id = "AnoDropDown", style = "width:70px;height:25px", rows = 10 })
                             </td>
                             <td style="width:110px">
                                 <label style="font-weight:normal;padding-top:7px">Nº Notificação:</label>
                             </td>
                             <td style="width:100px">
-                                @Html.TextBoxFor(m => m.Numero_Notificacao, new { style = "width:70px;" })
+                                @if (Model.Numero_Notificacao > 0) {
+                                    @Html.TextBoxFor(m => m.Numero_Notificacao, new { @id = "numero", @onKeyPress = "return formata(this, '§§§§§', event)", style = "width:70px;", @Value = Model.Numero_Notificacao })
+                                } else {
+                                    @Html.TextBoxFor(m => m.Numero_Notificacao, new { @id = "numero", @onKeyPress = "return formata(this, '§§§§§', event)", style = "width:70px;", @Value = "" })
+                                }
                             </td>
                         </tr>
                     </table>
@@ -65,13 +70,22 @@
                                 <label style="font-weight:normal;padding-top:7px">Código Imóvel:</label>
                             </td>
                             <td style="width:150px">
-                                @Html.TextBoxFor(m => m.Codigo_Imovel, new { style = "width:70px;" })
+                                @if (Model.Codigo_Imovel > 0) {
+                                    @Html.TextBoxFor(m => m.Codigo_Imovel, new { @id = "Codigo_Imovel", @onKeyPress = "return formata(this, '§§§§§§', event)", style = "width:70px;", @Value = Model.Codigo_Imovel })
+                                } else {
+                                    @Html.TextBoxFor(m => m.Codigo_Imovel, new { @id = "Codigo_Imovel", @onKeyPress = "return formata(this, '§§§§§§', event)", style = "width:70px;", @Value = "" })
+                                }
                             </td>
                             <td style="width:110px">
                                 <label style="font-weight:normal;padding-top:7px">Código Cidadão:</label>
                             </td>
                             <td style="width:100px">
-                                @Html.TextBoxFor(m => m.Codigo_Cidadao, new { style = "width:70px;" })
+                                @if (Model.Codigo_Cidadao > 0) {
+                                    @Html.TextBoxFor(m => m.Codigo_Cidadao, new { @id = "Codigo_Cidadao", @onKeyPress = "return formata(this, '§§§§§§', event)", style = "width:70px;", @Value = Model.Codigo_Cidadao })
+                                } else {
+                                    @Html.TextBoxFor(m => m.Codigo_Cidadao, new { @id = "Codigo_Cidadao", @onKeyPress = "return formata(this, '§§§§§§', event)", style = "width:70px;", @Value = "" })
+                                }
+
                             </td>
                         </tr>
                     </table>
@@ -87,7 +101,11 @@
                                 <label style="font-weight:normal;padding-top:7px">Área Notificada:</label>
                             </td>
                             <td style="width:100px">
-                                @Html.TextBoxFor(m => m.Area_Notificada, new { style = "width:70px;" })
+                                @if (Model.Area_Notificada > 0) {
+                                    @Html.TextBoxFor(m => m.Area_Notificada, new { @id = "area", @class = "maskValor", style = "width:70px;" ,@Value=Model.Area_Notificada})
+                                } else {
+                                    @Html.TextBoxFor(m => m.Area_Notificada, new { @id = "area", @class = "maskValor", style = "width:70px;",@Value=""})
+                                }
                             </td>
                         </tr>
                     </table>
@@ -97,13 +115,17 @@
                                 <label style="font-weight:normal;padding-top:7px">Uso construção:</label>
                             </td>
                             <td style="width:150px">
-                                @Html.TextBoxFor(m => m.Uso_Construcao, new { style = "width:70px;" })
+                                @Html.DropDownListFor(m => m.Uso_Construcao, ViewBag.Lista_Uso as SelectList, "(Selecione...)", new { @id = "UsoDropDown", style = "width:130px;height:25px", rows = 10 })
                             </td>
                             <td style="width:110px">
                                 <label style="font-weight:normal;padding-top:7px">ISS Pago:</label>
                             </td>
                             <td style="width:100px">
-                                @Html.TextBoxFor(m => m.Iss_Pago, new { style = "width:70px;" })
+                                @if (Model.Iss_Pago > 0) {
+                                    @Html.TextBoxFor(m => m.Iss_Pago, new { @id = "isspago", @class = "maskValor", style = "width:70px;", @Value = Model.Iss_Pago })
+                                } else {
+                                    @Html.TextBoxFor(m => m.Iss_Pago, new { @id = "isspago", @class = "maskValor", style = "width:70px;", @Value = "" })
+                                }
                             </td>
                         </tr>
                     </table>
@@ -113,21 +135,57 @@
                                 <label style="font-weight:normal;padding-top:7px">Cat. construção:</label>
                             </td>
                             <td style="width:150px">
-                                @Html.TextBoxFor(m => m.Categoria_Construcao, new { style = "width:70px;" })
+                                @Html.DropDownListFor(m => m.Categoria_Construcao, ViewBag.Lista_Cat as SelectList, "(Selecione...)", new { @id = "CatDropDown", style = "width:130px;height:25px", rows = 10 })
                             </td>
                             <td style="width:110px">
                                 <label style="font-weight:normal;padding-top:7px">Habite-se:</label>
                             </td>
                             <td style="width:100px">
-                                @Html.TextBoxFor(m => m.Habitese, new { style = "width:70px;" })
+                                @Html.CheckBoxFor(m => m.Habitese)
                             </td>
                         </tr>
                     </table>
+                    <table style="font-size:14px;width:500px">
+                        <tr style="height:30px">
+                            <td style="width:120px">
+                                <label style="font-weight:normal;padding-top:7px">Data Vencimento:</label>
+                            </td>
+                            <td style="width:150px">
+                                @Html.TextBoxFor(m => m.Data_vencimento, new { @id = "dataVencto", @class = "maskData", style = "width:80px;height:25px;text-align:left", @Value = Convert.ToDateTime(@Model.Data_vencimento).ToString("dd/MM/yyyy") })
+                            </td>
+                            <td style="width:110px">
+                            </td>
+                            <td style="width:100px">
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="font-size:14px;width:500px">
+                        <tr style="height:30px">
+                            <td style="width:120px">
+                                <label style="font-weight:normal;padding-top:7px">Valor m²:</label>
+                            </td>
+                            <td style="width:150px">
+                                <Label style="font-weight:normal;color:brown;padding-top:5px" id="lblValorM2">R$&nbsp;@Model.Valor_m2</Label>
+                            </td>
+                            <td style="width:110px">
+                                <label style="font-weight:normal;padding-top:7px" id="lblValorTotal">Valor total:</label>
+                            </td>
+                            <td style="width:100px">
+                                <Label style="font-weight:normal;color:brown;padding-top:5px">R$&nbsp;@Model.Valor_Total</Label>
+                            </td>
+                        </tr>
+                    </table>
+
                 </div>
 
             </div>
 
         </div>
+
+        <div style="text-align:center">
+            <button type="submit" class="btn btn-primary" name="action" value="btnValida">Gerar notificação</button>
+        </div>
+        <br />
         @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
     </div>
 
@@ -138,21 +196,31 @@
 
             <script type="text/javascript">
                 $(document).ready(function () {
+                    $(".maskValor").mask("99999999,00", { reverse: true });
+                    $(".maskData").inputmask("99/99/9999");
+                    $(".maskNumero").inputmask("999999");
+
                     $("#MainForm").submit(function () {
                         return ValidateForm();
+                    });
+
+                    $("#UsoDropDown").change(function () {
+                        if (this.value != '') {
+                            $("#MainForm").submit();
+                        }
                     });
                 });
 
                 function ValidateForm() {
                     ClearError();
-                    var _cod = document.getElementById('codigo').value;
-                    var _captcha = document.getElementById('captchaTxt').value;
-                    var _chave = document.getElementById('chave').value;
+                    //var _cod = document.getElementById('codigo').value;
+                    //var _captcha = document.getElementById('captchaTxt').value;
+                    //var _chave = document.getElementById('chave').value;
 
-                    if ((_cod == "" || parseInt(_cod) == 0) && _chave == "") {
-                        document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal ou a chave de autenticação da certidão";
-                        return false;
-                    }
+                    //if ((_cod == "" || parseInt(_cod) == 0) && _chave == "") {
+                    //    document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal ou a chave de autenticação da certidão";
+                    //    return false;
+                    //}
 
 
 
@@ -161,7 +229,7 @@
                 }
 
                 function ClearError() {
-                    document.getElementById('errorLabel').innerHTML = "";
+//                    document.getElementById('errorLabel').innerHTML = "";
                 }
 
 
