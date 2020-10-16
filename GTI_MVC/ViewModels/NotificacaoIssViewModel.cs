@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace GTI_Mvc.ViewModels {
     public class NotificacaoIssViewModel {
@@ -16,4 +17,5 @@ namespace GTI_Mvc.ViewModels {
         public bool Habitese { get; set; }
         public decimal Valor_Total { get; set; }
     }
+
 }

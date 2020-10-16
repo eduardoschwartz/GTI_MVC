@@ -102,9 +102,9 @@
                             </td>
                             <td style="width:100px">
                                 @if (Model.Area_Notificada > 0) {
-                                    @Html.TextBoxFor(m => m.Area_Notificada, new { @id = "area", @class = "maskValor", style = "width:70px;" ,@Value=Model.Area_Notificada})
+                                    @Html.TextBoxFor(m => m.Area_Notificada, new { @id = "txtArea", @class = "maskValor", style = "width:70px;" ,@Value=Model.Area_Notificada.ToString("#0.00")})
                                 } else {
-                                    @Html.TextBoxFor(m => m.Area_Notificada, new { @id = "area", @class = "maskValor", style = "width:70px;",@Value=""})
+                                    @Html.TextBoxFor(m => m.Area_Notificada, new { @id = "txtArea", @class = "maskValor", style = "width:70px;",@Value=""})
                                 }
                             </td>
                         </tr>
@@ -122,9 +122,9 @@
                             </td>
                             <td style="width:100px">
                                 @if (Model.Iss_Pago > 0) {
-                                    @Html.TextBoxFor(m => m.Iss_Pago, new { @id = "isspago", @class = "maskValor", style = "width:70px;", @Value = Model.Iss_Pago })
+                                    @Html.TextBoxFor(m => m.Iss_Pago, new { @id = "txtIssPago", @class = "maskValor", style = "width:70px;", @Value = Model.Iss_Pago.ToString("#0.00") })
                                 } else {
-                                    @Html.TextBoxFor(m => m.Iss_Pago, new { @id = "isspago", @class = "maskValor", style = "width:70px;", @Value = "" })
+                                    @Html.TextBoxFor(m => m.Iss_Pago, new { @id = "txtIssPago", @class = "maskValor", style = "width:70px;", @Value = "" })
                                 }
                             </td>
                         </tr>
@@ -165,13 +165,22 @@
                                 <label style="font-weight:normal;padding-top:7px">Valor m²:</label>
                             </td>
                             <td style="width:150px">
-                                <Label style="font-weight:normal;color:brown;padding-top:5px" id="lblValorM2">R$&nbsp;@Model.Valor_m2</Label>
+                                @if (Model.Valor_m2 > 0) {
+                                    <Label style="font-weight:normal;color:brown;padding-top:5px" id="lblValorM2">R$&nbsp;@Model.Valor_m2.ToString("#0.00")</Label>
+                                } else {
+                                    <Label style="font-weight:normal;color:brown;padding-top:5px" id="lblValorM2">R$ 0,00</Label>
+                                }
+
                             </td>
                             <td style="width:110px">
                                 <label style="font-weight:normal;padding-top:7px" id="lblValorTotal">Valor total:</label>
                             </td>
                             <td style="width:100px">
-                                <Label style="font-weight:normal;color:brown;padding-top:5px">R$&nbsp;@Model.Valor_Total</Label>
+                                @if (Model.Valor_Total > 0) {
+                                    <Label style="font-weight:normal;color:brown;padding-top:5px">R$&nbsp;@Model.Valor_Total.ToString("#0.00")</Label>
+                                } else {
+                                    <Label style="font-weight:normal;color:brown;padding-top:5px">R$ 0,00</Label>
+                                }
                             </td>
                         </tr>
                     </table>
@@ -207,6 +216,33 @@
                     $("#UsoDropDown").change(function () {
                         if (this.value != '') {
                             $("#MainForm").submit();
+                        } else {
+                            document.getElementById('lblValorM2').innerHTML = "0,00";
+                            document.getElementById('lblValorTotal').innerHTML = "0,00";
+                        }
+                    });
+                    $("#CatDropDown").change(function () {
+                        if (this.value != '') {
+                            $("#MainForm").submit();
+                        } else {
+                            document.getElementById('lblValorM2').innerHTML = "0,00";
+                            document.getElementById('lblValorTotal').innerHTML = "0,00";
+                        }
+                    });
+                    $("#txtArea").change(function () {
+                        if (this.value != '') {
+                            $("#MainForm").submit();
+                        } else {
+                            document.getElementById('lblValorM2').innerHTML = "0,00";
+                            document.getElementById('lblValorTotal').innerHTML = "0,00";
+                        }
+                    });
+                    $("#txtIssPago").change(function () {
+                        if (this.value != '') {
+                            $("#MainForm").submit();
+                        } else {
+                            document.getElementById('lblValorM2').innerHTML = "0,00";
+                            document.getElementById('lblValorTotal').innerHTML = "0,00";
                         }
                     });
                 });

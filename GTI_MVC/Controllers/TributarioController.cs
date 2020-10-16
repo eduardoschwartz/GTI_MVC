@@ -1936,6 +1936,7 @@ namespace GTI_Mvc.Controllers {
             }
             ViewBag.Lista_Ano = new SelectList(Lista_Ano);
 
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             List<Categconstr> Lista_Cat = new List<Categconstr>();
             switch (model.Uso_Construcao) {
                 case 1:
@@ -1966,6 +1967,16 @@ namespace GTI_Mvc.Controllers {
             }
 
             ViewBag.Lista_Cat = new SelectList(Lista_Cat, "Codcategconstr", "Desccategconstr");
+
+            if (model.Categoria_Construcao > 0) {
+                decimal _valor = tributarioRepository.Retorna_Valor_Tributo(model.Ano_Notificacao, model.Categoria_Construcao);
+                model.Valor_m2 = Math.Round(_valor, 2, MidpointRounding.AwayFromZero);
+                model.Valor_Total = Math.Round((model.Valor_m2 * model.Area_Notificada)-model.Iss_Pago, 2, MidpointRounding.AwayFromZero);
+            } else {
+                model.Valor_m2 = 0;
+                model.Valor_Total = 0;
+            }
+            
             return View(model);
         }
 
