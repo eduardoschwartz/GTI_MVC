@@ -42,8 +42,6 @@
             <div class="panel-body">
 
                 <div>
-                    @Html.HiddenFor(m=>m.Valor_m2)
-                    @Html.HiddenFor(m=>m.Valor_Total)
                     <table style="font-size:14px;width:500px">
                         <tr style="height:30px">
                             <td style="width:120px">
@@ -57,9 +55,9 @@
                             </td>
                             <td style="width:100px">
                                 @if (Model.Numero_Notificacao > 0) {
-                                    @Html.TextBoxFor(m => m.Numero_Notificacao, new { @id = "numero", @onKeyPress = "return formata(this, '§§§§§', event)", style = "width:70px;", @Value = Model.Numero_Notificacao })
+                                    @Html.TextBoxFor(m => m.Numero_Notificacao, new { @id = "txtNumero", @onKeyPress = "return formata(this, '§§§§§', event)", style = "width:70px;", @Value = Model.Numero_Notificacao })
                                 } else {
-                                    @Html.TextBoxFor(m => m.Numero_Notificacao, new { @id = "numero", @onKeyPress = "return formata(this, '§§§§§', event)", style = "width:70px;", @Value = "" })
+                                    @Html.TextBoxFor(m => m.Numero_Notificacao, new { @id = "txtNumero", @onKeyPress = "return formata(this, '§§§§§', event)", style = "width:70px;", @Value = "" })
                                 }
                             </td>
                         </tr>
@@ -95,16 +93,16 @@
                                 <label style="font-weight:normal;padding-top:7px">Nº Processo:</label>
                             </td>
                             <td style="width:150px">
-                                @Html.TextBoxFor(m => m.Numero_Processo, new { style = "width:70px;" })
+                                @Html.TextBoxFor(m => m.Numero_Processo, new { @id = "txtProcesso", style = "width:100px;" })
                             </td>
                             <td style="width:110px">
                                 <label style="font-weight:normal;padding-top:7px">Área Notificada:</label>
                             </td>
                             <td style="width:100px">
                                 @if (Model.Area_Notificada > 0) {
-                                    @Html.TextBoxFor(m => m.Area_Notificada, new { @id = "txtArea", @class = "maskValor", style = "width:70px;" ,@Value=Model.Area_Notificada.ToString("#0.00")})
+                                    @Html.TextBoxFor(m => m.Area_Notificada, new { @id = "txtArea", @class = "maskValor", style = "width:70px;", @Value = Model.Area_Notificada.ToString("#0.00") })
                                 } else {
-                                    @Html.TextBoxFor(m => m.Area_Notificada, new { @id = "txtArea", @class = "maskValor", style = "width:70px;",@Value=""})
+                                    @Html.TextBoxFor(m => m.Area_Notificada, new { @id = "txtArea", @class = "maskValor", style = "width:70px;", @Value = "" })
                                 }
                             </td>
                         </tr>
@@ -173,13 +171,13 @@
 
                             </td>
                             <td style="width:110px">
-                                <label style="font-weight:normal;padding-top:7px" id="lblValorTotal">Valor total:</label>
+                                <label style="font-weight:normal;padding-top:7px" >Valor total:</label>
                             </td>
                             <td style="width:100px">
                                 @if (Model.Valor_Total > 0) {
-                                    <Label style="font-weight:normal;color:brown;padding-top:5px">R$&nbsp;@Model.Valor_Total.ToString("#0.00")</Label>
+                                    <Label style="font-weight:normal;color:brown;padding-top:5px" id="lblValorTotal">R$&nbsp;@Model.Valor_Total.ToString("#0.00")</Label>
                                 } else {
-                                    <Label style="font-weight:normal;color:brown;padding-top:5px">R$ 0,00</Label>
+                                    <Label style="font-weight:normal;color:brown;padding-top:5px" id="lblValorTotal">R$ 0,00</Label>
                                 }
                             </td>
                         </tr>
@@ -190,9 +188,12 @@
             </div>
 
         </div>
+        <div class="form-group row">
+            <label style="font-weight:normal;color:red;padding-left:15px" id="errorLabel">@ViewBag.Result</label>
+        </div>
 
         <div style="text-align:center">
-            <button type="submit" class="btn btn-primary" name="action" value="btnValida">Gerar notificação</button>
+            <button type="submit" class="btn btn-primary" name="action" onclick="return ValidateForm()"   value="btnValida">Gerar notificação</button>
         </div>
         <br />
         @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
@@ -205,13 +206,10 @@
 
             <script type="text/javascript">
                 $(document).ready(function () {
+
                     $(".maskValor").mask("99999999,00", { reverse: true });
                     $(".maskData").inputmask("99/99/9999");
                     $(".maskNumero").inputmask("999999");
-
-                    $("#MainForm").submit(function () {
-                        return ValidateForm();
-                    });
 
                     $("#UsoDropDown").change(function () {
                         if (this.value != '') {
@@ -249,23 +247,49 @@
 
                 function ValidateForm() {
                     ClearError();
-                    //var _cod = document.getElementById('codigo').value;
-                    //var _captcha = document.getElementById('captchaTxt').value;
-                    //var _chave = document.getElementById('chave').value;
+                    var _numero = document.getElementById('txtNumero').value;
+                    var _imovel = document.getElementById('Codigo_Imovel').value;
+                    var _cidadao = document.getElementById('Codigo_Cidadao').value;
+                    var _area = document.getElementById('txtArea').value;
+                    var _cat = document.getElementById('CatDropDown').value;
 
-                    //if ((_cod == "" || parseInt(_cod) == 0) && _chave == "") {
-                    //    document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal ou a chave de autenticação da certidão";
-                    //    return false;
-                    //}
+                    if (_numero == "" || parseInt(_numero) == 0) {
+                        document.getElementById('errorLabel').innerHTML = "Digite o número da notficação";
+                        return false;
+                    }
 
+                    if (_imovel == "" || parseInt(_imovel) == 0) {
+                        document.getElementById('errorLabel').innerHTML = "Digite o código do imóvel";
+                        return false;
+                    }
 
+                    if (_cidadao == "" || parseInt(_cidadao) == 0) {
+                        document.getElementById('errorLabel').innerHTML = "Digite o código cidadão";
+                        return false;
+                    }
 
+                    if (_area == "" || parseInt(_area) == 0) {
+                        document.getElementById('errorLabel').innerHTML = "Digite a área";
+                        return false;
+                    }
+
+                    if (_cat == "") {
+                        document.getElementById('errorLabel').innerHTML = "Selecione a categoria da construção";
+                        return false;
+                    }
+
+                    var _proc = document.getElementById('txtProcesso').value;
+                    var _error = Valida_Numero_Processo(_proc);
+                    if (_error != "") {
+                        document.getElementById('errorLabel').innerHTML = _error;
+                        return false;
+                    }
 
                     return true;
                 }
 
                 function ClearError() {
-//                    document.getElementById('errorLabel').innerHTML = "";
+                    document.getElementById('errorLabel').innerHTML = "";
                 }
 
 

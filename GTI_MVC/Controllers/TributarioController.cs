@@ -1976,7 +1976,15 @@ namespace GTI_Mvc.Controllers {
                 model.Valor_m2 = 0;
                 model.Valor_Total = 0;
             }
-            
+
+            Processo_bll processoRepository = new Processo_bll("GTIconnection");
+            Exception ex = processoRepository.ValidaProcesso(model.Numero_Processo);
+            if (ex!=null && !string.IsNullOrWhiteSpace(ex.Message)) {
+                ViewBag.Result = ex.Message;
+                return View(model);
+            }
+
+
             return View(model);
         }
 
