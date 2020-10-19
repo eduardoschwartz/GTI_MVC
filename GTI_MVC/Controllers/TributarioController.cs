@@ -24,7 +24,7 @@ namespace GTI_Mvc.Controllers {
     [Route("Tributario")]
     public class TributarioController : Controller
     {
-        private readonly object gtiCore;
+//        private readonly object gtiCore;
 
         [Route("Certidao/Certidao_Debito_Codigo")]
         [HttpGet]
@@ -1898,7 +1898,9 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Notificacao_iss")]
         [HttpGet]
-        public ViewResult Notificacao_iss() {
+        public ActionResult Notificacao_iss() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
             NotificacaoIssViewModel model = new NotificacaoIssViewModel();
 
             List<Usoconstr> Lista_Uso = new List<Usoconstr>();
@@ -1923,7 +1925,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Notificacao_iss")]
         [HttpPost]
-        public ViewResult Notificacao_iss(NotificacaoIssViewModel model) {
+        public ActionResult Notificacao_iss(NotificacaoIssViewModel model,string action) {
             List<Usoconstr> Lista_Uso = new List<Usoconstr>();
             Lista_Uso.Add(new Usoconstr() { Codusoconstr = 1, Descusoconstr = "Residencial" });
             Lista_Uso.Add(new Usoconstr() { Codusoconstr = 2, Descusoconstr = "Industrial" });
@@ -1977,6 +1979,112 @@ namespace GTI_Mvc.Controllers {
                 model.Valor_Total = 0;
             }
 
+            if (action == "btnValida") {
+                if (model.Valor_Total == 0) {
+                    ViewBag.Result = "Valor da notificação não informado.";
+                    return View(model);
+                }
+
+                bool _isdate = IsDate(model.Data_vencimento);
+                if (!_isdate) {
+                    ViewBag.Result = "Data de vencimento inválida.";
+                    return View(model);
+                }
+
+                DateTime _dataVencto = Convert.ToDateTime(Convert.ToDateTime(model.Data_vencimento).ToString("dd/MM/yyyy"));
+                DateTime _dataAtual = Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy"));
+                if (_dataVencto < _dataAtual) {
+                    ViewBag.Result = "Data de vencimento inferior a data atual.";
+                    return View(model);
+                }
+
+                if (_dataVencto < _dataAtual) {
+                    ViewBag.Result = "Data de vencimento inferior a data atual.";
+                    return View(model);
+                }
+
+                double _days = (_dataVencto - _dataAtual).TotalDays;
+                if (_days > 30) {
+                    ViewBag.Result = "Data de vencimento superior a 30 dias.";
+                    return View(model);
+                }
+
+                Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconenction");
+                bool _existe = cidadaoRepository.ExisteCidadao(model.Codigo_Cidadao);
+                if (!_existe) {
+                    ViewBag.Result = "Código cidadão não cadastrado.";
+                    return View(model);
+                }
+
+                Imovel_bll imovelRepository = new Imovel_bll("GTIconenction");
+                _existe = imovelRepository.Existe_Imovel(model.Codigo_Imovel);
+
+                if (!_existe) {
+                    ViewBag.Result = "Imóvel não cadastrado.";
+                    return View(model);
+                }
+                CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(model.Codigo_Cidadao);
+                string _bairro = "";
+                if (_cidadao.Etiqueta2 == "S") {
+                    _bairro=_cidadao.bai
+                } else {
+
+                }
+
+                //Grava a notificacao
+                int _newcod = tributarioRepository.Retorna_notificacao_iss_web_disponivel(model.Ano_Notificacao);
+                Notificacao_iss_web _not = new Notificacao_iss_web() {
+                    Ano_notificacao=model.Ano_Notificacao,
+                    Area=model.Area_Notificada,
+                    Categoria=model.Categoria_Construcao,
+                    Codigo_cidadao=model.Codigo_Cidadao,
+                    Codigo_imovel=model.Codigo_Imovel,
+                    Data_gravacao=DateTime.Now,
+                    Data_vencimento=model.Data_vencimento,
+                    Fiscal = Convert.ToInt32(Session["hashid"]),
+                    Habitese = model.Habitese,
+                    Isspago =model.Iss_Pago,
+                    Numero_notificacao = model.Numero_Notificacao,
+                    Processo =model.Numero_Processo,
+                    Uso=model.Uso_Construcao,
+                    Valorm2=model.Valor_m2,
+                    Valortotal=model.Valor_Total,
+                    Versao=1
+                };
+
+
+                //Gera Boleto
+                //ReportDocument rd = new ReportDocument();
+                //rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Notificacao_m001.rpt"));
+                //TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+                //TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+                //ConnectionInfo crConnectionInfo = new ConnectionInfo();
+                //Tables CrTables;
+                //crConnectionInfo.ServerName = "200.232.123.115";
+                //crConnectionInfo.DatabaseName = "Tributacao";
+                //crConnectionInfo.UserID = "gtisys";
+                //crConnectionInfo.Password = "everest";
+                //CrTables = rd.Database.Tables;
+                //foreach (Table CrTable in CrTables) {
+                //    crtableLogoninfo = CrTable.LogOnInfo;
+                //    crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                //    CrTable.ApplyLogOnInfo(crtableLogoninfo);
+                //}
+
+                //rd.SetParameterValue("ANONUMERO", "001/0202");
+                //rd.SetParameterValue("NATUREZA", "NOME");
+                //rd.SetParameterValue("NOMEFISCAL", "FISCAL");
+                //rd.SetParameterValue("CARGO", "CARGO");
+
+                //try {
+                //    rd.RecordSelectionFormula = "{itbi_isencao_main.guid}='" + "uu" + "'";
+                //    Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                //    return File(stream, "application/pdf", "Notificacao.pdf");
+                //} catch  {
+                //    throw;
+                //}
+            }
+
             Processo_bll processoRepository = new Processo_bll("GTIconnection");
             Exception ex = processoRepository.ValidaProcesso(model.Numero_Processo);
             if (ex!=null && !string.IsNullOrWhiteSpace(ex.Message)) {
@@ -1987,6 +2095,7 @@ namespace GTI_Mvc.Controllers {
 
             return View(model);
         }
+
 
 
 

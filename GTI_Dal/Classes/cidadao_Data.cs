@@ -121,7 +121,7 @@ namespace GTI_Dal.Classes {
         public bool ExisteCidadao(int nCodigo) {
             bool bRet = false;
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var existingReg = db.Cidadao.Count(a => a.Codcidadao == nCodigo);
+                var existingReg = db.Cidadao.Count(a => a.Codcidadao == nCodigo && a.Codcidadao>=500000);
                 if (existingReg != 0) {
                     bRet = true;
                 }

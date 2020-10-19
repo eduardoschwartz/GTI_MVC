@@ -149,7 +149,11 @@
                                 <label style="font-weight:normal;padding-top:7px">Data Vencimento:</label>
                             </td>
                             <td style="width:150px">
-                                @Html.TextBoxFor(m => m.Data_vencimento, new { @id = "dataVencto", @class = "maskData", style = "width:80px;height:25px;text-align:left", @Value = Convert.ToDateTime(@Model.Data_vencimento).ToString("dd/MM/yyyy") })
+                                @if (Model.Data_vencimento == DateTime.MinValue) {
+                                    @Html.TextBoxFor(m => m.Data_vencimento, new { @id = "data_vencto", style = "width:80px;height:25px;text-align:left", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)", @Value = "" })
+                                } else {
+                                    @Html.TextBoxFor(m => m.Data_vencimento, new { @id = "data_vencto", style = "width:80px;height:25px;text-align:left", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)", @Value = Convert.ToDateTime(@Model.Data_vencimento).ToString("dd/MM/yyyy") })
+                                }
                             </td>
                             <td style="width:110px">
                             </td>
@@ -285,14 +289,25 @@
                         return false;
                     }
 
-                    return true;
+                    var _data = document.getElementById('data_vencto').value;
+
+                    if (_data.length < 10) {
+                        document.getElementById('errorLabel').innerHTML = "Data de vencimento inválida";
+                        return false;
+                    }
+
+                    if (confirm('Boletos liberados até as 16:30h podem ser quitados a partir do dia seguinte de sua liberação, após às 16:30h será necessário mais um dia útil para o registro. Você deseja gerar esta notificação?')) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+
                 }
 
                 function ClearError() {
                     document.getElementById('errorLabel').innerHTML = "";
                 }
 
-
-
+               
             </script>
         }

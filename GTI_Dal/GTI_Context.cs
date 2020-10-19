@@ -166,5 +166,6 @@ namespace GTI_Dal {
         public DbSet<Plano> Plano { get; set; }
         public DbSet<Assinatura> Assinatura { get; set; }
         public DbSet<Itbi_natureza_isencao> Itbi_Natureza_Isencao { get; set; }
+        public DbSet<Notificacao_iss_web> Notificacao_Iss_Web { get; set; }
     }
 }

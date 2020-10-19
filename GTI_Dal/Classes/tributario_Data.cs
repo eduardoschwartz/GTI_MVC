@@ -2405,8 +2405,6 @@ Proximo:;
             }
         }
 
-
-
         public List<Origemreparc> Lista_Origem_Parcelamento(string NumeroProcesso) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 db.Database.CommandTimeout = 3 * 60;
@@ -2493,7 +2491,6 @@ Proximo:;
             return null;
         }
 
-
         public short Retorna_Plano_Desconto(int Documento) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var Sql = (from c in db.Parceladocumento where c.Numdocumento == Documento select c.Plano).FirstOrDefault();
@@ -2512,6 +2509,63 @@ Proximo:;
                return  Sql;
             }
         }
+
+        public Exception Incluir_notificacao_iss_web(Notificacao_iss_web Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[29];
+                Parametros[0] = new SqlParameter { ParameterName = "@ano_notificacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano_notificacao };
+                Parametros[1] = new SqlParameter { ParameterName = "@numero_notificacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_notificacao };
+                Parametros[2] = new SqlParameter { ParameterName = "@codigo_cidadao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo_cidadao };
+                Parametros[3] = new SqlParameter { ParameterName = "@codigo_imovel", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo_imovel};
+                Parametros[4] = new SqlParameter { ParameterName = "@data_gravacao", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_gravacao };
+                Parametros[5] = new SqlParameter { ParameterName = "@processo", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Processo };
+                Parametros[6] = new SqlParameter { ParameterName = "@isspago", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Isspago };
+                Parametros[7] = new SqlParameter { ParameterName = "@habitese", SqlDbType = SqlDbType.Bit, SqlValue = Reg.Habitese };
+                Parametros[8] = new SqlParameter { ParameterName = "@area", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Area };
+                Parametros[9] = new SqlParameter { ParameterName = "@uso", SqlDbType = SqlDbType.Int, SqlValue = Reg.Uso };
+                Parametros[10] = new SqlParameter { ParameterName = "@categoria", SqlDbType = SqlDbType.Int, SqlValue = Reg.Categoria };
+                Parametros[11] = new SqlParameter { ParameterName = "@valorm2", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valorm2 };
+                Parametros[12] = new SqlParameter { ParameterName = "@valortotal", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valortotal };
+                Parametros[13] = new SqlParameter { ParameterName = "@versao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Versao };
+                Parametros[14] = new SqlParameter { ParameterName = "@data_vencimento", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_vencimento };
+                Parametros[15] = new SqlParameter { ParameterName = "@numero_guia", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_guia };
+                Parametros[16] = new SqlParameter { ParameterName = "@nosso_numero", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nosso_numero };
+                Parametros[17] = new SqlParameter { ParameterName = "@linha_digitavel", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Linha_digitavel };
+                Parametros[18] = new SqlParameter { ParameterName = "@codigo_barra", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Codigo_barra };
+                Parametros[19] = new SqlParameter { ParameterName = "@cpf_cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cpf_cnpj };
+                Parametros[20] = new SqlParameter { ParameterName = "@nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nome };
+                Parametros[21] = new SqlParameter { ParameterName = "@logradouro", SqlDbType = SqlDbType.Int, SqlValue = Reg.Logradouro };
+                Parametros[22] = new SqlParameter { ParameterName = "@numero", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero };
+                Parametros[23] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Complemento };
+                Parametros[24] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.Int, SqlValue = Reg.Cep };
+                Parametros[25] = new SqlParameter { ParameterName = "@bairro", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Bairro };
+                Parametros[26] = new SqlParameter { ParameterName = "@cidade", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cidade };
+                Parametros[27] = new SqlParameter { ParameterName = "@uf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Uf };
+                Parametros[28] = new SqlParameter { ParameterName = "@fiscal", SqlDbType = SqlDbType.Int, SqlValue = Reg.Fiscal };
+                db.Database.ExecuteSqlCommand("INSERT INTO itbi_isencao_main(ano_notificacao,numero_notificacao,codigo_cidadao,codigo_imovel,data_gravacao,processo,isspago,habitese,area,uso,categoria,valorm2,valortotal," +
+                                              "versao,data_vencimento,numero_guia,nosso_numero,linha_digitavel,codigo_barra,cpf_cnpj,nome,logradouro,numero,complemento,cep,bairro,cidade,uf,fiscal) " +
+                                              "VALUES(@ano_notificacao,@numero_notificacao,@codigo_cidadao,@codigo_imovel,@data_gravacao,@processo,@isspago,@habitese,@area,@uso,@categoria,@valorm2,@valortotal," +
+                                              "@versao,@data_vencimento,@numero_guia,@nosso_numero,@linha_digitavel,@codigo_barra,@cpf_cnpj,@nome,@logradouro,@numero,@complemento,@cep,@bairro,@cidade,@uf,@fiscal)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public int Retorna_notificacao_iss_web_disponivel(int Ano) {
+            int _numero = 1;
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Notificacao_Iss_Web orderby t.Numero_notificacao descending where t.Ano_notificacao == Ano select t).FirstOrDefault();
+                if (Sql != null) {
+                    _numero = (short)(Sql.Numero_notificacao + 1);
+                }
+            }
+            return _numero;
+        }
+
 
 
     }//end class

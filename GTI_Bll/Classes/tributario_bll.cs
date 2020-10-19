@@ -1452,6 +1452,18 @@ namespace GTI_Bll.Classes {
             Tributario_Data obj = new Tributario_Data(_connection);
             return obj.Retorna_Plano_Desconto_Perc(Plano);
         }
+
+        public Exception Incluir_notificacao_iss_web(Notificacao_iss_web Reg) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            Exception ex = obj.Incluir_notificacao_iss_web(Reg);
+            return ex;
+        }
+
+        public int Retorna_notificacao_iss_web_disponivel(int Ano) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Retorna_notificacao_iss_web_disponivel(Ano);
+        }
+
     }//end class
 }
 
