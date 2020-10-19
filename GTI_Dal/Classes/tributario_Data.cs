@@ -2510,7 +2510,7 @@ Proximo:;
             }
         }
 
-        public Exception Incluir_notificacao_iss_web(Notificacao_iss_web Reg) {
+        public Exception Insert_notificacao_iss_web(Notificacao_iss_web Reg) {
             using (var db = new GTI_Context(_connection)) {
                 object[] Parametros = new object[29];
                 Parametros[0] = new SqlParameter { ParameterName = "@ano_notificacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano_notificacao };
@@ -2528,13 +2528,13 @@ Proximo:;
                 Parametros[12] = new SqlParameter { ParameterName = "@valortotal", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valortotal };
                 Parametros[13] = new SqlParameter { ParameterName = "@versao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Versao };
                 Parametros[14] = new SqlParameter { ParameterName = "@data_vencimento", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_vencimento };
-                Parametros[15] = new SqlParameter { ParameterName = "@numero_guia", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_guia };
+                Parametros[15] = new SqlParameter { ParameterName = "@numero_guia", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Numero_guia };
                 Parametros[16] = new SqlParameter { ParameterName = "@nosso_numero", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nosso_numero };
                 Parametros[17] = new SqlParameter { ParameterName = "@linha_digitavel", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Linha_digitavel };
                 Parametros[18] = new SqlParameter { ParameterName = "@codigo_barra", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Codigo_barra };
                 Parametros[19] = new SqlParameter { ParameterName = "@cpf_cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cpf_cnpj };
                 Parametros[20] = new SqlParameter { ParameterName = "@nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nome };
-                Parametros[21] = new SqlParameter { ParameterName = "@logradouro", SqlDbType = SqlDbType.Int, SqlValue = Reg.Logradouro };
+                Parametros[21] = new SqlParameter { ParameterName = "@logradouro", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Logradouro };
                 Parametros[22] = new SqlParameter { ParameterName = "@numero", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero };
                 Parametros[23] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Complemento };
                 Parametros[24] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.Int, SqlValue = Reg.Cep };
@@ -2542,10 +2542,12 @@ Proximo:;
                 Parametros[26] = new SqlParameter { ParameterName = "@cidade", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cidade };
                 Parametros[27] = new SqlParameter { ParameterName = "@uf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Uf };
                 Parametros[28] = new SqlParameter { ParameterName = "@fiscal", SqlDbType = SqlDbType.Int, SqlValue = Reg.Fiscal };
-                db.Database.ExecuteSqlCommand("INSERT INTO itbi_isencao_main(ano_notificacao,numero_notificacao,codigo_cidadao,codigo_imovel,data_gravacao,processo,isspago,habitese,area,uso,categoria,valorm2,valortotal," +
+
+                db.Database.ExecuteSqlCommand("INSERT INTO notificacao_iss_web(ano_notificacao,numero_notificacao,codigo_cidadao,codigo_imovel,data_gravacao,processo,isspago,habitese,area,uso,categoria,valorm2,valortotal, " +
                                               "versao,data_vencimento,numero_guia,nosso_numero,linha_digitavel,codigo_barra,cpf_cnpj,nome,logradouro,numero,complemento,cep,bairro,cidade,uf,fiscal) " +
                                               "VALUES(@ano_notificacao,@numero_notificacao,@codigo_cidadao,@codigo_imovel,@data_gravacao,@processo,@isspago,@habitese,@area,@uso,@categoria,@valorm2,@valortotal," +
                                               "@versao,@data_vencimento,@numero_guia,@nosso_numero,@linha_digitavel,@codigo_barra,@cpf_cnpj,@nome,@logradouro,@numero,@complemento,@cep,@bairro,@cidade,@uf,@fiscal)", Parametros);
+
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -2560,7 +2562,7 @@ Proximo:;
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var Sql = (from t in db.Notificacao_Iss_Web orderby t.Numero_notificacao descending where t.Ano_notificacao == Ano select t).FirstOrDefault();
                 if (Sql != null) {
-                    _numero = (short)(Sql.Numero_notificacao + 1);
+                    _numero = Sql.Numero_notificacao + 1;
                 }
             }
             return _numero;

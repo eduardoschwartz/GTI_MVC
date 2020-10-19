@@ -1453,9 +1453,9 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Plano_Desconto_Perc(Plano);
         }
 
-        public Exception Incluir_notificacao_iss_web(Notificacao_iss_web Reg) {
+        public Exception Insert_notificacao_iss_web(Notificacao_iss_web Reg) {
             Tributario_Data obj = new Tributario_Data(_connection);
-            Exception ex = obj.Incluir_notificacao_iss_web(Reg);
+            Exception ex = obj.Insert_notificacao_iss_web(Reg);
             return ex;
         }
 

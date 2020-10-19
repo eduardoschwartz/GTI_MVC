@@ -2009,14 +2009,14 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 }
 
-                Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconenction");
+                Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
                 bool _existe = cidadaoRepository.ExisteCidadao(model.Codigo_Cidadao);
                 if (!_existe) {
                     ViewBag.Result = "Código cidadão não cadastrado.";
                     return View(model);
                 }
 
-                Imovel_bll imovelRepository = new Imovel_bll("GTIconenction");
+                Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
                 _existe = imovelRepository.Existe_Imovel(model.Codigo_Imovel);
 
                 if (!_existe) {
@@ -2024,34 +2024,54 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 }
                 CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(model.Codigo_Cidadao);
-                string _bairro = "";
-                if (_cidadao.Etiqueta2 == "S") {
-                    _bairro=_cidadao.bai
-                } else {
-
-                }
+                string _bairro = "",_endereco="",_compl="",_cidade="",_uf="";
+                int _numero = 0, _cep = 0;
+                bool _r = _cidadao.EtiquetaC != "S";
+                _endereco = _r ? _cidadao.EnderecoR : _cidadao.EnderecoC;
+                _bairro = _r ?_cidadao.NomeBairroR: _cidadao.NomeBairroC;
+                _numero =_r?(int)_cidadao.NumeroR: (int)_cidadao.NumeroC;
+                _compl = _r?_cidadao.ComplementoR: _cidadao.ComplementoC;
+                _cidade = _r ? _cidadao.NomeCidadeR : _cidadao.NomeCidadeC;
+                _uf = _r ? _cidadao.UfR : _cidadao.UfC;
+                _cep = _r ? (int)_cidadao.CepR : (int)_cidadao.CepC;
 
                 //Grava a notificacao
                 int _newcod = tributarioRepository.Retorna_notificacao_iss_web_disponivel(model.Ano_Notificacao);
                 Notificacao_iss_web _not = new Notificacao_iss_web() {
-                    Ano_notificacao=model.Ano_Notificacao,
-                    Area=model.Area_Notificada,
-                    Categoria=model.Categoria_Construcao,
-                    Codigo_cidadao=model.Codigo_Cidadao,
-                    Codigo_imovel=model.Codigo_Imovel,
+                    Ano_notificacao = model.Ano_Notificacao,
+                    Area = model.Area_Notificada,
+                    Bairro = _bairro,
+                    Categoria = model.Categoria_Construcao,
+                    Cep = _cep,
+                    Cidade = _cidade,
+                    Codigo_cidadao = model.Codigo_Cidadao,
+                    Codigo_imovel = model.Codigo_Imovel,
+                    Complemento = _compl,
+                    Cpf_cnpj = _cidadao.Cnpj == null ? _cidadao.Cpf : _cidadao.Cnpj,
                     Data_gravacao=DateTime.Now,
                     Data_vencimento=model.Data_vencimento,
                     Fiscal = Convert.ToInt32(Session["hashid"]),
                     Habitese = model.Habitese,
                     Isspago =model.Iss_Pago,
-                    Numero_notificacao = model.Numero_Notificacao,
+                    Logradouro=_endereco,
+                    Nome=_cidadao.Nome,
+                    Numero=_numero,
+                    Numero_notificacao = _newcod,
                     Processo =model.Numero_Processo,
+                    Uf=_uf,
                     Uso=model.Uso_Construcao,
                     Valorm2=model.Valor_m2,
                     Valortotal=model.Valor_Total,
                     Versao=1
                 };
+                _not.Numero_guia = 0;
+                _not.Nosso_numero = "";
+                _not.Codigo_barra = "";
+                _not.Linha_digitavel = "";
 
+                Exception ex2 = tributarioRepository.Insert_notificacao_iss_web(_not);
+
+                return RedirectToAction("sysMenu", "Home");
 
                 //Gera Boleto
                 //ReportDocument rd = new ReportDocument();
