@@ -229,6 +229,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsGuia_Itbi.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Datasets\dsNotificacaoISS.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsNotificacaoISS.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -570,6 +575,17 @@
       <DependentUpon>dsGuia_Itbi.xsd</DependentUpon>
     </Content>
     <Content Include="Files\ITBI Manual do Usuario.pdf" />
+    <Content Include="Datasets\dsNotificacaoISS.xsc">
+      <DependentUpon>dsNotificacaoISS.xsd</DependentUpon>
+    </Content>
+    <None Include="Datasets\dsNotificacaoISS.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsNotificacaoISS.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Datasets\dsNotificacaoISS.xss">
+      <DependentUpon>dsNotificacaoISS.xsd</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\cep.js" />
@@ -701,6 +717,7 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Alvara_Funcionamento_Valida.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Boleto_NotificacaoISS_m001.rdlc" />
     <EmbeddedResource Include="Reports\Boleto_ITBI_R.rdlc" />
     <EmbeddedResource Include="Reports\Boleto_ITBI.rdlc" />
     <EmbeddedResource Include="Reports\Carne_CIP.rdlc" />

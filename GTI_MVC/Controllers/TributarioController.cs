@@ -1060,13 +1060,13 @@ namespace GTI_Mvc.Controllers {
                 };
 
                 if (IsRefis && !DebitoAnoAtual) {
-                    if (Convert.ToDateTime( _debitos.Data_Vencimento) <= Convert.ToDateTime("19/10/2020")) {
+                    if (Convert.ToDateTime( model.Data_Vencimento) <= Convert.ToDateTime("19/10/2020")) {
                         nPerc = 1M;
                         nPlano = 41;
-                    } else if (Convert.ToDateTime(_debitos.Data_Vencimento) > Convert.ToDateTime("19/10/2020") && Convert.ToDateTime(_debitos.Data_Vencimento) <= Convert.ToDateTime("30/11/2020")) {
+                    } else if (Convert.ToDateTime(model.Data_Vencimento) > Convert.ToDateTime("19/10/2020") && Convert.ToDateTime(model.Data_Vencimento) <= Convert.ToDateTime("30/11/2020")) {
                         nPerc = 0.8M;
                         nPlano = 42;
-                    } else if (Convert.ToDateTime(_debitos.Data_Vencimento) > Convert.ToDateTime("30/11/2020") && Convert.ToDateTime(_debitos.Data_Vencimento) <= Convert.ToDateTime("22/12/2020")) {
+                    } else if (Convert.ToDateTime(model.Data_Vencimento) > Convert.ToDateTime("30/11/2020") && Convert.ToDateTime(model.Data_Vencimento) <= Convert.ToDateTime("22/12/2020")) {
                         nPerc = 0.7M;
                         nPlano = 43;
                     }
@@ -2003,11 +2003,11 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 }
 
-                double _days = (_dataVencto - _dataAtual).TotalDays;
-                if (_days > 30) {
-                    ViewBag.Result = "Data de vencimento superior a 30 dias.";
-                    return View(model);
-                }
+                //double _days = (_dataVencto - _dataAtual).TotalDays;
+                //if (_days > 30) {
+                //    ViewBag.Result = "Data de vencimento superior a 30 dias.";
+                //    return View(model);
+                //}
 
                 Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
                 bool _existe = cidadaoRepository.ExisteCidadao(model.Codigo_Cidadao);
@@ -2025,7 +2025,7 @@ namespace GTI_Mvc.Controllers {
                 }
                 CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(model.Codigo_Cidadao);
                 string _bairro = "",_endereco="",_compl="",_cidade="",_uf="",_nome="";
-                string _cpf_cnpj = _cidadao.Cnpj == null ? _cidadao.Cpf : _cidadao.Cnpj;
+                string _cpf_cnpj = string.IsNullOrWhiteSpace(_cidadao.Cnpj) ? _cidadao.Cpf : _cidadao.Cnpj;
                 int _numero = 0, _cep = 0, _codigo = model.Codigo_Cidadao,_fiscal= Convert.ToInt32(Session["hashid"]);
                 short _ano=(short)model.Ano_Notificacao;
                 bool _r = _cidadao.EtiquetaC != "S";
@@ -2060,7 +2060,7 @@ namespace GTI_Mvc.Controllers {
                     Datadebase = DateTime.Now,
                     Userid = _fiscal
                 };
-                Exception ex2 = tributarioRepository.Insert_Debito_Parcela(regParcela);
+        //        Exception ex2 = tributarioRepository.Insert_Debito_Parcela(regParcela);
 
                 //grava tributo
                 Debitotributo regTributo = new Debitotributo {
@@ -2073,7 +2073,7 @@ namespace GTI_Mvc.Controllers {
                     Codtributo = (short)model.Categoria_Construcao,
                     Valortributo = model.Valor_Total
                 };
-                ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
+         //       ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
 
                 //grava o documento
                 Numdocumento regDoc = new Numdocumento();
@@ -2083,7 +2083,8 @@ namespace GTI_Mvc.Controllers {
                 regDoc.Registrado = true;
                 regDoc.Percisencao = 0;
                 regDoc.Percisencao = 0;
-                int _novo_documento = tributarioRepository.Insert_Documento(regDoc);
+                //       int _novo_documento = tributarioRepository.Insert_Documento(regDoc);
+                int _novo_documento = 17888999;
 
                 //grava o documento na parcela
                 Parceladocumento regParc = new Parceladocumento();
@@ -2098,7 +2099,7 @@ namespace GTI_Mvc.Controllers {
                 regParc.Valormulta = 0;
                 regParc.Valorcorrecao = 0;
                 regParc.Plano = 0;
-                tributarioRepository.Insert_Parcela_Documento(regParc);
+            //    tributarioRepository.Insert_Parcela_Documento(regParc);
 
                 string sHist = "Iss construção civil lançado no código " + _codigo + " processo nº " + model.Numero_Processo + " notificação nº " + model.Numero_Notificacao.ToString("0000") + "/" + model.Ano_Notificacao.ToString() + " Área notificada: " + model.Area_Notificada.ToString("#0.00") + " m²";
                 //Incluir a observação da parcela
@@ -2113,18 +2114,18 @@ namespace GTI_Mvc.Controllers {
                     Userid = _fiscal,
                     Data = DateTime.Now
                 };
-                ex2 = tributarioRepository.Insert_Observacao_Parcela(ObsReg);
+            //    ex2 = tributarioRepository.Insert_Observacao_Parcela(ObsReg);
 
                 //Gravar histórico no imóvel
                 //Incluir a observação da parcela
                 Historico ObsImovel = new Historico() {
-                    Codreduzido = _codigo,
+                    Codreduzido = model.Codigo_Imovel,
                     Seq=0,
                     Datahist2=DateTime.Now,
                     Deschist=sHist,
                     Userid = _fiscal,
                 };
-                ex2 = imovelRepository.Incluir_Historico(ObsImovel);
+            //    ex2 = imovelRepository.Incluir_Historico(ObsImovel);
 
                 //Enviar para registrar 
                 Ficha_compensacao_documento ficha = new Ficha_compensacao_documento();
@@ -2138,8 +2139,8 @@ namespace GTI_Mvc.Controllers {
                 ficha.Data_vencimento = _dataVencto;
                 ficha.Valor_documento = Convert.ToDecimal(model.Valor_Total);
                 ficha.Uf = _uf;
-                ex2 = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
-                ex2 = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
+            //    ex2 = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
+             //   ex2 = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
 
                 //**************************************************************************
 
@@ -2171,6 +2172,10 @@ namespace GTI_Mvc.Controllers {
                     Valortotal=model.Valor_Total,
                     Versao=1
                 };
+                if (model.Habitese)
+                    _not.Msg = "O Setor de Fiscalização de Tributos da Prefeitura Municipal de Jaboticabal, tendo em vista o processo de pedido de HABITE-SE em referência, vem NOTIFICAR o contribuinte acima identificado do lançamento do Imposto Sobre Serviços da Construção Civil, relativo ao imóvel abaixo descrito, calculado conforme os parâmetros abaixo indicados, para no prazo de 30 dias, a contar do recebimento desta Notificação, efetuar o pagamento/parcelamento ou apresentar reclamação contra a mesma.";
+                else
+                    _not.Msg = "O Setor de Fiscalização de Tributos da Prefeitura Municipal de Jaboticabal, vem através desta NOTIFICAR o contribuinte em referência do lançamento do Imposto Sobre Serviços de Qualquer Natureza (ISSQN) incidente sobre a mão de obra para construção de imóvel, calculado conforme os parâmetros abaixo indicados, para no prazo de 30 dias a contar do recebimento desta efetuar o pagamento/parcelamento ou apresentar recurso contra o mesmo.";
                 _not.Guid = Guid.NewGuid().ToString("N");
                 model.Guid = _not.Guid;
                 _not.Numero_guia = 0;
@@ -2178,42 +2183,32 @@ namespace GTI_Mvc.Controllers {
                 _not.Codigo_barra = "";
                 _not.Linha_digitavel = "";
 
-                 ex2 = tributarioRepository.Insert_notificacao_iss_web(_not);
-
-                return RedirectToAction("sysMenu", "Home");
+                 Exception ex2 = tributarioRepository.Insert_notificacao_iss_web(_not);
 
                 //Gera Boleto
 
+                List<Notificacao_iss_web> Lista = new List<Notificacao_iss_web>();
+                Lista.Add(_not);
 
-                //ReportDocument rd = new ReportDocument();
-                //rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Notificacao_m001.rpt"));
-                //TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
-                //TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
-                //ConnectionInfo crConnectionInfo = new ConnectionInfo();
-                //Tables CrTables;
-                //crConnectionInfo.ServerName = "200.232.123.115";
-                //crConnectionInfo.DatabaseName = "Tributacao";
-                //crConnectionInfo.UserID = "gtisys";
-                //crConnectionInfo.Password = "everest";
-                //CrTables = rd.Database.Tables;
-                //foreach (Table CrTable in CrTables) {
-                //    crtableLogoninfo = CrTable.LogOnInfo;
-                //    crtableLogoninfo.ConnectionInfo = crConnectionInfo;
-                //    CrTable.ApplyLogOnInfo(crtableLogoninfo);
-                //}
+                Warning[] warnings;
+                string[] streamIds;
+                string mimeType = string.Empty, encoding = string.Empty, extension = string.Empty;
+                DataSet Ds = Functions.ToDataSet(Lista);
+                ReportDataSource rdsAct = new ReportDataSource("dsNotificacaoISS", Ds.Tables[0]);
+                ReportViewer viewer = new ReportViewer();
+                viewer.LocalReport.Refresh();
+                viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Boleto_NotificacaoISS_m001.rdlc");
+                viewer.LocalReport.DataSources.Add(rdsAct);
 
-                //rd.SetParameterValue("ANONUMERO", "001/0202");
-                //rd.SetParameterValue("NATUREZA", "NOME");
-                //rd.SetParameterValue("NOMEFISCAL", "FISCAL");
-                //rd.SetParameterValue("CARGO", "CARGO");
-
-                //try {
-                //    rd.RecordSelectionFormula = "{itbi_isencao_main.guid}='" + "uu" + "'";
-                //    Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
-                //    return File(stream, "application/pdf", "Notificacao.pdf");
-                //} catch  {
-                //    throw;
-                //}
+                byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
+                Response.Buffer = true;
+                Response.Clear();
+                Response.ContentType = mimeType;
+                Response.AddHeader("content-disposition", "attachment; filename= NotificacaoISS" + "." + extension);
+                Response.OutputStream.Write(bytes, 0, bytes.Length);
+                Response.Flush();
+                Response.End();
+                return RedirectToAction("sysMenu", "Home");
             }
 
             Processo_bll processoRepository = new Processo_bll("GTIconnection");

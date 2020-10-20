@@ -34,6 +34,7 @@ namespace GTI_Models.Models {
         public string Cidade { get; set; }
         public string Uf { get; set; }
         public int Fiscal { get; set; }
+        public string Msg { get; set; }
     }
 }
 

@@ -1140,7 +1140,7 @@ namespace GTI_Dal.Classes {
 
                 reg.Seq = Convert.ToInt16(maxCod);
                 try {
-                    db.Database.ExecuteSqlCommand("INSERT INTO historico(codreduzido,seq,deschist,datahist2,userid) VALUES(codreduzido,seq,deschist,datahist2,userid)",
+                    db.Database.ExecuteSqlCommand("INSERT INTO historico(codreduzido,seq,deschist,datahist2,userid) VALUES(@codreduzido,@seq,@deschist,@datahist2,@userid)",
                         new SqlParameter("@codreduzido", reg.Codreduzido),
                         new SqlParameter("@seq", reg.Seq),
                         new SqlParameter("@deschist", reg.Deschist),
