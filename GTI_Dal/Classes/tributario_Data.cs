@@ -2512,7 +2512,7 @@ Proximo:;
 
         public Exception Insert_notificacao_iss_web(Notificacao_iss_web Reg) {
             using (var db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[29];
+                object[] Parametros = new object[30];
                 Parametros[0] = new SqlParameter { ParameterName = "@ano_notificacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano_notificacao };
                 Parametros[1] = new SqlParameter { ParameterName = "@numero_notificacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_notificacao };
                 Parametros[2] = new SqlParameter { ParameterName = "@codigo_cidadao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo_cidadao };
@@ -2542,10 +2542,11 @@ Proximo:;
                 Parametros[26] = new SqlParameter { ParameterName = "@cidade", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cidade };
                 Parametros[27] = new SqlParameter { ParameterName = "@uf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Uf };
                 Parametros[28] = new SqlParameter { ParameterName = "@fiscal", SqlDbType = SqlDbType.Int, SqlValue = Reg.Fiscal };
+                Parametros[29] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
 
-                db.Database.ExecuteSqlCommand("INSERT INTO notificacao_iss_web(ano_notificacao,numero_notificacao,codigo_cidadao,codigo_imovel,data_gravacao,processo,isspago,habitese,area,uso,categoria,valorm2,valortotal, " +
+                db.Database.ExecuteSqlCommand("INSERT INTO notificacao_iss_web(guid,ano_notificacao,numero_notificacao,codigo_cidadao,codigo_imovel,data_gravacao,processo,isspago,habitese,area,uso,categoria,valorm2,valortotal, " +
                                               "versao,data_vencimento,numero_guia,nosso_numero,linha_digitavel,codigo_barra,cpf_cnpj,nome,logradouro,numero,complemento,cep,bairro,cidade,uf,fiscal) " +
-                                              "VALUES(@ano_notificacao,@numero_notificacao,@codigo_cidadao,@codigo_imovel,@data_gravacao,@processo,@isspago,@habitese,@area,@uso,@categoria,@valorm2,@valortotal," +
+                                              "VALUES(@guid,@ano_notificacao,@numero_notificacao,@codigo_cidadao,@codigo_imovel,@data_gravacao,@processo,@isspago,@habitese,@area,@uso,@categoria,@valorm2,@valortotal," +
                                               "@versao,@data_vencimento,@numero_guia,@nosso_numero,@linha_digitavel,@codigo_barra,@cpf_cnpj,@nome,@logradouro,@numero,@complemento,@cep,@bairro,@cidade,@uf,@fiscal)", Parametros);
 
                 try {
@@ -2568,7 +2569,16 @@ Proximo:;
             return _numero;
         }
 
-
+        public short Retorna_Proxima_Seq_NotificacaoIssWeb(int Codigo, int Ano) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from c in db.Debitoparcela where c.Codreduzido == Codigo && c.Anoexercicio == Ano && c.Codlancamento == 65 orderby c.Seqlancamento descending select c).FirstOrDefault();
+                if (Sql == null)
+                    return (short)0;
+                else {
+                    return (short)(((Debitoparcela)Sql).Seqlancamento + 1);
+                }
+            }
+        }
 
     }//end class
 }

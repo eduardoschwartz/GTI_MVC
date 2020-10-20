@@ -1131,6 +1131,29 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Incluir_Historico(Historico reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                int cntCod = (from c in db.Historico where c.Codreduzido==reg.Codreduzido select c).Count();
+                int maxCod = 1;
+                if (cntCod > 0)
+                    maxCod = (from c in db.Historico select c.Seq).Max() + 1;
+
+                reg.Seq = Convert.ToInt16(maxCod);
+                try {
+                    db.Database.ExecuteSqlCommand("INSERT INTO historico(codreduzido,seq,deschist,datahist2,userid) VALUES(codreduzido,seq,deschist,datahist2,userid)",
+                        new SqlParameter("@codreduzido", reg.Codreduzido),
+                        new SqlParameter("@seq", reg.Seq),
+                        new SqlParameter("@deschist", reg.Deschist),
+                        new SqlParameter("@datahist2", reg.Datahist2),
+                        new SqlParameter("@userid", reg.Userid));
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+
         public Exception Incluir_Area(List<Areas> areas) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 try {

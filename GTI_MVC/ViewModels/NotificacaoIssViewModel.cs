@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace GTI_Mvc.ViewModels {
     public class NotificacaoIssViewModel {
+        public string Guid { get; set; }
         public int Ano_Notificacao { get; set; }
         public int Numero_Notificacao { get; set; }
         public int Codigo_Imovel { get; set; }

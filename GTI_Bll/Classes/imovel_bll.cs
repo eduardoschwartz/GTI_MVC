@@ -769,8 +769,13 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Incluir_Historico(Historico reg) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Incluir_Historico(reg);
+            return ex;
 
+        }
         #endregion
 
-    }//end class
-}
+        }//end class
+    }

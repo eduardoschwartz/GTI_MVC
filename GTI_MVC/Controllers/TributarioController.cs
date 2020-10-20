@@ -2024,9 +2024,12 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 }
                 CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(model.Codigo_Cidadao);
-                string _bairro = "",_endereco="",_compl="",_cidade="",_uf="";
-                int _numero = 0, _cep = 0;
+                string _bairro = "",_endereco="",_compl="",_cidade="",_uf="",_nome="";
+                string _cpf_cnpj = _cidadao.Cnpj == null ? _cidadao.Cpf : _cidadao.Cnpj;
+                int _numero = 0, _cep = 0, _codigo = model.Codigo_Cidadao,_fiscal= Convert.ToInt32(Session["hashid"]);
+                short _ano=(short)model.Ano_Notificacao;
                 bool _r = _cidadao.EtiquetaC != "S";
+                _nome = _cidadao.Nome;
                 _endereco = _r ? _cidadao.EnderecoR : _cidadao.EnderecoC;
                 _bairro = _r ?_cidadao.NomeBairroR: _cidadao.NomeBairroC;
                 _numero =_r?(int)_cidadao.NumeroR: (int)_cidadao.NumeroC;
@@ -2035,8 +2038,112 @@ namespace GTI_Mvc.Controllers {
                 _uf = _r ? _cidadao.UfR : _cidadao.UfC;
                 _cep = _r ? (int)_cidadao.CepR : (int)_cidadao.CepC;
 
+                //***************************************************************************
+                //Grava os dados do boleto e gera o lançamento
+                //***************************************************************************
+                _nome = _nome.Length > 40 ? _nome.Substring(0, 40) : _nome;
+                _endereco = _endereco.Length > 40 ? _endereco.Substring(0, 40) : _endereco;
+                _bairro = _bairro.Length > 40 ? _bairro.Substring(0, 40) : _bairro;
+                _cidade = _cidade.Length > 40 ? _cidade.Substring(0, 40) : _cidade;
+
+                short _seq = tributarioRepository.Retorna_Proxima_Seq_NotificacaoIssWeb(_codigo, _ano);
+                //grava parcela
+                Debitoparcela regParcela = new Debitoparcela {
+                    Codreduzido = _codigo,
+                    Anoexercicio = _ano,
+                    Codlancamento = 65,
+                    Seqlancamento = _seq,
+                    Numparcela = 1,
+                    Codcomplemento = 0,
+                    Statuslanc = 3,
+                    Datavencimento = _dataVencto,
+                    Datadebase = DateTime.Now,
+                    Userid = _fiscal
+                };
+                Exception ex2 = tributarioRepository.Insert_Debito_Parcela(regParcela);
+
+                //grava tributo
+                Debitotributo regTributo = new Debitotributo {
+                    Codreduzido = _codigo,
+                    Anoexercicio = _ano,
+                    Codlancamento = 65,
+                    Seqlancamento = _seq,
+                    Numparcela = 1,
+                    Codcomplemento = 0,
+                    Codtributo = (short)model.Categoria_Construcao,
+                    Valortributo = model.Valor_Total
+                };
+                ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
+
+                //grava o documento
+                Numdocumento regDoc = new Numdocumento();
+                regDoc.Valorguia = model.Valor_Total;
+                regDoc.Emissor = "Gti.Web/NotificaoIss";
+                regDoc.Datadocumento = DateTime.Now;
+                regDoc.Registrado = true;
+                regDoc.Percisencao = 0;
+                regDoc.Percisencao = 0;
+                int _novo_documento = tributarioRepository.Insert_Documento(regDoc);
+
+                //grava o documento na parcela
+                Parceladocumento regParc = new Parceladocumento();
+                regParc.Codreduzido = _codigo;
+                regParc.Anoexercicio = _ano;
+                regParc.Codlancamento = 65;
+                regParc.Seqlancamento = _seq;
+                regParc.Numparcela = 1;
+                regParc.Codcomplemento = 0;
+                regParc.Numdocumento = _novo_documento;
+                regParc.Valorjuros = 0;
+                regParc.Valormulta = 0;
+                regParc.Valorcorrecao = 0;
+                regParc.Plano = 0;
+                tributarioRepository.Insert_Parcela_Documento(regParc);
+
+                string sHist = "Iss construção civil lançado no código " + _codigo + " processo nº " + model.Numero_Processo + " notificação nº " + model.Numero_Notificacao.ToString("0000") + "/" + model.Ano_Notificacao.ToString() + " Área notificada: " + model.Area_Notificada.ToString("#0.00") + " m²";
+                //Incluir a observação da parcela
+                Obsparcela ObsReg = new Obsparcela() {
+                    Codreduzido = _codigo,
+                    Anoexercicio = _ano,
+                    Codlancamento = 65,
+                    Seqlancamento = _seq,
+                    Numparcela = 1,
+                    Codcomplemento = 0,
+                    Obs = sHist,
+                    Userid = _fiscal,
+                    Data = DateTime.Now
+                };
+                ex2 = tributarioRepository.Insert_Observacao_Parcela(ObsReg);
+
+                //Gravar histórico no imóvel
+                //Incluir a observação da parcela
+                Historico ObsImovel = new Historico() {
+                    Codreduzido = _codigo,
+                    Seq=0,
+                    Datahist2=DateTime.Now,
+                    Deschist=sHist,
+                    Userid = _fiscal,
+                };
+                ex2 = imovelRepository.Incluir_Historico(ObsImovel);
+
+                //Enviar para registrar 
+                Ficha_compensacao_documento ficha = new Ficha_compensacao_documento();
+                ficha.Nome = _nome;
+                ficha.Endereco = _endereco.Length > 40 ? _endereco.Substring(0, 40) : _endereco;
+                ficha.Bairro = _bairro.Length > 15 ? _bairro.Substring(0, 15) : _bairro;
+                ficha.Cidade = _cidade.Length > 30 ? _cidade.Substring(0, 30) : _cidade;
+                ficha.Cep = Functions.RetornaNumero(_cep.ToString()) ?? "14870000";
+                ficha.Cpf = Functions.RetornaNumero(_cpf_cnpj);
+                ficha.Numero_documento = _novo_documento;
+                ficha.Data_vencimento = _dataVencto;
+                ficha.Valor_documento = Convert.ToDecimal(model.Valor_Total);
+                ficha.Uf = _uf;
+                ex2 = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
+                ex2 = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
+
+                //**************************************************************************
+
                 //Grava a notificacao
-                int _newcod = tributarioRepository.Retorna_notificacao_iss_web_disponivel(model.Ano_Notificacao);
                 Notificacao_iss_web _not = new Notificacao_iss_web() {
                     Ano_notificacao = model.Ano_Notificacao,
                     Area = model.Area_Notificada,
@@ -2047,16 +2154,16 @@ namespace GTI_Mvc.Controllers {
                     Codigo_cidadao = model.Codigo_Cidadao,
                     Codigo_imovel = model.Codigo_Imovel,
                     Complemento = _compl,
-                    Cpf_cnpj = _cidadao.Cnpj == null ? _cidadao.Cpf : _cidadao.Cnpj,
+                    Cpf_cnpj = _cpf_cnpj,
                     Data_gravacao=DateTime.Now,
                     Data_vencimento=model.Data_vencimento,
-                    Fiscal = Convert.ToInt32(Session["hashid"]),
+                    Fiscal = _fiscal,
                     Habitese = model.Habitese,
                     Isspago =model.Iss_Pago,
                     Logradouro=_endereco,
-                    Nome=_cidadao.Nome,
+                    Nome=_nome,
                     Numero=_numero,
-                    Numero_notificacao = _newcod,
+                    Numero_notificacao = model.Numero_Notificacao,
                     Processo =model.Numero_Processo,
                     Uf=_uf,
                     Uso=model.Uso_Construcao,
@@ -2064,16 +2171,20 @@ namespace GTI_Mvc.Controllers {
                     Valortotal=model.Valor_Total,
                     Versao=1
                 };
+                _not.Guid = Guid.NewGuid().ToString("N");
+                model.Guid = _not.Guid;
                 _not.Numero_guia = 0;
                 _not.Nosso_numero = "";
                 _not.Codigo_barra = "";
                 _not.Linha_digitavel = "";
 
-                Exception ex2 = tributarioRepository.Insert_notificacao_iss_web(_not);
+                 ex2 = tributarioRepository.Insert_notificacao_iss_web(_not);
 
                 return RedirectToAction("sysMenu", "Home");
 
                 //Gera Boleto
+
+
                 //ReportDocument rd = new ReportDocument();
                 //rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Notificacao_m001.rpt"));
                 //TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();

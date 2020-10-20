@@ -1,14 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GTI_Models.Models {
     public class Notificacao_iss_web {
         [Key]
-        [Column(Order=1)]
+        public string Guid { get; set; }
         public int Ano_notificacao { get; set; }
-        [Key]
-        [Column(Order = 2)]
         public int Numero_notificacao { get; set; }
         public int Codigo_cidadao { get; set; }
         public int Codigo_imovel { get; set; }
