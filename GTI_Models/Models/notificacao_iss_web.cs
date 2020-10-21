@@ -16,6 +16,7 @@ namespace GTI_Models.Models {
         public decimal Area { get; set; }
         public int Uso { get; set; }
         public int Categoria { get; set; }
+        public decimal ValorIssPago { get; set; }
         public decimal Valorm2 { get; set; }
         public decimal Valortotal { get; set; }
         public int Versao { get; set; }
@@ -35,6 +36,27 @@ namespace GTI_Models.Models {
         public string Uf { get; set; }
         public int Fiscal { get; set; }
         public string Msg { get; set; }
+        public string Decreto { get; set; }
+        public decimal C179 { get; set; }
+        public decimal C180 { get; set; }
+        public decimal C181 { get; set; }
+        public decimal C182 { get; set; }
+        public decimal C183 { get; set; }
+        public decimal C184 { get; set; }
+        public decimal C185 { get; set; }
+        public decimal C670 { get; set; }
+        public decimal C671 { get; set; }
+        public decimal C672 { get; set; }
+        public decimal C673 { get; set; }
+        public decimal C674 { get; set; }
+        public decimal C675 { get; set; }
+        public decimal C676 { get; set; }
+        public decimal C689 { get; set; }
+        public decimal C690 { get; set; }
+        public decimal C691 { get; set; }
+        public string FiscalNome { get; set; }
+        public string Cargo { get; set; }
+        public byte[] Assinatura { get; set; }
     }
 }
 

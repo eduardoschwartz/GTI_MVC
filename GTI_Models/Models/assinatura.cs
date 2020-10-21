@@ -8,5 +8,6 @@ namespace GTI_Models.Models {
         public string Cargo { get; set; }
         public byte[] Fotoass { get; set; }
         public int Codigo { get; set; }
+        public byte[] Fotoass2 { get; set; }
     }
 }

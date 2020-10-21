@@ -2139,10 +2139,11 @@ namespace GTI_Mvc.Controllers {
                 ficha.Data_vencimento = _dataVencto;
                 ficha.Valor_documento = Convert.ToDecimal(model.Valor_Total);
                 ficha.Uf = _uf;
-            //    ex2 = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
-             //   ex2 = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
+                //    ex2 = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
+                //   ex2 = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
 
                 //**************************************************************************
+               Notificacao_Iss_Tabela _tabela = tributarioRepository.Retorna_Notificacao_Iss_Tabela(model.Ano_Notificacao);
 
                 //Grava a notificacao
                 Notificacao_iss_web _not = new Notificacao_iss_web() {
@@ -2170,7 +2171,25 @@ namespace GTI_Mvc.Controllers {
                     Uso=model.Uso_Construcao,
                     Valorm2=model.Valor_m2,
                     Valortotal=model.Valor_Total,
-                    Versao=1
+                    Versao=1,
+                    Decreto=_tabela.Decreto,
+                    C179=_tabela.C179,
+                    C180=_tabela.C180,
+                    C181=_tabela.C181,
+                    C182=_tabela.C182,
+                    C183=_tabela.C183,
+                    C184=_tabela.C184,
+                    C185=_tabela.C185,
+                    C670=_tabela.C670,
+                    C671=_tabela.C671,
+                    C672=_tabela.C672,
+                    C673=_tabela.C673,
+                    C674=_tabela.C674,
+                    C675=_tabela.C675,
+                    C676=_tabela.C676,
+                    C689=_tabela.C689,
+                    C690=_tabela.C690,
+                    C691=_tabela.C691
                 };
                 if (model.Habitese)
                     _not.Msg = "O Setor de Fiscalização de Tributos da Prefeitura Municipal de Jaboticabal, tendo em vista o processo de pedido de HABITE-SE em referência, vem NOTIFICAR o contribuinte acima identificado do lançamento do Imposto Sobre Serviços da Construção Civil, relativo ao imóvel abaixo descrito, calculado conforme os parâmetros abaixo indicados, para no prazo de 30 dias, a contar do recebimento desta Notificação, efetuar o pagamento/parcelamento ou apresentar reclamação contra a mesma.";
@@ -2182,6 +2201,12 @@ namespace GTI_Mvc.Controllers {
                 _not.Nosso_numero = "";
                 _not.Codigo_barra = "";
                 _not.Linha_digitavel = "";
+
+                Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+                Assinatura _ass = sistemaRepository.Retorna_Usuario_Assinatura(_not.Fiscal);
+                _not.FiscalNome = _ass.Nome;
+                _not.Cargo = _ass.Cargo;
+                _not.Assinatura = _ass.Fotoass2;
 
                  Exception ex2 = tributarioRepository.Insert_notificacao_iss_web(_not);
 
@@ -2199,6 +2224,12 @@ namespace GTI_Mvc.Controllers {
                 viewer.LocalReport.Refresh();
                 viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Boleto_NotificacaoISS_m001.rdlc");
                 viewer.LocalReport.DataSources.Add(rdsAct);
+
+
+                List<ReportParameter> parameters = new List<ReportParameter>();
+                parameters.Add(new ReportParameter("NumeroNot",  Lista[0].Numero_notificacao.ToString("0000") + "/" + Lista[0].Ano_notificacao.ToString()));
+                parameters.Add(new ReportParameter("Processo", Lista[0].Processo));
+                viewer.LocalReport.SetParameters(parameters);
 
                 byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
                 Response.Buffer = true;

@@ -2580,5 +2580,15 @@ Proximo:;
             }
         }
 
+        public Notificacao_Iss_Tabela Retorna_Notificacao_Iss_Tabela(int Ano) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+               Notificacao_Iss_Tabela Lista = (from d in db.Notificacao_Iss_Tabela where d.Ano == Ano select d).FirstOrDefault();
+               return Lista;
+            }
+        }
+
+
+
+
     }//end class
 }

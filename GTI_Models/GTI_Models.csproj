@@ -166,6 +166,7 @@
     <Compile Include="Models\mobiliariohist.cs" />
     <Compile Include="Models\mobiliarioplaca.cs" />
     <Compile Include="Models\mobiliariovs.cs" />
+    <Compile Include="Models\Notificacao_Iss_Tabela.cs" />
     <Compile Include="Models\notificacao_iss_web.cs" />
     <Compile Include="Models\numdocumento.cs" />
     <Compile Include="Models\obscidadao.cs" />
