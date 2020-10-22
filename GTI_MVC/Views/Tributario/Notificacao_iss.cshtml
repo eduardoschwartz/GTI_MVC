@@ -175,7 +175,7 @@
 
                             </td>
                             <td style="width:110px">
-                                <label style="font-weight:normal;padding-top:7px" >Valor total:</label>
+                                <label style="font-weight:normal;padding-top:7px">Valor total:</label>
                             </td>
                             <td style="width:100px">
                                 @if (Model.Valor_Total > 0) {
@@ -197,9 +197,10 @@
         </div>
 
         <div style="text-align:center">
-            <button type="submit" class="btn btn-primary" name="action" onclick="return ValidateForm()"   value="btnValida">Gerar notificação</button>
+            <button type="submit" class="btn btn-primary" name="action" onclick="return ValidateForm()" value="btnValida">Gerar notificação</button>
         </div>
         <br />
+        @Html.ActionLink("Retornar ao menu de opções", "Notificacao_menu", "Tributario", null, new { @class = "actionlink" })<br />
         @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
     </div>
 

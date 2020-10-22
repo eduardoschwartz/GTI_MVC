@@ -17,6 +17,10 @@ namespace GTI_Mvc.ViewModels {
         public decimal Iss_Pago { get; set; }
         public bool Habitese { get; set; }
         public decimal Valor_Total { get; set; }
+        public string Nome { get; set; }
+        public int SituacaoCodigo { get; set; }
+        public string SituacaoNome { get; set; }
+        public DateTime Data_Emissao { get; set; }
     }
 
 }

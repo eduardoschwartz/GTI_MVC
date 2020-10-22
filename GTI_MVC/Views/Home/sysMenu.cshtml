@@ -28,7 +28,7 @@
     @if (Session["hashfunc"].ToString() == "S") {
         @Html.ActionLink("Tramitação de processos", "Tramite_Processo", "Protocolo", null, new { @class = "actionlink" })<br />
         if (Session["hashfiscal"].ToString() == "S") {
-            @Html.ActionLink("Notificação de ISS Contrução Civil", "Notificacao_iss", "Tributario", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Notificação de ISS Contrução Civil", "Notificacao_menu", "Tributario", null, new { @class = "actionlink" })<br />
         }
     }
     @*@if (Session["hashid"].ToString() == "433") {

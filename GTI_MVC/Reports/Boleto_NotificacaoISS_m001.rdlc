@@ -391,17 +391,18 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox190">
+                        <Textbox Name="Data_vencimento1">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Data_vencimento.Value</Value>
                                   <Style>
                                     <FontSize>7pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
+                                    <Format>dd/MM/yyyy</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -410,7 +411,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox190</rd:DefaultName>
+                          <rd:DefaultName>Data_vencimento1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -729,14 +730,14 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox191">
+                        <Textbox Name="Valortotal1">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Valortotal.Value</Value>
                                   <Style>
                                     <FontSize>7pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -748,7 +749,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox191</rd:DefaultName>
+                          <rd:DefaultName>Valortotal1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1275,14 +1276,14 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox193">
+                        <Textbox Name="Nosso_numero2">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Nosso_numero.Value</Value>
                                   <Style>
                                     <FontSize>6pt</FontSize>
                                   </Style>
@@ -1293,7 +1294,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox193</rd:DefaultName>
+                          <rd:DefaultName>Nosso_numero2</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1364,14 +1365,14 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox192">
+                        <Textbox Name="Numero_guia">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Numero_guia.Value</Value>
                                   <Style>
                                     <FontSize>6pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1383,7 +1384,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox192</rd:DefaultName>
+                          <rd:DefaultName>Numero_guia</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1579,14 +1580,14 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox202">
+                        <Textbox Name="Nome1">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Nome.Value</Value>
                                   <Style>
                                     <FontSize>5pt</FontSize>
                                   </Style>
@@ -1597,7 +1598,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox202</rd:DefaultName>
+                          <rd:DefaultName>Nome1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1627,14 +1628,14 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox198">
+                        <Textbox Name="Logradouro1">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Logradouro.Value</Value>
                                   <Style>
                                     <FontSize>5pt</FontSize>
                                   </Style>
@@ -1645,7 +1646,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox198</rd:DefaultName>
+                          <rd:DefaultName>Logradouro1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1672,14 +1673,14 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox196">
+                        <Textbox Name="Cpf_cnpj1">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>="Cpf/Cnpj:" + Fields!Cpf_cnpj.Value</Value>
                                   <Style>
                                     <FontSize>5pt</FontSize>
                                   </Style>
@@ -1690,7 +1691,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox196</rd:DefaultName>
+                          <rd:DefaultName>Cpf_cnpj1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1964,14 +1965,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="linha_digitavel">
+                        <Textbox Name="Linha_digitavel">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Linha_digitavel.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -1980,7 +1981,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>linha_digitavel</rd:DefaultName>
+                          <rd:DefaultName>Linha_digitavel</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -2216,17 +2217,18 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox218">
+                        <Textbox Name="Data_vencimento">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Data_vencimento.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
+                                    <Format>dd/MM/yyyy</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -2235,7 +2237,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox218</rd:DefaultName>
+                          <rd:DefaultName>Data_vencimento</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -2660,16 +2662,17 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox228">
+                        <Textbox Name="Data_gravacao">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Data_gravacao.Value</Value>
                                   <Style>
                                     <FontSize>7pt</FontSize>
+                                    <Format>dd/MM/yyyy</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -2678,7 +2681,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox228</rd:DefaultName>
+                          <rd:DefaultName>Data_gravacao</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -2699,14 +2702,14 @@
                     <TablixCell />
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox225">
+                        <Textbox Name="Numero_guia1">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Numero_guia.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -2718,7 +2721,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox225</rd:DefaultName>
+                          <rd:DefaultName>Numero_guia1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -2825,16 +2828,17 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox223">
+                        <Textbox Name="Data_gravacao1">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Data_gravacao.Value</Value>
                                   <Style>
                                     <FontSize>7pt</FontSize>
+                                    <Format>dd/MM/yyyy</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -2843,7 +2847,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox223</rd:DefaultName>
+                          <rd:DefaultName>Data_gravacao1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -2865,14 +2869,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox216">
+                        <Textbox Name="Nosso_numero">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Nosso_numero.Value</Value>
                                   <Style>
                                     <FontSize>7pt</FontSize>
                                   </Style>
@@ -2883,7 +2887,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox216</rd:DefaultName>
+                          <rd:DefaultName>Nosso_numero</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -3304,14 +3308,14 @@
                     <TablixCell />
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox215">
+                        <Textbox Name="Valortotal2">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Valortotal.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -3323,7 +3327,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox215</rd:DefaultName>
+                          <rd:DefaultName>Valortotal2</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -3437,7 +3441,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>="Ref. a notificação de Iss construção civil nº " + Parameters!NumeroNot.Value</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                   </Style>
@@ -4059,14 +4063,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox210">
+                        <Textbox Name="Nome">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Nome.Value</Value>
                                   <Style>
                                     <FontSize>6pt</FontSize>
                                   </Style>
@@ -4077,7 +4081,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox210</rd:DefaultName>
+                          <rd:DefaultName>Nome</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -4100,14 +4104,14 @@
                     <TablixCell />
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox211">
+                        <Textbox Name="Cpf_cnpj2">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Cpf_cnpj.Value</Value>
                                   <Style>
                                     <FontSize>6pt</FontSize>
                                   </Style>
@@ -4118,7 +4122,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox211</rd:DefaultName>
+                          <rd:DefaultName>Cpf_cnpj2</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -4209,14 +4213,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox207">
+                        <Textbox Name="Logradouro2">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Logradouro.Value</Value>
                                   <Style>
                                     <FontSize>6pt</FontSize>
                                   </Style>
@@ -4227,7 +4231,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox207</rd:DefaultName>
+                          <rd:DefaultName>Logradouro2</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -4324,14 +4328,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox205">
+                        <Textbox Name="Bairro1">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Bairro.Value</Value>
                                   <Style>
                                     <FontSize>6pt</FontSize>
                                   </Style>
@@ -4342,7 +4346,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox205</rd:DefaultName>
+                          <rd:DefaultName>Bairro1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -4361,14 +4365,14 @@
                     <TablixCell />
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox212">
+                        <Textbox Name="Codigo_cidadao">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>="Cód: Contribuinte:" + Fields!Codigo_cidadao.Value.ToString()</Value>
                                   <Style>
                                     <FontSize>6pt</FontSize>
                                   </Style>
@@ -4379,7 +4383,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox212</rd:DefaultName>
+                          <rd:DefaultName>Codigo_cidadao</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -4436,14 +4440,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox203">
+                        <Textbox Name="Cidade">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Cidade.Value + "/" + Fields!Uf.Value + " - " + Fields!Cep.Value.ToString()</Value>
                                   <Style>
                                     <FontSize>6pt</FontSize>
                                   </Style>
@@ -4454,7 +4458,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox203</rd:DefaultName>
+                          <rd:DefaultName>Cidade</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -4523,14 +4527,14 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="codigo_barra">
+                        <Textbox Name="Codigo_barra">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Codigo_barra.Value</Value>
                                   <Style>
                                     <FontFamily>SAdvI25d</FontFamily>
                                     <FontSize>16pt</FontSize>
@@ -4542,7 +4546,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>codigo_barra</rd:DefaultName>
+                          <rd:DefaultName>Codigo_barra</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -7367,9 +7371,9 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox329</rd:DefaultName>
-            <Top>14.53684cm</Top>
+            <Top>14.60034cm</Top>
             <Left>0.52869cm</Left>
-            <Height>4.11896cm</Height>
+            <Height>3.81896cm</Height>
             <Width>7.02066cm</Width>
             <ZIndex>8</ZIndex>
             <Style>
@@ -7443,7 +7447,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.5cm</Height>
+                  <Height>0.45cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -7485,7 +7489,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.5cm</Height>
+                  <Height>0.45cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -7545,7 +7549,7 @@
             <DataSetName>dsNotificacaoISS</DataSetName>
             <Top>15.58078cm</Top>
             <Left>9.73349cm</Left>
-            <Height>3.07501cm</Height>
+            <Height>2.97501cm</Height>
             <Width>10.66516cm</Width>
             <ZIndex>10</ZIndex>
             <Style>

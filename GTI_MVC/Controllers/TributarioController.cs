@@ -2080,6 +2080,7 @@ namespace GTI_Mvc.Controllers {
                 regDoc.Valorguia = model.Valor_Total;
                 regDoc.Emissor = "Gti.Web/NotificaoIss";
                 regDoc.Datadocumento = DateTime.Now;
+
                 regDoc.Registrado = true;
                 regDoc.Percisencao = 0;
                 regDoc.Percisencao = 0;
@@ -2197,19 +2198,47 @@ namespace GTI_Mvc.Controllers {
                     _not.Msg = "O Setor de Fiscalização de Tributos da Prefeitura Municipal de Jaboticabal, vem através desta NOTIFICAR o contribuinte em referência do lançamento do Imposto Sobre Serviços de Qualquer Natureza (ISSQN) incidente sobre a mão de obra para construção de imóvel, calculado conforme os parâmetros abaixo indicados, para no prazo de 30 dias a contar do recebimento desta efetuar o pagamento/parcelamento ou apresentar recurso contra o mesmo.";
                 _not.Guid = Guid.NewGuid().ToString("N");
                 model.Guid = _not.Guid;
-                _not.Numero_guia = 0;
-                _not.Nosso_numero = "";
-                _not.Codigo_barra = "";
-                _not.Linha_digitavel = "";
+                _not.Numero_guia = _novo_documento;
 
                 Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
                 Assinatura _ass = sistemaRepository.Retorna_Usuario_Assinatura(_not.Fiscal);
                 _not.FiscalNome = _ass.Nome;
                 _not.Cargo = _ass.Cargo;
                 _not.Assinatura = _ass.Fotoass2;
+                _not.Nosso_numero = "287353200" + _novo_documento.ToString();
 
-                 Exception ex2 = tributarioRepository.Insert_notificacao_iss_web(_not);
+                string _convenio = "2873532";
+                //***** GERA CÓDIGO DE BARRAS BOLETO REGISTRADO*****
+                DateTime _data_base = Convert.ToDateTime("07/10/1997");
+                TimeSpan ts = Convert.ToDateTime(_not.Data_vencimento) - _data_base;
+                int _fator_vencto = ts.Days;
+                string _quinto_grupo = String.Format("{0:D4}", _fator_vencto);
+                string _valor_boleto_str = string.Format("{0:0.00}", _not.Valortotal);
+                _quinto_grupo += string.Format("{0:D10}", Convert.ToInt64(Functions.RetornaNumero(_valor_boleto_str)));
+                string _barra = "0019" + _quinto_grupo + String.Format("{0:D13}", Convert.ToInt32(_convenio));
+                _barra += String.Format("{0:D10}", Convert.ToInt64(_not.Numero_guia)) + "17";
+                string _campo1 = "0019" + _barra.Substring(19, 5);
+                string _digitavel = _campo1 + Functions.Calculo_DV10(_campo1).ToString();
+                string _campo2 = _barra.Substring(23, 10);
+                _digitavel += _campo2 + Functions.Calculo_DV10(_campo2).ToString();
+                string _campo3 = _barra.Substring(33, 10);
+                _digitavel += _campo3 + Functions.Calculo_DV10(_campo3).ToString();
+                string _campo5 = _quinto_grupo;
+                string _campo4 = Functions.Calculo_DV11(_barra).ToString();
+                _digitavel += _campo4 + _campo5;
+                _barra = _barra.Substring(0, 4) + _campo4 + _barra.Substring(4, _barra.Length - 4);
+                //**Resultado final**
+                string _linha_digitavel = _digitavel.Substring(0, 5) + "." + _digitavel.Substring(5, 5) + " " + _digitavel.Substring(10, 5) + "." + _digitavel.Substring(15, 6) + " ";
+                _linha_digitavel += _digitavel.Substring(21, 5) + "." + _digitavel.Substring(26, 6) + " " + _digitavel.Substring(32, 1) + " " + Functions.StringRight(_digitavel, 14);
+                string _codigo_barra = Functions.Gera2of5Str(_barra);
+                //**************************************************
+                _not.Linha_digitavel = _linha_digitavel;
+                _not.Codigo_barra = _codigo_barra;
 
+
+                Exception ex2 = tributarioRepository.Insert_notificacao_iss_web(_not);
+
+                _not.Logradouro += ", " + _not.Numero.ToString() ;
                 //Gera Boleto
 
                 List<Notificacao_iss_web> Lista = new List<Notificacao_iss_web>();
@@ -2239,7 +2268,7 @@ namespace GTI_Mvc.Controllers {
                 Response.OutputStream.Write(bytes, 0, bytes.Length);
                 Response.Flush();
                 Response.End();
-                return RedirectToAction("sysMenu", "Home");
+                return RedirectToAction("Notificacao_menu");
             }
 
             Processo_bll processoRepository = new Processo_bll("GTIconnection");
@@ -2253,7 +2282,31 @@ namespace GTI_Mvc.Controllers {
             return View(model);
         }
 
+        [Route("Notificacao_menu")]
+        [HttpGet]
+        public ViewResult Notificacao_menu() {
+            return View();
+        }
 
+        [Route("Notificacao_query")]
+        [HttpGet]
+        public ViewResult Notificacao_query() {
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            List<Notificacao_iss_web> Lista = tributarioRepository.Retorna_Notificacao_Iss_Web(DateTime.Now.Year);
+            List<NotificacaoIssViewModel> model = new List<NotificacaoIssViewModel>();
+            foreach (Notificacao_iss_web item in Lista) {
+                NotificacaoIssViewModel reg = new NotificacaoIssViewModel() {
+                    Ano_Notificacao = item.Ano_notificacao,
+                    Numero_Notificacao = item.Numero_notificacao,
+                    Nome = "Nome do cara",
+                    Data_Emissao = item.Data_gravacao,
+                    SituacaoNome="Não pago"
+                };
+                model.Add(reg);
+            }
+
+            return View(model);
+        }
 
 
     }

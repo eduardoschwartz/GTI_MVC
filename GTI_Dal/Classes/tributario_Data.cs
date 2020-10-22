@@ -2587,7 +2587,33 @@ Proximo:;
             }
         }
 
+        public Notificacao_iss_web Retorna_Notificacao_Iss_Web(int Ano,int Numero) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Notificacao_iss_web Sql = (from l in db.Notificacao_Iss_Web where l.Ano_notificacao == Ano && l.Numero_notificacao==Numero select l).FirstOrDefault();
+                return Sql;
+            }
+        }
 
+        public List<Notificacao_iss_web> Retorna_Notificacao_Iss_Web(int Ano) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+               var Sql = (from l in db.Notificacao_Iss_Web where l.Ano_notificacao == Ano select l).ToList();
+                List<Notificacao_iss_web> Lista = new List<Notificacao_iss_web>();
+                foreach (Notificacao_iss_web item in Sql) {
+                    Notificacao_iss_web reg = new Notificacao_iss_web() {
+                        Ano_notificacao=item.Ano_notificacao,
+                        Numero_notificacao=item.Numero_notificacao,
+                        Data_gravacao=item.Data_gravacao,
+                        Data_vencimento=item.Data_vencimento,
+                        Nome=item.Nome
+                    };
+                    Lista.Add(reg);
+
+                }
+
+
+                return Lista;
+            }
+        }
 
 
     }//end class

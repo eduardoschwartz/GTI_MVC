@@ -1474,6 +1474,16 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Notificacao_Iss_Tabela( Ano);
         }
 
+        public Notificacao_iss_web Retorna_Notificacao_Iss_Web(int Ano, int Numero) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Retorna_Notificacao_Iss_Web(Ano, Numero);
+        }
+
+        public List<Notificacao_iss_web> Retorna_Notificacao_Iss_Web(int Ano) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Retorna_Notificacao_Iss_Web(Ano);
+        }
+
 
     }//end class
 }
