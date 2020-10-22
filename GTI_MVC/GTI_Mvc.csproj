@@ -691,6 +691,8 @@
     <Content Include="Views\Imovel\Itbi_isencao_q.cshtml" />
     <Content Include="Views\Shared\Checkguid.cshtml" />
     <Content Include="Views\Tributario\Notificacao_iss.cshtml" />
+    <Content Include="Views\Tributario\Notificacao_menu.cshtml" />
+    <Content Include="Views\Tributario\Notificacao_query.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
