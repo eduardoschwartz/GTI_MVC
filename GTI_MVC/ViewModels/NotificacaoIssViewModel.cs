@@ -21,6 +21,7 @@ namespace GTI_Mvc.ViewModels {
         public int SituacaoCodigo { get; set; }
         public string SituacaoNome { get; set; }
         public DateTime Data_Emissao { get; set; }
+        public string AnoNumero { get; set; }
     }
 
 }

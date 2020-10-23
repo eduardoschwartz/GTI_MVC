@@ -2144,7 +2144,7 @@ namespace GTI_Mvc.Controllers {
                 //   ex2 = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
 
                 //**************************************************************************
-               Notificacao_Iss_Tabela _tabela = tributarioRepository.Retorna_Notificacao_Iss_Tabela(model.Ano_Notificacao);
+               
 
                 //Grava a notificacao
                 Notificacao_iss_web _not = new Notificacao_iss_web() {
@@ -2172,102 +2172,16 @@ namespace GTI_Mvc.Controllers {
                     Uso=model.Uso_Construcao,
                     Valorm2=model.Valor_m2,
                     Valortotal=model.Valor_Total,
-                    Versao=1,
-                    Decreto=_tabela.Decreto,
-                    C179=_tabela.C179,
-                    C180=_tabela.C180,
-                    C181=_tabela.C181,
-                    C182=_tabela.C182,
-                    C183=_tabela.C183,
-                    C184=_tabela.C184,
-                    C185=_tabela.C185,
-                    C670=_tabela.C670,
-                    C671=_tabela.C671,
-                    C672=_tabela.C672,
-                    C673=_tabela.C673,
-                    C674=_tabela.C674,
-                    C675=_tabela.C675,
-                    C676=_tabela.C676,
-                    C689=_tabela.C689,
-                    C690=_tabela.C690,
-                    C691=_tabela.C691
+                    Versao=1
                 };
-                if (model.Habitese)
-                    _not.Msg = "O Setor de Fiscalização de Tributos da Prefeitura Municipal de Jaboticabal, tendo em vista o processo de pedido de HABITE-SE em referência, vem NOTIFICAR o contribuinte acima identificado do lançamento do Imposto Sobre Serviços da Construção Civil, relativo ao imóvel abaixo descrito, calculado conforme os parâmetros abaixo indicados, para no prazo de 30 dias, a contar do recebimento desta Notificação, efetuar o pagamento/parcelamento ou apresentar reclamação contra a mesma.";
-                else
-                    _not.Msg = "O Setor de Fiscalização de Tributos da Prefeitura Municipal de Jaboticabal, vem através desta NOTIFICAR o contribuinte em referência do lançamento do Imposto Sobre Serviços de Qualquer Natureza (ISSQN) incidente sobre a mão de obra para construção de imóvel, calculado conforme os parâmetros abaixo indicados, para no prazo de 30 dias a contar do recebimento desta efetuar o pagamento/parcelamento ou apresentar recurso contra o mesmo.";
+               
                 _not.Guid = Guid.NewGuid().ToString("N");
                 model.Guid = _not.Guid;
                 _not.Numero_guia = _novo_documento;
 
-                Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
-                Assinatura _ass = sistemaRepository.Retorna_Usuario_Assinatura(_not.Fiscal);
-                _not.FiscalNome = _ass.Nome;
-                _not.Cargo = _ass.Cargo;
-                _not.Assinatura = _ass.Fotoass2;
-                _not.Nosso_numero = "287353200" + _novo_documento.ToString();
-
-                string _convenio = "2873532";
-                //***** GERA CÓDIGO DE BARRAS BOLETO REGISTRADO*****
-                DateTime _data_base = Convert.ToDateTime("07/10/1997");
-                TimeSpan ts = Convert.ToDateTime(_not.Data_vencimento) - _data_base;
-                int _fator_vencto = ts.Days;
-                string _quinto_grupo = String.Format("{0:D4}", _fator_vencto);
-                string _valor_boleto_str = string.Format("{0:0.00}", _not.Valortotal);
-                _quinto_grupo += string.Format("{0:D10}", Convert.ToInt64(Functions.RetornaNumero(_valor_boleto_str)));
-                string _barra = "0019" + _quinto_grupo + String.Format("{0:D13}", Convert.ToInt32(_convenio));
-                _barra += String.Format("{0:D10}", Convert.ToInt64(_not.Numero_guia)) + "17";
-                string _campo1 = "0019" + _barra.Substring(19, 5);
-                string _digitavel = _campo1 + Functions.Calculo_DV10(_campo1).ToString();
-                string _campo2 = _barra.Substring(23, 10);
-                _digitavel += _campo2 + Functions.Calculo_DV10(_campo2).ToString();
-                string _campo3 = _barra.Substring(33, 10);
-                _digitavel += _campo3 + Functions.Calculo_DV10(_campo3).ToString();
-                string _campo5 = _quinto_grupo;
-                string _campo4 = Functions.Calculo_DV11(_barra).ToString();
-                _digitavel += _campo4 + _campo5;
-                _barra = _barra.Substring(0, 4) + _campo4 + _barra.Substring(4, _barra.Length - 4);
-                //**Resultado final**
-                string _linha_digitavel = _digitavel.Substring(0, 5) + "." + _digitavel.Substring(5, 5) + " " + _digitavel.Substring(10, 5) + "." + _digitavel.Substring(15, 6) + " ";
-                _linha_digitavel += _digitavel.Substring(21, 5) + "." + _digitavel.Substring(26, 6) + " " + _digitavel.Substring(32, 1) + " " + Functions.StringRight(_digitavel, 14);
-                string _codigo_barra = Functions.Gera2of5Str(_barra);
-                //**************************************************
-                _not.Linha_digitavel = _linha_digitavel;
-                _not.Codigo_barra = _codigo_barra;
-
 
                 Exception ex2 = tributarioRepository.Insert_notificacao_iss_web(_not);
 
-                _not.Logradouro += ", " + _not.Numero.ToString() ;
-                //Gera Boleto
-
-                List<Notificacao_iss_web> Lista = new List<Notificacao_iss_web>();
-                Lista.Add(_not);
-
-                Warning[] warnings;
-                string[] streamIds;
-                string mimeType = string.Empty, encoding = string.Empty, extension = string.Empty;
-                DataSet Ds = Functions.ToDataSet(Lista);
-                ReportDataSource rdsAct = new ReportDataSource("dsNotificacaoISS", Ds.Tables[0]);
-                ReportViewer viewer = new ReportViewer();
-                viewer.LocalReport.Refresh();
-                viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Boleto_NotificacaoISS_m001.rdlc");
-                viewer.LocalReport.DataSources.Add(rdsAct);
-
-
-                List<ReportParameter> parameters = new List<ReportParameter>();
-                parameters.Add(new ReportParameter("NumeroNot",  Lista[0].Numero_notificacao.ToString("0000") + "/" + Lista[0].Ano_notificacao.ToString()));
-                parameters.Add(new ReportParameter("Processo", Lista[0].Processo));
-                viewer.LocalReport.SetParameters(parameters);
-
-                byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
-                Response.Buffer = true;
-                Response.Clear();
-                Response.ContentType = mimeType;
-                Response.AddHeader("content-disposition", "attachment; filename= NotificacaoISS" + "." + extension);
-                Response.OutputStream.Write(bytes, 0, bytes.Length);
-                Response.Flush();
-                Response.End();
                 return RedirectToAction("Notificacao_menu");
             }
 
@@ -2294,18 +2208,149 @@ namespace GTI_Mvc.Controllers {
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             List<Notificacao_iss_web> Lista = tributarioRepository.Retorna_Notificacao_Iss_Web(DateTime.Now.Year);
             List<NotificacaoIssViewModel> model = new List<NotificacaoIssViewModel>();
+
             foreach (Notificacao_iss_web item in Lista) {
                 NotificacaoIssViewModel reg = new NotificacaoIssViewModel() {
+                    Guid=item.Guid,
                     Ano_Notificacao = item.Ano_notificacao,
                     Numero_Notificacao = item.Numero_notificacao,
-                    Nome = "Nome do cara",
+                    Nome = item.Nome,
                     Data_Emissao = item.Data_gravacao,
-                    SituacaoNome="Não pago"
+                    SituacaoNome="Não pago",
+                    AnoNumero=item.Numero_notificacao.ToString("0000") + "/" + item.Ano_notificacao.ToString()
                 };
                 model.Add(reg);
             }
 
             return View(model);
+        }
+
+       
+
+        public ActionResult Notificacao_print(string p) {
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Notificacao_iss_web_Struct _not = tributarioRepository.Retorna_Notificacao_Iss_Web(p);
+            Notificacao_Iss_Tabela _tabela = tributarioRepository.Retorna_Notificacao_Iss_Tabela(_not.Ano_notificacao);
+
+            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Assinatura _ass = sistemaRepository.Retorna_Usuario_Assinatura(_not.Fiscal);
+
+            string _nosso_numero = "287353200" + _not.Numero_guia.ToString();
+            string _convenio = "2873532";
+            //***** GERA CÓDIGO DE BARRAS BOLETO REGISTRADO*****
+            DateTime _data_base = Convert.ToDateTime("07/10/1997");
+            TimeSpan ts = Convert.ToDateTime(_not.Data_vencimento) - _data_base;
+            int _fator_vencto = ts.Days;
+            string _quinto_grupo = String.Format("{0:D4}", _fator_vencto);
+            string _valor_boleto_str = string.Format("{0:0.00}", _not.Valortotal);
+            _quinto_grupo += string.Format("{0:D10}", Convert.ToInt64(Functions.RetornaNumero(_valor_boleto_str)));
+            string _barra = "0019" + _quinto_grupo + String.Format("{0:D13}", Convert.ToInt32(_convenio));
+            _barra += String.Format("{0:D10}", Convert.ToInt64(_not.Numero_guia)) + "17";
+            string _campo1 = "0019" + _barra.Substring(19, 5);
+            string _digitavel = _campo1 + Functions.Calculo_DV10(_campo1).ToString();
+            string _campo2 = _barra.Substring(23, 10);
+            _digitavel += _campo2 + Functions.Calculo_DV10(_campo2).ToString();
+            string _campo3 = _barra.Substring(33, 10);
+            _digitavel += _campo3 + Functions.Calculo_DV10(_campo3).ToString();
+            string _campo5 = _quinto_grupo;
+            string _campo4 = Functions.Calculo_DV11(_barra).ToString();
+            _digitavel += _campo4 + _campo5;
+            _barra = _barra.Substring(0, 4) + _campo4 + _barra.Substring(4, _barra.Length - 4);
+            //**Resultado final**
+            string _linha_digitavel = _digitavel.Substring(0, 5) + "." + _digitavel.Substring(5, 5) + " " + _digitavel.Substring(10, 5) + "." + _digitavel.Substring(15, 6) + " ";
+            _linha_digitavel += _digitavel.Substring(21, 5) + "." + _digitavel.Substring(26, 6) + " " + _digitavel.Substring(32, 1) + " " + Functions.StringRight(_digitavel, 14);
+            string _codigo_barra = Functions.Gera2of5Str(_barra);
+            //**************************************************
+
+
+            NotificacaoIssReport _notR = new NotificacaoIssReport() {
+                Ano_notificacao = _not.Ano_notificacao,
+                Area = _not.Area,
+                Assinatura = _ass.Fotoass2,
+                Bairro = _not.Bairro,
+                Decreto = _tabela.Decreto,
+                C179 = _tabela.C179,
+                C180 = _tabela.C180,
+                C181 = _tabela.C181,
+                C182 = _tabela.C182,
+                C183 = _tabela.C183,
+                C184 = _tabela.C184,
+                C185 = _tabela.C185,
+                C670 = _tabela.C670,
+                C671 = _tabela.C671,
+                C672 = _tabela.C672,
+                C673 = _tabela.C673,
+                C674 = _tabela.C674,
+                C675 = _tabela.C675,
+                C676 = _tabela.C676,
+                C689 = _tabela.C689,
+                C690 = _tabela.C690,
+                C691 = _tabela.C691,
+                Cargo = _ass.Cargo,
+                Categoria = _not.Categoria,
+                Cep = _not.Cep,
+                Cidade = _not.Cidade,
+                Codigo_barra = _codigo_barra,
+                Codigo_cidadao = _not.Codigo_cidadao,
+                Codigo_imovel = _not.Codigo_imovel,
+                Complemento = _not.Complemento,
+                Cpf_cnpj = _not.Cpf_cnpj,
+                Data_gravacao = _not.Data_gravacao,
+                Data_vencimento = _not.Data_vencimento,
+                Fiscal = _not.Fiscal,
+                FiscalNome = _ass.Nome,
+                Guid = _not.Guid,
+                Habitese = _not.Habitese,
+                Isspago = _not.Isspago,
+                Linha_digitavel = _linha_digitavel,
+                Logradouro = _not.Logradouro,
+                Nome = _not.Nome,
+                Numero = _not.Numero,
+                Numero_guia = _not.Numero_guia,
+                Numero_notificacao = _not.Numero_notificacao,
+                Nosso_numero = _nosso_numero,
+                Processo = _not.Processo,
+                Uf = _not.Uf,
+                Uso = _not.Uso,
+                Valorm2 = _not.Valorm2,
+                Valortotal = _not.Valortotal
+            };
+            if (_not.Habitese)
+                _notR.Msg = "O Setor de Fiscalização de Tributos da Prefeitura Municipal de Jaboticabal, tendo em vista o processo de pedido de HABITE-SE em referência, vem NOTIFICAR o contribuinte acima identificado do lançamento do Imposto Sobre Serviços da Construção Civil, relativo ao imóvel abaixo descrito, calculado conforme os parâmetros abaixo indicados, para no prazo de 30 dias, a contar do recebimento desta Notificação, efetuar o pagamento/parcelamento ou apresentar reclamação contra a mesma.";
+            else
+                _notR.Msg = "O Setor de Fiscalização de Tributos da Prefeitura Municipal de Jaboticabal, vem através desta NOTIFICAR o contribuinte em referência do lançamento do Imposto Sobre Serviços de Qualquer Natureza (ISSQN) incidente sobre a mão de obra para construção de imóvel, calculado conforme os parâmetros abaixo indicados, para no prazo de 30 dias a contar do recebimento desta efetuar o pagamento/parcelamento ou apresentar recurso contra o mesmo.";
+
+            _not.Logradouro += ", " + _not.Numero.ToString();
+            //Gera Boleto
+
+            List<NotificacaoIssReport> Lista = new List<NotificacaoIssReport>();
+            Lista.Add(_notR);
+
+            Warning[] warnings;
+            string[] streamIds;
+            string mimeType = string.Empty, encoding = string.Empty, extension = string.Empty;
+            DataSet Ds = Functions.ToDataSet(Lista);
+            ReportDataSource rdsAct = new ReportDataSource("dsNotificacaoISS", Ds.Tables[0]);
+            ReportViewer viewer = new ReportViewer();
+            viewer.LocalReport.Refresh();
+            viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Boleto_NotificacaoISS_m001.rdlc");
+            viewer.LocalReport.DataSources.Add(rdsAct);
+
+
+            List<ReportParameter> parameters = new List<ReportParameter>();
+            parameters.Add(new ReportParameter("NumeroNot", Lista[0].Numero_notificacao.ToString("0000") + "/" + Lista[0].Ano_notificacao.ToString()));
+            parameters.Add(new ReportParameter("Processo", Lista[0].Processo));
+            viewer.LocalReport.SetParameters(parameters);
+
+            byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
+            Response.Buffer = true;
+            Response.Clear();
+            Response.ContentType = mimeType;
+            Response.AddHeader("content-disposition", "attachment; filename= NotificacaoISS" + "." + extension);
+            Response.OutputStream.Write(bytes, 0, bytes.Length);
+            Response.Flush();
+            Response.End();
+            return null;
         }
 
 

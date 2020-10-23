@@ -2512,7 +2512,7 @@ Proximo:;
 
         public Exception Insert_notificacao_iss_web(Notificacao_iss_web Reg) {
             using (var db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[30];
+                object[] Parametros = new object[27];
                 Parametros[0] = new SqlParameter { ParameterName = "@ano_notificacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano_notificacao };
                 Parametros[1] = new SqlParameter { ParameterName = "@numero_notificacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_notificacao };
                 Parametros[2] = new SqlParameter { ParameterName = "@codigo_cidadao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo_cidadao };
@@ -2529,25 +2529,22 @@ Proximo:;
                 Parametros[13] = new SqlParameter { ParameterName = "@versao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Versao };
                 Parametros[14] = new SqlParameter { ParameterName = "@data_vencimento", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_vencimento };
                 Parametros[15] = new SqlParameter { ParameterName = "@numero_guia", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Numero_guia };
-                Parametros[16] = new SqlParameter { ParameterName = "@nosso_numero", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nosso_numero };
-                Parametros[17] = new SqlParameter { ParameterName = "@linha_digitavel", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Linha_digitavel };
-                Parametros[18] = new SqlParameter { ParameterName = "@codigo_barra", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Codigo_barra };
-                Parametros[19] = new SqlParameter { ParameterName = "@cpf_cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cpf_cnpj };
-                Parametros[20] = new SqlParameter { ParameterName = "@nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nome };
-                Parametros[21] = new SqlParameter { ParameterName = "@logradouro", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Logradouro };
-                Parametros[22] = new SqlParameter { ParameterName = "@numero", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero };
-                Parametros[23] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Complemento };
-                Parametros[24] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.Int, SqlValue = Reg.Cep };
-                Parametros[25] = new SqlParameter { ParameterName = "@bairro", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Bairro };
-                Parametros[26] = new SqlParameter { ParameterName = "@cidade", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cidade };
-                Parametros[27] = new SqlParameter { ParameterName = "@uf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Uf };
-                Parametros[28] = new SqlParameter { ParameterName = "@fiscal", SqlDbType = SqlDbType.Int, SqlValue = Reg.Fiscal };
-                Parametros[29] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                Parametros[16] = new SqlParameter { ParameterName = "@cpf_cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cpf_cnpj };
+                Parametros[17] = new SqlParameter { ParameterName = "@nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nome };
+                Parametros[18] = new SqlParameter { ParameterName = "@logradouro", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Logradouro };
+                Parametros[19] = new SqlParameter { ParameterName = "@numero", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero };
+                Parametros[20] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Complemento };
+                Parametros[21] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.Int, SqlValue = Reg.Cep };
+                Parametros[22] = new SqlParameter { ParameterName = "@bairro", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Bairro };
+                Parametros[23] = new SqlParameter { ParameterName = "@cidade", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cidade };
+                Parametros[24] = new SqlParameter { ParameterName = "@uf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Uf };
+                Parametros[25] = new SqlParameter { ParameterName = "@fiscal", SqlDbType = SqlDbType.Int, SqlValue = Reg.Fiscal };
+                Parametros[26] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
 
                 db.Database.ExecuteSqlCommand("INSERT INTO notificacao_iss_web(guid,ano_notificacao,numero_notificacao,codigo_cidadao,codigo_imovel,data_gravacao,processo,isspago,habitese,area,uso,categoria,valorm2,valortotal, " +
-                                              "versao,data_vencimento,numero_guia,nosso_numero,linha_digitavel,codigo_barra,cpf_cnpj,nome,logradouro,numero,complemento,cep,bairro,cidade,uf,fiscal) " +
+                                              "versao,data_vencimento,numero_guia,cpf_cnpj,nome,logradouro,numero,complemento,cep,bairro,cidade,uf,fiscal) " +
                                               "VALUES(@guid,@ano_notificacao,@numero_notificacao,@codigo_cidadao,@codigo_imovel,@data_gravacao,@processo,@isspago,@habitese,@area,@uso,@categoria,@valorm2,@valortotal," +
-                                              "@versao,@data_vencimento,@numero_guia,@nosso_numero,@linha_digitavel,@codigo_barra,@cpf_cnpj,@nome,@logradouro,@numero,@complemento,@cep,@bairro,@cidade,@uf,@fiscal)", Parametros);
+                                              "@versao,@data_vencimento,@numero_guia,@cpf_cnpj,@nome,@logradouro,@numero,@complemento,@cep,@bairro,@cidade,@uf,@fiscal)", Parametros);
 
                 try {
                     db.SaveChanges();
@@ -2600,6 +2597,7 @@ Proximo:;
                 List<Notificacao_iss_web> Lista = new List<Notificacao_iss_web>();
                 foreach (Notificacao_iss_web item in Sql) {
                     Notificacao_iss_web reg = new Notificacao_iss_web() {
+                        Guid=item.Guid,
                         Ano_notificacao=item.Ano_notificacao,
                         Numero_notificacao=item.Numero_notificacao,
                         Data_gravacao=item.Data_gravacao,
@@ -2614,6 +2612,57 @@ Proximo:;
                 return Lista;
             }
         }
+
+        public Notificacao_iss_web_Struct Retorna_Notificacao_Iss_Web(string Guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var sql = (from n in db.Notificacao_Iss_Web
+                          join c in db.Categconstr on n.Categoria equals c.Codcategconstr into nc from c in nc.DefaultIfEmpty()
+                          join u in db.Usoconstr on n.Uso equals u.Codusoconstr into nu from u in nu.DefaultIfEmpty()
+                          where n.Guid == Guid
+                          select new Notificacao_iss_web_Struct {
+                              Guid=n.Guid,Ano_notificacao=n.Ano_notificacao,Numero_notificacao=n.Numero_notificacao,Codigo_cidadao=n.Codigo_cidadao,Codigo_imovel=n.Codigo_imovel,Data_gravacao=n.Data_gravacao,
+                              Processo=n.Processo,Isspago=n.Isspago,Habitese=n.Habitese,Area=n.Area,Uso=n.Uso,Categoria=n.Categoria,Valorm2=n.Valorm2,Valortotal=n.Valortotal,Versao=n.Versao,Data_vencimento=n.Data_vencimento,
+                              Numero_guia=n.Numero_guia,Cpf_cnpj=n.Cpf_cnpj,Nome=n.Nome,Logradouro=n.Logradouro,Numero=n.Numero,Complemento=n.Complemento,Cep=n.Cep,Bairro=n.Bairro,Cidade=n.Cidade,
+                              Uf=n.Uf,Fiscal=n.Fiscal,Categoria_Nome=c.Desccategconstr,Uso_Nome=u.Descusoconstr
+                          }).FirstOrDefault();
+                Notificacao_iss_web_Struct reg = new Notificacao_iss_web_Struct();
+                if (sql != null) {
+                    reg.Ano_notificacao = sql.Ano_notificacao;
+                    reg.Area = sql.Area;
+                    reg.Bairro = sql.Bairro;
+                    reg.Categoria = sql.Categoria;
+                    reg.Categoria_Nome = sql.Categoria_Nome;
+                    reg.Cep = sql.Cep;
+                    reg.Cidade = sql.Cidade;
+                    reg.Codigo_cidadao = sql.Codigo_cidadao;
+                    reg.Codigo_imovel = sql.Codigo_imovel;
+                    reg.Complemento = sql.Complemento;
+                    reg.Cpf_cnpj = sql.Cpf_cnpj;
+                    reg.Data_gravacao = sql.Data_gravacao;
+                    reg.Data_vencimento = sql.Data_vencimento;
+                    reg.Fiscal = sql.Fiscal;
+                    reg.Guid = sql.Guid;
+                    reg.Habitese = sql.Habitese;
+                    reg.Isspago = sql.Isspago;
+                    reg.Logradouro = sql.Logradouro;
+                    reg.Nome = sql.Nome;
+                    reg.Numero = sql.Numero;
+                    reg.Numero_guia = sql.Numero_guia;
+                    reg.Numero_notificacao = sql.Numero_notificacao;
+                    reg.Processo = sql.Processo;
+                    reg.Uf = sql.Uf;
+                    reg.Uso = sql.Uso;
+                    reg.Uso_Nome = sql.Uso_Nome;
+                    reg.Valorm2 = sql.Valorm2;
+                    reg.Valortotal = sql.Valortotal;
+                    reg.Versao = sql.Versao;
+                }
+
+                return reg;
+            }
+        }
+
+
 
 
     }//end class

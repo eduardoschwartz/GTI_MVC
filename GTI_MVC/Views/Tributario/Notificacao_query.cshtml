@@ -49,12 +49,13 @@
             <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
                 @foreach (var item in Model) {
                 <tr style="height:14px;">
-                    <td style="display:none">@Html.DisplayFor(modelItem => item.Numero_Notificacao)</td>
+                    <td style="display:none">@Html.DisplayFor(modelItem => item.Guid)</td>
+                    <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
                     <td style="width:270px;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome)</td>
                     <td style="width:270px;font-weight:normal">@Html.DisplayFor(modelItem => item.Data_Emissao)</td>
                     <td style="width:170px;font-weight:normal">@Html.DisplayFor(modelItem => item.SituacaoNome)</td>
                     <td style="width:130px">
-                        <a href="@Url.Action("Itbi_print","Imovel", new { p = item.Guid })" title="Imprimir a Notificação"> <img src="@Url.Content("~/images/print.png")"></a>
+                        <a href="@Url.Action("Notificacao_print","Tributario", new { p = item.Guid })" title="Imprimir a Notificação"> <img src="@Url.Content("~/images/print.png")"></a>
                     </td>
                 </tr>
                 }

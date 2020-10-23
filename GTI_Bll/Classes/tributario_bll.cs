@@ -1484,6 +1484,10 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Notificacao_Iss_Web(Ano);
         }
 
+        public Notificacao_iss_web_Struct Retorna_Notificacao_Iss_Web(string Guid) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Retorna_Notificacao_Iss_Web(Guid);
+        }
 
     }//end class
 }
