@@ -31,6 +31,7 @@ namespace GTI_Models.Models {
         public string Cidade { get; set; }
         public string Uf { get; set; }
         public int Fiscal { get; set; }
+        public int Situacao { get; set; }
     }
 
     public class Notificacao_iss_web_Struct {
@@ -63,6 +64,8 @@ namespace GTI_Models.Models {
         public int Fiscal { get; set; }
         public string Categoria_Nome { get; set; }
         public string Uso_Nome { get; set; }
+        public int Situacao { get; set; }
+        public string Situacao_nome { get; set; }
     }
 
 }

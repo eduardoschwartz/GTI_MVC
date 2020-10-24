@@ -2512,7 +2512,7 @@ Proximo:;
 
         public Exception Insert_notificacao_iss_web(Notificacao_iss_web Reg) {
             using (var db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[27];
+                object[] Parametros = new object[28];
                 Parametros[0] = new SqlParameter { ParameterName = "@ano_notificacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano_notificacao };
                 Parametros[1] = new SqlParameter { ParameterName = "@numero_notificacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_notificacao };
                 Parametros[2] = new SqlParameter { ParameterName = "@codigo_cidadao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo_cidadao };
@@ -2540,12 +2540,12 @@ Proximo:;
                 Parametros[24] = new SqlParameter { ParameterName = "@uf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Uf };
                 Parametros[25] = new SqlParameter { ParameterName = "@fiscal", SqlDbType = SqlDbType.Int, SqlValue = Reg.Fiscal };
                 Parametros[26] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                Parametros[27] = new SqlParameter { ParameterName = "@situacao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Situacao };
 
                 db.Database.ExecuteSqlCommand("INSERT INTO notificacao_iss_web(guid,ano_notificacao,numero_notificacao,codigo_cidadao,codigo_imovel,data_gravacao,processo,isspago,habitese,area,uso,categoria,valorm2,valortotal, " +
-                                              "versao,data_vencimento,numero_guia,cpf_cnpj,nome,logradouro,numero,complemento,cep,bairro,cidade,uf,fiscal) " +
+                                              "versao,data_vencimento,numero_guia,cpf_cnpj,nome,logradouro,numero,complemento,cep,bairro,cidade,uf,fiscal,situacao) " +
                                               "VALUES(@guid,@ano_notificacao,@numero_notificacao,@codigo_cidadao,@codigo_imovel,@data_gravacao,@processo,@isspago,@habitese,@area,@uso,@categoria,@valorm2,@valortotal," +
-                                              "@versao,@data_vencimento,@numero_guia,@cpf_cnpj,@nome,@logradouro,@numero,@complemento,@cep,@bairro,@cidade,@uf,@fiscal)", Parametros);
-
+                                              "@versao,@data_vencimento,@numero_guia,@cpf_cnpj,@nome,@logradouro,@numero,@complemento,@cep,@bairro,@cidade,@uf,@fiscal,@situacao)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -2591,23 +2591,26 @@ Proximo:;
             }
         }
 
-        public List<Notificacao_iss_web> Retorna_Notificacao_Iss_Web(int Ano) {
+        public List<Notificacao_iss_web_Struct> Retorna_Notificacao_Iss_Web(int Ano) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-               var Sql = (from l in db.Notificacao_Iss_Web where l.Ano_notificacao == Ano select l).ToList();
-                List<Notificacao_iss_web> Lista = new List<Notificacao_iss_web>();
-                foreach (Notificacao_iss_web item in Sql) {
-                    Notificacao_iss_web reg = new Notificacao_iss_web() {
+               var Sql = (from l in db.Notificacao_Iss_Web 
+                          join c in db.Itbi_Status on l.Situacao equals c.Codigo into lc from c in lc.DefaultIfEmpty()
+                          where l.Ano_notificacao == Ano select new Notificacao_iss_web_Struct {Guid=l.Guid,Ano_notificacao=l.Ano_notificacao,Numero_notificacao=l.Numero_notificacao,
+                          Data_gravacao=l.Data_gravacao,Data_vencimento=l.Data_vencimento,Nome=l.Nome,Situacao_nome=c.Descricao}).ToList();
+                List<Notificacao_iss_web_Struct> Lista = new List<Notificacao_iss_web_Struct>();
+                foreach (Notificacao_iss_web_Struct item in Sql) {
+                    Notificacao_iss_web_Struct reg = new Notificacao_iss_web_Struct() {
                         Guid=item.Guid,
                         Ano_notificacao=item.Ano_notificacao,
                         Numero_notificacao=item.Numero_notificacao,
                         Data_gravacao=item.Data_gravacao,
                         Data_vencimento=item.Data_vencimento,
-                        Nome=item.Nome
+                        Nome=item.Nome,
+                        Situacao_nome=item.Situacao_nome
                     };
                     Lista.Add(reg);
 
                 }
-
 
                 return Lista;
             }
@@ -2662,7 +2665,16 @@ Proximo:;
             }
         }
 
-
+        public bool Existe_NotificacaoISS_Numero(int Ano, int Numero) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from p in db.Notificacao_Iss_Web
+                           where p.Ano_notificacao == Ano && p.Numero_notificacao == Numero select p.Nome).FirstOrDefault();
+                if (string.IsNullOrEmpty(reg))
+                    return false;
+                else
+                    return true;
+            }
+        }
 
 
     }//end class

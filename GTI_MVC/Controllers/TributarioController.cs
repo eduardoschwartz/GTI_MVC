@@ -2003,6 +2003,12 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 }
 
+                bool _existeNumero = tributarioRepository.Existe_NotificacaoISS_Numero(model.Ano_Notificacao, model.Numero_Notificacao);
+                if (_existeNumero) {
+                    ViewBag.Result = "Nº de notificação já cadastrado.";
+                    return View(model);
+                }
+
                 //double _days = (_dataVencto - _dataAtual).TotalDays;
                 //if (_days > 30) {
                 //    ViewBag.Result = "Data de vencimento superior a 30 dias.";
@@ -2024,9 +2030,9 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 }
                 CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(model.Codigo_Cidadao);
-                string _bairro = "",_endereco="",_compl="",_cidade="",_uf="",_nome="";
+                string _bairro = "",_endereco="",_compl="",_cidade="JABOTICABAL",_uf="SP",_nome="";
                 string _cpf_cnpj = string.IsNullOrWhiteSpace(_cidadao.Cnpj) ? _cidadao.Cpf : _cidadao.Cnpj;
-                int _numero = 0, _cep = 0, _codigo = model.Codigo_Cidadao,_fiscal= Convert.ToInt32(Session["hashid"]);
+                int _numero = 0, _cep = 14870000, _codigo = model.Codigo_Cidadao,_fiscal= Convert.ToInt32(Session["hashid"]);
                 short _ano=(short)model.Ano_Notificacao;
                 bool _r = _cidadao.EtiquetaC != "S";
                 _nome = _cidadao.Nome;
@@ -2037,6 +2043,16 @@ namespace GTI_Mvc.Controllers {
                 _cidade = _r ? _cidadao.NomeCidadeR : _cidadao.NomeCidadeC;
                 _uf = _r ? _cidadao.UfR : _cidadao.UfC;
                 _cep = _r ? (int)_cidadao.CepR : (int)_cidadao.CepC;
+
+                if(string.IsNullOrEmpty(_endereco) || string.IsNullOrEmpty(_bairro)) {
+                    ViewBag.Result = "O Contribuinte possui endereço incompleto.";
+                    return View(model);
+                }
+
+                if (string.IsNullOrEmpty(_cpf_cnpj)) {
+                    ViewBag.Result = "O Cpf/Cnpj do Contribuinte é inválido.";
+                    return View(model);
+                }
 
                 //***************************************************************************
                 //Grava os dados do boleto e gera o lançamento
@@ -2172,7 +2188,8 @@ namespace GTI_Mvc.Controllers {
                     Uso=model.Uso_Construcao,
                     Valorm2=model.Valor_m2,
                     Valortotal=model.Valor_Total,
-                    Versao=1
+                    Versao=1,
+                    Situacao=2
                 };
                
                 _not.Guid = Guid.NewGuid().ToString("N");
@@ -2206,17 +2223,17 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult Notificacao_query() {
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
-            List<Notificacao_iss_web> Lista = tributarioRepository.Retorna_Notificacao_Iss_Web(DateTime.Now.Year);
+            List<Notificacao_iss_web_Struct> Lista = tributarioRepository.Retorna_Notificacao_Iss_Web(DateTime.Now.Year);
             List<NotificacaoIssViewModel> model = new List<NotificacaoIssViewModel>();
 
-            foreach (Notificacao_iss_web item in Lista) {
+            foreach (Notificacao_iss_web_Struct item in Lista) {
                 NotificacaoIssViewModel reg = new NotificacaoIssViewModel() {
                     Guid=item.Guid,
                     Ano_Notificacao = item.Ano_notificacao,
                     Numero_Notificacao = item.Numero_notificacao,
                     Nome = item.Nome,
                     Data_Emissao = item.Data_gravacao,
-                    SituacaoNome="Não pago",
+                    SituacaoNome=item.Situacao_nome,
                     AnoNumero=item.Numero_notificacao.ToString("0000") + "/" + item.Ano_notificacao.ToString()
                 };
                 model.Add(reg);
@@ -2288,6 +2305,7 @@ namespace GTI_Mvc.Controllers {
                 C691 = _tabela.C691,
                 Cargo = _ass.Cargo,
                 Categoria = _not.Categoria,
+                Categoria_nome=_not.Categoria_Nome,
                 Cep = _not.Cep,
                 Cidade = _not.Cidade,
                 Codigo_barra = _codigo_barra,
@@ -2312,6 +2330,7 @@ namespace GTI_Mvc.Controllers {
                 Processo = _not.Processo,
                 Uf = _not.Uf,
                 Uso = _not.Uso,
+                Uso_nome=_not.Uso_Nome,
                 Valorm2 = _not.Valorm2,
                 Valortotal = _not.Valortotal
             };

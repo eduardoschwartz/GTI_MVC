@@ -14,7 +14,9 @@ namespace GTI_Models.ReportModels {
         public bool Habitese { get; set; }
         public decimal Area { get; set; }
         public int Uso { get; set; }
+        public string Uso_nome { get; set; }
         public int Categoria { get; set; }
+        public string Categoria_nome { get; set; }
         public decimal Valorm2 { get; set; }
         public decimal Valortotal { get; set; }
         public int Versao { get; set; }

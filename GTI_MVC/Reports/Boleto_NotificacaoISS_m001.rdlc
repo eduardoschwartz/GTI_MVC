@@ -213,6 +213,14 @@
           <DataField>FiscalNome</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="Categoria_nome">
+          <DataField>Categoria_nome</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Uso_nome">
+          <DataField>Uso_nome</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>dsNotificacaoISS</rd:DataSetName>
@@ -1854,7 +1862,7 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>dsNotificacaoISS</DataSetName>
-            <Top>19.29139cm</Top>
+            <Top>19.06914cm</Top>
             <Left>0.38947cm</Left>
             <Height>9.69885cm</Height>
             <Width>3.45521cm</Width>
@@ -4729,7 +4737,7 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>dsNotificacaoISS</DataSetName>
-            <Top>19.32314cm</Top>
+            <Top>19.10089cm</Top>
             <Left>3.89587cm</Left>
             <Height>9.69885cm</Height>
             <Width>16.85996cm</Width>
@@ -5433,7 +5441,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Tipo do imóvel</Value>
+                                  <Value>Tipo de imóvel</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                   </Style>
@@ -5474,7 +5482,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Uso.Value</Value>
+                                  <Value>=Fields!Uso_nome.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                   </Style>
@@ -7559,7 +7567,7 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>11.44137in</Height>
+        <Height>11.35804in</Height>
         <Style />
       </Body>
       <Width>8.25006in</Width>

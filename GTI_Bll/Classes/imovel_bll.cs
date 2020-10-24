@@ -44,7 +44,7 @@ namespace GTI_Bll.Classes {
         }
 
         /// <summary>
-        /// Verifica e o imóvelk existe
+        /// Verifica e o imóvel existe
         /// </summary>
         /// <param name="distrito"></param>
         /// <param name="setor"></param>

@@ -2,14 +2,14 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Consulta de ITBI's";
+    ViewData["Title"] = "Consulta notificação";
 }
 
 <style>
 
     .center {
         margin: auto;
-        width: 780px;
+        width: 700px;
         border: 1px solid rgba(0,0,0,0.24);
         padding: 20px;
         box-shadow: 0 .1em 0.5em #000;
@@ -29,7 +29,7 @@
 
     @using (Html.BeginForm("Notificacao_query", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
         <br />
-        <label style="color: brown;font-size: 16px;font-style: italic">Consulta as notificações gravadas</label>
+        <label style="color: brown;font-size: 16px;font-style: italic">Consulta as notificações emitidas</label>
 
 
         <br />
@@ -38,11 +38,11 @@
             <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal; white-space: nowrap;">
                 <tr style="height:14px;">
                     <td style="display:none">Guid</td>
-                    <td style="width:100px;font-weight:normal">Not. nº</td>
-                    <td style="width:270px;font-weight:normal">Nome do Contribuinte</td>
-                    <td style="width:270px;font-weight:normal">Data Emissão</td>
+                    <td style="width:100px;font-weight:normal">Nº Notif.</td>
+                    <td style="width:330px;font-weight:normal">Nome do Contribuinte</td>
+                    <td style="width:210px;font-weight:normal">Data Emissão</td>
                     <td style="width:170px;font-weight:normal">Situação</td>
-                    <td style="width:160px">
+                    <td style="width:100px">
                     </td>
                 </tr>
             </thead>
@@ -51,10 +51,10 @@
                 <tr style="height:14px;">
                     <td style="display:none">@Html.DisplayFor(modelItem => item.Guid)</td>
                     <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
-                    <td style="width:270px;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome)</td>
-                    <td style="width:270px;font-weight:normal">@Html.DisplayFor(modelItem => item.Data_Emissao)</td>
+                    <td style="width:330px;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome)</td>
+                    <td style="width:210px;font-weight:normal">@Html.DisplayFor(modelItem => item.Data_Emissao)</td>
                     <td style="width:170px;font-weight:normal">@Html.DisplayFor(modelItem => item.SituacaoNome)</td>
-                    <td style="width:130px">
+                    <td style="width:100px">
                         <a href="@Url.Action("Notificacao_print","Tributario", new { p = item.Guid })" title="Imprimir a Notificação"> <img src="@Url.Content("~/images/print.png")"></a>
                     </td>
                 </tr>

@@ -377,6 +377,10 @@ namespace GTI_MVC.Datasets {
             
             private global::System.Data.DataColumn columnFiscalNome;
             
+            private global::System.Data.DataColumn columnCategoria_nome;
+            
+            private global::System.Data.DataColumn columnUso_nome;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public dsNotificacaoISSDataTable() {
@@ -804,6 +808,22 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Categoria_nomeColumn {
+                get {
+                    return this.columnCategoria_nome;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Uso_nomeColumn {
+                get {
+                    return this.columnUso_nome;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -888,7 +908,9 @@ namespace GTI_MVC.Datasets {
                         decimal c689, 
                         decimal c690, 
                         decimal c691, 
-                        string FiscalNome) {
+                        string FiscalNome, 
+                        string Categoria_nome, 
+                        string Uso_nome) {
                 dsNotificacaoISSRow rowdsNotificacaoISSRow = ((dsNotificacaoISSRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Guid,
@@ -939,7 +961,9 @@ namespace GTI_MVC.Datasets {
                         c689,
                         c690,
                         c691,
-                        FiscalNome};
+                        FiscalNome,
+                        Categoria_nome,
+                        Uso_nome};
                 rowdsNotificacaoISSRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowdsNotificacaoISSRow);
                 return rowdsNotificacaoISSRow;
@@ -1011,6 +1035,8 @@ namespace GTI_MVC.Datasets {
                 this.columnc690 = base.Columns["c690"];
                 this.columnc691 = base.Columns["c691"];
                 this.columnFiscalNome = base.Columns["FiscalNome"];
+                this.columnCategoria_nome = base.Columns["Categoria_nome"];
+                this.columnUso_nome = base.Columns["Uso_nome"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1114,6 +1140,10 @@ namespace GTI_MVC.Datasets {
                 base.Columns.Add(this.columnc691);
                 this.columnFiscalNome = new global::System.Data.DataColumn("FiscalNome", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnFiscalNome);
+                this.columnCategoria_nome = new global::System.Data.DataColumn("Categoria_nome", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCategoria_nome);
+                this.columnUso_nome = new global::System.Data.DataColumn("Uso_nome", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnUso_nome);
                 this.ExtendedProperties.Add("Generator_TablePropName", "_dsNotificacaoISS");
                 this.ExtendedProperties.Add("Generator_UserTableName", "dsNotificacaoISS");
             }
@@ -2042,6 +2072,38 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Categoria_nome {
+                get {
+                    try {
+                        return ((string)(this[this.tabledsNotificacaoISS.Categoria_nomeColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Categoria_nome\' in table \'dsNotificacaoISS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledsNotificacaoISS.Categoria_nomeColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Uso_nome {
+                get {
+                    try {
+                        return ((string)(this[this.tabledsNotificacaoISS.Uso_nomeColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Uso_nome\' in table \'dsNotificacaoISS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledsNotificacaoISS.Uso_nomeColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsGuidNull() {
                 return this.IsNull(this.tabledsNotificacaoISS.GuidColumn);
             }
@@ -2626,6 +2688,30 @@ namespace GTI_MVC.Datasets {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetFiscalNomeNull() {
                 this[this.tabledsNotificacaoISS.FiscalNomeColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsCategoria_nomeNull() {
+                return this.IsNull(this.tabledsNotificacaoISS.Categoria_nomeColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetCategoria_nomeNull() {
+                this[this.tabledsNotificacaoISS.Categoria_nomeColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsUso_nomeNull() {
+                return this.IsNull(this.tabledsNotificacaoISS.Uso_nomeColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetUso_nomeNull() {
+                this[this.tabledsNotificacaoISS.Uso_nomeColumn] = global::System.Convert.DBNull;
             }
         }
         

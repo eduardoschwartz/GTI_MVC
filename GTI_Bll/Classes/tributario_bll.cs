@@ -1479,7 +1479,7 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Notificacao_Iss_Web(Ano, Numero);
         }
 
-        public List<Notificacao_iss_web> Retorna_Notificacao_Iss_Web(int Ano) {
+        public List<Notificacao_iss_web_Struct> Retorna_Notificacao_Iss_Web(int Ano) {
             Tributario_Data obj = new Tributario_Data(_connection);
             return obj.Retorna_Notificacao_Iss_Web(Ano);
         }
@@ -1487,6 +1487,11 @@ namespace GTI_Bll.Classes {
         public Notificacao_iss_web_Struct Retorna_Notificacao_Iss_Web(string Guid) {
             Tributario_Data obj = new Tributario_Data(_connection);
             return obj.Retorna_Notificacao_Iss_Web(Guid);
+        }
+
+        public bool Existe_NotificacaoISS_Numero(int Ano, int Numero) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Existe_NotificacaoISS_Numero(Ano,Numero);
         }
 
     }//end class

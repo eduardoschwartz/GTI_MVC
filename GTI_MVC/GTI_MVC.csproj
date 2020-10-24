@@ -412,12 +412,6 @@
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Reports\Notificacao_m001.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Notificacao_m001.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Reports\Resumo_Pagto_Itbi.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -832,10 +826,6 @@
     <EmbeddedResource Include="Reports\Itbi_Rural.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Itbi_Rural.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Notificacao_m001.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>Notificacao_m001.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Resumo_Pagto_Itbi.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
