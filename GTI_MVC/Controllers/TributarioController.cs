@@ -2242,8 +2242,6 @@ namespace GTI_Mvc.Controllers {
             return View(model);
         }
 
-       
-
         public ActionResult Notificacao_print(string p) {
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             Notificacao_iss_web_Struct _not = tributarioRepository.Retorna_Notificacao_Iss_Web(p);
@@ -2371,6 +2369,27 @@ namespace GTI_Mvc.Controllers {
             Response.Flush();
             Response.End();
             return null;
+        }
+
+        [Route("Rod_menu")]
+        [HttpGet]
+        public ViewResult Rod_menu() {
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            List<Rodo_empresa> Lista = tributarioRepository.Lista_Rodo_empresa();
+            ViewBag.Lista_Empresa = new SelectList(Lista, "Codigo", "Nome");
+
+            RodoviariaViewModel model = new RodoviariaViewModel();
+            return View(model);
+        }
+
+        [Route("Rod_menu")]
+        [HttpPost]
+        public ViewResult Rod_menu(Rodo_empresa model) {
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            List<Rodo_empresa> Lista = tributarioRepository.Lista_Rodo_empresa();
+            ViewBag.Lista_Empresa = new SelectList(Lista, "Codigo", "Nome");
+
+            return View(model);
         }
 
 

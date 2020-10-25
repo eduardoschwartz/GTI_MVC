@@ -187,6 +187,7 @@
     <Compile Include="Models\proprietario.cs" />
     <Compile Include="Models\certidao_inscricao_extrato.cs" />
     <Compile Include="Models\redesim_viabilidade.cs" />
+    <Compile Include="Models\rodo_empresa.cs" />
     <Compile Include="Models\security_event.cs" />
     <Compile Include="Models\segunda_via_web.cs" />
     <Compile Include="Models\serasa.cs" />

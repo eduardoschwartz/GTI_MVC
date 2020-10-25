@@ -1494,6 +1494,11 @@ namespace GTI_Bll.Classes {
             return obj.Existe_NotificacaoISS_Numero(Ano,Numero);
         }
 
+        public List<Rodo_empresa> Lista_Rodo_empresa() {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Lista_Rodo_empresa();
+        }
+
     }//end class
 }
 

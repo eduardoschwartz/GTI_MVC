@@ -31,6 +31,10 @@
             @Html.ActionLink("Notificação de ISS Contrução Civil", "Notificacao_menu", "Tributario", null, new { @class = "actionlink" })<br />
         }
     }
+    @if (Session["hashfiscal"].ToString() == "S") {
+        @Html.ActionLink("Uso de Plataforma (terminal Rodoviário)", "Rod_menu", "Tributario", null, new { @class = "actionlink" })<br />
+    }
+
     @*@if (Session["hashid"].ToString() == "433") {
             @Html.ActionLink("Cadastro de imóvel", "CadImovel", "Imovel",null, new { Codigo = 1 ,  @class = "actionlink" })<br />
         }*@

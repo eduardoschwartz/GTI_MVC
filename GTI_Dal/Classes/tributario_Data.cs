@@ -2676,6 +2676,19 @@ Proximo:;
             }
         }
 
-
+        public List<Rodo_empresa> Lista_Rodo_empresa() {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Rodo_Empresa orderby t.Nome select new {Codigo= t.Codigo,Nome=t.Nome }).ToList();
+                List<Rodo_empresa> Lista = new List<Rodo_empresa>();
+                foreach (var item in Sql) {
+                    Rodo_empresa reg = new Rodo_empresa() {
+                        Codigo=item.Codigo,
+                        Nome=item.Nome
+                    };
+                    Lista.Add(reg);
+                }
+                return Lista;
+            }
+        }
     }//end class
 }
