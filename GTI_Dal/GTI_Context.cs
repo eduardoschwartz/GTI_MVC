@@ -169,5 +169,6 @@ namespace GTI_Dal {
         public DbSet<Notificacao_iss_web> Notificacao_Iss_Web { get; set; }
         public DbSet<Notificacao_Iss_Tabela> Notificacao_Iss_Tabela { get; set; }
         public DbSet<Rodo_empresa> Rodo_Empresa { get; set; }
+        public DbSet<Rodo_uso_plataforma> Rodo_Uso_Palataforma { get; set; }
     }
 }

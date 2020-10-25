@@ -689,6 +689,7 @@
     <Content Include="Views\Tributario\Notificacao_menu.cshtml" />
     <Content Include="Views\Tributario\Notificacao_query.cshtml" />
     <Content Include="Views\Tributario\Rod_menu.cshtml" />
+    <Content Include="Views\Tributario\Rod_plat_query.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -2690,5 +2690,32 @@ Proximo:;
                 return Lista;
             }
         }
+
+        public List<Rodo_uso_plataforma> Lista_Rodo_uso_plataforma(int Codigo,int Ano) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Rodo_Uso_Palataforma where t.Codigo==Codigo && t.Datade.Year==Ano
+                           orderby new { t.Datade,t.Seq } select t).ToList();
+                List<Rodo_uso_plataforma> Lista = new List<Rodo_uso_plataforma>(); 
+                foreach (var item in Sql) {
+                    Rodo_uso_plataforma reg = new Rodo_uso_plataforma() {
+                        Codigo = item.Codigo,
+                        Datade=item.Datade,
+                        Dataate=item.Dataate,
+                        Seq=item.Seq,
+                        Qtde1=item.Qtde1,
+                        Qtde2=item.Qtde2,
+                        Qtde3=item.Qtde3,
+                        Numero_Guia=item.Numero_Guia,
+                        Valor_Guia=item.Valor_Guia,
+                        Situacao=item.Situacao
+                    };
+                    Lista.Add(reg);
+                }
+                return Lista;
+            }
+        }
+
+
+
     }//end class
 }

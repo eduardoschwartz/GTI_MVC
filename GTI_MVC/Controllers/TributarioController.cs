@@ -2384,15 +2384,31 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Rod_menu")]
         [HttpPost]
-        public ViewResult Rod_menu(RodoviariaViewModel model) {
+        public ActionResult Rod_menu(RodoviariaViewModel model) {
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
             List<Rodo_empresa> Lista = tributarioRepository.Lista_Rodo_empresa();
             ViewBag.Lista_Empresa = new SelectList(Lista, "Codigo", "Nome");
             
 
+            return RedirectToAction("Rod_plat_query",new { a=model.Codigo,b=model.Nome});
+        }
+
+        [Route("Rod_plat_query")]
+        [HttpGet]
+        public ViewResult Rod_plat_query(string a,string b) {
+            int _codigo = Convert.ToInt32(a);
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            List<Rodo_uso_plataforma> Lista = tributarioRepository.Lista_Rodo_uso_plataforma(_codigo,DateTime.Now.Year);
+
+            RodoviariaViewModel model = new RodoviariaViewModel {
+                Codigo = _codigo,
+                Nome=b,
+                Lista_uso_plataforma=Lista
+            };
             return View(model);
         }
+
 
 
     }
