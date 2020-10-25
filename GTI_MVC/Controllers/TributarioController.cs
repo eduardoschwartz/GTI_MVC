@@ -2076,7 +2076,7 @@ namespace GTI_Mvc.Controllers {
                     Datadebase = DateTime.Now,
                     Userid = _fiscal
                 };
-        //        Exception ex2 = tributarioRepository.Insert_Debito_Parcela(regParcela);
+                Exception ex2 = tributarioRepository.Insert_Debito_Parcela(regParcela);
 
                 //grava tributo
                 Debitotributo regTributo = new Debitotributo {
@@ -2089,7 +2089,7 @@ namespace GTI_Mvc.Controllers {
                     Codtributo = (short)model.Categoria_Construcao,
                     Valortributo = model.Valor_Total
                 };
-         //       ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
+                ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
 
                 //grava o documento
                 Numdocumento regDoc = new Numdocumento();
@@ -2100,8 +2100,8 @@ namespace GTI_Mvc.Controllers {
                 regDoc.Registrado = true;
                 regDoc.Percisencao = 0;
                 regDoc.Percisencao = 0;
-                //       int _novo_documento = tributarioRepository.Insert_Documento(regDoc);
-                int _novo_documento = 17888999;
+                int _novo_documento = tributarioRepository.Insert_Documento(regDoc);
+                //int _novo_documento = 17888999;
 
                 //grava o documento na parcela
                 Parceladocumento regParc = new Parceladocumento();
@@ -2116,7 +2116,7 @@ namespace GTI_Mvc.Controllers {
                 regParc.Valormulta = 0;
                 regParc.Valorcorrecao = 0;
                 regParc.Plano = 0;
-            //    tributarioRepository.Insert_Parcela_Documento(regParc);
+                tributarioRepository.Insert_Parcela_Documento(regParc);
 
                 string sHist = "Iss construção civil lançado no código " + _codigo + " processo nº " + model.Numero_Processo + " notificação nº " + model.Numero_Notificacao.ToString("0000") + "/" + model.Ano_Notificacao.ToString() + " Área notificada: " + model.Area_Notificada.ToString("#0.00") + " m²";
                 //Incluir a observação da parcela
@@ -2131,7 +2131,7 @@ namespace GTI_Mvc.Controllers {
                     Userid = _fiscal,
                     Data = DateTime.Now
                 };
-            //    ex2 = tributarioRepository.Insert_Observacao_Parcela(ObsReg);
+                ex2 = tributarioRepository.Insert_Observacao_Parcela(ObsReg);
 
                 //Gravar histórico no imóvel
                 //Incluir a observação da parcela
@@ -2142,7 +2142,7 @@ namespace GTI_Mvc.Controllers {
                     Deschist=sHist,
                     Userid = _fiscal,
                 };
-            //    ex2 = imovelRepository.Incluir_Historico(ObsImovel);
+                ex2 = imovelRepository.Incluir_Historico(ObsImovel);
 
                 //Enviar para registrar 
                 Ficha_compensacao_documento ficha = new Ficha_compensacao_documento();
@@ -2156,8 +2156,8 @@ namespace GTI_Mvc.Controllers {
                 ficha.Data_vencimento = _dataVencto;
                 ficha.Valor_documento = Convert.ToDecimal(model.Valor_Total);
                 ficha.Uf = _uf;
-                //    ex2 = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
-                //   ex2 = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
+                ex2 = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
+                ex2 = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
 
                 //**************************************************************************
                
@@ -2196,19 +2196,19 @@ namespace GTI_Mvc.Controllers {
                 model.Guid = _not.Guid;
                 _not.Numero_guia = _novo_documento;
 
-
-                Exception ex2 = tributarioRepository.Insert_notificacao_iss_web(_not);
+                ex2 = tributarioRepository.Insert_notificacao_iss_web(_not);
 
                 return RedirectToAction("Notificacao_menu");
             }
 
-            Processo_bll processoRepository = new Processo_bll("GTIconnection");
-            Exception ex = processoRepository.ValidaProcesso(model.Numero_Processo);
-            if (ex!=null && !string.IsNullOrWhiteSpace(ex.Message)) {
-                ViewBag.Result = ex.Message;
-                return View(model);
+            if (!string.IsNullOrEmpty(model.Numero_Processo)) {
+                Processo_bll processoRepository = new Processo_bll("GTIconnection");
+                Exception ex = processoRepository.ValidaProcesso(model.Numero_Processo);
+                if (ex != null && !string.IsNullOrWhiteSpace(ex.Message)) {
+                    ViewBag.Result = ex.Message;
+                    return View(model);
+                }
             }
-
 
             return View(model);
         }
@@ -2333,6 +2333,7 @@ namespace GTI_Mvc.Controllers {
                 Uso_nome=_not.Uso_Nome,
                 Valorm2 = _not.Valorm2,
                 Valortotal = _not.Valortotal
+               
             };
             if (_not.Habitese)
                 _notR.Msg = "O Setor de Fiscalização de Tributos da Prefeitura Municipal de Jaboticabal, tendo em vista o processo de pedido de HABITE-SE em referência, vem NOTIFICAR o contribuinte acima identificado do lançamento do Imposto Sobre Serviços da Construção Civil, relativo ao imóvel abaixo descrito, calculado conforme os parâmetros abaixo indicados, para no prazo de 30 dias, a contar do recebimento desta Notificação, efetuar o pagamento/parcelamento ou apresentar reclamação contra a mesma.";

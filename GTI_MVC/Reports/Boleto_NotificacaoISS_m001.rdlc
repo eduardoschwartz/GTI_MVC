@@ -65,8 +65,8 @@
           <DataField>Valorm2</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="ValorISSPago">
-          <DataField>ValorISSPago</DataField>
+        <Field Name="ISSPago">
+          <DataField>ISSPago</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
         <Field Name="Valortotal">
@@ -5740,14 +5740,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="ValorISSPago">
+                        <Textbox Name="ISSPago">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ValorISSPago.Value</Value>
+                                  <Value>=Fields!ISSPago.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <Format>'R$'0.00;'R$'0.00-</Format>
@@ -5759,7 +5759,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>ValorISSPago</rd:DefaultName>
+                          <rd:DefaultName>ISSPago</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -5777,6 +5777,7 @@
                             <rd:FormatSymbolCulture>pt-BR</rd:FormatSymbolCulture>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>

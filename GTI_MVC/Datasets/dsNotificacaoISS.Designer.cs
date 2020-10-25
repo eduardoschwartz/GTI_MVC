@@ -303,7 +303,7 @@ namespace GTI_MVC.Datasets {
             
             private global::System.Data.DataColumn columnValorm2;
             
-            private global::System.Data.DataColumn columnValorISSPago;
+            private global::System.Data.DataColumn columnISSPago;
             
             private global::System.Data.DataColumn columnValortotal;
             
@@ -512,9 +512,9 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn ValorISSPagoColumn {
+            public global::System.Data.DataColumn ISSPagoColumn {
                 get {
-                    return this.columnValorISSPago;
+                    return this.columnISSPago;
                 }
             }
             
@@ -872,7 +872,7 @@ namespace GTI_MVC.Datasets {
                         string Uso, 
                         string Categoria, 
                         decimal Valorm2, 
-                        decimal ValorISSPago, 
+                        decimal ISSPago, 
                         decimal Valortotal, 
                         string Data_vencimento, 
                         int Numero_guia, 
@@ -925,7 +925,7 @@ namespace GTI_MVC.Datasets {
                         Uso,
                         Categoria,
                         Valorm2,
-                        ValorISSPago,
+                        ISSPago,
                         Valortotal,
                         Data_vencimento,
                         Numero_guia,
@@ -998,7 +998,7 @@ namespace GTI_MVC.Datasets {
                 this.columnUso = base.Columns["Uso"];
                 this.columnCategoria = base.Columns["Categoria"];
                 this.columnValorm2 = base.Columns["Valorm2"];
-                this.columnValorISSPago = base.Columns["ValorISSPago"];
+                this.columnISSPago = base.Columns["ISSPago"];
                 this.columnValortotal = base.Columns["Valortotal"];
                 this.columnData_vencimento = base.Columns["Data_vencimento"];
                 this.columnNumero_guia = base.Columns["Numero_guia"];
@@ -1066,8 +1066,8 @@ namespace GTI_MVC.Datasets {
                 base.Columns.Add(this.columnCategoria);
                 this.columnValorm2 = new global::System.Data.DataColumn("Valorm2", typeof(decimal), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnValorm2);
-                this.columnValorISSPago = new global::System.Data.DataColumn("ValorISSPago", typeof(decimal), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnValorISSPago);
+                this.columnISSPago = new global::System.Data.DataColumn("ISSPago", typeof(decimal), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnISSPago);
                 this.columnValortotal = new global::System.Data.DataColumn("Valortotal", typeof(decimal), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnValortotal);
                 this.columnData_vencimento = new global::System.Data.DataColumn("Data_vencimento", typeof(string), null, global::System.Data.MappingType.Element);
@@ -1480,17 +1480,17 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public decimal ValorISSPago {
+            public decimal ISSPago {
                 get {
                     try {
-                        return ((decimal)(this[this.tabledsNotificacaoISS.ValorISSPagoColumn]));
+                        return ((decimal)(this[this.tabledsNotificacaoISS.ISSPagoColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'ValorISSPago\' in table \'dsNotificacaoISS\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'ISSPago\' in table \'dsNotificacaoISS\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tabledsNotificacaoISS.ValorISSPagoColumn] = value;
+                    this[this.tabledsNotificacaoISS.ISSPagoColumn] = value;
                 }
             }
             
@@ -2248,14 +2248,14 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsValorISSPagoNull() {
-                return this.IsNull(this.tabledsNotificacaoISS.ValorISSPagoColumn);
+            public bool IsISSPagoNull() {
+                return this.IsNull(this.tabledsNotificacaoISS.ISSPagoColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetValorISSPagoNull() {
-                this[this.tabledsNotificacaoISS.ValorISSPagoColumn] = global::System.Convert.DBNull;
+            public void SetISSPagoNull() {
+                this[this.tabledsNotificacaoISS.ISSPagoColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
