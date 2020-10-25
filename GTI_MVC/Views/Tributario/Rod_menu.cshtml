@@ -26,21 +26,37 @@
 <br />
 
 @using (Html.BeginForm("Rod_menu", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
-<div class="center">
-    <span style="color:brown;font-weight:bold;font-style:italic">Uso de paltaforma (Terminal Rodoviário)</span><br /><br />
-    <label style="font-weight:normal">Selecione a empresa:</label><br />
-    @Html.DropDownListFor(m => m.Codigo_Empresa, ViewBag.Lista_Empresa as SelectList, null, new { @id = "EmpresaDropDown", style = "width:450px;height:25px", rows = 10 })
-    <div class="form-group row">
-        <label style="font-weight:normal;color:red;padding-left:15px" id="errorLabel">@ViewBag.Result</label>
-    </div>
+    <div class="center">
+        <span style="color:brown;font-weight:bold;font-style:italic">Uso de paltaforma (Terminal Rodoviário)</span><br /><br />
+        <label style="font-weight:normal">Selecione a empresa:</label><br />
+        @Html.DropDownListFor(m => m.Codigo, ViewBag.Lista_Empresa as SelectList, null, new { @id = "EmpresaDropDown", style = "width:450px;height:25px", rows = 10 })
+        <div class="form-group row">
+            <label style="font-weight:normal;color:red;padding-left:15px" id="errorLabel">@ViewBag.Result</label>
+        </div>
 
-    <div style="text-align:center">
-        <button type="submit" class="btn btn-primary" >Selecionar</button>
-    </div>
+        <div style="text-align:center">
+            <button type="submit" class="btn btn-primary">Selecionar</button>
+        </div>
 
-    <br /><br />
-    @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
-    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
-    <br />
-</div>
+        <br /><br />
+        @Html.HiddenFor(m=>m.Nome, new { @id = "Nome_tmp" })
+        @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
+        @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+        <br />
+    </div>
+}
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            document.getElementById('Nome_tmp').value = $('#EmpresaDropDown :selected').text();;
+            $("#EmpresaDropDown").change(function () {
+                document.getElementById('Nome_tmp').value = $('#EmpresaDropDown :selected').text();;
+            });
+        });
+
+
+
+    </script>
 }

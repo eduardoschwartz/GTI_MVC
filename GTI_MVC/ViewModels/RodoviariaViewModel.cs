@@ -5,7 +5,7 @@ using System.Web;
 
 namespace GTI_Mvc.ViewModels {
     public class RodoviariaViewModel {
-        public int Codigo_Empresa { get; set; }
-        public string Razao_Social { get; set; }
+        public int Codigo { get; set; }
+        public string Nome { get; set; }
     }
 }

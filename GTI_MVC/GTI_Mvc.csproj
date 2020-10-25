@@ -439,6 +439,7 @@
     <Compile Include="ViewModels\MemoryViewModel.cs" />
     <Compile Include="ViewModels\NotificacaoIssViewModel.cs" />
     <Compile Include="ViewModels\ProcessoViewModel.cs" />
+    <Compile Include="ViewModels\RodoviariaViewModel.cs" />
     <Compile Include="Views\Imovel\EditorTemplates\ListAnexoEditorViewModel.cs" />
     <Compile Include="Views\Imovel\EditorTemplates\ListCompradorEditorViewModel.cs" />
     <Compile Include="Views\Imovel\EditorTemplates\ListVendedorEditorViewModel.cs" />
@@ -687,6 +688,7 @@
     <Content Include="Views\Tributario\Notificacao_iss.cshtml" />
     <Content Include="Views\Tributario\Notificacao_menu.cshtml" />
     <Content Include="Views\Tributario\Notificacao_query.cshtml" />
+    <Content Include="Views\Tributario\Rod_menu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

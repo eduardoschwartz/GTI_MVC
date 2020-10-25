@@ -2384,10 +2384,12 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Rod_menu")]
         [HttpPost]
-        public ViewResult Rod_menu(Rodo_empresa model) {
+        public ViewResult Rod_menu(RodoviariaViewModel model) {
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
             List<Rodo_empresa> Lista = tributarioRepository.Lista_Rodo_empresa();
             ViewBag.Lista_Empresa = new SelectList(Lista, "Codigo", "Nome");
+            
 
             return View(model);
         }
