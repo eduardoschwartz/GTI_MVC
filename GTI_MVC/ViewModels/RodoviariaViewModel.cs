@@ -10,5 +10,10 @@ namespace GTI_Mvc.ViewModels {
         public string Nome { get; set; }
         public int Ano { get; set; }
         public List<Rodo_uso_plataforma_Struct> Lista_uso_plataforma { get; set; }
+        public DateTime DataDe { get; set; }
+        public DateTime DataAte { get; set; }
+        public int Qtde1 { get; set; }
+        public int Qtde2 { get; set; }
+        public int Qtde3 { get; set; }
     }
 }
