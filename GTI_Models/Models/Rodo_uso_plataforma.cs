@@ -23,4 +23,18 @@ namespace GTI_Models.Models {
         public decimal Valor_Guia { get; set; }
         public int Situacao { get; set; }
     }
+
+    public class Rodo_uso_plataforma_Struct {
+        public int Codigo { get; set; }
+        public DateTime Datade { get; set; }
+        public DateTime Dataate { get; set; }
+        public byte Seq { get; set; }
+        public int Qtde1 { get; set; }
+        public int Qtde2 { get; set; }
+        public int Qtde3 { get; set; }
+        public int Numero_Guia { get; set; }
+        public decimal Valor_Guia { get; set; }
+        public int Situacao { get; set; }
+        public string Situacao_Nome { get; set; }
+    }
 }

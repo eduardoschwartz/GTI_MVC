@@ -8,6 +8,7 @@ namespace GTI_Mvc.ViewModels {
     public class RodoviariaViewModel {
         public int Codigo { get; set; }
         public string Nome { get; set; }
-        public List<Rodo_uso_plataforma> Lista_uso_plataforma { get; set; }
+        public int Ano { get; set; }
+        public List<Rodo_uso_plataforma_Struct> Lista_uso_plataforma { get; set; }
     }
 }

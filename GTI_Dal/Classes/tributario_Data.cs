@@ -2691,23 +2691,27 @@ Proximo:;
             }
         }
 
-        public List<Rodo_uso_plataforma> Lista_Rodo_uso_plataforma(int Codigo,int Ano) {
+        public List<Rodo_uso_plataforma_Struct> Lista_Rodo_uso_plataforma(int Codigo,int Ano) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from t in db.Rodo_Uso_Palataforma where t.Codigo==Codigo && t.Datade.Year==Ano
-                           orderby new { t.Datade,t.Seq } select t).ToList();
-                List<Rodo_uso_plataforma> Lista = new List<Rodo_uso_plataforma>(); 
+                var Sql = (from t in db.Rodo_Uso_Palataforma
+                           join c in db.Itbi_Status on t.Situacao equals c.Codigo into lc from c in lc.DefaultIfEmpty()
+                           where t.Codigo==Codigo && t.Datade.Year==Ano
+                           orderby new { t.Datade,t.Seq } select new {Codigo= t.Codigo,DataDe=t.Datade,DataAte=t.Dataate,Seq=t.Seq,Qtde1=t.Qtde1,Qtde2=t.Qtde2,Qtde3=t.Qtde3,
+                           Numero_Guia=t.Numero_Guia,Valor_Guia=t.Valor_Guia,Situacao=t.Situacao,SituacaoNome=c.Descricao}).ToList();
+                List<Rodo_uso_plataforma_Struct> Lista = new List<Rodo_uso_plataforma_Struct>(); 
                 foreach (var item in Sql) {
-                    Rodo_uso_plataforma reg = new Rodo_uso_plataforma() {
+                    Rodo_uso_plataforma_Struct reg = new Rodo_uso_plataforma_Struct() {
                         Codigo = item.Codigo,
-                        Datade=item.Datade,
-                        Dataate=item.Dataate,
+                        Datade=item.DataDe,
+                        Dataate=item.DataAte,
                         Seq=item.Seq,
                         Qtde1=item.Qtde1,
                         Qtde2=item.Qtde2,
                         Qtde3=item.Qtde3,
                         Numero_Guia=item.Numero_Guia,
                         Valor_Guia=item.Valor_Guia,
-                        Situacao=item.Situacao
+                        Situacao=item.Situacao,
+                        Situacao_Nome=item.SituacaoNome
                     };
                     Lista.Add(reg);
                 }

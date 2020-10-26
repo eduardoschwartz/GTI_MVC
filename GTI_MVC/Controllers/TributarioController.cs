@@ -2215,7 +2215,9 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Notificacao_menu")]
         [HttpGet]
-        public ViewResult Notificacao_menu() {
+        public ActionResult Notificacao_menu() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
             return View();
         }
 
@@ -2373,11 +2375,13 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Rod_menu")]
         [HttpGet]
-        public ViewResult Rod_menu() {
+        public ActionResult Rod_menu() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             List<Rodo_empresa> Lista = tributarioRepository.Lista_Rodo_empresa();
             ViewBag.Lista_Empresa = new SelectList(Lista, "Codigo", "Nome");
-
+            
             RodoviariaViewModel model = new RodoviariaViewModel();
             return View(model);
         }
@@ -2386,29 +2390,43 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Rod_menu(RodoviariaViewModel model) {
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
-            Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
+            
             List<Rodo_empresa> Lista = tributarioRepository.Lista_Rodo_empresa();
             ViewBag.Lista_Empresa = new SelectList(Lista, "Codigo", "Nome");
             
-
-            return RedirectToAction("Rod_plat_query",new { a=model.Codigo,b=model.Nome});
+            return RedirectToAction("Rod_plat_query",new { a= Encrypt( model.Codigo.ToString()),c=Encrypt(DateTime.Now.Year.ToString())});
         }
 
         [Route("Rod_plat_query")]
         [HttpGet]
-        public ViewResult Rod_plat_query(string a,string b) {
-            int _codigo = Convert.ToInt32(a);
+        public ActionResult Rod_plat_query(string a,string c) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            int _codigo, _ano;
+            try {
+                _codigo = Convert.ToInt32(Decrypt(a));
+                _ano = Convert.ToInt32(Decrypt(c));
+            } catch (Exception) {
+                return RedirectToAction("Login", "Home");
+            }
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
-            List<Rodo_uso_plataforma> Lista = tributarioRepository.Lista_Rodo_uso_plataforma(_codigo,DateTime.Now.Year);
-
+            List<Rodo_uso_plataforma_Struct> Lista = tributarioRepository.Lista_Rodo_uso_plataforma(_codigo,_ano);
+            Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
+            string _nome = cidadaoRepository.Retorna_Nome_Cidadao(_codigo);
             RodoviariaViewModel model = new RodoviariaViewModel {
                 Codigo = _codigo,
-                Nome=b,
+                Nome=_nome,
                 Lista_uso_plataforma=Lista
             };
             return View(model);
         }
 
+        [Route("Rod_plat_query")]
+        [HttpPost]
+        public ActionResult Rod_plat_query(RodoviariaViewModel model) {
+
+            return View(model);
+        }
 
 
     }

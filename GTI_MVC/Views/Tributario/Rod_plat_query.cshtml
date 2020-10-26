@@ -9,11 +9,7 @@
 
     .center {
         margin: auto;
-        width: 700px;
-        border: 1px solid rgba(0,0,0,0.24);
-        padding: 20px;
-        box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
+        width: 800px;
     }
 
     .actionlink:hover {
@@ -23,57 +19,109 @@
     .actionlink {
         color: darkslateblue;
     }
+
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .topics tr {
+        height: 20px;
+        font-size: 14px;
+    }
 </style>
 
 <div class="center">
 
-    @using (Html.BeginForm("Notificacao_query", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
-        <br />
-        <label style="color: brown;font-size: 16px;font-style: italic">Consulta ao uso da plataforma</label>
-        <br />
-        <Label>Empresa:&nbsp;@Model.Codigo.ToString()&nbsp;-&nbsp;@Model.Nome</Label>
+    @using (Html.BeginForm("Rod_plat_query", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
+        <div class="container" style="width:700px">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
 
-        <br />
-        <br />
-        <table id="tblMain" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
-            <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal; white-space: nowrap;">
-                <tr style="height:14px;">
-                    <td style="width:85px;font-weight:normal;text-align:center">Período de</td>
-                    <td style="width:85px;font-weight:normal;text-align:center">Período até</td>
-                    <td style="width:45px;font-weight:normal;text-align:right">Qtde1</td>
-                    <td style="width:45px;font-weight:normal;text-align:right">Qtde2</td>
-                    <td style="width:45px;font-weight:normal;text-align:right">Qtde3</td>
-                    <td style="width:80px;font-weight:normal;text-align:right">Valor Guia</td>
-                    <td style="width:80px;font-weight:normal;text-align:right">Nº Guia</td>
-                    <td style="width:100px">
-                    </td>
-                </tr>
-            </thead>
-            <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
-                @foreach (var item in Model.Lista_uso_plataforma) {
-                <tr style="height:14px;">
-                    <td style="width:85px;font-weight:normal;text-align:center"> @Convert.ToDateTime(item.Datade).ToString("dd/MM/yyyy")</td>
-                    <td style="width:85px;font-weight:normal;text-align:center"> @Convert.ToDateTime(item.Dataate).ToString("dd/MM/yyyy")</td>
-                    <td style="width:45px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Qtde1)</td>
-                    <td style="width:45px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Qtde2)</td>
-                    <td style="width:45px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Qtde3)</td>
-                    <td style="width:80px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Valor_Guia)</td>
-                    <td style="width:80px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Numero_Guia)</td>
-                    <td style="width:100px">
-                        <a href="@Url.Action("Notificacao_print","Tributario", new { p1 = item.Datade,p2=item.Dataate,p3=item.Seq })" title="Imprimir a Guia"> <img src="@Url.Content("~/images/print.png")"></a>
-                    </td>
-                </tr>
-                }
-            </tbody>
-        </table>
-        <br />
-        <br />
-        <div class="form-group row">
-            <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
+                    Consulta ao uso da plataforma
+                    <label style="font-weight:normal;color:black;padding-left:200px">
+                        Exercício:&nbsp;
+                        @Html.DropDownListFor(m => m.Ano, new List<SelectListItem> { new SelectListItem { Text = "2020", Value = "2020" } },null, new { @id = "AnoDropDown" })
+                    </label>  <br />
+                    <Label>Empresa:&nbsp;@Model.Codigo.ToString()&nbsp;-&nbsp;@Model.Nome</Label>
+
+                </div>
+                <div class="panel-body">
+
+                    <table id="tblMain" class="topics" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                        <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal; white-space: nowrap;">
+                            <tr>
+                                <td style="width:85px;font-weight:normal;text-align:center">Período de</td>
+                                <td style="width:85px;font-weight:normal;text-align:center">Período até</td>
+                                <td style="width:45px;font-weight:normal;text-align:right">Qtde1</td>
+                                <td style="width:45px;font-weight:normal;text-align:right">Qtde2</td>
+                                <td style="width:45px;font-weight:normal;text-align:right">Qtde3</td>
+                                <td style="width:80px;font-weight:normal;text-align:right">Valor Guia</td>
+                                <td style="width:100px;font-weight:normal;text-align:center">Nº Guia</td>
+                                <td style="width:100px;font-weight:normal;text-align:left">Situação</td>
+                                <td style="width:80px">
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody id="tblComprador" class="topics" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
+                            @foreach (var item in Model.Lista_uso_plataforma) {
+                                <tr>
+                                    <td style="width:85px;font-weight:normal;text-align:center"> @Convert.ToDateTime(item.Datade).ToString("dd/MM/yyyy")</td>
+                                    <td style="width:85px;font-weight:normal;text-align:center"> @Convert.ToDateTime(item.Dataate).ToString("dd/MM/yyyy")</td>
+                                    <td style="width:45px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Qtde1)</td>
+                                    <td style="width:45px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Qtde2)</td>
+                                    <td style="width:45px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Qtde3)</td>
+                                    <td style="width:80px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Valor_Guia)</td>
+                                    <td style="width:100px;font-weight:normal;text-align:center">@Html.DisplayFor(modelItem => item.Numero_Guia)</td>
+                                    <td style="width:100px;font-weight:normal;text-align:left">@Html.DisplayFor(modelItem => item.Situacao_Nome)</td>
+                                    <td style="width:80px">
+                                        <a href="@Url.Action("Notificacao_print","Tributario", new { p1 = item.Datade,p2=item.Dataate,p3=item.Seq })" title="Imprimir a Guia"> <img src="@Url.Content("~/images/print.png")"></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <br />
+                    <p style="font-weight:normal;font-size:12px;color:brown">
+                        *Qtde 1 - Uso da palateforma até 39 km<br />
+                        *Qtde 2 - Uso da palateforma de 40 km até 79,9 km<br />
+                        *Qtde 3 - Uso da palateforma acima de 79,9 km
+                    </p>
+                </div>
+                <div class="panel-footer">
+                    <a style="cursor:pointer" onclick="NewData()">Gravar novo período de utilização</a><br />
+                    @Html.ActionLink("Retornar ao menu de opções", "Notificacao_menu", "Tributario", null, new { @class = "actionlink" })<br />
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
+            </div>
+
         </div>
     }
 
-    @Html.ActionLink("Preencher outra notificação", "Notificacao_iss", "Tributario", null, new { @class = "actionlink" })<br />
-    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 </div>
 
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#AnoDropDown").change(function () {
+                if (this.value != '') {
+                    $("#MainForm").submit();
+                } 
+            });
+          
+        });
+
+        function ClearError() {
+            document.getElementById('errorLabel').innerHTML = "";
+        }
+
+        function NewData() {
+            alert("OK");
+        }
+
+    </script>
+}
