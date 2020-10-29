@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace GTI_Models.Models {
     public class Rodo_uso_plataforma {
         [Key]
-        [Column(Order =1)]
+        [Column(Order = 1)]
         public int Codigo { get; set; }
         [Key]
         [Column(Order = 2)]
@@ -37,4 +37,10 @@ namespace GTI_Models.Models {
         public int Situacao { get; set; }
         public string Situacao_Nome { get; set; }
     }
+
+    public class Rodo_uso_palataforma_datas {
+        public DateTime Datade { get; set; }
+        public DateTime Dataate { get; set; }
+    }
+
 }

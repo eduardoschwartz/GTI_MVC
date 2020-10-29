@@ -117,11 +117,11 @@
                         <tr>
                             <td style="width:200px;font-size:13px">
                                 <label style="font-weight:normal">Data De:&nbsp;</label>
-                                @Html.TextBoxFor(x => x.DataDe, "{0:dd/MM/yyyy}", new { @style = "width:90px;", @data_picker = "date-picker", @Value = DateTime.Now.ToShortDateString() })
+                                @Html.TextBoxFor(x => x.DataDe, "{0:dd/MM/yyyy}", new { @id="datadeTxt", @style = "width:90px;", @data_picker = "date-picker", @Value = DateTime.Now.ToShortDateString() })
                             </td>
                             <td style="width:200px;font-size:13px">
                                 <label style="font-weight:normal">Data Até:&nbsp;</label>
-                                @Html.TextBoxFor(x => x.DataAte, "{0:dd/MM/yyyy}", new { @style = "width:90px;", @data_picker = "date-picker", @Value = DateTime.Now.ToShortDateString() })
+                                @Html.TextBoxFor(x => x.DataAte, "{0:dd/MM/yyyy}", new { @id = "dataateTxt", @style = "width:90px;", @data_picker = "date-picker", @Value = DateTime.Now.ToShortDateString() })
                             </td>
                         </tr>
                     </table>
@@ -158,7 +158,7 @@
                     <label style="font-weight:normal;color:red;padding-left:7px" id="errorGuia">@ViewBag.Error</label>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="btnGuiaOk">Incluir</button>
+                    <button type="button" class="btn btn-primary" id="btnGuiaOk" onclick="return ValidateForm()">Incluir</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 </div>
             </div>
@@ -172,7 +172,6 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-           
 
             $('*[data-picker="date-picker"]').datepicker({
                 dateFormat: 'dd/mm/yy',
@@ -187,15 +186,87 @@
             $("#AnoDropDown").change(function () {
                 if (this.value != '') {
                     $("#MainForm").submit();
-                } 
+                }
             });
-          
+
         });
 
         function NewData() {
             $('#GuiaModal').modal();
             document.getElementById('errorGuia').innerHTML = "";
         }
+
+        function ValidateForm() {
+            ClearError();
+            var _data1 = document.getElementById('datadeTxt').value;
+            if (!Valida_Data(_data1)) {
+                document.getElementById('errorGuia').innerHTML = "Data inicial inválida";
+                return false;
+            }
+            var _data2 = document.getElementById('dataateTxt').value;
+            if (!Valida_Data(_data1)) {
+                document.getElementById('errorGuia').innerHTML = "Data final inválida";
+                return false;
+            }
+            if (DataMaior(_data1, _data2)) {
+                document.getElementById('errorGuia').innerHTML = "Data inicial maior que data final";
+                return false;
+            }
+
+            var a = document.getElementById('AnoDropDown').value;
+            var d = parseInt(a);
+            var d1 = RetornaAno(_data1);
+            var d2 = RetornaAno(_data2);
+            if (d1 != d || d2 != d) {
+                document.getElementById('errorGuia').innerHTML = "Intervalo de datas fora do ano selecionado";
+                return false;
+            }
+
+
+            var table = document.getElementById("tblMain");
+            var r = 0; //start counting rows in table
+            while (row = table.rows[r++]) {
+                var c = 0; //start counting columns in row
+                var data1, data2;
+                while (cell = row.cells[c++]) {
+                    if (r > 0) {
+                        if (c == 1) {
+                            data1 = cell.innerHTML;
+                        } 
+                        if (c == 2) {
+                            data2 = cell.innerHTML;
+                            if (DataIntervalo(_data1, data1, data2)) {
+                                document.getElementById('errorGuia').innerHTML = "Intervalo de datas já cadastrado";
+                                return false;
+                            }
+                            if (DataIntervalo(_data2, data1, data2)) {
+                                document.getElementById('errorGuia').innerHTML = "Intervalo de datas já cadastrado";
+                                return false;
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            return true;
+        }
+
+        function Valida_Data(data) {
+            if (data == "") {
+                return false;
+            }
+            var patternValidaData = /^(((0[1-9]|[12][0-9]|3[01])([-.\/])(0[13578]|10|12)([-.\/])(\d{4}))|(([0][1-9]|[12][0-9]|30)([-.\/])(0[469]|11)([-.\/])(\d{4}))|((0[1-9]|1[0-9]|2[0-8])([-.\/])(02)([-.\/])(\d{4}))|((29)(\.|-|\/)(02)([-.\/])([02468][048]00))|((29)([-.\/])(02)([-.\/])([13579][26]00))|((29)([-.\/])(02)([-.\/])([0-9][0-9][0][48]))|((29)([-.\/])(02)([-.\/])([0-9][0-9][2468][048]))|((29)([-.\/])(02)([-.\/])([0-9][0-9][13579][26])))$/;
+            if (!patternValidaData.test(data)) {
+                return false;
+            }
+            return true;
+        }
+
+        function ClearError() {
+            document.getElementById('errorGuia').innerHTML = "";
+        }
+
 
     </script>
 }

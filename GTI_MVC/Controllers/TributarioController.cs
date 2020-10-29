@@ -2411,6 +2411,15 @@ namespace GTI_Mvc.Controllers {
             }
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             List<Rodo_uso_plataforma_Struct> Lista = tributarioRepository.Lista_Rodo_uso_plataforma(_codigo,_ano);
+            List<Rodo_uso_palataforma_datas> Lista_Data = new List<Rodo_uso_palataforma_datas>();
+            foreach (Rodo_uso_plataforma_Struct item in Lista) {
+                Rodo_uso_palataforma_datas reg = new Rodo_uso_palataforma_datas() {
+                    Datade = item.Datade,
+                    Dataate = item.Dataate
+                };
+                Lista_Data.Add(reg);
+            }
+            ViewBag.Lista_Data=Lista_Data;
             Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
             string _nome = cidadaoRepository.Retorna_Nome_Cidadao(_codigo);
             RodoviariaViewModel model = new RodoviariaViewModel {
@@ -2418,6 +2427,7 @@ namespace GTI_Mvc.Controllers {
                 Nome=_nome,
                 Lista_uso_plataforma=Lista
             };
+
             return View(model);
         }
 

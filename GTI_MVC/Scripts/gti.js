@@ -170,3 +170,62 @@ function valida_Cnpj(cnpj) {
     return true;
 
 }
+
+function DataMaior(date1, date2) {
+    let parts1 = date1.split('/')
+    let parts2 = date2.split('/')
+
+    date1 = new Date(parts1[2], parts1[1] - 1, parts1[0]).getTime()
+    date2 = new Date(parts2[2], parts2[1] - 1, parts2[0]).getTime()
+
+    return date1 > date2 ? true : false
+}
+
+function DataMenor(date1, date2) {
+    let parts1 = date1.split('/')
+    let parts2 = date2.split('/')
+
+    date1 = new Date(parts1[2], parts1[1] - 1, parts1[0]).getTime()
+    date2 = new Date(parts2[2], parts2[1] - 1, parts2[0]).getTime()
+
+    return date1 < date2 ? true : false
+}
+
+function DataIgual(date1, date2) {
+    let parts1 = date1.split('/')
+    let parts2 = date2.split('/')
+
+    date1 = new Date(parts1[2], parts1[1] - 1, parts1[0]).getTime()
+    date2 = new Date(parts2[2], parts2[1] - 1, parts2[0]).getTime()
+
+    return date1 == date2 ? true : false
+}
+
+function DataIntervalo(date, date1, date2) {
+    var retorno = false;
+
+    let parts = date.split('/')
+    let parts1 = date1.split('/')
+    let parts2 = date2.split('/')
+
+    date = new Date(parts[2], parts[1] - 1, parts[0]).getTime()
+    date1 = new Date(parts1[2], parts1[1] - 1, parts1[0]).getTime()
+    date2 = new Date(parts2[2], parts2[1] - 1, parts2[0]).getTime()
+
+    if (date >= date1 && date <= date2) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function RetornaAno(date) {
+    let parts = date.split('/')
+    date = new Date(parts[2], parts[1] - 1, parts[0]).getTime()
+    var d = new Date(date)
+    var n = d.getFullYear()
+    return n
+}
+
+
+
