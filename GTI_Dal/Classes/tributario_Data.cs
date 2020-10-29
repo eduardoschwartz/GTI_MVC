@@ -626,6 +626,14 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public short Retorna_Ultima_Seq_Uso_Plataforma(int Codigo, int Ano) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var cntCod = (from c in db.Debitoparcela where c.Codreduzido == Codigo && c.Anoexercicio == Ano && c.Codlancamento == 52 orderby c.Seqlancamento descending select c.Seqlancamento).FirstOrDefault();
+                return Convert.ToInt16(cntCod);
+            }
+        }
+
+
         public short Retorna_Ultima_Seq_AR(int Codigo, int Ano) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var cntCod = (from c in db.Parceladocumento where c.Codreduzido == Codigo && c.Anoexercicio == Ano && c.Codlancamento == 78 orderby c.Seqlancamento descending select c.Seqlancamento).FirstOrDefault();

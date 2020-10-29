@@ -42,12 +42,14 @@
         <div class="container" style="width:700px">
             <div class="panel panel-danger">
                 <div class="panel-heading">
+                    @*@Html.HiddenFor(m => m.DataDeTmp, new { @id = "DataDeTmp" })*@
 
                     Consulta ao uso da plataforma
                     <label style="font-weight:normal;color:black;padding-left:200px">
                         Exercício:&nbsp;
                         @Html.DropDownListFor(m => m.Ano, new List<SelectListItem> { new SelectListItem { Text = "2020", Value = "2020" } }, null, new { @id = "AnoDropDown" })
                     </label>  <br />
+                    @Html.HiddenFor(m=>m.Codigo,new { id="Codigo"})
                     <Label>Empresa:&nbsp;@Model.Codigo.ToString()&nbsp;-&nbsp;@Model.Nome</Label>
 
                 </div>
@@ -117,11 +119,11 @@
                         <tr>
                             <td style="width:200px;font-size:13px">
                                 <label style="font-weight:normal">Data De:&nbsp;</label>
-                                @Html.TextBoxFor(x => x.DataDe, "{0:dd/MM/yyyy}", new { @id="datadeTxt", @style = "width:90px;", @data_picker = "date-picker", @Value = DateTime.Now.ToShortDateString() })
+                                @Html.TextBoxFor(x => x.DataDe, "{0:dd/MM/yyyy}", new { @id="DataDe", @style = "width:90px;", @data_picker = "date-picker", @Value = DateTime.Now.ToShortDateString() })
                             </td>
                             <td style="width:200px;font-size:13px">
                                 <label style="font-weight:normal">Data Até:&nbsp;</label>
-                                @Html.TextBoxFor(x => x.DataAte, "{0:dd/MM/yyyy}", new { @id = "dataateTxt", @style = "width:90px;", @data_picker = "date-picker", @Value = DateTime.Now.ToShortDateString() })
+                                @Html.TextBoxFor(x => x.DataAte, "{0:dd/MM/yyyy}", new { @id = "DataAte", @style = "width:90px;", @data_picker = "date-picker", @Value = DateTime.Now.ToShortDateString() })
                             </td>
                         </tr>
                     </table>
@@ -134,7 +136,7 @@
                                 <label style="font-weight:normal">Qtde até 39km:</label>
                             </td>
                             <td style="width:80px">
-                                @Html.TextBoxFor(x => x.Qtde1, null, new { @style = "width:50px;", @onKeyPress = "return formata(this, '§§§§', event)" ,@Value=""})
+                                @Html.TextBoxFor(x => x.Qtde1, null, new {@id="Qtde1", @style = "width:50px;", @onKeyPress = "return formata(this, '§§§§', event)" ,@Value=""})
                             </td>
                         </tr>
                         <tr>
@@ -142,7 +144,7 @@
                                 <label style="font-weight:normal">Qtde de 40km até 79,9km:</label>
                             </td>
                             <td style="width:80px">
-                                @Html.TextBoxFor(x => x.Qtde2, null, new { @style = "width:50px;", @onKeyPress = "return formata(this, '§§§§', event)", @Value = "" })
+                                @Html.TextBoxFor(x => x.Qtde2, null, new { @id = "Qtde2", @style = "width:50px;", @onKeyPress = "return formata(this, '§§§§', event)", @Value = "" })
                             </td>
                         </tr>
                         <tr>
@@ -150,7 +152,7 @@
                                 <label style="font-weight:normal">Qtde acima de 79,9km:</label>
                             </td>
                             <td style="width:80px">
-                                @Html.TextBoxFor(x => x.Qtde3, null, new { @style = "width:50px;", @onKeyPress = "return formata(this, '§§§§', event)", @Value = "" })
+                                @Html.TextBoxFor(x => x.Qtde3, null, new { @id = "Qtde3", @style = "width:50px;", @onKeyPress = "return formata(this, '§§§§', event)", @Value = "" })
                             </td>
                         </tr>
                     </table>
@@ -198,12 +200,12 @@
 
         function ValidateForm() {
             ClearError();
-            var _data1 = document.getElementById('datadeTxt').value;
+            var _data1 = document.getElementById('DataDe').value;
             if (!Valida_Data(_data1)) {
                 document.getElementById('errorGuia').innerHTML = "Data inicial inválida";
                 return false;
             }
-            var _data2 = document.getElementById('dataateTxt').value;
+            var _data2 = document.getElementById('DataAte').value;
             if (!Valida_Data(_data1)) {
                 document.getElementById('errorGuia').innerHTML = "Data final inválida";
                 return false;
@@ -222,17 +224,16 @@
                 return false;
             }
 
-
             var table = document.getElementById("tblMain");
-            var r = 0; //start counting rows in table
+            var r = 0;
             while (row = table.rows[r++]) {
-                var c = 0; //start counting columns in row
+                var c = 0;
                 var data1, data2;
                 while (cell = row.cells[c++]) {
                     if (r > 0) {
                         if (c == 1) {
                             data1 = cell.innerHTML;
-                        } 
+                        }
                         if (c == 2) {
                             data2 = cell.innerHTML;
                             if (DataIntervalo(_data1, data1, data2)) {
@@ -249,19 +250,49 @@
                 }
             }
 
+            var _codigo = document.getElementById('Codigo').value;
+            var _qtde1 = document.getElementById('Qtde1').value;
+            var _qtde2 = document.getElementById('Qtde2').value;
+            var _qtde3 = document.getElementById('Qtde3').value;
+
+            var _bqtde1 = true;
+            var _bqtde2 = true;
+            var _bqtde3 = true;
+            if (_qtde1 == "" || parseInt(_qtde1) == 0) {
+                _bqtde1 = false;
+            }
+            if (_qtde2 == "" || parseInt(_qtde2) == 0) {
+                _bqtde2 = false;
+            }
+            if (_qtde3 == "" || parseInt(_qtde3) == 0) {
+                _bqtde3 = false;
+            }
+            if (!_bqtde1 && !_bqtde2 && !_bqtde3) {
+                document.getElementById('errorGuia').innerHTML = "Nenhuma quantidade informada";
+                return false;
+            }
+
+            $('#GuiaModal').modal('hide');
+            sendForm(_data1, _data2,_qtde1,_qtde2,_qtde3,_codigo);
             return true;
         }
 
-        function Valida_Data(data) {
-            if (data == "") {
-                return false;
-            }
-            var patternValidaData = /^(((0[1-9]|[12][0-9]|3[01])([-.\/])(0[13578]|10|12)([-.\/])(\d{4}))|(([0][1-9]|[12][0-9]|30)([-.\/])(0[469]|11)([-.\/])(\d{4}))|((0[1-9]|1[0-9]|2[0-8])([-.\/])(02)([-.\/])(\d{4}))|((29)(\.|-|\/)(02)([-.\/])([02468][048]00))|((29)([-.\/])(02)([-.\/])([13579][26]00))|((29)([-.\/])(02)([-.\/])([0-9][0-9][0][48]))|((29)([-.\/])(02)([-.\/])([0-9][0-9][2468][048]))|((29)([-.\/])(02)([-.\/])([0-9][0-9][13579][26])))$/;
-            if (!patternValidaData.test(data)) {
-                return false;
-            }
-            return true;
-        }
+        function sendForm(_dataDe, _dataAte,_qtde1,_qtde2,_qtde3,_codigo) {
+            $.ajax({
+                type: "Post",
+                url: "/Tributario/Rod_plat_query",
+                dataType: 'json',
+                data: {
+                    DataDe: _dataDe,
+                    DataAte: _dataAte,
+                    Qtde1: _qtde1,
+                    Qtde2: _qtde2,
+                    Qtde3: _qtde3,
+                    Codigo: _codigo
+                },
+            });
+        };
+
 
         function ClearError() {
             document.getElementById('errorGuia').innerHTML = "";

@@ -38,9 +38,5 @@ namespace GTI_Models.Models {
         public string Situacao_Nome { get; set; }
     }
 
-    public class Rodo_uso_palataforma_datas {
-        public DateTime Datade { get; set; }
-        public DateTime Dataate { get; set; }
-    }
-
+    
 }

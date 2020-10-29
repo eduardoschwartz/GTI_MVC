@@ -1727,9 +1727,13 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-            string _cpf = model.CpfCnpjLabel ;
-            string _cnpj = model.CnpjValue;
-            bool _bCpf = _cpf == null ? false : true;
+            string _cpf="", _cnpj="";
+            if (_cpfMask.Length == 11)
+                _cpf = _cpfMask;
+            else
+                _cnpj = _cpfMask;
+//            _cnpj = model.CnpjValue;
+            bool _bCpf = _cpf == "" ? false : true;
             int _documento;
             if (model.Documento.Length < 8) {
                 ViewBag.Result = "Nº de documento inválido.";
@@ -2411,15 +2415,6 @@ namespace GTI_Mvc.Controllers {
             }
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             List<Rodo_uso_plataforma_Struct> Lista = tributarioRepository.Lista_Rodo_uso_plataforma(_codigo,_ano);
-            List<Rodo_uso_palataforma_datas> Lista_Data = new List<Rodo_uso_palataforma_datas>();
-            foreach (Rodo_uso_plataforma_Struct item in Lista) {
-                Rodo_uso_palataforma_datas reg = new Rodo_uso_palataforma_datas() {
-                    Datade = item.Datade,
-                    Dataate = item.Dataate
-                };
-                Lista_Data.Add(reg);
-            }
-            ViewBag.Lista_Data=Lista_Data;
             Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
             string _nome = cidadaoRepository.Retorna_Nome_Cidadao(_codigo);
             RodoviariaViewModel model = new RodoviariaViewModel {
@@ -2433,9 +2428,146 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Rod_plat_query")]
         [HttpPost]
-        public ActionResult Rod_plat_query(RodoviariaViewModel model) {
+        public ActionResult Rod_plat_query(FormCollection collection) {
+            var data1 = collection["DataDe"];
+            DateTime _data1;
+            bool t=DateTime.TryParse(data1,out _data1);
+            var data2 = collection["DataAte"];
+            DateTime _data2;
+            t = DateTime.TryParse(data2, out _data2);
+            var cod = collection["Codigo"];
+            int _codigo=Convert.ToInt32(cod);
+            var qtde1 = collection["Qtde1"];
+            int _qtde1 = Convert.ToInt32(qtde1);
+            var qtde2 = collection["Qtde2"];
+            int _qtde2 = Convert.ToInt32(qtde2);
+            var qtde3 = collection["Qtde3"];
+            int _qtde3 = Convert.ToInt32(qtde3);
+            short _ano = (short)_data1.Year;
+            int _userId =  Convert.ToInt32(Session["hashid"]);
+            decimal _valorGuia=0, _valorTotal1 = 0, _valorTotal2 = 0, _valorTotal3 = 0;
 
-            return View(model);
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            decimal _valor1 = tributarioRepository.Retorna_Valor_Tributo(_ano, 154);
+            decimal _valor2 = tributarioRepository.Retorna_Valor_Tributo(_ano, 155);
+            decimal _valor3 = tributarioRepository.Retorna_Valor_Tributo(_ano, 156);
+
+            short _seq = tributarioRepository.Retorna_Ultima_Seq_Uso_Plataforma(_codigo, _ano);
+            _seq++;
+            DateTime _dataVencto = _data2.AddDays(10);
+
+            Exception ex2 = null;
+            //grava parcela
+            Debitoparcela regParcela = new Debitoparcela {
+                Codreduzido = _codigo,
+                Anoexercicio = _ano,
+                Codlancamento = 52,
+                Seqlancamento = _seq,
+                Numparcela = 1,
+                Codcomplemento = 0,
+                Statuslanc = 3,
+                Datavencimento = _dataVencto,
+                Datadebase = DateTime.Now,
+                Userid = _userId
+            };
+            try {
+                ex2 = tributarioRepository.Insert_Debito_Parcela(regParcela);
+            } catch (Exception ex) {
+
+                throw;
+            }
+            
+
+            //grava tributo
+            if (_qtde1 > 0) {
+                _valorTotal1 = _valor1 * _qtde1;
+                Debitotributo regTributo = new Debitotributo {
+                    Codreduzido = _codigo,
+                    Anoexercicio = _ano,
+                    Codlancamento = 52,
+                    Seqlancamento = _seq,
+                    Numparcela = 1,
+                    Codcomplemento = 0,
+                    Codtributo = (short)154,
+                    Valortributo = Math.Round(_valorTotal1, 2)
+                };
+                ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
+            }
+            if (_qtde2 > 0) {
+                _valorTotal2 = _valor2 * _qtde2;
+                Debitotributo regTributo = new Debitotributo {
+                    Codreduzido = _codigo,
+                    Anoexercicio = _ano,
+                    Codlancamento = 52,
+                    Seqlancamento = _seq,
+                    Numparcela = 1,
+                    Codcomplemento = 0,
+                    Codtributo = (short)155,
+                    Valortributo = Math.Round(_valorTotal2 , 2)
+                };
+                ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
+            }
+            if (_qtde3 > 0) {
+                _valorTotal3 = _valor3 * _qtde3;
+                Debitotributo regTributo = new Debitotributo {
+                    Codreduzido = _codigo,
+                    Anoexercicio = _ano,
+                    Codlancamento = 52,
+                    Seqlancamento = _seq,
+                    Numparcela = 1,
+                    Codcomplemento = 0,
+                    Codtributo = (short)156,
+                    Valortributo = Math.Round(_valorTotal3, 2)
+                };
+                ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
+            }
+            _valorGuia = _valorTotal1 + _valorTotal2 + _valorTotal3;
+
+            //grava o documento
+            Numdocumento regDoc = new Numdocumento();
+            regDoc.Valorguia = _valorGuia;
+            regDoc.Emissor = "Gti.Web/UsoPlataforma";
+            regDoc.Datadocumento = DateTime.Now;
+            regDoc.Registrado = true;
+            regDoc.Percisencao = 0;
+            regDoc.Percisencao = 0;
+            int _novo_documento = tributarioRepository.Insert_Documento(regDoc);
+
+            //retorna o valor atualizado do débito (lançamento retroativo)
+
+
+
+            //grava o documento na parcela
+            Parceladocumento regParc = new Parceladocumento();
+            regParc.Codreduzido = _codigo;
+            regParc.Anoexercicio = _ano;
+            regParc.Codlancamento = 52;
+            regParc.Seqlancamento = _seq;
+            regParc.Numparcela = 1;
+            regParc.Codcomplemento = 0;
+            regParc.Numdocumento = _novo_documento;
+            regParc.Valorjuros = 0;
+            regParc.Valormulta = 0;
+            regParc.Valorcorrecao = 0;
+            regParc.Plano = 0;
+            tributarioRepository.Insert_Parcela_Documento(regParc);
+
+            string sHist = "REFERENTE A " + (_qtde1+_qtde2+_qtde3).ToString()  +  " TAXAS DE EMBARQUE DO TERMINAL RODOVIÁRIO DO PERÍODO DE " + _data1.ToString("dd/MM/yyyy")  +  " À " +  _data2.ToString("dd/MM/yyyy") + ".";
+            //Incluir a observação da parcela
+            Obsparcela ObsReg = new Obsparcela() {
+                Codreduzido = _codigo,
+                Anoexercicio = _ano,
+                Codlancamento = 52,
+                Seqlancamento = _seq,
+                Numparcela = 1,
+                Codcomplemento = 0,
+                Obs = sHist,
+                Userid = _userId,
+                Data = DateTime.Now
+            };
+            ex2 = tributarioRepository.Insert_Observacao_Parcela(ObsReg);
+
+            return RedirectToAction("Rod_plat_query", new { a = Encrypt(_codigo.ToString()), c = Encrypt(DateTime.Now.Year.ToString()) });
         }
 
 
