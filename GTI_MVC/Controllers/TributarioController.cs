@@ -2472,11 +2472,10 @@ namespace GTI_Mvc.Controllers {
             };
             try {
                 ex2 = tributarioRepository.Insert_Debito_Parcela(regParcela);
-            } catch (Exception ex) {
+            } catch (Exception ) {
 
                 throw;
             }
-            
 
             //grava tributo
             if (_qtde1 > 0) {
@@ -2521,7 +2520,14 @@ namespace GTI_Mvc.Controllers {
                 };
                 ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
             }
-            _valorGuia = _valorTotal1 + _valorTotal2 + _valorTotal3;
+
+            //retorna o valor atualizado do débito (lançamento retroativo)
+            List<SpExtrato> ListaTributo = tributarioRepository.Lista_Extrato_Tributo(_codigo, _ano, _ano, 52, 52, _seq, _seq, 1, 1, 0, 0, 3, 3, DateTime.Now, "Web");
+            List<SpExtrato> ListaParcela = tributarioRepository.Lista_Extrato_Parcela(ListaTributo);
+            
+            foreach (SpExtrato item in ListaParcela) {
+                _valorGuia += item.Valortotal;
+            }
 
             //grava o documento
             Numdocumento regDoc = new Numdocumento();
@@ -2532,10 +2538,6 @@ namespace GTI_Mvc.Controllers {
             regDoc.Percisencao = 0;
             regDoc.Percisencao = 0;
             int _novo_documento = tributarioRepository.Insert_Documento(regDoc);
-
-            //retorna o valor atualizado do débito (lançamento retroativo)
-
-
 
             //grava o documento na parcela
             Parceladocumento regParc = new Parceladocumento();
@@ -2567,7 +2569,25 @@ namespace GTI_Mvc.Controllers {
             };
             ex2 = tributarioRepository.Insert_Observacao_Parcela(ObsReg);
 
-            return RedirectToAction("Rod_plat_query", new { a = Encrypt(_codigo.ToString()), c = Encrypt(DateTime.Now.Year.ToString()) });
+            //Incluir rodo_uso_plataforma
+            _seq = tributarioRepository.Retorna_Ultima_Seq_Uso_Plataforma(_codigo, _data1,_data2);
+            _seq++;
+
+            Rodo_uso_plataforma regR = new Rodo_uso_plataforma {
+                Codigo = _codigo,
+                Datade = _data1,
+                Dataate = _data2,
+                Seq=(byte)_seq,
+                Qtde1=_qtde1,
+                Qtde2=_qtde2,
+                Qtde3=_qtde3,
+                Numero_Guia=_novo_documento,
+                Valor_Guia=_valorGuia,
+                Situacao=7 //não pago
+            };
+            ex2 = tributarioRepository.Insert_Rodo_Uso_Plataforma(regR);
+
+            return null;
         }
 
 

@@ -119,11 +119,11 @@
                         <tr>
                             <td style="width:200px;font-size:13px">
                                 <label style="font-weight:normal">Data De:&nbsp;</label>
-                                @Html.TextBoxFor(x => x.DataDe, "{0:dd/MM/yyyy}", new { @id="DataDe", @style = "width:90px;", @data_picker = "date-picker", @Value = DateTime.Now.ToShortDateString() })
+                                @Html.TextBoxFor(x => x.DataDe, "{0:dd/MM/yyyy}", new { @id="DataDe", @style = "width:90px;", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)", @data_picker = "date-picker", @Value = DateTime.Now.ToShortDateString() })
                             </td>
                             <td style="width:200px;font-size:13px">
                                 <label style="font-weight:normal">Data Até:&nbsp;</label>
-                                @Html.TextBoxFor(x => x.DataAte, "{0:dd/MM/yyyy}", new { @id = "DataAte", @style = "width:90px;", @data_picker = "date-picker", @Value = DateTime.Now.ToShortDateString() })
+                                @Html.TextBoxFor(x => x.DataAte, "{0:dd/MM/yyyy}", new { @id = "DataAte", @style = "width:90px;", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)", @data_picker = "date-picker", @Value = DateTime.Now.ToShortDateString() })
                             </td>
                         </tr>
                     </table>
@@ -136,7 +136,7 @@
                                 <label style="font-weight:normal">Qtde até 39km:</label>
                             </td>
                             <td style="width:80px">
-                                @Html.TextBoxFor(x => x.Qtde1, null, new {@id="Qtde1", @style = "width:50px;", @onKeyPress = "return formata(this, '§§§§', event)" ,@Value=""})
+                                @Html.TextBoxFor(x => x.Qtde1, null, new {@id="Qtde1", @style = "width:50px;", @onKeyPress = "return formata(this, '§§§§', event)" ,@Value="" })
                             </td>
                         </tr>
                         <tr>
@@ -291,6 +291,7 @@
                     Codigo: _codigo
                 },
             });
+            location.reload();
         };
 
 

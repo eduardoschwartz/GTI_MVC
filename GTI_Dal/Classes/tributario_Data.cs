@@ -633,6 +633,16 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public short Retorna_Ultima_Seq_Uso_Plataforma(int Codigo, DateTime DataDe,DateTime DataAte) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var cntCod = (from c in db.Rodo_Uso_Palataforma where c.Codigo == Codigo && c.Datade == DataDe && c.Dataate == DataAte orderby c.Seq descending select c).FirstOrDefault();
+                if (cntCod == null)
+                    return 0;
+                else
+                    return Convert.ToInt16(cntCod.Seq);
+            }
+        }
+
 
         public short Retorna_Ultima_Seq_AR(int Codigo, int Ano) {
             using (GTI_Context db = new GTI_Context(_connection)) {
@@ -2727,6 +2737,30 @@ Proximo:;
             }
         }
 
+        public Exception Insert_Rodo_Uso_Plataforma(Rodo_uso_plataforma Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[10];
+                Parametros[0] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
+                Parametros[1] = new SqlParameter { ParameterName = "@datade", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Datade };
+                Parametros[2] = new SqlParameter { ParameterName = "@dataate", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Dataate };
+                Parametros[3] = new SqlParameter { ParameterName = "@seq", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Seq };
+                Parametros[4] = new SqlParameter { ParameterName = "@qtde1", SqlDbType = SqlDbType.Int, SqlValue = Reg.Qtde1 };
+                Parametros[5] = new SqlParameter { ParameterName = "@qtde2", SqlDbType = SqlDbType.Int, SqlValue = Reg.Qtde2 };
+                Parametros[6] = new SqlParameter { ParameterName = "@qtde3", SqlDbType = SqlDbType.Int, SqlValue = Reg.Qtde3 };
+                Parametros[7] = new SqlParameter { ParameterName = "@numero_guia", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_Guia };
+                Parametros[8] = new SqlParameter { ParameterName = "@valor_guia", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Guia };
+                Parametros[9] = new SqlParameter { ParameterName = "@situacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Situacao };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO rodo_uso_plataforma(codigo,datade,dataate,seq,qtde1,qtde2,qtde3,numero_guia,valor_guia,situacao) " +
+                                              "VALUES(@codigo,@datade,@dataate,@seq,@qtde1,@qtde2,@qtde3,@numero_guia,@valor_guia,@situacao)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
 
 
     }//end class

@@ -1509,6 +1509,18 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Ultima_Seq_Uso_Plataforma(Codigo, Ano);
         }
 
+        public short Retorna_Ultima_Seq_Uso_Plataforma(int Codigo, DateTime DataDe, DateTime DataAte) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Retorna_Ultima_Seq_Uso_Plataforma(Codigo, DataDe,DataAte);
+        }
+
+        public Exception Insert_Rodo_Uso_Plataforma(Rodo_uso_plataforma Reg) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            Exception ex = obj.Insert_Rodo_Uso_Plataforma(Reg);
+            return ex;
+        }
+
+
     }//end class
 }
 

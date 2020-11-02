@@ -145,6 +145,7 @@ namespace GTI_Mvc.Controllers {
                                 Session["hashlname"] = user_web.Email;
                                 Session["hashfname"] = user_web.Nome;
                                 Session.Add("hashfiscalitbi", "N");
+                                Session.Add("hashfiscal", "N");
                                 Session.Add("hashfunc", "N");
                                 return View("../Home/SysMenu");
                             }
