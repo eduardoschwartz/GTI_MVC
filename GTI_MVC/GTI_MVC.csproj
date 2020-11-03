@@ -716,6 +716,7 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Alvara_Funcionamento_Valida.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Boleto_Uso_Plataforma.rdlc" />
     <EmbeddedResource Include="Reports\Boleto_NotificacaoISS_m001.rdlc" />
     <EmbeddedResource Include="Reports\Boleto_ITBI_R.rdlc" />
     <EmbeddedResource Include="Reports\Boleto_ITBI.rdlc" />

@@ -1054,17 +1054,17 @@
                 _somavv = _somavv * _percvv / 100;
             }
 
-            //if (_somaa > 0 && _somavv > 0) {
             if (_somaa > 0 && _somavv > 0) {
                 _somavv = _somavv * 0.015;
-//                if (_somaa > _somavv) {
                 if (_soma > _somavv) {
                     $("input[name='Valor_guia']").val((_somaa).toFixed(2).replace(".", ","));
                 } else {
                     $("input[name='Valor_guia']").val((_somavv).toFixed(2).replace(".", ","));
                 }
             } else {
-                if (_soma > _somavvoriginal) {
+                //if (_soma > _somavvoriginal) {
+                if (_soma > _somavv) {
+
                     if (_tf == "") {
                         $("input[name='Valor_guia']").val((_soma * 0.015).toFixed(2).replace(".", ","));
                     } else {
