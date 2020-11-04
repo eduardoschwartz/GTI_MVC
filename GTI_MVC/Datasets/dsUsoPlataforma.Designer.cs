@@ -343,6 +343,10 @@ namespace GTI_MVC.Datasets {
             
             private global::System.Data.DataColumn columnValor_Guia;
             
+            private global::System.Data.DataColumn columnData_Vencimento;
+            
+            private global::System.Data.DataColumn columnData_Documento;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public dsUsoPlataformaDataTable() {
@@ -634,6 +638,22 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Data_VencimentoColumn {
+                get {
+                    return this.columnData_Vencimento;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Data_DocumentoColumn {
+                get {
+                    return this.columnData_Documento;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -701,7 +721,9 @@ namespace GTI_MVC.Datasets {
                         string Linha_Digitavel, 
                         string Codigo_Barra, 
                         int Numero_Guia, 
-                        decimal Valor_Guia) {
+                        decimal Valor_Guia, 
+                        string Data_Vencimento, 
+                        string Data_Documento) {
                 dsUsoPlataformaRow rowdsUsoPlataformaRow = ((dsUsoPlataformaRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Codigo,
@@ -735,7 +757,9 @@ namespace GTI_MVC.Datasets {
                         Linha_Digitavel,
                         Codigo_Barra,
                         Numero_Guia,
-                        Valor_Guia};
+                        Valor_Guia,
+                        Data_Vencimento,
+                        Data_Documento};
                 rowdsUsoPlataformaRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowdsUsoPlataformaRow);
                 return rowdsUsoPlataformaRow;
@@ -790,6 +814,8 @@ namespace GTI_MVC.Datasets {
                 this.columnCodigo_Barra = base.Columns["Codigo_Barra"];
                 this.columnNumero_Guia = base.Columns["Numero_Guia"];
                 this.columnValor_Guia = base.Columns["Valor_Guia"];
+                this.columnData_Vencimento = base.Columns["Data_Vencimento"];
+                this.columnData_Documento = base.Columns["Data_Documento"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -859,6 +885,10 @@ namespace GTI_MVC.Datasets {
                 base.Columns.Add(this.columnNumero_Guia);
                 this.columnValor_Guia = new global::System.Data.DataColumn("Valor_Guia", typeof(decimal), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnValor_Guia);
+                this.columnData_Vencimento = new global::System.Data.DataColumn("Data_Vencimento", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnData_Vencimento);
+                this.columnData_Documento = new global::System.Data.DataColumn("Data_Documento", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnData_Documento);
                 this.ExtendedProperties.Add("Generator_TablePropName", "_dsUsoPlataforma");
                 this.ExtendedProperties.Add("Generator_UserTableName", "dsUsoPlataforma");
             }
@@ -1515,6 +1545,38 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Data_Vencimento {
+                get {
+                    try {
+                        return ((string)(this[this.tabledsUsoPlataforma.Data_VencimentoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Data_Vencimento\' in table \'dsUsoPlataforma\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledsUsoPlataforma.Data_VencimentoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Data_Documento {
+                get {
+                    try {
+                        return ((string)(this[this.tabledsUsoPlataforma.Data_DocumentoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Data_Documento\' in table \'dsUsoPlataforma\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledsUsoPlataforma.Data_DocumentoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsCodigoNull() {
                 return this.IsNull(this.tabledsUsoPlataforma.CodigoColumn);
             }
@@ -1895,6 +1957,30 @@ namespace GTI_MVC.Datasets {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetValor_GuiaNull() {
                 this[this.tabledsUsoPlataforma.Valor_GuiaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsData_VencimentoNull() {
+                return this.IsNull(this.tabledsUsoPlataforma.Data_VencimentoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetData_VencimentoNull() {
+                this[this.tabledsUsoPlataforma.Data_VencimentoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsData_DocumentoNull() {
+                return this.IsNull(this.tabledsUsoPlataforma.Data_DocumentoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetData_DocumentoNull() {
+                this[this.tabledsUsoPlataforma.Data_DocumentoColumn] = global::System.Convert.DBNull;
             }
         }
         

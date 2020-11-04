@@ -2741,13 +2741,14 @@ Proximo:;
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var Sql = (from t in db.Rodo_Uso_Palataforma
                            where t.Codigo == Codigo && t.Datade==DataDe && t.Dataate==DataAte && t.Seq==Seq
-                           select new {Codigo = t.Codigo, DataDe = t.Datade, DataAte = t.Dataate, Seq = t.Seq, Qtde1 = t.Qtde1, Qtde2 = t.Qtde2, Qtde3 = t.Qtde3,
+                           select new {Codigo = t.Codigo, DataDe = t.Datade, DataAte = t.Dataate, Seq = t.Seq,SeqDebito=t.SeqDebito,  Qtde1 = t.Qtde1, Qtde2 = t.Qtde2, Qtde3 = t.Qtde3,
                                        Numero_Guia = t.Numero_Guia, Valor_Guia = t.Valor_Guia, Situacao = t.Situacao }).FirstOrDefault();
                 Rodo_uso_plataforma_Struct reg = new Rodo_uso_plataforma_Struct() {
                     Codigo = Sql.Codigo,
                     Datade = Sql.DataDe,
                     Dataate = Sql.DataAte,
                     Seq = Sql.Seq,
+                    SeqDebito=Sql.SeqDebito,
                     Qtde1 = Sql.Qtde1,
                     Qtde2 = Sql.Qtde2,
                     Qtde3 = Sql.Qtde3,

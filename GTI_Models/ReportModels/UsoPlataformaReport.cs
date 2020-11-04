@@ -11,6 +11,8 @@ namespace GTI_Models.ReportModels {
         public string UF { get; set; }
         public DateTime Data_Inicio { get; set; }
         public DateTime Data_Final { get; set; }
+        public DateTime Data_Vencimento { get; set; }
+        public DateTime Data_Documento { get; set; }
         public int Qtde1 { get; set; }
         public decimal Aliquota1 { get; set; }
         public decimal Valor1P { get; set; }

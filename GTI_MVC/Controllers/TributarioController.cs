@@ -2688,8 +2688,39 @@ namespace GTI_Mvc.Controllers {
             //**************************************************
 
             UsoPlataformaReport _usoR = new UsoPlataformaReport() {
+                Aliquota1=_aliq1,
+                Aliquota2=_aliq2,
+                Aliquota3=_aliq3,
+                Bairro=_bairro,
+                Cidade=_cidade,
                 Codigo=_codigo,
-                Nome=_nome
+                Codigo_Barra=_codigo_barra,
+                CpfCnpj=_cpf_cnpj,
+                Data_Final=_dataate,
+                Data_Inicio=_datade,
+                Data_Documento=(DateTime)doc.Datadocumento,
+                Data_Vencimento=_dataVencto,
+                Endereco=_endereco + ", " + _numero.ToString() + " " + _compl,
+                Linha_Digitavel=_linha_digitavel, Nome = _nome,
+                Nosso_Numero =_nosso_numero,
+                Numero_Guia=reg.Numero_Guia,
+                Qtde1=reg.Qtde1,
+                Qtde2=reg.Qtde2,
+                Qtde3=reg.Qtde3,
+                UF=_uf,
+                Valor1J=_vj1,
+                Valor1M=_vm1,
+                Valor1P=_vp1,
+                Valor1T=_vt1,
+                Valor2J = _vj2,
+                Valor2M = _vm2,
+                Valor2P = _vp2,
+                Valor2T = _vt2,
+                Valor3J = _vj3,
+                Valor3M = _vm3,
+                Valor3P = _vp3,
+                Valor3T = _vt3,
+                Valor_Guia=reg.Valor_Guia
             };
             
             //Gera Boleto
