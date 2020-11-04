@@ -234,6 +234,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsNotificacaoISS.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Datasets\dsUsoPlataforma.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsUsoPlataforma.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -580,6 +585,17 @@
     </None>
     <Content Include="Datasets\dsNotificacaoISS.xss">
       <DependentUpon>dsNotificacaoISS.xsd</DependentUpon>
+    </Content>
+    <Content Include="Datasets\dsUsoPlataforma.xsc">
+      <DependentUpon>dsUsoPlataforma.xsd</DependentUpon>
+    </Content>
+    <None Include="Datasets\dsUsoPlataforma.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsUsoPlataforma.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Datasets\dsUsoPlataforma.xss">
+      <DependentUpon>dsUsoPlataforma.xsd</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />

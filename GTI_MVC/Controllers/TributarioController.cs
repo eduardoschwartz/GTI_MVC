@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -2176,7 +2177,7 @@ namespace GTI_Mvc.Controllers {
                     Cidade = _cidade,
                     Codigo_cidadao = model.Codigo_Cidadao,
                     Codigo_imovel = model.Codigo_Imovel,
-                    Complemento = _compl,
+                    Complemento = _compl??"",
                     Cpf_cnpj = _cpf_cnpj,
                     Data_gravacao=DateTime.Now,
                     Data_vencimento=model.Data_vencimento,
@@ -2570,15 +2571,16 @@ namespace GTI_Mvc.Controllers {
             ex2 = tributarioRepository.Insert_Observacao_Parcela(ObsReg);
 
             //Incluir rodo_uso_plataforma
-            _seq = tributarioRepository.Retorna_Ultima_Seq_Uso_Plataforma(_codigo, _data1,_data2);
-            _seq++;
+            short _seq2 = tributarioRepository.Retorna_Ultima_Seq_Uso_Plataforma(_codigo, _data1,_data2);
+           // _seq2++;
 
             Rodo_uso_plataforma regR = new Rodo_uso_plataforma {
                 Codigo = _codigo,
                 Datade = _data1,
                 Dataate = _data2,
-                Seq=(byte)_seq,
-                Qtde1=_qtde1,
+                Seq=(byte)_seq2,
+                SeqDebito = (byte)_seq,
+                Qtde1 =_qtde1,
                 Qtde2=_qtde2,
                 Qtde3=_qtde3,
                 Numero_Guia=_novo_documento,
@@ -2590,6 +2592,131 @@ namespace GTI_Mvc.Controllers {
             return null;
         }
 
+        public ActionResult Rod_uso_plataforma_print(string p1,string p2,string p3,string p4) {
+
+            DateTime _datade,_dataate;
+            bool b = DateTime.TryParseExact(p1, "MM/dd/yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out _datade);
+            bool c = DateTime.TryParseExact(p2, "MM/dd/yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out _dataate);
+            int _ano = _datade.Year;
+            short _seq = Convert.ToInt16(p3);
+            int _codigo = Convert.ToInt32(p4);
+            p1 = ""; p2 = ""; p3 = ""; p4 = "";
+
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Rodo_uso_plataforma_Struct reg = tributarioRepository.Retorna_Rodo_uso_plataforma(_codigo, _datade, _dataate, _seq);
+
+            short _seqdebito = reg.SeqDebito;
+            decimal _aliq1 = tributarioRepository.Retorna_Valor_Tributo(_ano, 154);
+            decimal _aliq2 = tributarioRepository.Retorna_Valor_Tributo(_ano, 155);
+            decimal _aliq3 = tributarioRepository.Retorna_Valor_Tributo(_ano, 156);
+
+            Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
+            CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(_codigo);
+
+            string _bairro = "", _endereco = "", _compl = "", _cidade = "JABOTICABAL", _uf = "SP", _nome = "";
+            string _cpf_cnpj = string.IsNullOrWhiteSpace(_cidadao.Cnpj) ? _cidadao.Cpf : _cidadao.Cnpj;
+            int _numero = 0, _cep = 14870000,  _userId = Convert.ToInt32(Session["hashid"]);
+            bool _r = _cidadao.EtiquetaC != "S";
+            _nome = _cidadao.Nome;
+            _endereco = _r ? _cidadao.EnderecoR : _cidadao.EnderecoC;
+            _bairro = _r ? _cidadao.NomeBairroR : _cidadao.NomeBairroC;
+            _numero = _r ? (int)_cidadao.NumeroR : (int)_cidadao.NumeroC;
+            _compl = _r ? _cidadao.ComplementoR : _cidadao.ComplementoC;
+            _cidade = _r ? _cidadao.NomeCidadeR : _cidadao.NomeCidadeC;
+            _uf = _r ? _cidadao.UfR : _cidadao.UfC;
+            _cep = _r ? (int)_cidadao.CepR : (int)_cidadao.CepC;
+
+            List<SpExtrato> ListaTributo = tributarioRepository.Lista_Extrato_Tributo(_codigo, (short)_ano, (short)_ano, 52, 52, _seqdebito, _seqdebito, 1, 1, 0, 0, 0, 99, DateTime.Now, "Web");
+            decimal _vp1 = 0, _vm1 = 0, _vj1 = 0, _vt1 = 0;
+            decimal _vp2 = 0, _vm2 = 0, _vj2 = 0, _vt2 = 0;
+            decimal _vp3 = 0, _vm3 = 0, _vj3 = 0, _vt3 = 0;
+
+            foreach (SpExtrato item in ListaTributo) {
+
+                switch (item.Codtributo) {
+                    case 154:
+                        _vp1 = item.Valortributo;
+                        _vm1 = item.Valormulta;
+                        _vj1 = item.Valorjuros;
+                        _vt1 = item.Valortotal;
+                        break;
+                    case 155:
+                        _vp2 = item.Valortributo;
+                        _vm2 = item.Valormulta;
+                        _vj2 = item.Valorjuros;
+                        _vt2 = item.Valortotal;
+                        break;
+                    case 156:
+                        _vp3 = item.Valortributo;
+                        _vm3 = item.Valormulta;
+                        _vj3 = item.Valorjuros;
+                        _vt3 = item.Valortotal;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            Numdocumento doc = tributarioRepository.Retorna_Dados_Documento(reg.Numero_Guia);
+            DateTime _dataVencto =(DateTime) doc.Datadocumento;
+
+            string _nosso_numero = "287353200" + reg.Numero_Guia.ToString();
+            string _convenio = "2873532";
+            //***** GERA CÓDIGO DE BARRAS BOLETO REGISTRADO*****
+            DateTime _data_base = Convert.ToDateTime("07/10/1997");
+            TimeSpan ts = Convert.ToDateTime(_dataVencto) - _data_base;
+            int _fator_vencto = ts.Days;
+            string _quinto_grupo = String.Format("{0:D4}", _fator_vencto);
+            string _valor_boleto_str = string.Format("{0:0.00}", reg.Valor_Guia);
+            _quinto_grupo += string.Format("{0:D10}", Convert.ToInt64(Functions.RetornaNumero(_valor_boleto_str)));
+            string _barra = "0019" + _quinto_grupo + String.Format("{0:D13}", Convert.ToInt32(_convenio));
+            _barra += String.Format("{0:D10}", Convert.ToInt64(reg.Numero_Guia)) + "17";
+            string _campo1 = "0019" + _barra.Substring(19, 5);
+            string _digitavel = _campo1 + Functions.Calculo_DV10(_campo1).ToString();
+            string _campo2 = _barra.Substring(23, 10);
+            _digitavel += _campo2 + Functions.Calculo_DV10(_campo2).ToString();
+            string _campo3 = _barra.Substring(33, 10);
+            _digitavel += _campo3 + Functions.Calculo_DV10(_campo3).ToString();
+            string _campo5 = _quinto_grupo;
+            string _campo4 = Functions.Calculo_DV11(_barra).ToString();
+            _digitavel += _campo4 + _campo5;
+            _barra = _barra.Substring(0, 4) + _campo4 + _barra.Substring(4, _barra.Length - 4);
+            //**Resultado final**
+            string _linha_digitavel = _digitavel.Substring(0, 5) + "." + _digitavel.Substring(5, 5) + " " + _digitavel.Substring(10, 5) + "." + _digitavel.Substring(15, 6) + " ";
+            _linha_digitavel += _digitavel.Substring(21, 5) + "." + _digitavel.Substring(26, 6) + " " + _digitavel.Substring(32, 1) + " " + Functions.StringRight(_digitavel, 14);
+            string _codigo_barra = Functions.Gera2of5Str(_barra);
+            //**************************************************
+
+            UsoPlataformaReport _usoR = new UsoPlataformaReport() {
+                Codigo=_codigo,
+                Nome=_nome
+            };
+            
+            //Gera Boleto
+
+            List<UsoPlataformaReport> Lista = new List<UsoPlataformaReport>();
+            Lista.Add(_usoR);
+
+            Warning[] warnings;
+            string[] streamIds;
+            string mimeType = string.Empty, encoding = string.Empty, extension = string.Empty;
+            DataSet Ds = Functions.ToDataSet(Lista);
+            ReportDataSource rdsAct = new ReportDataSource("dsUsoPlataforma", Ds.Tables[0]);
+            ReportViewer viewer = new ReportViewer();
+            viewer.LocalReport.Refresh();
+            viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Boleto_Uso_Plataforma.rdlc");
+            viewer.LocalReport.DataSources.Add(rdsAct);
+
+            byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
+            Response.Buffer = true;
+            Response.Clear();
+            Response.ContentType = mimeType;
+            Response.AddHeader("content-disposition", "attachment; filename= UsoPlataforma" + "." + extension);
+            Response.OutputStream.Write(bytes, 0, bytes.Length);
+            Response.Flush();
+            Response.End();
+            return null;
+        }
 
     }
 }

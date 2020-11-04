@@ -95,7 +95,6 @@ namespace GTI_Mvc.Controllers {
                     } else {
                         ViewBag.Result = "";
                         Session["hashid"] = UserId;
-//                        Functions.pUserId = UserId;
                     }
                 }
                 

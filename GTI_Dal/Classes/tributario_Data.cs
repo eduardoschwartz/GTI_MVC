@@ -2737,22 +2737,45 @@ Proximo:;
             }
         }
 
+        public Rodo_uso_plataforma_Struct Retorna_Rodo_uso_plataforma(int Codigo, DateTime DataDe,DateTime DataAte,short Seq) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Rodo_Uso_Palataforma
+                           where t.Codigo == Codigo && t.Datade==DataDe && t.Dataate==DataAte && t.Seq==Seq
+                           select new {Codigo = t.Codigo, DataDe = t.Datade, DataAte = t.Dataate, Seq = t.Seq, Qtde1 = t.Qtde1, Qtde2 = t.Qtde2, Qtde3 = t.Qtde3,
+                                       Numero_Guia = t.Numero_Guia, Valor_Guia = t.Valor_Guia, Situacao = t.Situacao }).FirstOrDefault();
+                Rodo_uso_plataforma_Struct reg = new Rodo_uso_plataforma_Struct() {
+                    Codigo = Sql.Codigo,
+                    Datade = Sql.DataDe,
+                    Dataate = Sql.DataAte,
+                    Seq = Sql.Seq,
+                    Qtde1 = Sql.Qtde1,
+                    Qtde2 = Sql.Qtde2,
+                    Qtde3 = Sql.Qtde3,
+                    Numero_Guia = Sql.Numero_Guia,
+                    Valor_Guia = Sql.Valor_Guia,
+                    Situacao = Sql.Situacao
+                };
+                return reg;
+            }
+        }
+
         public Exception Insert_Rodo_Uso_Plataforma(Rodo_uso_plataforma Reg) {
             using (var db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[10];
+                object[] Parametros = new object[11];
                 Parametros[0] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
                 Parametros[1] = new SqlParameter { ParameterName = "@datade", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Datade };
                 Parametros[2] = new SqlParameter { ParameterName = "@dataate", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Dataate };
                 Parametros[3] = new SqlParameter { ParameterName = "@seq", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Seq };
-                Parametros[4] = new SqlParameter { ParameterName = "@qtde1", SqlDbType = SqlDbType.Int, SqlValue = Reg.Qtde1 };
-                Parametros[5] = new SqlParameter { ParameterName = "@qtde2", SqlDbType = SqlDbType.Int, SqlValue = Reg.Qtde2 };
-                Parametros[6] = new SqlParameter { ParameterName = "@qtde3", SqlDbType = SqlDbType.Int, SqlValue = Reg.Qtde3 };
-                Parametros[7] = new SqlParameter { ParameterName = "@numero_guia", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_Guia };
-                Parametros[8] = new SqlParameter { ParameterName = "@valor_guia", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Guia };
-                Parametros[9] = new SqlParameter { ParameterName = "@situacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Situacao };
+                Parametros[4] = new SqlParameter { ParameterName = "@seqdebito", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.SeqDebito };
+                Parametros[5] = new SqlParameter { ParameterName = "@qtde1", SqlDbType = SqlDbType.Int, SqlValue = Reg.Qtde1 };
+                Parametros[6] = new SqlParameter { ParameterName = "@qtde2", SqlDbType = SqlDbType.Int, SqlValue = Reg.Qtde2 };
+                Parametros[7] = new SqlParameter { ParameterName = "@qtde3", SqlDbType = SqlDbType.Int, SqlValue = Reg.Qtde3 };
+                Parametros[8] = new SqlParameter { ParameterName = "@numero_guia", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_Guia };
+                Parametros[9] = new SqlParameter { ParameterName = "@valor_guia", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Guia };
+                Parametros[10] = new SqlParameter { ParameterName = "@situacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Situacao };
 
-                db.Database.ExecuteSqlCommand("INSERT INTO rodo_uso_plataforma(codigo,datade,dataate,seq,qtde1,qtde2,qtde3,numero_guia,valor_guia,situacao) " +
-                                              "VALUES(@codigo,@datade,@dataate,@seq,@qtde1,@qtde2,@qtde3,@numero_guia,@valor_guia,@situacao)", Parametros);
+                db.Database.ExecuteSqlCommand("INSERT INTO rodo_uso_plataforma(codigo,datade,dataate,seq,seqdebito,qtde1,qtde2,qtde3,numero_guia,valor_guia,situacao) " +
+                                              "VALUES(@codigo,@datade,@dataate,@seq,@seqdebito,@qtde1,@qtde2,@qtde3,@numero_guia,@valor_guia,@situacao)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {

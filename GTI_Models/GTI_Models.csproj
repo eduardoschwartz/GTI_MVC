@@ -242,6 +242,7 @@
     <Compile Include="ReportModels\Empresa_Detalhe.cs" />
     <Compile Include="ReportModels\Imovel_Detalhe.cs" />
     <Compile Include="ReportModels\NotificacaoIssReport.cs" />
+    <Compile Include="ReportModels\UsoPlataformaReport.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

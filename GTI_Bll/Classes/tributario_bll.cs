@@ -1520,6 +1520,10 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Rodo_uso_plataforma_Struct Retorna_Rodo_uso_plataforma(int Codigo, DateTime DataDe, DateTime DataAte, short Seq) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Retorna_Rodo_uso_plataforma(Codigo, DataDe, DataAte,Seq);
+        }
 
     }//end class
 }

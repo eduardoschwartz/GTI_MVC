@@ -16,6 +16,7 @@ namespace GTI_Models.Models {
         [Key]
         [Column(Order = 4)]
         public byte Seq { get; set; }
+        public byte SeqDebito { get; set; }
         public int Qtde1 { get; set; }
         public int Qtde2 { get; set; }
         public int Qtde3 { get; set; }
@@ -29,6 +30,7 @@ namespace GTI_Models.Models {
         public DateTime Datade { get; set; }
         public DateTime Dataate { get; set; }
         public byte Seq { get; set; }
+        public byte SeqDebito { get; set; }
         public int Qtde1 { get; set; }
         public int Qtde2 { get; set; }
         public int Qtde3 { get; set; }
