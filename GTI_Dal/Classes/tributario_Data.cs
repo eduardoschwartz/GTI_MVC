@@ -2709,6 +2709,24 @@ Proximo:;
             }
         }
 
+        public List<Rodo_empresa> Lista_Rodo_empresa(int Codigo,bool Func) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Rodo_Uso_Palataforma_User
+                           join c in db.Rodo_Empresa on t.Empresa equals c.Codigo into lc from c in lc.DefaultIfEmpty()
+                           where t.User_id==Codigo && t.Funcionario==Func
+                           orderby c.Nome select new { Codigo = t.Empresa, Nome = c.Nome }).ToList();
+                List<Rodo_empresa> Lista = new List<Rodo_empresa>();
+                foreach (var item in Sql) {
+                    Rodo_empresa reg = new Rodo_empresa() {
+                        Codigo = item.Codigo,
+                        Nome = item.Nome
+                    };
+                    Lista.Add(reg);
+                }
+                return Lista;
+            }
+        }
+
         public List<Rodo_uso_plataforma_Struct> Lista_Rodo_uso_plataforma(int Codigo,int Ano) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var Sql = (from t in db.Rodo_Uso_Palataforma

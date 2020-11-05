@@ -1809,7 +1809,7 @@ namespace GTI_Dal.Classes {
                 if (!f)//se for fiscal pode consultar qualquer ITBI
                     Sql=Sql.Where(m => m.UserId == user);
                 else {
-                    Sql = Sql.Where(m => m.SituacaoCodigo <3);//Só consultar ITBIs abertos
+                  //  Sql = Sql.Where(m => m.SituacaoCodigo <3);//Só consultar ITBIs abertos
                 }
 
                 foreach (var reg in Sql) {

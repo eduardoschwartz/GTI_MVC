@@ -1499,6 +1499,11 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Rodo_empresa();
         }
 
+        public List<Rodo_empresa> Lista_Rodo_empresa(int Codigo, bool Func) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Lista_Rodo_empresa(Codigo,Func);
+        }
+
         public List<Rodo_uso_plataforma_Struct> Lista_Rodo_uso_plataforma(int Codigo, int Ano) {
             Tributario_Data obj = new Tributario_Data(_connection);
             return obj.Lista_Rodo_uso_plataforma(Codigo,Ano);

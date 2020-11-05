@@ -2034,20 +2034,30 @@ namespace GTI_Mvc.Controllers {
                     ViewBag.Result = "Imóvel não cadastrado.";
                     return View(model);
                 }
+
+                EnderecoStruct _imovel = imovelRepository.Dados_Endereco(model.Codigo_Imovel,TipoEndereco.Local);
                 CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(model.Codigo_Cidadao);
                 string _bairro = "",_endereco="",_compl="",_cidade="JABOTICABAL",_uf="SP",_nome="";
                 string _cpf_cnpj = string.IsNullOrWhiteSpace(_cidadao.Cnpj) ? _cidadao.Cpf : _cidadao.Cnpj;
                 int _numero = 0, _cep = 14870000, _codigo = model.Codigo_Cidadao,_fiscal= Convert.ToInt32(Session["hashid"]);
                 short _ano=(short)model.Ano_Notificacao;
-                bool _r = _cidadao.EtiquetaC != "S";
+                //bool _r = _cidadao.EtiquetaC != "S";
                 _nome = _cidadao.Nome;
-                _endereco = _r ? _cidadao.EnderecoR : _cidadao.EnderecoC;
-                _bairro = _r ?_cidadao.NomeBairroR: _cidadao.NomeBairroC;
-                _numero =_r?(int)_cidadao.NumeroR: (int)_cidadao.NumeroC;
-                _compl = _r?_cidadao.ComplementoR: _cidadao.ComplementoC;
-                _cidade = _r ? _cidadao.NomeCidadeR : _cidadao.NomeCidadeC;
-                _uf = _r ? _cidadao.UfR : _cidadao.UfC;
-                _cep = _r ? (int)_cidadao.CepR : (int)_cidadao.CepC;
+                //_endereco = _r ? _cidadao.EnderecoR : _cidadao.EnderecoC;
+                //_bairro = _r ?_cidadao.NomeBairroR: _cidadao.NomeBairroC;
+                //_numero =_r?(int)_cidadao.NumeroR: (int)_cidadao.NumeroC;
+                //_compl = _r?_cidadao.ComplementoR: _cidadao.ComplementoC;
+                //_cidade = _r ? _cidadao.NomeCidadeR : _cidadao.NomeCidadeC;
+                //_uf = _r ? _cidadao.UfR : _cidadao.UfC;
+                //_cep = _r ? (int)_cidadao.CepR : (int)_cidadao.CepC;
+
+                _endereco = _imovel.Endereco ;
+                _bairro = _imovel.NomeBairro;
+                _numero = (int)_imovel.Numero;
+                _compl = _imovel.Complemento;
+                _cidade = "JABOTICABAL";
+                _uf = "SP";
+                _cep = Convert.ToInt32(_imovel.Cep);
 
                 if(string.IsNullOrEmpty(_endereco) || string.IsNullOrEmpty(_bairro)) {
                     ViewBag.Result = "O Contribuinte possui endereço incompleto.";
@@ -2238,7 +2248,7 @@ namespace GTI_Mvc.Controllers {
                     Guid=item.Guid,
                     Ano_Notificacao = item.Ano_notificacao,
                     Numero_Notificacao = item.Numero_notificacao,
-                    Nome = item.Nome,
+                    Nome = Functions.TruncateTo(  item.Nome,25),
                     Data_Emissao = item.Data_gravacao,
                     SituacaoNome=item.Situacao_nome,
                     AnoNumero=item.Numero_notificacao.ToString("0000") + "/" + item.Ano_notificacao.ToString()
@@ -2326,7 +2336,7 @@ namespace GTI_Mvc.Controllers {
                 Habitese = _not.Habitese,
                 Isspago = _not.Isspago,
                 Linha_digitavel = _linha_digitavel,
-                Logradouro = _not.Logradouro,
+                Logradouro = _not.Logradouro + ", " + _not.Numero,
                 Nome = _not.Nome,
                 Numero = _not.Numero,
                 Numero_guia = _not.Numero_guia,
@@ -2384,7 +2394,10 @@ namespace GTI_Mvc.Controllers {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
-            List<Rodo_empresa> Lista = tributarioRepository.Lista_Rodo_empresa();
+            int _userid = Convert.ToInt32(Session["hashid"]);
+            bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
+
+            List<Rodo_empresa> Lista = tributarioRepository.Lista_Rodo_empresa(_userid,_func);
             ViewBag.Lista_Empresa = new SelectList(Lista, "Codigo", "Nome");
             
             RodoviariaViewModel model = new RodoviariaViewModel();
@@ -2749,5 +2762,18 @@ namespace GTI_Mvc.Controllers {
             return null;
         }
 
+        public ActionResult Rod_uso_plataforma_cancel(string p1, string p2, string p3, string p4) {
+            DateTime _datade, _dataate;
+            bool b = DateTime.TryParseExact(p1, "MM/dd/yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out _datade);
+            bool c = DateTime.TryParseExact(p2, "MM/dd/yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out _dataate);
+            int _ano = _datade.Year;
+            short _seq = Convert.ToInt16(p3);
+            int _codigo = Convert.ToInt32(p4);
+
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+
+            return RedirectToAction("Rod_plat_query", "Tributario",new { a =Encrypt( p4), c = Encrypt(_ano.ToString()) });
+
+        }
     }
 }

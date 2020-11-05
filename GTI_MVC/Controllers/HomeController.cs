@@ -33,6 +33,15 @@ namespace GTI_Mvc.Controllers {
         public ViewResult Login() {
             
             if (Session["hashid"]!= null) {
+                int _userid = Convert.ToInt32(Session["hashid"]);
+                bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
+                Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+                List<int> ListaUsoPlataforma = tributarioRepository.Lista_Rodo_Uso_Plataforma_UserEmpresa(_userid, _func);
+                if (ListaUsoPlataforma.Count == 0) {
+                    ViewBag.UsoPlataforma = "N";
+                } else {
+                    ViewBag.UsoPlataforma = "S";
+                }
                 return View("SysMenu");
             }
             Session.Remove("hashid");
@@ -61,6 +70,16 @@ namespace GTI_Mvc.Controllers {
                 LoginViewModel model = new LoginViewModel();
                 return View("Login",model);
             } else {
+                int _userid = Convert.ToInt32(Session["hashid"]);
+                bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
+                Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+                List<int> ListaUsoPlataforma = tributarioRepository.Lista_Rodo_Uso_Plataforma_UserEmpresa(_userid, _func);
+                if (ListaUsoPlataforma.Count == 0) {
+                    ViewBag.UsoPlataforma = "N";
+                } else {
+                    ViewBag.UsoPlataforma = "S";
+                }
+
                 return View();
             }
         }
@@ -78,7 +97,7 @@ namespace GTI_Mvc.Controllers {
             Session["hashfunc"] = bFuncionario ? "S" : "N";
            // Functions.pUserGTI = bFuncionario;
             Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
-
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             if (bFuncionario) {
                 sOldPwd = sistema_Class.Retorna_User_Password(sLogin);
                 int UserId = sistema_Class.Retorna_User_LoginId(sLogin);
@@ -120,6 +139,15 @@ namespace GTI_Mvc.Controllers {
                         Session.Add("hashfiscal", "N");
                         Session.Add("hashfunc", "N");
                     }
+                    int _userid = Convert.ToInt32(Session["hashid"]);
+                    bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
+
+                    List<int> ListaUsoPlataforma = tributarioRepository.Lista_Rodo_Uso_Plataforma_UserEmpresa(_userid, _func);
+                    if (ListaUsoPlataforma.Count == 0) {
+                        ViewBag.UsoPlataforma = "N";
+                    } else {
+                        ViewBag.UsoPlataforma = "S";
+                    }
                     return View("../Home/SysMenu");
                 }
             } else {
@@ -146,6 +174,15 @@ namespace GTI_Mvc.Controllers {
                                 Session.Add("hashfiscalitbi", "N");
                                 Session.Add("hashfiscal", "N");
                                 Session.Add("hashfunc", "N");
+                                int _userid = Convert.ToInt32(Session["hashid"]);
+                                bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
+
+                                List<int> ListaUsoPlataforma = tributarioRepository.Lista_Rodo_Uso_Plataforma_UserEmpresa(_userid, _func);
+                                if (ListaUsoPlataforma.Count == 0) {
+                                    ViewBag.UsoPlataforma = "N";
+                                } else {
+                                    ViewBag.UsoPlataforma = "S";
+                                }
                                 return View("../Home/SysMenu");
                             }
                         }
