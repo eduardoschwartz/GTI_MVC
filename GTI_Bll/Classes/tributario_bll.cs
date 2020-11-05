@@ -1525,6 +1525,11 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Rodo_uso_plataforma(Codigo, DataDe, DataAte,Seq);
         }
 
+        public List<int> Lista_Rodo_Uso_Plataforma_UserEmpresa(int UserId, bool Func) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Lista_Rodo_Uso_Plataforma_UserEmpresa(UserId,Func);
+        }
+
     }//end class
 }
 

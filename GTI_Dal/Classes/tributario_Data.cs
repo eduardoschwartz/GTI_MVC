@@ -2786,6 +2786,12 @@ Proximo:;
             }
         }
 
+        public List<int> Lista_Rodo_Uso_Plataforma_UserEmpresa(int UserId,bool Func) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                List<int> Lista = (from t in db.Rodo_Uso_Palataforma_User where t.User_id==UserId && t.Funcionario==Func  select t.Empresa).ToList();
+                return Lista;
+            }
+        }
 
     }//end class
 }
