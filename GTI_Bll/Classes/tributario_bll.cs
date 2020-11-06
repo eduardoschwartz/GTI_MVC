@@ -1535,6 +1535,13 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Rodo_Uso_Plataforma_UserEmpresa(UserId,Func);
         }
 
+        public Exception Alterar_Uso_Plataforma_Situacao(int Codigo, DateTime DataDe, DateTime DataAte, short Seq,int status) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            Exception ex = obj.Alterar_Uso_Plataforma_Situacao(Codigo,DataDe,DataAte,Seq,status);
+            return ex;
+        }
+
+
     }//end class
 }
 

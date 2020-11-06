@@ -2811,5 +2811,18 @@ Proximo:;
             }
         }
 
+        public Exception Alterar_Uso_Plataforma_Situacao(int Codigo, DateTime DataDe, DateTime DataAte, short Seq,int status) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Rodo_uso_plataforma i = db.Rodo_Uso_Palataforma.First(g => g.Codigo == Codigo && g.Datade==DataDe && g.Dataate==DataAte && g.Seq==Seq);
+                i.Situacao = status;
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
     }//end class
 }

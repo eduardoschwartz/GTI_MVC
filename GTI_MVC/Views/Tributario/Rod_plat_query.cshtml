@@ -84,7 +84,7 @@
                                     <td style="width:80px">
                                         @if (item.Situacao == 7) {
                                             <a href="@Url.Action("Rod_uso_plataforma_print", "Tributario", new { p1 = item.Datade, p2 = item.Dataate, p3 = item.Seq, p4 = item.Codigo })" title="Imprimir a Guia"> <img src="@Url.Content("~/images/print.png")"></a>
-                                            <a href="@Url.Action("Rod_uso_plataforma_cancel", "Tributario", new { p1 = item.Datade, p2 = item.Dataate, p3 = item.Seq, p4 = item.Codigo  })" onclick="return confirm('Cancelar esta apuração?')" })" title="Cancelar Apuração"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
+                                            <a href="@Url.Action("Rod_uso_plataforma_cancel", "Tributario", new { p1 = item.Datade, p2 = item.Dataate, p3 = item.Seq, p4 = item.Codigo ,p5=item.Numero_Guia })" onclick="return confirm('Cancelar esta apuração?')" })" title="Cancelar Apuração"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
                                         }
                                     </td>
                                 </tr>
