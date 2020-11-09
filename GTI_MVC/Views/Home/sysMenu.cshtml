@@ -7,12 +7,13 @@
 <style>
     .center {
         margin: auto;
-        width: 500px;
+        /*        width: 500px;
         border: 1px solid rgba(0,0,0,0.24);
         padding: 20px;
         box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
+        border-radius: 13px;*/
     }
+
     .actionlink:hover {
         color: darkgreen;
     }
@@ -24,24 +25,32 @@
 <br />
 
 <div class="center">
-    <span style="color:brown;font-weight:bold;font-style:italic">Selecione um serviço</span><br />
-    @if (Session["hashfunc"].ToString() == "S") {
-        @Html.ActionLink("Tramitação de processos", "Tramite_Processo", "Protocolo", null, new { @class = "actionlink" })<br />
-        if (Session["hashfiscal"].ToString() == "S") {
-            @Html.ActionLink("Notificação de ISS Contrução Civil", "Notificacao_menu", "Tributario", null, new { @class = "actionlink" })<br />
-        }
-    }
-    @if (ViewBag.UsoPlataforma == "S") {
-        @Html.ActionLink("Uso de Plataforma (terminal Rodoviário)", "Rod_menu", "Tributario", null, new { @class = "actionlink" })<br />
-    }
+    @*<span style="color:brown;font-weight:bold;font-style:italic">Selecione um serviço</span><br />*@
+    <div class="container" style="width:500px">
+        <div class="panel panel-danger">
+            <div class="panel-heading">Selecione um serviço</div>
+            <div class="panel-body">
+                @if (Session["hashfunc"].ToString() == "S") {
+                    @Html.ActionLink("Tramitação de processos", "Tramite_Processo", "Protocolo", null, new { @class = "actionlink" })<br />
+                    if (Session["hashfiscal"].ToString() == "S") {
+                        @Html.ActionLink("Notificação de ISS Contrução Civil", "Notificacao_menu", "Tributario", null, new { @class = "actionlink" })<br />
+                    }
+                }
+                @if (ViewBag.UsoPlataforma == "S") {
+                    @Html.ActionLink("Uso de Plataforma (terminal Rodoviário)", "Rod_menu", "Tributario", null, new { @class = "actionlink" })<br />
+                }
 
-    @*@if (Session["hashid"].ToString() == "433") {
-            @Html.ActionLink("Cadastro de imóvel", "CadImovel", "Imovel",null, new { Codigo = 1 ,  @class = "actionlink" })<br />
-        }*@
-    @Html.ActionLink("Imposto sobre Transmissão de Bens Imóveis (ITBI)", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })<br />
+                @*@if (Session["hashid"].ToString() == "433") {
+                @Html.ActionLink("Cadastro de imóvel", "CadImovel", "Imovel",null, new { Codigo = 1 ,  @class = "actionlink" })<br />
+            }*@
+                @Html.ActionLink("Imposto sobre Transmissão de Bens Imóveis (ITBI)", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })<br />
 
-    <br />
-    @Html.ActionLink("Alterar a senha", "Login_update", "Home", null, new { @class = "actionlink" })<br />
-    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
-    <br />
-</div>
+            </div>
+            <div class="panel-footer">
+                @Html.ActionLink("Alterar a senha", "Login_update", "Home", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+
+            </div>
+            </div>
+        </div>
+    </div>

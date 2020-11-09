@@ -9,11 +9,11 @@
 
     .center {
         margin: auto;
-        width: 780px;
+/*        width: 780px;
         border: 1px solid rgba(0,0,0,0.24);
         padding: 20px;
         box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
+        border-radius: 13px;*/
     }
 
     .actionlink:hover {
@@ -28,76 +28,84 @@
 <div class="center">
 
     @using (Html.BeginForm("Itbi_query", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
-        <br />
-        <label style="color: brown;font-size: 16px;font-style: italic">Consulta de certidões de isenção de ITBI</label>
+        @*<br />
+            <label style="color: brown;font-size: 16px;font-style: italic">Consulta de certidões de isenção de ITBI</label>
 
-        <br />
-        <br />
-        <table id="tblMain" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
-            <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal; white-space: nowrap;">
-                <tr style="height:14px;">
-                    <td style="display:none">Guid</td>
-                    <td style="width:100px;font-weight:normal">Certidão nº</td>
-                    <td style="width:90px;font-weight:normal">Data</td>
-                    <td style="width:270px;font-weight:normal">Requerida por</td>
-                    <td style="width:90px;font-weight:normal">Valida até</td>
-                    <td style="width:170px;font-weight:normal">Situação</td>
-                    <td style="width:130px"></td>
-                </tr>
-            </thead>
-            <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
-                @foreach (var item in Model) {
-                    <tr style="height:14px;">
-                        <td style="display:none">@Html.DisplayFor(modelItem => item.Guid)</td>
-                        <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.Itbi_NumeroAno)</td>
-                        <td style="width:90px;font-weight:normal"> @DateTime.Parse(Html.DisplayFor(modelItem => item.Data_cadastro).ToString()).ToString("dd/MM/yyyy")</td>
-                        <td style="width:270px;font-weight:normal">@Html.DisplayFor(modelItem => item.Comprador_Nome_tmp)</td>
-                        <td style="width:90px;font-weight:normal">@Html.DisplayFor(modelItem => item.Data_Validade)</td>
-                        <td style="width:170px;font-weight:normal">@Html.DisplayFor(modelItem => item.Situacao_Itbi_Nome)</td>
-                        <td style="width:130px">
-                            <a href="@Url.Action("Itbi_isencao_q", "Imovel", new { p = item.Guid })" title="Visualizar certidão"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
-                            @if (item.Situacao_Itbi_codigo == 1) {
-                                <a href="@Url.Action("Itbi_isencao_cancel", "Imovel", new { p = item.Guid, s = 4 })" onclick="return confirm('Cancelar esta certidão?')" })" title="Cancelar este ITBI"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
+            <br />
+            <br />*@
+
+        <div class="container" style="width:750px">
+            <div class="panel panel-danger">
+                <div class="panel-heading">Consulta de certidões de isenção de ITBI</div>
+                <div class="panel-body">
+                    <table id="tblMain" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                        <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal; white-space: nowrap;">
+                            <tr style="height:14px;">
+                                <td style="display:none">Guid</td>
+                                <td style="width:100px;font-weight:normal">Certidão nº</td>
+                                <td style="width:90px;font-weight:normal">Data</td>
+                                <td style="width:270px;font-weight:normal">Requerida por</td>
+                                <td style="width:90px;font-weight:normal">Valida até</td>
+                                <td style="width:170px;font-weight:normal">Situação</td>
+                                <td style="width:130px"></td>
+                            </tr>
+                        </thead>
+                        <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
+                            @foreach (var item in Model) {
+                                <tr style="height:14px;">
+                                    <td style="display:none">@Html.DisplayFor(modelItem => item.Guid)</td>
+                                    <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.Itbi_NumeroAno)</td>
+                                    <td style="width:90px;font-weight:normal"> @DateTime.Parse(Html.DisplayFor(modelItem => item.Data_cadastro).ToString()).ToString("dd/MM/yyyy")</td>
+                                    <td style="width:270px;font-weight:normal">@Html.DisplayFor(modelItem => item.Comprador_Nome_tmp)</td>
+                                    <td style="width:90px;font-weight:normal">@Html.DisplayFor(modelItem => item.Data_Validade)</td>
+                                    <td style="width:170px;font-weight:normal">@Html.DisplayFor(modelItem => item.Situacao_Itbi_Nome)</td>
+                                    <td style="width:130px">
+                                        <a href="@Url.Action("Itbi_isencao_q", "Imovel", new { p = item.Guid })" title="Visualizar certidão"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                                        @if (item.Situacao_Itbi_codigo == 1) {
+                                            <a href="@Url.Action("Itbi_isencao_cancel", "Imovel", new { p = item.Guid, s = 4 })" onclick="return confirm('Cancelar esta certidão?')" })" title="Cancelar este ITBI"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
+                                        }
+                                        @if (item.Situacao_Itbi_codigo == 5) {
+                                            <a href="@Url.Action("Itbi_isencao_print", "Imovel", new { p = item.Guid, u = item.Tipo_Imovel == "Urbano" })" title="Imprimir a certidão"> <img src="@Url.Content("~/images/print.png")"></a>
+                                        }
+                                    </td>
+                                </tr>
                             }
-                            @if (item.Situacao_Itbi_codigo == 5) {
-                                <a href="@Url.Action("Itbi_isencao_print", "Imovel", new { p = item.Guid, u = item.Tipo_Imovel == "Urbano" })" title="Imprimir a certidão"> <img src="@Url.Content("~/images/print.png")"></a>
+                        </tbody>
+                    </table>
+               
+                    <div class="form-group row">
+                        <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
+                    </div>
+                    
+                </div>
+                <div class="panel-footer">
+                    @Html.ActionLink("Retornar ao menu de opções", "Itbi_Menu", "Imovel", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                    </div>
+                </div>
+            </div>
+                if (ViewBag.Erro == "C") {
+                    <script type="text/javascript">
+                        alert("Apenas Itbis que encontram-se em análise podem ser cancelados!");
+                    </script>
+                } else {
+                    if (ViewBag.Erro == "P") {
+                        <script type="text/javascript">
+                            alert("A guia de pagamento deste Itbi ainda não foi liberada!");
+                        </script>
+                    } else {
+                        if (ViewBag.Erro == "A") {
+                            <script type="text/javascript">
+                                alert("Apenas Itbis que encontram-se em análise podem ser alterados!");
+                            </script>
+                        } else {
+                            if (ViewBag.Erro == "V") {
+                                <script type="text/javascript">
+                                    alert("Este boleto esta vencido e não pode ser mais emitido!");
+                                </script>
                             }
-                        </td>
-                    </tr>
+                        }
+                    }
                 }
-            </tbody>
-        </table>
-        <br />
-        <br />
-        <div class="form-group row">
-            <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
-        </div>
     }
-
-    @Html.ActionLink("Retornar ao menu de opções", "Itbi_Menu", "Imovel", null, new { @class = "actionlink" })<br />
-    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
-</div>
-
-@if (ViewBag.Erro == "C") {
-    <script type="text/javascript">
-        alert("Apenas Itbis que encontram-se em análise podem ser cancelados!");
-    </script>
-} else {
-    if (ViewBag.Erro == "P") {
-        <script type="text/javascript">
-            alert("A guia de pagamento deste Itbi ainda não foi liberada!");
-        </script>
-    } else {
-        if (ViewBag.Erro == "A") {
-            <script type="text/javascript">
-                alert("Apenas Itbis que encontram-se em análise podem ser alterados!");
-            </script>
-        } else {
-            if (ViewBag.Erro == "V") {
-                <script type="text/javascript">
-                    alert("Este boleto esta vencido e não pode ser mais emitido!");
-                </script>
-            }
-        }
-    }
-}
+    </div>

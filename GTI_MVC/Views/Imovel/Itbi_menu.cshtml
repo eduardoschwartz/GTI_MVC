@@ -7,11 +7,11 @@
 <style>
     .center {
         margin: auto;
-        width: 500px;
+        /* width: 500px;
         border: 1px solid rgba(0,0,0,0.24);
         padding: 20px;
         box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
+        border-radius: 13px;*/
     }
 
     .actionlink:hover {
@@ -25,18 +25,25 @@
 <br />
 
 <div class="center">
-    <span style="color:brown;font-weight:bold;font-style:italic">Imposto sobre Transmissão de Bens Imóveis (ITBI)</span><br />
-    @Html.ActionLink("Nova emissão de ITBI (Imóveis Urbanos)", "Itbi_urbano", "Imovel", null, new { @class = "actionlink" })<br />
-    @Html.ActionLink("Nova emissão de ITBI (Imóveis Rurais)", "Itbi_rural", "Imovel", null, new { @class = "actionlink" })<br />
-    @Html.ActionLink("Consultar declarações enviadas", "Itbi_query", "Imovel", null, new { @class = "actionlink" })<br />
-    @Html.ActionLink("Certidão de não incidência de ITBI", "Itbi_isencao", "Imovel", null, new { @class = "actionlink" })<br />
-    @Html.ActionLink("Consultar certidões enviadas", "Itbi_query_isencao", "Imovel", null, new { @class = "actionlink" })<br />
-    <a href="~/Files/ITBI Manual do Usuario.pdf" class="actionlink">Download do manual do usuário</a><br />
-    @if (ViewBag.Fiscal == "S") {
-        @Html.ActionLink("Relatório dos ITBI´s emitidos", "Itbi_resumo", "Imovel", null, new { @class = "actionlink" })<br />
-    }
-    <br />
-    @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
-    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
-    <br />
+    @*<span style="color:brown;font-weight:bold;font-style:italic">Imposto sobre Transmissão de Bens Imóveis (ITBI)</span><br />*@
+    <div class="container" style="width:450px">
+        <div class="panel panel-danger">
+            <div class="panel-heading">Imposto sobre Transmissão de Bens Imóveis (ITBI)</div>
+            <div class="panel-body">
+                @Html.ActionLink("Nova emissão de ITBI (Imóveis Urbanos)", "Itbi_urbano", "Imovel", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Nova emissão de ITBI (Imóveis Rurais)", "Itbi_rural", "Imovel", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Consultar declarações enviadas", "Itbi_query", "Imovel", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Certidão de não incidência de ITBI", "Itbi_isencao", "Imovel", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Consultar certidões enviadas", "Itbi_query_isencao", "Imovel", null, new { @class = "actionlink" })<br />
+                <a href="~/Files/ITBI Manual do Usuario.pdf" class="actionlink">Download do manual do usuário</a><br />
+                @if (ViewBag.Fiscal == "S") {
+                    @Html.ActionLink("Relatório dos ITBI´s emitidos", "Itbi_resumo", "Imovel", null, new { @class = "actionlink" })<br />
+                }
+            </div>
+            <div class="panel-footer">
+                @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
+        </div>
+    </div>
 </div>

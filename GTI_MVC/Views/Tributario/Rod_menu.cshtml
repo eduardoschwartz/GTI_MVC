@@ -8,11 +8,11 @@
 <style>
     .center {
         margin: auto;
-        width: 500px;
-        border: 1px solid rgba(0,0,0,0.24);
-        padding: 20px;
+        width: 450px;
+/*        border: 1px solid rgba(0,0,0,0.24);*/
+/*        padding: 20px;
         box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
+        border-radius: 13px;*/
     }
 
     .actionlink:hover {
@@ -27,22 +27,31 @@
 
 @using (Html.BeginForm("Rod_menu", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
     <div class="center">
-        <span style="color:brown;font-weight:bold;font-style:italic">Uso de paltaforma (Terminal Rodoviário)</span><br /><br />
-        <label style="font-weight:normal">Selecione a empresa:</label><br />
-        @Html.DropDownListFor(m => m.Codigo, ViewBag.Lista_Empresa as SelectList, null, new { @id = "EmpresaDropDown", style = "width:450px;height:25px", rows = 10 })
-        <div class="form-group row">
-            <label style="font-weight:normal;color:red;padding-left:15px" id="errorLabel">@ViewBag.Result</label>
-        </div>
+        <div class="container" style="width:460px">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    Uso de Plataforma (Terminal Rodoviário)
+                </div>
+                <div class="panel-body">
+                    <label style="font-weight:normal">Selecione a empresa:</label><br />
+                    @Html.DropDownListFor(m => m.Codigo, ViewBag.Lista_Empresa as SelectList, null, new { @id = "EmpresaDropDown", style = "width:400px;height:25px", rows = 10 })
+                    <div class="form-group row">
+                        <label style="font-weight:normal;color:red;padding-left:15px" id="errorLabel">@ViewBag.Result</label>
+                    </div>
 
-        <div style="text-align:center">
-            <button type="submit" class="btn btn-primary">Selecionar</button>
-        </div>
+                    <div style="text-align:center">
+                        <button type="submit" class="btn btn-primary">Selecionar</button>
+                    </div>
 
-        <br /><br />
-        @Html.HiddenFor(m=>m.Nome, new { @id = "Nome_tmp" })
-        @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
-        @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
-        <br />
+                    @Html.HiddenFor(m => m.Nome, new { @id = "Nome_tmp" })
+                </div>
+                <div class="panel-footer">
+                    @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+
+                </div>
+                </div>
+            </div>
     </div>
 }
 

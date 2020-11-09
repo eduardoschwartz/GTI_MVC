@@ -7,12 +7,12 @@
 <style>
     .center {
         margin: auto;
-        width: 500px;
+/*        width: 500px;
         border: 1px solid rgba(0,0,0,0.24);
         padding: 20px;
         box-shadow: 0 .1em 0.5em #000;
         border-radius: 13px;
-    }
+*/    }
 
     .actionlink:hover {
         color: darkgreen;
@@ -25,11 +25,20 @@
 <br />
 
 <div class="center">
-    <span style="color:brown;font-weight:bold;font-style:italic">Notificação de ISS contrução civil</span><br /><br />
-    @Html.ActionLink("Preencher nova notificação", "Notificacao_iss", "Tributario", null, new { @class = "actionlink" })<br />
-    @Html.ActionLink("Consultar notificações emitidas", "Notificacao_query", "Tributario", null, new { @class = "actionlink" })<br />
-    <br />
-    @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
-    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
-    <br />
+    <div class="container" style="width:350px">
+        <div class="panel panel-danger">
+            <div class="panel-heading">Notificação de ISS Construção Civil</div>
+            <div class="panel-body">
+                @*<span style="color:brown;font-weight:bold;font-style:italic">Notificação de ISS contrução civil</span><br /><br />*@
+                @Html.ActionLink("Preencher nova notificação", "Notificacao_iss", "Tributario", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Consultar notificações emitidas", "Notificacao_query", "Tributario", null, new { @class = "actionlink" })<br />
+            </div>
+            <div class="panel-footer">
+                @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
+        </div>
+ 
+    
+    </div>
 </div>

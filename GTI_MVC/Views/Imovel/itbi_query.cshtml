@@ -9,11 +9,11 @@
 
     .center {
         margin: auto;
-        width: 780px;
+        /* width: 780px;
         border: 1px solid rgba(0,0,0,0.24);
         padding: 20px;
         box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
+        border-radius: 13px;*/
     }
 
     .actionlink:hover {
@@ -28,73 +28,83 @@
 <div class="center">
 
     @using (Html.BeginForm("Itbi_query", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
-        <br />
-        <label style="color: brown;font-size: 16px;font-style: italic">Consulta de ITBI</label>
+       
+        <div class="container" style="width:800px">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    Consulta de ITBI
+                    @{
+                    var selectList = new SelectList(new List<SelectListItem>
+                        {
+                        new SelectListItem {Text = "Enviado para análise", Value = "1" },
+                        new SelectListItem {Text = "Aguardando pagamento", Value = "2"},
+                        new SelectListItem {Text = "Itbi's concluídos", Value = "3" },
+                        new SelectListItem {Text = "Itbi's cancelados", Value = "4"},
+                        }, "Value", "Text");
 
-        {
-            var selectList = new SelectList(new List<SelectListItem>{
-            new SelectListItem {Text = "Enviado para análise", Value = "1" },
-            new SelectListItem {Text = "Aguardando pagamento", Value = "2"},
-            new SelectListItem {Text = "Itbi's concluídos", Value = "3" },
-            new SelectListItem {Text = "Itbi's cancelados", Value = "4"},
-                    }, "Value", "Text");
-            <Label style="padding-left:10px">Exibir:&nbsp;</Label>@Html.DropDownListFor(m => m[0].Status_Query, selectList, "(Exibir todos os ITBI's)", new { onchange = "this.form.submit()" })
-        }
-        <br />
-        <br />
-        <table id="tblMain" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
-            <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal; white-space: nowrap;">
-                <tr style="height:14px;">
-                    <td style="display:none">Guid</td>
-                    <td style="width:100px;font-weight:normal">Itbi nº</td>
-                    <td style="width:90px;font-weight:normal">Data</td>
-                    <td style="width:60px;font-weight:normal">Tipo</td>
-                    <td style="width:270px;font-weight:normal">Nome do Comprador</td>
-                    <td style="width:170px;font-weight:normal">Situação</td>
-                    <td style="width:160px">
-                    </td>
-                </tr>
-            </thead>
-            <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
-                @foreach (var item in Model) {
-                    <tr style="height:14px;">
-                        <td style="display:none">@Html.DisplayFor(modelItem => item.Guid)</td>
-                        <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.Itbi_NumeroAno)</td>
-                        <td style="width:90px;font-weight:normal"> @DateTime.Parse(Html.DisplayFor(modelItem => item.Data_cadastro).ToString()).ToString("dd/MM/yyyy")</td>
-                        <td style="width:60px;font-weight:normal">@Html.DisplayFor(modelItem => item.Tipo_Imovel)</td>
-                        <td style="width:270px;font-weight:normal">@Html.DisplayFor(modelItem => item.Comprador_Nome_tmp)</td>
-                        <td style="width:170px;font-weight:normal">@Html.DisplayFor(modelItem => item.Situacao_Itbi_Nome)</td>
-                        <td style="width:130px">
-                            @if (item.Tipo_Imovel == "Urbano") {
-                                <a href="@Url.Action("Itbi_urbano_q", "Imovel", new { p = item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
-                            } else {
-                                <a href="@Url.Action("Itbi_rural_q","Imovel",new {p=item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                        }
+                        <Label style="padding-left:10px">Exibir:&nbsp;</Label>@Html.DropDownListFor(m => m[0].Status_Query, selectList, "(Exibir todos os ITBI's)", new { onchange = "this.form.submit()" })
+                </div>
+                <div class="panel-body">
+                
+                    <table id="tblMain" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                        <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal; white-space: nowrap;">
+                            <tr style="height:14px;">
+                                <td style="display:none">Guid</td>
+                                <td style="width:100px;font-weight:normal">Itbi nº</td>
+                                <td style="width:90px;font-weight:normal">Data</td>
+                                <td style="width:60px;font-weight:normal">Tipo</td>
+                                <td style="width:270px;font-weight:normal">Nome do Comprador</td>
+                                <td style="width:170px;font-weight:normal">Situação</td>
+                                <td style="width:160px">
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
+                            @foreach (var item in Model) {
+                                <tr style="height:14px;">
+                                    <td style="display:none">@Html.DisplayFor(modelItem => item.Guid)</td>
+                                    <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.Itbi_NumeroAno)</td>
+                                    <td style="width:90px;font-weight:normal"> @DateTime.Parse(Html.DisplayFor(modelItem => item.Data_cadastro).ToString()).ToString("dd/MM/yyyy")</td>
+                                    <td style="width:60px;font-weight:normal">@Html.DisplayFor(modelItem => item.Tipo_Imovel)</td>
+                                    <td style="width:270px;font-weight:normal">@Html.DisplayFor(modelItem => item.Comprador_Nome_tmp)</td>
+                                    <td style="width:170px;font-weight:normal">@Html.DisplayFor(modelItem => item.Situacao_Itbi_Nome)</td>
+                                    <td style="width:130px">
+                                        @if (item.Tipo_Imovel == "Urbano") {
+                                            <a href="@Url.Action("Itbi_urbano_q", "Imovel", new { p = item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                                        } else {
+                                            <a href="@Url.Action("Itbi_rural_q","Imovel",new {p=item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                                        }
+                                        <a href="@Url.Action("Itbi_print","Imovel", new { p = item.Guid,u=item.Tipo_Imovel=="Urbano" })" title="Imprimir a declaração do ITBI"> <img src="@Url.Content("~/images/print.png")"></a>
+                                        @if (item.Tipo_Imovel == "Urbano") {
+                                            <a href="@Url.Action("Itbi_urbano_e","Imovel", new { p = item.Guid } )" title="Alterar este ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>
+                                        } else {
+                                            <a href="@Url.Action("Itbi_rural_e","Imovel", new { p = item.Guid } )" title="Alterar este ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>
+                                        }
+                                        <a href="@Url.Action("Itbi_cancel", "Imovel", new { p = item.Guid, s = 4 })" onclick="return confirm('Cancelar este Itbi?')" })" title="Cancelar este ITBI"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
+                                        <a href="@Url.Action("Itbi_forum","Imovel" , new { p = item.Guid } )" title="Processo de análise do ITBI"> <img src="@Url.Content("~/images/observacao.png")"></a>
+                                        @if (item.Situacao_Itbi_codigo == 2) {
+                                            <a href="@Url.Action("Itbi_guia", "Imovel", new { p = item.Guid })" onclick="return confirm('Boletos liberados até as 16:30h podem ser quitados a partir do dia seguinte de sua liberação, após às 16:30h será necessário mais um dia útil para o registro. Você deseja emitir o boleto?')" })" title="Emitir guia para pagamento"> <img src="@Url.Content("~/images/barcode.gif")"></a>
+                                        }
+                                    </td>
+                                </tr>
                             }
-                            <a href="@Url.Action("Itbi_print","Imovel", new { p = item.Guid,u=item.Tipo_Imovel=="Urbano" })" title="Imprimir a declaração do ITBI"> <img src="@Url.Content("~/images/print.png")"></a>
-                            @if (item.Tipo_Imovel == "Urbano") {
-                                <a href="@Url.Action("Itbi_urbano_e","Imovel", new { p = item.Guid } )" title="Alterar este ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>
-                            } else {
-                                <a href="@Url.Action("Itbi_rural_e","Imovel", new { p = item.Guid } )" title="Alterar este ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>
-                            }
-                            <a href="@Url.Action("Itbi_cancel", "Imovel", new { p = item.Guid, s = 4 })" onclick="return confirm('Cancelar este Itbi?')" })" title="Cancelar este ITBI"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
-                            <a href="@Url.Action("Itbi_forum","Imovel" , new { p = item.Guid } )" title="Processo de análise do ITBI"> <img src="@Url.Content("~/images/observacao.png")"></a>
-                            @if (item.Situacao_Itbi_codigo == 2) {
-                                <a href="@Url.Action("Itbi_guia", "Imovel", new { p = item.Guid })" onclick="return confirm('Boletos liberados até as 16:30h podem ser quitados a partir do dia seguinte de sua liberação, após às 16:30h será necessário mais um dia útil para o registro. Você deseja emitir o boleto?')" })" title="Emitir guia para pagamento"> <img src="@Url.Content("~/images/barcode.gif")"></a>
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <br />
-        <br />
-        <div class="form-group row">
-            <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
+                        </tbody>
+                    </table>
+                    <br />
+                    <br />
+                    <div class="form-group row">
+                        <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    @Html.ActionLink("Preencher outro ITBI", "Itbi_Menu", "Imovel", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                </div>
+            </div>
         </div>
     }
 
-    @Html.ActionLink("Preencher outro ITBI", "Itbi_Menu", "Imovel", null, new { @class = "actionlink" })<br />
-    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 </div>
 
 @if (ViewBag.Erro == "C") {
