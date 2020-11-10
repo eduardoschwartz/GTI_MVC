@@ -15,14 +15,11 @@
         font-size: 14px;
         box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
     }
+
     .center {
         margin: auto;
-        width: 480px;
-        border: 1px solid rgba(0,0,0,0.24);
-        padding: 20px;
-        box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
     }
+
     .actionlink:hover {
         color: darkgreen;
     }
@@ -32,70 +29,47 @@
     }
 </style>
 
-<div class="center">
-    <label style="color: brown;font-size: 16px;font-style: italic">&nbsp;Renovação de Alvará de Funcionamento</label>
-    <br />
-
+<div class="center container" style="width:450px">
     <form asp-controller="Empresa" enctype="multipart/form-data" method="post" onsubmit="return ValidateForm()" asp-action="Details" style="margin-left:18px">
-        <table width="500px">
-            <tr>
-                <td style="width:150px">@Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })</td>
-                <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)", @onchange = "ClearError()" })</td>
-            </tr>
-            <tr style="height:40px">
-                <td style="width:150px">
-                    CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
-                    &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
-                </td>
-                <td style="width:300px">
-                    @Html.TextBoxFor(m => m.CpfValue, new { @id = "cpfTxt", @class = "textBoxBlue", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CPF" })
-                    @Html.TextBoxFor(m => m.CnpjValue, new { @id = "cnpjTxt", @class = "textBoxBlue", @style = "max-width:200px;display:none", @onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CNPJ" })
-                </td>
-            </tr>
-            <tr>
-                <td style="width:150px" valign="middle">
-                    <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                </td>
-                <td style="width:150px" valign="middle">
-                    @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:110px;" })
-                </td>
-            </tr>
-        </table>
+        <div class="panel panel-danger">
+            <div class="panel-heading">Renovação de alvará de funcionamento</div>
+            <div class="panel-body">
 
-        <br />
-        <div>
-            <button type="submit" class="btn btn-primary"> Consultar</button>
-        </div>
-        <br />
-        <br />
-
-        <div style="border:1px solid black;width:400px;margin-left:1px">
-            <br />
-            <label style="color:brown;font-size:16px;font-style:italic;padding-left:10px">Autenticar o Alvará</label>
-            <br />
-            <div class="form-group row align-items-lg-baseline">
-                <div class="input-group">
-                    <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chave</label>
-                    &nbsp;&nbsp;@Html.TextBoxFor(m => m.Chave, new { @id = "chave", @class = "textBoxBlue", @style = "max-width:190px;" })
-                    &nbsp;<button class="green_button" type="submit" title="Validar a certidão." formaction="Validate_AF" formmethod="post">Validar</button>
-                </div>
+                <table width="500px">
+                    <tr>
+                        <td style="width:150px">@Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })</td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)", @onchange = "ClearError()" })</td>
+                    </tr>
+                    <tr style="height:40px">
+                        <td style="width:150px">
+                            CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
+                            &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
+                        </td>
+                        <td style="width:300px">
+                            @Html.TextBoxFor(m => m.CpfValue, new { @id = "cpfTxt", @class = "textBoxBlue", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CPF" })
+                            @Html.TextBoxFor(m => m.CnpjValue, new { @id = "cnpjTxt", @class = "textBoxBlue", @style = "max-width:200px;display:none", @onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CNPJ" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px" valign="middle">
+                            <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+                        </td>
+                        <td style="width:150px" valign="middle">
+                            @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:110px;" })
+                        </td>
+                    </tr>
+                </table>
                 <br />
-                <article style="color:darkred;font-size:small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Obs: A partir de 27/05/2020 a validação será feita através do <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;QRCode presente no alvará.</article>
-
+                <button type="submit" class="btn btn-primary"> Consultar</button>
+            </div>
+            <label style="font-weight:normal;color:red;padding-left:13px" id="errorLabel">@Model.ErrorMessage</label>
+            <div class="panel-footer">
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
             </div>
         </div>
-
     </form>
-
-
-    @if (Model != null) {
-        <div class="form-group row">
-            <label style="font-weight:normal;color:red" id="errorLabel">@Model.ErrorMessage</label>
-        </div>
-    }
-
-    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 </div>
+
 @section scripts{
 
     <script type="text/javascript">

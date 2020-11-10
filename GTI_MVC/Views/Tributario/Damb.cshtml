@@ -16,14 +16,11 @@
         font-size: 14px;
         box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
     }
+
     .center {
         margin: auto;
-        width: 420px;
-        border: 1px solid rgba(0,0,0,0.24);
-        padding: 20px;
-        box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
     }
+
     .actionlink:hover {
         color: darkgreen;
     }
@@ -33,64 +30,60 @@
     }
 </style>
 
-<div class="center">
-    <label style="color: brown;font-size: 16px;font-style: italic">Consulta e atualização de débitos vencidos</label>
-    <br />
+<div class="center container" style="width:450px">
     @using (Html.BeginForm("Damb", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
+        <div class="panel panel-danger">
+            <div class="panel-heading">Consulta e atualização de débitos vencidos</div>
+            <div class="panel-body">
+                <table width="500px">
+                    <tr style="height:40px">
+                        <td style="style=" padding-top:15px;width:150px">
+                            <label style="font-weight:normal">Data de Vencimento:</label>
+                        </td>
+                        <td style="width: 300px;font-weight:bold">
+                            @Html.DisplayFor(m => Model.DataVencimento)
+                            @Html.HiddenFor(m => Model.DataVencimento)
+                        </td>
+                    </tr>
+                    <tr style="height:40px">
+                        <td style="padding-top:15px;width:150px">
+                            @Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })
+                        </td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "Codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="font-size:12px;color:red">* No caso dos imóveis informar o código do imóvel </td>
+                    </tr>
+                    <tr style="height:40px">
+                        <td style="width: 150px">
+                            CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
+                            &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
+                        </td>
+                        <td style="width:300px">
+                            @Html.TextBoxFor(m => m.CpfValue, new { @id = "cpfTxt", @class = "textBoxBlue", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CPF" })
+                            @Html.TextBoxFor(m => m.CnpjValue, new { @id = "cnpjTxt", @class = "textBoxBlue", @style = "max-width:200px;display:none", @onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CNPJ" })
+                        </td>
+                    </tr>
 
+                    <tr>
+                        <td style="style=" padding-top:15px;width:150px" valign="middle">
+                            <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+                        </td>
+                        <td style="width:150px;" valign="middle">
+                            @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:110px;" })
+                        </td>
+                    </tr>
+                </table>
 
-        <table width="500px">
-            <tr style="height:40px">
-                <td style="style=" padding-top:15px;width:150px">
-                    <label style="font-weight:normal">Data de Vencimento:</label>
-                </td>
-                <td style="width: 300px;font-weight:bold">
-                    @Html.DisplayFor(m => Model.DataVencimento)
-                    @Html.HiddenFor(m => Model.DataVencimento)
-                </td>
-            </tr>
-            <tr style="height:40px">
-                <td  style ="padding-top:15px;width:150px">
-                    @Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })
-                </td>
-                <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "Codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
-            </tr>
-            <tr>
-                <td style="font-size:12px;color:red">* No caso dos imóveis informar o código do imóvel </td>
-            </tr>
-            <tr style="height:40px">
-                <td style="width: 150px">
-                    CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
-                    &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
-                </td>
-                <td style="width:300px">
-                    @Html.TextBoxFor(m => m.CpfValue, new { @id = "cpfTxt", @class = "textBoxBlue", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CPF" })
-                    @Html.TextBoxFor(m => m.CnpjValue, new { @id = "cnpjTxt", @class = "textBoxBlue", @style = "max-width:200px;display:none", @onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CNPJ" })
-                </td>
-            </tr>
-
-            <tr>
-                <td style="style=" padding-top:15px;width:150px" valign="middle">
-                    <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                </td>
-                <td style="width:150px;" valign="middle">
-                    @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:110px;" })
-                </td>
-            </tr>
-        </table>
-
-        <br />
-
-        <button type="submit" class="btn btn-primary" id="print" formaction="Damb" formmethod="post">Consultar</button>
-
+                <br />
+                <button type="submit" class="btn btn-primary" id="print" formaction="Damb" formmethod="post">Consultar</button>
+            </div>
+            <label style="font-weight:normal;color:red;padding-left:13px" id="errorLabel">@ViewBag.Result</label>
+            <div class="panel-footer">
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
+        </div>
     }
-
-
-    <br />
-    <div class="form-group row">
-        <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
-    </div>
-    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 </div>
 
 @section scripts{
@@ -104,12 +97,12 @@
 
         function ValidateForm() {
             ClearError();
-            
+
             var _cod = document.getElementById('Codigo').value;
             var _cpf = document.getElementById('cpfTxt').value;
             var _cnpj = document.getElementById('cnpjTxt').value;
             var _captcha = document.getElementById('captchaTxt').value;
-            
+
             if ((_cod == "" || parseInt(_cod) == 0)) {
                 document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal!";
                 return false;
@@ -119,14 +112,14 @@
                     document.getElementById('errorLabel').innerHTML = "Digite o Cpf ou o CNPJ!";
                     return false;
                 } else {
-                    if (_captcha == "" ) {
+                    if (_captcha == "") {
                         document.getElementById('errorLabel').innerHTML = "Digite o código de validação!";
                         return false;
                     } else {
                         if (_captcha.length < 6) {
                             document.getElementById('errorLabel').innerHTML = "Código de validação inválido!";
                             return false;
-                        }else
+                        } else
                             return true;
                     }
                 }

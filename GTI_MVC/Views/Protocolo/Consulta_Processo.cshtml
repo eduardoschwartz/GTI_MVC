@@ -15,14 +15,11 @@
         font-size: 14px;
         box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
     }
+
     .center {
         margin: auto;
-        width: 500px;
-        border: 1px solid rgba(0,0,0,0.24);
-        padding: 20px;
-        box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
     }
+
     .actionlink:hover {
         color: darkgreen;
     }
@@ -30,43 +27,39 @@
     .actionlink {
         color: darkslateblue;
     }
-
 </style>
 
 
-<div class="center">
-    <label style="color: brown; font-size: 16px; font-style: italic">Consulta de Processo</label>
-    <br />
+<div class="center container" style="width:400px">
     @using (Html.BeginForm("Consulta_Processo", "Protocolo", FormMethod.Post, new { @id = "MainForm" })) {
-        <table>
-            <tr style="height:40px">
-                <td style="width:150px"><label style="font-weight:normal">Nº do Processo: </label></td>
-                <td style="width:300px">@Html.TextBoxFor(m => m.Numero_Ano, new { @id = "numprocesso", @class = "textBoxBlue", @style = "max-width:150px" })</td>
-            </tr>
+        <div class="panel panel-danger">
+            <div class="panel-heading">Consulta de Processo</div>
+            <div class="panel-body">
+                <table>
+                    <tr style="height:40px">
+                        <td style="width:150px"><label style="font-weight:normal">Nº do Processo: </label></td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Numero_Ano, new { @id = "numprocesso", @class = "textBoxBlue", @style = "max-width:150px" })</td>
+                    </tr>
 
-            <tr style="height:40px">
-                <td style="width:150px" valign="middle">
-                    <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                </td>
-                <td style="width:150px" valign="middle">
-                    @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
-                </td>
-            </tr>
-        </table>
+                    <tr style="height:40px">
+                        <td style="width:150px" valign="middle">
+                            <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+                        </td>
+                        <td style="width:150px" valign="middle">
+                            @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
+                        </td>
+                    </tr>
+                </table>
 
-        <br />
-        <button type="submit" class="btn btn-primary"> Consultar</button>
-        <br />
-        <br />
-
-        <div class="form-group row">
-            <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+                <br />
+                <button type="submit" class="btn btn-primary"> Consultar</button>
+            </div>
+            <label style="font-weight:normal;color:red;padding-left:13px" id="errorLabel">@ViewBag.Result</label>
+            <div class="panel-footer">
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
         </div>
-        <br />
     }
-
-
-    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 </div>
 
 @section scripts{
