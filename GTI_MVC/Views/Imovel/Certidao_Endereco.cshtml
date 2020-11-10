@@ -30,42 +30,41 @@
     }
 </style>
 
-<div class="center">
-    <div class="container" style="width:400px">
-        @using (Html.BeginForm("Certidao_Endereco", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
-            <div class="panel panel-danger">
-                <div class="panel-heading">Certidão de Endereço</div>
-                <div class="panel-body">
+<div class="center container" style="width:400px">
+    @using (Html.BeginForm("Certidao_Endereco", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+        <div class="panel panel-danger">
+            <div class="panel-heading">Certidão de Endereço</div>
+            <div class="panel-body">
 
-                    <table width="500px">
-                        <tr style="height:40px">
-                            <td style="width:150px">@Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })</td>
-                            <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
-                        </tr>
+                <table width="500px">
+                    <tr style="height:40px">
+                        <td style="width:150px">@Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })</td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
+                    </tr>
 
-                        <tr style="height:40px">
-                            <td style="width:150px" valign="middle">
-                                <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                            </td>
-                            <td style="width:150px" valign="middle">
-                                @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
-                            </td>
-                        </tr>
-                    </table>
-
-                </div>
-                <label style="font-weight:normal;color:red;padding-left:13px" id="errorLabel">@ViewBag.Result</label>
-                <div class="panel-footer">
-                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
-                </div>
-
+                    <tr style="height:40px">
+                        <td style="width:150px" valign="middle">
+                            <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+                        </td>
+                        <td style="width:150px" valign="middle">
+                            @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
+                        </td>
+                    </tr>
+                </table>
+                <br />
+                <button type="submit" class="btn btn-primary"> Consultar</button>
             </div>
-            <button type="submit" class="btn btn-primary"> Consultar</button>
-        }
-    </div>
+            <label style="font-weight:normal;color:red;padding-left:13px" id="errorLabel">@ViewBag.Result</label>
+            <div class="panel-footer">
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
 
+        </div>
 
+    }
 </div>
+
+
 
 @section scripts{
 

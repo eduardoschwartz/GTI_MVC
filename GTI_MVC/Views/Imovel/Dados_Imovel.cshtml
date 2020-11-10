@@ -17,12 +17,6 @@
 
         .center {
             margin: auto;
-            /*        width: 380px;
-            border: 1px solid rgba(0,0,0,0.24);
-            padding: 20px;
-            box-shadow: 0 .1em 0.5em #000;
-            border-radius: 13px;
-    */
         }
 
         .actionlink:hover {
@@ -34,10 +28,7 @@
         }
 </style>
 
-<div class="center">
-    @*<label style="color: brown;font-size: 16px;font-style: italic">Dados de um imóvel</label>
-        <br />*@
-    <div class="container" style="width:400px">
+    <div class="center container" style="width:400px">
         @using (Html.BeginForm("Dados_Imovel", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
             <div class="panel panel-danger">
                 <div class="panel-heading">Dados de um imóvel</div>
@@ -67,6 +58,8 @@
                             </td>
                         </tr>
                     </table>
+                    <br />
+                    <button type="submit" class="btn btn-primary"> Consultar</button>
                 </div>
                 <label style="font-weight:normal;color:red;padding-left:13px" id="errorLabel">@ViewBag.Result</label>
                 <div class="panel-footer">
@@ -74,15 +67,11 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary"> Consultar</button>
+            
 
 
         }
     </div>
-
-</div>
-
-
 
 
 

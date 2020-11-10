@@ -15,14 +15,11 @@
         font-size: 14px;
         box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
     }
+
     .center {
         margin: auto;
-        width: 400px;
-        border: 1px solid rgba(0,0,0,0.24);
-        padding: 20px;
-        box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
     }
+
     .actionlink:hover {
         color: darkgreen;
     }
@@ -32,46 +29,41 @@
     }
 </style>
 
-<div class="center">
-    <label style="color: brown;font-size: 16px;font-style: italic">Detalhe de Boleto</label>
-    <br />
+<div class="center container" style="width:400px">
 
     @using (Html.BeginForm("Detalhe_Boleto", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
+        <div class="panel panel-danger">
+            <div class="panel-heading">Detalhe de um boleto</div>
+            <div class="panel-body">
 
-        <table width="500px">
-            <tr style="height:40px">
-                <td style="width:150px">Cpf/Cnpj:</td>
-                <td style="width:300px">@Html.TextBoxFor(m => m.CpfCnpjLabel, new { @id = "cpfcnpjTxt",@onpaste="return false", @class = "textBoxBlue", @style = "max-width:250px", @onKeyPress = "return formata(this, '§§§§§§§§§§§§§§', event)" })</td>
-            </tr>
-            <tr style="height:40px">
-                <td style="width:150px">Nº do Documento:</td>
-                <td style="width:300px">@Html.TextBoxFor(m => m.Documento, new { @id = "documento", @class = "textBoxBlue", @style = "max-width:250px", @onKeyPress = "return formata(this, '§§§§§§§§§§§§§§§§§', event)" })</td>
-            </tr>
+                <table width="500px">
+                    <tr style="height:40px">
+                        <td style="width:150px">Cpf/Cnpj:</td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.CpfCnpjLabel, new { @id = "cpfcnpjTxt", @onpaste = "return false", @class = "textBoxBlue", @style = "max-width:250px", @onKeyPress = "return formata(this, '§§§§§§§§§§§§§§', event)" })</td>
+                    </tr>
+                    <tr style="height:40px">
+                        <td style="width:150px">Nº do Documento:</td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Documento, new { @id = "documento", @class = "textBoxBlue", @style = "max-width:250px", @onKeyPress = "return formata(this, '§§§§§§§§§§§§§§§§§', event)" })</td>
+                    </tr>
 
-            <tr style="height:40px">
-                <td style="width:150px" valign="middle">
-                    <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                </td>
-                <td style="width:150px" valign="middle">
-                    @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
-                </td>
-            </tr>
-        </table>
-
-        <br />
-            <button type="submit" class="btn btn-primary"> Consultar</button>
-        <br />
-        <br />
-
-
-        <br />
-        <div class="form-group row">
-            <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+                    <tr style="height:40px">
+                        <td style="width:150px" valign="middle">
+                            <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+                        </td>
+                        <td style="width:150px" valign="middle">
+                            @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
+                        </td>
+                    </tr>
+                </table>
+                <br />
+                <button type="submit" class="btn btn-primary"> Consultar</button>
+            </div>
+            <label style="font-weight:normal;color:red;padding-left:13px" id="errorLabel">@ViewBag.Result</label>
+            <div class="panel-footer">
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
         </div>
-
     }
-
-    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 </div>
 @section scripts{
 
@@ -91,7 +83,7 @@
             var _consultar = false;
             var _autenticar = false;
 
-            if ((_cpfcnpj != "" ))
+            if ((_cpfcnpj != ""))
                 _consultar = true;
 
             if (_consultar == false && _autenticar == false) {
@@ -140,7 +132,7 @@
             return true;
         }
 
-  
+
 
         function ClearError() {
             document.getElementById('errorLabel').innerHTML = "";

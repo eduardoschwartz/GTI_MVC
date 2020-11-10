@@ -14,14 +14,11 @@
         font-size: 14px;
         box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
     }
+
     .center {
         margin: auto;
-        width: 350px;
-        border: 1px solid rgba(0,0,0,0.24);
-        padding: 20px;
-        box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
     }
+
     .actionlink:hover {
         color: darkgreen;
     }
@@ -31,79 +28,74 @@
     }
 </style>
 
-<div class="center">
-    <label style="color: brown; font-size: 16px; font-style: italic">Alteração de Senha</label>
-    <br />
-
+<div class="center container" style="width:350px">
 
     @using (Html.BeginForm("Login_update", "Home", FormMethod.Post, new { @id = "MainForm" })) {
+        <div class="panel panel-danger">
+            <div class="panel-heading">Alteração de Senha</div>
+            <div class="panel-body">
 
-        <table width="500px">
-            <tr style="height:40px">
-                <td style="width:80px">@Html.LabelFor(m => m.Senha, new { @style = "font-weight:normal" })</td>
-                <td style="width:300px">@Html.TextBoxFor(m => m.Senha, new { @type = "password", @id = "senha", @class = "textBoxBlue", @style = "max-width:200px" })</td>
-            </tr>
-            <tr style="height:40px">
-                <td style="width:80px">@Html.LabelFor(m => m.Senha2, new { @style = "font-weight:normal" })</td>
-                <td style="width:300px">@Html.TextBoxFor(m => m.Senha2, new { @type = "password", @id = "senha2", @class = "textBoxBlue", @style = "max-width:200px" })</td>
-            </tr>
-            <tr style="height:40px">
-                <td style="width:80px">@Html.LabelFor(m => m.Senha3, new { @style = "font-weight:normal" })</td>
-                <td style="width:300px">@Html.TextBoxFor(m => m.Senha3, new { @type = "password", @id = "senha3", @class = "textBoxBlue", @style = "max-width:200px" })</td>
-            </tr>
-        </table>
-
-        <br />
-            <button type="submit" title="Acessar o sistema" class="btn btn-primary"> Entrar</button>
-
-
-        <br />
-        <div class="form-group row">
+                <table width="500px">
+                    <tr style="height:40px">
+                        <td style="width:80px">@Html.LabelFor(m => m.Senha, new { @style = "font-weight:normal" })</td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Senha, new { @type = "password", @id = "senha", @class = "textBoxBlue", @style = "max-width:200px" })</td>
+                    </tr>
+                    <tr style="height:40px">
+                        <td style="width:80px">@Html.LabelFor(m => m.Senha2, new { @style = "font-weight:normal" })</td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Senha2, new { @type = "password", @id = "senha2", @class = "textBoxBlue", @style = "max-width:200px" })</td>
+                    </tr>
+                    <tr style="height:40px">
+                        <td style="width:80px">@Html.LabelFor(m => m.Senha3, new { @style = "font-weight:normal" })</td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Senha3, new { @type = "password", @id = "senha3", @class = "textBoxBlue", @style = "max-width:200px" })</td>
+                    </tr>
+                </table>
+                <br />
+                <button type="submit" title="Acessar o sistema" class="btn btn-primary"> Entrar</button>
+            </div>
             <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+            <div class="panel-footer">
+                @Html.ActionLink("Retornar ao menu do sistema", "sysMenu", "Home", null, new { @class = "actionlink" })
+            </div>
         </div>
-
     }
-
-    @Html.ActionLink("Retornar ao menu do sistema", "sysMenu", "Home", null, new { @class = "actionlink" })
 </div>
 
-    @section scripts{
+@section scripts{
 
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $("#MainForm").submit(function () {
-                    return ValidateForm();
-                });
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
             });
+        });
 
-            function ValidateForm() {
-                ClearError();
-                var _senha = document.getElementById('senha').value;
-                var _senha2 = document.getElementById('senha2').value;
-                var _senha3 = document.getElementById('senha3').value;
+        function ValidateForm() {
+            ClearError();
+            var _senha = document.getElementById('senha').value;
+            var _senha2 = document.getElementById('senha2').value;
+            var _senha3 = document.getElementById('senha3').value;
 
-                if (_senha == "" || _senha2 == "" || _senha3 == "") {
-                    document.getElementById('errorLabel').innerHTML = "Preencha todos os campos";
+            if (_senha == "" || _senha2 == "" || _senha3 == "") {
+                document.getElementById('errorLabel').innerHTML = "Preencha todos os campos";
+                return false;
+            } else {
+                if (_senha2 != _senha3) {
+                    document.getElementById('errorLabel').innerHTML = "Novas senhas não conferem";
                     return false;
                 } else {
-                    if (_senha2 != _senha3) {
-                        document.getElementById('errorLabel').innerHTML = "Novas senhas não conferem";
+                    if (_senha2.length < 6) {
+                        document.getElementById('errorLabel').innerHTML = "A senha tem que ter mais de 6 caracteres";
                         return false;
-                    } else {
-                        if (_senha2.length < 6) {
-                            document.getElementById('errorLabel').innerHTML = "A senha tem que ter mais de 6 caracteres";
-                            return false;
-                        }
                     }
                 }
-
-                return true;
             }
+            return true;
+        }
 
-            function ClearError() {
-                document.getElementById('errorLabel').innerHTML = "";
-            }
+        function ClearError() {
+            document.getElementById('errorLabel').innerHTML = "";
+        }
 
-        </script>
-    }
+    </script>
+}
 

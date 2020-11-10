@@ -15,14 +15,11 @@
         font-size: 14px;
         box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
     }
+
     .center {
         margin: auto;
-        width: 450px;
-        border: 1px solid rgba(0,0,0,0.24);
-        padding: 20px;
-        box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
     }
+
     .actionlink:hover {
         color: darkgreen;
     }
@@ -32,58 +29,37 @@
     }
 </style>
 
-<div class="center">
-    <label style="color: brown;font-size: 16px;font-style: italic">Certidão de Débito</label>
-    <br />
+<div class="center container" style="width:400px">
 
     @using (Html.BeginForm("Certidao_Debito_Codigo", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
+        <div class="panel panel-danger">
+            <div class="panel-heading">Certidão de Débito</div>
+            <div class="panel-body">
 
-        <table width="500px">
-            <tr style="height:40px">
-                <td style="width:150px">@Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })</td>
-                <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
-            </tr>
+                <table width="500px">
+                    <tr style="height:40px">
+                        <td style="width:150px">@Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })</td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
+                    </tr>
 
-            <tr style="height:40px">
-                <td style="width:150px" valign="middle">
-                    <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                </td>
-                <td style="width:150px" valign="middle">
-                    @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
-                </td>
-            </tr>
-        </table>
-
-        <br />
-           <button type="submit" class="btn btn-primary"> Consultar</button>
-        <br />
-        <br />
-        <br />
-        <div style="border:1px solid black;width:400px;margin-left:1px">
-            <br />
-            <label style="color:brown;font-size:16px;font-style:italic;margin-left:10px;font-weight:normal;text-decoration:underline">Autenticar a Certidão</label>
-            <br />
-            <div class="form-group row align-items-lg-baseline">
-                <div class="input-group">
-                    <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chave</label>
-                    &nbsp;&nbsp;@Html.TextBoxFor(m => m.Chave, new { @id = "chave", @class = "textBoxBlue", @style = "max-width:110px;" })
-                    &nbsp;&nbsp;<button class="btn btn-primary" type="submit" title="Validar a certidão." formaction="Validate_DB" formmethod="post">Validar</button>
-                </div>
+                    <tr style="height:40px">
+                        <td style="width:150px" valign="middle">
+                            <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+                        </td>
+                        <td style="width:150px" valign="middle">
+                            @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
+                        </td>
+                    </tr>
+                </table>
                 <br />
-                <article style="color:darkred;font-size:small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Obs: A partir de 27/05/2020 a validação será feita através do <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;QRCode presente na certidão.</article>
-
+                <button type="submit" class="btn btn-primary"> Consultar</button>
+            </div>
+            <label style="font-weight:normal;color:red;padding-left:13px" id="errorLabel">@ViewBag.Result</label>
+            <div class="panel-footer">
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
             </div>
         </div>
-
-        <br />
-        <div class="form-group row">
-            <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
-        </div>
-
     }
-
-
-    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 </div>
 
 @section scripts{
@@ -132,7 +108,7 @@
             document.getElementById('errorLabel').innerHTML = "";
         }
 
-       
+
 
     </script>
 }

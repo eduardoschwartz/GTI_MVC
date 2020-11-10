@@ -15,14 +15,11 @@
         font-size: 14px;
         box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
     }
+
     .center {
         margin: auto;
-        width: 600px;
-        border: 1px solid rgba(0,0,0,0.24);
-        padding: 20px;
-        box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
     }
+
     .actionlink:hover {
         color: darkgreen;
     }
@@ -32,50 +29,44 @@
     }
 </style>
 
-<div class="center">
-    <label style="color: brown;font-size: 16px;font-style: italic">Emissão de 2ª via de parcelamento</label>
-    <br />
-    <span style="color: #CC0000">
-        <span style="text-decoration: underline">Observação importante</span>:&nbsp; Os boletos serão registrados durante a noite e estarão disponíveis para pagamento a partir de amanhã. Caso queira pagar alguma parcela hoje, emitir boleto através da consulta e atualização de boletos disponível no site.
-    </span>
-    <br />
-
-
+<div class="center container" style="width:600px">
     @using (Html.BeginForm("SegundaVia_Parcelamento", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
-        <table width="500px">
-            <tr style="height:40px">
-                <td style="  padding-top:15px;width:150px">
-                    @Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })
-                </td>
-                <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "Codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
-            </tr>
-            <tr style="height:40px">
-                <td style="width:150px"><label style="font-weight:normal">Nº do Processo: </label></td>
-                <td style="width:300px">@Html.TextBoxFor(m => m.Numero_Processo, new { @id = "numprocesso", @class = "textBoxBlue", @style = "max-width:150px" })</td>
-            </tr>
+        <div class="panel panel-danger">
+            <div class="panel-heading">Emissão de 2ª via de parcelamento</div>
+            <div class="panel-body">
+                <span style="text-decoration: underline;color: #CC0000">Observação importante</span>:&nbsp; <article style="color: #CC0000;text-align:justify">Os boletos serão registrados durante a noite e estarão disponíveis para pagamento a partir de amanhã. Caso queira pagar alguma parcela hoje, emitir boleto através da consulta e atualização de boletos disponível no site.</article>
+                <br />
 
-            <tr style="height:40px">
-                <td style="width:150px" valign="middle">
-                    <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                </td>
-                <td style="width:150px" valign="middle">
-                    @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
-                </td>
-            </tr>
-        </table>
+                <table width="500px">
+                    <tr style="height:40px">
+                        <td style="  padding-top:15px;width:150px">
+                            @Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })
+                        </td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "Codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
+                    </tr>
+                    <tr style="height:40px">
+                        <td style="width:150px"><label style="font-weight:normal">Nº do Processo: </label></td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Numero_Processo, new { @id = "numprocesso", @class = "textBoxBlue", @style = "max-width:150px" })</td>
+                    </tr>
 
-        <br />
-            <button type="submit" class="btn btn-primary"> Consultar</button>
-        <br />
-        <br />
-
-        <div class="form-group row">
-            <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+                    <tr style="height:40px">
+                        <td style="width:150px" valign="middle">
+                            <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+                        </td>
+                        <td style="width:150px" valign="middle">
+                            @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
+                        </td>
+                    </tr>
+                </table>
+                <br />
+                <button type="submit" class="btn btn-primary"> Consultar</button>
+            </div>
+            <label style="font-weight:normal;color:red;padding-left:13px" id="errorLabel">@ViewBag.Result</label>
+            <div class="panel-footer">
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
         </div>
     }
-
-
-    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 </div>
 
 
