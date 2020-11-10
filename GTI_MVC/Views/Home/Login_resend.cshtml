@@ -17,11 +17,7 @@
 
     .center {
         margin: auto;
-        width: 520px;
-        border: 1px solid rgba(0,0,0,0.24);
-        padding: 20px;
-        box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
+       
     }
 
     .actionlink:hover {
@@ -34,38 +30,41 @@
 </style>
 
 <div class="center">
-    <br />
-    <label style="color: brown;font-size: 16px;font-style: italic">Reenviar email de confirmação da conta</label>
-    <br />
+    <div class="container" style="width:520px">
 
-    <br />
-    @using (Html.BeginForm("Login_resend", "Home", FormMethod.Post, new { @id = "MainForm" })) {
-        <table width="500px">
-            <tr style="height:40px">
-                <td><label style="font-weight:normal">Endereço de Email:</label></td>
-                <td>@Html.TextBoxFor(m => m.Email, new { @id = "email", @class = "textBoxBlue", @style = "max-width:400px;width:300px" })</td>
-            </tr>
+        @using (Html.BeginForm("Login_resend", "Home", FormMethod.Post, new { @id = "MainForm" })) {
 
-            <tr style="height:40px">
-                <td valign="middle">
-                    <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                </td>
-                <td valign="middle">
-                    @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
-                </td>
-            </tr>
-        </table>
-        <br />
-        <button type="submit" title="Enviar" class="btn btn-primary"> Enviar</button>
+            <div class="panel panel-danger">
+                <div class="panel-heading">Reenviar email de confirmação da conta</div>
+                <div class="panel-body">
 
-        <br />
-        <br />
-        <div class="form-group row">
-            <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
-        </div>
-    }
+                    <table width="500px">
+                        <tr style="height:40px">
+                            <td><label style="font-weight:normal">Endereço de Email:</label></td>
+                            <td>@Html.TextBoxFor(m => m.Email, new { @id = "email", @class = "textBoxBlue", @style = "max-width:400px;width:300px" })</td>
+                        </tr>
 
-    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                        <tr style="height:40px">
+                            <td valign="middle">
+                                <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+                            </td>
+                            <td valign="middle">
+                                @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                    <button type="submit" title="Enviar" class="btn btn-primary"> Enviar</button>
+                </div>
+                <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
+                <div class="panel-footer">
+                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                </div>
+            </div>
+        }
+
+    </div>
+
 </div>
 
 

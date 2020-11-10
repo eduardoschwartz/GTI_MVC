@@ -14,14 +14,11 @@
         font-size: 14px;
         box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
     }
-   .center {
+
+    .center {
         margin: auto;
-        width: 340px;
-        border: 1px solid rgba(0,0,0,0.24);
-        padding: 20px;
-        box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
     }
+
     .actionlink:hover {
         color: darkgreen;
     }
@@ -32,29 +29,33 @@
 </style>
 
 <div class="center">
-    <br />
-    <label style="color: brown;font-size: 16px;font-style: italic">Acesso ao Sistema</label>
-    <br />
+    <div class="container" style="width:360px">
+        @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @id = "MainForm" })) {
+            <div class="panel panel-danger">
+                <div class="panel-heading">Acesso ao Sistema</div>
+                <div class="panel-body">
+                    @Html.TextBoxFor(m => m.Usuario, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:300px;width:320px", placeholder = "Nome de usuário ou Email" })<br /><br />
+                    @Html.TextBoxFor(m => m.Senha, new { @type = "password", @id = "senha", @class = "textBoxBlue", @style = "max-width:200px", placeholder = "Digite a senha" })<br />
+                    <br />
+                    <button type="submit" title="Acessar o sistema" class="btn btn-primary"> Entrar</button><span>&nbsp;&nbsp;&nbsp;</span>@Html.ActionLink("Criar conta", "Login_create", "Home", null, new { @class = "btn btn-info", title = "Criar uma nova conta no sistema" })
+                </div>
 
-    <br />
-    @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @id = "MainForm" })) {
-        @Html.TextBoxFor(m => m.Usuario, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:300px;width:320px", placeholder = "Nome de usuário ou Email" })<br /><br />
-        @Html.TextBoxFor(m => m.Senha, new { @type = "password", @id = "senha", @class = "textBoxBlue", @style = "max-width:200px", placeholder = "Digite a senha" })<br />
+                <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
+                <div class="panel-footer">
+                    @Html.ActionLink("Esqueci minha senha", "Login_resend_pwd", "Home", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Reenviar email para ativação da conta", "Login_resend", "Home", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                </div>
 
-        <br />
-        <button type="submit" title="Acessar o sistema" class="btn btn-primary"> Entrar</button><span>&nbsp;&nbsp;&nbsp;</span>@Html.ActionLink("Criar conta", "Login_create", "Home", null, new { @class = "btn btn-info", title = "Criar uma nova conta no sistema" })
+            </div>
+            
+        }
 
-        <br />
-        <br />
-        <div class="form-group row">
-            <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
-        </div>
-    }
-
-    @Html.ActionLink("Esqueci minha senha", "Login_resend_pwd", "Home", null, new { @class = "actionlink" })<br />
-    @Html.ActionLink("Reenviar email para ativação da conta", "Login_resend", "Home", null, new { @class = "actionlink" })<br />
-    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+    </div>
 </div>
+
+
+
 
 
 @section scripts{
