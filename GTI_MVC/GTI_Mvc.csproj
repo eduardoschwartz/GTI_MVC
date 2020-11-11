@@ -706,6 +706,8 @@
     <Content Include="Views\Tributario\Notificacao_query.cshtml" />
     <Content Include="Views\Tributario\Rod_menu.cshtml" />
     <Content Include="Views\Tributario\Rod_plat_query.cshtml" />
+    <Content Include="Views\Empresa\Carne_tl.cshtml" />
+    <Content Include="Views\Empresa\Carne_vs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -738,6 +740,7 @@
     <EmbeddedResource Include="Reports\Boleto_ITBI.rdlc" />
     <EmbeddedResource Include="Reports\Carne_CIP.rdlc" />
     <EmbeddedResource Include="Reports\Carne_IPTU.rdlc" />
+    <EmbeddedResource Include="Reports\Carne_ISS_TLL.rdlc" />
     <EmbeddedResource Include="Reports\Carne_Parcelamento.rdlc" />
     <EmbeddedResource Include="Reports\CertidaoDebitoDocumentoN.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
