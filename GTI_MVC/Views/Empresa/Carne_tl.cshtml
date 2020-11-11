@@ -1,0 +1,241 @@
+﻿@model GTI_Mvc.ViewModels.CertidaoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Carnê de ISS Fixo/Taxa de Licença";
+}
+
+
+<style>
+    .textBoxBlue {
+        height: 25px;
+        position: relative;
+        border: 1px solid #0094ff;
+        border-color: rgba(0, 0, 0, .14);
+        background-color: white;
+        font-size: 14px;
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
+    }
+
+    .center {
+        margin: auto;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+</style>
+
+<div class="center container" style="width:440px">
+    @using (Html.BeginForm("Carne_tl", "Empresa", FormMethod.Post, new { @id = "MainForm" })) {
+        <div class="panel panel-danger">
+            <div class="panel-heading">Carnê de ISS Fixo/Taxa de Licença</div>
+            <div class="panel-body">
+
+                <table width="500px">
+                    <tr>
+                        <td style="width:150px">@Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })</td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)", @onchange = "ClearError()" })</td>
+                    </tr>
+                    <tr style="height:40px">
+                        <td style="width:150px">
+                            @if (Model.CnpjValue == null) {
+                                @: CPF: &nbsp;<input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
+                                @:&nbsp; CNPJ: &nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
+                            } else {
+                                @: CPF: &nbsp;<input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" onclick="radioCheck()" />
+                                @:&nbsp; CNPJ: &nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" checked="checked" onclick="radioCheck()" />
+                            }
+                        </td>
+                        <td style="width:300px">
+                            @if (Model.CnpjValue == null) {
+                                @Html.TextBoxFor(m => m.CpfValue, new { @id = "cpfTxt", @class = "textBoxBlue", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CPF" })
+                                @Html.TextBoxFor(m => m.CnpjValue, new { @id = "cnpjTxt", @class = "textBoxBlue", @style = "max-width:200px;display:none", @onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CNPJ" })
+                            } else {
+                                @Html.TextBoxFor(m => m.CpfValue, new { @id = "cpfTxt", @class = "textBoxBlue", @style = "max-width:200px;display:none", @onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CPF" })
+                                @Html.TextBoxFor(m => m.CnpjValue, new { @id = "cnpjTxt", @class = "textBoxBlue", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CNPJ" })
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px" valign="middle">
+                            <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+                        </td>
+                        <td style="width:150px" valign="middle">
+                            @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:110px;" })
+                        </td>
+                    </tr>
+                </table>
+
+                <br />
+                <button type="submit" class="btn btn-primary"> Imprimir</button>
+            </div>
+            <label style="font-weight:normal;color:red;padding-left:13px" id="errorLabel">@ViewBag.Result</label>
+            <div class="panel-footer">
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
+        </div>
+    }
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+        });
+
+        function radioCheck() {
+            document.getElementById('cnpjTxt').value = "";
+            document.getElementById('cpfTxt').value = "";
+            if (document.getElementById('cpfCheck').checked) {
+                document.getElementById('cpfTxt').style.display = 'block';
+            }
+            else {
+                document.getElementById('cpfTxt').style.display = 'none';
+            }
+            if (document.getElementById('cnpjCheck').checked) {
+                document.getElementById('cnpjTxt').style.display = 'block';
+            }
+            else {
+                document.getElementById('cnpjTxt').style.display = 'none';
+            }
+        }
+
+        function ClearError() {
+            document.getElementById('errorLabel').innerHTML = "";
+        }
+
+        function ValidateForm() {
+            ClearError();
+            var _cod = document.getElementById('codigo').value;
+            var _cpf = document.getElementById('cpfTxt').value;
+            var _cnpj = document.getElementById('cnpjTxt').value;
+            var _captcha = document.getElementById('captchaTxt').value;
+
+            if (_cod == "" || parseInt(_cod) == 0) {
+                document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal";
+                return false;
+            }
+            else {
+                if (parseInt(_cod) > 0 && _cpf == "" && _cnpj == "") {
+                    document.getElementById('errorLabel').innerHTML = "Digite o Cpf ou o CNPJ!";
+                    return false;
+                } else {
+                    if (_captcha == "") {
+                        document.getElementById('errorLabel').innerHTML = "Digite o código de validação!";
+                        return false;
+                    } 
+                }
+            }
+            if (_cpf != "") {
+                if (!valida_Cpf(_cpf)) {
+                    document.getElementById('errorLabel').innerHTML = "Nº de CPF inválido!";
+                    return false;
+                }
+            }
+            if (_cnpj != "") {
+                if (!valida_Cnpj(_cnpj)) {
+                    document.getElementById('errorLabel').innerHTML = "Nº de CNPJ inválido!";
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function valida_Cpf(cpf) {
+            cpf = cpf.split("").filter(n => (Number(n) || n == 0)).join("");
+            var numeros, digitos, soma, i, resultado, digitos_iguais;
+            digitos_iguais = 1;
+            if (cpf.length < 11)
+                return false;
+            for (i = 0; i < cpf.length - 1; i++)
+                if (cpf.charAt(i) != cpf.charAt(i + 1)) {
+                    digitos_iguais = 0;
+                    break;
+                }
+            if (!digitos_iguais) {
+                numeros = cpf.substring(0, 9);
+                digitos = cpf.substring(9);
+                soma = 0;
+                for (i = 10; i > 1; i--)
+                    soma += numeros.charAt(10 - i) * i;
+                resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+                if (resultado != digitos.charAt(0))
+                    return false;
+                numeros = cpf.substring(0, 10);
+                soma = 0;
+                for (i = 11; i > 1; i--)
+                    soma += numeros.charAt(11 - i) * i;
+                resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+                if (resultado != digitos.charAt(1))
+                    return false;
+                return true;
+            }
+            else
+                return false;
+        }
+
+        function valida_Cnpj(cnpj) {
+
+            cnpj = cnpj.replace(/[^\d]+/g, '');
+
+            if (cnpj == '') return false;
+
+            if (cnpj.length != 14)
+                return false;
+
+            // Elimina CNPJs invalidos conhecidos
+            if (cnpj == "00000000000000" ||
+                cnpj == "11111111111111" ||
+                cnpj == "22222222222222" ||
+                cnpj == "33333333333333" ||
+                cnpj == "44444444444444" ||
+                cnpj == "55555555555555" ||
+                cnpj == "66666666666666" ||
+                cnpj == "77777777777777" ||
+                cnpj == "88888888888888" ||
+                cnpj == "99999999999999")
+                return false;
+
+            // Valida DVs
+            tamanho = cnpj.length - 2
+            numeros = cnpj.substring(0, tamanho);
+            digitos = cnpj.substring(tamanho);
+            soma = 0;
+            pos = tamanho - 7;
+            for (i = tamanho; i >= 1; i--) {
+                soma += numeros.charAt(tamanho - i) * pos--;
+                if (pos < 2)
+                    pos = 9;
+            }
+            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+            if (resultado != digitos.charAt(0))
+                return false;
+
+            tamanho = tamanho + 1;
+            numeros = cnpj.substring(0, tamanho);
+            soma = 0;
+            pos = tamanho - 7;
+            for (i = tamanho; i >= 1; i--) {
+                soma += numeros.charAt(tamanho - i) * pos--;
+                if (pos < 2)
+                    pos = 9;
+            }
+            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+            if (resultado != digitos.charAt(1))
+                return false;
+
+            return true;
+
+        }
+
+
+    </script>
+}

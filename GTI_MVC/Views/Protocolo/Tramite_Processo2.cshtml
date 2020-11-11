@@ -25,11 +25,7 @@
         }
     .center {
         margin: auto;
-        width: 900px;
-        border: 1px solid rgba(0,0,0,0.24);
-        padding: 20px;
-        box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
+      
     }
     .actionlink:hover {
         color: darkgreen;
@@ -39,157 +35,134 @@
         color: darkslateblue;
     }
 </style>
-<div class="center">
-    <label style="color:brown;font-size:16px;font-style:italic">Trâmite de Processo</label>
-    <br />
-    <!--###########################-->
-    <!--          HEADER           -->
-    <!--###########################-->
+<div class="center container" style="width:900px">
     <form asp-controller="Protocolo" enctype="multipart/form-data" method="post" class="mt-3">
-        <!--###########################-->
-        <!--      DADOS DO PROCESSO    -->
-        <!--###########################-->
-        <table title="Dados do Processo" style="font-size:12px;background-color:White;border-color:#CCCCCC; ">
-            <tr>
-                <td style="width:200px;padding: 1px 1px 1px 5px;">
-                    Nº do processo:
-                </td>
-                <td style="color:black;font-weight:bold">
-                    @Model.Numero_Ano
-                </td>
-            </tr>
-            <tr>
-                <td style="width:600px;padding: 1px 1px 1px 5px;">
-                    Data do processo:
-                </td>
-                <td style="color:black;font-weight:bold">
-                    @Model.Data_Processo
-                </td>
-            </tr>
-            <tr>
-                <td style="width: 15%; padding: 1px 1px 1px 5px;">
-                    Requerente:
-                </td>
-                <td style="color:black;font-weight:bold">
-                    @Model.Requerente
-                </td>
-            </tr>
-            <tr>
-                <td style="width:15%;padding: 1px 1px 1px 5px;">
-                    Assunto:
-                </td>
-                <td style="color:black;font-weight:bold">
-                    @Model.Assunto_Nome
-                </td>
-            </tr>
-        </table>
-        <br />
-        <!--###########################-->
-        <!--   TABELA DE TRAMITAÇÃO    -->
-        <!--###########################-->
-        <div id="TramitacaoTable" style="max-height: 247px; overflow: auto;">
-            <table id="tblMain" class="tableContainer" style="font-size:9px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
-                <thead style="background-color:#337ab7;color:white;font-size:9px;font-weight:normal">
-                    <tr style="height:12px;">
-                        <th>
-                            Seq
-                        </th>
-                        <th style="width:30px">
-                            Centro de Custos
-                        </th>
-                        <th style="width:60px;text-align:center">
-                            Dt.Entrada
-                        </th>
-                        <th style="width:40px;text-align:center">
-                            Hora
-                        </th>
-                        <th style="width:30px">
-                            Recebido por
-                        </th>
-                        <th style="width:30px">
-                            Despacho
-                        </th>
-                        <th style="width:60px;text-align:center">
-                            Dt.Envio
-                        </th>
-                        <th style="width:30px">
-                            Enviado por
-                        </th>
+        <div class="panel panel-danger">
+            <div class="panel-heading">Trâmite de Processo</div>
+            <div class="panel-body">
 
-                        <th>
-
-                        </th>
+                <table title="Dados do Processo" style="font-size:12px;background-color:White;border-color:#CCCCCC; ">
+                    <tr>
+                        <td style="width:200px;padding: 1px 1px 1px 5px;">
+                            Nº do processo:
+                        </td>
+                        <td style="color:black;font-weight:bold">
+                            @Model.Numero_Ano
+                        </td>
                     </tr>
-                </thead>
-                <tbody style="color: #333333">
-                    @foreach (var item in Model.Lista_Tramite) {
-                        <tr style="        height: 15px;
-        border-bottom-color: cadetblue;
-        border-bottom-style: solid;
-        border-bottom-width: 1px;
-        border-top-color: cadetblue;
-        border-top-style: solid;
-        border-top-width: 1px
-">
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Seq)
-                            </td>
-                            <td style="width:180px">
-                                @Html.DisplayFor(modelItem => item.CentroCustoNome)
-                            </td>
-                            <td style="width:50px;text-align:center">
-                                @Html.DisplayFor(modelItem => item.DataEntrada)
-                            </td>
-                            <td style="width:40px;text-align:center">
-                                @Html.DisplayFor(modelItem => item.HoraEntrada)
-                            </td>
-                            <td style="min-width:150px">
-                                @Html.DisplayFor(modelItem => item.Usuario1)
-                            </td>
-                            <td style="color:brown">
-                                @Html.DisplayFor(modelItem => item.DespachoNome)
-                            </td>
-                            <td style="width:60px;text-align:center">
-                                @Html.DisplayFor(modelItem => item.DataEnvio)
-                            </td>
-                            <td style="min-width:150px">
-                                @Html.DisplayFor(modelItem => item.Usuario2)
-                            </td>
-                            <td>
-                                <a href="@Url.Action("Receive","Protocolo",new {p1=Functions.Encrypt( @Model.Ano.ToString()),p2=Functions.Encrypt( @Model.Numero.ToString()), p3=Functions.Encrypt(item.Seq.ToString())})" title="Receber processo"> <img src="@Url.Content("~/images/receber.png")" onclick="return Validar_Receber('@Model.Lista_CC',@item.Seq,@item.CentroCustoCodigo)" /></a>
-                                <a href="@Url.Action("Send","Protocolo",new {p1=Functions.Encrypt( @Model.Ano.ToString()),p2=Functions.Encrypt( @Model.Numero.ToString()), p3=Functions.Encrypt(item.Seq.ToString())})" title="Enviar processo"> <img src="@Url.Content("~/images/enviar.png")" onclick="return Validar_Enviar('@Model.Lista_CC',@item.Seq,@item.CentroCustoCodigo)" /></a>
-                                <a href="#" title="Mover trâmite para baixo"> <img src="@Url.Content("~/images/abaixo.gif")" data-value="@item.Seq" onclick="MoveDown(@Model.Ano,@Model.Numero,@item.Seq)"></a>
-                                <a href="#" title="Mover trâmite para cima"> <img src="@Url.Content("~/images/acima.gif")" data-value="@item.Seq" onclick="MoveUp(@Model.Ano,@Model.Numero,@item.Seq)"></a>
-                                <a href="@Url.Action("AddPlace","Protocolo",new {Ano=@Model.Ano,Numero=@Model.Numero, Seq=item.Seq,@item.CentroCustoCodigo})" title="Incluir um local de trâmite"> <img src="@Url.Content("~/images/inserir_local.png")" onclick="return Validar_AddPlace('@Model.Ano',@Model.Numero,@item.Seq,@item.CentroCustoCodigo)" /></a>
-                                <a href="@Url.Action("RemovePlace","Protocolo",new {Ano=@Model.Ano,Numero=@Model.Numero, Seq=item.Seq})" title="Remover um local de trâmite"> <img src="@Url.Content("~/images/remover_local.png")" onclick="return Usuario_CC_Remover('@Model.Lista_CC',@item.Seq,@item.CentroCustoCodigo)" /></a>
-                                @*<a href="@Url.Action("Obs","Protocolo",new {Ano=@Model.Ano,Numero=@Model.Numero, Seq=item.Seq})" title="Observação"> <img src="@Url.Content("~/images/observacao.png")"  /></a>*@
-                                <a href="@Url.Action("Obs","Protocolo",new {Ano=@Model.Ano,Numero=@Model.Numero, Seq=item.Seq})" title="Observação"> <img src="@Url.Content("~/images/observacao.png")" onclick="return Validar_Obs(@item.Ano,@item.Numero, '@Model.Lista_CC',@item.Seq,'@item.ObsGeral','@item.ObsInterna')" /></a>
-                            </td>
+                    <tr>
+                        <td style="width:600px;padding: 1px 1px 1px 5px;">
+                            Data do processo:
+                        </td>
+                        <td style="color:black;font-weight:bold">
+                            @Model.Data_Processo
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%; padding: 1px 1px 1px 5px;">
+                            Requerente:
+                        </td>
+                        <td style="color:black;font-weight:bold">
+                            @Model.Requerente
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:15%;padding: 1px 1px 1px 5px;">
+                            Assunto:
+                        </td>
+                        <td style="color:black;font-weight:bold">
+                            @Model.Assunto_Nome
+                        </td>
+                    </tr>
+                </table>
+                <br />
+                <div id="TramitacaoTable" style="max-height: 247px; overflow: auto;">
+                    <table id="tblMain" class="tableContainer" style="font-size:9px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                        <thead style="background-color:#337ab7;color:white;font-size:9px;font-weight:normal">
+                            <tr style="height:12px;">
+                                <th>
+                                    Seq
+                                </th>
+                                <th style="width:30px">
+                                    Centro de Custos
+                                </th>
+                                <th style="width:60px;text-align:center">
+                                    Dt.Entrada
+                                </th>
+                                <th style="width:40px;text-align:center">
+                                    Hora
+                                </th>
+                                <th style="width:30px">
+                                    Recebido por
+                                </th>
+                                <th style="width:30px">
+                                    Despacho
+                                </th>
+                                <th style="width:60px;text-align:center">
+                                    Dt.Envio
+                                </th>
+                                <th style="width:30px">
+                                    Enviado por
+                                </th>
 
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                                <th>
 
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody style="color: #333333">
+                            @foreach (var item in Model.Lista_Tramite) {
+                                <tr style="height: 15px; border-bottom-color: cadetblue; border-bottom-style: solid; border-bottom-width: 1px; border-top-color: cadetblue; border-top-style: solid; border-top-width: 1px">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Seq)
+                                    </td>
+                                    <td style="width:180px">
+                                        @Html.DisplayFor(modelItem => item.CentroCustoNome)
+                                    </td>
+                                    <td style="width:50px;text-align:center">
+                                        @Html.DisplayFor(modelItem => item.DataEntrada)
+                                    </td>
+                                    <td style="width:40px;text-align:center">
+                                        @Html.DisplayFor(modelItem => item.HoraEntrada)
+                                    </td>
+                                    <td style="min-width:150px">
+                                        @Html.DisplayFor(modelItem => item.Usuario1)
+                                    </td>
+                                    <td style="color:brown">
+                                        @Html.DisplayFor(modelItem => item.DespachoNome)
+                                    </td>
+                                    <td style="width:60px;text-align:center">
+                                        @Html.DisplayFor(modelItem => item.DataEnvio)
+                                    </td>
+                                    <td style="min-width:150px">
+                                        @Html.DisplayFor(modelItem => item.Usuario2)
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Receive","Protocolo",new {p1=Functions.Encrypt( @Model.Ano.ToString()),p2=Functions.Encrypt( @Model.Numero.ToString()), p3=Functions.Encrypt(item.Seq.ToString())})" title="Receber processo"> <img src="@Url.Content("~/images/receber.png")" onclick="return Validar_Receber('@Model.Lista_CC',@item.Seq,@item.CentroCustoCodigo)" /></a>
+                                        <a href="@Url.Action("Send","Protocolo",new {p1=Functions.Encrypt( @Model.Ano.ToString()),p2=Functions.Encrypt( @Model.Numero.ToString()), p3=Functions.Encrypt(item.Seq.ToString())})" title="Enviar processo"> <img src="@Url.Content("~/images/enviar.png")" onclick="return Validar_Enviar('@Model.Lista_CC',@item.Seq,@item.CentroCustoCodigo)" /></a>
+                                        <a href="#" title="Mover trâmite para baixo"> <img src="@Url.Content("~/images/abaixo.gif")" data-value="@item.Seq" onclick="MoveDown(@Model.Ano,@Model.Numero,@item.Seq)"></a>
+                                        <a href="#" title="Mover trâmite para cima"> <img src="@Url.Content("~/images/acima.gif")" data-value="@item.Seq" onclick="MoveUp(@Model.Ano,@Model.Numero,@item.Seq)"></a>
+                                        <a href="@Url.Action("AddPlace","Protocolo",new {Ano=@Model.Ano,Numero=@Model.Numero, Seq=item.Seq,@item.CentroCustoCodigo})" title="Incluir um local de trâmite"> <img src="@Url.Content("~/images/inserir_local.png")" onclick="return Validar_AddPlace('@Model.Ano',@Model.Numero,@item.Seq,@item.CentroCustoCodigo)" /></a>
+                                        <a href="@Url.Action("RemovePlace","Protocolo",new {Ano=@Model.Ano,Numero=@Model.Numero, Seq=item.Seq})" title="Remover um local de trâmite"> <img src="@Url.Content("~/images/remover_local.png")" onclick="return Usuario_CC_Remover('@Model.Lista_CC',@item.Seq,@item.CentroCustoCodigo)" /></a>
+                                        <a href="@Url.Action("Obs","Protocolo",new {Ano=@Model.Ano,Numero=@Model.Numero, Seq=item.Seq})" title="Observação"> <img src="@Url.Content("~/images/observacao.png")" onclick="return Validar_Obs(@item.Ano,@item.Numero, '@Model.Lista_CC',@item.Seq,'@item.ObsGeral','@item.ObsInterna')" /></a>
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <label style="font-weight:normal;color:red;padding-left:13px" id="errorLabel">@ViewBag.Result</label>
+            <div class="panel-footer">
+
+                @Html.ActionLink("Consultar outro processo", "Tramite_Processo", "Protocolo", null, new { @class = "actionlink" })    <br />
+                @Html.ActionLink("Retornar ao menu de opções", "SysMenu", "Home", null, new { @class = "actionlink" })    <br />
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
         </div>
     </form>
-
-    <!--###########################-->
-    <!--          FOOTER           -->
-    <!--###########################-->
-    <br />
-    <br />
-    <div class="form-group row">
-        <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
-    </div>
-
-
-
-    @Html.ActionLink("Consultar outro processo", "Tramite_Processo", "Protocolo", null, new { @class = "actionlink" })
-    <br />
-    @Html.ActionLink("Retornar ao menu de opções", "SysMenu", "Home", null, new { @class = "actionlink" })
-    <br />
-    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 </div>
 
 <!--##########################-->
@@ -226,8 +199,6 @@
 
 
 @section scripts {
-    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
 
     <script>
 

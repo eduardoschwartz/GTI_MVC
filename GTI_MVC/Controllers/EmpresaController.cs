@@ -15,6 +15,7 @@ using GTI_Mvc.ViewModels;
 using GTI_MVC;
 using QRCoder;
 using System.Drawing;
+using Microsoft.Reporting.WebForms;
 
 namespace GTI_Mvc.Controllers {
 
@@ -923,7 +924,259 @@ namespace GTI_Mvc.Controllers {
             }
         }
 
+        [Route("Carne_tl")]
+        [HttpGet]
+        public ViewResult Carne_tl() {
+            CertidaoViewModel model = new CertidaoViewModel();
+            return View(model);
+        }
 
+        [Route("Carne_tl")]
+        [HttpPost]
+        public ActionResult Carne_tl(CertidaoViewModel model) {
+            int _codigo = Convert.ToInt32(model.Inscricao);
+            string _cpf =   model.CpfValue==null?"":Functions.RetornaNumero(model.CpfValue);
+            string _cnpj = model.CnpjValue == null ? "" : Functions.RetornaNumero(model.CnpjValue);
+            int _ano = 2020;
+
+            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+                ViewBag.Result = "Código de verificação inválido.";
+                return View(model);
+            }
+
+            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+            bool bFind = empresaRepository.Existe_Empresa(_codigo);
+            if (bFind) {
+                EmpresaStruct _empresa = empresaRepository.Retorna_Empresa(_codigo);
+                if (_cpf!="") {
+                    if (Convert.ToInt64(Functions.RetornaNumero(_empresa.Cpf_cnpj)).ToString("00000000000") !=  _cpf) {
+                        ViewBag.Result = "CPF não pertence ao proprietário desta empresa!";
+                        return View(model);
+                    }
+                } else {
+                    if (Convert.ToInt64(Functions.RetornaNumero(_empresa.Cpf_cnpj)).ToString("00000000000000") != _cnpj) {
+                       ViewBag.Result = "CNPJ não pertence ao proprietário desta empresa!";
+                        return View(model);
+                    }
+                }
+            } else {
+                ViewBag.Result = "Inscrição Municipal não cadastrada!";
+                return View(model);
+            }
+
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+
+            Paramparcela _parametro_parcela = tributarioRepository.Retorna_Parametro_Parcela(_ano, (int)TipoCarne.Iss_Taxa);
+            int _qtde_parcela = (int)_parametro_parcela.Qtdeparcela;
+            decimal _SomaISS = 0, _SomaTaxa = 0;
+
+            List<DebitoStructure> Lista_Taxa = tributarioRepository.Lista_Parcelas_Taxa(_codigo, 2020);
+            List<DebitoStructure> Lista_Iss = tributarioRepository.Lista_Parcelas_Iss_Fixo(_codigo, 2020);
+            bool _temtaxa = Lista_Taxa.Count > 0 ? true : false;
+            bool _temiss = Lista_Iss.Count > 0 ? true : false;
+
+            List<DebitoStructure> Lista_Unificada = new List<DebitoStructure>();
+            foreach (DebitoStructure item in Lista_Taxa) {//carrega a lista unificada com os dados das taxas
+                DebitoStructure reg = new DebitoStructure();
+                reg.Codigo_Tributo = item.Codigo_Tributo;
+                reg.Abreviatura_Tributo = item.Abreviatura_Tributo;
+                reg.Data_Vencimento = item.Data_Vencimento;
+                reg.Numero_Parcela = item.Numero_Parcela;
+                reg.Numero_Documento = item.Numero_Documento;
+                reg.Soma_Principal = item.Soma_Principal;
+                reg.Data_Base = item.Data_Base;
+                Lista_Unificada.Add(reg);
+                if (item.Numero_Parcela > 0)
+                    _SomaTaxa += item.Soma_Principal;
+            }
+
+            if (_temiss) {
+                if (_temtaxa) {//se tiver taxa, tem que juntar os dois na lista unificada
+                    bFind = false;
+                    int _index = 0;
+                    foreach (DebitoStructure item in Lista_Taxa) {
+                        decimal _valor_principal = 0;
+                        foreach (var item2 in Lista_Iss) {
+                            if (item.Numero_Documento == item2.Numero_Documento) {
+                                _valor_principal = item2.Soma_Principal;
+                                Lista_Unificada[_index].Soma_Principal += _valor_principal;
+                                if (item.Numero_Parcela > 0)
+                                    _SomaISS += item2.Soma_Principal;
+                                _index++;
+                                break;
+                            }
+                        }
+                    }
+                } else { //se não tiver taxa, a lista unficada conterá apenas os dados de iss
+                    foreach (DebitoStructure item in Lista_Iss) {
+                        DebitoStructure reg = new DebitoStructure();
+                        reg.Codigo_Tributo = item.Codigo_Tributo;
+                        reg.Abreviatura_Tributo = item.Abreviatura_Tributo;
+                        reg.Data_Vencimento = item.Data_Vencimento;
+                        reg.Numero_Parcela = item.Numero_Parcela;
+                        reg.Numero_Documento = item.Numero_Documento;
+                        reg.Soma_Principal = item.Soma_Principal;
+                        reg.Data_Base = item.Data_Base;
+                        Lista_Unificada.Add(reg);
+                        if (item.Numero_Parcela > 0)
+                            _SomaISS += item.Soma_Principal;
+                    }
+                }
+            }
+
+            if (!_temtaxa && !_temiss) {
+                ViewBag.Result = "Não é possível emitir segunda via para este código";
+                return View(model);
+            } else {
+                string _descricao_lancamento;
+                if (_temtaxa && _temiss)
+                    _descricao_lancamento = "ISS FIXO/TAXA DE LICENÇA";
+                else {
+                    if (_temtaxa && !_temiss)
+                        _descricao_lancamento = "TAXA DE LICENÇA";
+                    else
+                        _descricao_lancamento = "ISS FIXO";
+                }
+                int nSid = Functions.GetRandomNumber();
+
+                EmpresaStruct _empresa = empresaRepository.Retorna_Empresa(_codigo);
+                string _razao = _empresa.Razao_social;
+                string _cpfcnpj;
+                if (_empresa.Juridica)
+                    _cpfcnpj = Convert.ToUInt64(_empresa.Cpf_cnpj).ToString(@"00\.000\.000\/0000\-00");
+                else {
+                    if (_empresa.Cpf_cnpj.Length > 1)
+                        _cpfcnpj = Convert.ToUInt64(_empresa.Cpf_cnpj).ToString(@"000\.000\.000\-00");
+                    else
+                        _cpfcnpj = "";
+                }
+                string _endereco = _empresa.Endereco_nome;
+                short _numimovel = (short)_empresa.Numero;
+                string _complemento = _empresa.Complemento;
+                string _bairro = _empresa.Bairro_nome;
+                string _cep = _empresa.Cep;
+
+                short _index = 0;
+                string _convenio = "2873532";
+                List<Boletoguia> ListaBoleto = new List<Boletoguia>();
+                foreach (DebitoStructure item in Lista_Unificada) {
+
+                    Boletoguia reg = new Boletoguia();
+                    reg.Usuario = "Gti.Web/2ViaISSTLL";
+                    reg.Computer = "web";
+                    reg.Sid = nSid;
+                    reg.Seq = _index;
+                    reg.Codreduzido = _codigo.ToString("000000");
+                    reg.Nome = _razao;
+                    reg.Cpf = _cpfcnpj;
+                    reg.Numimovel = _numimovel;
+                    reg.Endereco = _endereco;
+                    reg.Complemento = _complemento;
+                    reg.Bairro = _bairro;
+                    reg.Cidade = "JABOTICABAL";
+                    reg.Uf = "SP";
+                    reg.Cep = _cep;
+                    reg.Desclanc = _descricao_lancamento;
+                    reg.Fulllanc = _descricao_lancamento;
+                    reg.Numdoc = item.Numero_Documento.ToString();
+                    reg.Numparcela = (short)item.Numero_Parcela;
+                    reg.Datadoc = item.Data_Base;
+                    reg.Datavencto = item.Data_Vencimento;
+                    reg.Numdoc2 = item.Numero_Documento.ToString();
+                    reg.Valorguia = item.Soma_Principal;
+                    reg.Valor_ISS = _SomaISS;
+                    reg.Valor_Taxa = _SomaTaxa;
+
+                    //***** GERA CÓDIGO DE BARRAS BOLETO REGISTRADO*****
+                    DateTime _data_base = Convert.ToDateTime("07/10/1997");
+                    TimeSpan ts = Convert.ToDateTime(item.Data_Vencimento) - _data_base;
+                    int _fator_vencto = ts.Days;
+                    string _quinto_grupo = String.Format("{0:D4}", _fator_vencto);
+                    string _valor_boleto_str = string.Format("{0:0.00}", reg.Valorguia);
+                    _quinto_grupo += string.Format("{0:D10}", Convert.ToInt64(Functions.RetornaNumero(_valor_boleto_str)));
+                    string _barra = "0019" + _quinto_grupo + String.Format("{0:D13}", Convert.ToInt32(_convenio));
+                    _barra += String.Format("{0:D10}", Convert.ToInt64(reg.Numdoc)) + "17";
+                    string _campo1 = "0019" + _barra.Substring(19, 5);
+                    string _digitavel = _campo1 + Functions.Calculo_DV10(_campo1).ToString();
+                    string _campo2 = _barra.Substring(23, 10);
+                    _digitavel += _campo2 + Functions.Calculo_DV10(_campo2).ToString();
+                    string _campo3 = _barra.Substring(33, 10);
+                    _digitavel += _campo3 + Functions.Calculo_DV10(_campo3).ToString();
+                    string _campo5 = _quinto_grupo;
+                    string _campo4 = Functions.Calculo_DV11(_barra).ToString();
+                    _digitavel += _campo4 + _campo5;
+                    _barra = _barra.Substring(0, 4) + _campo4 + _barra.Substring(4, _barra.Length - 4);
+                    //**Resultado final**
+                    string _linha_digitavel = _digitavel.Substring(0, 5) + "." + _digitavel.Substring(5, 5) + " " + _digitavel.Substring(10, 5) + "." + _digitavel.Substring(15, 6) + " ";
+                    _linha_digitavel += _digitavel.Substring(21, 5) + "." + _digitavel.Substring(26, 6) + " " + _digitavel.Substring(32, 1) + " " + Functions.StringRight(_digitavel, 14);
+                    string _codigo_barra = Functions.Gera2of5Str(_barra);
+                    //**************************************************
+                    reg.Totparcela = (short)_qtde_parcela;
+                    if (item.Numero_Parcela == 0) {
+                        reg.Parcela = "Única";
+                    } else
+                        reg.Parcela = reg.Numparcela.ToString("00") + "/" + reg.Totparcela.ToString("00");
+
+
+                    reg.Digitavel = _linha_digitavel;
+                    reg.Codbarra = _codigo_barra;
+                    reg.Nossonumero = _convenio + String.Format("{0:D10}", Convert.ToInt64(reg.Numdoc));
+                    ListaBoleto.Add(reg);
+                    _index++;
+                }
+
+                Warning[] warnings;
+                string[] streamIds;
+                string mimeType = string.Empty;
+                string encoding = string.Empty;
+                string extension = string.Empty;
+                if (ListaBoleto.Count > 0) {
+                    DataSet Ds = Functions.ToDataSet(ListaBoleto);
+                    ReportDataSource rdsAct = new ReportDataSource("dsBoletoGuia", Ds.Tables[0]);
+                    ReportViewer viewer = new ReportViewer();
+                    viewer.LocalReport.Refresh();
+                    viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Carne_ISS_TLL.rdlc"); ;
+                    viewer.LocalReport.DataSources.Add(rdsAct); // Add  datasource here       
+
+                    decimal _valor_aliquota = empresaRepository.Aliquota_Taxa_Licenca(_codigo);
+
+                    List<ReportParameter> parameters = new List<ReportParameter>();
+                    parameters.Add(new ReportParameter("DATADOC", Convert.ToDateTime(ListaBoleto[0].Datadoc).ToString("dd/MM/yyyy")));
+                    parameters.Add(new ReportParameter("NOME", ListaBoleto[0].Nome));
+                    parameters.Add(new ReportParameter("ENDERECO", ListaBoleto[0].Endereco + " " + ListaBoleto[0].Complemento));
+                    parameters.Add(new ReportParameter("BAIRRO", ListaBoleto[0].Bairro));
+                    parameters.Add(new ReportParameter("CIDADE", ListaBoleto[0].Cidade + "/" + ListaBoleto[0].Uf));
+                    parameters.Add(new ReportParameter("CODIGO", _codigo.ToString()));
+                    parameters.Add(new ReportParameter("IE", _empresa.Inscricao_estadual == "" ? " " : _empresa.Inscricao_estadual));
+                    parameters.Add(new ReportParameter("DOC", ListaBoleto[0].Cpf));
+                    parameters.Add(new ReportParameter("ATIVIDADE", _empresa.Atividade_extenso));
+                    parameters.Add(new ReportParameter("ISS", Convert.ToDecimal(ListaBoleto[0].Valor_ISS).ToString("#0.00")));
+                    parameters.Add(new ReportParameter("TAXA", Convert.ToDecimal(ListaBoleto[0].Valor_Taxa).ToString("#0.00")));
+                    parameters.Add(new ReportParameter("AREA", Convert.ToDecimal(_empresa.Area).ToString("#0.00")));
+                    parameters.Add(new ReportParameter("ALIQUOTA", _valor_aliquota.ToString("#0.00")));
+                    viewer.LocalReport.SetParameters(parameters);
+
+                    byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
+                    Response.Buffer = true;
+                    Response.Clear();
+                    Response.ContentType = mimeType;
+                    Response.AddHeader("content-disposition", "attachment; filename= guia_pmj" + "." + extension);
+                    Response.OutputStream.Write(bytes, 0, bytes.Length);
+                    Response.Flush();
+                    Response.End();
+                }
+
+            }
+             return null;
+        }
+
+
+        [Route("Carne_vs")]
+        [HttpGet]
+        public ViewResult Carne_vs() {
+            CertidaoViewModel model = new CertidaoViewModel();
+            return View(model);
+        }
 
     }
 }
