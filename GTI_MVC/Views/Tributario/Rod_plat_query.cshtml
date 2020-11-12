@@ -287,10 +287,15 @@
             return true;
         }
 
-        function sendForm(_dataDe, _dataAte,_qtde1,_qtde2,_qtde3,_codigo) {
+        function sendForm(_dataDe, _dataAte, _qtde1, _qtde2, _qtde3, _codigo) {
+            var _origem = location.origin;
+            var _newurl = "/Tributario/Rod_plat_query"; 
+            if (_origem.indexOf("sistemas") > -1) {    
+                 _newurl = "/gti/Tributario/Rod_plat_query";
+            }
             $.ajax({
                 type: "Post",
-                url: "/gti/Tributario/Rod_plat_query",
+                url: _newurl,
                 dataType: 'json',
                 data: {
                     DataDe: _dataDe,
