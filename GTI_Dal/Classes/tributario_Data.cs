@@ -1864,8 +1864,7 @@ namespace GTI_Dal.Classes {
 
         public List<DebitoStructure> Lista_Parcelas_Taxa(int nCodigo, int nAno) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                DateTime dDataBase = Convert.ToDateTime("01/01/2020");
-                //Retornar a lista das parcelas registradas
+                DateTime dDataBase = Convert.ToDateTime("01/01/" + nAno.ToString());
                 var reg = (from dp in db.Debitoparcela
                            join dt in db.Debitotributo on new { p1 = dp.Codreduzido, p2 = dp.Anoexercicio, p3 = dp.Codlancamento, p4 = dp.Seqlancamento, p5 = dp.Numparcela, p6 = dp.Codcomplemento }
                                                    equals new { p1 = dt.Codreduzido, p2 = dt.Anoexercicio, p3 = dt.Codlancamento, p4 = dt.Seqlancamento, p5 = dt.Numparcela, p6 = dt.Codcomplemento } into dpdt from dt in dpdt.DefaultIfEmpty()
@@ -1903,7 +1902,7 @@ Proximo:;
         }
 
         public List<DebitoStructure> Lista_Parcelas_Iss_Fixo(int nCodigo, int nAno) {
-            DateTime dDataBase = Convert.ToDateTime("01/01/2020");
+            DateTime dDataBase = Convert.ToDateTime("01/01/" + nAno.ToString()    );
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var reg = (from dp in db.Debitoparcela
                            join dt in db.Debitotributo on new { p1 = dp.Codreduzido, p2 = dp.Anoexercicio, p3 = dp.Codlancamento, p4 = dp.Seqlancamento, p5 = dp.Numparcela, p6 = dp.Codcomplemento }
