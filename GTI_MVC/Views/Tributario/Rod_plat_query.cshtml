@@ -93,9 +93,9 @@
                     </table>
                     <br />
                     <p style="font-weight:normal;font-size:12px;color:brown">
-                        *Qtde 1 - Uso da palateforma até 39 km<br />
-                        *Qtde 2 - Uso da palateforma de 40 km até 79,9 km<br />
-                        *Qtde 3 - Uso da palateforma acima de 79,9 km
+                        *Qtde 1 - Uso da plataforma até 39 km<br />
+                        *Qtde 2 - Uso da plataforma de 40 km até 79,9 km<br />
+                        *Qtde 3 - Uso da plataforma acima de 79,9 km
                     </p>
                 </div>
                 <div class="panel-footer">
@@ -266,12 +266,15 @@
             var _bqtde2 = true;
             var _bqtde3 = true;
             if (_qtde1 == "" || parseInt(_qtde1) == 0) {
+                _qtde1 = "0";
                 _bqtde1 = false;
             }
             if (_qtde2 == "" || parseInt(_qtde2) == 0) {
+                _qtde2 = "0";
                 _bqtde2 = false;
             }
             if (_qtde3 == "" || parseInt(_qtde3) == 0) {
+                _qtde3 = "0";
                 _bqtde3 = false;
             }
             if (!_bqtde1 && !_bqtde2 && !_bqtde3) {
@@ -287,7 +290,7 @@
         function sendForm(_dataDe, _dataAte,_qtde1,_qtde2,_qtde3,_codigo) {
             $.ajax({
                 type: "Post",
-                url: "/Tributario/Rod_plat_query",
+                url: "/gti/Tributario/Rod_plat_query",
                 dataType: 'json',
                 data: {
                     DataDe: _dataDe,
@@ -297,8 +300,14 @@
                     Qtde3: _qtde3,
                     Codigo: _codigo
                 },
+                success: function (response,data) {
+                    alert(response.responseText);
+                    window.location.reload();
+                },
+                error: function (response) {
+                    alert("Ocorreu um erro!");   
+                }
             });
-            location.reload();
         };
 
 

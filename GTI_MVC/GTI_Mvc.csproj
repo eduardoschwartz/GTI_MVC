@@ -229,6 +229,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsGuia_Itbi.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Datasets\dsMobiliarioAtividadeVS.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsMobiliarioAtividadeVS.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Datasets\dsNotificacaoISS.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -578,6 +583,17 @@
     <Content Include="Datasets\dsNotificacaoISS.xsc">
       <DependentUpon>dsNotificacaoISS.xsd</DependentUpon>
     </Content>
+    <Content Include="Datasets\dsMobiliarioAtividadeVS.xsc">
+      <DependentUpon>dsMobiliarioAtividadeVS.xsd</DependentUpon>
+    </Content>
+    <None Include="Datasets\dsMobiliarioAtividadeVS.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsMobiliarioAtividadeVS.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Datasets\dsMobiliarioAtividadeVS.xss">
+      <DependentUpon>dsMobiliarioAtividadeVS.xsd</DependentUpon>
+    </Content>
     <None Include="Datasets\dsNotificacaoISS.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -742,6 +758,7 @@
     <EmbeddedResource Include="Reports\Carne_IPTU.rdlc" />
     <EmbeddedResource Include="Reports\Carne_ISS_TLL.rdlc" />
     <EmbeddedResource Include="Reports\Carne_Parcelamento.rdlc" />
+    <EmbeddedResource Include="Reports\Carne_VS.rdlc" />
     <EmbeddedResource Include="Reports\CertidaoDebitoDocumentoN.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>CertidaoDebitoDocumentoN.cs</LastGenOutput>

@@ -1,4 +1,4 @@
-﻿function formata(campo, mask, evt) {
+function formata(campo, mask, evt) {
 
     if (document.all) { // Internet Explorer
         key = evt.keyCode;

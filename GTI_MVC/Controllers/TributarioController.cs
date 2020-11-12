@@ -2433,20 +2433,21 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Rod_plat_query")]
         [HttpPost]
-        public ActionResult Rod_plat_query(FormCollection collection) {
-            var data1 = collection["DataDe"];
+        public ActionResult Rod_plat_query(string DataDe,string DataAte,string Codigo,string Qtde1,string Qtde2,string Qtde3) {
+            //            FormCollection collection=new FormCollection();
+            var data1 = DataDe;
             DateTime _data1;
             bool t=DateTime.TryParse(data1,out _data1);
-            var data2 = collection["DataAte"];
+            var data2 = DataAte;
             DateTime _data2;
             t = DateTime.TryParse(data2, out _data2);
-            var cod = collection["Codigo"];
+            var cod = Codigo;
             int _codigo=Convert.ToInt32(cod);
-            var qtde1 = collection["Qtde1"];
+            var qtde1 = Qtde1;
             int _qtde1 = Convert.ToInt32(qtde1);
-            var qtde2 = collection["Qtde2"];
+            var qtde2 = Qtde2;
             int _qtde2 = Convert.ToInt32(qtde2);
-            var qtde3 = collection["Qtde3"];
+            var qtde3 = Qtde3;
             int _qtde3 = Convert.ToInt32(qtde3);
             short _ano = (short)_data1.Year;
             int _userId =  Convert.ToInt32(Session["hashid"]);
@@ -2629,7 +2630,7 @@ namespace GTI_Mvc.Controllers {
             ex2 = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
             ex2 = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
 
-            return null;
+            return Json(new { success = true, responseText = "Dados enviados com sucesso!" }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Rod_uso_plataforma_print(string p1,string p2,string p3,string p4) {
