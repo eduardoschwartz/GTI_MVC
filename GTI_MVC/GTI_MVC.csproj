@@ -58,8 +58,8 @@
     <Reference Include="CrystalDecisions.Shared">
       <HintPath>..\..\..\program files (x86)\sap businessobjects\crystal reports for .net framework 4.0\common\sap businessobjects enterprise xi 4.0\win32_x86\dotnet\CrystalDecisions.Shared.dll</HintPath>
     </Reference>
-    <Reference Include="DotNet.CEP.Search.App, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetCEPSearch.1.0.0\lib\netstandard2.0\DotNet.CEP.Search.App.dll</HintPath>
+    <Reference Include="DotNet.CEP.Search.App, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetCEPSearch.1.0.1\lib\netstandard2.0\DotNet.CEP.Search.App.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.dll</HintPath>

@@ -1651,6 +1651,7 @@
                           </Style>
                         </Textbox>
                         <ColSpan>2</ColSpan>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />
@@ -6816,7 +6817,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Data de vencimento</Value>
+                                  <Value>Valor do documento</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -6849,7 +6850,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Valor da guia</Value>
+                                  <Value>Data de vencimento</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
