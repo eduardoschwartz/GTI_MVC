@@ -26,6 +26,7 @@ namespace GTI_Dal {
         public DbSet<Pais> Pais { get; set; }
         public DbSet<Logradouro> Logradouro { get; set; }
         public DbSet<Cep> Cep { get; set; }
+        public DbSet<Cepdb> CepDB { get; set; }
         public DbSet<Processogti> Processogti { get; set; }
         public DbSet<Anexo> Anexo { get; set; }
         public DbSet<Anexo_log> Anexo_log { get; set; }

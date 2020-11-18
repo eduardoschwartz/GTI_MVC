@@ -153,6 +153,11 @@ namespace GTI_Bll.Classes {
             return obj.Existe_Bairro(uf, cidade,bairro);
         }
 
+        public Cepdb Retorna_CepDB(int Cep) {
+            Endereco_Data obj = new Endereco_Data(_connection);
+            return obj.Retorna_CepDB(Cep);
+        }
+
     }
 }
 

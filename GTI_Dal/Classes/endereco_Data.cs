@@ -330,5 +330,11 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Cepdb Retorna_CepDB(int Cep) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                return (from c in db.CepDB where c.Cep == Cep.ToString() select c).FirstOrDefault();
+            }
+        }
+
     }
 }

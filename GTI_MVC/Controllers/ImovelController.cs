@@ -1412,7 +1412,8 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 }
 
-                var cepObj = Classes.Cep.Busca(Functions.RetornaNumero(model.Comprador.Cep));
+                var cepObj = Classes.Cep.Busca_CepDB(Convert.ToInt32( Functions.RetornaNumero(model.Comprador.Cep)));
+                //var cepObj = Classes.Cep.Busca(Functions.RetornaNumero(model.Comprador.Cep));
                 //var cepObj = Classes.Cep.Busca_Correio(Functions.RetornaNumero(model.Comprador.Cep));
                 if (cepObj.CEP != null) {
                     string rua = cepObj.Endereco;
@@ -1761,8 +1762,9 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 }
 
+                var cepObj = Classes.Cep.Busca_CepDB(Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep)));
                 //var cepObj = Classes.Cep.Busca_Correio(Functions.RetornaNumero(model.Comprador.Cep));
-                var cepObj = Classes.Cep.Busca(Functions.RetornaNumero(model.Comprador.Cep));
+                //var cepObj = Classes.Cep.Busca(Functions.RetornaNumero(model.Comprador.Cep));
                 if (cepObj.CEP != null) {
                     string rua = cepObj.Endereco;
                     if (rua.IndexOf('-') > 0) {
@@ -2196,8 +2198,9 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 }
 
+                var cepObj = Classes.Cep.Busca_CepDB(Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep)));
                 //var cepObj = Classes.Cep.Busca_Correio(Functions.RetornaNumero(model.Comprador.Cep));
-                var cepObj = Classes.Cep.Busca(Functions.RetornaNumero(model.Comprador.Cep));
+                //var cepObj = Classes.Cep.Busca(Functions.RetornaNumero(model.Comprador.Cep));
                 if (cepObj.CEP != null) {
                     string rua = cepObj.Endereco;
                     if (rua.IndexOf('-') > 0) {
@@ -2522,8 +2525,9 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 }
 
+                var cepObj = Classes.Cep.Busca_CepDB(Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep)));
                 //var cepObj = Classes.Cep.Busca_Correio(Functions.RetornaNumero(model.Comprador.Cep));
-                var cepObj = Classes.Cep.Busca(Functions.RetornaNumero(model.Comprador.Cep));
+                //var cepObj = Classes.Cep.Busca(Functions.RetornaNumero(model.Comprador.Cep));
                 if (cepObj.CEP != null) {
                     string rua = cepObj.Endereco;
                     if (rua.IndexOf('-') > 0) {
@@ -3605,7 +3609,8 @@ namespace GTI_Mvc.Controllers {
             DateTime _dataVencto = Retorna_Data_Vencimento_Itbi();
             string _nome = model.Comprador.Nome.Length > 40 ? model.Comprador.Nome.Substring(0, 40) : model.Comprador.Nome;
             string _endereco = model.Comprador.Logradouro_Nome.Length > 40 ? model.Comprador.Logradouro_Nome.Substring(0, 40) : model.Comprador.Logradouro_Nome;
-            string _bairro = model.Comprador.Bairro_Nome.Length > 40 ? model.Comprador.Bairro_Nome.Substring(0, 40) : model.Comprador.Bairro_Nome;
+            string _bairro = model.Comprador.Bairro_Nome ?? "";
+            _bairro =_bairro.Length > 40 ? _bairro.Substring(0, 40) : _bairro;
             string _cidade = "JABOTICABAL";
             if (model.Comprador.Cidade_Nome != null)
                 _cidade = model.Comprador.Cidade_Nome.Length > 40 ? model.Comprador.Cidade_Nome.Substring(0, 40) : model.Comprador.Cidade_Nome;

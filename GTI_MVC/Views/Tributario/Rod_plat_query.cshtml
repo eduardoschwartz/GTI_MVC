@@ -83,8 +83,8 @@
                                     <td style="width:100px;font-weight:normal;text-align:left">@Html.DisplayFor(modelItem => item.Situacao_Nome)</td>
                                     <td style="width:80px">
                                         @if (item.Situacao == 7) {
-                                            <a href="@Url.Action("Rod_uso_plataforma_print", "Tributario", new { p1 = item.Datade, p2 = item.Dataate, p3 = item.Seq, p4 = item.Codigo })" title="Imprimir a Guia"> <img src="@Url.Content("~/images/print.png")"></a>
-                                            <a href="@Url.Action("Rod_uso_plataforma_cancel", "Tributario", new { p1 = item.Datade, p2 = item.Dataate, p3 = item.Seq, p4 = item.Codigo ,p5=item.Numero_Guia })" onclick="return confirm('Cancelar esta apuração?')" })" title="Cancelar Apuração"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
+                                            <a href="@Url.Action("Rod_uso_plataforma_print", "Tributario", new { p1 = item.Datade, p2 = item.Dataate, p3 = item.Seq, p4 = item.Codigo })" title="Imprimir a Guia" onclick="return confirm('Boletos liberados até as 16:30h podem ser quitados a partir do dia seguinte de sua liberação, após às 16:30h será necessário mais um dia útil para o registro. Você deseja emitir o boleto?')"> <img src="@Url.Content("~/images/print.png")"></a>
+                                            <a href="@Url.Action("Rod_uso_plataforma_cancel", "Tributario", new { p1 = item.Datade, p2 = item.Dataate, p3 = item.Seq, p4 = item.Codigo ,p5=item.Numero_Guia })" onclick="return confirm('Cancelar esta apuração?')"  title="Cancelar Apuração"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
                                         }
                                     </td>
                                 </tr>

@@ -87,6 +87,7 @@
     <Compile Include="Models\banco.cs" />
     <Compile Include="Models\boleto.cs" />
     <Compile Include="Models\boletoguia.cs" />
+    <Compile Include="Models\cepdb.cs" />
     <Compile Include="Models\certidao_impressao.cs" />
     <Compile Include="Models\chaveStruct.cs" />
     <Compile Include="Models\dados_imovel_web.cs" />

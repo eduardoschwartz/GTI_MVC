@@ -1,4 +1,6 @@
 ﻿using DotNet.CEP.Search.App;
+using GTI_Bll.Classes;
+using GTI_Models.Models;
 using System;
 using System.IO;
 using System.Net;
@@ -96,9 +98,6 @@ namespace GTI_Mvc.Classes {
             //}
 
 
-
-
-
             ////******************
             var url = "http://apps.widenet.com.br/busca-cep/api/cep.json?code=" + cep;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -143,11 +142,29 @@ namespace GTI_Mvc.Classes {
                 cepObj.Cidade = "";
                 cepObj.Estado = "";
             }
-
             return cepObj;
-
         }
 
+        public static Cep Busca_CepDB(int Cep) {
+            var cepObj = new Cep();
+            Endereco_bll enderecoRepository = new Endereco_bll("GTiconnection");
+            Cepdb _cep = enderecoRepository.Retorna_CepDB(Cep);
+            if (_cep == null) {
+                cepObj.Endereco = "";
+                cepObj.Bairro = "";
+                cepObj.CEP = "";
+                cepObj.Cidade = "";
+                cepObj.Estado = "";
+            } else {
+                cepObj.Endereco = _cep.Logradouro;
+                cepObj.Bairro = _cep.Bairro;
+                cepObj.CEP = _cep.Cep;
+                cepObj.Cidade = _cep.Cidade;
+                cepObj.Estado = _cep.Uf;
+            }
+
+            return cepObj;
+        }
 
 
     }
