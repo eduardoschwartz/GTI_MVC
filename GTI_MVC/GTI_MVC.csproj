@@ -440,6 +440,7 @@
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Classes\TAcesso.cs" />
     <Compile Include="ViewModels\BoletoViewModel.cs" />
+    <Compile Include="ViewModels\CepViewModel.cs" />
     <Compile Include="ViewModels\CertidaoViewModel.cs" />
     <Compile Include="ViewModels\DebitoListViewModel.cs" />
     <Compile Include="ViewModels\DebitoSelectionViewModel.cs" />
@@ -824,6 +825,7 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\Shared\Cep_inc.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

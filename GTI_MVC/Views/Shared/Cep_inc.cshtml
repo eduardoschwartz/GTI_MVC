@@ -1,0 +1,144 @@
+﻿@model GTI_Mvc.ViewModels.CepViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Cadastro de Cep";
+}
+
+<style>
+
+    .center {
+        margin: auto;
+        width: 500px;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .modal-ku {
+        width: 450px;
+        margin: 200px, auto;
+    }
+</style>
+
+<div class="center">
+
+    @using (Html.BeginForm("Cep_inc", "Shared", FormMethod.Post, new { @id = "MainForm" })) {
+        <div class="container" style="width:580px">
+            <div class="panel panel-danger">
+                <div class="panel-heading">Inclusão de Cep não cadastrado</div>
+                <div class="panel-body">
+                    <label style="width:50px;font-weight:normal">CEP:</label>
+                    @if (@Model.Cep == null) {
+                        @Html.TextBoxFor(m => m.Cep, new { @id = "cep", @style = "width:100px;height:25px", @onKeyPress = "return formata(this, '§§§§§-§§§', event)" })
+                        <label>&nbsp;&nbsp;</label>
+                        <button id="btnCepOk" type="submit" class="btn btn-primary" name="action" value="btnCepOK">Consultar</button>
+
+                    } else {
+
+                        if (ViewBag.Error == "") {
+                            @Html.HiddenFor(m => m.Cep)
+                            <label style="color:brown">@Model.Cep&nbsp;&nbsp;</label>
+                            <button id="btnCepCancel" type="submit" class="btn btn-danger" onclick="return cancelarCodigo()" name="action" value="btnCepCancel">Cancelar</button>
+                        } else {
+                            @Html.TextBoxFor(m => m.Cep, new { @id = "cep", @style = "width:100px;height:25px;color:blue" })
+                            <button id="btnCepOk" type="submit" class="btn btn-primary" name="action" value="btnCepOK">Consultar</button>
+                        }
+                    }
+
+                    @if (Model.Cep != null && ViewBag.Error == "") {
+                        <div style="padding-top:20px">
+                            <table>
+                                <tr>
+                                    <td style="width:150px">
+                                        Estado
+                                    </td>
+                                    <td style="width:450px">
+                                        @Html.TextBoxFor(m => m.Uf, new { style = "width:400px;height:25px", @readonly = true, @value = @Model.NomeUf })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top:10px">
+                                        Cidade
+                                    </td>
+                                    <td style="padding-top:10px">
+                                        @Html.TextBoxFor(m => m.Uf, new { style = "width:400px;height:25px", @readonly = true, @value = @Model.NomeUf })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top:10px">
+                                        Bairro
+                                    </td>
+                                    <td style="padding-top:10px">
+                                        @Html.TextBoxFor(m => m.Uf, new { style = "width:400px;height:25px", @readonly = true, @value = @Model.NomeUf })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top:10px">
+                                        Logradouro
+                                    </td>
+                                    <td style="padding-top:10px">
+                                        @Html.TextBoxFor(m => m.Uf, new { style = "width:400px;height:25px", @readonly = true, @value = @Model.NomeUf })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    }
+
+                    <div style="text-align:center">
+                        <br />
+                        <button type="submit" class="btn btn-success" name="action" value="btnValida" >Gravar</button>&nbsp;&nbsp;
+                    </div>
+
+
+
+
+
+
+                    @if (ViewBag.Error != null && ViewBag.Error != "") {
+                        <br />
+                        <br />
+                        <label style="font-weight:normal;color:red;padding-left:7px" id="errorLabel">@ViewBag.Error</label>
+                    }
+                </div>
+                <div class="panel-footer">
+                    @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
+
+                </div>
+            </div>
+        </div>
+    }
+
+
+    
+
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+        });
+
+     
+
+        function ValidateForm() {
+            ClearError();
+        }
+
+
+        function ClearError() {
+            document.getElementById('errorLabel').innerHTML = "";
+        }
+
+    
+
+    </script>
+}

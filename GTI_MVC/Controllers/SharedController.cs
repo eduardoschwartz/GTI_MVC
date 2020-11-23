@@ -218,6 +218,32 @@ namespace GTI_MVC.Controllers {
 
         }
 
+        [Route("Cep_inc")]
+        [HttpGet]
+        public ActionResult Cep_inc() {
+            CepViewModel model = new CepViewModel();
+            return View(model);
+        }
+
+        [Route("Cep_inc")]
+        [HttpPost]
+        public ActionResult Cep_inc(CepViewModel model, string action) {
+            ViewBag.Error = "";
+            if (action == "btnCepOK") {
+                if (model.Cep == null || model.Cep.Length < 9) {
+                    ViewBag.Error = "* Cep digitado inválido.";
+                    return View(model);
+                }
+            }
+            if (action == "btnCepCancel") {
+                model.Cep = null;
+                return View(model);
+            }
+
+             model.NomeUf = "TESTE";
+             return View(model);
+        }
+
 
     }
 }
