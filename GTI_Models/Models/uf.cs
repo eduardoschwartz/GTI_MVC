@@ -6,14 +6,12 @@ namespace GTI_Models.Models {
 
     public class Uf {
         [Key]
-        [StringLength(2)]
         public string Siglauf { get; set; }
-        [Required]
-        [StringLength(30)]
-        [Index("UFNome_Index", IsUnique = true)]
         public string Descuf{ get; set; }
+        public int Cep1 { get; set; }
+        public int Cep2 { get; set; }
 
-        public List<Cidade> Cidades { get; set; }
+//        public List<Cidade> Cidades { get; set; }
     }
 
 }

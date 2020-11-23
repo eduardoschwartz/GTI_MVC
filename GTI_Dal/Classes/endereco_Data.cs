@@ -336,5 +336,32 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Uf Retorna_Cep_Estado(int Cep) {
+            string _cep = Cep.ToString().PadLeft(8, '0');
+            int _cep1 =  Convert.ToInt32( _cep.Substring(0, 5) + "000");
+            int _cep2 = Convert.ToInt32(_cep.Substring(0, 5) + "999");
+
+            Uf reg = new Uf();
+
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from u in db.Uf orderby u.Cep1 select u).ToList();
+                foreach (Uf item in Sql) {
+                    if(_cep1>=item.Cep1 && _cep1 <= item.Cep2) {
+                        reg.Siglauf = item.Siglauf;
+                        reg.Descuf = item.Descuf;
+                        reg.Cep1 = item.Cep1;
+                        reg.Cep2 = item.Cep2;
+                        break;
+                    }
+                }
+            }
+
+            return reg;
+        }
+
+
+
+
+
     }
 }

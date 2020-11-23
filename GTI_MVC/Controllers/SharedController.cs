@@ -3,6 +3,7 @@ using CrystalDecisions.Shared;
 using GTI_Bll.Classes;
 using GTI_Models.Models;
 using GTI_Models.ReportModels;
+using GTI_Mvc;
 using GTI_Mvc.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -240,7 +241,19 @@ namespace GTI_MVC.Controllers {
                 return View(model);
             }
 
-             model.NomeUf = "TESTE";
+            int _cep = Convert.ToInt32(Functions.RetornaNumero(model.Cep));
+            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+            Uf _uf = enderecoRepository.Retorna_Cep_Estado(_cep);
+            if (_uf == null) {
+                ViewBag.Error = "* Cep não existente.";
+                model.Uf = "";
+                model.NomeUf = "";
+                return View(model);
+            }
+
+            model.Uf = _uf.Siglauf;
+            model.NomeUf = _uf.Descuf;
+
              return View(model);
         }
 

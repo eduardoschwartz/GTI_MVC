@@ -158,6 +158,12 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_CepDB(Cep);
         }
 
+        public Uf Retorna_Cep_Estado(int Cep) {
+            Endereco_Data obj = new Endereco_Data(_connection);
+            return obj.Retorna_Cep_Estado(Cep);
+
+        }
+
     }
 }
 

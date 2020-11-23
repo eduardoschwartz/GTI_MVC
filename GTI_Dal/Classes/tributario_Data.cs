@@ -2612,6 +2612,7 @@ Proximo:;
             using (GTI_Context db = new GTI_Context(_connection)) {
                var Sql = (from l in db.Notificacao_Iss_Web 
                           join c in db.Itbi_Status on l.Situacao equals c.Codigo into lc from c in lc.DefaultIfEmpty()
+                          orderby l.Numero_notificacao
                           where l.Ano_notificacao == Ano select new Notificacao_iss_web_Struct {Guid=l.Guid,Ano_notificacao=l.Ano_notificacao,Numero_notificacao=l.Numero_notificacao,
                           Data_gravacao=l.Data_gravacao,Data_vencimento=l.Data_vencimento,Nome=l.Nome,Situacao_nome=c.Descricao}).ToList();
                 List<Notificacao_iss_web_Struct> Lista = new List<Notificacao_iss_web_Struct>();
