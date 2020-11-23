@@ -3061,21 +3061,33 @@ namespace GTI_Mvc.Controllers {
                     Imovel_codigo = Convert.ToInt32(model.Codigo == null ? "0" : model.Codigo),
                     Guid = _guid,
                     Data_cadastro = DateTime.Now,
-                    Inscricao = model.Dados_Imovel.Inscricao,
-                    Proprietario_Codigo = model.Dados_Imovel.Proprietario_Codigo == null ? 0 : (int)model.Dados_Imovel.Proprietario_Codigo,
-                    Proprietario_Nome = model.Dados_Imovel.Proprietario_Nome,
                     Situacao_itbi = 1,
                     Userid = Convert.ToInt32(Session["hashid"]),
                     Funcionario = Session["hashfunc"].ToString() == "S" ? true : false
                 };
+                if (model.Dados_Imovel != null) {
+                    model.Dados_Imovel.Proprietario_Codigo = model.Dados_Imovel.Proprietario_Codigo == null ? 0 : (int)model.Dados_Imovel.Proprietario_Codigo;
+                    model.Dados_Imovel.Proprietario_Nome = model.Dados_Imovel.Proprietario_Nome;
+                    model.Dados_Imovel.Inscricao = model.Dados_Imovel.Inscricao;
+                }
                 ex = imovelRepository.Incluir_Itbi_main(regMain);
             } else {
                 _guid = model.Guid;
                 Itbi_main regMain = imovelRepository.Retorna_Itbi_Main(_guid);
                 if (Functions.IsDate(model.Data_Transacao))
                     regMain.Data_Transacao = model.Data_Transacao;
-                regMain.Proprietario_Codigo = model.Dados_Imovel.Proprietario_Codigo == null ? 0 : (int)model.Dados_Imovel.Proprietario_Codigo;
-                regMain.Proprietario_Nome = model.Dados_Imovel.Proprietario_Nome;
+
+                if (model.Dados_Imovel != null) {
+                    regMain.Proprietario_Codigo = model.Dados_Imovel.Proprietario_Codigo == null ? 0 : (int)model.Dados_Imovel.Proprietario_Codigo;
+                    regMain.Proprietario_Nome = model.Dados_Imovel.Proprietario_Nome;
+                    regMain.Imovel_endereco = model.Dados_Imovel.NomeLogradouro;
+                    regMain.Imovel_numero = model.Dados_Imovel.Numero == null ? 0 : (short)model.Dados_Imovel.Numero;
+                    regMain.Imovel_complemento = model.Dados_Imovel.Complemento;
+                    regMain.Imovel_cep = Convert.ToInt32(Functions.RetornaNumero(model.Dados_Imovel.Cep));
+                    regMain.Imovel_bairro = model.Dados_Imovel.NomeBairro;
+                    regMain.Imovel_Quadra = model.Dados_Imovel.QuadraOriginal;
+                    regMain.Imovel_Lote = model.Dados_Imovel.LoteOriginal;
+                }
                 regMain.Tipo_Instrumento = model.Tipo_Instrumento;
                 regMain.Valor_Venal = model.Valor_Venal;
                 regMain.Valor_Avaliacao = model.Valor_Avaliacao;
@@ -3088,13 +3100,6 @@ namespace GTI_Mvc.Controllers {
                 regMain.Receita_Federal = model.Receita_Federal;
                 regMain.Descricao_Imovel = model.Descricao_Imovel;
                 regMain.Natureza_Codigo = model.Natureza_Codigo;
-                regMain.Imovel_endereco = model.Dados_Imovel.NomeLogradouro;
-                regMain.Imovel_numero = model.Dados_Imovel.Numero == null ? 0 : (short)model.Dados_Imovel.Numero;
-                regMain.Imovel_complemento = model.Dados_Imovel.Complemento;
-                regMain.Imovel_cep = Convert.ToInt32(Functions.RetornaNumero(model.Dados_Imovel.Cep));
-                regMain.Imovel_bairro = model.Dados_Imovel.NomeBairro;
-                regMain.Imovel_Quadra = model.Dados_Imovel.QuadraOriginal;
-                regMain.Imovel_Lote = model.Dados_Imovel.LoteOriginal;
                 regMain.Comprador_cpf_cnpj = model.Cpf_Cnpj;
                 regMain.Comprador_codigo = model.Comprador.Codigo;
                 regMain.Comprador_nome = model.Comprador.Nome;

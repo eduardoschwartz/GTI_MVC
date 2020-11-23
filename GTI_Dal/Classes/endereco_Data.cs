@@ -144,6 +144,13 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public string Retorna_UfNome(string UF) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from c in db.Uf where c.Siglauf == UF  select c.Descuf).FirstOrDefault();
+                return Sql;
+            }
+        }
+
         public int Retorna_Cidade(string UF, string Cidade) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var Sql = (from c in db.Cidade where c.Siglauf == UF && c.Desccidade == Cidade select c.Codcidade).FirstOrDefault();

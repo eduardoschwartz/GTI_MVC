@@ -72,7 +72,7 @@
                                 </td>
                             </tr>
                         </table>*@
-                        @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Nome)
+                        @*@Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Nome)*@
                         <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Dados do Imóvel:</label><br />
 
                         <table style="font-size:14px;width:640px">
@@ -144,7 +144,7 @@
                                 <td>
                                     <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Comprador.Cep, new { @class = "maskCep", @id = "txtCep", style = "width:90px;height:25px" })</label>
                                     <button type="submit" class="btn btn-info" name="action" value="btnCepCompradorOK" data-balloon-length="medium" aria-label="Digite um Cep válido e clique em pesquisar." data-balloon-pos="up">Pesquisar</button>
-                                    <label style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/" target="_blank">aqui</a> para consultar o Cep</label><br />
+                                    <label style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank">aqui</a> para consultar o Cep</label><br />
                                 </td>
                             </tr>
                         </table>
@@ -266,9 +266,9 @@
                     </div>
                 </div>
 
-                @Html.HiddenFor(m => m.Dados_Imovel.Inscricao)
+                @*@Html.HiddenFor(m => m.Dados_Imovel.Inscricao)
                 @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Codigo)
-                @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Nome)
+                @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Nome)*@
                 @Html.HiddenFor(m => m.Comprador.Codigo)
                 @Html.HiddenFor(m => m.Comprador.Logradouro_Codigo)
                 @Html.HiddenFor(m => m.Comprador.Bairro_Codigo)

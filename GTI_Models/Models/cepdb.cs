@@ -6,7 +6,9 @@ namespace GTI_Models.Models {
         public string Cep { get; set; }
         public string Uf { get; set; }
         public string Cidade { get; set; }
+        public int Cidadecodigo { get; set; }
         public string Bairro { get; set; }
+        public int Bairrocodigo { get; set; }
         public string Logradouro { get; set; }
     }
 }

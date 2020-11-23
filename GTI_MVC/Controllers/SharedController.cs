@@ -241,8 +241,23 @@ namespace GTI_MVC.Controllers {
                 return View(model);
             }
 
+
             int _cep = Convert.ToInt32(Functions.RetornaNumero(model.Cep));
             Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+            Cepdb _cepdb = enderecoRepository.Retorna_CepDB(_cep);
+            if(_cepdb != null) {
+                model.Uf = _cepdb.Uf;
+                model.NomeUf = enderecoRepository.Retorna_UfNome(_cepdb.Uf);
+                model.Cidade_Codigo = _cepdb.Cidadecodigo;
+                model.Cidade_Nome = _cepdb.Cidade.ToUpper();
+                model.Bairro_Codigo = _cepdb.Bairrocodigo;
+                model.Bairro_Nome = _cepdb.Bairro.ToUpper();
+                model.Logradouro = _cepdb.Logradouro.ToUpper();
+                return View(model);
+            }
+
+            
+            
             Uf _uf = enderecoRepository.Retorna_Cep_Estado(_cep);
             if (_uf == null) {
                 ViewBag.Error = "* Cep não existente.";
@@ -250,6 +265,7 @@ namespace GTI_MVC.Controllers {
                 model.NomeUf = "";
                 return View(model);
             }
+
 
             model.Uf = _uf.Siglauf;
             model.NomeUf = _uf.Descuf;

@@ -60,9 +60,7 @@
                                     </td>
                                     <td style="width:450px">
                                         @Html.HiddenFor(m => m.Uf)
-                                        @Html.HiddenFor(m => m.NomeUf)
-
-                                        @Html.TextBoxFor(m => m.NomeUf, new { style = "width:400px;height:25px", @readonly = true, @value = @Model.NomeUf })
+                                        @Html.TextBoxFor(m => m.NomeUf, new { style = "width:400px;height:25px", @readonly = true, @Value = @Model.NomeUf })
                                     </td>
                                 </tr>
                                 <tr>
@@ -70,7 +68,8 @@
                                         Cidade
                                     </td>
                                     <td style="padding-top:10px">
-                                        @Html.TextBoxFor(m => m.Cidade_Codigo, new { style = "width:400px;height:25px", @readonly = true, @value = @Model.Cidade_Nome })
+                                        @Html.HiddenFor(m => m.Cidade_Codigo)
+                                        @Html.TextBoxFor(m => m.Cidade_Nome, new { style = "width:400px;height:25px", @readonly = true, @Value = @Model.Cidade_Nome })
                                     </td>
                                 </tr>
                                 <tr>
@@ -78,7 +77,8 @@
                                         Bairro
                                     </td>
                                     <td style="padding-top:10px">
-                                        @Html.TextBoxFor(m => m.Bairro_Codigo, new { style = "width:400px;height:25px", @readonly = true, @value = @Model.Bairro_Nome })
+                                        @Html.HiddenFor(m => m.Bairro_Codigo)
+                                        @Html.TextBoxFor(m => m.Bairro_Nome, new { style = "width:400px;height:25px", @readonly = true, @Value = @Model.Bairro_Nome })
                                     </td>
                                 </tr>
                                 <tr>
@@ -86,18 +86,19 @@
                                         Logradouro
                                     </td>
                                     <td style="padding-top:10px">
-                                        @Html.TextBoxFor(m => m.Logradouro, new { style = "width:400px;height:25px", @readonly = true, @value = @Model.Logradouro })
+                                        @Html.TextBoxFor(m => m.Logradouro, new { style = "width:400px;height:25px", @readonly = true, @Value = @Model.Logradouro })
                                     </td>
                                 </tr>
                             </table>
                         </div>
                     }
 
-                    <div style="text-align:center">
-                        <br />
-                        <button type="submit" class="btn btn-success" name="action" value="btnValida" >Gravar</button>&nbsp;&nbsp;
-                    </div>
-
+                    @if (Model.Cidade_Nome == null) {
+                        <div style="text-align:center">
+                            <br />
+                            <button type="submit" class="btn btn-success" name="action" value="btnValida">Gravar</button>&nbsp;&nbsp;
+                        </div>
+                    }
 
 
 

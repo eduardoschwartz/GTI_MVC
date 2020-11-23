@@ -36,6 +36,11 @@ namespace GTI_Bll.Classes {
             return obj.Incluir_bairro(reg);
         }
 
+        public string Retorna_UfNome(string UF) {
+            Endereco_Data obj = new Endereco_Data(_connection);
+            return obj.Retorna_UfNome(UF);
+        }
+
         public Exception Alterar_Bairro(Bairro reg) {
             Endereco_Data obj = new Endereco_Data(_connection);
             Exception ex= obj.Alterar_Bairro(reg);
