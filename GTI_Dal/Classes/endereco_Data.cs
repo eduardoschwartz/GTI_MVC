@@ -44,7 +44,7 @@ namespace GTI_Dal.Classes {
                
         public List<Bairro> Lista_Bairro(string UF, int cidade) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from b in db.Bairro where b.Siglauf == UF && b.Codcidade == cidade orderby b.Descbairro select b);
+                var Sql = (from b in db.Bairro where b.Siglauf == UF && b.Codcidade == cidade orderby b.Descbairro where b.Codbairro!=999 && b.Codbairro>0  && b.Descbairro.Trim()!=""  select b);
                 return Sql.ToList();
             }
         }
@@ -366,7 +366,11 @@ namespace GTI_Dal.Classes {
             return reg;
         }
 
-
+        public List<string> Retorna_CepDB_Logradouro(int Cep) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                return (from c in db.CepDB where c.Cep == Cep.ToString() select c.Logradouro).ToList();
+            }
+        }
 
 
 

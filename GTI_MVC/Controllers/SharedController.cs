@@ -237,14 +237,24 @@ namespace GTI_MVC.Controllers {
                 }
             }
             if (action == "btnCepCancel") {
-                model.Cep = null;
+                model = new CepViewModel();
                 return View(model);
             }
 
 
             int _cep = Convert.ToInt32(Functions.RetornaNumero(model.Cep));
             Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+            List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_cep);
+            List<Logradouro> Lista_Logradouro = new List<Logradouro>();
+            int s = 1;
+            foreach (string item in Lista_Tmp) {
+                Lista_Logradouro.Add(new Logradouro() { Codlogradouro = s, Endereco = item });
+                s++;
+            }
+            ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
+
             Cepdb _cepdb = enderecoRepository.Retorna_CepDB(_cep);
+
             if(_cepdb != null) {
                 model.Uf = _cepdb.Uf;
                 model.NomeUf = enderecoRepository.Retorna_UfNome(_cepdb.Uf);
@@ -253,11 +263,9 @@ namespace GTI_MVC.Controllers {
                 model.Bairro_Codigo = _cepdb.Bairrocodigo;
                 model.Bairro_Nome = _cepdb.Bairro.ToUpper();
                 model.Logradouro = _cepdb.Logradouro.ToUpper();
-                return View(model);
             }
 
-            
-            
+
             Uf _uf = enderecoRepository.Retorna_Cep_Estado(_cep);
             if (_uf == null) {
                 ViewBag.Error = "* Cep não existente.";
@@ -266,6 +274,12 @@ namespace GTI_MVC.Controllers {
                 return View(model);
             }
 
+            List<Cidade> Lista_Cidade = enderecoRepository.Lista_Cidade(_uf.Siglauf);
+            ViewBag.Cidade = new SelectList(Lista_Cidade, "Codcidade", "Desccidade");
+
+            int _cidade = model.Cidade_Codigo > 0 ? model.Cidade_Codigo : Lista_Cidade[0].Codcidade;
+            List<Bairro> Lista_Bairro = enderecoRepository.Lista_Bairro(_uf.Siglauf,model.Cidade_Codigo);
+            ViewBag.Bairro = new SelectList(Lista_Bairro, "Codbairro", "Descbairro");
 
             model.Uf = _uf.Siglauf;
             model.NomeUf = _uf.Descuf;
