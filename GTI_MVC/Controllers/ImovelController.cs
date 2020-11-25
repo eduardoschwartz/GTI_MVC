@@ -4006,7 +4006,7 @@ ActionPos:
 
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             //##### QRCode ##########################################################
-            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkguid?p=" + p;
+            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkguid?c=" + p;
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
             using (Bitmap bitmap = qrCode.GetGraphic(20)) {

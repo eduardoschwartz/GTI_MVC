@@ -165,7 +165,9 @@ namespace GTI_MVC.Controllers {
 
         [Route("Checkguid")]
         [HttpGet]
-        public ActionResult Checkguid(string c) {
+        public ActionResult Checkguid(string c,string p) {
+            if (string.IsNullOrEmpty(c))
+                c = p;
             ViewBag.c = c;
             return View();
         }
@@ -241,14 +243,13 @@ namespace GTI_MVC.Controllers {
                 return View(model);
             }
 
-
             int _cep = Convert.ToInt32(Functions.RetornaNumero(model.Cep));
             Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
             List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_cep);
             List<Logradouro> Lista_Logradouro = new List<Logradouro>();
             int s = 1;
             foreach (string item in Lista_Tmp) {
-                Lista_Logradouro.Add(new Logradouro() { Codlogradouro = s, Endereco = item });
+                Lista_Logradouro.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
                 s++;
             }
             ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
@@ -265,7 +266,6 @@ namespace GTI_MVC.Controllers {
                 model.Logradouro = _cepdb.Logradouro.ToUpper();
             }
 
-
             Uf _uf = enderecoRepository.Retorna_Cep_Estado(_cep);
             if (_uf == null) {
                 ViewBag.Error = "* Cep não existente.";
@@ -277,6 +277,19 @@ namespace GTI_MVC.Controllers {
             List<Cidade> Lista_Cidade = enderecoRepository.Lista_Cidade(_uf.Siglauf);
             ViewBag.Cidade = new SelectList(Lista_Cidade, "Codcidade", "Desccidade");
 
+            if (model.Cidade_Codigo_New > 0) {
+                List<Bairro> Lista_Bairro_New = enderecoRepository.Lista_Bairro(_uf.Siglauf, model.Cidade_Codigo_New);
+                ViewBag.Bairro_New = new SelectList(Lista_Bairro_New, "Codbairro", "Descbairro");
+            } else {
+                if (model.Cidade_Codigo > 0) {
+                    List<Bairro> Lista_Bairro_New = enderecoRepository.Lista_Bairro(_uf.Siglauf, model.Cidade_Codigo);
+                    ViewBag.Bairro_New = new SelectList(Lista_Bairro_New, "Codbairro", "Descbairro");
+                } else {
+                    List<Bairro> Lista_Bairro_New = new List<Bairro>();
+                    ViewBag.Bairro_New = new SelectList(Lista_Bairro_New, "Codbairro", "Descbairro");
+                }
+            }
+
             int _cidade = model.Cidade_Codigo > 0 ? model.Cidade_Codigo : Lista_Cidade[0].Codcidade;
             List<Bairro> Lista_Bairro = enderecoRepository.Lista_Bairro(_uf.Siglauf,model.Cidade_Codigo);
             ViewBag.Bairro = new SelectList(Lista_Bairro, "Codbairro", "Descbairro");
@@ -284,7 +297,29 @@ namespace GTI_MVC.Controllers {
             model.Uf = _uf.Siglauf;
             model.NomeUf = _uf.Descuf;
 
-             return View(model);
+            if (action == "btnValida") {
+                if(model.Logradouro_New==null || model.Logradouro_New.Trim() == "") {
+                    ViewBag.Error = "Digite o nome do logradouro.";
+                    return View(model);
+                }
+                if (model.Bairro_Codigo_New == 0) {
+                    ViewBag.Error = "Selecione o bairro.";
+                    return View(model);
+                }
+
+                foreach (Logradouro rua in Lista_Logradouro) {
+                    if (model.Logradouro_New.ToUpper() == rua.Endereco) {
+                        ViewBag.Error = "Logradouro já cadastrado para este Cep.";
+                        return View(model);
+                    }
+                }
+
+                //Grava o novo Cep
+
+
+            }
+
+            return View(model);
         }
 
 

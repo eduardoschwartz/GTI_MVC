@@ -34,23 +34,18 @@
                 <div class="panel-heading">Inclusão de Cep não cadastrado</div>
                 <div class="panel-body">
                     <label style="width:50px;font-weight:normal">CEP:</label>
+
                     @if (@Model.Cep == null) {
-                        @Html.TextBoxFor(m => m.Cep, new { @id = "cep", @style = "width:100px;height:25px", @onKeyPress = "return formata(this, '§§§§§-§§§', event)",@Value="" })
+                        @Html.TextBoxFor(m => m.Cep, new { @id = "cep", @style = "width:100px;height:25px", @onKeyPress = "return formata(this, '§§§§§-§§§', event)", @Value = "" })
                         <label>&nbsp;&nbsp;</label>
                         <button id="btnCepOk" type="submit" class="btn btn-primary" name="action" value="btnCepOK">Consultar</button>
                     } else {
-
-                        if (ViewBag.Error == "") {
-                            @Html.HiddenFor(m => m.Cep)
-                            <label style="color:brown">@Model.Cep&nbsp;&nbsp;</label>
-                            <button id="btnCepCancel" type="submit" class="btn btn-danger" onclick="return cancelarCodigo()" name="action" value="btnCepCancel">Cancelar</button>
-                        } else {
-                            @Html.TextBoxFor(m => m.Cep, new { @id = "cep", @style = "width:100px;height:25px;color:blue" })
-                            <button id="btnCepOk" type="submit" class="btn btn-primary" name="action" value="btnCepOK">Consultar</button>
-                        }
+                        @Html.HiddenFor(m => m.Cep)
+                        <label style="color:brown">@Model.Cep&nbsp;&nbsp;</label>
+                        <button id="btnCepCancel" type="submit" class="btn btn-danger" onclick="return cancelarCodigo()" name="action" value="btnCepCancel">Cancelar</button>
                     }
 
-                    @if (Model.Cep != null && ViewBag.Error == "") {
+                    @if (Model.Cep != null) {
                         <div style="padding-top:20px">
                             <table>
                                 <tr>
@@ -86,7 +81,7 @@
                                     </td>
                                     <td style="padding-top:10px">
                                         @Html.DropDownListFor(m => m.Logradouro, ViewBag.Logradouro as SelectList, null, new { @id = "LogradouroDropDown", style = "width:400px;height:25px;color:blue", rows = 10 })
-                                        
+
                                     </td>
                                 </tr>
                             </table>
@@ -95,7 +90,7 @@
                 </div>
 
 
-                @if (Model.Cep != null && ViewBag.Error == "") {
+                @if (Model.Cep != null ) {
                     <div class="panel-heading">Adicionar novo endereço ao cep</div>
                     <div class="panel-body ">
                         <div  >
@@ -106,7 +101,7 @@
                                     </td>
                                     <td style="padding-top:10px;width:450px">
                                         @if (Model.Cidade_Codigo == 0) {
-                                            @Html.DropDownListFor(m => m.Cidade_Codigo_New, ViewBag.Cidade as SelectList, null, new { @id = "CidadeDropDown", style = "width:400px;height:25px", rows = 10 })
+                                            @Html.DropDownListFor(m => m.Cidade_Codigo_New, ViewBag.Cidade as SelectList, null, new { @id = "CidadeNewDropDown", style = "width:400px;height:25px", rows = 10 })
                                         } else {
                                             @Html.TextBoxFor(m => m.Cidade_Nome, new { style = "width:400px;height:25px;color:blue", @readonly = true, @Value = @Model.Cidade_Nome })
                                         }
@@ -117,7 +112,7 @@
                                         Bairro
                                     </td>
                                     <td style="padding-top:10px">
-                                        @Html.DropDownListFor(m => m.Bairro_Codigo_New, ViewBag.Bairro as SelectList, null, new { @id = "BairroDropDown", style = "width:400px;height:25px", rows = 10 })
+                                        @Html.DropDownListFor(m => m.Bairro_Codigo_New, ViewBag.Bairro_New as SelectList, null, new { @id = "BairroNewDropDown", style = "width:400px;height:25px", rows = 10 })
                                     </td>
                                 </tr>
                                 <tr>
@@ -125,26 +120,23 @@
                                         Logradouro
                                     </td>
                                     <td style="padding-top:10px">
-                                        @Html.TextBoxFor(m => m.Logradouro_New, new { style = "width:400px;height:25px;color:blue", @readonly = true, @Value = @Model.Logradouro_New })
+                                        @Html.TextBoxFor(m => m.Logradouro_New, new { @id="LogradouroNewTxt", style = "width:400px;height:25px",  @Value = @Model.Logradouro_New })
                                     </td>
                                 </tr>
                             </table>
                         </div>
-                        <div style="text-align:center">
+                        <div >
+                            @if (ViewBag.Error != null && ViewBag.Error != "") {
+                                <label style="font-weight:normal;color:red;padding-left:7px" id="errorLabel">@ViewBag.Error</label>
+                            }
                             <br />
                             <button type="submit" class="btn btn-success" name="action" value="btnValida">Gravar</button>&nbsp;&nbsp;
                         </div>
-                        @if (ViewBag.Error != null && ViewBag.Error != "") {
-                            <br />
-                            <br />
-                            <label style="font-weight:normal;color:red;padding-left:7px" id="errorLabel">@ViewBag.Error</label>
-                        }
                     </div>
                 }
 
                 <div class="panel-footer">
                     @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
-
                 </div>
             </div>
         </div>
@@ -159,22 +151,12 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-
-
+            $("#CidadeNewDropDown").change(function () {
+                if (this.value != '') {
+                    $("#MainForm").submit();
+                }
+            });
         });
-
-
-
-        function ValidateForm() {
-            ClearError();
-        }
-
-
-        function ClearError() {
-            document.getElementById('errorLabel').innerHTML = "";
-        }
-
-
-
+             
     </script>
 }
