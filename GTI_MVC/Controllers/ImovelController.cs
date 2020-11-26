@@ -1232,6 +1232,7 @@ namespace GTI_Mvc.Controllers {
                     Exception ex = imovelRepository.Excluir_Itbi_anexo(guid, s);
                 }
                 model = Retorna_Itbi_Gravado(guid);
+
             }
             return View(model);
         }
@@ -1239,6 +1240,379 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_urbano")]
         [HttpPost]
         public ActionResult Itbi_urbano(ItbiViewModel model, HttpPostedFileBase file, string action, int seq = 0) {
+            bool _bcpf = false, _bcnpj = false;
+            Endereco_bll enderecoRepository = new Endereco_bll("GTiconnection");
+            string _guid = "";
+            ModelState.Clear();
+
+            List<Logradouro> Lista_Logradouro = new List<Logradouro>();
+            ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
+            if (model.Comprador != null && model.Comprador.Cep != null) {
+                int _ceptmp = Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep));
+                List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_ceptmp);
+                Lista_Logradouro = new List<Logradouro>();
+                int s = 1;
+                foreach (string item in Lista_Tmp) {
+                    Lista_Logradouro.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
+                    s++;
+                }
+                ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
+
+                
+                if (model.Comprador.Logradouro_Nome != null) {
+                    string a = Functions.RetornaNumero(model.Comprador.Logradouro_Nome);
+                    Cepdb _cepdb = null;
+                    if (a == "")
+                        _cepdb = enderecoRepository.Retorna_CepDB(_ceptmp, model.Comprador.Logradouro_Nome);
+                    else {
+                        int b = Convert.ToInt32(a)-1;
+                        _cepdb = enderecoRepository.Retorna_CepDB(_ceptmp, Lista_Logradouro[b].Endereco);
+                    }
+
+                    if (_cepdb.Bairrocodigo > 0) {
+                        model.Comprador.Bairro_Codigo = _cepdb.Bairrocodigo;
+                        model.Comprador.Bairro_Nome = _cepdb.Bairro.ToUpper();
+                    }
+                }
+            }
+
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
+            ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
+            List<Itbi_financiamento> Lista_Financimento = imovelRepository.Lista_Itbi_Financiamento();
+            ViewBag.Lista_Financiamento = new SelectList(Lista_Financimento, "Codigo", "Descricao");
+            ViewBag.Lista_Erro = new List<string>();
+            if (model.Comprador == null) {
+                model.Comprador = new Comprador_Itbi();
+            }
+            if (model.Lista_Anexo == null)
+                model.Lista_Anexo = new List<ListAnexoEditorViewModel>();
+            else {
+                List<Itbi_anexo> Lista_Anexo_tmp = imovelRepository.Retorna_Itbi_Anexo(model.Guid);
+                model.Lista_Anexo.Clear();
+                foreach (Itbi_anexo itemA in Lista_Anexo_tmp) {
+                    ListAnexoEditorViewModel regA = new ListAnexoEditorViewModel() {
+                        Seq = itemA.Seq,
+                        Nome = itemA.Descricao,
+                        Arquivo = itemA.Arquivo
+                    };
+                    model.Lista_Anexo.Add(regA);
+                }
+            }
+
+            model.Lista_Erro = new List<string>();
+            if (model.Totalidade == "Sim")
+                model.Totalidade_Perc = 0;
+
+            bool _find = false;
+            if (model.Comprador_Nome_tmp != null) {
+                for (int i = 0; i < model.Lista_Comprador.Count; i++) {
+                    if (model.Lista_Comprador[i].Cpf_Cnpj == model.Comprador_Cpf_cnpj_tmp) {
+                        _find = true;
+                        break;
+                    }
+                };
+            }
+
+            if (model.Cpf_Cnpj == Functions.RetornaNumero(model.Comprador_Cpf_cnpj_tmp)) {
+                _find = true;
+            }
+
+            if (_find) {
+                ViewBag.Error = "* Cpf/Cnpj já cadastrado.";
+            } else {
+                var editorViewModel = new ListCompradorEditorViewModel();
+                editorViewModel.Seq = model.Lista_Comprador.Count;
+                editorViewModel.Nome = model.Comprador_Nome_tmp != null ? model.Comprador_Nome_tmp.ToUpper() : model.Comprador_Nome_tmp;
+                string _cpfMask = model.Comprador_Cpf_cnpj_tmp;
+                if (_cpfMask != null) {
+                    if (Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
+                        _cpfMask = _cpfMask.PadLeft(14, '0');
+                    } else {
+                        if (Functions.ValidaCpf(_cpfMask.PadLeft(11, '0'))) {
+                            _cpfMask = _cpfMask.PadLeft(11, '0');
+                        }
+                    }
+                    _cpfMask = Functions.FormatarCpfCnpj(_cpfMask);
+                }
+                editorViewModel.Cpf_Cnpj = _cpfMask;
+                if (editorViewModel.Nome != null) {
+                    editorViewModel.Seq = model.Lista_Comprador.Count;
+                    if (editorViewModel.Cpf_Cnpj != null)
+                        model.Lista_Comprador.Add(editorViewModel);
+                }
+
+            }
+            model.Comprador_Cpf_cnpj_tmp = "";
+
+            _find = false;
+            if (model.Vendedor_Nome_tmp != null) {
+                for (int i = 0; i < model.Lista_Vendedor.Count; i++) {
+                    if (Functions.RetornaNumero(model.Lista_Vendedor[i].Cpf_Cnpj) == model.Vendedor_Cpf_cnpj_tmp) {
+                        _find = true;
+                        break;
+                    }
+                };
+            }
+
+            if (_find) {
+                ViewBag.Error = "* Cpf/Cnpj já cadastrado.";
+            } else {
+                var editorViewModel = new ListVendedorEditorViewModel();
+                editorViewModel.Seq = model.Lista_Vendedor.Count;
+                editorViewModel.Nome = model.Vendedor_Nome_tmp != null ? model.Vendedor_Nome_tmp.ToUpper() : model.Vendedor_Nome_tmp;
+                string _cpfMask = model.Vendedor_Cpf_cnpj_tmp;
+                if (_cpfMask != null) {
+                    if (Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
+                        _cpfMask = _cpfMask.PadLeft(14, '0');
+                    } else {
+                        if (Functions.ValidaCpf(_cpfMask.PadLeft(11, '0'))) {
+                            _cpfMask = _cpfMask.PadLeft(11, '0');
+                        }
+                    }
+                    _cpfMask = Functions.FormatarCpfCnpj(_cpfMask);
+                }
+                editorViewModel.Cpf_Cnpj = _cpfMask;
+                if (editorViewModel.Nome != null) {
+                    editorViewModel.Seq = model.Lista_Vendedor.Count;
+                    if (editorViewModel.Cpf_Cnpj != null)
+                        model.Lista_Vendedor.Add(editorViewModel);
+                }
+            }
+
+
+            if (action == "btnCodigoCancel") {
+                if (model.Guid != null) {
+                    Exception ex = imovelRepository.Excluir_Itbi(model.Guid);
+                }
+                ViewBag.Error = "";
+                model = new ItbiViewModel();
+                return View(model);
+            }
+
+            if (action == "btnCpfCompradorOK") {
+                if (model.Cpf_Cnpj != null) {
+                    string _cpfCnpj = model.Cpf_Cnpj;
+                    if (_cpfCnpj.Length > 11) {
+                        _cpfCnpj = _cpfCnpj.PadLeft(14, '0');
+                        if (!Functions.ValidaCNPJ(_cpfCnpj)) {
+                            ViewBag.Error = "* Cpf/Cnpj do comprador inválido.";
+                            model.Cpf_Cnpj = "";
+                            return View(model);
+                        } else {
+                            _bcnpj = true;
+                        }
+                    } else {
+                        if (Functions.ValidaCNPJ(_cpfCnpj.PadLeft(14, '0'))) {
+                            _bcnpj = true;
+                        } else {
+                            if (Functions.ValidaCpf(_cpfCnpj.PadLeft(11, '0'))) {
+                                _bcpf = true;
+                            }
+                        }
+                    }
+                    if (_bcnpj) {
+                        _cpfCnpj = _cpfCnpj.PadLeft(14, '0');
+                        _cpfCnpj = Functions.FormatarCpfCnpj(_cpfCnpj);
+                    } else {
+                        if (_bcpf) {
+                            _cpfCnpj = _cpfCnpj.PadLeft(11, '0');
+                            _cpfCnpj = Functions.FormatarCpfCnpj(_cpfCnpj);
+                        }
+                    }
+                    if (_bcpf || _bcnpj) {
+                        model.Cpf_Cnpj = _cpfCnpj;
+                    } else {
+                        ViewBag.Error = "* Cpf/Cnpj do comprador inválido.";
+                        model.Cpf_Cnpj = "";
+                        return View(model);
+                    }
+                } else {
+                    ViewBag.Error = "* Digite o Cpf/Cnpj do comprador.";
+                    return View(model);
+                }
+            }
+
+            if (action == "btnCpfCompradorCancel") {
+                model.Cpf_Cnpj = "";
+                model.Comprador = new Comprador_Itbi();
+            }
+
+            if (action == "btnCepCompradorOK") {
+                if (model.Comprador.Cep == null || model.Comprador.Cep.Length < 9) {
+                    ViewBag.Error = "* Cep do comprador inválido.";
+                    return View(model);
+                }
+
+                int _cep = Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep));
+                var cepObj = Classes.Cep.Busca_CepDB(_cep);
+                if (cepObj.CEP != null) {
+                    string rua = cepObj.Endereco;
+                    if (rua.IndexOf('-') > 0) {
+                        rua = rua.Substring(0, rua.IndexOf('-'));
+                    }
+
+                    List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_cep);
+                    Lista_Logradouro = new List<Logradouro>();
+                    int s = 1;
+                    foreach (string item in Lista_Tmp) {
+                        Lista_Logradouro.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
+                        s++;
+                    }
+                    ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
+
+
+                    Bairro bairro = enderecoRepository.Retorna_CepDB_Bairro(_cep);
+                    if (bairro != null) {
+                        model.Comprador.Bairro_Codigo = bairro.Codbairro;
+                        model.Comprador.Bairro_Nome = bairro.Descbairro;
+                    }
+                    Cidade cidade = enderecoRepository.Retorna_CepDB_Cidade(_cep);
+                    if (cidade != null) {
+                        model.Comprador.Cidade_Codigo = cidade.Codcidade;
+                        model.Comprador.Cidade_Nome = cidade.Desccidade;
+                    }
+                    model.Comprador.UF = cepObj.Estado;
+
+                } else {
+                    model.Comprador.Logradouro_Codigo = 0;
+                    model.Comprador.Logradouro_Nome = "";
+                    model.Comprador.Bairro_Codigo = 0;
+                    model.Comprador.Bairro_Nome = "";
+                    model.Comprador.Cidade_Codigo = 0;
+                    model.Comprador.Cidade_Nome = "";
+                    model.Comprador.Numero = 0;
+                    model.Comprador.Complemento = "";
+                    model.Comprador.UF = "";
+
+                    ViewBag.Error = "* Cep do comprador não localizado.";
+                    return View(model);
+                } 
+            }
+
+            if (action == "btnValida") {
+                model.Lista_Erro = Itbi_Valida(model);
+
+                if (model.Lista_Erro.Count > 0) {
+                    ViewBag.ListaErro = new SelectList(model.Lista_Erro);
+                    if (model.Comprador.Codigo == 0) {
+                        model.Comprador.Codigo = Grava_Cidadao(model);
+                    }
+                    Itbi_Save(model);
+                    return View(model);
+                } else {
+                    if (model.Itbi_Numero == 0) {
+                        ItbiAnoNumero _num = imovelRepository.Alterar_Itbi_Main(model.Guid);
+                        model.Itbi_Numero = _num.Numero;
+                        model.Itbi_Ano = _num.Ano;
+                    }
+                    if (model.Comprador.Codigo == 0) {
+                        model.Comprador.Codigo = Grava_Cidadao(model);
+                    }
+                    Itbi_Save(model);
+
+                    return RedirectToAction("itbi_ok");
+                }
+            }
+
+            if (action == "btnAnexoAdd") {
+                if (file != null) {
+                    if (string.IsNullOrWhiteSpace(model.Anexo_Desc_tmp)) {
+                        ViewBag.Error = "* Digite uma descrição para o anexo (é necessário selecionar novamente o anexo).";
+                        return View(model);
+                    } else {
+                        if (file.ContentType != "application/pdf") {
+                            ViewBag.Error = "* Este tipo de arquivo não pode ser enviado como anexo.";
+                            return View(model);
+                        } else {
+                            var fileName = Path.GetFileName(file.FileName);
+                            Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath("~/Files/Itbi/") + model.Guid);
+                            var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Files/Itbi/" + model.Guid), fileName);
+                            file.SaveAs(path);
+
+                            byte seqA = imovelRepository.Retorna_Itbi_Anexo_Disponivel(model.Guid);
+                            Itbi_anexo regA = new Itbi_anexo() {
+                                Guid = model.Guid,
+                                Seq = seqA,
+                                Descricao = model.Anexo_Desc_tmp,
+                                Arquivo = fileName
+                            };
+                            Exception ex = imovelRepository.Incluir_Itbi_Anexo(regA);
+                            ListAnexoEditorViewModel Anexo = new ListAnexoEditorViewModel() {
+                                Seq = model.Lista_Anexo.Count,
+                                Arquivo = fileName,
+                                Nome = model.Anexo_Desc_tmp
+                            };
+                            model.Lista_Anexo.Add(Anexo);
+
+                            Itbi_Save(model);
+                            return View(model);
+                        }
+                    }
+                } else {
+                    ViewBag.Error = "* Nenhum arquivo selecionado.";
+                    return View(model);
+                }
+            }
+
+            List<Itbi_anexo> Lista_Anexo = imovelRepository.Retorna_Itbi_Anexo(model.Guid);
+            model.Lista_Anexo.Clear();
+            foreach (Itbi_anexo itemA in Lista_Anexo) {
+                ListAnexoEditorViewModel regA = new ListAnexoEditorViewModel() {
+                    Seq = itemA.Seq,
+                    Nome = itemA.Descricao,
+                    Arquivo = itemA.Arquivo
+                };
+                model.Lista_Anexo.Add(regA);
+            }
+
+            model.Vendedor_Cpf_cnpj_tmp = "";
+            Int64 _matricula = model.Matricula;
+            model = Itbi_Urbano_Load(model, _bcpf, _bcnpj);
+            model.Matricula = _matricula > 0 ? _matricula : model.Matricula;
+
+                        
+            if (model.Comprador.Cep != null) {
+                int _ceptmp = Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep));
+                List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_ceptmp);
+                Lista_Logradouro = new List<Logradouro>();
+                int s = 1;
+                foreach (string item in Lista_Tmp) {
+                    Lista_Logradouro.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
+                    s++;
+                }
+                ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
+
+                if (model.Comprador.Logradouro_Nome != null) {
+                    Cepdb _cepdb = enderecoRepository.Retorna_CepDB(_ceptmp, model.Comprador.Logradouro_Nome);
+
+                    if (_cepdb.Bairrocodigo >0) {
+                        model.Comprador.Bairro_Codigo = _cepdb.Bairrocodigo;
+                        model.Comprador.Bairro_Nome = _cepdb.Bairro.ToUpper();
+                    }
+                }
+            }
+
+
+
+
+            if (model.Inscricao == null && Convert.ToInt32(model.Codigo) > 0) {
+                ViewBag.Error = "* Imóvel não cadastrado.";
+                return View(model);
+            }
+
+            _guid = Itbi_Save(model);
+            model.Guid = _guid;
+            if (_guid == "") {
+                ViewBag.Error = "* Ocorreu um erro ao gravar.";
+            }
+            ViewBag.Fiscal = Session["hashfiscalitbi"].ToString();
+            return View(model);
+        }
+
+        [Route("Itbi_urbano_e")]
+        [HttpPost]
+        public ActionResult Itbi_urbano_e(ItbiViewModel model, HttpPostedFileBase file, string action, int seq = 0) {
             bool _bcpf = false, _bcnpj = false;
 
             string _guid = "";
@@ -1351,6 +1725,8 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
+
+
             Endereco_bll enderecoRepository = new Endereco_bll("GTiconnection");
             if (model.Comprador.Cep != null) {
                 int _ceptmp = Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep));
@@ -1372,367 +1748,7 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-            if (action == "btnCodigoCancel") {
-                if (model.Guid != null) {
-                    Exception ex = imovelRepository.Excluir_Itbi(model.Guid);
-                }
-                ViewBag.Error = "";
-                model = new ItbiViewModel();
-                return View(model);
-            }
 
-            if (action == "btnCpfCompradorOK") {
-                if (model.Cpf_Cnpj != null) {
-                    string _cpfCnpj = model.Cpf_Cnpj;
-                    if (_cpfCnpj.Length > 11) {
-                        _cpfCnpj = _cpfCnpj.PadLeft(14, '0');
-                        if (!Functions.ValidaCNPJ(_cpfCnpj)) {
-                            ViewBag.Error = "* Cpf/Cnpj do comprador inválido.";
-                            model.Cpf_Cnpj = "";
-                            return View(model);
-                        } else {
-                            _bcnpj = true;
-                        }
-                    } else {
-                        if (Functions.ValidaCNPJ(_cpfCnpj.PadLeft(14, '0'))) {
-                            _bcnpj = true;
-                        } else {
-                            if (Functions.ValidaCpf(_cpfCnpj.PadLeft(11, '0'))) {
-                                _bcpf = true;
-                            }
-                        }
-                    }
-                    if (_bcnpj) {
-                        _cpfCnpj = _cpfCnpj.PadLeft(14, '0');
-                        _cpfCnpj = Functions.FormatarCpfCnpj(_cpfCnpj);
-                    } else {
-                        if (_bcpf) {
-                            _cpfCnpj = _cpfCnpj.PadLeft(11, '0');
-                            _cpfCnpj = Functions.FormatarCpfCnpj(_cpfCnpj);
-                        }
-                    }
-                    if (_bcpf || _bcnpj) {
-                        model.Cpf_Cnpj = _cpfCnpj;
-                    } else {
-                        ViewBag.Error = "* Cpf/Cnpj do comprador inválido.";
-                        model.Cpf_Cnpj = "";
-                        return View(model);
-                    }
-                } else {
-                    ViewBag.Error = "* Digite o Cpf/Cnpj do comprador.";
-                    return View(model);
-                }
-            }
-
-            if (action == "btnCpfCompradorCancel") {
-                model.Cpf_Cnpj = "";
-                model.Comprador = new Comprador_Itbi();
-            }
-
-            if (action == "btnCepCompradorOK") {
-                if (model.Comprador.Cep == null || model.Comprador.Cep.Length < 9) {
-                    ViewBag.Error = "* Cep do comprador inválido.";
-                    return View(model);
-                }
-
-                int _cep = Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep));
-                var cepObj = Classes.Cep.Busca_CepDB(_cep);
-                //var cepObj = Classes.Cep.Busca(Functions.RetornaNumero(model.Comprador.Cep));
-                //var cepObj = Classes.Cep.Busca_Correio(Functions.RetornaNumero(model.Comprador.Cep));
-                if (cepObj.CEP != null) {
-                    string rua = cepObj.Endereco;
-                    if (rua.IndexOf('-') > 0) {
-                        rua = rua.Substring(0, rua.IndexOf('-'));
-                    }
-
-                    
-                    //LogradouroStruct _log = enderecoRepository.Retorna_Logradouro_Cep(Convert.ToInt32(Functions.RetornaNumero(cepObj.CEP)));
-                    //if (_log.Endereco != null) {
-                    //    model.Comprador.Logradouro_Codigo = (int)_log.CodLogradouro;
-                    //    model.Comprador.Logradouro_Nome = _log.Endereco;
-                    //} else {
-                    //    model.Comprador.Logradouro_Codigo = 0;
-                    //    model.Comprador.Logradouro_Nome = rua.ToUpper();
-                    //}
-
-                    List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_cep);
-                    Lista_Logradouro = new List<Logradouro>();
-                    int s = 1;
-                    foreach (string item in Lista_Tmp) {
-                        Lista_Logradouro.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
-                        s++;
-                    }
-                    ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
-
-
-                    Bairro bairro = enderecoRepository.Retorna_CepDB_Bairro(_cep);
-                    if (bairro != null) {
-                        model.Comprador.Bairro_Codigo = bairro.Codbairro;
-                        model.Comprador.Bairro_Nome = bairro.Descbairro;
-                    }
-                    Cidade cidade = enderecoRepository.Retorna_CepDB_Cidade(_cep);
-                    if (cidade != null) {
-                        model.Comprador.Cidade_Codigo = cidade.Codcidade;
-                        model.Comprador.Cidade_Nome = cidade.Desccidade;
-                    }
-                    model.Comprador.UF = cepObj.Estado;
-
-
-
-                    //Bairro bairro = enderecoRepository.RetornaLogradouroBairro(model.Comprador.Logradouro_Codigo, (short)model.Comprador.Numero);
-                    //if (bairro.Descbairro != null) {
-                    //    model.Comprador.Bairro_Codigo = bairro.Codbairro;
-                    //    model.Comprador.Bairro_Nome = bairro.Descbairro;
-                    //} else {
-                    //    string _uf = cepObj.Estado;
-                    //    string _cidade = cepObj.Cidade;
-                    //    string _bairro = cepObj.Bairro;
-                    //    int _codcidade = enderecoRepository.Retorna_Cidade(_uf, _cidade);
-                    //    if (_codcidade > 0) {
-                    //        model.Comprador.Cidade_Codigo = _codcidade;
-                    //        if (_codcidade != 413) {
-                    //            //verifica se bairro existe nesta cidade
-                    //            bool _existeBairro = enderecoRepository.Existe_Bairro(_uf, _codcidade, _bairro);
-                    //            if (!_existeBairro) {
-                    //                Bairro reg = new Bairro() {
-                    //                    Siglauf = _uf,
-                    //                    Codcidade = (short)_codcidade,
-                    //                    Descbairro = _bairro.ToUpper()
-                    //                };
-                    //                int _codBairro = enderecoRepository.Incluir_bairro(reg);
-                    //                model.Comprador.Bairro_Codigo = _codBairro;
-                    //            }
-                    //        }
-                    //    } else {
-                    //        model.Comprador.Cidade_Codigo = 0;
-                    //    }
-                    //    model.Comprador.Bairro_Nome = cepObj.Bairro.ToUpper();
-                    //}
-
-                    //model.Comprador.Cidade_Nome = cepObj.Cidade.ToUpper();
-                    //model.Comprador.UF = cepObj.Estado;
-                } else {
-                    model.Comprador.Logradouro_Codigo = 0;
-                    model.Comprador.Logradouro_Nome = "";
-                    model.Comprador.Bairro_Codigo = 0;
-                    model.Comprador.Bairro_Nome = "";
-                    model.Comprador.Cidade_Codigo = 0;
-                    model.Comprador.Cidade_Nome = "";
-                    model.Comprador.Numero = 0;
-                    model.Comprador.Complemento = "";
-                    model.Comprador.UF = "";
-
-                    ViewBag.Error = "* Cep do comprador não localizado.";
-                    return View(model);
-                } 
-            }
-
-            if (action == "btnValida") {
-                model.Lista_Erro = Itbi_Valida(model);
-
-                if (model.Lista_Erro.Count > 0) {
-                    ViewBag.ListaErro = new SelectList(model.Lista_Erro);
-                    if (model.Comprador.Codigo == 0) {
-                        model.Comprador.Codigo = Grava_Cidadao(model);
-                    }
-                    Itbi_Save(model);
-                    return View(model);
-                } else {
-                    if (model.Itbi_Numero == 0) {
-                        ItbiAnoNumero _num = imovelRepository.Alterar_Itbi_Main(model.Guid);
-                        model.Itbi_Numero = _num.Numero;
-                        model.Itbi_Ano = _num.Ano;
-                    }
-                    if (model.Comprador.Codigo == 0) {
-                        model.Comprador.Codigo = Grava_Cidadao(model);
-                    }
-                    Itbi_Save(model);
-
-                    return RedirectToAction("itbi_ok");
-                }
-            }
-
-            if (action == "btnAnexoAdd") {
-                if (file != null) {
-                    if (string.IsNullOrWhiteSpace(model.Anexo_Desc_tmp)) {
-                        ViewBag.Error = "* Digite uma descrição para o anexo (é necessário selecionar novamente o anexo).";
-                        return View(model);
-                    } else {
-                        if (file.ContentType != "application/pdf") {
-                            ViewBag.Error = "* Este tipo de arquivo não pode ser enviado como anexo.";
-                            return View(model);
-                        } else {
-                            var fileName = Path.GetFileName(file.FileName);
-                            Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath("~/Files/Itbi/") + model.Guid);
-                            var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Files/Itbi/" + model.Guid), fileName);
-                            file.SaveAs(path);
-
-                            byte seqA = imovelRepository.Retorna_Itbi_Anexo_Disponivel(model.Guid);
-                            Itbi_anexo regA = new Itbi_anexo() {
-                                Guid = model.Guid,
-                                Seq = seqA,
-                                Descricao = model.Anexo_Desc_tmp,
-                                Arquivo = fileName
-                            };
-                            Exception ex = imovelRepository.Incluir_Itbi_Anexo(regA);
-                            ListAnexoEditorViewModel Anexo = new ListAnexoEditorViewModel() {
-                                Seq = model.Lista_Anexo.Count,
-                                Arquivo = fileName,
-                                Nome = model.Anexo_Desc_tmp
-                            };
-                            model.Lista_Anexo.Add(Anexo);
-
-                            Itbi_Save(model);
-                            return View(model);
-                        }
-                    }
-                } else {
-                    ViewBag.Error = "* Nenhum arquivo selecionado.";
-                    return View(model);
-                }
-            }
-
-            List<Itbi_anexo> Lista_Anexo = imovelRepository.Retorna_Itbi_Anexo(model.Guid);
-            model.Lista_Anexo.Clear();
-            foreach (Itbi_anexo itemA in Lista_Anexo) {
-                ListAnexoEditorViewModel regA = new ListAnexoEditorViewModel() {
-                    Seq = itemA.Seq,
-                    Nome = itemA.Descricao,
-                    Arquivo = itemA.Arquivo
-                };
-                model.Lista_Anexo.Add(regA);
-            }
-
-            model.Vendedor_Cpf_cnpj_tmp = "";
-            Int64 _matricula = model.Matricula;
-            model = Itbi_Urbano_Load(model, _bcpf, _bcnpj);
-            model.Matricula = _matricula > 0 ? _matricula : model.Matricula;
-
-            if (model.Inscricao == null && Convert.ToInt32(model.Codigo) > 0) {
-                ViewBag.Error = "* Imóvel não cadastrado.";
-                return View(model);
-            }
-
-            _guid = Itbi_Save(model);
-            model.Guid = _guid;
-            if (_guid == "") {
-                ViewBag.Error = "* Ocorreu um erro ao gravar.";
-            }
-            ViewBag.Fiscal = Session["hashfiscalitbi"].ToString();
-            return View(model);
-        }
-
-        [Route("Itbi_urbano_e")]
-        [HttpPost]
-        public ActionResult Itbi_urbano_e(ItbiViewModel model, HttpPostedFileBase file, string action, int seq = 0) {
-            bool _bcpf = false, _bcnpj = false;
-
-            string _guid = "";
-            ModelState.Clear();
-
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
-            List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
-            ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
-            List<Itbi_financiamento> Lista_Financimento = imovelRepository.Lista_Itbi_Financiamento();
-            ViewBag.Lista_Financiamento = new SelectList(Lista_Financimento, "Codigo", "Descricao");
-            ViewBag.Lista_Erro = new List<string>();
-            if (model.Comprador == null) {
-                model.Comprador = new Comprador_Itbi();
-            }
-            if (model.Lista_Anexo == null)
-                model.Lista_Anexo = new List<ListAnexoEditorViewModel>();
-            else {
-                List<Itbi_anexo> Lista_Anexo_tmp = imovelRepository.Retorna_Itbi_Anexo(model.Guid);
-                model.Lista_Anexo.Clear();
-                foreach (Itbi_anexo itemA in Lista_Anexo_tmp) {
-                    ListAnexoEditorViewModel regA = new ListAnexoEditorViewModel() {
-                        Seq = itemA.Seq,
-                        Nome = itemA.Descricao,
-                        Arquivo = itemA.Arquivo
-                    };
-                    model.Lista_Anexo.Add(regA);
-                }
-            }
-
-            model.Lista_Erro = new List<string>();
-            if (model.Totalidade == "Sim")
-                model.Totalidade_Perc = 0;
-
-            bool _find = false;
-            if (model.Comprador_Nome_tmp != null) {
-                for (int i = 0; i < model.Lista_Comprador.Count; i++) {
-                    if (model.Lista_Comprador[i].Cpf_Cnpj == model.Comprador_Cpf_cnpj_tmp) {
-                        _find = true;
-                        break;
-                    }
-                };
-            }
-
-            if (model.Cpf_Cnpj == Functions.RetornaNumero(model.Comprador_Cpf_cnpj_tmp)) {
-                _find = true;
-            }
-
-            if (_find) {
-                ViewBag.Error = "* Cpf/Cnpj já cadastrado.";
-            } else {
-                var editorViewModel = new ListCompradorEditorViewModel();
-                editorViewModel.Seq = model.Lista_Comprador.Count;
-                editorViewModel.Nome = model.Comprador_Nome_tmp != null ? model.Comprador_Nome_tmp.ToUpper() : model.Comprador_Nome_tmp;
-                string _cpfMask = model.Comprador_Cpf_cnpj_tmp;
-                if (_cpfMask != null) {
-                    if (Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
-                        _cpfMask = _cpfMask.PadLeft(14, '0');
-                    } else {
-                        if (Functions.ValidaCpf(_cpfMask.PadLeft(11, '0'))) {
-                            _cpfMask = _cpfMask.PadLeft(11, '0');
-                        }
-                    }
-                    _cpfMask = Functions.FormatarCpfCnpj(_cpfMask);
-                }
-                editorViewModel.Cpf_Cnpj = _cpfMask;
-                if (editorViewModel.Nome != null) {
-                    editorViewModel.Seq = model.Lista_Comprador.Count;
-                    if (editorViewModel.Cpf_Cnpj != null)
-                        model.Lista_Comprador.Add(editorViewModel);
-                }
-
-            }
-            model.Comprador_Cpf_cnpj_tmp = "";
-
-            _find = false;
-            if (model.Vendedor_Nome_tmp != null) {
-                for (int i = 0; i < model.Lista_Vendedor.Count; i++) {
-                    if (Functions.RetornaNumero(model.Lista_Vendedor[i].Cpf_Cnpj) == model.Vendedor_Cpf_cnpj_tmp) {
-                        _find = true;
-                        break;
-                    }
-                };
-            }
-
-            if (_find) {
-                ViewBag.Error = "* Cpf/Cnpj já cadastrado.";
-            } else {
-                var editorViewModel = new ListVendedorEditorViewModel();
-                editorViewModel.Seq = model.Lista_Vendedor.Count;
-                editorViewModel.Nome = model.Vendedor_Nome_tmp != null ? model.Vendedor_Nome_tmp.ToUpper() : model.Vendedor_Nome_tmp;
-                string _cpfMask = model.Vendedor_Cpf_cnpj_tmp;
-                if (_cpfMask != null) {
-                    if (Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
-                        _cpfMask = _cpfMask.PadLeft(14, '0');
-                    } else {
-                        if (Functions.ValidaCpf(_cpfMask.PadLeft(11, '0'))) {
-                            _cpfMask = _cpfMask.PadLeft(11, '0');
-                        }
-                    }
-                    _cpfMask = Functions.FormatarCpfCnpj(_cpfMask);
-                }
-                editorViewModel.Cpf_Cnpj = _cpfMask;
-                if (editorViewModel.Nome != null) {
-                    editorViewModel.Seq = model.Lista_Vendedor.Count;
-                    if (editorViewModel.Cpf_Cnpj != null)
-                        model.Lista_Vendedor.Add(editorViewModel);
-                }
-            }
 
             if (action == "btnAtualizarImovel") {
                 if (model.Guid != null) {
@@ -1810,74 +1826,54 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 }
 
-                var cepObj = Classes.Cep.Busca_CepDB(Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep)));
-                //var cepObj = Classes.Cep.Busca_Correio(Functions.RetornaNumero(model.Comprador.Cep));
-                //var cepObj = Classes.Cep.Busca(Functions.RetornaNumero(model.Comprador.Cep));
-                if (cepObj.CEP != null) {
-                    string rua = cepObj.Endereco;
-                    if (rua.IndexOf('-') > 0) {
-                        rua = rua.Substring(0, rua.IndexOf('-'));
-                    }
+                int _cep = Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep));
+                    var cepObj = Classes.Cep.Busca_CepDB(_cep);
+                    if (cepObj.CEP != null) {
+                        string rua = cepObj.Endereco;
+                        if (rua.IndexOf('-') > 0) {
+                            rua = rua.Substring(0, rua.IndexOf('-'));
+                        }
 
-                    Endereco_bll enderecoRepository = new Endereco_bll("GTiconnection");
-                    LogradouroStruct _log = enderecoRepository.Retorna_Logradouro_Cep(Convert.ToInt32(Functions.RetornaNumero(cepObj.CEP)));
-                    if (_log.Endereco != null) {
-                        model.Comprador.Logradouro_Codigo = (int)_log.CodLogradouro;
-                        model.Comprador.Logradouro_Nome = _log.Endereco;
+                        List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_cep);
+                        Lista_Logradouro = new List<Logradouro>();
+                        int s = 1;
+                        foreach (string item in Lista_Tmp) {
+                            Lista_Logradouro.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
+                            s++;
+                        }
+                        ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
+
+
+                        Bairro bairro = enderecoRepository.Retorna_CepDB_Bairro(_cep);
+                        if (bairro != null) {
+                            model.Comprador.Bairro_Codigo = bairro.Codbairro;
+                            model.Comprador.Bairro_Nome = bairro.Descbairro;
+                        }
+                        Cidade cidade = enderecoRepository.Retorna_CepDB_Cidade(_cep);
+                        if (cidade != null) {
+                            model.Comprador.Cidade_Codigo = cidade.Codcidade;
+                            model.Comprador.Cidade_Nome = cidade.Desccidade;
+                        }
+                        model.Comprador.UF = cepObj.Estado;
+
                     } else {
                         model.Comprador.Logradouro_Codigo = 0;
-                        model.Comprador.Logradouro_Nome = rua.ToUpper();
+                        model.Comprador.Logradouro_Nome = "";
+                        model.Comprador.Bairro_Codigo = 0;
+                        model.Comprador.Bairro_Nome = "";
+                        model.Comprador.Cidade_Codigo = 0;
+                        model.Comprador.Cidade_Nome = "";
+                        model.Comprador.Numero = 0;
+                        model.Comprador.Complemento = "";
+                        model.Comprador.UF = "";
+
+                        ViewBag.Error = "* Cep do comprador não localizado.";
+                        return View(model);
                     }
 
-                    Bairro bairro = enderecoRepository.RetornaLogradouroBairro(model.Comprador.Logradouro_Codigo, (short)model.Comprador.Numero);
-                    if (bairro.Descbairro != null) {
-                        model.Comprador.Bairro_Codigo = bairro.Codbairro;
-                        model.Comprador.Bairro_Nome = bairro.Descbairro;
-                    } else {
-                        string _uf = cepObj.Estado;
-                        string _cidade = cepObj.Cidade;
-                        string _bairro = cepObj.Bairro;
-                        int _codcidade = enderecoRepository.Retorna_Cidade(_uf, _cidade);
-                        if (_codcidade > 0) {
-                            model.Comprador.Cidade_Codigo = _codcidade;
-                            if (_codcidade != 413) {
-                                //verifica se bairro existe nesta cidade
-                                bool _existeBairro = enderecoRepository.Existe_Bairro(_uf, _codcidade, _bairro);
-                                if (!_existeBairro) {
-                                    Bairro reg = new Bairro() {
-                                        Siglauf = _uf,
-                                        Codcidade = (short)_codcidade,
-                                        Descbairro = _bairro.ToUpper()
-                                    };
-                                    int _codBairro = enderecoRepository.Incluir_bairro(reg);
-                                    model.Comprador.Bairro_Codigo = _codBairro;
-                                }
-                            }
-                        } else {
-                            model.Comprador.Cidade_Codigo = 0;
-                        }
-                        model.Comprador.Bairro_Nome = cepObj.Bairro.ToUpper();
-                    }
-
-                    model.Comprador.Cidade_Nome = cepObj.Cidade.ToUpper();
-                    model.Comprador.UF = cepObj.Estado;
-                } else {
-                    model.Comprador.Logradouro_Codigo = 0;
-                    model.Comprador.Logradouro_Nome = "";
-                    model.Comprador.Bairro_Codigo = 0;
-                    model.Comprador.Bairro_Nome = "";
-                    model.Comprador.Cidade_Codigo = 0;
-                    model.Comprador.Cidade_Nome = "";
-                    model.Comprador.Numero = 0;
-                    model.Comprador.Complemento = "";
-                    model.Comprador.UF = "";
-
-                    ViewBag.Error = "* Cep do comprador não localizado.";
-                    return View(model);
                 }
-            }
 
-            if (action == "btnValida") {
+                if (action == "btnValida") {
                 model.Lista_Erro = Itbi_Valida(model);
 
                 if (model.Lista_Erro.Count > 0) {
@@ -2841,6 +2837,23 @@ namespace GTI_Mvc.Controllers {
             ItbiViewModel model = Retorna_Itbi_Gravado(p);
             if (model.Utilizar_VVT)
                 model.Valor_Venal_Territorial = model.Valor_Venal;
+
+            int _ceptmp = Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep));
+            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+            List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_ceptmp);
+            List<Logradouro> Lista_Logradouro = new List<Logradouro>();
+            int z = 1;
+            foreach (string item in Lista_Tmp) {
+                Lista_Logradouro.Add(new Logradouro() { Codlogradouro = z, Endereco = item.ToUpper() });
+                if (Lista_Logradouro[z-1].Endereco == model.Comprador.Logradouro_Nome)
+                    model.Comprador.Logradouro_Nome = (z).ToString();
+
+                z++;
+            }
+     
+            ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
+
+
             return View("Itbi_urbano_e", model);
         }
 
@@ -3100,11 +3113,13 @@ namespace GTI_Mvc.Controllers {
         private string Itbi_Save(ItbiViewModel model) {
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             string _guid;
+            string oldpos = "";
             Exception ex = null;
 
             //################### Grava Itbi_Main #####################
 
             if (model.Guid == null) {
+
                 _guid = Guid.NewGuid().ToString("N");
                 model.Guid = _guid;
                 Itbi_main regMain = new Itbi_main() {
@@ -3123,6 +3138,26 @@ namespace GTI_Mvc.Controllers {
                 ex = imovelRepository.Incluir_Itbi_main(regMain);
             } else {
                 _guid = model.Guid;
+                if (model.Comprador != null && model.Comprador.Nome != null) {
+                    string a = Functions.RetornaNumero(model.Comprador.Logradouro_Nome);
+                    if (a != "") {
+                        int b = Convert.ToInt32(a);
+                        if (b > 0) {
+                            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+                            int _ceptmp = Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep));
+                            List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_ceptmp);
+                            List<Logradouro> Lista_Logradouro = new List<Logradouro>();
+                            int s = 1;
+                            foreach (string item in Lista_Tmp) {
+                                Lista_Logradouro.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
+                                s++;
+                            }
+                            oldpos = b.ToString();
+                            model.Comprador.Logradouro_Nome = Lista_Logradouro[b - 1].Endereco;
+                        }
+                    }
+                }
+
                 Itbi_main regMain = imovelRepository.Retorna_Itbi_Main(_guid);
                 if (Functions.IsDate(model.Data_Transacao))
                     regMain.Data_Transacao = model.Data_Transacao;
@@ -3219,7 +3254,8 @@ namespace GTI_Mvc.Controllers {
             }
             ex = imovelRepository.Incluir_Itbi_vendedor(ListaV);
             //#########################################################
-
+            if (oldpos != "")
+                model.Comprador.Logradouro_Nome = oldpos;
             return _guid;
         }
 

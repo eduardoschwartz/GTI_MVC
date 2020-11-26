@@ -341,14 +341,26 @@ namespace GTI_Dal.Classes {
 
         public Cepdb Retorna_CepDB(int Cep) {
             using (GTI_Context db = new GTI_Context(_connection)) {
+                Cepdb _cepdb = null;
                 var sql= (from c in db.CepDB where c.Cep == Cep.ToString() select c).FirstOrDefault();
-                Cepdb _cepdb = new Cepdb() {
-                    Cep=sql.Cep,
-                    Uf=sql.Uf,
-                    Cidadecodigo=sql.Cidadecodigo,
-                    Bairrocodigo=sql.Bairrocodigo,
-                    Logradouro=sql.Logradouro
-                };
+
+                if (sql != null) {
+                    _cepdb = new Cepdb() {
+                        Cep = sql.Cep,
+                        Uf = sql.Uf,
+                        Cidadecodigo = sql.Cidadecodigo,
+                        Bairrocodigo = sql.Bairrocodigo,
+                        Logradouro = sql.Logradouro
+                    };
+                } else {
+                    _cepdb = new Cepdb() {
+                        Cep = Cep.ToString(),
+                        Uf = "",
+                        Cidadecodigo = 0,
+                        Bairrocodigo = 0,
+                        Logradouro = ""
+                    };
+                }
 
                 _cepdb.Cidade = Retorna_Cidade(_cepdb.Uf, _cepdb.Cidadecodigo);
                 _cepdb.Bairro = Retorna_Bairro(_cepdb.Uf, _cepdb.Cidadecodigo,_cepdb.Bairrocodigo);
@@ -357,15 +369,26 @@ namespace GTI_Dal.Classes {
         }
 
         public Cepdb Retorna_CepDB(int Cep,string Logradouro) {
+            Cepdb _cepdb = null;
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var sql = (from c in db.CepDB where c.Cep == Cep.ToString()  && c.Logradouro==Logradouro select c).FirstOrDefault();
-                Cepdb _cepdb = new Cepdb() {
-                    Cep = sql.Cep,
-                    Uf = sql.Uf,
-                    Cidadecodigo = sql.Cidadecodigo,
-                    Bairrocodigo = sql.Bairrocodigo,
-                    Logradouro = sql.Logradouro
-                };
+                if (sql != null) {
+                    _cepdb = new Cepdb() {
+                        Cep = sql.Cep,
+                        Uf = sql.Uf,
+                        Cidadecodigo = sql.Cidadecodigo,
+                        Bairrocodigo = sql.Bairrocodigo,
+                        Logradouro = sql.Logradouro
+                    };
+                } else {
+                    _cepdb = new Cepdb() {
+                        Cep = Cep.ToString(),
+                        Uf = "",
+                        Cidadecodigo = 0,
+                        Bairrocodigo = 0,
+                        Logradouro = ""
+                    };
+                }
 
                 _cepdb.Cidade = Retorna_Cidade(_cepdb.Uf, _cepdb.Cidadecodigo);
                 _cepdb.Bairro = Retorna_Bairro(_cepdb.Uf, _cepdb.Cidadecodigo, _cepdb.Bairrocodigo);
@@ -403,30 +426,50 @@ namespace GTI_Dal.Classes {
         }
 
         public Cidade Retorna_CepDB_Cidade(int Cep) {
+            Cidade reg = null;
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var sql= (from c in db.CepDB
                         join l in db.Cidade on c.Cidadecodigo equals l.Codcidade into cl from l in cl.DefaultIfEmpty()
                         where c.Cep == Cep.ToString() select new  { Siglauf = c.Uf, Codcidade = (short)c.Cidadecodigo, Desccidade = l.Desccidade }).FirstOrDefault();
-                Cidade reg = new Cidade() {
-                    Siglauf = sql.Siglauf,
-                    Codcidade = sql.Codcidade,
-                    Desccidade = sql.Desccidade
-                };
+                if (sql != null) {
+                    reg = new Cidade() {
+                        Siglauf = sql.Siglauf,
+                        Codcidade = sql.Codcidade,
+                        Desccidade = sql.Desccidade
+                    };
+                } else {
+                    reg = new Cidade() {
+                        Siglauf = "",
+                        Codcidade = 0,
+                        Desccidade = ""
+                    };
+                }
+
                 return reg;
             }
         }
 
         public Bairro Retorna_CepDB_Bairro(int Cep) {
+            Bairro reg = null;
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var sql= (from c in db.CepDB
                         join l in db.Bairro on c.Bairrocodigo equals l.Codbairro into cl from l in cl.DefaultIfEmpty()
                         where c.Cep == Cep.ToString() select new  { Siglauf = c.Uf, Codcidade = (short)c.Cidadecodigo, CodBairro= (short)c.Bairrocodigo ,Descbairro = l.Descbairro }).FirstOrDefault();
-                Bairro reg = new Bairro() {
-                    Siglauf=sql.Siglauf,
-                    Codcidade=sql.Codcidade,
-                    Codbairro=sql.CodBairro,
-                    Descbairro=sql.Descbairro
-                };
+                if (sql != null) {
+                    reg = new Bairro() {
+                        Siglauf = sql.Siglauf,
+                        Codcidade = sql.Codcidade,
+                        Codbairro = sql.CodBairro,
+                        Descbairro = sql.Descbairro
+                    };
+                } else {
+                    reg = new Bairro() {
+                        Siglauf = "",
+                        Codcidade = 0,
+                        Codbairro = 0,
+                        Descbairro = ""
+                    };
+                }
                 return reg;
             }
         }
