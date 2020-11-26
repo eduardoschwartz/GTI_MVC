@@ -196,7 +196,8 @@
                                             <label style="font-weight:normal">Logradouro:</label>
                                         </td>
                                         <td>
-                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Logradouro_Nome, new { style = "width:392px;height:25px", @readonly = true })</label>
+                                            @Html.DropDownListFor(m => m.Comprador.Logradouro_Nome, ViewBag.Logradouro as SelectList, null, new { @id = "LogradouroDropDown", style = "width:392px;height:25px", rows = 10 })
+                                            @*<label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Comprador.Logradouro_Nome, new { style = "width:392px;height:25px", @readonly = true })</label>*@
                                             <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal">
                                                 @Html.TextBoxFor(m => m.Comprador.Numero, new { style = "width:60px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)" })
                                             </label>
@@ -1102,6 +1103,11 @@
         }
 
         $(document).ready(function () {
+            $("#LogradouroDropDown").change(function () {
+                if (this.value != '') {
+                    $("#MainForm").submit();
+                }
+            });
             $('#btnCompradorOk').click(function () {
                 var cpfcompradorback = $("#CompradorModal #cpfcnpjc2Txt").val();
                 var nomecompradorback = $("#CompradorModal #nomec2Txt").val();

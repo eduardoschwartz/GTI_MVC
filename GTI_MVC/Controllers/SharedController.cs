@@ -253,10 +253,13 @@ namespace GTI_MVC.Controllers {
                 s++;
             }
             ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
+            Cepdb _cepdb = null;
+            if(model.Logradouro!=null)
+                _cepdb = enderecoRepository.Retorna_CepDB(_cep, Lista_Logradouro[Convert.ToInt32(model.Logradouro) - 1].Endereco);
+            else
+                _cepdb = enderecoRepository.Retorna_CepDB(_cep);
 
-            Cepdb _cepdb = enderecoRepository.Retorna_CepDB(_cep);
-
-            if(_cepdb != null) {
+            if (_cepdb != null) {
                 model.Uf = _cepdb.Uf;
                 model.NomeUf = enderecoRepository.Retorna_UfNome(_cepdb.Uf);
                 model.Cidade_Codigo = _cepdb.Cidadecodigo;

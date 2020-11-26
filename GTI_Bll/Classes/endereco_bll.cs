@@ -163,6 +163,11 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_CepDB(Cep);
         }
 
+        public Cepdb Retorna_CepDB(int Cep, string Logradouro) {
+            Endereco_Data obj = new Endereco_Data(_connection);
+            return obj.Retorna_CepDB(Cep,Logradouro);
+        }
+
         public Uf Retorna_Cep_Estado(int Cep) {
             Endereco_Data obj = new Endereco_Data(_connection);
             return obj.Retorna_Cep_Estado(Cep);
@@ -177,6 +182,16 @@ namespace GTI_Bll.Classes {
             Endereco_Data obj = new Endereco_Data(_connection);
             Exception ex = obj.Incluir_CepDB(Reg);
             return ex;
+        }
+
+        public Cidade Retorna_CepDB_Cidade(int Cep) {
+            Endereco_Data obj = new Endereco_Data(_connection);
+            return obj.Retorna_CepDB_Cidade(Cep);
+        }
+
+        public Bairro Retorna_CepDB_Bairro(int Cep) {
+            Endereco_Data obj = new Endereco_Data(_connection);
+            return obj.Retorna_CepDB_Bairro(Cep);
         }
 
 

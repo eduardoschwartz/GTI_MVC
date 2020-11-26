@@ -1244,6 +1244,9 @@ namespace GTI_Mvc.Controllers {
             string _guid = "";
             ModelState.Clear();
 
+            List<Logradouro> Lista_Logradouro = new List<Logradouro>();
+            ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
+
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
             ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
@@ -1348,6 +1351,26 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
+            Endereco_bll enderecoRepository = new Endereco_bll("GTiconnection");
+            if (model.Comprador.Cep != null) {
+                int _ceptmp = Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep));
+                List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_ceptmp);
+                Lista_Logradouro = new List<Logradouro>();
+                int s = 1;
+                foreach (string item in Lista_Tmp) {
+                    Lista_Logradouro.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
+                    s++;
+                }
+                ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
+                if (model.Comprador.Logradouro_Nome != null) {
+                    Cepdb _cepdb = enderecoRepository.Retorna_CepDB(_ceptmp, Lista_Logradouro[Convert.ToInt32(model.Comprador.Logradouro_Nome) - 1].Endereco);
+
+                    if (_cepdb != null) {
+                        model.Comprador.Bairro_Codigo = _cepdb.Bairrocodigo;
+                        model.Comprador.Bairro_Nome = _cepdb.Bairro.ToUpper();
+                    }
+                }
+            }
 
             if (action == "btnCodigoCancel") {
                 if (model.Guid != null) {
@@ -1412,7 +1435,8 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 }
 
-                var cepObj = Classes.Cep.Busca_CepDB(Convert.ToInt32( Functions.RetornaNumero(model.Comprador.Cep)));
+                int _cep = Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep));
+                var cepObj = Classes.Cep.Busca_CepDB(_cep);
                 //var cepObj = Classes.Cep.Busca(Functions.RetornaNumero(model.Comprador.Cep));
                 //var cepObj = Classes.Cep.Busca_Correio(Functions.RetornaNumero(model.Comprador.Cep));
                 if (cepObj.CEP != null) {
@@ -1421,48 +1445,72 @@ namespace GTI_Mvc.Controllers {
                         rua = rua.Substring(0, rua.IndexOf('-'));
                     }
 
-                    Endereco_bll enderecoRepository = new Endereco_bll("GTiconnection");
-                    LogradouroStruct _log = enderecoRepository.Retorna_Logradouro_Cep(Convert.ToInt32(Functions.RetornaNumero(cepObj.CEP)));
-                    if (_log.Endereco != null) {
-                        model.Comprador.Logradouro_Codigo = (int)_log.CodLogradouro;
-                        model.Comprador.Logradouro_Nome = _log.Endereco;
-                    } else {
-                        model.Comprador.Logradouro_Codigo = 0;
-                        model.Comprador.Logradouro_Nome = rua.ToUpper();
-                    }
+                    
+                    //LogradouroStruct _log = enderecoRepository.Retorna_Logradouro_Cep(Convert.ToInt32(Functions.RetornaNumero(cepObj.CEP)));
+                    //if (_log.Endereco != null) {
+                    //    model.Comprador.Logradouro_Codigo = (int)_log.CodLogradouro;
+                    //    model.Comprador.Logradouro_Nome = _log.Endereco;
+                    //} else {
+                    //    model.Comprador.Logradouro_Codigo = 0;
+                    //    model.Comprador.Logradouro_Nome = rua.ToUpper();
+                    //}
 
-                    Bairro bairro = enderecoRepository.RetornaLogradouroBairro(model.Comprador.Logradouro_Codigo, (short)model.Comprador.Numero);
-                    if (bairro.Descbairro != null) {
+                    List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_cep);
+                    Lista_Logradouro = new List<Logradouro>();
+                    int s = 1;
+                    foreach (string item in Lista_Tmp) {
+                        Lista_Logradouro.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
+                        s++;
+                    }
+                    ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
+
+
+                    Bairro bairro = enderecoRepository.Retorna_CepDB_Bairro(_cep);
+                    if (bairro != null) {
                         model.Comprador.Bairro_Codigo = bairro.Codbairro;
                         model.Comprador.Bairro_Nome = bairro.Descbairro;
-                    } else {
-                        string _uf = cepObj.Estado;
-                        string _cidade = cepObj.Cidade;
-                        string _bairro = cepObj.Bairro;
-                        int _codcidade = enderecoRepository.Retorna_Cidade(_uf, _cidade);
-                        if (_codcidade > 0) {
-                            model.Comprador.Cidade_Codigo = _codcidade;
-                            if (_codcidade != 413) {
-                                //verifica se bairro existe nesta cidade
-                                bool _existeBairro = enderecoRepository.Existe_Bairro(_uf, _codcidade, _bairro);
-                                if (!_existeBairro) {
-                                    Bairro reg = new Bairro() {
-                                        Siglauf = _uf,
-                                        Codcidade = (short)_codcidade,
-                                        Descbairro = _bairro.ToUpper()
-                                    };
-                                    int _codBairro = enderecoRepository.Incluir_bairro(reg);
-                                    model.Comprador.Bairro_Codigo = _codBairro;
-                                }
-                            }
-                        } else {
-                            model.Comprador.Cidade_Codigo = 0;
-                        }
-                        model.Comprador.Bairro_Nome = cepObj.Bairro.ToUpper();
                     }
-
-                    model.Comprador.Cidade_Nome = cepObj.Cidade.ToUpper();
+                    Cidade cidade = enderecoRepository.Retorna_CepDB_Cidade(_cep);
+                    if (cidade != null) {
+                        model.Comprador.Cidade_Codigo = cidade.Codcidade;
+                        model.Comprador.Cidade_Nome = cidade.Desccidade;
+                    }
                     model.Comprador.UF = cepObj.Estado;
+
+
+
+                    //Bairro bairro = enderecoRepository.RetornaLogradouroBairro(model.Comprador.Logradouro_Codigo, (short)model.Comprador.Numero);
+                    //if (bairro.Descbairro != null) {
+                    //    model.Comprador.Bairro_Codigo = bairro.Codbairro;
+                    //    model.Comprador.Bairro_Nome = bairro.Descbairro;
+                    //} else {
+                    //    string _uf = cepObj.Estado;
+                    //    string _cidade = cepObj.Cidade;
+                    //    string _bairro = cepObj.Bairro;
+                    //    int _codcidade = enderecoRepository.Retorna_Cidade(_uf, _cidade);
+                    //    if (_codcidade > 0) {
+                    //        model.Comprador.Cidade_Codigo = _codcidade;
+                    //        if (_codcidade != 413) {
+                    //            //verifica se bairro existe nesta cidade
+                    //            bool _existeBairro = enderecoRepository.Existe_Bairro(_uf, _codcidade, _bairro);
+                    //            if (!_existeBairro) {
+                    //                Bairro reg = new Bairro() {
+                    //                    Siglauf = _uf,
+                    //                    Codcidade = (short)_codcidade,
+                    //                    Descbairro = _bairro.ToUpper()
+                    //                };
+                    //                int _codBairro = enderecoRepository.Incluir_bairro(reg);
+                    //                model.Comprador.Bairro_Codigo = _codBairro;
+                    //            }
+                    //        }
+                    //    } else {
+                    //        model.Comprador.Cidade_Codigo = 0;
+                    //    }
+                    //    model.Comprador.Bairro_Nome = cepObj.Bairro.ToUpper();
+                    //}
+
+                    //model.Comprador.Cidade_Nome = cepObj.Cidade.ToUpper();
+                    //model.Comprador.UF = cepObj.Estado;
                 } else {
                     model.Comprador.Logradouro_Codigo = 0;
                     model.Comprador.Logradouro_Nome = "";
@@ -1476,7 +1524,7 @@ namespace GTI_Mvc.Controllers {
 
                     ViewBag.Error = "* Cep do comprador não localizado.";
                     return View(model);
-                }
+                } 
             }
 
             if (action == "btnValida") {
@@ -2528,6 +2576,7 @@ namespace GTI_Mvc.Controllers {
                 var cepObj = Classes.Cep.Busca_CepDB(Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep)));
                 //var cepObj = Classes.Cep.Busca_Correio(Functions.RetornaNumero(model.Comprador.Cep));
                 //var cepObj = Classes.Cep.Busca(Functions.RetornaNumero(model.Comprador.Cep));
+                int _cep = Convert.ToInt32(Functions.RetornaNumero(cepObj.CEP));
                 if (cepObj.CEP != null) {
                     string rua = cepObj.Endereco;
                     if (rua.IndexOf('-') > 0) {
@@ -2535,7 +2584,7 @@ namespace GTI_Mvc.Controllers {
                     }
 
                     Endereco_bll enderecoRepository = new Endereco_bll("GTiconnection");
-                    LogradouroStruct _log = enderecoRepository.Retorna_Logradouro_Cep(Convert.ToInt32(Functions.RetornaNumero(cepObj.CEP)));
+                    LogradouroStruct _log = enderecoRepository.Retorna_Logradouro_Cep(_cep);
                     if (_log.Endereco != null) {
                         model.Comprador.Logradouro_Codigo = (int)_log.CodLogradouro;
                         model.Comprador.Logradouro_Nome = _log.Endereco;
@@ -2543,6 +2592,7 @@ namespace GTI_Mvc.Controllers {
                         model.Comprador.Logradouro_Codigo = 0;
                         model.Comprador.Logradouro_Nome = rua.ToUpper();
                     }
+
 
                     Bairro bairro = enderecoRepository.RetornaLogradouroBairro(model.Comprador.Logradouro_Codigo, (short)model.Comprador.Numero);
                     if (bairro.Descbairro != null) {
