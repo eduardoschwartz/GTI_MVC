@@ -2,6 +2,8 @@
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace GTI_Dal.Classes {
@@ -372,6 +374,26 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Incluir_CepDB(Cepdb Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[7];
+                Parametros[0] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cep };
+                Parametros[1] = new SqlParameter { ParameterName = "@uf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Uf };
+                Parametros[2] = new SqlParameter { ParameterName = "@cidadecodigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Cidadecodigo };
+                Parametros[3] = new SqlParameter { ParameterName = "@bairrocodigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Bairrocodigo };
+                Parametros[4] = new SqlParameter { ParameterName = "@logradouro", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Logradouro };
+                Parametros[5] = new SqlParameter { ParameterName = "@func", SqlDbType = SqlDbType.Bit, SqlValue = Reg.Func };
+                Parametros[6] = new SqlParameter { ParameterName = "@userid", SqlDbType = SqlDbType.Int, SqlValue = Reg.Userid };
+                db.Database.ExecuteSqlCommand("INSERT INTO cepdb(cep,uf,cidadecodigo,bairrocodigo,logradouro,func,userid) " +
+                                              " VALUES(@cep,@uf,@cidadecodigo,@bairrocodigo,@logradouro,@func,@userid)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
 
 
     }

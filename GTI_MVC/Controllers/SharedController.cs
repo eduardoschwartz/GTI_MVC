@@ -316,12 +316,23 @@ namespace GTI_MVC.Controllers {
 
                 //Grava o novo Cep
 
-
+                Cepdb _reg = new Cepdb() {
+                    Cep=_cep.ToString("00000000"),
+                    Uf=model.Uf,
+                    Cidadecodigo=model.Cidade_Codigo_New==0?model.Cidade_Codigo:model.Cidade_Codigo_New,
+                    Bairrocodigo=model.Bairro_Codigo_New,
+                    Logradouro=model.Logradouro_New.ToUpper(),
+                    Func = Session["hashfunc"].ToString() == "S" ? true : false,
+                    Userid= Convert.ToInt32(Session["hashid"])
+                };
+                Exception ex = enderecoRepository.Incluir_CepDB(_reg);
+                model = new CepViewModel();
             }
 
             return View(model);
         }
 
+       
 
     }
 }

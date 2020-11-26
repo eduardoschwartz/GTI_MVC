@@ -775,7 +775,14 @@ namespace GTI_Bll.Classes {
             return ex;
 
         }
+
+        public string Retorna_Imovel_Inscricao(int Codigo) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Imovel_Inscricao(Codigo);
+        }
+
+
         #endregion
 
-        }//end class
+    }//end class
     }

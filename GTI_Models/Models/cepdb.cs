@@ -10,5 +10,7 @@ namespace GTI_Models.Models {
         public string Bairro { get; set; }
         public int Bairrocodigo { get; set; }
         public string Logradouro { get; set; }
+        public bool Func { get; set; }
+        public int Userid { get; set; }
     }
 }

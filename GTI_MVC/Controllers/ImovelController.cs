@@ -3088,6 +3088,7 @@ namespace GTI_Mvc.Controllers {
                     regMain.Imovel_Quadra = model.Dados_Imovel.QuadraOriginal;
                     regMain.Imovel_Lote = model.Dados_Imovel.LoteOriginal;
                 }
+                regMain.Inscricao = model.Inscricao;
                 regMain.Tipo_Instrumento = model.Tipo_Instrumento;
                 regMain.Valor_Venal = model.Valor_Venal;
                 regMain.Valor_Avaliacao = model.Valor_Avaliacao;
@@ -3252,6 +3253,10 @@ namespace GTI_Mvc.Controllers {
             itbi.Comprador.Cep = regMain.Comprador_cep.ToString("00000-000");
             itbi.Comprador.Telefone = regMain.Comprador_telefone;
             itbi.Comprador.Email = regMain.Comprador_email;
+
+            if(itbi.Inscricao==null && Convert.ToInt32(itbi.Codigo) > 0) {
+                itbi.Inscricao = imovelRepository.Retorna_Imovel_Inscricao(Convert.ToInt32(itbi.Codigo));
+            }
 
             List<ListCompradorEditorViewModel> Lista_comprador = new List<ListCompradorEditorViewModel>();
             List<Itbi_comprador> listaC = imovelRepository.Retorna_Itbi_Comprador(guid);

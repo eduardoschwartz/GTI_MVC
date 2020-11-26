@@ -173,6 +173,13 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_CepDB_Logradouro(Cep);
         }
 
+        public Exception Incluir_CepDB(Cepdb Reg) {
+            Endereco_Data obj = new Endereco_Data(_connection);
+            Exception ex = obj.Incluir_CepDB(Reg);
+            return ex;
+        }
+
+
     }
 }
 

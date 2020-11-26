@@ -206,6 +206,15 @@ namespace GTI_Dal.Classes {
             return nRet;
         }
 
+        public string Retorna_Imovel_Inscricao(int Codigo) {
+            string _inscricao="";
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from a in db.Cadimob where a.Codreduzido==Codigo select a).FirstOrDefault();
+                _inscricao = reg.Distrito.ToString() + "." + reg.Setor.ToString("00") + "." + reg.Quadra.ToString("0000") + "." + reg.Lote.ToString("00000") + "." + reg.Seq.ToString("00") + "." + reg.Unidade.ToString("00") + "." + reg.Subunidade.ToString("000");
+            }
+            return _inscricao;
+        }
+
         public EnderecoStruct Dados_Endereco(int Codigo, TipoEndereco Tipo) {
             EnderecoStruct regEnd = new EnderecoStruct();
             using (GTI_Context db = new GTI_Context(_connection)) {
