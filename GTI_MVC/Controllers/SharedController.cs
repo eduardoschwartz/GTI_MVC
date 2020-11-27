@@ -253,6 +253,8 @@ namespace GTI_MVC.Controllers {
                 s++;
             }
             ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
+
+
             Cepdb _cepdb = null;
             if(model.Logradouro!=null)
                 _cepdb = enderecoRepository.Retorna_CepDB(_cep, Lista_Logradouro[Convert.ToInt32(model.Logradouro) - 1].Endereco);
@@ -282,16 +284,27 @@ namespace GTI_MVC.Controllers {
             List<Cidade> Lista_Cidade = enderecoRepository.Lista_Cidade(_uf.Siglauf);
             ViewBag.Cidade = new SelectList(Lista_Cidade, "Codcidade", "Desccidade");
 
+            List<Bairro> Lista_Bairro_New = null;
             if (model.Cidade_Codigo_New > 0) {
-                List<Bairro> Lista_Bairro_New = enderecoRepository.Lista_Bairro(_uf.Siglauf, model.Cidade_Codigo_New);
+                Lista_Bairro_New = enderecoRepository.Lista_Bairro(_uf.Siglauf, model.Cidade_Codigo_New);
                 ViewBag.Bairro_New = new SelectList(Lista_Bairro_New, "Codbairro", "Descbairro");
             } else {
                 if (model.Cidade_Codigo > 0) {
-                    List<Bairro> Lista_Bairro_New = enderecoRepository.Lista_Bairro(_uf.Siglauf, model.Cidade_Codigo);
+                    Lista_Bairro_New = enderecoRepository.Lista_Bairro(_uf.Siglauf, model.Cidade_Codigo);
                     ViewBag.Bairro_New = new SelectList(Lista_Bairro_New, "Codbairro", "Descbairro");
                 } else {
-                    List<Bairro> Lista_Bairro_New = new List<Bairro>();
+                    Lista_Bairro_New = new List<Bairro>();
                     ViewBag.Bairro_New = new SelectList(Lista_Bairro_New, "Codbairro", "Descbairro");
+                }
+            }
+
+            if (!string.IsNullOrEmpty(model.Bairro_Nome_New)) {
+                string _bairronew = model.Bairro_Nome_New.ToUpper();
+                foreach (Bairro item in Lista_Bairro_New) {
+                    if (item.Descbairro.ToUpper() == model.Bairro_Nome_New.ToUpper()) {
+                        ViewBag.Error = "Bairro já cadastrado.";
+                        return View(model);
+                    }
                 }
             }
 

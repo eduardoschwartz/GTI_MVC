@@ -90,10 +90,10 @@
                 </div>
 
 
-                @if (Model.Cep != null ) {
+                @if (Model.Cep != null) {
                     <div class="panel-heading">Adicionar novo endereço ao cep</div>
                     <div class="panel-body ">
-                        <div  >
+                        <div>
                             <table>
                                 <tr>
                                     <td style="padding-top:10px;width:150px">
@@ -103,7 +103,7 @@
                                         @if (Model.Cidade_Codigo == 0) {
                                             @Html.DropDownListFor(m => m.Cidade_Codigo_New, ViewBag.Cidade as SelectList, null, new { @id = "CidadeNewDropDown", style = "width:400px;height:25px", rows = 10 })
                                         } else {
-                                            @Html.TextBoxFor(m => m.Cidade_Nome, new { style = "width:400px;height:25px;color:blue", @readonly = true, @Value = @Model.Cidade_Nome })
+                                            @Html.TextBoxFor(m => m.Cidade_Nome, new { @id = "cidadeNomeTxt", style = "width:400px;height:25px;color:blue", @readonly = true, @Value = @Model.Cidade_Nome })
                                         }
                                     </td>
                                 </tr>
@@ -120,7 +120,7 @@
                                         Logradouro
                                     </td>
                                     <td style="padding-top:10px">
-                                        @Html.TextBoxFor(m => m.Logradouro_New, new { @id="LogradouroNewTxt", style = "width:400px;height:25px",  @Value = @Model.Logradouro_New })
+                                        @Html.TextBoxFor(m => m.Logradouro_New, new { @id = "LogradouroNewTxt", style = "width:400px;height:25px", @Value = @Model.Logradouro_New })
                                     </td>
                                 </tr>
                             </table>
@@ -131,7 +131,7 @@
                             }
                             <br />
                             <button type="submit" class="btn btn-success" name="action" value="btnValida">Gravar</button>&nbsp;&nbsp;&nbsp;
-                            <button type="button" class="btn btn-info" name="action" value="btnBairro">Incluir novo bairro</button>
+                            <button type="button" onclick="NewData()" class="btn btn-info" name="action" value="btnBairro">Incluir novo bairro</button>
                         </div>
                     </div>
                 }
@@ -141,12 +141,39 @@
                 </div>
             </div>
         </div>
+        @Html.HiddenFor(m => m.Bairro_Nome_New, new { @id = "Bairro_Nome_New" })
     }
 
+    <!-- Modal -->
+    <div class="modal fade" id="BairroModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-ku" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Incluir novo bairro</h4>
+                </div>
+                <div class="modal-body">
+                    <label style="font-weight:normal">Cidade:&nbsp;</label>
+                    <label id="BairroNomeLabel" style="font-weight:normal;color:blue"></label>
+                    <br />
 
+                    <label style="font-weight:normal;">Digite o nome do bairro</label>
+                    @Html.TextBoxFor(x => x.Bairro_Nome_New, null, new { @id = "BairroNomeTxt", @style = "width:400px;", @maxlength = "50", @Value = "" })
+                    <br />
+                    <label style="font-weight:normal;color:red;padding-left:7px" id="errorLabel">@ViewBag.Error</label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnBairroOk" onclick="return ValidateForm()">Incluir</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 </div>
+
+
+
 
 @section scripts{
 
@@ -163,6 +190,32 @@
                 }
             });
         });
-             
+
+        function NewData() {
+            $('#BairroModal').modal();
+            var _cidade = document.getElementById('cidadeNomeTxt').value;
+            document.getElementById('BairroNomeLabel').innerHTML = _cidade;
+            document.getElementById('errorLabel').innerHTML = "";
+        }
+
+        function ValidateForm() {
+            ClearError();
+            var _bairro = document.getElementById('BairroNomeTxt').value;
+            if (_bairro == '') {
+                document.getElementById('errorLabel').innerHTML = "Digite o nome do bairro";
+                return false;
+            }
+            document.getElementById('Bairro_Nome_New').value = _bairro;
+            $('#BairroModal').modal('hide');
+            $("#MainForm").submit();
+           return true;
+        }
+
+
+        function ClearError() {
+            document.getElementById('errorLabel').innerHTML = "";
+        }
+
+
     </script>
 }

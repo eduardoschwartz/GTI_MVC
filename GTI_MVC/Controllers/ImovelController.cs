@@ -1593,9 +1593,6 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-
-
-
             if (model.Inscricao == null && Convert.ToInt32(model.Codigo) > 0) {
                 ViewBag.Error = "* Imóvel não cadastrado.";
                 return View(model);

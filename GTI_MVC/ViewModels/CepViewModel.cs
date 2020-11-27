@@ -13,5 +13,6 @@ namespace GTI_Mvc.ViewModels {
         public int Cidade_Codigo_New { get; set; }
         public int Bairro_Codigo_New { get; set; }
         public string Logradouro_New { get; set; }
+        public string Bairro_Nome_New { get; set; }
     }
 }
