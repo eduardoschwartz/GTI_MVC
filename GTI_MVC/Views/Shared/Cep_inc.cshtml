@@ -125,12 +125,13 @@
                                 </tr>
                             </table>
                         </div>
-                        <div >
+                        <div>
                             @if (ViewBag.Error != null && ViewBag.Error != "") {
                                 <label style="font-weight:normal;color:red;padding-left:7px" id="errorLabel">@ViewBag.Error</label>
                             }
                             <br />
-                            <button type="submit" class="btn btn-success" name="action" value="btnValida">Gravar</button>&nbsp;&nbsp;
+                            <button type="submit" class="btn btn-success" name="action" value="btnValida">Gravar</button>&nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-info" name="action" value="btnBairro">Incluir novo bairro</button>
                         </div>
                     </div>
                 }

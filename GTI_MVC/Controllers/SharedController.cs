@@ -262,11 +262,13 @@ namespace GTI_MVC.Controllers {
             if (_cepdb != null) {
                 model.Uf = _cepdb.Uf;
                 model.NomeUf = enderecoRepository.Retorna_UfNome(_cepdb.Uf);
-                model.Cidade_Codigo = _cepdb.Cidadecodigo;
-                model.Cidade_Nome = _cepdb.Cidade.ToUpper();
-                model.Bairro_Codigo = _cepdb.Bairrocodigo;
-                model.Bairro_Nome = _cepdb.Bairro.ToUpper();
-                model.Logradouro = _cepdb.Logradouro.ToUpper();
+                if (_cepdb.Cidadecodigo > 0) {
+                    model.Cidade_Codigo = _cepdb.Cidadecodigo;
+                    model.Cidade_Nome = _cepdb.Cidade.ToUpper();
+                    model.Bairro_Codigo = _cepdb.Bairrocodigo;
+                    model.Bairro_Nome = _cepdb.Bairro.ToUpper();
+                    model.Logradouro = _cepdb.Logradouro.ToUpper();
+                }
             }
 
             Uf _uf = enderecoRepository.Retorna_Cep_Estado(_cep);

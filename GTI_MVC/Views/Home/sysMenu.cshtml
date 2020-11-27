@@ -25,7 +25,7 @@
             <div class="panel-body">
                 @if (Session["hashfunc"].ToString() == "S") {
                     @Html.ActionLink("Tramitação de processos", "Tramite_Processo", "Protocolo", null, new { @class = "actionlink" })<br />
-                    @Html.ActionLink("Inclusão de Cep não cadastrado", "Cep_inc", "Shared", null, new { @class = "actionlink" })<br />
+
                     if (Session["hashfiscal"].ToString() == "S") {
                         @Html.ActionLink("Notificação de ISS Contrução Civil", "Notificacao_menu", "Tributario", null, new { @class = "actionlink" })<br />
                     }
@@ -35,8 +35,9 @@
                 }
 
                 @*@if (Session["hashid"].ToString() == "433") {
-                @Html.ActionLink("Cadastro de imóvel", "CadImovel", "Imovel",null, new { Codigo = 1 ,  @class = "actionlink" })<br />
-            }*@
+            @Html.ActionLink("Cadastro de imóvel", "CadImovel", "Imovel",null, new { Codigo = 1 ,  @class = "actionlink" })<br />
+        }*@
+                @Html.ActionLink("Inclusão de Cep não cadastrado", "Cep_inc", "Shared", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Imposto sobre Transmissão de Bens Imóveis (ITBI)", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })<br />
 
             </div>

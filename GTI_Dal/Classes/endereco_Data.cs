@@ -429,7 +429,7 @@ namespace GTI_Dal.Classes {
             Cidade reg = null;
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var sql= (from c in db.CepDB
-                        join l in db.Cidade on c.Cidadecodigo equals l.Codcidade into cl from l in cl.DefaultIfEmpty()
+                        join l in db.Cidade on new { p1 = c.Uf, p2 = (short)c.Cidadecodigo } equals new { p1 = l.Siglauf, p2 = l.Codcidade } into cl from l in cl.DefaultIfEmpty()
                         where c.Cep == Cep.ToString() select new  { Siglauf = c.Uf, Codcidade = (short)c.Cidadecodigo, Desccidade = l.Desccidade }).FirstOrDefault();
                 if (sql != null) {
                     reg = new Cidade() {
