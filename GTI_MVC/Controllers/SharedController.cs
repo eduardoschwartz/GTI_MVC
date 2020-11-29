@@ -243,8 +243,15 @@ namespace GTI_MVC.Controllers {
                 return View(model);
             }
 
+            //if (model.Cidade_Codigo == 0) {
+            //    model.Bairro_Codigo_New = 0;
+            //    model.Bairro_Nome_New = "";
+            //}
+
             int _cep = Convert.ToInt32(Functions.RetornaNumero(model.Cep));
             Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+
+
             List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_cep);
             List<Logradouro> Lista_Logradouro = new List<Logradouro>();
             int s = 1;
@@ -298,15 +305,15 @@ namespace GTI_MVC.Controllers {
                 }
             }
 
-            if (!string.IsNullOrEmpty(model.Bairro_Nome_New)) {
-                string _bairronew = model.Bairro_Nome_New.ToUpper();
-                foreach (Bairro item in Lista_Bairro_New) {
-                    if (item.Descbairro.ToUpper() == model.Bairro_Nome_New.ToUpper()) {
-                        ViewBag.Error = "Bairro já cadastrado.";
-                        return View(model);
-                    }
-                }
-            }
+            //if (!string.IsNullOrEmpty(model.Bairro_Nome_New)) {
+            //    string _bairronew = model.Bairro_Nome_New.ToUpper();
+            //    foreach (Bairro item in Lista_Bairro_New) {
+            //        if (item.Descbairro.ToUpper() == model.Bairro_Nome_New.ToUpper()) {
+            //            ViewBag.Error = "Bairro já cadastrado.";
+            //            return View(model);
+            //        }
+            //    }
+            //}
 
             int _cidade = model.Cidade_Codigo > 0 ? model.Cidade_Codigo : Lista_Cidade[0].Codcidade;
             List<Bairro> Lista_Bairro = enderecoRepository.Lista_Bairro(_uf.Siglauf,model.Cidade_Codigo);
@@ -314,6 +321,8 @@ namespace GTI_MVC.Controllers {
 
             model.Uf = _uf.Siglauf;
             model.NomeUf = _uf.Descuf;
+
+
 
             if (action == "btnValida") {
                 if(model.Logradouro_New==null || model.Logradouro_New.Trim() == "") {
@@ -345,7 +354,23 @@ namespace GTI_MVC.Controllers {
                 };
                 Exception ex = enderecoRepository.Incluir_CepDB(_reg);
                 model = new CepViewModel();
+                return View(model);
             }
+
+            if (model.Bairro_Nome_New != null && model.Bairro_Nome_New != "") {
+                Bairro _bairro = new Bairro() {
+                    Siglauf = model.Uf,
+                    Codcidade = (short)model.Cidade_Codigo_New==0?(short)_cidade:(short)model.Cidade_Codigo_New,
+                    Descbairro = model.Bairro_Nome_New.ToUpper()
+                };
+                model.Bairro_Codigo_New = enderecoRepository.Incluir_bairro(_bairro);
+                model.Bairro_Nome_New = "";
+                ViewBag.Error = "";
+                Lista_Bairro_New = enderecoRepository.Lista_Bairro(model.Uf, model.Cidade_Codigo_New);
+                ViewBag.Bairro_New = new SelectList(Lista_Bairro_New, "Codbairro", "Descbairro");
+                return View(model);
+            }
+
 
             return View(model);
         }

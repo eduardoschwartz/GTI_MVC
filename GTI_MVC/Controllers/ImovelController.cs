@@ -1265,14 +1265,18 @@ namespace GTI_Mvc.Controllers {
                     if (a == "")
                         _cepdb = enderecoRepository.Retorna_CepDB(_ceptmp, model.Comprador.Logradouro_Nome);
                     else {
-                        int b = Convert.ToInt32(a)-1;
-                        _cepdb = enderecoRepository.Retorna_CepDB(_ceptmp, Lista_Logradouro[b].Endereco);
+                        if (Lista_Logradouro.Count > 0) {
+                            int b = Convert.ToInt32(a) - 1;
+                            _cepdb = enderecoRepository.Retorna_CepDB(_ceptmp, Lista_Logradouro[b].Endereco);
+                            if (_cepdb.Bairrocodigo > 0) {
+                                model.Comprador.Bairro_Codigo = _cepdb.Bairrocodigo;
+                                model.Comprador.Bairro_Nome = _cepdb.Bairro.ToUpper();
+                            }
+                        }
+
                     }
 
-                    if (_cepdb.Bairrocodigo > 0) {
-                        model.Comprador.Bairro_Codigo = _cepdb.Bairrocodigo;
-                        model.Comprador.Bairro_Nome = _cepdb.Bairro.ToUpper();
-                    }
+                    
                 }
             }
 
@@ -3150,7 +3154,8 @@ namespace GTI_Mvc.Controllers {
                                 s++;
                             }
                             oldpos = b.ToString();
-                            model.Comprador.Logradouro_Nome = Lista_Logradouro[b - 1].Endereco;
+                            if (Lista_Logradouro.Count>0)
+                                model.Comprador.Logradouro_Nome = Lista_Logradouro[b - 1].Endereco;
                         }
                     }
                 }
