@@ -1270,7 +1270,7 @@ namespace GTI_Mvc.Controllers {
                             _cepdb = enderecoRepository.Retorna_CepDB(_ceptmp, Lista_Logradouro[b].Endereco);
                             if (_cepdb.Bairrocodigo > 0) {
                                 model.Comprador.Bairro_Codigo = _cepdb.Bairrocodigo;
-                                model.Comprador.Bairro_Nome = _cepdb.Bairro.ToUpper();
+                                model.Comprador.Bairro_Nome = enderecoRepository.Retorna_Bairro(model.Comprador.UF, _cepdb.Cidadecodigo, _cepdb.Bairrocodigo);
                             }
                         }
 
@@ -1592,7 +1592,7 @@ namespace GTI_Mvc.Controllers {
 
                     if (_cepdb.Bairrocodigo >0) {
                         model.Comprador.Bairro_Codigo = _cepdb.Bairrocodigo;
-                        model.Comprador.Bairro_Nome = _cepdb.Bairro.ToUpper();
+                        model.Comprador.Bairro_Nome = enderecoRepository.Retorna_Bairro(model.Comprador.UF, _cepdb.Cidadecodigo, _cepdb.Bairrocodigo);
                     }
                 }
             }
@@ -1744,7 +1744,7 @@ namespace GTI_Mvc.Controllers {
 
                     if (_cepdb != null) {
                         model.Comprador.Bairro_Codigo = _cepdb.Bairrocodigo;
-                        model.Comprador.Bairro_Nome = _cepdb.Bairro.ToUpper();
+                        model.Comprador.Bairro_Nome = enderecoRepository.Retorna_Bairro(model.Comprador.UF, _cepdb.Cidadecodigo, _cepdb.Bairrocodigo);
                     }
                 }
             }

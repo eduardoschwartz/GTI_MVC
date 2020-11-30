@@ -362,8 +362,8 @@ namespace GTI_Dal.Classes {
                     };
                 }
 
-                _cepdb.Cidade = Retorna_Cidade(_cepdb.Uf, _cepdb.Cidadecodigo);
-                _cepdb.Bairro = Retorna_Bairro(_cepdb.Uf, _cepdb.Cidadecodigo,_cepdb.Bairrocodigo);
+           //     _cepdb.Cidade = Retorna_Cidade(_cepdb.Uf, _cepdb.Cidadecodigo);
+          //      _cepdb.Bairro = Retorna_Bairro(_cepdb.Uf, _cepdb.Cidadecodigo,_cepdb.Bairrocodigo);
                 return _cepdb;
             }
         }
@@ -390,8 +390,8 @@ namespace GTI_Dal.Classes {
                     };
                 }
 
-                _cepdb.Cidade = Retorna_Cidade(_cepdb.Uf, _cepdb.Cidadecodigo);
-                _cepdb.Bairro = Retorna_Bairro(_cepdb.Uf, _cepdb.Cidadecodigo, _cepdb.Bairrocodigo);
+          //      _cepdb.Cidade = Retorna_Cidade(_cepdb.Uf, _cepdb.Cidadecodigo);
+//_cepdb.Bairro = Retorna_Bairro(_cepdb.Uf, _cepdb.Cidadecodigo, _cepdb.Bairrocodigo);
                 return _cepdb;
             }
         }

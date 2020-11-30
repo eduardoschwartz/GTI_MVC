@@ -157,9 +157,9 @@ namespace GTI_Mvc.Classes {
                 cepObj.Estado = "";
             } else {
                 cepObj.Endereco = _cep.Logradouro;
-                cepObj.Bairro = _cep.Bairro;
+                cepObj.Bairro = enderecoRepository.Retorna_Bairro(_cep.Uf, _cep.Cidadecodigo, _cep.Bairrocodigo);
                 cepObj.CEP = _cep.Cep;
-                cepObj.Cidade = _cep.Cidade;
+                cepObj.Cidade = enderecoRepository.Retorna_Cidade(_cep.Uf, _cep.Cidadecodigo);
                 cepObj.Estado = _cep.Uf;
             }
 
