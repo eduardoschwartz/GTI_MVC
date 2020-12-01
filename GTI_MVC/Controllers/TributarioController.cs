@@ -58,7 +58,6 @@ namespace GTI_Mvc.Controllers {
                         _existeCod = empresaRepository.Existe_Empresa(_codigo);
                         _tipoCadastro = TipoCadastro.Empresa;
                     } else {
-                        _tipoCadastro = TipoCadastro.Cidadao;
                         ViewBag.Result = "Inscrição inválida.";
                         return View(certidaoViewModel);
                     }
@@ -307,12 +306,11 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Debito_Doc")]
         [HttpPost]
         public ActionResult Certidao_Debito_Doc(CertidaoViewModel model) {
-            int _numero;
             string sNome = "";
             Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
-            _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Debito_Doc);
+            int _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Debito_Doc);
             ViewBag.Result = "";
 
             model.OptionList = new List<SelectListaItem> {
@@ -380,12 +378,13 @@ namespace GTI_Mvc.Controllers {
                     }
                 }
 
-                Certidao_debito_documento reg = new Certidao_debito_documento();
-                reg._Codigo = _codigo;
-                reg._Ret = nRet;
-                reg._Tributo = sTributo;
-                reg._Nome = sNome == null ? "" : sNome.Trim();
-                
+                Certidao_debito_documento reg = new Certidao_debito_documento {
+                    _Codigo = _codigo,
+                    _Ret = nRet,
+                    _Tributo = sTributo,
+                    _Nome = sNome == null ? "" : sNome.Trim()
+                };
+
                 _lista_certidao.Add(reg);
             }
 
@@ -439,13 +438,14 @@ namespace GTI_Mvc.Controllers {
                 _tributo = _tributo.Substring(0, _tributo.Length - 1);
             int _numero_certidao = tributario_Class.Retorna_Codigo_Certidao(TipoCertidao.Debito);
             int _ano_certidao = DateTime.Now.Year;
-            Certidao cert = new Certidao();
-            cert.Ano = (short)_ano_certidao;
+            Certidao cert = new Certidao {
+                Ano = (short)_ano_certidao,
 
-            cert.Numero = _numero_certidao;
-            cert.Nome_Requerente = _lista_certidao[0]._Nome;
-            cert.Cpf_Cnpj = !string.IsNullOrWhiteSpace( model.CpfValue)?model.CpfValue:model.CnpjValue;
-            cert.Numero_Ano = _numero_certidao.ToString("00000") + "/" + _ano_certidao.ToString();
+                Numero = _numero_certidao,
+                Nome_Requerente = _lista_certidao[0]._Nome,
+                Cpf_Cnpj = !string.IsNullOrWhiteSpace(model.CpfValue) ? model.CpfValue : model.CnpjValue,
+                Numero_Ano = _numero_certidao.ToString("00000") + "/" + _ano_certidao.ToString()
+            };
             if (_tipo_Certidao == RetornoCertidaoDebito.Negativa) {
                 cert.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "-IN";
 //                cert.Tributo = "Não consta débito apurado contra o(a) mesmo(a).";
@@ -469,8 +469,9 @@ namespace GTI_Mvc.Controllers {
                     }
                 }
             }
-            List<Certidao> ListaCertidao = new List<Certidao>();
-            ListaCertidao.Add(cert);
+            List<Certidao> ListaCertidao = new List<Certidao> {
+                cert
+            };
 
             Certidao_debito_doc RegSave = new Certidao_debito_doc() {
                 Ano = (short)_ano_certidao,
@@ -769,14 +770,14 @@ namespace GTI_Mvc.Controllers {
                         return View(model);
                     } else {
                         if (model.CpfValue != null) {
-                            _existeCod = empresaRepository.ExisteEmpresaCpf(RetornaNumero(model.CpfValue))>0?true:false;
+                            _existeCod = empresaRepository.ExisteEmpresaCpf(RetornaNumero(model.CpfValue))>0;
                             if (!_existeCod) {
                                 ViewBag.Result = "CPF não pertence a esta inscrição.";
                                 return View(model);
                             }
                         } else {
                             if (model.CnpjValue != null) {
-                                _existeCod = empresaRepository.ExisteEmpresaCnpj(RetornaNumero(model.CnpjValue))>0?true:false;
+                                _existeCod = empresaRepository.ExisteEmpresaCnpj(RetornaNumero(model.CnpjValue))>0;
                                 if (!_existeCod) {
                                     ViewBag.Result = "CNPJ não pertence a esta inscrição.";
                                     return View(model);
@@ -1543,12 +1544,13 @@ namespace GTI_Mvc.Controllers {
                             foreach (DebitoStructure item in ListaDebito.Where(m => m.Codigo_Situacao == 3)) {
 
                                 //criamos um documento novo para cada parcela da vigilância
-                                Numdocumento regDoc = new Numdocumento();
-                                regDoc.Valorguia = item.Soma_Principal;
-                                regDoc.Emissor = "Gti.Web/2ViaVS";
-                                regDoc.Datadocumento = DateTime.Now;
-                                regDoc.Registrado = false;
-                                regDoc.Percisencao = 0;
+                                Numdocumento regDoc = new Numdocumento {
+                                    Valorguia = item.Soma_Principal,
+                                    Emissor = "Gti.Web/2ViaVS",
+                                    Datadocumento = DateTime.Now,
+                                    Registrado = false,
+                                    Percisencao = 0
+                                };
                                 regDoc.Percisencao = 0;
                                 int _novo_documento = tributario_class.Insert_Documento(regDoc);
                                 regDoc.numdocumento = _novo_documento;
@@ -1562,32 +1564,34 @@ namespace GTI_Mvc.Controllers {
 
 
                                 //grava o documento na parcela
-                                Parceladocumento regParc = new Parceladocumento();
-                                regParc.Codreduzido = item.Codigo_Reduzido;
-                                regParc.Anoexercicio = Convert.ToInt16(item.Ano_Exercicio);
-                                regParc.Codlancamento = Convert.ToInt16(item.Codigo_Lancamento);
-                                regParc.Seqlancamento = Convert.ToInt16(item.Sequencia_Lancamento);
-                                regParc.Numparcela = Convert.ToByte(item.Numero_Parcela);
-                                regParc.Codcomplemento = Convert.ToByte(item.Complemento);
-                                regParc.Numdocumento = _novo_documento;
-                                regParc.Valorjuros = 0;
-                                regParc.Valormulta = 0;
-                                regParc.Valorcorrecao = 0;
-                                regParc.Plano = 0;
+                                Parceladocumento regParc = new Parceladocumento {
+                                    Codreduzido = item.Codigo_Reduzido,
+                                    Anoexercicio = Convert.ToInt16(item.Ano_Exercicio),
+                                    Codlancamento = Convert.ToInt16(item.Codigo_Lancamento),
+                                    Seqlancamento = Convert.ToInt16(item.Sequencia_Lancamento),
+                                    Numparcela = Convert.ToByte(item.Numero_Parcela),
+                                    Codcomplemento = Convert.ToByte(item.Complemento),
+                                    Numdocumento = _novo_documento,
+                                    Valorjuros = 0,
+                                    Valormulta = 0,
+                                    Valorcorrecao = 0,
+                                    Plano = 0
+                                };
                                 tributario_class.Insert_Parcela_Documento(regParc);
 
                                 //Registrar os novos documentos
-                                Ficha_compensacao_documento ficha = new Ficha_compensacao_documento();
-                                ficha.Nome = _nome.Length > 40 ? _nome.Substring(0, 40) : _nome;
-                                ficha.Endereco = _endereco.Length > 40 ? _endereco.Substring(0, 40) : _endereco;
-                                ficha.Bairro = _bairro.Length > 15 ? _bairro.Substring(0, 15) : _bairro;
-                                ficha.Cidade = _cidade.Length > 30 ? _cidade.Substring(0, 30) : _cidade;
-                                ficha.Cep = _cep ?? "14870000";
-                                ficha.Cpf = _cpfcnpj;
-                                ficha.Numero_documento = _novo_documento;
-                                ficha.Data_vencimento = Convert.ToDateTime(item.Data_Vencimento);
-                                ficha.Valor_documento = Convert.ToDecimal(item.Soma_Principal);
-                                ficha.Uf = _uf;
+                                Ficha_compensacao_documento ficha = new Ficha_compensacao_documento {
+                                    Nome = _nome.Length > 40 ? _nome.Substring(0, 40) : _nome,
+                                    Endereco = _endereco.Length > 40 ? _endereco.Substring(0, 40) : _endereco,
+                                    Bairro = _bairro.Length > 15 ? _bairro.Substring(0, 15) : _bairro,
+                                    Cidade = _cidade.Length > 30 ? _cidade.Substring(0, 30) : _cidade,
+                                    Cep = _cep ?? "14870000",
+                                    Cpf = _cpfcnpj,
+                                    Numero_documento = _novo_documento,
+                                    Data_vencimento = Convert.ToDateTime(item.Data_Vencimento),
+                                    Valor_documento = Convert.ToDecimal(item.Soma_Principal),
+                                    Uf = _uf
+                                };
                                 if (item.Data_Vencimento >= Convert.ToDateTime( DateTime.Now.ToString("dd/MM/yyyy"))) {
                                     Exception ex = tributario_class.Insert_Ficha_Compensacao_Documento(ficha);
                                     if (ex == null)
@@ -1601,37 +1605,38 @@ namespace GTI_Mvc.Controllers {
                                 List<Boletoguia> ListaBoleto = new List<Boletoguia>();
                                 foreach (DebitoStructure item in ListaDebito.Where(m => m.Codigo_Situacao == 3)) {
                                     if (item.Data_Vencimento >= Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy"))) {
-                                        Boletoguia reg = new Boletoguia();
-                                        reg.Usuario = "Gti.Web/LibParc";
-                                        reg.Computer = "web";
-                                        reg.Sid = nSid;
-                                        reg.Seq = _index;
-                                        reg.Codreduzido = _codigo.ToString("000000");
-                                        reg.Nome = _nome;
-                                        reg.Cpf = _cpfcnpj;
-                                        reg.Numimovel = _numero;
-                                        reg.Endereco = _endereco_rua;
-                                        reg.Complemento = _complemento;
-                                        reg.Bairro = _bairro;
-                                        reg.Cidade = "JABOTICABAL";
-                                        reg.Uf = "SP";
-                                        reg.Cep = _cep;
-                                        reg.Desclanc = _descricao_lancamento;
-                                        reg.Fulllanc = _descricao_lancamento;
-                                        reg.Numdoc = item.Numero_Documento.ToString();
-                                        reg.Numparcela = (short)item.Numero_Parcela;
-                                        reg.Datadoc = DateTime.Now;
-                                        reg.Datavencto = item.Data_Vencimento;
-                                        reg.Numdoc2 = item.Numero_Documento.ToString();
-                                        reg.Valorguia = item.Soma_Principal;
-                                        reg.Valor_ISS = 0;
-                                        reg.Valor_Taxa = 0;
-                                        reg.Totparcela = _totParcela;
-                                        reg.Obs = "Referente ao parcelamento de débitos: processo nº " + _processo;
-                                        reg.Numproc = _processo;
+                                    Boletoguia reg = new Boletoguia {
+                                        Usuario = "Gti.Web/LibParc",
+                                        Computer = "web",
+                                        Sid = nSid,
+                                        Seq = _index,
+                                        Codreduzido = _codigo.ToString("000000"),
+                                        Nome = _nome,
+                                        Cpf = _cpfcnpj,
+                                        Numimovel = _numero,
+                                        Endereco = _endereco_rua,
+                                        Complemento = _complemento,
+                                        Bairro = _bairro,
+                                        Cidade = "JABOTICABAL",
+                                        Uf = "SP",
+                                        Cep = _cep,
+                                        Desclanc = _descricao_lancamento,
+                                        Fulllanc = _descricao_lancamento,
+                                        Numdoc = item.Numero_Documento.ToString(),
+                                        Numparcela = (short)item.Numero_Parcela,
+                                        Datadoc = DateTime.Now,
+                                        Datavencto = item.Data_Vencimento,
+                                        Numdoc2 = item.Numero_Documento.ToString(),
+                                        Valorguia = item.Soma_Principal,
+                                        Valor_ISS = 0,
+                                        Valor_Taxa = 0,
+                                        Totparcela = _totParcela,
+                                        Obs = "Referente ao parcelamento de débitos: processo nº " + _processo,
+                                        Numproc = _processo
+                                    };
 
-                                        //***** GERA CÓDIGO DE BARRAS BOLETO REGISTRADO*****
-                                        DateTime _data_base = Convert.ToDateTime("07/10/1997");
+                                    //***** GERA CÓDIGO DE BARRAS BOLETO REGISTRADO*****
+                                    DateTime _data_base = Convert.ToDateTime("07/10/1997");
                                         TimeSpan ts = Convert.ToDateTime(item.Data_Vencimento) - _data_base;
                                         int _fator_vencto = ts.Days;
                                         string _quinto_grupo = String.Format("{0:D4}", _fator_vencto);
@@ -1660,40 +1665,38 @@ namespace GTI_Mvc.Controllers {
                                         } else
                                             reg.Parcela = reg.Numparcela.ToString("00") + "/" + _totParcela.ToString("00");
 
-                                        reg.Digitavel = _linha_digitavel;
-                                        reg.Codbarra = _codigo_barra;
-                                        reg.Nossonumero = _convenio + String.Format("{0:D10}", Convert.ToInt64(reg.Numdoc));
-                                        ListaBoleto.Add(reg);
-                                        _index++;
-                                    }
-                                }
-                                Warning[] warnings;
-                                string[] streamIds;
-                                string mimeType = string.Empty;
-                                string encoding = string.Empty;
-                                string extension = string.Empty;
-                                Session["sid"] = "";
-                                Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
-                                if (ListaBoleto.Count > 0) {
-                                    tributario_Class.Insert_Carne_Web(Convert.ToInt32(ListaBoleto[0].Codreduzido), DateTime.Now.Year);
-                                    DataSet Ds = Functions.ToDataSet(ListaBoleto);
-                                    ReportDataSource rdsAct = new ReportDataSource("dsBoletoGuia", Ds.Tables[0]);
-                                    ReportViewer viewer = new ReportViewer();
-                                    viewer.LocalReport.Refresh();
-                                    viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Carne_Parcelamento.rdlc"); ;
-                                    viewer.LocalReport.DataSources.Add(rdsAct);
-                                    byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
-                                    
-                                    Response.Buffer = true;
-                                    Response.Clear();
-                                    Response.ContentType = mimeType;
-                                    Response.AddHeader("content-disposition", "attachment; filename= guia_pmj" + "." + extension);
-                                    Response.OutputStream.Write(bytes, 0, bytes.Length);
-                                    Response.Flush();
-                                    Response.End();
+                                    reg.Digitavel = _linha_digitavel;
+                                    reg.Codbarra = _codigo_barra;
+                                    reg.Nossonumero = _convenio + String.Format("{0:D10}", Convert.ToInt64(reg.Numdoc));
+                                    ListaBoleto.Add(reg);
+                                    _index++;
                                 }
                             }
-                       // }
+                            string mimeType = string.Empty;
+                            string encoding = string.Empty;
+                            string extension = string.Empty;
+                            Session["sid"] = "";
+                            Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
+                            if (ListaBoleto.Count > 0) {
+                                tributario_Class.Insert_Carne_Web(Convert.ToInt32(ListaBoleto[0].Codreduzido), DateTime.Now.Year);
+                                DataSet Ds = Functions.ToDataSet(ListaBoleto);
+                                ReportDataSource rdsAct = new ReportDataSource("dsBoletoGuia", Ds.Tables[0]);
+                                ReportViewer viewer = new ReportViewer();
+                                viewer.LocalReport.Refresh();
+                                viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Carne_Parcelamento.rdlc"); ;
+                                viewer.LocalReport.DataSources.Add(rdsAct);
+                                byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out string[] streamIds, out Warning[] warnings);
+
+                                Response.Buffer = true;
+                                Response.Clear();
+                                Response.ContentType = mimeType;
+                                Response.AddHeader("content-disposition", "attachment; filename= guia_pmj" + "." + extension);
+                                Response.OutputStream.Write(bytes, 0, bytes.Length);
+                                Response.Flush();
+                                Response.End();
+                            }
+                        }
+                        // }
                     }
                 }
             }
@@ -1719,7 +1722,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Detalhe_Boleto")]
         [HttpPost]
         public ActionResult Detalhe_Boleto(CertidaoViewModel model) {
-            string _cpfMask = model.CpfCnpjLabel;    
+            string _cpfMask = model.CpfCnpjLabel;
             if (Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
                 _cpfMask = _cpfMask.PadLeft(14, '0');
             } else {
@@ -1728,13 +1731,13 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-            string _cpf="", _cnpj="";
+            string _cpf = "", _cnpj = "";
             if (_cpfMask.Length == 11)
                 _cpf = _cpfMask;
             else
                 _cnpj = _cpfMask;
-//            _cnpj = model.CnpjValue;
-            bool _bCpf = _cpf == "" ? false : true;
+            //            _cnpj = model.CnpjValue;
+            bool _bCpf = _cpf != "";
             int _documento;
             if (model.Documento.Length < 8) {
                 ViewBag.Result = "Nº de documento inválido.";
@@ -1813,13 +1816,6 @@ namespace GTI_Mvc.Controllers {
 
             List<DebitoStructure> ListaParcelas = Carregaparcelas(_documento, dDataDoc);
             int nSid = tributarioRepository.Insert_Boleto_DAM(ListaParcelas, _documento, dDataDoc);
-
-
-            Warning[] warnings;
-            string[] streamIds;
-            string mimeType = string.Empty;
-            string encoding = string.Empty;
-            string extension = string.Empty;
             Session["sid"] = "";
             Tributario_bll tributario_Repository = new Tributario_bll("GTIconnection");
             List<GTI_Models.Models.Boleto> ListaBoleto = tributarioRepository.Lista_Boleto_DAM(nSid);
@@ -1828,8 +1824,8 @@ namespace GTI_Mvc.Controllers {
             ReportViewer viewer = new ReportViewer();
             viewer.LocalReport.Refresh();
             viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/rptDetalheBoleto.rdlc"); ;
-            viewer.LocalReport.DataSources.Add(rdsAct);          
-            byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
+            viewer.LocalReport.DataSources.Add(rdsAct);
+            byte[] bytes = viewer.LocalReport.Render("PDF", null, out string mimeType, out string encoding, out string extension, out string[] streamIds, out Warning[] warnings);
             tributario_Repository.Excluir_Carne(nSid);
             Response.Buffer = true;
             Response.Clear();
@@ -1847,11 +1843,9 @@ namespace GTI_Mvc.Controllers {
             List<DebitoStructure> ListaParcelas = tributario_Class.Lista_Tabela_Parcela_Documento(nNumDoc);
 
             short _plano = tributario_Class.Retorna_Plano_Desconto(nNumDoc);
-            decimal _perc = 0;
-
             foreach (DebitoStructure Linha in ListaParcelas) {
                 if (_plano > 0) {
-                    _perc = tributario_Class.Retorna_Plano_Desconto_Perc(_plano);
+                    decimal _perc = tributario_Class.Retorna_Plano_Desconto_Perc(_plano);
                     ListaParcelas[i].Soma_Juros = Convert.ToDecimal(ListaParcelas[i].Soma_Juros) - (Convert.ToDecimal(ListaParcelas[i].Soma_Juros) * _perc/100);
                     ListaParcelas[i].Soma_Multa = Convert.ToDecimal(ListaParcelas[i].Soma_Multa) - (Convert.ToDecimal(ListaParcelas[i].Soma_Multa) * _perc/100);
                     ListaParcelas[i].Soma_Total = ListaParcelas[i].Soma_Principal + ListaParcelas[i].Soma_Correcao;
@@ -1908,10 +1902,11 @@ namespace GTI_Mvc.Controllers {
                 return RedirectToAction("Login", "Home");
             NotificacaoIssViewModel model = new NotificacaoIssViewModel();
 
-            List<Usoconstr> Lista_Uso = new List<Usoconstr>();
-            Lista_Uso.Add(new Usoconstr() { Codusoconstr = 1, Descusoconstr = "Residencial" });
-            Lista_Uso.Add(new Usoconstr() { Codusoconstr = 2, Descusoconstr = "Industrial" });
-            Lista_Uso.Add(new Usoconstr() { Codusoconstr = 3, Descusoconstr = "Comercial" });
+            List<Usoconstr> Lista_Uso = new List<Usoconstr> {
+                new Usoconstr() { Codusoconstr = 1, Descusoconstr = "Residencial" },
+                new Usoconstr() { Codusoconstr = 2, Descusoconstr = "Industrial" },
+                new Usoconstr() { Codusoconstr = 3, Descusoconstr = "Comercial" }
+            };
             ViewBag.Lista_Uso = new SelectList(Lista_Uso, "Codusoconstr", "Descusoconstr");
 
             List<Categconstr> Lista_Cat = new List<Categconstr>();
@@ -1931,10 +1926,11 @@ namespace GTI_Mvc.Controllers {
         [Route("Notificacao_iss")]
         [HttpPost]
         public ActionResult Notificacao_iss(NotificacaoIssViewModel model,string action) {
-            List<Usoconstr> Lista_Uso = new List<Usoconstr>();
-            Lista_Uso.Add(new Usoconstr() { Codusoconstr = 1, Descusoconstr = "Residencial" });
-            Lista_Uso.Add(new Usoconstr() { Codusoconstr = 2, Descusoconstr = "Industrial" });
-            Lista_Uso.Add(new Usoconstr() { Codusoconstr = 3, Descusoconstr = "Comercial" });
+            List<Usoconstr> Lista_Uso = new List<Usoconstr> {
+                new Usoconstr() { Codusoconstr = 1, Descusoconstr = "Residencial" },
+                new Usoconstr() { Codusoconstr = 2, Descusoconstr = "Industrial" },
+                new Usoconstr() { Codusoconstr = 3, Descusoconstr = "Comercial" }
+            };
             ViewBag.Lista_Uso = new SelectList(Lista_Uso, "Codusoconstr", "Descusoconstr");
 
             List<int> Lista_Ano = new List<int>();
@@ -2037,17 +2033,16 @@ namespace GTI_Mvc.Controllers {
 
                 EnderecoStruct _imovel = imovelRepository.Dados_Endereco(model.Codigo_Imovel,TipoEndereco.Local);
                 CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(model.Codigo_Cidadao);
-                string _bairro = "",_endereco="",_compl="",_cidade="JABOTICABAL",_uf="SP",_nome="";
+                string _bairro = "",_endereco="",_compl="",_cidade="JABOTICABAL",_nome="";
                 string _cpf_cnpj = string.IsNullOrWhiteSpace(_cidadao.Cnpj) ? _cidadao.Cpf : _cidadao.Cnpj;
-                int _numero = 0, _cep = 14870000, _codigo = model.Codigo_Cidadao,_fiscal= Convert.ToInt32(Session["hashid"]);
+                int _cep = 14870000, _codigo = model.Codigo_Cidadao,_fiscal= Convert.ToInt32(Session["hashid"]);
                 short _ano=(short)model.Ano_Notificacao;
                 _nome = _cidadao.Nome;
                 _endereco = _imovel.Endereco ;
                 _bairro = _imovel.NomeBairro;
-                _numero = (int)_imovel.Numero;
+                int _numero = (int)_imovel.Numero;
                 _compl = _imovel.Complemento;
                 _cidade = "JABOTICABAL";
-                _uf = "SP";
                 _cep = Convert.ToInt32(_imovel.Cep);
 
                 if(string.IsNullOrEmpty(_endereco) || string.IsNullOrEmpty(_bairro)) {
@@ -2098,30 +2093,32 @@ namespace GTI_Mvc.Controllers {
                 ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
 
                 //grava o documento
-                Numdocumento regDoc = new Numdocumento();
-                regDoc.Valorguia = model.Valor_Total;
-                regDoc.Emissor = "Gti.Web/NotificaoIss";
-                regDoc.Datadocumento = DateTime.Now;
+                Numdocumento regDoc = new Numdocumento {
+                    Valorguia = model.Valor_Total,
+                    Emissor = "Gti.Web/NotificaoIss",
+                    Datadocumento = DateTime.Now,
 
-                regDoc.Registrado = true;
-                regDoc.Percisencao = 0;
+                    Registrado = true,
+                    Percisencao = 0
+                };
                 regDoc.Percisencao = 0;
                 int _novo_documento = tributarioRepository.Insert_Documento(regDoc);
                 //int _novo_documento = 17888999;
 
                 //grava o documento na parcela
-                Parceladocumento regParc = new Parceladocumento();
-                regParc.Codreduzido = _codigo;
-                regParc.Anoexercicio = _ano;
-                regParc.Codlancamento = 65;
-                regParc.Seqlancamento = _seq;
-                regParc.Numparcela = 1;
-                regParc.Codcomplemento = 0;
-                regParc.Numdocumento = _novo_documento;
-                regParc.Valorjuros = 0;
-                regParc.Valormulta = 0;
-                regParc.Valorcorrecao = 0;
-                regParc.Plano = 0;
+                Parceladocumento regParc = new Parceladocumento {
+                    Codreduzido = _codigo,
+                    Anoexercicio = _ano,
+                    Codlancamento = 65,
+                    Seqlancamento = _seq,
+                    Numparcela = 1,
+                    Codcomplemento = 0,
+                    Numdocumento = _novo_documento,
+                    Valorjuros = 0,
+                    Valormulta = 0,
+                    Valorcorrecao = 0,
+                    Plano = 0
+                };
                 tributarioRepository.Insert_Parcela_Documento(regParc);
 
                 string sHist = "Iss construção civil lançado no código " + _codigo + " processo nº " + model.Numero_Processo + " notificação nº " + model.Numero_Notificacao.ToString("0000") + "/" + model.Ano_Notificacao.ToString() + " Área notificada: " + model.Area_Notificada.ToString("#0.00") + " m²";
@@ -2151,17 +2148,18 @@ namespace GTI_Mvc.Controllers {
                 ex2 = imovelRepository.Incluir_Historico(ObsImovel);
 
                 //Enviar para registrar 
-                Ficha_compensacao_documento ficha = new Ficha_compensacao_documento();
-                ficha.Nome = _nome;
-                ficha.Endereco = _endereco.Length > 40 ? _endereco.Substring(0, 40) : _endereco;
-                ficha.Bairro = _bairro.Length > 15 ? _bairro.Substring(0, 15) : _bairro;
-                ficha.Cidade = _cidade.Length > 30 ? _cidade.Substring(0, 30) : _cidade;
-                ficha.Cep = Functions.RetornaNumero(_cep.ToString()) ?? "14870000";
-                ficha.Cpf = Functions.RetornaNumero(_cpf_cnpj);
-                ficha.Numero_documento = _novo_documento;
-                ficha.Data_vencimento = _dataVencto;
-                ficha.Valor_documento = Convert.ToDecimal(model.Valor_Total);
-                ficha.Uf = _uf;
+                Ficha_compensacao_documento ficha = new Ficha_compensacao_documento {
+                    Nome = _nome,
+                    Endereco = _endereco.Length > 40 ? _endereco.Substring(0, 40) : _endereco,
+                    Bairro = _bairro.Length > 15 ? _bairro.Substring(0, 15) : _bairro,
+                    Cidade = _cidade.Length > 30 ? _cidade.Substring(0, 30) : _cidade,
+                    Cep = Functions.RetornaNumero(_cep.ToString()) ?? "14870000",
+                    Cpf = Functions.RetornaNumero(_cpf_cnpj),
+                    Numero_documento = _novo_documento,
+                    Data_vencimento = _dataVencto,
+                    Valor_documento = Convert.ToDecimal(model.Valor_Total),
+                    Uf = "SP"
+                };
                 ex2 = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
                 ex2 = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
 
@@ -2180,20 +2178,20 @@ namespace GTI_Mvc.Controllers {
                     Codigo_imovel = model.Codigo_Imovel,
                     Complemento = _compl??"",
                     Cpf_cnpj = _cpf_cnpj,
-                    Data_gravacao=DateTime.Now,
-                    Data_vencimento=model.Data_vencimento,
+                    Data_gravacao= DateTime.Now,
+                    Data_vencimento= model.Data_vencimento,
                     Fiscal = _fiscal,
                     Habitese = model.Habitese,
-                    Isspago =model.Iss_Pago,
-                    Logradouro=_endereco,
-                    Nome=_nome,
-                    Numero=_numero,
+                    Isspago = model.Iss_Pago,
+                    Logradouro= _endereco,
+                    Nome= _nome,
+                    Numero= _numero,
                     Numero_notificacao = model.Numero_Notificacao,
-                    Processo =model.Numero_Processo,
-                    Uf=_uf,
-                    Uso=model.Uso_Construcao,
-                    Valorm2=model.Valor_m2,
-                    Valortotal=model.Valor_Total,
+                    Processo = model.Numero_Processo,
+                    Uf= "SP",
+                    Uso= model.Uso_Construcao,
+                    Valorm2= model.Valor_m2,
+                    Valortotal= model.Valor_Total,
                     Versao=1,
                     Situacao=2
                 };
@@ -2349,12 +2347,9 @@ namespace GTI_Mvc.Controllers {
             _not.Logradouro += ", " + _not.Numero.ToString();
             //Gera Boleto
 
-            List<NotificacaoIssReport> Lista = new List<NotificacaoIssReport>();
-            Lista.Add(_notR);
-
-            Warning[] warnings;
-            string[] streamIds;
-            string mimeType = string.Empty, encoding = string.Empty, extension = string.Empty;
+            List<NotificacaoIssReport> Lista = new List<NotificacaoIssReport> {
+                _notR
+            };
             DataSet Ds = Functions.ToDataSet(Lista);
             ReportDataSource rdsAct = new ReportDataSource("dsNotificacaoISS", Ds.Tables[0]);
             ReportViewer viewer = new ReportViewer();
@@ -2363,12 +2358,12 @@ namespace GTI_Mvc.Controllers {
             viewer.LocalReport.DataSources.Add(rdsAct);
 
 
-            List<ReportParameter> parameters = new List<ReportParameter>();
-            parameters.Add(new ReportParameter("NumeroNot", Lista[0].Numero_notificacao.ToString("0000") + "/" + Lista[0].Ano_notificacao.ToString()));
-            parameters.Add(new ReportParameter("Processo", Lista[0].Processo));
+            List<ReportParameter> parameters = new List<ReportParameter> {
+                new ReportParameter("NumeroNot", Lista[0].Numero_notificacao.ToString("0000") + "/" + Lista[0].Ano_notificacao.ToString()),
+                new ReportParameter("Processo", Lista[0].Processo)
+            };
             viewer.LocalReport.SetParameters(parameters);
-
-            byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
+            byte[] bytes = viewer.LocalReport.Render("PDF", null, out string mimeType, out string encoding, out string extension, out string[] streamIds, out Warning[] warnings);
             Response.Buffer = true;
             Response.Clear();
             Response.ContentType = mimeType;
@@ -2386,7 +2381,7 @@ namespace GTI_Mvc.Controllers {
                 return RedirectToAction("Login", "Home");
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             int _userid = Convert.ToInt32(Session["hashid"]);
-            bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
+            bool _func = Session["hashfunc"].ToString() == "S";
 
             List<Rodo_empresa> Lista = tributarioRepository.Lista_Rodo_empresa(_userid,_func);
             ViewBag.Lista_Empresa = new SelectList(Lista, "Codigo", "Nome");
@@ -2436,11 +2431,8 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Rod_plat_query(string DataDe,string DataAte,string Codigo,string Qtde1,string Qtde2,string Qtde3) {
             //            FormCollection collection=new FormCollection();
             var data1 = DataDe;
-            DateTime _data1;
-            bool t=DateTime.TryParse(data1,out _data1);
-            var data2 = DataAte;
-            DateTime _data2;
-            t = DateTime.TryParse(data2, out _data2);
+            bool t = DateTime.TryParse(data1, out DateTime _data1);
+            t = DateTime.TryParse(DataAte, out DateTime _data2);
             var cod = Codigo;
             int _codigo=Convert.ToInt32(cod);
             var qtde1 = Qtde1;
@@ -2451,7 +2443,7 @@ namespace GTI_Mvc.Controllers {
             int _qtde3 = Convert.ToInt32(qtde3);
             short _ano = (short)_data1.Year;
             int _userId =  Convert.ToInt32(Session["hashid"]);
-            decimal _valorGuia=0, _valorTotal1 = 0, _valorTotal2 = 0, _valorTotal3 = 0;
+            decimal _valorGuia =0;
 
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             decimal _valor1 = tributarioRepository.Retorna_Valor_Tributo(_ano, 154);
@@ -2485,7 +2477,7 @@ namespace GTI_Mvc.Controllers {
 
             //grava tributo
             if (_qtde1 > 0) {
-                _valorTotal1 = _valor1 * _qtde1;
+                decimal _valorTotal1 = _valor1 * _qtde1;
                 Debitotributo regTributo = new Debitotributo {
                     Codreduzido = _codigo,
                     Anoexercicio = _ano,
@@ -2499,7 +2491,7 @@ namespace GTI_Mvc.Controllers {
                 ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
             }
             if (_qtde2 > 0) {
-                _valorTotal2 = _valor2 * _qtde2;
+                decimal _valorTotal2 = _valor2 * _qtde2;
                 Debitotributo regTributo = new Debitotributo {
                     Codreduzido = _codigo,
                     Anoexercicio = _ano,
@@ -2513,7 +2505,7 @@ namespace GTI_Mvc.Controllers {
                 ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
             }
             if (_qtde3 > 0) {
-                _valorTotal3 = _valor3 * _qtde3;
+                decimal _valorTotal3 = _valor3 * _qtde3;
                 Debitotributo regTributo = new Debitotributo {
                     Codreduzido = _codigo,
                     Anoexercicio = _ano,
@@ -2540,28 +2532,30 @@ namespace GTI_Mvc.Controllers {
             }
 
             //grava o documento
-            Numdocumento regDoc = new Numdocumento();
-            regDoc.Valorguia = _valorGuia;
-            regDoc.Emissor = "Gti.Web/UsoPlataforma";
-            regDoc.Datadocumento = _dataVencto;
-            regDoc.Registrado = true;
-            regDoc.Percisencao = 0;
+            Numdocumento regDoc = new Numdocumento {
+                Valorguia = _valorGuia,
+                Emissor = "Gti.Web/UsoPlataforma",
+                Datadocumento = _dataVencto,
+                Registrado = true,
+                Percisencao = 0
+            };
             regDoc.Percisencao = 0;
             int _novo_documento = tributarioRepository.Insert_Documento(regDoc);
 
             //grava o documento na parcela
-            Parceladocumento regParc = new Parceladocumento();
-            regParc.Codreduzido = _codigo;
-            regParc.Anoexercicio = _ano;
-            regParc.Codlancamento = 52;
-            regParc.Seqlancamento = _seq;
-            regParc.Numparcela = 1;
-            regParc.Codcomplemento = 0;
-            regParc.Numdocumento = _novo_documento;
-            regParc.Valorjuros = 0;
-            regParc.Valormulta = 0;
-            regParc.Valorcorrecao = 0;
-            regParc.Plano = 0;
+            Parceladocumento regParc = new Parceladocumento {
+                Codreduzido = _codigo,
+                Anoexercicio = _ano,
+                Codlancamento = 52,
+                Seqlancamento = _seq,
+                Numparcela = 1,
+                Codcomplemento = 0,
+                Numdocumento = _novo_documento,
+                Valorjuros = 0,
+                Valormulta = 0,
+                Valorcorrecao = 0,
+                Plano = 0
+            };
             tributarioRepository.Insert_Parcela_Documento(regParc);
 
             string sHist = "REFERENTE A " + (_qtde1+_qtde2+_qtde3).ToString()  +  " TAXAS DE EMBARQUE DO TERMINAL RODOVIÁRIO DO PERÍODO DE " + _data1.ToString("dd/MM/yyyy")  +  " À " +  _data2.ToString("dd/MM/yyyy") + ".";
@@ -2601,32 +2595,32 @@ namespace GTI_Mvc.Controllers {
             //Enviar para registrar 
             Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
             CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(_codigo);
-
-            string _bairro = "", _endereco = "", _compl = "", _cidade = "JABOTICABAL", _uf = "SP", _nome = "";
+            string _bairro = "", _endereco = "", _compl = "", _cidade = "JABOTICABAL";
             string _cpf_cnpj = string.IsNullOrWhiteSpace(_cidadao.Cnpj) ? _cidadao.Cpf : _cidadao.Cnpj;
-            int _numero = 0, _cep = 14870000;
+            int _cep = 14870000;
             bool _r = _cidadao.EtiquetaC != "S";
-            _nome = _cidadao.Nome;
+            string _nome = _cidadao.Nome;
             _endereco = _r ? _cidadao.EnderecoR : _cidadao.EnderecoC;
             _bairro = _r ? _cidadao.NomeBairroR : _cidadao.NomeBairroC;
-            _numero = _r ? (int)_cidadao.NumeroR : (int)_cidadao.NumeroC;
+            int _numero = _r ? (int)_cidadao.NumeroR : (int)_cidadao.NumeroC;
             _compl = _r ? _cidadao.ComplementoR : _cidadao.ComplementoC;
             _cidade = _r ? _cidadao.NomeCidadeR : _cidadao.NomeCidadeC;
-            _uf = _r ? _cidadao.UfR : _cidadao.UfC;
+            string _uf = _r ? _cidadao.UfR : _cidadao.UfC;
             _cep = _r ? (int)_cidadao.CepR : (int)_cidadao.CepC;
 
 
-            Ficha_compensacao_documento ficha = new Ficha_compensacao_documento();
-            ficha.Nome = _nome;
-            ficha.Endereco = _endereco.Length > 40 ? _endereco.Substring(0, 40) : _endereco;
-            ficha.Bairro = _bairro.Length > 15 ? _bairro.Substring(0, 15) : _bairro;
-            ficha.Cidade = _cidade.Length > 30 ? _cidade.Substring(0, 30) : _cidade;
-            ficha.Cep = Functions.RetornaNumero(_cep.ToString()) ?? "14870000";
-            ficha.Cpf = Functions.RetornaNumero(_cpf_cnpj);
-            ficha.Numero_documento = _novo_documento;
-            ficha.Data_vencimento = _dataVencto;
-            ficha.Valor_documento = Convert.ToDecimal(_valorGuia);
-            ficha.Uf = _uf;
+            Ficha_compensacao_documento ficha = new Ficha_compensacao_documento {
+                Nome = _nome,
+                Endereco = _endereco.Length > 40 ? _endereco.Substring(0, 40) : _endereco,
+                Bairro = _bairro.Length > 15 ? _bairro.Substring(0, 15) : _bairro,
+                Cidade = _cidade.Length > 30 ? _cidade.Substring(0, 30) : _cidade,
+                Cep = Functions.RetornaNumero(_cep.ToString()) ?? "14870000",
+                Cpf = Functions.RetornaNumero(_cpf_cnpj),
+                Numero_documento = _novo_documento,
+                Data_vencimento = _dataVencto,
+                Valor_documento = Convert.ToDecimal(_valorGuia),
+                Uf = _uf
+            };
             ex2 = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
             ex2 = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
 
@@ -2635,9 +2629,8 @@ namespace GTI_Mvc.Controllers {
 
         public ActionResult Rod_uso_plataforma_print(string p1,string p2,string p3,string p4) {
 
-            DateTime _datade,_dataate;
-            bool b = DateTime.TryParseExact(p1, "MM/dd/yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out _datade);
-            bool c = DateTime.TryParseExact(p2, "MM/dd/yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out _dataate);
+            bool b = DateTime.TryParseExact(p1, "MM/dd/yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _datade);
+            bool c = DateTime.TryParseExact(p2, "MM/dd/yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _dataate);
             int _ano = _datade.Year;
             short _seq = Convert.ToInt16(p3);
             int _codigo = Convert.ToInt32(p4);
@@ -2653,19 +2646,18 @@ namespace GTI_Mvc.Controllers {
 
             Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
             CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(_codigo);
-
-            string _bairro = "", _endereco = "", _compl = "", _cidade = "JABOTICABAL", _uf = "SP", _nome = "";
+            string _bairro = "", _endereco = "", _compl = "", _cidade = "JABOTICABAL", _nome = "";
             string _cpf_cnpj = string.IsNullOrWhiteSpace(_cidadao.Cnpj) ? _cidadao.Cpf : _cidadao.Cnpj;
-            int _numero = 0, _cep = 14870000,  _userId = Convert.ToInt32(Session["hashid"]);
+            int _userId = Convert.ToInt32(Session["hashid"]);
             bool _r = _cidadao.EtiquetaC != "S";
             _nome = _cidadao.Nome;
             _endereco = _r ? _cidadao.EnderecoR : _cidadao.EnderecoC;
             _bairro = _r ? _cidadao.NomeBairroR : _cidadao.NomeBairroC;
-            _numero = _r ? (int)_cidadao.NumeroR : (int)_cidadao.NumeroC;
+            int _numero = _r ? (int)_cidadao.NumeroR : (int)_cidadao.NumeroC;
             _compl = _r ? _cidadao.ComplementoR : _cidadao.ComplementoC;
             _cidade = _r ? _cidadao.NomeCidadeR : _cidadao.NomeCidadeC;
-            _uf = _r ? _cidadao.UfR : _cidadao.UfC;
-            _cep = _r ? (int)_cidadao.CepR : (int)_cidadao.CepC;
+            string _uf = _r ? _cidadao.UfR : _cidadao.UfC;
+            int _cep = _r ? (int)_cidadao.CepR : (int)_cidadao.CepC;
 
             List<SpExtrato> ListaTributo = tributarioRepository.Lista_Extrato_Tributo(_codigo, (short)_ano, (short)_ano, 52, 52, _seqdebito, _seqdebito, 1, 1, 0, 0, 0, 99, DateTime.Now, "Web");
             decimal _vp1 = 0, _vm1 = 0, _vj1 = 0, _vt1 = 0;
@@ -2763,26 +2755,22 @@ namespace GTI_Mvc.Controllers {
                 Valor3T = _vt3,
                 Valor_Guia=reg.Valor_Guia
             };
-            
+
             //Gera Boleto
 
-            List<UsoPlataformaReport> Lista = new List<UsoPlataformaReport>();
-            Lista.Add(_usoR);
-
-            Warning[] warnings;
-            string[] streamIds;
-            string mimeType = string.Empty, encoding = string.Empty, extension = string.Empty;
+            List<UsoPlataformaReport> Lista = new List<UsoPlataformaReport> {
+                _usoR
+            };
             DataSet Ds = Functions.ToDataSet(Lista);
             ReportDataSource rdsAct = new ReportDataSource("dsUsoPlataforma", Ds.Tables[0]);
             ReportViewer viewer = new ReportViewer();
             viewer.LocalReport.Refresh();
             viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Boleto_Uso_Plataforma.rdlc");
             viewer.LocalReport.DataSources.Add(rdsAct);
-
-            byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
+            byte[] bytes = viewer.LocalReport.Render("PDF", null, out string mimeType, out string encoding, out string extension, out string[] streamIds, out Warning[] warnings);
             Response.Buffer = true;
             Response.Clear();
-            Response.ContentType = mimeType;
+            Response.ContentType = string.Empty;
             Response.AddHeader("content-disposition", "attachment; filename= UsoPlataforma" + "." + extension);
             Response.OutputStream.Write(bytes, 0, bytes.Length);
             Response.Flush();
@@ -2791,9 +2779,8 @@ namespace GTI_Mvc.Controllers {
         }
 
         public ActionResult Rod_uso_plataforma_cancel(string p1, string p2, string p3, string p4,string p5) {
-            DateTime _datade, _dataate;
-            bool b = DateTime.TryParseExact(p1, "MM/dd/yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out _datade);
-            bool c = DateTime.TryParseExact(p2, "MM/dd/yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out _dataate);
+            bool b = DateTime.TryParseExact(p1, "MM/dd/yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _datade);
+            bool c = DateTime.TryParseExact(p2, "MM/dd/yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _dataate);
             int _ano = _datade.Year;
             short _seq = Convert.ToInt16(p3);
             int _codigo = Convert.ToInt32(p4);

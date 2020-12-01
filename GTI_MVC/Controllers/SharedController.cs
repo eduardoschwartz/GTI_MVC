@@ -224,6 +224,8 @@ namespace GTI_MVC.Controllers {
         [Route("Cep_inc")]
         [HttpGet]
         public ActionResult Cep_inc() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
             CepViewModel model = new CepViewModel();
             return View(model);
         }
@@ -349,7 +351,7 @@ namespace GTI_MVC.Controllers {
                     Cidadecodigo=model.Cidade_Codigo_New==0?model.Cidade_Codigo:model.Cidade_Codigo_New,
                     Bairrocodigo=model.Bairro_Codigo_New,
                     Logradouro=model.Logradouro_New.ToUpper(),
-                    Func = Session["hashfunc"].ToString() == "S" ? true : false,
+                    Func = Session["hashfunc"].ToString() == "S",
                     Userid= Convert.ToInt32(Session["hashid"])
                 };
                 Exception ex = enderecoRepository.Incluir_CepDB(_reg);
