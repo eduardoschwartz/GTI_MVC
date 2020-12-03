@@ -145,7 +145,7 @@
                                 <td>
                                     <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Comprador.Cep, new { @class = "maskCep", @id = "txtCep", style = "width:90px;height:25px" })</label>
                                     <button type="submit" class="btn btn-info" name="action" value="btnCepCompradorOK" data-balloon-length="medium" aria-label="Digite um Cep válido e clique em pesquisar." data-balloon-pos="up">Pesquisar</button>
-                                    <label style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank">aqui</a> para consultar o Cep</label><br />
+                                    <label style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank">aqui</a> para consultar o Cep</label><span style="color:red">&nbsp;*</span><br /><br />
                                 </td>
                             </tr>
                         </table>
@@ -212,6 +212,7 @@
                                 </td>
                             </tr>
                         </table>
+                        <span style="color:red;font-size:12px">*Caso o cep não retorne os dados do endereço, retorne ao menu de opções e faça o cadastro do mesmo. Mais informações no manual do usuário.</span>
                     }
                 </div>
 
