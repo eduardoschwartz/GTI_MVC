@@ -3154,8 +3154,12 @@ namespace GTI_Mvc.Controllers {
                                 s++;
                             }
                             oldpos = b.ToString();
-                            if (Lista_Logradouro.Count>0)
-                                model.Comprador.Logradouro_Nome = Lista_Logradouro[b - 1].Endereco;
+                            if (Lista_Logradouro.Count > 0) {
+                                if(b<Lista_Logradouro.Count)
+                                    model.Comprador.Logradouro_Nome = Lista_Logradouro[b - 1].Endereco;
+                                else
+                                    model.Comprador.Logradouro_Nome = Lista_Logradouro[Lista_Logradouro.Count-1 ].Endereco;
+                            }
                         }
                     }
                 }
