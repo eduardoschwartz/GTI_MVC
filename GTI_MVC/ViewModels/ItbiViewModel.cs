@@ -76,6 +76,7 @@ namespace GTI_Mvc.ViewModels {
         public List<SelectListItem> Lista_Natureza_Isencao { get; set; }
         public int Natureza_Isencao_Codigo { get; set; }
         public string Data_Validade { get; set; }
+        public string Ano_Selected { get; set; }
 
         public ItbiViewModel() {
             Lista_Comprador = new List<ListCompradorEditorViewModel>();

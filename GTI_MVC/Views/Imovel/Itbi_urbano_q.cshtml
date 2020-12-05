@@ -642,7 +642,7 @@
                                         @Html.HiddenFor(modelItem => item.Arquivo)
                                     </td>
                                     <td>
-                                        <a href="@Url.Action("Itbi_download", "Imovel", new { @p = Model.Guid, @f = item.Arquivo })" title="Download"> <img src="@Url.Content("~/images/downarrow.gif")" /></a>
+                                        <a href="@Url.Action("Itbi_download", "Imovel", new { @p = Model.Guid, @f = item.Arquivo ,@a=Model.Itbi_Ano})" title="Download"> <img src="@Url.Content("~/images/downarrow.gif")" /></a>
                                     </td>
                                 </tr>
                             }

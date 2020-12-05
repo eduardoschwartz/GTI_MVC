@@ -1119,7 +1119,6 @@ namespace GTI_Mvc.Controllers {
             return null;
         }
 
-
         [Route("CadImovel")]
         [HttpGet]
         public ViewResult CadImovel() {
@@ -1529,9 +1528,11 @@ namespace GTI_Mvc.Controllers {
                             ViewBag.Error = "* Este tipo de arquivo não pode ser enviado como anexo.";
                             return View(model);
                         } else {
+                            string _ano = model.Itbi_Ano == 0 ? DateTime.Now.Year.ToString() : model.Itbi_Ano.ToString();
+                            string _path = "~/Files/Itbi/" + _ano + "/";
                             var fileName = Path.GetFileName(file.FileName);
-                            Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath("~/Files/Itbi/") + model.Guid);
-                            var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Files/Itbi/" + model.Guid), fileName);
+                            Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath(_path) + model.Guid);
+                            var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path + model.Guid), fileName);
                             file.SaveAs(path);
 
                             byte seqA = imovelRepository.Retorna_Itbi_Anexo_Disponivel(model.Guid);
@@ -1909,9 +1910,11 @@ namespace GTI_Mvc.Controllers {
                             ViewBag.Error = "* Este tipo de arquivo não pode ser enviado como anexo.";
                             return View(model);
                         } else {
+                            string _ano = model.Itbi_Ano == 0 ? DateTime.Now.Year.ToString() : model.Itbi_Ano.ToString();
+                            string _path = "~/Files/Itbi/" + _ano + "/";
                             var fileName = Path.GetFileName(file.FileName);
-                            Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath("~/Files/Itbi/") + model.Guid);
-                            var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Files/Itbi/" + model.Guid), fileName);
+                            Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath(_path) + model.Guid);
+                            var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path + model.Guid), fileName);
                             file.SaveAs(path);
 
                             byte seqA = imovelRepository.Retorna_Itbi_Anexo_Disponivel(model.Guid);
@@ -1996,7 +1999,7 @@ namespace GTI_Mvc.Controllers {
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             int _userId = Convert.ToInt32(Session["hashid"]);
             bool _fiscal = Session["hashfiscalitbi"] != null && Session["hashfiscalitbi"].ToString() == "S" ? true : false;
-            List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Query(_userId, _fiscal, 0);
+            List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Query(_userId, _fiscal, 0,DateTime.Now.Year);
             List<ItbiViewModel> model = new List<ItbiViewModel>();
             foreach (Itbi_Lista reg in Lista) {
                 ItbiViewModel item = new ItbiViewModel() {
@@ -2006,7 +2009,8 @@ namespace GTI_Mvc.Controllers {
                     Tipo_Imovel = reg.Tipo,
                     Comprador_Nome_tmp = Functions.TruncateTo(reg.Nome_Comprador, 25),
                     Situacao_Itbi_Nome = reg.Situacao,
-                    Situacao_Itbi_codigo=reg.Situacao_Codigo
+                    Situacao_Itbi_codigo = reg.Situacao_Codigo,
+                    Ano_Selected = DateTime.Now.Year.ToString()
                 };
                 model.Add(item);
             }
@@ -2017,10 +2021,13 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_query")]
         [HttpPost]
         public ViewResult Itbi_query(List<ItbiViewModel> model) {
+            string _ano = model[0].Ano_Selected ?? "";
+            if (_ano == "")
+                _ano = "2020";
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             int _userId = Convert.ToInt32(Session["hashid"]);
             bool _fiscal = Session["hashfiscalitbi"] != null && Session["hashfiscalitbi"].ToString() == "S" ? true : false;
-            List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Query(_userId, _fiscal, Convert.ToInt32(model[0].Status_Query));
+            List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Query(_userId, _fiscal, Convert.ToInt32(model[0].Status_Query),Convert.ToInt32(_ano));
             model.Clear();
             foreach (Itbi_Lista reg in Lista) {
                 ItbiViewModel item = new ItbiViewModel() {
@@ -2344,9 +2351,11 @@ namespace GTI_Mvc.Controllers {
                             ViewBag.Error = "* Este tipo de arquivo não pode ser enviado como anexo.";
                             return View(model);
                         } else {
+                            string _ano = model.Itbi_Ano == 0 ? DateTime.Now.Year.ToString() : model.Itbi_Ano.ToString();
+                            string _path = "~/Files/Itbi/" + _ano + "/";
                             var fileName = Path.GetFileName(file.FileName);
-                            Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath("~/Files/Itbi/") + model.Guid);
-                            var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Files/Itbi/" + model.Guid), fileName);
+                            Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath(_path) + model.Guid);
+                            var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path + model.Guid), fileName);
                             file.SaveAs(path);
 
                             byte seqA = imovelRepository.Retorna_Itbi_Anexo_Disponivel(model.Guid);
@@ -2673,9 +2682,11 @@ namespace GTI_Mvc.Controllers {
                             ViewBag.Error = "* Este tipo de arquivo não pode ser enviado como anexo.";
                             return View(model);
                         } else {
+                            string _ano = model.Itbi_Ano == 0 ? DateTime.Now.Year.ToString() : model.Itbi_Ano.ToString();
+                            string _path = "~/Files/Itbi/" + _ano + "/";
                             var fileName = Path.GetFileName(file.FileName);
-                            Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath("~/Files/Itbi/") + model.Guid);
-                            var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Files/Itbi/" + model.Guid), fileName);
+                            Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath(_path) + model.Guid);
+                            var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path + model.Guid), fileName);
                             file.SaveAs(path);
 
                             byte seqA = imovelRepository.Retorna_Itbi_Anexo_Disponivel(model.Guid);
@@ -2761,10 +2772,11 @@ namespace GTI_Mvc.Controllers {
             }
         }
 
-        public FileResult Itbi_Download(string p, string f) {
+        public FileResult Itbi_Download(string p, string f, int a) {
             string fullName = Server.MapPath("~");
             fullName = Path.Combine(fullName, "Files");
             fullName = Path.Combine(fullName, "Itbi");
+            fullName = Path.Combine(fullName, a.ToString());
             fullName = Path.Combine(fullName, p);
             fullName = Path.Combine(fullName, f);
             fullName = fullName.Replace("\\", "/");
@@ -2783,7 +2795,6 @@ namespace GTI_Mvc.Controllers {
             ItbiViewModel model = Retorna_Itbi_Gravado(p);
             return View(model);
         }
-
 
         [Route("Itbi_rural_q")]
         [HttpPost]
@@ -3120,7 +3131,6 @@ namespace GTI_Mvc.Controllers {
             //################### Grava Itbi_Main #####################
 
             if (model.Guid == null) {
-
                 _guid = Guid.NewGuid().ToString("N");
                 model.Guid = _guid;
                 Itbi_main regMain = new Itbi_main() {

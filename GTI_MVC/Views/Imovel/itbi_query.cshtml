@@ -34,16 +34,28 @@
                 <div class="panel-heading">
                     Consulta de ITBI
                     @{
-                    var selectList = new SelectList(new List<SelectListItem>
-                        {
+                        var selectList = new SelectList(new List<SelectListItem>
+                            {
                         new SelectListItem {Text = "Enviado para análise", Value = "1" },
                         new SelectListItem {Text = "Aguardando pagamento", Value = "2"},
                         new SelectListItem {Text = "Itbi's concluídos", Value = "3" },
                         new SelectListItem {Text = "Itbi's cancelados", Value = "4"},
                         }, "Value", "Text");
 
-                        }
-                        <Label style="padding-left:10px">Exibir:&nbsp;</Label>@Html.DropDownListFor(m => m[0].Status_Query, selectList, "(Exibir todos os ITBI's)", new { onchange = "this.form.submit()" })
+                        var selectListAno = new SelectList(new List<SelectListItem>
+                            {
+                        new SelectListItem {Text = "2020", Value = "2020" },
+                        new SelectListItem {Text = "2021", Value = "2021"}
+                        }, "Value", "Text");
+
+                    }
+                    <Label style="padding-left:10px">Exibir:&nbsp;</Label>@Html.DropDownListFor(m => m[0].Status_Query, selectList, "(Exibir todos os ITBI's)", new { onchange = "this.form.submit()" })
+                    <label style="padding-left:20px">
+                        Exercício:&nbsp;
+                        @Html.DropDownListFor(m => m[0].Ano_Selected, selectListAno, null, new { @id = "AnoDropDown",@style="font-weight:normal", onchange = "this.form.submit()" })
+                    </label>  <br />
+
+
                 </div>
                 <div class="panel-body">
                 
