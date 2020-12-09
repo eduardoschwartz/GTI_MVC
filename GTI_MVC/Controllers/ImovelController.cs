@@ -789,6 +789,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Carne_Iptu(CertidaoViewModel model) {
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             int _codigo = 0;
+            int _ano = 2021;
             bool _existeCod = false;
             ImovelDetailsViewModel imovelDetailsViewModel = new ImovelDetailsViewModel();
 
@@ -832,7 +833,7 @@ namespace GTI_Mvc.Controllers {
             Laseriptu _calc = imovelRepository.Dados_IPTU(_codigo, DateTime.Now.Year);
             List<ProprietarioStruct> _prop = imovelRepository.Lista_Proprietario(_codigo, true);
 
-            List<DebitoStructure> Extrato_Lista = tributario_Class.Lista_Parcelas_IPTU(_codigo, DateTime.Now.Year);
+            List<DebitoStructure> Extrato_Lista = tributario_Class.Lista_Parcelas_IPTU(_codigo,_ano);
             if (Extrato_Lista.Count == 0) {
                 model.ErrorMessage = "Não é possível emitir 2ª via de IPTU para este contribuinte.";
                 return View(model);
@@ -919,7 +920,7 @@ namespace GTI_Mvc.Controllers {
                 viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Carne_IPTU.rdlc"); ;
                 viewer.LocalReport.DataSources.Add(rdsAct); // Add  datasource here       
 
-                Laseriptu RegIPTU = tributario_Class.Carrega_Dados_IPTU(Convert.ToInt32(ListaBoleto[0].Codreduzido), DateTime.Now.Year);
+                Laseriptu RegIPTU = tributario_Class.Carrega_Dados_IPTU(Convert.ToInt32(ListaBoleto[0].Codreduzido), _ano);
 
                 List<ReportParameter> parameters = new List<ReportParameter>();
                 parameters.Add(new ReportParameter("QUADRA", "Quadra: " + ListaBoleto[0].Quadra + " Lote: " + ListaBoleto[0].Lote));

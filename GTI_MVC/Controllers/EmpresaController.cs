@@ -937,7 +937,7 @@ namespace GTI_Mvc.Controllers {
             int _codigo = Convert.ToInt32(model.Inscricao);
             string _cpf =   model.CpfValue==null?"":Functions.RetornaNumero(model.CpfValue);
             string _cnpj = model.CnpjValue == null ? "" : Functions.RetornaNumero(model.CnpjValue);
-            int _ano = 2020;
+            int _ano = 2021;
 
             if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
                 ViewBag.Result = "Código de verificação inválido.";
@@ -1184,7 +1184,7 @@ namespace GTI_Mvc.Controllers {
             int _codigo = Convert.ToInt32(model.Inscricao);
             string _cpf = model.CpfValue == null ? "" : Functions.RetornaNumero(model.CpfValue);
             string _cnpj = model.CnpjValue == null ? "" : Functions.RetornaNumero(model.CnpjValue);
-            int _ano = 2020;
+            int _ano = 2021;
 
             if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
                 ViewBag.Result = "Código de verificação inválido.";

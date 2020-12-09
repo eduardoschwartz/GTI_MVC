@@ -875,7 +875,7 @@ namespace GTI_Dal.Classes {
                            join pd in db.Parceladocumento on new { p1 = dp.Codreduzido, p2 = dp.Anoexercicio, p3 = dp.Codlancamento, p4 = dp.Seqlancamento, p5 = dp.Numparcela, p6 = dp.Codcomplemento }
                                                       equals new { p1 = pd.Codreduzido, p2 = pd.Anoexercicio, p3 = pd.Codlancamento, p4 = pd.Seqlancamento, p5 = pd.Numparcela, p6 = pd.Codcomplemento } into dppd from pd in dppd.DefaultIfEmpty()
                            join nd in db.Numdocumento on pd.Numdocumento equals nd.numdocumento 
-                           where dp.Codreduzido == nCodigo && dp.Anoexercicio == nAno && dp.Codlancamento == 1 && dp.Seqlancamento == 0   && nd.Registrado==true 
+                           where dp.Codreduzido == nCodigo && dp.Anoexercicio == nAno && dp.Codlancamento == 1 && dp.Seqlancamento == 0  && nd.Registrado==true
                            orderby new { dp.Numparcela, dp.Codcomplemento }
                            select new { dp.Codreduzido, dp.Anoexercicio, dp.Codlancamento, dp.Seqlancamento, dp.Numparcela, dp.Codcomplemento, dp.Datavencimento, dt.Valortributo, pd.Numdocumento,nd.Datadocumento });
 
@@ -1977,7 +1977,7 @@ Proximo:;
         }
 
         public List<DebitoStructure> Lista_Parcelas_Vigilancia(int nCodigo, int nAno) {
-            DateTime dDataBase = Convert.ToDateTime("01/01/2020");
+            DateTime dDataBase = Convert.ToDateTime("01/01/2021");
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var reg = (from dp in db.Debitoparcela
                            join dt in db.Debitotributo on new { p1 = dp.Codreduzido, p2 = dp.Anoexercicio, p3 = dp.Codlancamento, p4 = dp.Seqlancamento, p5 = dp.Numparcela, p6 = dp.Codcomplemento }

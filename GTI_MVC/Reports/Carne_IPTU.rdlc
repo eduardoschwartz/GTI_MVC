@@ -716,7 +716,6 @@
                           </Style>
                         </Textbox>
                         <ColSpan>2</ColSpan>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />
@@ -4697,7 +4696,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>NOTIFICAÇÃO DE LANÇAMENTO - IPTU 2020</Value>
+                    <Value>NOTIFICAÇÃO DE LANÇAMENTO - IPTU 2021</Value>
                     <Style>
                       <FontSize>9pt</FontSize>
                       <FontWeight>Bold</FontWeight>
