@@ -839,8 +839,12 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
+            string _msg="" ;
             List<Boletoguia> ListaBoleto = new List<Boletoguia>();
             foreach (DebitoStructure item in Extrato_Lista) {
+                if (item.Numero_Parcela > 0)
+                    _msg = "Após o vencimento tirar 2ª via no site da prefeitura www.jaboticabal.sp.gov.br";
+
                 Boletoguia reg = new Boletoguia() {
                     Codreduzido = _codigo.ToString("000000"),
                     Nome = _prop[0].Nome,
@@ -857,7 +861,8 @@ namespace GTI_Mvc.Controllers {
                     Numdoc = item.Numero_Documento.ToString(),
                     Nossonumero = "287353200" + item.Numero_Documento.ToString(),
                     Datavencto = Convert.ToDateTime(item.Data_Vencimento),
-                    Valorguia = Convert.ToDecimal(item.Soma_Principal)
+                    Valorguia = Convert.ToDecimal(item.Soma_Principal),
+                    Msg=_msg
                 };
 
                 if (item.Numero_Parcela == 0) {

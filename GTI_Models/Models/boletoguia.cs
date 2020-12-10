@@ -46,5 +46,6 @@ namespace GTI_Models.Models {
         public string Inscricao_cadastral { get; set; }
         public decimal? Valor_ISS { get; set; }
         public decimal? Valor_Taxa { get; set; }
+        public string Msg { get; set; }
     }
 }

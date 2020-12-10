@@ -2254,8 +2254,12 @@ namespace GTI_Mvc.Controllers {
             Notificacao_Iss_Tabela _tabela = tributarioRepository.Retorna_Notificacao_Iss_Tabela(_not.Ano_notificacao);
 
             Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
-            Assinatura _ass = sistemaRepository.Retorna_Usuario_Assinatura(_not.Fiscal);
 
+            if (_not.Fiscal == 0)
+                _not.Fiscal = 421;
+            Assinatura _ass = sistemaRepository.Retorna_Usuario_Assinatura(_not.Fiscal);
+            if (_ass == null)
+                _ass = new Assinatura();
             string _nosso_numero = "287353200" + _not.Numero_guia.ToString();
             string _convenio = "2873532";
             //***** GERA CÓDIGO DE BARRAS BOLETO REGISTRADO*****
@@ -2283,11 +2287,10 @@ namespace GTI_Mvc.Controllers {
             string _codigo_barra = Functions.Gera2of5Str(_barra);
             //**************************************************
 
-
             NotificacaoIssReport _notR = new NotificacaoIssReport() {
                 Ano_notificacao = _not.Ano_notificacao,
                 Area = _not.Area,
-                Assinatura = _ass.Fotoass2,
+                Assinatura = _ass.Fotoass2==null?new byte[0]:_ass.Fotoass2,
                 Bairro = _not.Bairro,
                 Decreto = _tabela.Decreto,
                 C179 = _tabela.C179,
@@ -2309,7 +2312,7 @@ namespace GTI_Mvc.Controllers {
                 C691 = _tabela.C691,
                 Cargo = _ass.Cargo,
                 Categoria = _not.Categoria,
-                Categoria_nome=_not.Categoria_Nome,
+                Categoria_nome=_not.Categoria_Nome??"",
                 Cep = _not.Cep,
                 Cidade = _not.Cidade,
                 Codigo_barra = _codigo_barra,

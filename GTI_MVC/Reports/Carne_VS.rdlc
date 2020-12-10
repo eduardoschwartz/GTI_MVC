@@ -124,22 +124,6 @@
           <DataField>cep</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="numbarra2a">
-          <DataField>numbarra2a</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="numbarra2b">
-          <DataField>numbarra2b</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="numbarra2c">
-          <DataField>numbarra2c</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="numbarra2d">
-          <DataField>numbarra2d</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
         <Field Name="desclanc">
           <DataField>desclanc</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -176,10 +160,14 @@
           <DataField>valor_taxa</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
+        <Field Name="msg">
+          <DataField>msg</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>dsBoletoGuia</rd:DataSetName>
-        <rd:SchemaPath>D:\Work\GTI_V3\GTI_Web\DataSets\dsBoletoGuia.xsd</rd:SchemaPath>
+        <rd:SchemaPath>D:\Work\GTI_MVC\GTI_MVC\Datasets\dsBoletoGuia.xsd</rd:SchemaPath>
         <rd:TableName>boletoguia</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
@@ -3817,23 +3805,16 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox161">
+                        <Textbox Name="msg">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Após o vencimento tirar 2ª via no site da prefeitura </Value>
+                                  <Value>=Fields!msg.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>www.jaboticabal.sp.gov.br</Value>
-                                  <Style>
-                                    <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -3842,7 +3823,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox161</rd:DefaultName>
+                          <rd:DefaultName>msg</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -3853,6 +3834,7 @@
                           </Style>
                         </Textbox>
                         <ColSpan>7</ColSpan>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />

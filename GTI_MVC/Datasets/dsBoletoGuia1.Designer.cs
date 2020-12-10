@@ -347,6 +347,8 @@ namespace GTI_MVC.Datasets {
             
             private global::System.Data.DataColumn columnvalor_taxa;
             
+            private global::System.Data.DataColumn columnmsg;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public boletoguiaDataTable() {
@@ -654,6 +656,14 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn msgColumn {
+                get {
+                    return this.columnmsg;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -723,7 +733,8 @@ namespace GTI_MVC.Datasets {
                         System.DateTime Datadoc, 
                         string inscricao_cadastral, 
                         decimal valor_iss, 
-                        decimal valor_taxa) {
+                        decimal valor_taxa, 
+                        string msg) {
                 boletoguiaRow rowboletoguiaRow = ((boletoguiaRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         usuario,
@@ -759,7 +770,8 @@ namespace GTI_MVC.Datasets {
                         Datadoc,
                         inscricao_cadastral,
                         valor_iss,
-                        valor_taxa};
+                        valor_taxa,
+                        msg};
                 rowboletoguiaRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowboletoguiaRow);
                 return rowboletoguiaRow;
@@ -824,6 +836,7 @@ namespace GTI_MVC.Datasets {
                 this.columninscricao_cadastral = base.Columns["inscricao_cadastral"];
                 this.columnvalor_iss = base.Columns["valor_iss"];
                 this.columnvalor_taxa = base.Columns["valor_taxa"];
+                this.columnmsg = base.Columns["msg"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -897,6 +910,8 @@ namespace GTI_MVC.Datasets {
                 base.Columns.Add(this.columnvalor_iss);
                 this.columnvalor_taxa = new global::System.Data.DataColumn("valor_taxa", typeof(decimal), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnvalor_taxa);
+                this.columnmsg = new global::System.Data.DataColumn("msg", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnmsg);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnsid,
                                 this.columnseq}, true));
@@ -1589,6 +1604,22 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string msg {
+                get {
+                    try {
+                        return ((string)(this[this.tableboletoguia.msgColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'msg\' in table \'boletoguia\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableboletoguia.msgColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IscodreduzidoNull() {
                 return this.IsNull(this.tableboletoguia.codreduzidoColumn);
             }
@@ -1945,6 +1976,18 @@ namespace GTI_MVC.Datasets {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void Setvalor_taxaNull() {
                 this[this.tableboletoguia.valor_taxaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsmsgNull() {
+                return this.IsNull(this.tableboletoguia.msgColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetmsgNull() {
+                this[this.tableboletoguia.msgColumn] = global::System.Convert.DBNull;
             }
         }
         

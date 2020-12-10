@@ -1059,7 +1059,10 @@ namespace GTI_Mvc.Controllers {
                 short _index = 0;
                 string _convenio = "2873532";
                 List<Boletoguia> ListaBoleto = new List<Boletoguia>();
+                string _msg = "";
                 foreach (DebitoStructure item in Lista_Unificada) {
+                    if (item.Numero_Parcela > 0)
+                        _msg = "Após o vencimento tirar 2ª via no site da prefeitura www.jaboticabal.sp.gov.br";
 
                     Boletoguia reg = new Boletoguia();
                     reg.Usuario = "Gti.Web/2ViaISSTLL";
@@ -1086,6 +1089,7 @@ namespace GTI_Mvc.Controllers {
                     reg.Valorguia = item.Soma_Principal;
                     reg.Valor_ISS = _SomaISS;
                     reg.Valor_Taxa = _SomaTaxa;
+                    reg.Msg = _msg;
 
                     //***** GERA CÓDIGO DE BARRAS BOLETO REGISTRADO*****
                     DateTime _data_base = Convert.ToDateTime("07/10/1997");
@@ -1248,7 +1252,10 @@ namespace GTI_Mvc.Controllers {
                 short _index = 0;
                 string _convenio = "2873532";
                 List<Boletoguia> ListaBoleto = new List<Boletoguia>();
+                string _msg = "";
                 foreach (DebitoStructure item in Lista_Taxa) {
+                    if (item.Numero_Parcela > 0)
+                        _msg = "Após o vencimento tirar 2ª via no site da prefeitura www.jaboticabal.sp.gov.br";
 
                     Boletoguia reg = new Boletoguia();
                     reg.Usuario = "Gti.Web/2ViaVSTLL";
@@ -1275,6 +1282,7 @@ namespace GTI_Mvc.Controllers {
                     reg.Valorguia = item.Soma_Principal;
                     reg.Valor_ISS = 0;
                     reg.Valor_Taxa = _total;
+                    reg.Msg = _msg;
 
                     //***** GERA CÓDIGO DE BARRAS BOLETO REGISTRADO*****
                     DateTime _data_base = Convert.ToDateTime("07/10/1997");
