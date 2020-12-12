@@ -154,6 +154,7 @@
     <Compile Include="Models\itbi_vendedor.cs" />
     <Compile Include="Models\lancamento.cs" />
     <Compile Include="Models\laseriptu.cs" />
+    <Compile Include="Models\laseriptu_ext.cs" />
     <Compile Include="Models\livro.cs" />
     <Compile Include="Models\logevento.cs" />
     <Compile Include="Models\logradouro_bairro.cs" />

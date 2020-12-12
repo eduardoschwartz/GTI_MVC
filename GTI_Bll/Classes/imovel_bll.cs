@@ -781,6 +781,10 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Imovel_Inscricao(Codigo);
         }
 
+        public Laseriptu_ext Dados_IPTU_Ext(int Codigo, int Ano) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Dados_IPTU_Ext(Codigo,Ano);
+        }
 
         #endregion
 

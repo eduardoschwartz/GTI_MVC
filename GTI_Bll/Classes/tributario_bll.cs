@@ -463,6 +463,12 @@ namespace GTI_Bll.Classes {
             return obj.Carrega_Dados_IPTU(nCodigo, nAno);
         }
 
+
+        public Laseriptu_ext Carrega_Dados_IPTU_Ext(int nCodigo, int nAno) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Carrega_Dados_IPTU_Ext(nCodigo, nAno);
+        }
+
         /// <summary>
         /// Pesquisa o endereço de um terreno lançado na CIP 
         /// </summary>

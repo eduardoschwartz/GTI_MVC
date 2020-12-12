@@ -759,6 +759,13 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Laseriptu_ext Dados_IPTU_Ext(int Codigo, int Ano) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from i in db.Laser_iptu_ext where i.Ano == Ano && i.Codreduzido == Codigo select i).FirstOrDefault();
+                return Sql;
+            }
+        }
+
         public bool Verifica_Imunidade(int Codigo) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 Cadimob Sql = (from c in db.Cadimob where c.Codreduzido == Codigo select c).FirstOrDefault();

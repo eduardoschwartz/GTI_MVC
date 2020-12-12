@@ -98,6 +98,7 @@ namespace GTI_Dal {
         public DbSet<Boleto> Boleto { get; set; }
         public DbSet<Segunda_via_web> Segunda_via_web { get; set; }
         public DbSet<Laseriptu> Laser_iptu { get; set; }
+        public DbSet<Laseriptu_ext> Laser_iptu_ext { get; set; }
         public DbSet<comercio_eletronico> Comercio_eletronico { get; set; }
         public DbSet<Vre_empresa> Vre_empresa { get; set; }
         public DbSet<Vre_atividade> Vre_atividade { get; set; }
