@@ -5,7 +5,6 @@
     ViewBag.Title = "ITBI Urbano";
 }
 <link href="~/Content/Baloon.css" rel="stylesheet" />
-
 <style>
     .center {
         margin: auto;
@@ -37,91 +36,85 @@
 
 <div class="center">
 
-    @using (Html.BeginForm("Itbi_urbano", "Imovel", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @using (Html.BeginForm("Itbi_urbano_e", "Itbi", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
         <div class="container" style="width:700px">
             <div class="panel panel-danger">
-                <div class="panel-heading">Declaração de transações imobiliárias (Imóveis Urbanos) </div>
+                <div class="panel-heading">Alteração de ITBI - Nº @Model.Itbi_NumeroAno </div>
                 <div class="panel-body">
                     <div style="padding-left:7px">
 
-                        <table style="font-size:13px;width:640px">
+                        <table style="font-size:14px;width:640px">
                             <tr style="height:30px">
                                 <td style="width:154px">
                                     <label style="font-weight:normal">Código do imóvel:</label>
                                 </td>
-                                <td>
-                                    @if (@Model.Inscricao == null) {
-                                        @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)" })
-                                        <label>&nbsp;&nbsp;</label>
-                                        <button id="btnCodigoOk" type="submit" class="btn btn-primary" name="action" value="btnCodigoOK">Consultar</button>
+                                <td style="color:blue">
+                                    @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px;color:blue", @readonly = true })
+                                    <label>&nbsp;&nbsp;</label>
+                                    <button id="btnAtualizarImovel" type="submit" class="btn btn-danger"  name="action" value="btnAtualizarImovel" >Atualizar os dados do imóvel</button>
 
-                                    } else {
-                                        @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px;color:blue", @readonly = true })
-                                        <label>&nbsp;&nbsp;</label>
-                                        <button id="btnCodigoCancel" type="submit" class="btn btn-danger" onclick="return cancelarCodigo()" name="action" value="btnCodigoCancel" data-balloon-length="medium" aria-label="Ao cancelar, todos os dados inseridos neste lançamento de ITBI serão perdidos." data-balloon-pos="right">Cancelar</button>
-                                    }
                                 </td>
                             </tr>
                         </table>
-                        @if (@Model.Inscricao == null) {
-                            <label style="font-weight:normal;font-size:13px;color:brown">(Encontra-se na capa do carnê de IPTU)&nbsp;&nbsp;</label><br />
-                        }
                     </div>
-                    @if (@Model.Inscricao != null) {
-                <div style="padding-left:7px">
+                    <div style="padding-left:7px">
 
-                    <table style="font-size:13px;width:640px">
-                
-                        @Html.HiddenFor(m=>m.Dados_Imovel.Proprietario_Nome)
-                        <tr style="height:30px">
-                            <td style="width:154px">
-                                <label style="font-weight:normal">Inscrição cadastral:</label>
-                            </td>
-                            <td>
-                                <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Inscricao, new { @readonly = true, style = "width:200px;height:25px" })</label>
-                            </td>
-                        </tr>
-                    </table>
+                        <table style="font-size:14px;width:640px">
+                            @*<tr style="height:30px">
+                                <td style="width:154px">
+                                    <label style="font-weight:normal;padding-top:2px">Proprietário principal:</label>
+                                </td>
+                                <td>
+                                    <label style="font-weight:normal;color:blue;padding-top:2px">@Html.TextBoxFor(m => m.Dados_Imovel.Proprietario_Nome, new { @readonly = true, style = "width:470px;height:25px" })</label>
+                                </td>
+                            </tr>*@
+                            @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Nome)
+                            <tr style="height:30px">
+                                <td style="width:154px">
+                                    <label style="font-weight:normal">Inscrição cadastral:</label>
+                                </td>
+                                <td>
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Inscricao, new { @readonly = true, style = "width:200px;height:25px" })</label>
+                                </td>
+                            </tr>
+                        </table>
 
 
+                        <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Endereço do Imóvel:</label><br />
 
-                    <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Endereço do Imóvel:</label><br />
+                        <table style="font-size:14px;width:640px">
+                            <tr style="height:30px">
+                                <td style="width:62px">
+                                    <label style="font-weight:normal">Cep:</label>
+                                </td>
+                                <td>
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Cep, new { style = "width:80px;height:25px", @readonly = true })</label>
+                                    <label style="font-weight:normal;padding-left:10px">Logradouro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.NomeLogradouro, new { style = "width:385px;height:25px", @readonly = true })</label>
+                                </td>
+                            </tr>
+                            <tr style="height:30px">
+                                <td>
+                                    <label style="font-weight:normal">Número:</label>
+                                </td>
+                                <td>
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Numero, new { style = "width:80px;height:25px", @readonly = true })</label>
+                                    <label style="font-weight:normal;padding-left:10px">Complemento:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Complemento, new { style = "width:369px;height:25px", @readonly = true })</label>
+                                </td>
+                            </tr>
+                            <tr style="height:30px">
+                                <td>
+                                    <label style="font-weight:normal">Quadra:</label>
+                                </td>
+                                <td>
+                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.QuadraOriginal, new { style = "width:110px;height:25px", @readonly = true })</label>
+                                    <label style="font-weight:normal;padding-left:10px">Lote:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.LoteOriginal, new { style = "width:110px;height:25px", @readonly = true })</label>
+                                    <label style="font-weight:normal;padding-left:10px">Bairro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.NomeBairro, new { style = "width:226px;height:25px", @readonly = true })</label>
+                                </td>
+                            </tr>
+                        </table>
 
-                    <table style="font-size:13px;width:640px">
-                        <tr style="height:30px">
-                            <td style="width:62px">
-                                <label style="font-weight:normal">Cep:</label>
-                            </td>
-                            <td>
-                                <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Cep, new { style = "width:80px;height:25px", @readonly = true })</label>
-                                <label style="font-weight:normal;padding-left:10px">Logradouro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.NomeLogradouro, new { style = "width:385px;height:25px", @readonly = true })</label>
-                            </td>
-                        </tr>
-                        <tr style="height:30px">
-                            <td>
-                                <label style="font-weight:normal">Número:</label>
-                            </td>
-                            <td>
-                                <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Numero, new { style = "width:80px;height:25px", @readonly = true })</label>
-                                <label style="font-weight:normal;padding-left:10px">Complemento:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Complemento, new { style = "width:369px;height:25px", @readonly = true })</label>
-                            </td>
-                        </tr>
-                        <tr style="height:30px">
-                            <td>
-                                <label style="font-weight:normal">Quadra:</label>
-                            </td>
-                            <td>
-                                <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.QuadraOriginal, new { style = "width:110px;height:25px", @readonly = true })</label>
-                                <label style="font-weight:normal;padding-left:10px">Lote:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.LoteOriginal, new { style = "width:110px;height:25px", @readonly = true })</label>
-                                <label style="font-weight:normal;padding-left:10px">Bairro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.NomeBairro, new { style = "width:226px;height:25px", @readonly = true })</label>
-                            </td>
-                        </tr>
-                    </table>
-                    
-
-                </div>
-                    }
+                    </div>
                 </div>
 
                 @if (@Model.Inscricao != null) {
@@ -129,7 +122,7 @@
                     <div class="panel-heading">Dados dos Compradores </div>
                     <div class="panel-body">
 
-                        <table style="font-size:13px;width:640px">
+                        <table style="font-size:14px;width:640px">
                             <tr style="height:30px">
                                 <td style="width:103px">
                                     @if (@Model.Cpf_Cnpj != null && @Model.Cpf_Cnpj != "") {
@@ -158,7 +151,7 @@
                         @if (@Model.Cpf_Cnpj != null && @Model.Cpf_Cnpj != "") {
 
                             <div style="padding-top:5px">
-                                <table style="font-size:13px;width:640px">
+                                <table style="font-size:14px;width:640px">
                                     <tr style="height:30px">
                                         <td style="width:103px">
                                             <label style="font-weight:normal">Nome:&nbsp;&nbsp;</label>
@@ -176,7 +169,7 @@
                                 </table>
                             </div>
 
-                            <table style="font-size:13px;width:640px">
+                            <table style="font-size:14px;width:640px">
                                 <tr style="height:30px">
                                     <td style="width:103px">
                                         <label style="font-weight:normal;">Nº do Cep:</label>
@@ -184,13 +177,13 @@
                                     <td>
                                         <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Comprador.Cep, new { @class = "maskCep", @id = "txtCep", style = "width:90px;height:25px" })</label>
                                         <button type="submit" class="btn btn-info" name="action" value="btnCepCompradorOK" data-balloon-length="medium" aria-label="Digite um Cep válido e clique em pesquisar." data-balloon-pos="up">Pesquisar</button>
-                                        <label style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank">aqui</a> para consultar o Cep</label><span style="color:red">&nbsp;*</span><br />
+                                        <label style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank">aqui</a> para consultar o Cep</label><span style="color:red">&nbsp;*</span><br /><br />
                                     </td>
                                 </tr>
                             </table>
 
                             <div style="padding-top:5px">
-                                <table style="font-size:13px;width:640px">
+                                <table style="font-size:14px;width:640px">
                                     <tr style="height:30px">
                                         <td style="width:103px">
                                             <label style="font-weight:normal">Logradouro:</label>
@@ -205,7 +198,7 @@
                                     </tr>
                                 </table>
                             </div>
-                            <table style="font-size:13px;width:640px">
+                            <table style="font-size:14px;width:640px">
                                 <tr style="height:30px">
                                     <td style="width:103px">
                                         <label style="font-weight:normal;">Complemento:</label>
@@ -260,9 +253,9 @@
                     <div class="panel-body">
 
                         <div id="CompradorTable" style="max-height: 247px; overflow: auto;width:700px;padding-top:7px">
-                            <table id="tblComprador" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
-                                <thead style="background-color:brown;color:white;font-size:13px;font-weight:normal">
-                                    <tr style="height:13px;">
+                            <table id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                                <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal">
+                                    <tr style="height:14px;">
                                         <th style="width:20px;font-weight:normal">
                                             #
                                         </th>
@@ -279,7 +272,7 @@
                                 </thead>
                             </table>
                             <div style="display:none">@Html.EditorFor(model => model.Lista_Comprador)</div>
-                            <table id="tblComprador" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px">
+                            <table id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px">
                                 @foreach (var item in Model.Lista_Comprador) {
 
                                     <tr style="height:18px">
@@ -296,7 +289,7 @@
                                             @Html.HiddenFor(modelItem => item.Cpf_Cnpj)
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "rc", @s = item.Seq, @guid = Model.Guid })" title="Remover comprador"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                            <a href="@Url.Action("Itbi_urbano_e", "Itbi", new { @p=Model.Guid, @a = "rc", @s = item.Seq, @guid = Model.Guid })" title="Remover comprador"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                         </td>
                                     </tr>
                                 }
@@ -320,7 +313,11 @@
                     @Html.HiddenFor(m => m.Vendedor_Cpf_cnpj_tmp, new { @id = "Vendedor_Cpf_cnpj_tmp" })
                     @Html.HiddenFor(m => m.Vendedor_Nome_tmp, new { @id = "Vendedor_Nome_tmp" })
                     @Html.HiddenFor(m => m.Guid)
+                    @Html.HiddenFor(m => m.Itbi_Ano)
+                    @Html.HiddenFor(m => m.Itbi_Numero)
                     @Html.HiddenFor(m => m.Lista_Anexo)
+
+                    @*@Ajax.ActionLink("All", "Itbi_Comprador", new AjaxOptions() {HttpMethod="GET",UpdateTargetId="divComprador",InsertionMode=InsertionMode.Replace})*@
 
                     @*#############VENDEDORES###############*@
                     <div class="panel-heading">Dados dos Vendedores </div>
@@ -362,7 +359,7 @@
                                             @Html.HiddenFor(modelItem => item.Cpf_Cnpj)
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "rv", @s = item.Seq, @guid = Model.Guid })" title="Remover vendedor"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                            <a href="@Url.Action("Itbi_urbano_e", "Itbi", new { @p=Model.Guid, @a = "rv", @s = item.Seq, @guid = Model.Guid })" title="Remover vendedor"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                         </td>
                                     </tr>
                                 }
@@ -508,10 +505,18 @@
                                     <label style="font-weight:normal;">Valor da transação:</label>
                                 </td>
                                 <td style="width:114px">
-                                    @if (Model.Valor_Transacao > 0) {
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Transacao.ToString("0.#0") })</label>
+                                    @if (Model.Tipo_Financiamento == 0) {
+                                        if (Model.Valor_Transacao > 0) {
+                                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Transacao.ToString("0.#0") })</label>
+                                        } else {
+                                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
+                                        }
                                     } else {
-                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
+                                        if (Model.Valor_Transacao > 0) {
+                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Transacao.ToString("0.#0"), @readonly = true })</label>
+                                        } else {
+                                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
+                                        }
                                     }
                                 </td>
                                 <td style="width:82px">
@@ -532,10 +537,11 @@
                                         }
                                     }
                                 </td>
-                                <td  style="width:224px">
+                                <td style="width:224px">
                                     <label style="font-weight:normal;">Utilizar o valor venal territorial:&nbsp;</label>
-                                    @Html.CheckBoxFor(m => m.Utilizar_VVT,new { id="chkValorVenal"})
+                                    @Html.EditorFor(m => m.Utilizar_VVT, new { htmlAttributes = new { @onclick = "StateChange()" } })
                                 </td>
+
                             </tr>
                         </table>
 
@@ -559,22 +565,22 @@
                                 </td>
                                 <td style="width:100px;padding-top:2px">
                                     @if (ViewBag.Fiscal == "S") {
-                                        if (Model.Valor_Avaliacao_atual > 0) {
+                                                    if (Model.Valor_Avaliacao_atual > 0) {
                                             <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao_atual.ToString("0.#0") })</label>
-                                        } else {
+                                                    } else {
                                             <label style="font-weight:normal">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
                                         }
-                                    } else {
-                                        if (Model.Valor_Avaliacao_atual > 0) {
+                                                } else {
+                                                    if (Model.Valor_Avaliacao_atual > 0) {
                                             <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Avaliacao_atual.ToString("0.#0"), @readonly = true })</label>
-                                        } else {
+                                                    } else {
                                             <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Avaliacao_atual, new { id = "txtAvaliacao2", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
                                         }
-                                    }
+                                                }
                                 </td>
                             </tr>
-
                         </table>
+
 
                         <table style="font-size:13px;width:640px">
                             <tr style="height:30px">
@@ -583,7 +589,7 @@
                                 </td>
                                 <td style="width:500px">
                                     @foreach (var tipo in Model.Lista_Instrumento) {
-                                        @Html.RadioButtonFor(model => model.Tipo_Instrumento, tipo) <span>&nbsp;</span>@tipo<span>&nbsp;&nbsp;</span>
+                                                    @Html.RadioButtonFor(model => model.Tipo_Instrumento, tipo) <span>&nbsp;</span>@tipo<span>&nbsp;&nbsp;</span>
                                     }
                                 </td>
                             </tr>
@@ -595,11 +601,11 @@
                                 </td>
                                 <td style="width:136px">
                                     @if (Model.Totalidade == "Sim" || Model.Totalidade == null) {
-                                        @Html.RadioButtonFor(model => model.Totalidade, "Sim", new { @id = "totalChk", @onclick = "radioCheck()", @checked = true })<label style="font-weight:normal">&nbsp;Sim&nbsp;&nbsp;</label>
-                                        @Html.RadioButtonFor(model => model.Totalidade, "Não", new { @id = "totalChk", @onclick = "radioCheck()" })<label style="font-weight:normal">&nbsp;Não&nbsp;&nbsp;</label>
+                                                    @Html.RadioButtonFor(model => model.Totalidade, "Sim", new { @id = "totalChk", @onclick = "radioCheck()", @checked = true })<label style="font-weight:normal">&nbsp;Sim&nbsp;&nbsp;</label>
+                                                    @Html.RadioButtonFor(model => model.Totalidade, "Não", new { @id = "totalChk", @onclick = "radioCheck()" })<label style="font-weight:normal">&nbsp;Não&nbsp;&nbsp;</label>
                                     } else {
-                                        @Html.RadioButtonFor(model => model.Totalidade, "Sim", new { @id = "totalChk", @onclick = "radioCheck()" })<label style="font-weight:normal">&nbsp;Sim&nbsp;&nbsp;</label>
-                                        @Html.RadioButtonFor(model => model.Totalidade, "Não", new { @id = "totalChk", @onclick = "radioCheck()", @checked = true })<label style="font-weight:normal">&nbsp;Não&nbsp;&nbsp;</label>
+                                                    @Html.RadioButtonFor(model => model.Totalidade, "Sim", new { @id = "totalChk", @onclick = "radioCheck()" })<label style="font-weight:normal">&nbsp;Sim&nbsp;&nbsp;</label>
+                                                    @Html.RadioButtonFor(model => model.Totalidade, "Não", new { @id = "totalChk", @onclick = "radioCheck()", @checked = true })<label style="font-weight:normal">&nbsp;Não&nbsp;&nbsp;</label>
                                     }
 
                                 </td>
@@ -612,18 +618,18 @@
                                 </td>
                                 <td style="width:101px;padding-top:5px">
                                     @if (Model.Totalidade == "Sim" || Model.Totalidade == null) {
-                                        if (Model.Totalidade_Perc > 0) {
+                                                    if (Model.Totalidade_Perc > 0) {
                                             <label style="font-weight:normal;display:none" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc.ToString("0.#0") })</label>
-                                        } else {
+                                                    } else {
                                             <label style="font-weight:normal;display:none" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                         }
-                                    } else {
-                                        if (Model.Totalidade_Perc > 0) {
+                                                } else {
+                                                    if (Model.Totalidade_Perc > 0) {
                                             <label style="font-weight:normal;display:block" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc.ToString("0.#0") })</label>
-                                        } else {
+                                                    } else {
                                             <label style="font-weight:normal;display:block" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                         }
-                                    }
+                                                }
                                 </td>
                             </tr>
                         </table>
@@ -655,8 +661,6 @@
                                 </td>
                             </tr>
                         </table>
-
-
 
                     </div>
                     <div class="panel-heading">Valor da guia para pagamento </div>
@@ -741,7 +745,7 @@
                                             @Html.HiddenFor(modelItem => item.Arquivo)
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "ra", @s = item.Seq, @guid = Model.Guid })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                            <a href="@Url.Action("Itbi_urbano_e", "Itbi", new { @a = "ra", @s = item.Seq, @p = Model.Guid })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                         </td>
                                     </tr>
                                 }
@@ -749,7 +753,8 @@
                         </div>
                         <br />
 
-                        <input style="width:610px" id="fileUpload" type="file" name="file" accept="application/pdf" /><br />
+
+                        <input style="width:610px" id="imageUpload" type="file" name="file" accept="application/pdf" /><br />
                         <table>
                             <tr>
                                 <td style="font-size:13px;width:200px">
@@ -791,7 +796,7 @@
                 @*<button type="submit" class="btn btn-success" name="action" value="btnPrint" data-balloon-length="medium" aria-label="Imprimir os dados do formulário." data-balloon-pos="up">Imprimir</button>*@
             </div>
         }
-        <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })</div>
+        <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })</div>
     }
 
     <!-- Modal Comprador -->
@@ -806,18 +811,18 @@
                     <table>
                         <tr style="height:30px">
                             <td>
-                                <label style="font-weight:normal;font-size:13px">Digite o Cpf/Cnpj:&nbsp;&nbsp;</label>
+                                <label style="font-weight:normal;font-size:14px">Digite o Cpf/Cnpj:&nbsp;&nbsp;</label>
                             </td>
                             <td>
-                                <input id="cpfcnpjc2Txt" name="Cpf_Cnpj_comprador" onKeyPress="return formata(this, '§§§§§§§§§§§§§§', event)" onpaste="return false" style="width:150px;height:25px;font-size:13px" type="text" value="" />
+                                <input id="cpfcnpjc2Txt" name="Cpf_Cnpj_comprador" onKeyPress="return formata(this, '§§§§§§§§§§§§§§', event)" onpaste="return false" style="width:150px;height:25px;font-size:14px" type="text" value="" />
                             </td>
                         </tr>
                         <tr style="height:30px">
                             <td>
-                                <label style="font-weight:normal;font-size:13px">Digite o Nome:&nbsp;&nbsp;</label>
+                                <label style="font-weight:normal;font-size:14px">Digite o Nome:&nbsp;&nbsp;</label>
                             </td>
                             <td>
-                                <input id="nomec2Txt" name="nome_comprador" style="width:350px;height:25px;font-size:13px" type="text" value="" />
+                                <input id="nomec2Txt" name="nome_comprador" style="width:350px;height:25px;font-size:14px" type="text" value="" />
                             </td>
                         </tr>
                     </table>
@@ -845,18 +850,18 @@
                     <table>
                         <tr style="height:30px">
                             <td>
-                                <label style="font-weight:normal;font-size:13px">Digite o Cpf/Cnpj:&nbsp;&nbsp;</label>
+                                <label style="font-weight:normal;font-size:14px">Digite o Cpf/Cnpj:&nbsp;&nbsp;</label>
                             </td>
                             <td>
-                                <input id="cpfcnpjc3Txt" name="Cpf_Cnpj_vendedor" onKeyPress="return formata(this, '§§§§§§§§§§§§§§', event)" onpaste="return false" style="width:150px;height:25px;font-size:13px" type="text" value="" />
+                                <input id="cpfcnpjc3Txt" name="Cpf_Cnpj_vendedor" onKeyPress="return formata(this, '§§§§§§§§§§§§§§', event)" onpaste="return false" style="width:150px;height:25px;font-size:14px" type="text" value="" />
                             </td>
                         </tr>
                         <tr style="height:30px">
                             <td>
-                                <label style="font-weight:normal;font-size:13px">Digite o Nome:&nbsp;&nbsp;</label>
+                                <label style="font-weight:normal;font-size:14px">Digite o Nome:&nbsp;&nbsp;</label>
                             </td>
                             <td>
-                                <input id="nomec3Txt" name="nome_vendedor" style="width:350px;height:25px;font-size:13px" type="text" value="" />
+                                <input id="nomec3Txt" name="nome_vendedor" style="width:350px;height:25px;font-size:14px" type="text" value="" />
                             </td>
                         </tr>
                     </table>
@@ -908,7 +913,7 @@
             });
 
             //$(".maskValor").inputmask('Regex', { regex: "^[0-9]{1,8}(\\,\\d{1,2})?$" });
-            $(".maskValor").mask("99999999,00", {reverse:true});
+            $(".maskValor").mask("99999999,00", { reverse: true });
             $(".maskPerc").inputmask('Regex', { regex: "^[0-9]{1,3}(\\,\\d{1,2})?$" });
             $(".maskData").inputmask("99/99/9999");
             $(".maskCep").inputmask("99999-999");
@@ -1056,6 +1061,7 @@
                 _somavv = _somavv * _percvv / 100;
             }
 
+
             if (_somaa > 0 && _somavv > 0) {
                 _somavv = _somavv * 0.015;
                 if (_soma > _somavv) {
@@ -1126,7 +1132,7 @@
                             cpfcnpj = cnpjtmp;
                         }
                     } else {
-                        if (valida_Cpf(cnpjtmp)) {
+                        if (valida_Cnpj(cnpjtmp)) {
                             cpfcnpj = cnpjtmp;
                         } else {
                             if (!valida_Cpf(cpftmp)) {
@@ -1189,10 +1195,9 @@
                     }
                 }
             });
-
-            $('#chkValorVenal').click(function () {
-               $("#MainForm").submit();
-            });
+            //$('#chkValorVenal').click(function () {
+            //    $("#MainForm").submit();
+            //});
 
             var model = @Html.Raw(Json.Encode(Model.Lista_Erro));
             if (model.length >0) {
@@ -1220,6 +1225,10 @@
                 document.getElementById('percLabel').style.display = 'none';
                 document.getElementById('percLabel2').style.display = 'none';
             }
+        }
+
+        function StateChange() {
+            document.getElementById('MainForm').submit();
         }
 
         $(function () {$("#fileUpload").change(function () {

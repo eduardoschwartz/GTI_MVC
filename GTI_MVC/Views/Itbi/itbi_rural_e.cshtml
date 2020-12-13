@@ -36,11 +36,11 @@
 
 <div class="center">
 
-    @using (Html.BeginForm("Itbi_rural", "Imovel", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @using (Html.BeginForm("Itbi_rural_e", "Itbi", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
         <div class="container" style="width:700px">
             <div class="panel panel-danger">
-                <div class="panel-heading">Declaração de transações imobiliárias (Imóveis Rural) </div>
+                <div class="panel-heading">Alteração de ITBI - Nº @Model.Itbi_NumeroAno </div>
                 <div class="panel-body">
 
                     <div style="padding-left:7px">
@@ -62,6 +62,7 @@
                             </tr>
 
                         </table>
+
                         @*<table style="font-size:13px;width:640px">
                             <tr style="height:30px">
                                 <td style="width:154px">
@@ -72,7 +73,7 @@
                                 </td>
                             </tr>
                         </table>*@
-                        @*@Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Nome)*@
+                        @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Nome)
                         <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Dados do Imóvel:</label><br />
 
                         <table style="font-size:14px;width:640px">
@@ -255,7 +256,7 @@
                                         @Html.HiddenFor(modelItem => item.Cpf_Cnpj)
                                     </td>
                                     <td>
-                                        <a href="@Url.Action("Itbi_rural", "Imovel", new { @a = "rc", @s = item.Seq, @guid = Model.Guid })" title="Remover comprador"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                        <a href="@Url.Action("Itbi_rural_e", "Itbi", new {  @p=Model.Guid,@a = "rc", @s = item.Seq, @guid = Model.Guid })" title="Remover comprador"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                     </td>
                                 </tr>
                             }
@@ -267,9 +268,9 @@
                     </div>
                 </div>
 
-                @*@Html.HiddenFor(m => m.Dados_Imovel.Inscricao)
+                @Html.HiddenFor(m => m.Dados_Imovel.Inscricao)
                 @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Codigo)
-                @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Nome)*@
+                @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Nome)
                 @Html.HiddenFor(m => m.Comprador.Codigo)
                 @Html.HiddenFor(m => m.Comprador.Logradouro_Codigo)
                 @Html.HiddenFor(m => m.Comprador.Bairro_Codigo)
@@ -324,7 +325,7 @@
                                         @Html.HiddenFor(modelItem => item.Cpf_Cnpj)
                                     </td>
                                     <td>
-                                        <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "rv", @s = item.Seq, @guid = Model.Guid })" title="Remover vendedor"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                        <a href="@Url.Action("Itbi_rural_e", "Itbi", new { @p=Model.Guid, @a = "rv", @s = item.Seq, @guid = Model.Guid })" title="Remover vendedor"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                     </td>
                                 </tr>
                             }
@@ -470,10 +471,18 @@
                                 <label style="font-weight:normal;">Valor da transação:</label>
                             </td>
                             <td style="width:114px">
-                                @if (Model.Valor_Transacao > 0) {
-                                    <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Transacao.ToString("0.#0") })</label>
+                                @if (Model.Tipo_Financiamento == 0) {
+                                    if (Model.Valor_Transacao > 0) {
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Transacao.ToString("0.#0") })</label>
+                                    } else {
+                                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
+                                    }
                                 } else {
-                                    <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
+                                    if (Model.Valor_Transacao > 0) {
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = Model.Valor_Transacao.ToString("0.#0"), @readonly = true })</label>
+                                    } else {
+                                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Valor_Transacao, new { id = "txtValorTransacao", @class = "maskValor", style = "width:90px;height:25px;text-align:right", @Value = "0,00", @readonly = true })</label>
+                                    }
                                 }
                             </td>
                             <td style="width:82px">
@@ -571,7 +580,7 @@
                                     if (Model.Totalidade_Perc > 0) {
                                         <label style="font-weight:normal;display:block" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = Model.Totalidade_Perc.ToString("0.#0") })</label>
                                     } else {
-                                        <label style="font-weight:normal;display:block" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = "0,00" })</label>
+                                        <label style="font-weight:normal;display:block" id="percLabel2"> @Html.TextBoxFor(m => m.Totalidade_Perc, new { @id = "percTxt", @class = "maskPerc", style = "width:90px;height:25px;text-align:right", @Value = "" })</label>
                                     }
                                 }
                             </td>
@@ -632,7 +641,6 @@
                                 }
                             </td>
                         </tr>
-
                     </table>
                     <table>
                         <tr>
@@ -681,7 +689,7 @@
                                         @Html.HiddenFor(modelItem => item.Arquivo)
                                     </td>
                                     <td>
-                                        <a href="@Url.Action("Itbi_urbano", "Imovel", new { @a = "ra", @s = item.Seq, @guid = Model.Guid })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                        <a href="@Url.Action("Itbi_rural_e", "Itbi", new { @a = "ra", @s = item.Seq, @p = Model.Guid })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                     </td>
                                 </tr>
                             }
@@ -726,13 +734,14 @@
         </div>
 
 
-        <div style="text-align:center">
-            <button type="submit" class="btn btn-primary" name="action" value="btnValida" data-balloon-length="medium" aria-label="Enviar formulário para análise." data-balloon-pos="up">Enviar</button>&nbsp;&nbsp;
-            @*<button type="submit" class="btn btn-success" name="action" value="btnPrint" data-balloon-length="medium" aria-label="Imprimir os dados do formulário." data-balloon-pos="up">Imprimir</button>*@
-        </div>
-        <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })</div>
+        if (Model.Codigo != null && Model.Codigo.Trim() != "") {
+            <div style="text-align:center">
+                <button type="submit" class="btn btn-primary" name="action" value="btnValida" data-balloon-length="medium" aria-label="Enviar formulário para análise." data-balloon-pos="up">Enviar</button>&nbsp;&nbsp;
+                @*<button type="submit" class="btn btn-success" name="action" value="btnPrint" data-balloon-length="medium" aria-label="Imprimir os dados do formulário." data-balloon-pos="up">Imprimir</button>*@
+            </div>
+        }
+        <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })</div>
     }
-
     <!-- Modal Comprador -->
     <div class="modal fade" id="CompradorModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -844,7 +853,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-
+           
 
             //$(".maskValor").inputmask('Regex', { regex: "^[0-9]{1,8}(\\,\\d{1,2})?$" });
             $(".maskValor").mask("99999999,00", { reverse: true });
@@ -895,15 +904,15 @@
                 calcula_guia();
             });
 
-            $("#txtValorVenal").on('input', function () {
-                calcula_guia();
-            });
-
             $("#txtAvaliacao").on('input', function () {
                 calcula_guia();
             });
 
             $("#txtAvaliacao2").on('input', function () {
+                calcula_guia();
+            });
+
+            $("#txtValorVenal").on('input', function () {
                 calcula_guia();
             });
 
@@ -914,7 +923,7 @@
             $("#txtRecursoProprio").on('input', function () {
                 var _rp = document.getElementById('txtRecursoProprio').value;
                 var _rp2 = Number(_rp.replace(/[^0-9.-]+/g, "."));
-                var _rp3 = parseFloat(_rp2);
+                var _rp3 = parseFloat(_rp2) ;
                 $("input[name='Recursos_proprios_atual']").val((_rp3 * 0.015).toFixed(2).replace(".", ","));
                 calcula_guia();
             });
@@ -942,6 +951,7 @@
                 $("input[name='Financiamento_atual']").val((_fn3 * 0.005).toFixed(2).replace(".", ","));
                 calcula_guia();
             });
+
         });
 
         function calcula_guia() {
@@ -1064,7 +1074,7 @@
                             cpfcnpj = cnpjtmp;
                         }
                     } else {
-                        if (valida_Cnpj(cnpjtmp)) {
+                        if (valida_Cpf(cnpjtmp)) {
                             cpfcnpj = cnpjtmp;
                         } else {
                             if (!valida_Cpf(cpftmp)) {
@@ -1104,7 +1114,7 @@
                             cpfcnpj = cnpjtmp;
                         }
                     } else {
-                        if (valida_Cpf(cnpjtmp)) {
+                        if (valida_Cnpj(cnpjtmp)) {
                             cpfcnpj = cnpjtmp;
                         } else {
                             if (!valida_Cpf(cpftmp)) {
@@ -1134,7 +1144,7 @@
             }
         });
 
-
+     
         function radioCheck() {
             var index = $("input[id=totalChk]:checked").val();
             if (index=="Não") {

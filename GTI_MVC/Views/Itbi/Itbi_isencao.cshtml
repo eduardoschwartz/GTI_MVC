@@ -36,7 +36,7 @@
 
 <div class="center container" style="width:700px">
 
-    @using (Html.BeginForm("Itbi_isencao", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+    @using (Html.BeginForm("Itbi_isencao", "Itbi", FormMethod.Post, new { @id = "MainForm" })) {
 
 
     <div class="panel panel-danger">
@@ -92,7 +92,7 @@
                                         @Html.HiddenFor(modelItem => item.Descricao)
                                     </td>
                                     <td style="width:20px">
-                                        <a href="@Url.Action("Itbi_isencao", "Imovel", new { @a = "rv", @s = item.Seq, @guid = Model.Guid })" title="Remover imóvel"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                        <a href="@Url.Action("Itbi_isencao", "Itbi", new { @a = "rv", @s = item.Seq, @guid = Model.Guid })" title="Remover imóvel"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                     </td>
                                 </tr>
                             }
@@ -160,7 +160,7 @@
         </div>
         <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
         <div class="panel-footer">
-            @Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })<br />
             @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
         </div>
     </div>

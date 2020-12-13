@@ -27,7 +27,7 @@
 
 <div class="center">
 
-    @using (Html.BeginForm("Itbi_isencao_q", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+    @using (Html.BeginForm("Itbi_isencao_q", "Itbi", FormMethod.Post, new { @id = "MainForm" })) {
 
         <div class="container" style="width:700px">
             <div class="panel panel-danger">
@@ -111,7 +111,7 @@
 
     }
 
-    <div style="padding-left:15px">@Html.ActionLink("Consultar outra certidão", "Itbi_query_isencao", "Imovel", null, new { @class = "actionlink" })</div>
+    <div style="padding-left:15px">@Html.ActionLink("Consultar outra certidão", "Itbi_query_isencao", "Itbi", null, new { @class = "actionlink" })</div>
     <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })</div>
 </div>
 

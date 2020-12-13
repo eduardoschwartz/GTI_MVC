@@ -27,7 +27,7 @@
 
 <div class="center">
 
-    @using (Html.BeginForm("Itbi_query", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+    @using (Html.BeginForm("Itbi_query", "Itbi", FormMethod.Post, new { @id = "MainForm" })) {
        
         <div class="container" style="width:800px">
             <div class="panel panel-danger">
@@ -83,20 +83,20 @@
                                     <td style="width:170px;font-weight:normal">@Html.DisplayFor(modelItem => item.Situacao_Itbi_Nome)</td>
                                     <td style="width:130px">
                                         @if (item.Tipo_Imovel == "Urbano") {
-                                            <a href="@Url.Action("Itbi_urbano_q", "Imovel", new { p = item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                                            <a href="@Url.Action("Itbi_urbano_q", "Itbi", new { p = item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
                                         } else {
-                                            <a href="@Url.Action("Itbi_rural_q","Imovel",new {p=item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                                            <a href="@Url.Action("Itbi_rural_q","Itbi",new {p=item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
                                         }
-                                        <a href="@Url.Action("Itbi_print","Imovel", new { p = item.Guid,u=item.Tipo_Imovel=="Urbano" })" title="Imprimir a declaração do ITBI"> <img src="@Url.Content("~/images/print.png")"></a>
+                                        <a href="@Url.Action("Itbi_print","Itbi", new { p = item.Guid,u=item.Tipo_Imovel=="Urbano" })" title="Imprimir a declaração do ITBI"> <img src="@Url.Content("~/images/print.png")"></a>
                                         @if (item.Tipo_Imovel == "Urbano") {
-                                            <a href="@Url.Action("Itbi_urbano_e","Imovel", new { p = item.Guid } )" title="Alterar este ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>
+                                            <a href="@Url.Action("Itbi_urbano_e","Itbi", new { p = item.Guid } )" title="Alterar este ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>
                                         } else {
-                                            <a href="@Url.Action("Itbi_rural_e","Imovel", new { p = item.Guid } )" title="Alterar este ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>
+                                            <a href="@Url.Action("Itbi_rural_e","Itbi", new { p = item.Guid } )" title="Alterar este ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>
                                         }
-                                        <a href="@Url.Action("Itbi_cancel", "Imovel", new { p = item.Guid, s = 4 })" onclick="return confirm('Cancelar este Itbi?')" })" title="Cancelar este ITBI"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
-                                        <a href="@Url.Action("Itbi_forum","Imovel" , new { p = item.Guid } )" title="Processo de análise do ITBI"> <img src="@Url.Content("~/images/observacao.png")"></a>
+                                        <a href="@Url.Action("Itbi_cancel", "Itbi", new { p = item.Guid, s = 4 })" onclick="return confirm('Cancelar este Itbi?')" })" title="Cancelar este ITBI"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
+                                        <a href="@Url.Action("Itbi_forum","Itbi" , new { p = item.Guid } )" title="Processo de análise do ITBI"> <img src="@Url.Content("~/images/observacao.png")"></a>
                                         @if (item.Situacao_Itbi_codigo == 2) {
-                                            <a href="@Url.Action("Itbi_guia", "Imovel", new { p = item.Guid })" onclick="return confirm('Boletos liberados até as 16:30h podem ser quitados a partir do dia seguinte de sua liberação, após às 16:30h será necessário mais um dia útil para o registro. Você deseja emitir o boleto?')" })" title="Emitir guia para pagamento"> <img src="@Url.Content("~/images/barcode.gif")"></a>
+                                            <a href="@Url.Action("Itbi_guia", "Itbi", new { p = item.Guid })" onclick="return confirm('Boletos liberados até as 16:30h podem ser quitados a partir do dia seguinte de sua liberação, após às 16:30h será necessário mais um dia útil para o registro. Você deseja emitir o boleto?')" })" title="Emitir guia para pagamento"> <img src="@Url.Content("~/images/barcode.gif")"></a>
                                         }
                                     </td>
                                 </tr>
@@ -110,7 +110,7 @@
                     </div>
                 </div>
                 <div class="panel-footer">
-                    @Html.ActionLink("Preencher outro ITBI", "Itbi_Menu", "Imovel", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Preencher outro ITBI", "Itbi_Menu", "Itbi", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
                 </div>
             </div>

@@ -36,7 +36,7 @@
 
 <div class="center">
 
-    @using (Html.BeginForm("Itbi_urbano_q", "Imovel", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @using (Html.BeginForm("Itbi_urbano_q", "Itbi", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
         <div class="container" style="width:700px">
             <div class="panel panel-danger">
@@ -642,7 +642,7 @@
                                         @Html.HiddenFor(modelItem => item.Arquivo)
                                     </td>
                                     <td>
-                                        <a href="@Url.Action("Itbi_download", "Imovel", new { @p = Model.Guid, @f = item.Arquivo ,@a=Model.Itbi_Ano})" title="Download"> <img src="@Url.Content("~/images/downarrow.gif")" /></a>
+                                        <a href="@Url.Action("Itbi_download", "Itbi", new { @p = Model.Guid, @f = item.Arquivo ,@a=Model.Itbi_Ano})" title="Download"> <img src="@Url.Content("~/images/downarrow.gif")" /></a>
                                     </td>
                                 </tr>
                             }
@@ -671,8 +671,8 @@
             }
         </div>
 
-        <div style="padding-left:15px">@Html.ActionLink("Consultar outro ITBI", "Itbi_query", "Imovel", null, new { @class = "actionlink" })</div>
-        <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })</div>
+        <div style="padding-left:15px">@Html.ActionLink("Consultar outro ITBI", "Itbi_query", "Itbi", null, new { @class = "actionlink" })</div>
+        <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })</div>
     }
 
 </div>

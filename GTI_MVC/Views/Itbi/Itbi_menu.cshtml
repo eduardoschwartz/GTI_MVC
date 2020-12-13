@@ -30,14 +30,14 @@
         <div class="panel panel-danger">
             <div class="panel-heading">Imposto sobre Transmissão de Bens Imóveis (ITBI)</div>
             <div class="panel-body">
-                @Html.ActionLink("Nova emissão de ITBI (Imóveis Urbanos)", "Itbi_urbano", "Imovel", null, new { @class = "actionlink" })<br />
-                @Html.ActionLink("Nova emissão de ITBI (Imóveis Rurais)", "Itbi_rural", "Imovel", null, new { @class = "actionlink" })<br />
-                @Html.ActionLink("Consultar declarações enviadas", "Itbi_query", "Imovel", null, new { @class = "actionlink" })<br />
-                @Html.ActionLink("Certidão de não incidência de ITBI", "Itbi_isencao", "Imovel", null, new { @class = "actionlink" })<br />
-                @Html.ActionLink("Consultar certidões enviadas", "Itbi_query_isencao", "Imovel", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Nova emissão de ITBI (Imóveis Urbanos)", "Itbi_urbano", "Itbi", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Nova emissão de ITBI (Imóveis Rurais)", "Itbi_rural", "Itbi", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Consultar declarações enviadas", "Itbi_query", "Itbi", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Certidão de não incidência de ITBI", "Itbi_isencao", "Itbi", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Consultar certidões enviadas", "Itbi_query_isencao", "Itbi", null, new { @class = "actionlink" })<br />
                 <a href="~/Files/ITBI Manual do Usuario.pdf" class="actionlink">Download do manual do usuário</a><br />
                 @if (ViewBag.Fiscal == "S") {
-                    @Html.ActionLink("Relatório dos ITBI´s emitidos", "Itbi_resumo", "Imovel", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Relatório dos ITBI´s emitidos", "Itbi_resumo", "Itbi", null, new { @class = "actionlink" })<br />
                 }
             </div>
             <div class="panel-footer">
