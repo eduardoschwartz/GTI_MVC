@@ -588,8 +588,6 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-
-
             Endereco_bll enderecoRepository = new Endereco_bll("GTiconnection");
             if (model.Comprador.Cep != null) {
                 int _ceptmp = Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep));
@@ -2102,6 +2100,21 @@ namespace GTI_Mvc.Controllers {
             }
 
             //################### Grava Itbi_Comprador #####################
+            
+            if (model.Lista_Comprador.Count == 0) {
+                List<Itbi_comprador> _listaC= imovelRepository.Retorna_Itbi_Comprador(model.Guid);
+                byte y = 0;
+                foreach (Itbi_comprador item in _listaC) {
+                    ListCompradorEditorViewModel reg = new ListCompradorEditorViewModel() {
+                        Nome=item.Nome,
+                        Cpf_Cnpj=item.Cpf_cnpj,
+                        Seq=y
+                    };
+                    model.Lista_Comprador.Add(reg);
+                    y++;
+                }
+            }
+
             ex = imovelRepository.Excluir_Itbi_comprador(model.Guid);
 
             List<Itbi_comprador> ListaC = new List<Itbi_comprador>();
@@ -2117,6 +2130,21 @@ namespace GTI_Mvc.Controllers {
             ex = imovelRepository.Incluir_Itbi_comprador(ListaC);
 
             //################### Grava Itbi_Vendedor #####################
+            if (model.Lista_Vendedor.Count == 0) {
+                List<Itbi_vendedor> _listaV = imovelRepository.Retorna_Itbi_vendedor(model.Guid);
+                byte y = 0;
+                foreach (Itbi_vendedor item in _listaV) {
+                    ListVendedorEditorViewModel reg = new ListVendedorEditorViewModel() {
+                        Nome = item.Nome,
+                        Cpf_Cnpj = item.Cpf_cnpj,
+                        Seq = y
+                    };
+                    model.Lista_Vendedor.Add(reg);
+                    y++;
+                }
+            }
+
+
             ex = imovelRepository.Excluir_Itbi_vendedor(model.Guid);
 
             List<Itbi_vendedor> ListaV = new List<Itbi_vendedor>();
