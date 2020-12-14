@@ -2561,7 +2561,8 @@ namespace GTI_Mvc.Controllers {
 
         public DateTime Retorna_Data_Vencimento_Itbi() {
             DateTime _data = DateTime.Now;
-            _data = _data.AddDays(30);
+            //            _data = _data.AddDays(30);
+            _data = new DateTime(2020,12,31);
             if (_data.DayOfWeek == DayOfWeek.Saturday)
                 _data.AddDays(2);
             else {
