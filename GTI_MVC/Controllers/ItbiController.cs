@@ -101,6 +101,33 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Itbi_urbano(ItbiViewModel model, HttpPostedFileBase file, string action, int seq = 0) {
             bool _bcpf = false, _bcnpj = false;
+
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            List<ListCompradorEditorViewModel> Lista_comprador = new List<ListCompradorEditorViewModel>();
+            List<Itbi_comprador> listaC = imovelRepository.Retorna_Itbi_Comprador(model.Guid);
+            foreach (Itbi_comprador item in listaC) {
+                ListCompradorEditorViewModel itemC = new ListCompradorEditorViewModel() {
+                    Seq = item.Seq,
+                    Nome = item.Nome,
+                    Cpf_Cnpj = item.Cpf_cnpj
+                };
+                Lista_comprador.Add(itemC);
+            }
+            model.Lista_Comprador = Lista_comprador;
+
+            List<ListVendedorEditorViewModel> Lista_vendedor = new List<ListVendedorEditorViewModel>();
+            List<Itbi_vendedor> listaV = imovelRepository.Retorna_Itbi_vendedor(model.Guid);
+            foreach (Itbi_vendedor item in listaV) {
+                ListVendedorEditorViewModel itemV = new ListVendedorEditorViewModel() {
+                    Seq = item.Seq,
+                    Nome = item.Nome,
+                    Cpf_Cnpj = item.Cpf_cnpj
+                };
+                Lista_vendedor.Add(itemV);
+            }
+            model.Lista_Vendedor = Lista_vendedor;
+
+
             Endereco_bll enderecoRepository = new Endereco_bll("GTiconnection");
             string _guid = "";
             ModelState.Clear();
@@ -140,7 +167,7 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            
             List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
             ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
             List<Itbi_financiamento> Lista_Financimento = imovelRepository.Lista_Itbi_Financiamento();
@@ -477,6 +504,32 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Itbi_urbano_e(ItbiViewModel model, HttpPostedFileBase file, string action, int seq = 0) {
             bool _bcpf = false, _bcnpj = false;
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+
+            List<ListCompradorEditorViewModel> Lista_comprador = new List<ListCompradorEditorViewModel>();
+            List<Itbi_comprador> listaC = imovelRepository.Retorna_Itbi_Comprador(model.Guid);
+            foreach (Itbi_comprador item in listaC) {
+                ListCompradorEditorViewModel itemC = new ListCompradorEditorViewModel() {
+                    Seq = item.Seq,
+                    Nome = item.Nome,
+                    Cpf_Cnpj = item.Cpf_cnpj
+                };
+                Lista_comprador.Add(itemC);
+            }
+            model.Lista_Comprador = Lista_comprador;
+
+            List<ListVendedorEditorViewModel> Lista_vendedor = new List<ListVendedorEditorViewModel>();
+            List<Itbi_vendedor> listaV = imovelRepository.Retorna_Itbi_vendedor(model.Guid);
+            foreach (Itbi_vendedor item in listaV) {
+                ListVendedorEditorViewModel itemV = new ListVendedorEditorViewModel() {
+                    Seq = item.Seq,
+                    Nome = item.Nome,
+                    Cpf_Cnpj = item.Cpf_cnpj
+                };
+                Lista_vendedor.Add(itemV);
+            }
+            model.Lista_Vendedor = Lista_vendedor;
+
 
             string _guid = "";
             ModelState.Clear();
@@ -484,7 +537,7 @@ namespace GTI_Mvc.Controllers {
             List<Logradouro> Lista_Logradouro = new List<Logradouro>();
             ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
 
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            
             List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
             ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
             List<Itbi_financiamento> Lista_Financimento = imovelRepository.Lista_Itbi_Financiamento();
@@ -949,6 +1002,31 @@ namespace GTI_Mvc.Controllers {
             ModelState.Clear();
 
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+
+            List<ListCompradorEditorViewModel> Lista_comprador = new List<ListCompradorEditorViewModel>();
+            List<Itbi_comprador> listaC = imovelRepository.Retorna_Itbi_Comprador(model.Guid);
+            foreach (Itbi_comprador item in listaC) {
+                ListCompradorEditorViewModel itemC = new ListCompradorEditorViewModel() {
+                    Seq = item.Seq,
+                    Nome = item.Nome,
+                    Cpf_Cnpj = item.Cpf_cnpj
+                };
+                Lista_comprador.Add(itemC);
+            }
+            model.Lista_Comprador = Lista_comprador;
+
+            List<ListVendedorEditorViewModel> Lista_vendedor = new List<ListVendedorEditorViewModel>();
+            List<Itbi_vendedor> listaV = imovelRepository.Retorna_Itbi_vendedor(model.Guid);
+            foreach (Itbi_vendedor item in listaV) {
+                ListVendedorEditorViewModel itemV = new ListVendedorEditorViewModel() {
+                    Seq = item.Seq,
+                    Nome = item.Nome,
+                    Cpf_Cnpj = item.Cpf_cnpj
+                };
+                Lista_vendedor.Add(itemV);
+            }
+            model.Lista_Vendedor = Lista_vendedor;
+
             List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
             ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
             List<Itbi_financiamento> Lista_Financimento = imovelRepository.Lista_Itbi_Financiamento();
@@ -1275,6 +1353,30 @@ namespace GTI_Mvc.Controllers {
             ModelState.Clear();
 
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+
+            List<ListCompradorEditorViewModel> Lista_comprador = new List<ListCompradorEditorViewModel>();
+            List<Itbi_comprador> listaC = imovelRepository.Retorna_Itbi_Comprador(model.Guid);
+            foreach (Itbi_comprador item in listaC) {
+                ListCompradorEditorViewModel itemC = new ListCompradorEditorViewModel() {
+                    Seq = item.Seq,
+                    Nome = item.Nome,
+                    Cpf_Cnpj = item.Cpf_cnpj
+                };
+                Lista_comprador.Add(itemC);
+            }
+            model.Lista_Comprador = Lista_comprador;
+
+            List<ListVendedorEditorViewModel> Lista_vendedor = new List<ListVendedorEditorViewModel>();
+            List<Itbi_vendedor> listaV = imovelRepository.Retorna_Itbi_vendedor(model.Guid);
+            foreach (Itbi_vendedor item in listaV) {
+                ListVendedorEditorViewModel itemV = new ListVendedorEditorViewModel() {
+                    Seq = item.Seq,
+                    Nome = item.Nome,
+                    Cpf_Cnpj = item.Cpf_cnpj
+                };
+                Lista_vendedor.Add(itemV);
+            }
+            model.Lista_Vendedor = Lista_vendedor;
             List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
             ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
             List<Itbi_financiamento> Lista_Financimento = imovelRepository.Lista_Itbi_Financiamento();
@@ -1680,7 +1782,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_urbano_e")]
         [HttpGet]
         public ActionResult Itbi_urbano_e(string p = "", string a = "", int s = 0) {
-            if (Session["hashid"] == null)
+            if (Session["hashid"] == null || p=="")
                 return RedirectToAction("Login", "Home");
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             Itbi_status stat = imovelRepository.Retorna_Itbi_Situacao(p);
@@ -2101,19 +2203,19 @@ namespace GTI_Mvc.Controllers {
 
             //################### Grava Itbi_Comprador #####################
             
-            if (model.Lista_Comprador.Count == 0) {
-                List<Itbi_comprador> _listaC= imovelRepository.Retorna_Itbi_Comprador(model.Guid);
-                byte y = 0;
-                foreach (Itbi_comprador item in _listaC) {
-                    ListCompradorEditorViewModel reg = new ListCompradorEditorViewModel() {
-                        Nome=item.Nome,
-                        Cpf_Cnpj=item.Cpf_cnpj,
-                        Seq=y
-                    };
-                    model.Lista_Comprador.Add(reg);
-                    y++;
-                }
-            }
+            //if (model.Lista_Comprador.Count == 0) {
+            //    List<Itbi_comprador> _listaC= imovelRepository.Retorna_Itbi_Comprador(model.Guid);
+            //    byte y = 0;
+            //    foreach (Itbi_comprador item in _listaC) {
+            //        ListCompradorEditorViewModel reg = new ListCompradorEditorViewModel() {
+            //            Nome=item.Nome,
+            //            Cpf_Cnpj=item.Cpf_cnpj,
+            //            Seq=y
+            //        };
+            //        model.Lista_Comprador.Add(reg);
+            //        y++;
+            //    }
+            //}
 
             ex = imovelRepository.Excluir_Itbi_comprador(model.Guid);
 
@@ -2130,19 +2232,19 @@ namespace GTI_Mvc.Controllers {
             ex = imovelRepository.Incluir_Itbi_comprador(ListaC);
 
             //################### Grava Itbi_Vendedor #####################
-            if (model.Lista_Vendedor.Count == 0) {
-                List<Itbi_vendedor> _listaV = imovelRepository.Retorna_Itbi_vendedor(model.Guid);
-                byte y = 0;
-                foreach (Itbi_vendedor item in _listaV) {
-                    ListVendedorEditorViewModel reg = new ListVendedorEditorViewModel() {
-                        Nome = item.Nome,
-                        Cpf_Cnpj = item.Cpf_cnpj,
-                        Seq = y
-                    };
-                    model.Lista_Vendedor.Add(reg);
-                    y++;
-                }
-            }
+            //if (model.Lista_Vendedor.Count == 0) {
+            //    List<Itbi_vendedor> _listaV = imovelRepository.Retorna_Itbi_vendedor(model.Guid);
+            //    byte y = 0;
+            //    foreach (Itbi_vendedor item in _listaV) {
+            //        ListVendedorEditorViewModel reg = new ListVendedorEditorViewModel() {
+            //            Nome = item.Nome,
+            //            Cpf_Cnpj = item.Cpf_cnpj,
+            //            Seq = y
+            //        };
+            //        model.Lista_Vendedor.Add(reg);
+            //        y++;
+            //    }
+            //}
 
 
             ex = imovelRepository.Excluir_Itbi_vendedor(model.Guid);
