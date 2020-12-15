@@ -1982,8 +1982,42 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
+      <Textbox Name="ObsText">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Code.GetText("teste ç]rogj çorgj çorj ",96)</Value>
+                <Style>
+                  <FontFamily>Consolas</FontFamily>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <Top>5.55936cm</Top>
+        <Left>0.56561cm</Left>
+        <Height>0.41479cm</Height>
+        <Width>2.90689cm</Width>
+        <ZIndex>7</ZIndex>
+        <Visibility>
+          <Hidden>true</Hidden>
+        </Visibility>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
-    <Height>2.48686in</Height>
+    <Height>2.49728in</Height>
     <Style>
       <Border>
         <Style>None</Style>
@@ -2402,6 +2436,66 @@
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
+  <Code>  public Function GetText(ByVal text As String, ByVal width As Integer) 
+        Dim palabras As String() = text.Split(" "c)  'text--&gt;palabras
+        Dim sb1 As New System.Text.StringBuilder()
+        Dim sb2 As New System.Text.StringBuilder()
+        Dim length As Integer = palabras.Length     'palabras
+        Dim resultado As New System.Collections.Generic.List(Of String)()
+        Dim i As Integer = 0
+        While i &lt; length
+            sb1.AppendFormat("{0} ", palabras(i))   'palabras
+            If sb1.ToString().Length &gt; width Then
+                resultado.Add(sb2.ToString())
+                sb1 = New System.Text.StringBuilder()
+                sb2 = New System.Text.StringBuilder()
+                System.Math.Max(System.Threading.Interlocked.Decrement(i), i + 1)
+            Else
+                sb2.AppendFormat("{0} ", palabras(i))
+            End If
+            System.Math.Max(System.Threading.Interlocked.Increment(i), i - 1)
+        End While
+        resultado.Add(sb2.ToString())               'resultado
+
+        Dim resultado2 As New System.Collections.Generic.List(Of String)()
+        Dim temp As String
+
+        Dim index1 As Integer, index2 As Integer, salto As Integer
+        Dim target As String
+        Dim limite As Integer = resultado.Count     'resultado
+        For Each item As String In resultado        'resultado
+            target = " "
+            temp = item.ToString().Trim()
+            index1 = 0
+            index2 = 0
+            salto = 2
+
+            If limite &lt;= 1 Then
+                resultado2.Add(temp)
+                Exit For
+            End If
+            While temp.Length &lt;= width
+                If temp.IndexOf(target, index2) &lt; 0 Then
+                    index1 = 0
+                    index2 = 0
+                    target = target + " "
+                    System.Math.Max(System.Threading.Interlocked.Increment(salto), salto - 1)
+                End If
+                index1 = temp.IndexOf(target, index2)
+                temp = temp.Insert(temp.IndexOf(target, index2), " ")
+
+                index2 = index1 + salto
+            End While
+            System.Math.Max(System.Threading.Interlocked.Decrement(limite), limite + 1)
+            resultado2.Add(temp)
+        Next
+
+        Dim builder As New System.Text.StringBuilder()
+        For Each item As String In resultado2
+            builder.Append(item).Append(chr(10))
+       Next
+        Return builder.ToString()
+    End Function</Code>
   <EmbeddedImages>
     <EmbeddedImage Name="BrasaoJaboticabal">
       <MIMEType>image/jpeg</MIMEType>
@@ -2414,6 +2508,7 @@ LjoXNyP21clhknheKLR3FgQCbfQU+Hdqkfq4sbn5/wB4NfT3eqD9HFRPr/cBQIYO1+Sy39ycZGS3hvJj
 xXaLkSMmUgIJ9svP0Fm/lY/4h40GceXapeQhV8SdNK94WPlcihbAUGFQd+ZKdmOtv89vUfgt/pTmXH7cxX34XF/kqBvafIvIFCkEsoyGJOnlXqbOypVkmOOCcfd7KOVASQ2G8qN19oIsALUFdcn/AKhBjcRAMjkpIfdzZsgDd7YGibVb0XJ9KfU0vyc7Pyt+LkFSi2mf2kCsgjKsVjY3I3M38a9ycNnwSRFJ1hMkm2WS5cykgS7mZimh6V9PHzmVnknJmlf9dWhsbAmMKAX8PKgoxbcuPFWV1EKq8kzjUiNiw2m/Q/x+lSz8iqovH4gVIAASSLA/53+Fug/sqKXj5vVFFlLZgrD9MbdsYIFyGGliatcH25PyjS4/vLCyeqaZGJaTUqwN19Nj4aUEnauMmZmSZarMqRho8YLuYP4ySb2HVjp6bU0jzO8ZBbEwvZDkht91C62W5dr3tqacriw8ZiFYY3ijQKxTGYsb2a5VXv5Ul4vgeG5lWkxuSzPOaCR19wEnXd6T18xQM+I4rnkz0yuS5ISqoP8A8sYFrnzNhpWgpRx/afDcflrmQo7ZCfbJJIzW0t0vam9AUmh4aTM5VuU5MX9klcHHJuEAP/I1tCx6jy/g5ooM53FxfCY+K8s6yNkTXCNvLMW8zvuLCsHHIFkZIz6gd0djruHlXVp+Nwsif38iMTMAFUP6lAGuinSvEvCcNN/yYUDEdD7S3HyNrig5Tk95Fcg+wl2RyWlNlBLEFhd93puL9KifvRrgFARZdIm0un2nWMC+tdEy/wCnvbWU24xPGevpa/8AvDGoh/TntqFS5x3ymUehHcAa/wCkLQZLh+Sz+ZWQ48JMUQLSMQgA3EjruXzpwr8omOv6QKhzIrjcBuClPHw9Q8abR9q5qy/otBiYq29vGVS6qR/MwGzc3zq48GLx6e9ymV+U8YuFICRgXuLrc+Nup+lBmpJsqSP3pIJCdrHbYFPsVA3VTbSvCcjEJNshMbhk3bjc
 hb+rp5gLpTtU5PuAL7E/t8btKyTEW9w3IbYg6/U2poO2uEmxTHkYiTGUDfJILyGw0O/qv0oMj+VE+KVjDTsF2x2T1D0bGsxP2k+Fev8AsnARzjE2O7dfRwunhc/ZoRTY9u52FOZ+KlUx4pCjFkvoo9QZHHjr0IqCXEg5HfPgz/incGmgkX3Iw1w32aMlyL3Fx8KBRl5s2LxYz8nbJhhvbj1D63L2Oo+RBpPL3dFMf042LWsu0rcLpZfVIT4VqeU7WzsqA48uGHhclisEoI8wy79h3L4Umxf6TflguMqXFKEgx5EAufiGVwD+ygVr3IBJ/wDVGYVlGw+5GVUqT6huVmteq+NnchyPLSZAa2Og9uMKbAgWAJt1vbrWsxf6QYa2/Mz3lAOiom0W+rGtBgdidv4QASNnIFrs1v8AaBQVuC4t5oBlYXIPHNoJk26B7dGUsQR9KYZ3b35GTByWM64nJwlTJKgOyUfzK66HUVZw+ExsHL/IxGZFZSskRN1PiDr5UwoCiiigKKKKAooooCiiigKT4/bsMmXLmZyq4kYNHi9Y129Gf/G3z0/jTiig8xRLFGEXoP7flXqiigLC5PietLeT4HHzIR7Lfi5Ef/FMnhrfawuNy38KZUUEOF+T+LGMtVWdRtk2G6kjTcvwPWpqKKAooooCiiigKKKKD//Z</ImageData>
     </EmbeddedImage>
+    
   </EmbeddedImages>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>61208e93-b422-47b1-b256-d83093c26911</rd:ReportID>
