@@ -1521,12 +1521,13 @@ namespace GTI_Mvc.Controllers {
                     _totParcela = (short)pr.Qtdeparcela;
 
                     int _seq = Lista[0].Numsequencia;
-                    List<DebitoStructure> ListaDebito = tributario_class.Lista_Parcelas_Parcelamento_Ano(_codigo, 2020, _seq);
+                    List<DebitoStructure> ListaDebito = tributario_class.Lista_Parcelas_Parcelamento_Ano(_codigo, 2021, _seq);
                     if (ListaDebito.Count == 0) {
                         ViewBag.Result = "Não existem parcelas a serem impressas.";
                         return View(model);
                     } else {
-                        //  if (ListaDebito[0].Numero_Parcela == 1) {
+                        
+
                         bool _find = false;
                         foreach (DebitoStructure itemtmp in ListaDebito) {
                             if (itemtmp.Codigo_Situacao < 3) {
@@ -1534,6 +1535,8 @@ namespace GTI_Mvc.Controllers {
                                 break;
                             }
                         }
+                        if (ListaDebito[0].Numero_Parcela > 1)
+                            _find = true;
                         if (!_find) {
                             ViewBag.Result = "Liberação do carnê somente após o pagamento da primeira parcela.";
                             return View(model);
