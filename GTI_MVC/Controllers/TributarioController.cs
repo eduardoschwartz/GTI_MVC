@@ -2243,10 +2243,23 @@ namespace GTI_Mvc.Controllers {
                     Nome = Functions.TruncateTo(  item.Nome,25),
                     Data_Emissao = item.Data_gravacao,
                     SituacaoNome=item.Situacao_nome,
-                    AnoNumero=item.Numero_notificacao.ToString("0000") + "/" + item.Ano_notificacao.ToString()
+                    AnoNumero=item.Numero_notificacao.ToString("0000") + "/" + item.Ano_notificacao.ToString(),
+                    Ano_Selected = DateTime.Now.Year.ToString()
                 };
                 model.Add(reg);
             }
+
+            return View(model);
+        }
+
+        [Route("Notificacao_query")]
+        [HttpPost]
+        public ViewResult Notificacao_query(List<NotificacaoIssViewModel> model) {
+            string _ano = model[0].Ano_Selected ?? "";
+            if (_ano == "")
+                _ano = DateTime.Now.Year.ToString();
+
+
 
             return View(model);
         }

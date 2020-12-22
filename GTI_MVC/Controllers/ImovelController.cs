@@ -946,46 +946,22 @@ namespace GTI_Mvc.Controllers {
                 parameters.Add(new ReportParameter("LOTEO", ListaBoleto[0].Lote));
                 parameters.Add(new ReportParameter("CODIGO", ListaBoleto[0].Codreduzido));
                 parameters.Add(new ReportParameter("INSC", ListaBoleto[0].Inscricao_cadastral));
-                if (RegIPTU != null) {
-                    parameters.Add(new ReportParameter("FRACAO", Convert.ToDecimal(RegIPTU.Fracaoideal).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("NATUREZA", RegIPTU.Natureza));
-                    parameters.Add(new ReportParameter("TESTADA", Convert.ToDecimal(RegIPTU.Testadaprinc).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("AREAT", Convert.ToDecimal(RegIPTU.Areaterreno).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("AREAC", Convert.ToDecimal(RegIPTU.Areaconstrucao).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("VVT", Convert.ToDecimal(RegIPTU.Vvt).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("VVC", Convert.ToDecimal(RegIPTU.Vvc).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("VVI", Convert.ToDecimal(RegIPTU.Vvi).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("IPTU", Convert.ToDecimal(RegIPTU.Impostopredial).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("ITU", Convert.ToDecimal(RegIPTU.Impostoterritorial).ToString("#0.00")));
-                    if (RegIPTU.Natureza == "predial")
-                        parameters.Add(new ReportParameter("TOTALPARC", Convert.ToDecimal(RegIPTU.Impostopredial).ToString("#0.00")));
-                    else
-                        parameters.Add(new ReportParameter("TOTALPARC", Convert.ToDecimal(RegIPTU.Impostoterritorial).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("UNICA1", Convert.ToDecimal(RegIPTU.Valortotalunica).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("UNICA2", Convert.ToDecimal(RegIPTU.Valortotalunica2).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("UNICA3", Convert.ToDecimal(RegIPTU.Valortotalunica3).ToString("#0.00")));
-                } else {
-                    parameters.Add(new ReportParameter("FRACAO", Convert.ToDecimal(RegIPTU_Ext.Fracaoideal).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("NATUREZA", RegIPTU_Ext.Natureza));
-                    parameters.Add(new ReportParameter("TESTADA", Convert.ToDecimal(RegIPTU_Ext.Testadaprinc).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("AREAT", Convert.ToDecimal(RegIPTU_Ext.Areaterreno).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("AREAC", Convert.ToDecimal(RegIPTU_Ext.Areaconstrucao).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("VVT", Convert.ToDecimal(RegIPTU_Ext.Vvt).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("VVC", Convert.ToDecimal(RegIPTU_Ext.Vvc).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("VVI", Convert.ToDecimal(RegIPTU_Ext.Vvi).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("IPTU", Convert.ToDecimal(RegIPTU_Ext.Impostopredial).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("ITU", Convert.ToDecimal(RegIPTU_Ext.Impostoterritorial).ToString("#0.00")));
-                    if (RegIPTU_Ext.Natureza == "predial")
-                        parameters.Add(new ReportParameter("TOTALPARC", Convert.ToDecimal(RegIPTU_Ext.Impostopredial).ToString("#0.00")));
-                    else
-                        parameters.Add(new ReportParameter("TOTALPARC", Convert.ToDecimal(RegIPTU_Ext.Impostoterritorial).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("UNICA1", Convert.ToDecimal(RegIPTU_Ext.Valortotalunica).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("UNICA2", Convert.ToDecimal(RegIPTU_Ext.Valortotalunica2).ToString("#0.00")));
-                    parameters.Add(new ReportParameter("UNICA3", Convert.ToDecimal(RegIPTU_Ext.Valortotalunica3).ToString("#0.00")));
-                }
-
+                parameters.Add(new ReportParameter("FRACAO", Convert.ToDecimal(RegIPTU.Fracaoideal).ToString("#0.00")));
+                parameters.Add(new ReportParameter("NATUREZA", RegIPTU.Natureza));
+                parameters.Add(new ReportParameter("TESTADA", Convert.ToDecimal(RegIPTU.Testadaprinc).ToString("#0.00")));
+                parameters.Add(new ReportParameter("AREAT", Convert.ToDecimal(RegIPTU.Areaterreno).ToString("#0.00")));
+                parameters.Add(new ReportParameter("AREAC", Convert.ToDecimal(RegIPTU.Areaconstrucao).ToString("#0.00")));
+                parameters.Add(new ReportParameter("VVT", Convert.ToDecimal(RegIPTU.Vvt).ToString("#0.00")));
+                parameters.Add(new ReportParameter("VVC", Convert.ToDecimal(RegIPTU.Vvc).ToString("#0.00")));
+                parameters.Add(new ReportParameter("VVI", Convert.ToDecimal(RegIPTU.Vvi).ToString("#0.00")));
+                parameters.Add(new ReportParameter("IPTU", Convert.ToDecimal(RegIPTU.Impostopredial).ToString("#0.00")));
+                parameters.Add(new ReportParameter("ITU", Convert.ToDecimal(RegIPTU.Impostoterritorial).ToString("#0.00")));
+                parameters.Add(new ReportParameter("TOTALPARC", Convert.ToDecimal((ListaBoleto.Count - 3) * ListaBoleto[3].Valorguia).ToString("#0.00")));
+                parameters.Add(new ReportParameter("UNICA1", Convert.ToDecimal(ListaBoleto[0].Valorguia).ToString("#0.00")));
+                parameters.Add(new ReportParameter("UNICA2", Convert.ToDecimal(ListaBoleto[1].Valorguia).ToString("#0.00")));
+                parameters.Add(new ReportParameter("UNICA3", Convert.ToDecimal(ListaBoleto[2].Valorguia).ToString("#0.00")));
+       
                 viewer.LocalReport.SetParameters(parameters);
-
                 byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
                 Response.Buffer = true;
                 Response.Clear();

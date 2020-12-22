@@ -935,7 +935,7 @@ namespace GTI_Mvc.Controllers {
         public ViewResult Itbi_query(List<ItbiViewModel> model) {
             string _ano = model[0].Ano_Selected ?? "";
             if (_ano == "")
-                _ano = "2020";
+                _ano = DateTime.Now.Year.ToString();
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             int _userId = Convert.ToInt32(Session["hashid"]);
             bool _fiscal = Session["hashfiscalitbi"] != null && Session["hashfiscalitbi"].ToString() == "S" ? true : false;
