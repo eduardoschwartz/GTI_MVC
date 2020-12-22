@@ -1369,11 +1369,17 @@ namespace GTI_Dal.Classes {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var reg = (from p in db.Proprietario
                            join c in db.Cidadao on p.Codcidadao equals c.Codcidadao into pc from c in pc.DefaultIfEmpty()
-                           where p.Codreduzido == Codigo && c.Cpf == Cpf select c.Nomecidadao).FirstOrDefault();
-                if (string.IsNullOrEmpty(reg))
+                           where p.Codreduzido == Codigo  select new{Nome=c.Nomecidadao,Cpf= c.Cpf }).FirstOrDefault();
+                if (reg.Cpf == null)
                     return false;
-                else
-                    return true;
+                else {
+                    string _cpf = Convert.ToInt64(reg.Cpf).ToString();
+                    _cpf = _cpf.PadLeft(11, '0');
+                    if (_cpf == Cpf)
+                        return true;
+                    else
+                        return false;
+                }
             }
         }
 
