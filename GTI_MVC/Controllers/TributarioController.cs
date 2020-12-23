@@ -2234,7 +2234,7 @@ namespace GTI_Mvc.Controllers {
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             List<Notificacao_iss_web_Struct> Lista = tributarioRepository.Retorna_Notificacao_Iss_Web(DateTime.Now.Year);
             List<NotificacaoIssViewModel> model = new List<NotificacaoIssViewModel>();
-
+            List<AnoList> ListaAno = tributarioRepository.Retorna_Ano_Notificacao();
             foreach (Notificacao_iss_web_Struct item in Lista) {
                 NotificacaoIssViewModel reg = new NotificacaoIssViewModel() {
                     Guid=item.Guid,
@@ -2243,24 +2243,43 @@ namespace GTI_Mvc.Controllers {
                     Nome = Functions.TruncateTo(  item.Nome,25),
                     Data_Emissao = item.Data_gravacao,
                     SituacaoNome=item.Situacao_nome,
-                    AnoNumero=item.Numero_notificacao.ToString("0000") + "/" + item.Ano_notificacao.ToString(),
-                    Ano_Selected = DateTime.Now.Year.ToString()
+                    AnoNumero=item.Numero_notificacao.ToString("0000") + "/" + item.Ano_notificacao.ToString()
                 };
                 model.Add(reg);
             }
 
+            ViewBag.ListaAno = new SelectList(ListaAno, "Codigo", "Descricao",2020);
+            model[0].Ano_Selected = ListaAno[ListaAno.Count-1].Codigo;
             return View(model);
         }
 
         [Route("Notificacao_query")]
         [HttpPost]
         public ViewResult Notificacao_query(List<NotificacaoIssViewModel> model) {
-            string _ano = model[0].Ano_Selected ?? "";
-            if (_ano == "")
-                _ano = DateTime.Now.Year.ToString();
+            int _ano = model[0].Ano_Selected ;
+            if (model[0].Ano_Selected == 0)
+                _ano = DateTime.Now.Year;
 
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            List<Notificacao_iss_web_Struct> Lista = tributarioRepository.Retorna_Notificacao_Iss_Web(Convert.ToInt32(_ano));
+            model = new List<NotificacaoIssViewModel>();
 
-
+            foreach (Notificacao_iss_web_Struct item in Lista) {
+                NotificacaoIssViewModel reg = new NotificacaoIssViewModel() {
+                    Guid = item.Guid,
+                    Ano_Notificacao = item.Ano_notificacao,
+                    Numero_Notificacao = item.Numero_notificacao,
+                    Nome = Functions.TruncateTo(item.Nome, 25),
+                    Data_Emissao = item.Data_gravacao,
+                    SituacaoNome = item.Situacao_nome,
+                    AnoNumero = item.Numero_notificacao.ToString("0000") + "/" + item.Ano_notificacao.ToString(),
+                    Ano_Selected = DateTime.Now.Year
+                };
+                model.Add(reg);
+            }
+            List<AnoList> ListaAno = tributarioRepository.Retorna_Ano_Notificacao();
+            ViewBag.ListaAno = new SelectList(ListaAno, "Codigo", "Descricao", _ano);
+            model[0].Ano_Selected = _ano;
             return View(model);
         }
 

@@ -2616,10 +2616,27 @@ Proximo:;
             }
         }
 
+        public List<AnoList> Retorna_Ano_Notificacao() {
+            List<AnoList> Lista = new List<AnoList>();
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from a in db.Notificacao_Iss_Web orderby a.Ano_notificacao select a.Ano_notificacao).Distinct().ToList();
+                foreach (int item in Sql) {
+                    AnoList reg = new AnoList() {
+                        Codigo=item,
+                        Descricao=item.ToString()
+                    };
+                    Lista.Add(reg);
+                }
+                return Lista;
+            }
+        }
+
+
         public List<Notificacao_iss_web_Struct> Retorna_Notificacao_Iss_Web(int Ano) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                var Sql = (from l in db.Notificacao_Iss_Web 
                           join c in db.Itbi_Status on l.Situacao equals c.Codigo into lc from c in lc.DefaultIfEmpty()
+                          where l.Ano_notificacao==Ano
                           orderby l.Numero_notificacao
                            select new Notificacao_iss_web_Struct {Guid=l.Guid,Ano_notificacao=l.Ano_notificacao,Numero_notificacao=l.Numero_notificacao,
                           Data_gravacao=l.Data_gravacao,Data_vencimento=l.Data_vencimento,Nome=l.Nome,Situacao_nome=c.Descricao}).ToList();

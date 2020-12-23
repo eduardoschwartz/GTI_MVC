@@ -67,6 +67,10 @@ namespace GTI_Models.Models {
         public string Nao { get; set; }
     }
 
+    public class AnoList {
+        public int Codigo { get; set; }
+        public string Descricao { get; set; }
+    }
 
 
 }

@@ -1547,6 +1547,10 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public List<AnoList> Retorna_Ano_Notificacao() {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Retorna_Ano_Notificacao();
+        }
 
     }//end class
 }

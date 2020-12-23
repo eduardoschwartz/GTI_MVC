@@ -9,12 +9,12 @@
 
     .center {
         margin: auto;
-        width: 700px;
+/*        width: 700px;
         border: 1px solid rgba(0,0,0,0.24);
         padding: 20px;
         box-shadow: 0 .1em 0.5em #000;
         border-radius: 13px;
-    }
+*/    }
 
     .actionlink:hover {
         color: darkgreen;
@@ -32,19 +32,10 @@
             <div class="panel panel-danger">
                 <div class="panel-heading">
                     Consulta de Notificações emitidas
-                    @{
-
-
-                        var selectListAno = new SelectList(new List<SelectListItem>
-                            {
-                        new SelectListItem {Text = "2019", Value = "2019" },
-                        new SelectListItem {Text = "2020", Value = "2020"}
-                        }, "Value", "Text");
-
-                    }
+                   
                     <label style="padding-left:20px">
                         Exercício:&nbsp;
-                        @Html.DropDownListFor(m => m[0].Ano_Selected, selectListAno, null, new { @id = "AnoDropDown", @style = "font-weight:normal", onchange = "this.form.submit()" })
+                        @Html.DropDownListFor(m => Model[0].Ano_Selected, ViewBag.ListaAno as SelectList, null, new { @id = "AnoDropDown", @style = "font-weight:normal", onchange = "this.form.submit()" })
                     </label>  <br />
 
 
@@ -77,8 +68,7 @@
                             }
                         </tbody>
                     </table>
-                    <br />
-                    <br />
+               
                     <div class="form-group row">
                         <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
                     </div>
