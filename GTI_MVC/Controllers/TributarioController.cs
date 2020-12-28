@@ -25,7 +25,6 @@ namespace GTI_Mvc.Controllers {
     [Route("Tributario")]
     public class TributarioController : Controller
     {
-//        private readonly object gtiCore;
 
         [Route("Certidao/Certidao_Debito_Codigo")]
         [HttpGet]
