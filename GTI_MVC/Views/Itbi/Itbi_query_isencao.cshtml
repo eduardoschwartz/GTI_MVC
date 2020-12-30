@@ -9,7 +9,7 @@
 
     .center {
         margin: auto;
-/*        width: 780px;
+        /*        width: 780px;
         border: 1px solid rgba(0,0,0,0.24);
         padding: 20px;
         box-shadow: 0 .1em 0.5em #000;
@@ -23,6 +23,7 @@
     .actionlink {
         color: darkslateblue;
     }
+
     .card-header {
         background-color: mistyrose;
         color: brown;
@@ -103,40 +104,40 @@
                             }
                         </tbody>
                     </table>
-               
+
                     <div class="form-group row">
                         <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
                     </div>
-                    
+
                 </div>
                 <div class="card-footer">
                     @Html.ActionLink("Retornar ao menu de opções", "Itbi_Menu", "Itbi", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
-                    </div>
                 </div>
             </div>
-                if (ViewBag.Erro == "C") {
+        </div>
+        if (ViewBag.Erro == "C") {
+            <script type="text/javascript">
+                alert("Apenas Itbis que encontram-se em análise podem ser cancelados!");
+            </script>
+        } else {
+            if (ViewBag.Erro == "P") {
+                <script type="text/javascript">
+                    alert("A guia de pagamento deste Itbi ainda não foi liberada!");
+                </script>
+            } else {
+                if (ViewBag.Erro == "A") {
                     <script type="text/javascript">
-                        alert("Apenas Itbis que encontram-se em análise podem ser cancelados!");
+                        alert("Apenas Itbis que encontram-se em análise podem ser alterados!");
                     </script>
                 } else {
-                    if (ViewBag.Erro == "P") {
+                    if (ViewBag.Erro == "V") {
                         <script type="text/javascript">
-                            alert("A guia de pagamento deste Itbi ainda não foi liberada!");
+                            alert("Este boleto esta vencido e não pode ser mais emitido!");
                         </script>
-                    } else {
-                        if (ViewBag.Erro == "A") {
-                            <script type="text/javascript">
-                                alert("Apenas Itbis que encontram-se em análise podem ser alterados!");
-                            </script>
-                        } else {
-                            if (ViewBag.Erro == "V") {
-                                <script type="text/javascript">
-                                    alert("Este boleto esta vencido e não pode ser mais emitido!");
-                                </script>
-                            }
-                        }
                     }
                 }
+            }
+        }
     }
-    </div>
+</div>

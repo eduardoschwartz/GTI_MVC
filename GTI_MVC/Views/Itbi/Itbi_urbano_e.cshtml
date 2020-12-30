@@ -31,6 +31,38 @@
     .ui-datepicker {
         margin-top: 30px;
     }
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
 </style>
 
 
@@ -39,9 +71,9 @@
     @using (Html.BeginForm("Itbi_urbano_e", "Itbi", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
         <div class="container" style="width:700px">
-            <div class="panel panel-danger">
-                <div class="panel-heading">Alteração de ITBI - Nº @Model.Itbi_NumeroAno </div>
-                <div class="panel-body">
+            <div class="card">
+                <div class="card-header">Alteração de ITBI - Nº @Model.Itbi_NumeroAno </div>
+                <div class="card-body">
                     <div style="padding-left:7px">
 
                         <table style="font-size:14px;width:640px">
@@ -119,8 +151,8 @@
 
                 @if (@Model.Inscricao != null) {
                     @*#############COMPRADORES###############*@
-                    <div class="panel-heading">Dados dos Compradores </div>
-                    <div class="panel-body">
+                    <div class="card-header">Dados dos Compradores </div>
+                    <div class="card-body">
 
                         <table style="font-size:14px;width:640px">
                             <tr style="height:30px">
@@ -249,8 +281,8 @@
                         }
                     </div>
 
-                    <div class="panel-heading">Outros Compradores </div>
-                    <div class="panel-body">
+                    <div class="card-header">Outros Compradores </div>
+                    <div class="card-body">
 
                         <div id="CompradorTable" style="max-height: 247px; overflow: auto;width:700px;padding-top:7px">
                             <table id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
@@ -320,8 +352,8 @@
                     @*@Ajax.ActionLink("All", "Itbi_Comprador", new AjaxOptions() {HttpMethod="GET",UpdateTargetId="divComprador",InsertionMode=InsertionMode.Replace})*@
 
                     @*#############VENDEDORES###############*@
-                    <div class="panel-heading">Dados dos Vendedores </div>
-                    <div class="panel-body">
+                    <div class="card-header">Dados dos Vendedores </div>
+                    <div class="card-body">
 
                         <div id="VendedorTable" style="max-height: 247px; overflow: auto;width:700px;padding-top:7px">
                             <table id="tblVendedor" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
@@ -368,8 +400,8 @@
                         <div style="padding-top:7px;"><button type="button" class="btn btn-info" name="action" value="btnVendedorAdd" onclick="EditarVendedor()">Incluir vendedores</button></div>
                     </div>
 
-                    <div class="panel-heading">Outras informações </div>
-                    <div class="panel-body">
+                    <div class="card-header">Outras informações </div>
+                    <div class="card-body">
                         <table style="font-size:13px;width:644px">
                             <tr style="height:30px">
                                 <td style="width:144px">
@@ -663,8 +695,8 @@
                         </table>
 
                     </div>
-                    <div class="panel-heading">Valor da guia para pagamento </div>
-                    <div class="panel-body">
+                    <div class="card-header">Valor da guia para pagamento </div>
+                    <div class="card-body">
 
                         <table style="font-size:13px;width:640px">
                             <tr style="height:30px">
@@ -707,8 +739,8 @@
                             </tr>
                         </table>
                     </div>
-                    <div class="panel-heading">Inclusão de Anexos </div>
-                    <div class="panel-body">
+                    <div class="card-header">Inclusão de Anexos </div>
+                    <div class="card-body">
                         <div id="VendedorTable" style="max-height: 247px; overflow: auto;width:640px;padding-top:7px">
                             <table id="tblVendedor" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
                                 <thead style="background-color:brown;color:white;font-size:13px;font-weight:normal">
@@ -783,7 +815,7 @@
 
                 @if (ViewBag.Error != null && ViewBag.Error != "") {
                     <div class="form-group row">
-                        <label style="font-weight:normal;color:red;padding-left:28px" id="errorLabel">@ViewBag.Error</label>
+                        <label class="errorlabel" id="errorLabel">@ViewBag.Error</label>
                     </div>
                 }
             </div>
@@ -792,6 +824,7 @@
 
         if (Model.Codigo != null && Model.Codigo.Trim() != "") {
             <div style="text-align:center">
+                <br />
                 <button type="submit" class="btn btn-primary" name="action" value="btnValida" data-balloon-length="medium" aria-label="Enviar formulário para análise." data-balloon-pos="up">Enviar</button>&nbsp;&nbsp;
                 @*<button type="submit" class="btn btn-success" name="action" value="btnPrint" data-balloon-length="medium" aria-label="Imprimir os dados do formulário." data-balloon-pos="up">Imprimir</button>*@
             </div>
