@@ -23,6 +23,38 @@
 
         .actionlink {
             color: darkslateblue;
+            font-size:14px;
+        }
+        .card-header {
+            background-color: mistyrose;
+            color: brown;
+            font-size: 14px
+        }
+
+        .card {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .card-footer {
+            background-color: whitesmoke;
+            font-size: 14px
+        }
+
+        .btn-primary {
+            background-color: steelblue;
+        }
+
+        .btn {
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        .errorlabel {
+            font-weight: normal;
+            color: red;
+            padding-left: 13px;
+            font-size: 13px;
+            font-family: Arial, Helvetica, sans-serif;
         }
     </style>
 
@@ -33,7 +65,7 @@
 
     <br />
     @using (Html.BeginForm("Login_create2", "Home", FormMethod.Post, new { @id = "MainForm" })) {
-        <label style="font-weight:normal;color:brown">Por favor verifique seu email para ativar o seu acesso.</label>
+        <label style="font-weight:normal;color:brown;font-size:14px">Por favor verifique seu email para ativar o seu acesso.</label>
         <br />
         <br />
         <button type="submit"  class="btn btn-primary"> Efetuar Login</button>

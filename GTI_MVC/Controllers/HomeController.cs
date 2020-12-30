@@ -418,6 +418,7 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult Login_resend_pwd() {
             LoginViewModel model = new LoginViewModel();
+ 
             return View();
         }
 
