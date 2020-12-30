@@ -21,17 +21,49 @@
     .actionlink {
         color: darkslateblue;
     }
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
 </style>
 
 <div class="center container" style="width:830px">
 
     @using (@Html.BeginForm(null, null, FormMethod.Post, new { @action = "https://mpag.bb.com.br/site/mpag/" })) {
-        <div class="panel panel-danger">
-            <div class="panel-heading">
+        <div class="card">
+            <div class="card-header">
                 Emissão de Documento de Arrecadação Municipal (D.A.M.)<br />
                 Confirme os dados antes de imprimir
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 @Html.Hidden("msgLoja", " RECEBER SOMENTE ATE O VENCIMENTO, APOS ATUALIZAR O BOLETO NO SITE www.jaboticabal.sp.gov.br")
                 @Html.Hidden("cep", Convert.ToInt64(Regex.Replace(@Model.Cep, " [^.0-9]", "")))
                 @Html.Hidden("uf", @Model.UF)
@@ -172,7 +204,7 @@
                 <br />
                 <button type="submit" id="enviar" title="Imprimir o boleto" class="btn btn-primary">Gerar Boleto</button>
             </div>
-            <div class="panel-footer">
+            <div class="card-footer">
                 @Html.ActionLink("Consultar outra inscrição", "Dama", "Tributario", null, new { @class = "actionlink" }) <br />
                 @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
             </div>

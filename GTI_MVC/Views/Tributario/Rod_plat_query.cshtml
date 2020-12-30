@@ -33,6 +33,38 @@
         width: 450px;
         margin: 200px, auto;
     }
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
     
 </style>
 
@@ -40,8 +72,8 @@
 
     @using (Html.BeginForm("Rod_plat_query", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
         <div class="container" style="width:700px">
-            <div class="panel panel-danger">
-                <div class="panel-heading">
+            <div class="card">
+                <div class="card-header">
                     @*@Html.HiddenFor(m => m.DataDeTmp, new { @id = "DataDeTmp" })*@
 
                     Consulta ao uso da plataforma
@@ -53,7 +85,7 @@
                     <Label>Empresa:&nbsp;@Model.Codigo.ToString()&nbsp;-&nbsp;@Model.Nome</Label>
 
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
 
                     <table id="tblMain" class="topics" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
                         <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal; white-space: nowrap;">
@@ -98,7 +130,7 @@
                         *Qtde 3 - Uso da plataforma acima de 79,9 km
                     </p>
                 </div>
-                <div class="panel-footer">
+                <div class="card-footer">
                     <a style="cursor:pointer" onclick="NewData()">Adicionar período de utilização da plataforma</a><br />
                     @Html.ActionLink("Retornar ao menu de opções", "Rod_menu", "Tributario", null, new { @class = "actionlink" })<br />
 

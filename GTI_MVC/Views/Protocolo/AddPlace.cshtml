@@ -37,6 +37,38 @@
     .actionlink {
         color: darkslateblue;
     }
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size:14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
 </style>
 
 <div class="center" >
@@ -111,12 +143,12 @@
         <div class="form-group row align-items-lg-baseline" style="margin-left:1px">
             <div class="col-sm-10">
                 <label>Novo Local: </label>
-                @Html.DropDownListFor(m => m.CCusto_Codigo, ViewBag.Lista_CentroCusto as SelectList, "-Selecione um Local-", new { @id = "AddPlaceDropDown", style = "width:330px;height:25px", rows = 10 })
+                @Html.DropDownListFor(m => m.CCusto_Codigo, ViewBag.Lista_CentroCusto as SelectList, "-Selecione um Local-", new { @id = "AddPlaceDropDown", style = "width:330px;height:25px;font-size:14px", rows = 10 })
             </div>
         </div>
         <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary" id="Enviar_Save">Gravar</button>
-            <input type="button" class="btn btn-secondary" value="Cancelar" onclick="@("window.location.href='" + @Url.Action("Tramite_Processo2", "Protocolo",new { @Ano=Functions.Encrypt(Model.Ano.ToString()),@Numero=Functions.Encrypt(Model.Numero.ToString())}) + "'");" />
+            <button type="submit" class="btn btn-primary" id="Enviar_Save">Gravar</button><span>&nbsp;&nbsp</span>
+            <input type="button"   class="btn btn-secondary" value="Cancelar" onclick="@("window.location.href='" + @Url.Action("Tramite_Processo2", "Protocolo",new { @Ano=Functions.Encrypt(Model.Ano.ToString()),@Numero=Functions.Encrypt(Model.Numero.ToString())}) + "'");" />
         </div>
 
     </form>

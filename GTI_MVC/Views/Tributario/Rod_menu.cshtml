@@ -22,21 +22,53 @@
     .actionlink {
         color: darkslateblue;
     }
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
 </style>
 <br />
 
 @using (Html.BeginForm("Rod_menu", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
     <div class="center">
         <div class="container" style="width:460px">
-            <div class="panel panel-danger">
-                <div class="panel-heading">
+            <div class="card">
+                <div class="card-header">
                     Uso de Plataforma (Terminal Rodoviário)
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <label style="font-weight:normal">Selecione a empresa:</label><br />
                     @Html.DropDownListFor(m => m.Codigo, ViewBag.Lista_Empresa as SelectList, null, new { @id = "EmpresaDropDown", style = "width:400px;height:25px", rows = 10 })
                     <div class="form-group row">
-                        <label style="font-weight:normal;color:red;padding-left:15px" id="errorLabel">@ViewBag.Result</label>
+                        <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
                     </div>
 
                     <div style="text-align:center">
@@ -45,7 +77,7 @@
 
                     @Html.HiddenFor(m => m.Nome, new { @id = "Nome_tmp" })
                 </div>
-                <div class="panel-footer">
+                <div class="card-footer">
                     @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 

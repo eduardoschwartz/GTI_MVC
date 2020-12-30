@@ -30,6 +30,38 @@
     .actionlink {
         color: darkslateblue;
     }
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
 </style>
 
 <div class="center" style="width:620px">
@@ -37,9 +69,9 @@
     @using (Html.BeginForm("Notificacao_iss", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
 
     <div class="container" style="width:580px">
-        <div class="panel panel-danger">
-            <div class="panel-heading">Notificação de ISS Construção Civil</div>
-            <div class="panel-body">
+        <div class="card">
+            <div class="card-header">Notificação de ISS Construção Civil</div>
+            <div class="card-body">
 
                 <div>
                     <table style="font-size:14px;width:500px">
@@ -190,7 +222,7 @@
                 </div>
 
             </div>
-            <label style="font-weight:normal;color:red;padding-left:15px" id="errorLabel">@ViewBag.Result</label>
+            <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
         </div>
 
         <div style="text-align:center">
