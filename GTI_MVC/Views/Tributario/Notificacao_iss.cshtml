@@ -223,15 +223,17 @@
 
             </div>
             <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+            <div style="text-align:center">
+                <button type="submit" class="btn btn-primary" name="action" onclick="return ValidateForm()" value="btnValida">Gerar notificação</button>
+
+            </div>
+            <br />
+            <div class="card-footer">
+                @Html.ActionLink("Retornar ao menu de opções", "Notificacao_menu", "Tributario", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
         </div>
 
-        <div style="text-align:center">
-            
-            <button type="submit" class="btn btn-primary" name="action" onclick="return ValidateForm()" value="btnValida">Gerar notificação</button>
-        </div>
-        <br />
-        @Html.ActionLink("Retornar ao menu de opções", "Notificacao_menu", "Tributario", null, new { @class = "actionlink" })<br />
-        @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
     </div>
 
     }
