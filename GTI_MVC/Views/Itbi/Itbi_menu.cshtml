@@ -21,15 +21,47 @@
     .actionlink {
         color: darkslateblue;
     }
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size:14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
 </style>
 <br />
 
 <div class="center">
     @*<span style="color:brown;font-weight:bold;font-style:italic">Imposto sobre Transmissão de Bens Imóveis (ITBI)</span><br />*@
     <div class="container" style="width:450px">
-        <div class="panel panel-danger">
-            <div class="panel-heading">Imposto sobre Transmissão de Bens Imóveis (ITBI)</div>
-            <div class="panel-body">
+        <div class="card">
+            <div class="card-header">Imposto sobre Transmissão de Bens Imóveis (ITBI)</div>
+            <div class="card-body">
                 @Html.ActionLink("Nova emissão de ITBI (Imóveis Urbanos)", "Itbi_urbano", "Itbi", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Nova emissão de ITBI (Imóveis Rurais)", "Itbi_rural", "Itbi", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Consultar declarações enviadas", "Itbi_query", "Itbi", null, new { @class = "actionlink" })<br />
@@ -40,7 +72,7 @@
                     @Html.ActionLink("Relatório dos ITBI´s emitidos", "Itbi_resumo", "Itbi", null, new { @class = "actionlink" })<br />
                 }
             </div>
-            <div class="panel-footer">
+            <div class="card-footer">
                 @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
             </div>

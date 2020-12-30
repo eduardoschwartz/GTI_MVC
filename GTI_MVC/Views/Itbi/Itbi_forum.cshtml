@@ -23,21 +23,52 @@
     .actionlink {
         color: darkslateblue;
     }
+    .card-header {
+        background-color: rgb(223,240,216);
+        color: darkgreen;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
 </style>
 
 <div class="center">
 
     <br />
-    <div class="panel panel-success">
-        <div class="panel-heading">
+    <div class="card">
+        <div class="card-header">
             Processo de análise do ITBI nº:&nbsp;<span style="font-weight:bold">@Model[0].Ano_Numero</span> &nbsp;&nbsp;Tipo de ITBI:&nbsp;<span style="font-weight:bold">@Model[0].Tipo_Itbi</span><br />
             Declarado em:&nbsp;<span style="font-weight:bold">@Model[0].Data_Itbi</span> &nbsp;&nbsp;Declarado por:&nbsp;<span style="font-weight:bold">@Model[0].User_Name</span><br />
             Email:&nbsp; <span style="font-weight:bold">@Model[0].User_Email</span> &nbsp;&nbsp;Telefone:&nbsp; <span style="font-weight:bold">@Model[0].User_Fone</span><br />
             Nome do Comprador:&nbsp;<span style="font-weight:bold">@Model[0].Comprador_Nome</span>
         </div>
-        <div class="panel-body"></div>
+        <div class="card-body"></div>
         @using (Html.BeginForm("Itbi_forum", "Itbi", FormMethod.Post, new { @id = "MainForm" })) {
-            if (Model.Count > 0 && Model[0].Mensagem!=null) {
+            if (Model.Count > 0 && Model[0].Mensagem != null) {
                 foreach (var item in Model) {
                     <div class="panel panel-info">
                         <div class="panel-heading">Mensagem enviada em: @item.Datahora por @item.User_Name </div>
@@ -58,16 +89,18 @@
             @Html.HiddenFor(m => m[0].Guid)
 
         }
-        <div class="panel-footer">
-            <div style="text-align:center">
-                <button type="button" class="btn btn-primary" onclick="EditarMsg()">Escrever nova mensagem</button>&nbsp;&nbsp;
-            </div>
+        <div style="text-align:center">
+            <button type="button" class="btn btn-primary" onclick="EditarMsg()">Escrever nova mensagem</button>&nbsp;&nbsp;
+        </div>
+        <br />
+        <div class="card-footer">
+            @Html.ActionLink("Voltar a consulta de ITBI", "Itbi_query", "Itbi", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Preencher outro ITBI", "Itbi_Menu", "Itbi", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
         </div>
 
     </div>
-    @Html.ActionLink("Voltar a consulta de ITBI", "Itbi_query", "Itbi", null, new { @class = "actionlink" })<br />
-    @Html.ActionLink("Preencher outro ITBI", "Itbi_Menu", "Itbi", null, new { @class = "actionlink" })<br />
-    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+
 </div>
 
 <div class="modal fade" id="MsgModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -87,7 +120,7 @@
                 </table>
                 <br />
 
-                <label style="font-weight:normal;color:red;padding-left:7px" id="errorMsg">@ViewBag.Error</label>
+                <label class="errorlabel" id="errorMsg">@ViewBag.Error</label>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>

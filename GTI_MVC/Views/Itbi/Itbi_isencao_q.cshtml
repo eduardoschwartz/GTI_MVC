@@ -10,10 +10,7 @@
     .center {
         margin: auto;
         width: 780px;
-        border: 1px solid rgba(0,0,0,0.24);
-        padding: 20px;
-        box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
+     
     }
 
     .actionlink:hover {
@@ -22,6 +19,38 @@
 
     .actionlink {
         color: darkslateblue;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
     }
 </style>
 
@@ -30,9 +59,9 @@
     @using (Html.BeginForm("Itbi_isencao_q", "Itbi", FormMethod.Post, new { @id = "MainForm" })) {
 
         <div class="container" style="width:700px">
-            <div class="panel panel-danger">
-                <div class="panel-heading">Certidão de não incidência de ITBI nº @Model.Itbi_NumeroAno </div>
-                <div class="panel-body">
+            <div class="card">
+                <div class="card-header">Certidão de não incidência de ITBI nº @Model.Itbi_NumeroAno </div>
+                <div class="card-body">
                     <label id="Guidtmp" style="display: none">@Model.Guid</label>
                     @Html.HiddenFor(m => m.Guid, new { @id = "Guid" })@*Armazenar o guid*@
                     @Html.HiddenFor(m => m.Natureza_Isencao_Codigo, new { @id = "Natureza_Isencao_Codigo" })@*Armazenar o guid*@
@@ -96,23 +125,22 @@
                     <Label style="font-size:14px">Natureza:&nbsp;@Model.Natureza_Nome  </Label>
 
                 </div>
-            </div>
-            <div class="form-group row">
-                <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
-            </div>
+                <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+                @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo == 1) {
+                    <div style="text-align:center">
+                        <span style="padding-left:5px"><button type="submit" class="btn btn-primary" , name="button" value="guia">Liberar Certidão</button></span>
+                    </div>
+                }
+                <div class="card-footer">
+                    @Html.ActionLink("Consultar outra certidão", "Itbi_query_isencao", "Itbi", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })
 
-            @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo == 1) {
-                <div style="text-align:center">
-                    <span style="padding-left:5px"><button type="submit" class="btn btn-primary" , name="button" value="guia">Liberar Certidão</button></span>
                 </div>
-            }
-
+            </div>
         </div>
 
     }
 
-    <div style="padding-left:15px">@Html.ActionLink("Consultar outra certidão", "Itbi_query_isencao", "Itbi", null, new { @class = "actionlink" })</div>
-    <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Imovel", null, new { @class = "actionlink" })</div>
 </div>
 
 
