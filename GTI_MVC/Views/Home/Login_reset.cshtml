@@ -30,6 +30,38 @@
 
     .actionlink {
         color: darkslateblue;
+        font-size:14px;
+    }
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
     }
 </style>
 
@@ -43,11 +75,11 @@
         @Html.HiddenFor(m => m.Email)
         <table width="400px">
             <tr style="height:40px">
-                <td><label style="font-weight:normal">Digite a Senha:</label></td>
+                <td><label style="font-weight:normal;font-size:14px">Digite a Senha:</label></td>
                 <td>@Html.TextBoxFor(m => m.Senha2, new { @type = "password", @id = "senha2", @class = "textBoxBlue", @style = "max-width:400px" })</td>
             </tr>
             <tr style="height:40px">
-                <td><label style="font-weight:normal">Confirme a Senha:</label></td>
+                <td><label style="font-weight:normal;font-size:14px">Confirme a Senha:</label></td>
                 <td>@Html.TextBoxFor(m => m.Senha3, new { @type = "password", @id = "senha3", @class = "textBoxBlue", @style = "max-width:400px" })</td>
             </tr>
 

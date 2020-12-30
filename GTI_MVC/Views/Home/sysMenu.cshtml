@@ -16,13 +16,30 @@
     .actionlink {
         color: darkslateblue;
     }
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size:14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+
 </style>
 <br />
 
     <div class="center container" style="width:500px">
-        <div class="panel panel-danger">
-            <div class="panel-heading">Selecione um serviço</div>
-            <div class="panel-body">
+        <div class="card">
+            <div class="card-header">Selecione um serviço</div>
+            <div class="card-body">
                 @if (Session["hashfunc"].ToString() == "S") {
                     @Html.ActionLink("Tramitação de processos", "Tramite_Processo", "Protocolo", null, new { @class = "actionlink" })<br />
 
@@ -41,7 +58,7 @@
                 @Html.ActionLink("Imposto sobre Transmissão de Bens Imóveis (ITBI)", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })<br />
 
             </div>
-            <div class="panel-footer">
+            <div class="card-footer">
                 @Html.ActionLink("Alterar a senha", "Login_update", "Home", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 
