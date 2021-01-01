@@ -2228,7 +2228,9 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult Notificacao_query() {
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
-            List<Notificacao_iss_web_Struct> Lista = tributarioRepository.Retorna_Notificacao_Iss_Web(DateTime.Now.Year);
+            int _ano = DateTime.Now.Year;
+            StartQueryNotificacao:
+            List<Notificacao_iss_web_Struct> Lista = tributarioRepository.Retorna_Notificacao_Iss_Web(_ano);
             List<NotificacaoIssViewModel> model = new List<NotificacaoIssViewModel>();
             List<AnoList> ListaAno = tributarioRepository.Retorna_Ano_Notificacao();
             foreach (Notificacao_iss_web_Struct item in Lista) {
@@ -2243,9 +2245,12 @@ namespace GTI_Mvc.Controllers {
                 };
                 model.Add(reg);
             }
-
-            ViewBag.ListaAno = new SelectList(ListaAno, "Codigo", "Descricao",2020);
-            model[0].Ano_Selected = ListaAno[ListaAno.Count-1].Codigo;
+            if (model.Count == 0) {
+                _ano = DateTime.Now.Year-1;
+                goto StartQueryNotificacao;
+            }
+                
+            ViewBag.ListaAno = new SelectList(ListaAno, "Codigo", "Descricao", ListaAno[ListaAno.Count - 1].Codigo);
             return View(model);
         }
 

@@ -87,6 +87,7 @@
                         </thead>
                         <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
                             @foreach (var item in Model) {
+                                if (item.Ano_Notificacao > 0) {
                                 <tr style="height:20px;">
                                     <td style="display:none">@Html.DisplayFor(modelItem => item.Guid)</td>
                                     <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
@@ -94,9 +95,10 @@
                                     <td style="width:210px;font-weight:normal">@Html.DisplayFor(modelItem => item.Data_Emissao)</td>
                                     <td style="width:170px;font-weight:normal">@Html.DisplayFor(modelItem => item.SituacaoNome)</td>
                                     <td style="width:100px">
-                                        <a href="@Url.Action("Notificacao_print","Tributario", new { p = item.Guid })" title="Imprimir a Notificação"> <img src="@Url.Content("~/images/print.png")"></a>
+                                        <a href="@Url.Action("Notificacao_print", "Tributario", new { p = item.Guid })" title="Imprimir a Notificação"> <img src="@Url.Content("~/images/print.png")"></a>
                                     </td>
                                 </tr>
+                                }
                             }
                         </tbody>
                     </table>
