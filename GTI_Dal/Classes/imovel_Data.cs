@@ -1369,7 +1369,7 @@ namespace GTI_Dal.Classes {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var reg = (from p in db.Proprietario
                            join c in db.Cidadao on p.Codcidadao equals c.Codcidadao into pc from c in pc.DefaultIfEmpty()
-                           where p.Codreduzido == Codigo  select new{Nome=c.Nomecidadao,Cpf= c.Cpf }).FirstOrDefault();
+                           where p.Codreduzido == Codigo && p.Principal==true select new{Nome=c.Nomecidadao,Cpf= c.Cpf }).FirstOrDefault();
                 if (reg.Cpf == null)
                     return false;
                 else {
@@ -1387,7 +1387,7 @@ namespace GTI_Dal.Classes {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var reg = (from p in db.Proprietario
                            join c in db.Cidadao on p.Codcidadao equals c.Codcidadao into pc from c in pc.DefaultIfEmpty()
-                           where p.Codreduzido == Codigo && c.Cnpj == Cnpj select c.Nomecidadao).FirstOrDefault();
+                           where p.Codreduzido == Codigo && c.Cnpj == Cnpj && p.Principal==true select c.Nomecidadao).FirstOrDefault();
                 if (string.IsNullOrEmpty(reg))
                     return false;
                 else
