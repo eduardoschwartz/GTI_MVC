@@ -527,6 +527,11 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Notificacao_Terreno(Ano);
         }
 
+        public Notificacao_Terreno_Struct Retorna_Notificacao_Terreno(int Ano, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Notificacao_Terreno(Ano,Numero);
+        }
+
         #region ITBI
         public List<Itbi_natureza> Lista_Itbi_Natureza() {
             Imovel_Data obj = new Imovel_Data(_connection);

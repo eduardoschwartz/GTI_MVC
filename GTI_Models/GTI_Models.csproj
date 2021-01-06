@@ -243,6 +243,7 @@
     <Compile Include="ReportModels\Boleto.cs" />
     <Compile Include="ReportModels\Certidao.cs" />
     <Compile Include="ReportModels\Comprovante_Inscricao.cs" />
+    <Compile Include="ReportModels\dtNotificacao.cs" />
     <Compile Include="ReportModels\Empresa_Detalhe.cs" />
     <Compile Include="ReportModels\Imovel_Detalhe.cs" />
     <Compile Include="ReportModels\NotificacaoIssReport.cs" />

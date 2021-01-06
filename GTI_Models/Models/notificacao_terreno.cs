@@ -36,6 +36,7 @@ namespace GTI_Models.Models {
         public int Prazo { get; set; }
         public DateTime Data_Cadastro { get; set; }
         public int Userid  { get; set; }
+        public string UsuarioNome { get; set; }
 
     }
 

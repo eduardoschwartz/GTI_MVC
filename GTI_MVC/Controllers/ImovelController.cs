@@ -1307,5 +1307,38 @@ namespace GTI_Mvc.Controllers {
             return View(model);
         }
 
+        public ActionResult Notificacao_terreno_print(int a,int n) {
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Notificacao_Terreno_Struct _not = imovelRepository.Retorna_Notificacao_Terreno(a, n);
+
+            List<DtNotificacao> ListaNot = new List<DtNotificacao>();
+
+            DtNotificacao reg = new DtNotificacao() {
+                AnoNumero=_not.AnoNumero,
+                Codigo=_not.Codigo_Imovel.ToString(),
+                Nome=_not.Nome_Proprietario,
+                Endereco_Entrega=_not.Endereco_Entrega,
+                Endereco_Local=_not.Endereco_Local,
+                Endereco_Prop=_not.Endereco_Prop,
+                Prazo=_not.Prazo,
+                Usuario=_not.UsuarioNome
+            };
+            ListaNot.Add(reg);
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Notificacao_Terreno.rpt"));
+
+            try {
+                rd.SetDataSource(ListaNot);
+                Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                return File(stream, "application/pdf", "Notificacao_Terreno.pdf");
+            } catch {
+
+                throw;
+            }
+       
+        }
+
+
     }
 }
