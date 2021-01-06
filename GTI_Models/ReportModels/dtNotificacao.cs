@@ -15,5 +15,7 @@ namespace GTI_Models.ReportModels {
         public int Prazo { get; set; }
         public string Usuario { get; set; }
         public DateTime Data_Cadastro { get; set; }
+        public string Inscricao { get; set; }
+        public string PrazoText { get; set; }
     }
 }

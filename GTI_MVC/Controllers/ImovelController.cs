@@ -1315,13 +1315,15 @@ namespace GTI_Mvc.Controllers {
 
             DtNotificacao reg = new DtNotificacao() {
                 AnoNumero=_not.AnoNumero,
-                Codigo=_not.Codigo_Imovel.ToString(),
+                Codigo=_not.Codigo_Imovel.ToString("00000"),
                 Nome=_not.Nome_Proprietario,
                 Endereco_Entrega=_not.Endereco_Entrega,
                 Endereco_Local=_not.Endereco_Local,
                 Endereco_Prop=_not.Endereco_Prop,
                 Prazo=_not.Prazo,
-                Usuario=_not.UsuarioNome
+                Usuario=_not.UsuarioNome,
+                Inscricao=_not.Inscricao,
+                PrazoText=Functions.Escrever_Valor_Extenso(_not.Prazo)
             };
             ListaNot.Add(reg);
 

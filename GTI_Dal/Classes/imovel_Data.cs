@@ -2369,7 +2369,7 @@ namespace GTI_Dal.Classes {
                            join u in db.Usuario on t.Userid equals u.Id into tu from u in tu
                            where t.Ano_not == Ano && t.Numero_not==Numero select new {
                                Ano = t.Ano_not, Numero = t.Numero_not, Codigo = t.Codigo, Data_Cadastro = t.Data_cadastro, Usuario = t.Userid, Situacao = t.Situacao, Nome = t.Nome, Prazo = t.Prazo,
-                               Endereco_entrega=t.Endereco_entrega, Endereco_prop = t.Endereco_prop,Endereco_Infracao=t.Endereco_infracao, Usuario_Nome= u.Nomecompleto
+                               Endereco_entrega=t.Endereco_entrega, Endereco_prop = t.Endereco_prop,Endereco_Infracao=t.Endereco_infracao, Usuario_Nome= u.Nomecompleto,Inscricao=t.Inscricao
                            }).First();
                 Notificacao_Terreno_Struct reg = new Notificacao_Terreno_Struct() {
                     Ano_Notificacao=Sql.Ano,
@@ -2383,7 +2383,8 @@ namespace GTI_Dal.Classes {
                     Endereco_Entrega=Sql.Endereco_entrega,
                     Endereco_Local=Sql.Endereco_Infracao,
                     Endereco_Prop=Sql.Endereco_prop,
-                    UsuarioNome=Sql.Usuario_Nome
+                    UsuarioNome=Sql.Usuario_Nome,
+                    Inscricao=Sql.Inscricao
                 };
                 return reg;
             }

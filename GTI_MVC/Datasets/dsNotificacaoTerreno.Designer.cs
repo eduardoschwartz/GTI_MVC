@@ -297,6 +297,10 @@ namespace GTI_MVC.Datasets {
             
             private global::System.Data.DataColumn columnData_Cadastro;
             
+            private global::System.Data.DataColumn columnInscricao;
+            
+            private global::System.Data.DataColumn columnPrazoText;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public dtNotificacaoDataTable() {
@@ -404,6 +408,22 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn InscricaoColumn {
+                get {
+                    return this.columnInscricao;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn PrazoTextColumn {
+                get {
+                    return this.columnPrazoText;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -439,7 +459,7 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public dtNotificacaoRow AdddtNotificacaoRow(string AnoNumero, string Nome, string Codigo, string Endereco_Local, string Endereco_Entrega, string Endereco_Prop, int Prazo, string Usuario, System.DateTime Data_Cadastro) {
+            public dtNotificacaoRow AdddtNotificacaoRow(string AnoNumero, string Nome, string Codigo, string Endereco_Local, string Endereco_Entrega, string Endereco_Prop, int Prazo, string Usuario, System.DateTime Data_Cadastro, string Inscricao, string PrazoText) {
                 dtNotificacaoRow rowdtNotificacaoRow = ((dtNotificacaoRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         AnoNumero,
@@ -450,7 +470,9 @@ namespace GTI_MVC.Datasets {
                         Endereco_Prop,
                         Prazo,
                         Usuario,
-                        Data_Cadastro};
+                        Data_Cadastro,
+                        Inscricao,
+                        PrazoText};
                 rowdtNotificacaoRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowdtNotificacaoRow);
                 return rowdtNotificacaoRow;
@@ -482,6 +504,8 @@ namespace GTI_MVC.Datasets {
                 this.columnPrazo = base.Columns["Prazo"];
                 this.columnUsuario = base.Columns["Usuario"];
                 this.columnData_Cadastro = base.Columns["Data_Cadastro"];
+                this.columnInscricao = base.Columns["Inscricao"];
+                this.columnPrazoText = base.Columns["PrazoText"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -505,6 +529,10 @@ namespace GTI_MVC.Datasets {
                 base.Columns.Add(this.columnUsuario);
                 this.columnData_Cadastro = new global::System.Data.DataColumn("Data_Cadastro", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnData_Cadastro);
+                this.columnInscricao = new global::System.Data.DataColumn("Inscricao", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnInscricao);
+                this.columnPrazoText = new global::System.Data.DataColumn("PrazoText", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPrazoText);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -791,6 +819,38 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Inscricao {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtNotificacao.InscricaoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Inscricao\' in table \'dtNotificacao\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtNotificacao.InscricaoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string PrazoText {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtNotificacao.PrazoTextColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'PrazoText\' in table \'dtNotificacao\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtNotificacao.PrazoTextColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsAnoNumeroNull() {
                 return this.IsNull(this.tabledtNotificacao.AnoNumeroColumn);
             }
@@ -895,6 +955,30 @@ namespace GTI_MVC.Datasets {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetData_CadastroNull() {
                 this[this.tabledtNotificacao.Data_CadastroColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsInscricaoNull() {
+                return this.IsNull(this.tabledtNotificacao.InscricaoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetInscricaoNull() {
+                this[this.tabledtNotificacao.InscricaoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsPrazoTextNull() {
+                return this.IsNull(this.tabledtNotificacao.PrazoTextColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetPrazoTextNull() {
+                this[this.tabledtNotificacao.PrazoTextColumn] = global::System.Convert.DBNull;
             }
         }
         
