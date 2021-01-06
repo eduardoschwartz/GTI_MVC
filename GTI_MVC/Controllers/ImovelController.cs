@@ -1182,6 +1182,12 @@ namespace GTI_Mvc.Controllers {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             NotificacaoTerViewModel model = new NotificacaoTerViewModel();
+            List<int> Lista_Ano = new List<int>();
+            for (int i = 2020; i <= DateTime.Now.Year; i++) {
+                Lista_Ano.Add(i);
+            }
+            ViewBag.Lista_Ano = new SelectList(Lista_Ano);
+            model.Ano_Notificacao = DateTime.Now.Year;
             return View(model);
         }
 
@@ -1193,7 +1199,11 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
             int _codigo = model.Codigo_Imovel;
-
+            List<int> Lista_Ano = new List<int>();
+            for (int i = 2020; i <= DateTime.Now.Year; i++) {
+                Lista_Ano.Add(i);
+            }
+            ViewBag.Lista_Ano = new SelectList(Lista_Ano);
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
             if (action == "btnCodigoOK") {
@@ -1204,28 +1214,34 @@ namespace GTI_Mvc.Controllers {
                     model = new NotificacaoTerViewModel();
                     return View(model);
                 }
-                if (model.Proprietarios == null)
+                if (model.Proprietarios == null )
                     model.Proprietarios = new List<ProprietarioStruct>();
-                model.Proprietarios.Add(Listaprop[0]);
+                model.Proprietarios[0]=Listaprop[0];
                 model.Inscricao = _imovel.Inscricao;
                 EnderecoStruct _endLocal = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Local);
-                model.Endereco_Local = _endLocal.Endereco + ", " +_endLocal.Numero.ToString()  + _endLocal.Complemento == null ? "" : "" +  " - " + _endLocal.NomeBairro.ToString();
+                string _compl = _endLocal.Complemento == null ? "" : " " + _endLocal.Complemento;
+                model.Endereco_Local = _endLocal.Endereco + ", " +_endLocal.Numero.ToString()  + _compl +  " - " + _endLocal.NomeBairro.ToString();
+                EnderecoStruct _endProp = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Proprietario);
+                _compl = _endProp.Complemento == null ? "" : " " + _endProp.Complemento;
+                model.Endereco_Prop = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _compl + " - " + _endProp.NomeBairro.ToString();
                 EnderecoStruct _endEntrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Entrega);
-                if (_endEntrega == null)
-                    model.Endereco_Entrega = _endEntrega.Endereco + ", " + _endEntrega.Numero.ToString() + " " + _endEntrega.Complemento == null ? "" : "" + " - " + _endEntrega.NomeBairro.ToString();
-                else {
-                    if(_imovel.EE_TipoEndereco==0)
+                if (_endEntrega.Endereco != null) {
+                    _compl = _endEntrega.Complemento == null ? "" : " " + _endEntrega.Complemento;
+                    model.Endereco_Entrega = _endEntrega.Endereco + ", " + _endEntrega.Numero.ToString() + _compl + " - " + _endEntrega.NomeBairro.ToString();
+                } else {
+                    if (_imovel.EE_TipoEndereco == 0)
                         model.Endereco_Entrega = model.Endereco_Local;
                     else {
                         model.Endereco_Entrega = model.Endereco_Prop;
                     }
                 }
-                EnderecoStruct _endProp = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Proprietario);
-                model.Endereco_Prop = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _endProp.Complemento==null?"":"" + " - " + _endProp.NomeBairro.ToString();
 
             }
             if (action == "btnCodigoCancel") {
                 model = new NotificacaoTerViewModel();
+                return View(model);
+            }
+            if (action == "btnValida") {
                 return View(model);
             }
 
