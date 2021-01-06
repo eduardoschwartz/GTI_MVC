@@ -1214,9 +1214,7 @@ namespace GTI_Mvc.Controllers {
                     model = new NotificacaoTerViewModel();
                     return View(model);
                 }
-                if (model.Proprietarios == null )
-                    model.Proprietarios = new List<ProprietarioStruct>();
-                model.Proprietarios[0]=Listaprop[0];
+                model.Nome_Proprietario=Listaprop[0].Nome;
                 model.Inscricao = _imovel.Inscricao;
                 EnderecoStruct _endLocal = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Local);
                 string _compl = _endLocal.Complemento == null ? "" : " " + _endLocal.Complemento;
@@ -1235,25 +1233,24 @@ namespace GTI_Mvc.Controllers {
                         model.Endereco_Entrega = model.Endereco_Prop;
                     }
                 }
-
             }
+
             if (action == "btnCodigoCancel") {
                 model = new NotificacaoTerViewModel();
                 return View(model);
             }
             if (action == "btnValida") {
-                Save_Notificacao_Terreno(model);
+                bool _existe = imovelRepository.Existe_Notificacao_Terreno(model.Ano_Notificacao, model.Numero_Notificacao);
+                if (_existe) {
+                    ViewBag.Result = "Nº de notificação já cadastrado.";
+                    return View(model);
+                } else { 
+                    Save_Notificacao_Terreno(model);
+                    return RedirectToAction("Notificacao_ter_query");
+                }
             }
 
             return View(model);
-        }
-
-        [Route("Notificacao_ter_query")]
-        [HttpGet]
-        public ActionResult Notificacao_ter_query() {
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
-            return View();
         }
 
         private ActionResult Save_Notificacao_Terreno(NotificacaoTerViewModel model) {
@@ -1266,15 +1263,48 @@ namespace GTI_Mvc.Controllers {
                 Endereco_infracao = model.Endereco_Local,
                 Endereco_prop = model.Endereco_Prop,
                 Prazo = model.Prazo,
-                Nome = model.Proprietarios[0].Nome,
-                Situacao = 1,
+                Nome = model.Nome_Proprietario,
+                Situacao = 3,//concluido
                 Userid = Convert.ToInt32(Session["hashid"]),
                 Data_cadastro=DateTime.Now
             };
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             Exception ex = imovelRepository.Incluir_notificacao_terreno(reg);
+            return null;
+            
+        }
 
-            return RedirectToAction("Notificacao_ter_query");
+        [Route("Notificacao_ter_query")]
+        [HttpGet]
+        public ActionResult Notificacao_ter_query() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            List<int> Lista_Ano = new List<int>();
+            for (int i = 2020; i <= DateTime.Now.Year; i++) {
+                Lista_Ano.Add(i);
+            }
+            ViewBag.Lista_Ano = new SelectList(Lista_Ano);
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            List<NotificacaoTerViewModel> ListaNot = new List<NotificacaoTerViewModel>();
+            List<Notificacao_Terreno_Struct> _listaNot = imovelRepository.Lista_Notificacao_Terreno(DateTime.Now.Year);
+            foreach (Notificacao_Terreno_Struct item in _listaNot) {
+                NotificacaoTerViewModel reg = new NotificacaoTerViewModel() {
+                    AnoNumero=item.AnoNumero,
+                    Ano_Notificacao=item.Ano_Notificacao,
+                    Numero_Notificacao=item.Numero_Notificacao,
+                    Codigo_Imovel=item.Codigo_Imovel,
+                    Data_Cadastro=item.Data_Cadastro,
+                    Prazo=item.Prazo,
+                    Nome_Proprietario=item.Nome_Proprietario,
+                    Situacao=item.Situacao
+                };
+                ListaNot.Add(reg);
+            }
+
+            NotificacaoTerQueryViewModel model = new NotificacaoTerQueryViewModel();
+            model.ListaNotificacao = ListaNot;
+            model.Ano_Selected = DateTime.Now.Year;
+            return View(model);
         }
 
     }

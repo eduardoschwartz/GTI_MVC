@@ -83,7 +83,7 @@
                         @Html.HiddenFor(m => m.Endereco_Entrega, new { Value = Model.Endereco_Entrega })
                         @Html.HiddenFor(m => m.Endereco_Local, new { Value = Model.Endereco_Local })
                         @Html.HiddenFor(m => m.Endereco_Prop, new { Value = Model.Endereco_Prop })
-                        @Html.HiddenFor(m => m.Proprietarios, new { Value = Model.Proprietarios })
+                        @Html.HiddenFor(m => m.Nome_Proprietario, new { Value = Model.Nome_Proprietario })
 
                         <table style="font-size:13px;width:640px">
                             <tr style="height:30px">
@@ -113,7 +113,7 @@
                                         Nome do Proprietário:
                                     </td>
                                     <td style="width:480px;color:brown">
-                                        @Model.Proprietarios[0].Nome
+                                        @Model.Nome_Proprietario
                                     </td>
                                 </tr>
                                 <tr>
@@ -165,7 +165,11 @@
                                         <label style="font-weight:normal;padding-top:7px">Prazo em dias:</label>
                                     </td>
                                     <td style="width:100px">
-                                        @Html.TextBoxFor(m => m.Prazo, new { @id = "txtPrazo", @onKeyPress = "return formata(this, '§§§', event)", style = "width:70px;", @Value = "" })
+                                        @if (Model.Prazo > 0) {
+                                            @Html.TextBoxFor(m => m.Prazo, new { @id = "txtPrazo", @onKeyPress = "return formata(this, '§§§', event)", style = "width:70px;", @Value = Model.Prazo })
+                                        } else {
+                                            @Html.TextBoxFor(m => m.Prazo, new { @id = "txtPrazo", @onKeyPress = "return formata(this, '§§§', event)", style = "width:70px;", @Value = "" })
+                                        }
                                     </td>
                                 </tr>
                             </table>

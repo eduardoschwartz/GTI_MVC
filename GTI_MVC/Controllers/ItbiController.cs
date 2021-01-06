@@ -948,7 +948,8 @@ namespace GTI_Mvc.Controllers {
                     Itbi_NumeroAno = reg.Numero_Ano,
                     Tipo_Imovel = reg.Tipo,
                     Comprador_Nome_tmp = Functions.TruncateTo(reg.Nome_Comprador, 26),
-                    Situacao_Itbi_Nome = reg.Situacao
+                    Situacao_Itbi_Nome = reg.Situacao,
+                    Situacao_Itbi_codigo=reg.Situacao_Codigo
                 };
                 model.Add(item);
             }

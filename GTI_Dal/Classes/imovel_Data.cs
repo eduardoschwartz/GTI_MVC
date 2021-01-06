@@ -2326,5 +2326,42 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public bool Existe_Notificacao_Terreno(int Ano,int Numero) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from i in db.Notificacao_Terreno
+                           where i.Ano_not==Ano && i.Numero_not==Numero select i.Inscricao).FirstOrDefault();
+                if (string.IsNullOrEmpty(reg))
+                    return false;
+                else
+                    return true;
+            }
+        }
+
+        public List<Notificacao_Terreno_Struct> Lista_Notificacao_Terreno(int Ano) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Notificacao_Terreno
+                           where t.Ano_not == Ano
+                           orderby t.Numero_not select new {
+                               Ano = t.Ano_not, Numero = t.Numero_not, Codigo = t.Codigo, Data_Cadastro = t.Data_cadastro, Usuario = t.Userid, Situacao = t.Situacao,Nome=t.Nome,Prazo=t.Prazo
+                           }).ToList();
+                List<Notificacao_Terreno_Struct> Lista = new List<Notificacao_Terreno_Struct>();
+                foreach (var item in Sql) {
+                    Notificacao_Terreno_Struct reg = new Notificacao_Terreno_Struct() {
+                        Ano_Notificacao = item.Ano,
+                        Numero_Notificacao = item.Numero,
+                        Codigo_Imovel = item.Codigo,
+                        Data_Cadastro = item.Data_Cadastro,
+                        Userid = item.Usuario,
+                        Situacao = item.Situacao,
+                        Prazo=item.Prazo,
+                        AnoNumero = item.Numero.ToString("0000") + "/" + item.Ano.ToString(),
+                        Nome_Proprietario=item.Nome
+                    };
+                    Lista.Add(reg);
+                }
+                return Lista;
+            }
+        }
+
     }//end class
 }

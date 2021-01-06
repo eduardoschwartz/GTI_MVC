@@ -2635,7 +2635,6 @@ Proximo:;
             }
         }
 
-
         public List<Notificacao_iss_web_Struct> Retorna_Notificacao_Iss_Web(int Ano) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                var Sql = (from l in db.Notificacao_Iss_Web 

@@ -8,13 +8,22 @@ namespace GTI_Mvc.ViewModels {
     public class NotificacaoTerViewModel {
         public int Ano_Notificacao { get; set; }
         public int Numero_Notificacao { get; set; }
+        public string AnoNumero { get; set; }
         public int Codigo_Imovel { get; set; }
         public int Situacao { get; set; }
         public string Inscricao { get; set; }
-        public List<ProprietarioStruct> Proprietarios { get; set; }
+        public string Nome_Proprietario { get; set; }
         public string Endereco_Local { get; set; }
         public string Endereco_Entrega { get; set; }
         public string Endereco_Prop { get; set; }
         public int Prazo { get; set; }
+        public DateTime Data_Cadastro { get; set; }
     }
+
+    public class NotificacaoTerQueryViewModel {
+        public int Ano_Selected { get; set; }
+        public int Situacao_Selected { get; set; }
+        public List<NotificacaoTerViewModel> ListaNotificacao { get; set; }
+    }
+
 }

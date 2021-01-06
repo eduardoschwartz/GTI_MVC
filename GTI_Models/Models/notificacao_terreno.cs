@@ -21,4 +21,23 @@ namespace GTI_Models.Models {
         public DateTime Data_cadastro { get; set; }
         public int Userid { get; set; }
     }
+
+    public class Notificacao_Terreno_Struct {
+        public int Ano_Notificacao { get; set; }
+        public int Numero_Notificacao { get; set; }
+        public string AnoNumero { get; set; }
+        public int Codigo_Imovel { get; set; }
+        public int Situacao { get; set; }
+        public string Inscricao { get; set; }
+        public string Nome_Proprietario { get; set; }
+        public string Endereco_Local { get; set; }
+        public string Endereco_Entrega { get; set; }
+        public string Endereco_Prop { get; set; }
+        public int Prazo { get; set; }
+        public DateTime Data_Cadastro { get; set; }
+        public int Userid  { get; set; }
+
+    }
+
+
 }
