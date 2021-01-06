@@ -2353,6 +2353,7 @@ Proximo:;
 
         public Exception Insert_Debito_Parcela(Debitoparcela Reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
                 object[] Parametros = new object[10];
                 Parametros[0] = new SqlParameter { ParameterName = "@codreduzido", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codreduzido };
                 Parametros[1] = new SqlParameter { ParameterName = "@anoexercicio", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Anoexercicio };
@@ -2379,6 +2380,7 @@ Proximo:;
 
         public Exception Insert_Debito_Tributo(Debitotributo Reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
                 object[] Parametros = new object[8];
                 Parametros[0] = new SqlParameter { ParameterName = "@codreduzido", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codreduzido };
                 Parametros[1] = new SqlParameter { ParameterName = "@anoexercicio", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Anoexercicio };
@@ -2603,8 +2605,10 @@ Proximo:;
         }
 
         public Notificacao_Iss_Tabela Retorna_Notificacao_Iss_Tabela(int Ano) {
+            
             using (GTI_Context db = new GTI_Context(_connection)) {
-               Notificacao_Iss_Tabela Lista = (from d in db.Notificacao_Iss_Tabela where d.Ano == Ano select d).FirstOrDefault();
+                db.Database.CommandTimeout = 180;
+                Notificacao_Iss_Tabela Lista = (from d in db.Notificacao_Iss_Tabela where d.Ano == Ano select d).FirstOrDefault();
                return Lista;
             }
         }

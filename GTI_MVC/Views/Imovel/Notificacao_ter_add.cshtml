@@ -1,0 +1,195 @@
+﻿@model GTI_Mvc.ViewModels.NotificacaoTerViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Notificação de Limpeza de Terreno";
+}
+
+<style>
+        .textBoxBlue {
+            height: 25px;
+            position: relative;
+            border: 1px solid #0094ff;
+            border-color: rgba(0, 0, 0, .14);
+            background-color: white;
+            font-size: 14px;
+            box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
+        }
+
+        .center {
+            margin: auto;
+            /*        width: 700px;*/
+            /*        border: 1px solid rgba(0,0,0,0.24);
+            padding: 20px;
+            box-shadow: 0 .1em 0.5em #000;
+            border-radius: 13px;
+    */
+        }
+
+        .actionlink:hover {
+            color: darkgreen;
+        }
+
+        .actionlink {
+            color: darkslateblue;
+        }
+
+        .card-header {
+            background-color: mistyrose;
+            color: brown;
+            font-size: 14px
+        }
+
+        .card {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+        }
+
+        .card-footer {
+            background-color: whitesmoke;
+            font-size: 14px
+        }
+
+        .btn-primary {
+            background-color: steelblue;
+        }
+
+        .btn {
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        .errorlabel {
+            font-weight: normal;
+            color: red;
+            padding-left: 20px;
+            font-size: 13px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+</style>
+
+<div class="center" style="width:700px">
+
+    @using (Html.BeginForm("Notificacao_ter_add", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+
+        <div class="container" style="width:700px">
+            <div class="card">
+                <div class="card-header">Notificação de Limpeza de Terreno</div>
+                <div class="card-body">
+
+                    <div style="padding-left:7px">
+                        @Html.HiddenFor(m => m.Inscricao)
+                        <table style="font-size:13px;width:640px">
+                            <tr style="height:30px">
+                                <td style="width:120px">
+                                    <label style="font-weight:normal;padding-top:4px">Código do imóvel:</label>
+                                </td>
+                                <td>
+                                    @if (@Model.Inscricao == null) {
+                                        @Html.TextBoxFor(m => m.Codigo_Imovel, new { @id = "codigo", @style = "width:100px;height:25px", @Value = "", @onKeyPress = "return formata(this, '§§§§§', event)" })
+                                        <label>&nbsp;&nbsp;</label>
+                                        <button id="btnCodigoOk" type="submit" class="btn btn-primary" name="action" value="btnCodigoOK">Consultar</button>
+
+
+                                    } else {
+                                        @Html.TextBoxFor(m => m.Codigo_Imovel, new { @id = "codigo", @style = "width:100px;height:25px;color:blue", @readonly = true })
+                                        <label>&nbsp;&nbsp;</label>
+                                        <button id="btnCodigoCancel" type="submit" class="btn btn-danger" onclick="return cancelarCodigo()" name="action" value="btnCodigoCancel" data-balloon-length="medium" aria-label="Ao cancelar, todos os dados inseridos neste lançamento de ITBI serão perdidos." data-balloon-pos="right">Cancelar</button>
+                                        <span style="padding-left:10px">Inscrição Cadastral:&nbsp;</span><span style="color:brown">@Model.Inscricao</span>
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+
+                        @if (@Model.Inscricao != null) {
+                            <br />
+                            <table style="font-size:13px;width:640px">
+                                <tr>
+                                    <td style="width:160px;height:20px">
+                                        Nome do Proprietário:
+                                    </td>
+                                    <td style="width:480px;color:brown">
+                                        @Model.Proprietarios[0].Nome
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 160px;height: 20px">
+                                        Endereço da Infração:
+                                    </td>
+                                    <td style="width:480px;color:brown">
+                                        @Model.Endereco_Local
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:160px;height:20px">
+                                        Endereço do Proprietário:
+                                    </td>
+                                    <td style="width:480px;color:brown">
+                                        @Model.Endereco_Entrega
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:160px;height:20px">
+                                        Endereço Entrega:
+                                    </td>
+                                    <td style="width:480px;color:brown">
+                                        @Model.Endereco_Prop
+                                    </td>
+                                </tr>
+
+                            </table>
+                        }
+                    </div>
+
+                </div>
+                <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+                @if (@Model.Inscricao != null) {
+                    <div style="text-align:center">
+                        <button type="submit" class="btn btn-primary" name="action" onclick="return ValidateForm()" value="btnValida">Gerar notificação</button>
+                        <br />
+                        <br />
+                    </div>
+                }
+
+                <div class="card-footer">
+                    @Html.ActionLink("Retornar ao menu de opções", "Notificacao_ter_menu", "Imovel", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                </div>
+            </div>
+
+        </div>
+
+    }
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+        });
+
+        function ValidateForm() {
+            ClearError();
+            var _imovel = document.getElementById('codigo').value;
+
+            if (_imovel == "" || parseInt(_imovel) == 0) {
+                document.getElementById('errorLabel').innerHTML = "Digite o código do imóvel";
+                return false;
+            }
+
+
+            if (confirm('Você deseja gerar esta notificação?')) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+
+        function ClearError() {
+            document.getElementById('errorLabel').innerHTML = "";
+        }
+
+
+    </script>
+}

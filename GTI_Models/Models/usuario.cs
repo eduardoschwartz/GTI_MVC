@@ -21,6 +21,7 @@ namespace GTI_Models.Models {
         public int? Id { get; set; }
         public string Userbinary { get; set; }
         public bool? Fiscal_Itbi { get; set; }
+        public bool? Fiscal_postura { get; set; }
     }
 
     public class usuarioStruct {
@@ -39,5 +40,6 @@ namespace GTI_Models.Models {
         public string Nome_setor { get; set; }
         public string Userbinary { get; set; }
         public bool Fiscal_Itbi { get; set; }
+        public bool Fiscal_postura { get; set; }
     }
 }

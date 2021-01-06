@@ -462,6 +462,7 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MemoryViewModel.cs" />
     <Compile Include="ViewModels\NotificacaoIssViewModel.cs" />
+    <Compile Include="ViewModels\NotificacaoTerViewModel.cs" />
     <Compile Include="ViewModels\ProcessoViewModel.cs" />
     <Compile Include="ViewModels\RodoviariaViewModel.cs" />
     <Compile Include="Views\Imovel\EditorTemplates\ListAnexoEditorViewModel.cs" />
@@ -845,6 +846,8 @@
     <Content Include="Views\Home\Login_gti.cshtml" />
     <Content Include="Scripts\jquery-3.5.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.5.1.min.map" />
+    <Content Include="Views\Imovel\Notificacao_ter_menu.cshtml" />
+    <Content Include="Views\Imovel\Notificacao_ter_add.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

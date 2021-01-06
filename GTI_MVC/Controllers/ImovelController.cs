@@ -1168,6 +1168,70 @@ namespace GTI_Mvc.Controllers {
             return model;
         }
 
+        [Route("Notificacao_ter_menu")]
+        [HttpGet]
+        public ActionResult Notificacao_ter_menu() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            return View();
+        }
+
+        [Route("Notificacao_ter_add")]
+        [HttpGet]
+        public ActionResult Notificacao_ter_add() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            NotificacaoTerViewModel model = new NotificacaoTerViewModel();
+            return View(model);
+        }
+
+        [Route("Notificacao_ter_add")]
+        [HttpPost]
+        public ActionResult Notificacao_ter_add(NotificacaoTerViewModel model, string action) {
+            if (model.Codigo_Imovel == 0) {
+                ViewBag.Result = "Código de imóvel inválido.";
+                return View(model);
+            }
+            int _codigo = model.Codigo_Imovel;
+
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+            if (action == "btnCodigoOK") {
+                ImovelStruct _imovel = imovelRepository.Dados_Imovel(_codigo);
+                List<ProprietarioStruct> Listaprop = imovelRepository.Lista_Proprietario(_codigo, true);
+                if (Listaprop.Count == 0) {
+                    ViewBag.Result = "Não é possível emitir notificação para este imóvel.";
+                    model = new NotificacaoTerViewModel();
+                    return View(model);
+                }
+                if (model.Proprietarios == null)
+                    model.Proprietarios = new List<ProprietarioStruct>();
+                model.Proprietarios.Add(Listaprop[0]);
+                model.Inscricao = _imovel.Inscricao;
+                EnderecoStruct _endLocal = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Local);
+                model.Endereco_Local = _endLocal.Endereco + ", " +_endLocal.Numero.ToString()  + _endLocal.Complemento == null ? "" : "" +  " - " + _endLocal.NomeBairro.ToString();
+                EnderecoStruct _endEntrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Entrega);
+                if (_endEntrega == null)
+                    model.Endereco_Entrega = _endEntrega.Endereco + ", " + _endEntrega.Numero.ToString() + " " + _endEntrega.Complemento == null ? "" : "" + " - " + _endEntrega.NomeBairro.ToString();
+                else {
+                    if(_imovel.EE_TipoEndereco==0)
+                        model.Endereco_Entrega = model.Endereco_Local;
+                    else {
+                        model.Endereco_Entrega = model.Endereco_Prop;
+                    }
+                }
+                EnderecoStruct _endProp = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Proprietario);
+                model.Endereco_Prop = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _endProp.Complemento==null?"":"" + " - " + _endProp.NomeBairro.ToString();
+
+            }
+            if (action == "btnCodigoCancel") {
+                model = new NotificacaoTerViewModel();
+                return View(model);
+            }
+
+            return View(model);
+        }
+
 
     }
 }
