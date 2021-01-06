@@ -2299,5 +2299,32 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Incluir_notificacao_terreno(Notificacao_terreno Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+                object[] Parametros = new object[12];
+                Parametros[0] = new SqlParameter { ParameterName = "@ano_not", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano_not };
+                Parametros[1] = new SqlParameter { ParameterName = "@numero_not", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_not };
+                Parametros[2] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
+                Parametros[3] = new SqlParameter { ParameterName = "@situacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Situacao };
+                Parametros[4] = new SqlParameter { ParameterName = "@endereco_infracao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_infracao };
+                Parametros[5] = new SqlParameter { ParameterName = "@endereco_prop", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_prop };
+                Parametros[6] = new SqlParameter { ParameterName = "@endereco_entrega", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_entrega };
+                Parametros[7] = new SqlParameter { ParameterName = "@nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nome };
+                Parametros[8] = new SqlParameter { ParameterName = "@inscricao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Inscricao };
+                Parametros[9] = new SqlParameter { ParameterName = "@prazo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Prazo };
+                Parametros[10] = new SqlParameter { ParameterName = "@data_cadastro", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_cadastro };
+                Parametros[11] = new SqlParameter { ParameterName = "@userid", SqlDbType = SqlDbType.Int, SqlValue = Reg.Userid };
+                db.Database.ExecuteSqlCommand("INSERT INTO notificacao_terreno(ano_not,numero_not,codigo,situacao,endereco_infracao,endereco_prop,endereco_entrega,nome,inscricao,prazo,data_cadastro,userid) " +
+                                              " VALUES(@ano_not,@numero_not,@codigo,@situacao,@endereco_infracao,@endereco_prop,@endereco_entrega,@nome,@inscricao,@prazo,@data_cadastro,@userid)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
     }//end class
 }

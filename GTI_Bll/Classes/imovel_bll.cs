@@ -511,6 +511,11 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Testada_principal(Codigo, Face);
         }
 
+        public Exception Incluir_notificacao_terreno(Notificacao_terreno Reg) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Incluir_notificacao_terreno(Reg);
+            return ex;
+        }
 
         #region ITBI
         public List<Itbi_natureza> Lista_Itbi_Natureza() {
@@ -522,8 +527,6 @@ namespace GTI_Bll.Classes {
             Imovel_Data obj = new Imovel_Data(_connection);
             return obj.Lista_Itbi_Financiamento();
         }
-
-        
 
         public bool Existe_Itbi(string guid) {
             Imovel_Data obj = new Imovel_Data(_connection);

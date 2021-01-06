@@ -1242,12 +1242,40 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
             if (action == "btnValida") {
-                return View(model);
+                Save_Notificacao_Terreno(model);
             }
 
             return View(model);
         }
 
+        [Route("Notificacao_ter_query")]
+        [HttpGet]
+        public ActionResult Notificacao_ter_query() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            return View();
+        }
+
+        private ActionResult Save_Notificacao_Terreno(NotificacaoTerViewModel model) {
+            Notificacao_terreno reg = new Notificacao_terreno() {
+                Ano_not = model.Ano_Notificacao,
+                Numero_not = model.Numero_Notificacao,
+                Codigo = model.Codigo_Imovel,
+                Inscricao = model.Inscricao,
+                Endereco_entrega = model.Endereco_Entrega,
+                Endereco_infracao = model.Endereco_Local,
+                Endereco_prop = model.Endereco_Prop,
+                Prazo = model.Prazo,
+                Nome = model.Proprietarios[0].Nome,
+                Situacao = 1,
+                Userid = Convert.ToInt32(Session["hashid"]),
+                Data_cadastro=DateTime.Now
+            };
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Exception ex = imovelRepository.Incluir_notificacao_terreno(reg);
+
+            return RedirectToAction("Notificacao_ter_query");
+        }
 
     }
 }

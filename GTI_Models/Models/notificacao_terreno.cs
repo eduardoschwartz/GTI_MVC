@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GTI_Models.Models {
@@ -17,5 +18,7 @@ namespace GTI_Models.Models {
         public string Nome { get; set; }
         public string Inscricao { get; set; }
         public int Prazo { get; set; }
+        public DateTime Data_cadastro { get; set; }
+        public int Userid { get; set; }
     }
 }
