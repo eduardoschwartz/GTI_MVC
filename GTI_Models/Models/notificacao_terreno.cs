@@ -20,6 +20,15 @@ namespace GTI_Models.Models {
         public int Prazo { get; set; }
         public DateTime Data_cadastro { get; set; }
         public int Userid { get; set; }
+        public string Nome2 { get; set; }
+        public string Endereco_prop2 { get; set; }
+        public string Endereco_entrega2 { get; set; }
+        public string Cpf { get; set; }
+        public string Rg { get; set; }
+        public string Cpf2 { get; set; }
+        public string Rg2 { get; set; }
+        public int Codigo_cidadao { get; set; }
+        public int Codigo_cidadao2 { get; set; }
     }
 
     public class Notificacao_Terreno_Struct {
@@ -37,8 +46,15 @@ namespace GTI_Models.Models {
         public DateTime Data_Cadastro { get; set; }
         public int Userid  { get; set; }
         public string UsuarioNome { get; set; }
-
+        public string Nome2 { get; set; }
+        public string Endereco_prop2 { get; set; }
+        public string Endereco_entrega2 { get; set; }
+        public string Cpf { get; set; }
+        public string Rg { get; set; }
+        public string Cpf2 { get; set; }
+        public string Rg2 { get; set; }
+        public int Codigo_cidadao { get; set; }
+        public int Codigo_cidadao2 { get; set; }
     }
-
 
 }

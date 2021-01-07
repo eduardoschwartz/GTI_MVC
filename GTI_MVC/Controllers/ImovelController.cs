@@ -537,11 +537,13 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-            List<AreaStruct> ListaArea = imovelRepository.Lista_Area(_codigo);
-            foreach (AreaStruct item in ListaArea) {
-                if (item.Tipo_Codigo == 2) {
-                    ViewBag.Result = "Este imóvel não esta isento da cobrança de IPTU no ano atual.";
-                    return View(certidaoViewModel);
+            if (!bImune) {
+                List<AreaStruct> ListaArea = imovelRepository.Lista_Area(_codigo);
+                foreach (AreaStruct item in ListaArea) {
+                    if (item.Tipo_Codigo == 2) {
+                        ViewBag.Result = "Este imóvel não esta isento da cobrança de IPTU no ano atual.";
+                        return View(certidaoViewModel);
+                    }
                 }
             }
 
@@ -1214,7 +1216,7 @@ namespace GTI_Mvc.Controllers {
                     model = new NotificacaoTerViewModel();
                     return View(model);
                 }
-                model.Nome_Proprietario=Listaprop[0].Nome;
+                model.Nome_Proprietario=Listaprop[0].Codigo + "-" + Listaprop[0].Nome;
                 model.Inscricao = _imovel.Inscricao;
                 EnderecoStruct _endLocal = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Local);
                 string _compl = _endLocal.Complemento == null ? "" : " " + _endLocal.Complemento;

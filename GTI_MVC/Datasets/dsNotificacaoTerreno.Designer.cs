@@ -301,6 +301,24 @@ namespace GTI_MVC.Datasets {
             
             private global::System.Data.DataColumn columnPrazoText;
             
+            private global::System.Data.DataColumn columnNome2;
+            
+            private global::System.Data.DataColumn columnEndereco_Entrega2;
+            
+            private global::System.Data.DataColumn columnEndereco_Prop2;
+            
+            private global::System.Data.DataColumn columnCpf;
+            
+            private global::System.Data.DataColumn columnRg;
+            
+            private global::System.Data.DataColumn columnCpf2;
+            
+            private global::System.Data.DataColumn columnRg2;
+            
+            private global::System.Data.DataColumn columnCodigo_cidadao;
+            
+            private global::System.Data.DataColumn columnCodigo_cidadao2;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public dtNotificacaoDataTable() {
@@ -424,6 +442,78 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Nome2Column {
+                get {
+                    return this.columnNome2;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Endereco_Entrega2Column {
+                get {
+                    return this.columnEndereco_Entrega2;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Endereco_Prop2Column {
+                get {
+                    return this.columnEndereco_Prop2;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn CpfColumn {
+                get {
+                    return this.columnCpf;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn RgColumn {
+                get {
+                    return this.columnRg;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Cpf2Column {
+                get {
+                    return this.columnCpf2;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Rg2Column {
+                get {
+                    return this.columnRg2;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Codigo_cidadaoColumn {
+                get {
+                    return this.columnCodigo_cidadao;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Codigo_cidadao2Column {
+                get {
+                    return this.columnCodigo_cidadao2;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -459,7 +549,27 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public dtNotificacaoRow AdddtNotificacaoRow(string AnoNumero, string Nome, string Codigo, string Endereco_Local, string Endereco_Entrega, string Endereco_Prop, int Prazo, string Usuario, System.DateTime Data_Cadastro, string Inscricao, string PrazoText) {
+            public dtNotificacaoRow AdddtNotificacaoRow(
+                        string AnoNumero, 
+                        string Nome, 
+                        string Codigo, 
+                        string Endereco_Local, 
+                        string Endereco_Entrega, 
+                        string Endereco_Prop, 
+                        int Prazo, 
+                        string Usuario, 
+                        System.DateTime Data_Cadastro, 
+                        string Inscricao, 
+                        string PrazoText, 
+                        string Nome2, 
+                        string Endereco_Entrega2, 
+                        string Endereco_Prop2, 
+                        string Cpf, 
+                        string Rg, 
+                        string Cpf2, 
+                        string Rg2, 
+                        int Codigo_cidadao, 
+                        int Codigo_cidadao2) {
                 dtNotificacaoRow rowdtNotificacaoRow = ((dtNotificacaoRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         AnoNumero,
@@ -472,7 +582,16 @@ namespace GTI_MVC.Datasets {
                         Usuario,
                         Data_Cadastro,
                         Inscricao,
-                        PrazoText};
+                        PrazoText,
+                        Nome2,
+                        Endereco_Entrega2,
+                        Endereco_Prop2,
+                        Cpf,
+                        Rg,
+                        Cpf2,
+                        Rg2,
+                        Codigo_cidadao,
+                        Codigo_cidadao2};
                 rowdtNotificacaoRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowdtNotificacaoRow);
                 return rowdtNotificacaoRow;
@@ -506,6 +625,15 @@ namespace GTI_MVC.Datasets {
                 this.columnData_Cadastro = base.Columns["Data_Cadastro"];
                 this.columnInscricao = base.Columns["Inscricao"];
                 this.columnPrazoText = base.Columns["PrazoText"];
+                this.columnNome2 = base.Columns["Nome2"];
+                this.columnEndereco_Entrega2 = base.Columns["Endereco_Entrega2"];
+                this.columnEndereco_Prop2 = base.Columns["Endereco_Prop2"];
+                this.columnCpf = base.Columns["Cpf"];
+                this.columnRg = base.Columns["Rg"];
+                this.columnCpf2 = base.Columns["Cpf2"];
+                this.columnRg2 = base.Columns["Rg2"];
+                this.columnCodigo_cidadao = base.Columns["Codigo_cidadao"];
+                this.columnCodigo_cidadao2 = base.Columns["Codigo_cidadao2"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -533,6 +661,24 @@ namespace GTI_MVC.Datasets {
                 base.Columns.Add(this.columnInscricao);
                 this.columnPrazoText = new global::System.Data.DataColumn("PrazoText", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnPrazoText);
+                this.columnNome2 = new global::System.Data.DataColumn("Nome2", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnNome2);
+                this.columnEndereco_Entrega2 = new global::System.Data.DataColumn("Endereco_Entrega2", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnEndereco_Entrega2);
+                this.columnEndereco_Prop2 = new global::System.Data.DataColumn("Endereco_Prop2", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnEndereco_Prop2);
+                this.columnCpf = new global::System.Data.DataColumn("Cpf", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCpf);
+                this.columnRg = new global::System.Data.DataColumn("Rg", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnRg);
+                this.columnCpf2 = new global::System.Data.DataColumn("Cpf2", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCpf2);
+                this.columnRg2 = new global::System.Data.DataColumn("Rg2", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnRg2);
+                this.columnCodigo_cidadao = new global::System.Data.DataColumn("Codigo_cidadao", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCodigo_cidadao);
+                this.columnCodigo_cidadao2 = new global::System.Data.DataColumn("Codigo_cidadao2", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCodigo_cidadao2);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -851,6 +997,150 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Nome2 {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtNotificacao.Nome2Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Nome2\' in table \'dtNotificacao\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtNotificacao.Nome2Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Endereco_Entrega2 {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtNotificacao.Endereco_Entrega2Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Endereco_Entrega2\' in table \'dtNotificacao\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtNotificacao.Endereco_Entrega2Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Endereco_Prop2 {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtNotificacao.Endereco_Prop2Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Endereco_Prop2\' in table \'dtNotificacao\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtNotificacao.Endereco_Prop2Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Cpf {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtNotificacao.CpfColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Cpf\' in table \'dtNotificacao\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtNotificacao.CpfColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Rg {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtNotificacao.RgColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Rg\' in table \'dtNotificacao\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtNotificacao.RgColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Cpf2 {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtNotificacao.Cpf2Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Cpf2\' in table \'dtNotificacao\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtNotificacao.Cpf2Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Rg2 {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtNotificacao.Rg2Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Rg2\' in table \'dtNotificacao\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtNotificacao.Rg2Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public int Codigo_cidadao {
+                get {
+                    try {
+                        return ((int)(this[this.tabledtNotificacao.Codigo_cidadaoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Codigo_cidadao\' in table \'dtNotificacao\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtNotificacao.Codigo_cidadaoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public int Codigo_cidadao2 {
+                get {
+                    try {
+                        return ((int)(this[this.tabledtNotificacao.Codigo_cidadao2Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Codigo_cidadao2\' in table \'dtNotificacao\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtNotificacao.Codigo_cidadao2Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsAnoNumeroNull() {
                 return this.IsNull(this.tabledtNotificacao.AnoNumeroColumn);
             }
@@ -979,6 +1269,114 @@ namespace GTI_MVC.Datasets {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetPrazoTextNull() {
                 this[this.tabledtNotificacao.PrazoTextColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsNome2Null() {
+                return this.IsNull(this.tabledtNotificacao.Nome2Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetNome2Null() {
+                this[this.tabledtNotificacao.Nome2Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsEndereco_Entrega2Null() {
+                return this.IsNull(this.tabledtNotificacao.Endereco_Entrega2Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetEndereco_Entrega2Null() {
+                this[this.tabledtNotificacao.Endereco_Entrega2Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsEndereco_Prop2Null() {
+                return this.IsNull(this.tabledtNotificacao.Endereco_Prop2Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetEndereco_Prop2Null() {
+                this[this.tabledtNotificacao.Endereco_Prop2Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsCpfNull() {
+                return this.IsNull(this.tabledtNotificacao.CpfColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetCpfNull() {
+                this[this.tabledtNotificacao.CpfColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsRgNull() {
+                return this.IsNull(this.tabledtNotificacao.RgColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetRgNull() {
+                this[this.tabledtNotificacao.RgColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsCpf2Null() {
+                return this.IsNull(this.tabledtNotificacao.Cpf2Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetCpf2Null() {
+                this[this.tabledtNotificacao.Cpf2Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsRg2Null() {
+                return this.IsNull(this.tabledtNotificacao.Rg2Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetRg2Null() {
+                this[this.tabledtNotificacao.Rg2Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsCodigo_cidadaoNull() {
+                return this.IsNull(this.tabledtNotificacao.Codigo_cidadaoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetCodigo_cidadaoNull() {
+                this[this.tabledtNotificacao.Codigo_cidadaoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsCodigo_cidadao2Null() {
+                return this.IsNull(this.tabledtNotificacao.Codigo_cidadao2Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetCodigo_cidadao2Null() {
+                this[this.tabledtNotificacao.Codigo_cidadao2Column] = global::System.Convert.DBNull;
             }
         }
         

@@ -229,10 +229,8 @@ namespace GTI_Bll.Classes {
         public string ValidaProcessoAntigo(string sInput) {
             string ret = "";
             string sNumero = sInput.Trim();
-            int Numero = 0;
             int Ano = 0;
             int Dv = 0;
-            string sDv = "";
             string sNumTmp = "";
             string AnoTmp = "";
             if (sNumero.Length < 6) {
@@ -253,7 +251,7 @@ namespace GTI_Bll.Classes {
                             AppEx = new Exception("Número de processo inválido!");
                             return ret;
                         }
-                        sNumTmp = sNumero.Substring(sNumero.IndexOf("/") - 1, 1);
+                        sNumTmp = sNumero.Substring(0, sNumero.Length-5);
                         Dv = DvProcesso(  Convert.ToInt32(sNumTmp));
                         ret = sNumTmp + "-" + Dv.ToString() + "/" + Ano.ToString();
                         return ret;

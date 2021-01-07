@@ -17,5 +17,15 @@ namespace GTI_Models.ReportModels {
         public DateTime Data_Cadastro { get; set; }
         public string Inscricao { get; set; }
         public string PrazoText { get; set; }
+        public string Nome2 { get; set; }
+        public string Endereco_prop2 { get; set; }
+        public string Endereco_entrega2 { get; set; }
+        public string Cpf { get; set; }
+        public string Rg { get; set; }
+        public string Cpf2 { get; set; }
+        public string Rg2 { get; set; }
+        public int Codigo_cidadao { get; set; }
+        public int Codigo_cidadao2 { get; set; }
+
     }
 }
