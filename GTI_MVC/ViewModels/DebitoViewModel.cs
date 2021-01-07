@@ -29,6 +29,8 @@ namespace GTI_Mvc.ViewModels {
         public string Cadastro { get; set; } = "Imóvel";
         public string[] Tipo_Cadastro = new[] { "Imóvel", "Empresa", "Cidadão" };
         public List<Contribuinte_Header_Struct> Lista_Header  { get; set; }
+        public string ProcessoAntigo { get; set; }
+        public string ProcessoNovo { get; set; }
     }
 
 }

@@ -226,6 +226,43 @@ namespace GTI_Bll.Classes {
             return null;
         }
 
+        public string ValidaProcessoAntigo(string sInput) {
+            string ret = "";
+            string sNumero = sInput.Trim();
+            int Numero = 0;
+            int Ano = 0;
+            int Dv = 0;
+            string sDv = "";
+            string sNumTmp = "";
+            string AnoTmp = "";
+            if (sNumero.Length < 6) {
+                AppEx = new Exception("Número de processo inválido!");
+                return ret;
+            } else {
+                AnoTmp = (sNumero.Substring(sNumero.Length - 4));
+                if (!bllCore.IsNumeric(AnoTmp)) {
+                    AppEx = new Exception("Número de processo inválido!");
+                    return ret;
+                } else {
+                    Ano = Convert.ToInt32(AnoTmp);
+                    if (Ano < 1900 || Ano > DateTime.Now.Year + 1) {
+                        AppEx = new Exception("Número de processo inválido!");
+                        return ret;
+                    } else {
+                        if (!sNumero.Contains("/")) {
+                            AppEx = new Exception("Número de processo inválido!");
+                            return ret;
+                        }
+                        sNumTmp = sNumero.Substring(sNumero.IndexOf("/") - 1, 1);
+                        Dv = DvProcesso(  Convert.ToInt32(sNumTmp));
+                        ret = sNumTmp + "-" + Dv.ToString() + "/" + Ano.ToString();
+                        return ret;
+                    }
+                }
+            }
+        }
+
+
 
         ///<summary> Retorna o dígito verificador de um número de processo.
         ///O dígito verificador é o mesmo para todos os números iguais, independente do ano do processo.

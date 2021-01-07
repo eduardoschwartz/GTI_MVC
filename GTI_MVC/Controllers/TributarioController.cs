@@ -1415,11 +1415,34 @@ namespace GTI_Mvc.Controllers {
 
         [Route("SegundaVia_Parcelamento")]
         [HttpPost]
-        public ActionResult SegundaVia_Parcelamento(DebitoViewModel model) {
+        public ActionResult SegundaVia_Parcelamento(DebitoViewModel model,string action) {
+
+            if(action== "btnDigito") {
+                string _antigo = model.ProcessoAntigo;
+                if (string.IsNullOrEmpty(_antigo)) {
+                    ViewBag.Result = "Nº do processo antigo inválido.";
+                    return View(model);
+                } else {
+                    Processo_bll processoRepository = new Processo_bll("GTIconnection");
+                    string _novo = processoRepository.ValidaProcessoAntigo(_antigo);
+                    if (_novo=="") {
+                        ViewBag.Result = "Nº do processo antigo inválido.";
+                        return View(model);
+                    } else {
+                        ViewBag.Result = "";
+                        model.ProcessoNovo = _novo;
+                        return View(model);
+                    }
+                }
+            }
+            model.ProcessoAntigo =null;
+            model.ProcessoNovo = null;
+
             if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
                 ViewBag.Result = "Código de verificação inválido.";
                 return View(model);
             }
+
             string _nome, _endereco, _endereco_rua, _complemento, _bairro, _cpfcnpj, _cidade, _cep, _uf;
             short _numero, _totParcela;
             int _codigo = Convert.ToInt32(model.Inscricao);

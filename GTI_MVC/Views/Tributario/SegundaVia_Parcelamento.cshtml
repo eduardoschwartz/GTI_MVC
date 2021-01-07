@@ -66,7 +66,7 @@
         <div class="card">
             <div class="card-header">Emissão de 2ª via de parcelamento</div>
             <div class="card-body">
-                <span style="text-decoration: underline;color: #CC0000">Observação importante</span>:&nbsp; <article style="color: #CC0000;text-align:justify">Os boletos serão registrados durante a noite e estarão disponíveis para pagamento a partir de amanhã. Caso queira pagar alguma parcela hoje, emitir boleto através da consulta e atualização de boletos disponível no site.</article>
+                <span style="text-decoration: underline;color: #CC0000">Observação importante</span>:&nbsp; <article style="color: #CC0000;text-align:justify">Os boletos serão enviados para registro e estarão disponíveis para pagamento no próximo dia útil. Nos finais de semana e feriados acrescentar mais um dia. Caso queira pagar alguma parcela hoje, emitir boleto através da consulta e atualização de boletos disponível no site.</article>
                 <br />
 
                 <table width="500px">
@@ -90,8 +90,33 @@
                         </td>
                     </tr>
                 </table>
+
                 <br />
-                <button type="submit" class="btn btn-primary"> Consultar</button>
+                <button type="submit" id="btnOK"  class="btn btn-primary"> Consultar</button>
+                <br />
+                <br />
+                <span style="color:brown;text-decoration: underline">Observação:</span><br />
+                <article style="color:black;text-align:justify">Em alguns carnês de parcelamento antigos, pode não aparecer o dígito verificador no nº de processo. Para o obter o número de processo com o dígito verificador, insira abaixo o nº de processo antigo para obter o número completo com o dígito.</article>
+                <br />
+                <table style="font-size:13px;width:640px">
+                    <tr style="height:30px">
+                        <td style="width:65px">
+                            <label style="font-weight:normal;padding-top:4px">Nº Antigo:</label>
+                        </td>
+                        <td style="width:575px">
+                            @if (@Model.ProcessoNovo == null) {
+                                @Html.TextBoxFor(m => m.ProcessoAntigo, new { @id = "codigo", @class = "textBoxBlue", @style = "width:100px;height:25px",  @Value = "" })
+                                <label>&nbsp;&nbsp;</label>
+                                <button id="btnDigito" type="submit" class="btn btn-success" name="action" value="btnDigito">Verificar</button>
+                            } else {
+                                @Html.TextBoxFor(m => m.ProcessoAntigo, new { @id = "codigo", @class = "textBoxBlue", @style = "width:100px;height:25px" })
+                                <label>&nbsp;&nbsp;</label>
+                                <span style="padding-left:10px">Nº Processo Novo:&nbsp;</span><span style="color:brown">@Model.ProcessoNovo</span>
+                            }
+                        </td>
+                    </tr>
+                </table>
+
             </div>
             <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
             <div class="card-footer">
@@ -107,7 +132,7 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            $("#MainForm").submit(function () {
+            $("#btnOK").click(function () {
                 return ValidateForm();
             });
         });
