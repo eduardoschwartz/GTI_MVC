@@ -84,6 +84,14 @@
                         @Html.HiddenFor(m => m.Endereco_Local, new { Value = Model.Endereco_Local })
                         @Html.HiddenFor(m => m.Endereco_Prop, new { Value = Model.Endereco_Prop })
                         @Html.HiddenFor(m => m.Nome_Proprietario, new { Value = Model.Nome_Proprietario })
+                        @Html.HiddenFor(m => m.Nome_Proprietario2, new { Value = Model.Nome_Proprietario2 })
+                        @Html.HiddenFor(m => m.Cpf, new { Value = Model.Cpf })
+                        @Html.HiddenFor(m => m.Rg, new { Value = Model.Rg })
+                        @Html.HiddenFor(m => m.Cpf2, new { Value = Model.Cpf2 })
+                        @Html.HiddenFor(m => m.Rg2, new { Value = Model.Rg2 })
+                        @Html.HiddenFor(m => m.Codigo_cidadao, new { Value = Model.Codigo_cidadao })
+                        @Html.HiddenFor(m => m.Codigo_cidadao2, new { Value = Model.Codigo_cidadao2 })
+
 
                         <table style="font-size:13px;width:640px">
                             <tr style="height:30px">
@@ -110,12 +118,22 @@
                             <table style="font-size:13px;width:640px">
                                 <tr>
                                     <td style="width:160px;height:20px">
-                                        Nome do Proprietário:
+                                        Nome do Proprietário 1:
                                     </td>
                                     <td style="width:480px;color:brown">
-                                        @Model.Nome_Proprietario
+                                        @Model.Codigo_cidadao-@Model.Nome_Proprietario
                                     </td>
                                 </tr>
+                                @if (Model.Codigo_cidadao2 > 0) {
+                                    <tr>
+                                        <td style="width:160px;height:20px">
+                                            Nome do Proprietário 2:
+                                        </td>
+                                        <td style="width:480px;color:brown">
+                                            @Model.Codigo_cidadao2-@Model.Nome_Proprietario2
+                                        </td>
+                                    </tr>
+                                }
                                 <tr>
                                     <td style="width: 160px;height: 20px">
                                         Endereço da Infração:
@@ -180,7 +198,7 @@
                 <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
                 @if (@Model.Inscricao != null) {
                     <div style="text-align:center">
-                        <button type="submit" class="btn btn-primary" name="action"  value="btnValida">Gerar notificação</button>
+                        <button type="submit" id="btnOk" class="btn btn-primary" name="action"  value="btnValida">Gerar notificação</button>
                         <br />
                         <br />
                     </div>
@@ -201,7 +219,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#MainForm").submit(function () {
+            $("#btnOk").click(function () {
                 return ValidateForm();
             });
         });

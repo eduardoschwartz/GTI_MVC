@@ -1210,24 +1210,64 @@ namespace GTI_Mvc.Controllers {
             Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
             if (action == "btnCodigoOK") {
                 ImovelStruct _imovel = imovelRepository.Dados_Imovel(_codigo);
-                List<ProprietarioStruct> Listaprop = imovelRepository.Lista_Proprietario(_codigo, true);
+                Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
+                List<ProprietarioStruct> Listaprop = imovelRepository.Lista_Proprietario(_codigo, false);
                 if (Listaprop.Count == 0) {
                     ViewBag.Result = "Não é possível emitir notificação para este imóvel.";
                     model = new NotificacaoTerViewModel();
                     return View(model);
                 }
-                model.Nome_Proprietario=Listaprop[0].Codigo + "-" + Listaprop[0].Nome;
+                foreach (ProprietarioStruct prop in Listaprop) {
+                    if( prop.Tipo=="P" &&  prop.Principal ) {
+                        model.Codigo_cidadao =prop.Codigo;
+                        model.Nome_Proprietario = prop.Nome;
+                        CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(prop.Codigo);
+                        model.Rg = _cidadao.Rg;
+                        model.Cpf = string.IsNullOrEmpty(_cidadao.Cnpj)? _cidadao.Cpf:_cidadao.Cnpj;
+                        model.Cpf = Functions.FormatarCpfCnpj(model.Cpf);
+                        break;
+                    }
+                }
+                foreach (ProprietarioStruct prop in Listaprop) {
+                    if (prop.Tipo == "P" && !prop.Principal) {
+                        model.Codigo_cidadao2 = prop.Codigo;
+                        model.Nome_Proprietario2 = prop.Nome;
+                        CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(prop.Codigo);
+                        model.Rg2 = _cidadao.Rg;
+                        model.Cpf2 = string.IsNullOrEmpty(_cidadao.Cnpj) ? _cidadao.Cpf : _cidadao.Cnpj;
+                        model.Cpf2 = Functions.FormatarCpfCnpj(model.Cpf);
+                        break;
+                    }
+                }
+                if(string.IsNullOrEmpty(model.Nome_Proprietario2) && Listaprop.Count > 1) {
+                    foreach (ProprietarioStruct prop in Listaprop) {
+                        if (prop.Tipo != "P") {
+                            model.Codigo_cidadao2 = prop.Codigo;
+                            model.Nome_Proprietario2 = prop.Nome;
+                            CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(prop.Codigo);
+                            model.Rg2 = _cidadao.Rg;
+                            model.Cpf2 = string.IsNullOrEmpty(_cidadao.Cnpj) ? _cidadao.Cpf : _cidadao.Cnpj;
+                            model.Cpf2 = Functions.FormatarCpfCnpj(model.Cpf2);
+                            break;
+                        }
+                    }
+                }
+
                 model.Inscricao = _imovel.Inscricao;
                 EnderecoStruct _endLocal = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Local);
                 string _compl = _endLocal.Complemento == null ? "" : " " + _endLocal.Complemento;
-                model.Endereco_Local = _endLocal.Endereco + ", " +_endLocal.Numero.ToString()  + _compl +  " - " + _endLocal.NomeBairro.ToString();
+                model.Endereco_Local = _endLocal.Endereco + ", " +_endLocal.Numero.ToString()  + _compl +  " - " + _endLocal.NomeBairro.ToString() + " - " + _endLocal.NomeCidade + "/" + _endLocal.UF + " Cep:" + _endLocal.Cep;
+
+
                 EnderecoStruct _endProp = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Proprietario);
                 _compl = _endProp.Complemento == null ? "" : " " + _endProp.Complemento;
-                model.Endereco_Prop = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _compl + " - " + _endProp.NomeBairro.ToString();
+                model.Endereco_Prop = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _compl + " - " + _endProp.NomeBairro.ToString() + " - " + _endProp.NomeCidade + "/" + _endProp.UF + " Cep:" + _endProp.Cep ;
+             
+                
                 EnderecoStruct _endEntrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Entrega);
                 if (_endEntrega.Endereco != null) {
                     _compl = _endEntrega.Complemento == null ? "" : " " + _endEntrega.Complemento;
-                    model.Endereco_Entrega = _endEntrega.Endereco + ", " + _endEntrega.Numero.ToString() + _compl + " - " + _endEntrega.NomeBairro.ToString();
+                    model.Endereco_Entrega = _endEntrega.Endereco + ", " + _endEntrega.Numero.ToString() + _compl + " - " + _endEntrega.NomeBairro.ToString() + " - " + _endEntrega.NomeCidade + "/" + _endEntrega.UF + " Cep:" + _endEntrega.Cep;
                 } else {
                     if (_imovel.EE_TipoEndereco == 0)
                         model.Endereco_Entrega = model.Endereco_Local;
@@ -1268,7 +1308,14 @@ namespace GTI_Mvc.Controllers {
                 Nome = model.Nome_Proprietario,
                 Situacao = 3,//concluido
                 Userid = Convert.ToInt32(Session["hashid"]),
-                Data_cadastro=DateTime.Now
+                Data_cadastro=DateTime.Now,
+                Nome2 = model.Nome_Proprietario2,
+                Codigo_cidadao=model.Codigo_cidadao,
+                Codigo_cidadao2=model.Codigo_cidadao2,
+                Cpf=model.Cpf,
+                Cpf2=model.Cpf2,
+                Rg=model.Rg,
+                Rg2=model.Rg2
             };
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             Exception ex = imovelRepository.Incluir_notificacao_terreno(reg);
@@ -1318,15 +1365,22 @@ namespace GTI_Mvc.Controllers {
             DtNotificacao reg = new DtNotificacao() {
                 AnoNumero=_not.AnoNumero,
                 Codigo=_not.Codigo_Imovel.ToString("00000"),
-                Nome=_not.Nome_Proprietario,
-                Endereco_Entrega=_not.Endereco_Entrega,
+                Nome= _not.Codigo_cidadao.ToString() + "-" + _not.Nome_Proprietario,
+                Cpf=_not.Cpf??"",
+                Rg=_not.Rg??"",
+                Endereco_Entrega = _not.Endereco_Entrega,
                 Endereco_Local=_not.Endereco_Local,
                 Endereco_Prop=_not.Endereco_Prop,
                 Prazo=_not.Prazo,
                 Usuario=_not.UsuarioNome,
                 Inscricao=_not.Inscricao,
-                PrazoText=Functions.Escrever_Valor_Extenso(_not.Prazo)
+                PrazoText=Functions.Escrever_Valor_Extenso(_not.Prazo),
+                Cpf2 = _not.Cpf2 ?? "",
+                Rg2 = _not.Rg2 ?? ""
             };
+            if (_not.Codigo_cidadao2 > 0) {
+                reg.Nome2 = _not.Codigo_cidadao2.ToString() + "-" + _not.Nome_Proprietario2;
+            }
             ListaNot.Add(reg);
 
             ReportDocument rd = new ReportDocument();

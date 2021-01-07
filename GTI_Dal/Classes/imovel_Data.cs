@@ -2302,7 +2302,7 @@ namespace GTI_Dal.Classes {
         public Exception Incluir_notificacao_terreno(Notificacao_terreno Reg) {
             using (var db = new GTI_Context(_connection)) {
                 db.Database.CommandTimeout = 180;
-                object[] Parametros = new object[12];
+                object[] Parametros = new object[19];
                 Parametros[0] = new SqlParameter { ParameterName = "@ano_not", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano_not };
                 Parametros[1] = new SqlParameter { ParameterName = "@numero_not", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_not };
                 Parametros[2] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
@@ -2315,8 +2315,18 @@ namespace GTI_Dal.Classes {
                 Parametros[9] = new SqlParameter { ParameterName = "@prazo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Prazo };
                 Parametros[10] = new SqlParameter { ParameterName = "@data_cadastro", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_cadastro };
                 Parametros[11] = new SqlParameter { ParameterName = "@userid", SqlDbType = SqlDbType.Int, SqlValue = Reg.Userid };
-                db.Database.ExecuteSqlCommand("INSERT INTO notificacao_terreno(ano_not,numero_not,codigo,situacao,endereco_infracao,endereco_prop,endereco_entrega,nome,inscricao,prazo,data_cadastro,userid) " +
-                                              " VALUES(@ano_not,@numero_not,@codigo,@situacao,@endereco_infracao,@endereco_prop,@endereco_entrega,@nome,@inscricao,@prazo,@data_cadastro,@userid)", Parametros);
+                Parametros[12] = new SqlParameter { ParameterName = "@nome2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nome2 };
+                Parametros[13] = new SqlParameter { ParameterName = "@codigo_cidadao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo_cidadao };
+                Parametros[14] = new SqlParameter { ParameterName = "@codigo_cidadao2", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo_cidadao2 };
+                Parametros[15] = new SqlParameter { ParameterName = "@cpf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cpf };
+                Parametros[16] = new SqlParameter { ParameterName = "@rg", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Rg };
+                Parametros[17] = new SqlParameter { ParameterName = "@cpf2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cpf2 };
+                Parametros[18] = new SqlParameter { ParameterName = "@rg2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Rg2 };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO notificacao_terreno(ano_not,numero_not,codigo,situacao,endereco_infracao,endereco_prop,endereco_entrega,nome,inscricao,prazo,data_cadastro," +
+                                              "userid,nome2,codigo_cidadao,codigo_cidadao2,cpf,rg,cpf2,rg2) " +
+                                              " VALUES(@ano_not,@numero_not,@codigo,@situacao,@endereco_infracao,@endereco_prop,@endereco_entrega,@nome,@inscricao,@prazo,@data_cadastro,@userid," +
+                                              "@nome2,@codigo_cidadao,@codigo_cidadao2,@cpf,@rg,@cpf2,@rg2)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -2369,7 +2379,8 @@ namespace GTI_Dal.Classes {
                            join u in db.Usuario on t.Userid equals u.Id into tu from u in tu
                            where t.Ano_not == Ano && t.Numero_not==Numero select new {
                                Ano = t.Ano_not, Numero = t.Numero_not, Codigo = t.Codigo, Data_Cadastro = t.Data_cadastro, Usuario = t.Userid, Situacao = t.Situacao, Nome = t.Nome, Prazo = t.Prazo,
-                               Endereco_entrega=t.Endereco_entrega, Endereco_prop = t.Endereco_prop,Endereco_Infracao=t.Endereco_infracao, Usuario_Nome= u.Nomecompleto,Inscricao=t.Inscricao
+                               Endereco_entrega=t.Endereco_entrega, Endereco_prop = t.Endereco_prop,Endereco_Infracao=t.Endereco_infracao, Usuario_Nome= u.Nomecompleto,Inscricao=t.Inscricao,
+                               t.Nome2,t.Codigo_cidadao,t.Codigo_cidadao2,t.Cpf,t.Rg,t.Cpf2,t.Rg2
                            }).First();
                 Notificacao_Terreno_Struct reg = new Notificacao_Terreno_Struct() {
                     Ano_Notificacao=Sql.Ano,
@@ -2384,7 +2395,14 @@ namespace GTI_Dal.Classes {
                     Endereco_Local=Sql.Endereco_Infracao,
                     Endereco_Prop=Sql.Endereco_prop,
                     UsuarioNome=Sql.Usuario_Nome,
-                    Inscricao=Sql.Inscricao
+                    Inscricao=Sql.Inscricao,
+                    Nome_Proprietario2=Sql.Nome2,
+                    Codigo_cidadao=Sql.Codigo_cidadao,
+                    Codigo_cidadao2=Sql.Codigo_cidadao2,
+                    Cpf=Sql.Cpf,
+                    Cpf2=Sql.Cpf2,
+                    Rg=Sql.Rg,
+                    Rg2=Sql.Rg2
                 };
                 return reg;
             }

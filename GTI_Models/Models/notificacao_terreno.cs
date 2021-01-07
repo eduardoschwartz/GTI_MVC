@@ -46,7 +46,7 @@ namespace GTI_Models.Models {
         public DateTime Data_Cadastro { get; set; }
         public int Userid  { get; set; }
         public string UsuarioNome { get; set; }
-        public string Nome2 { get; set; }
+        public string Nome_Proprietario2 { get; set; }
         public string Endereco_prop2 { get; set; }
         public string Endereco_entrega2 { get; set; }
         public string Cpf { get; set; }

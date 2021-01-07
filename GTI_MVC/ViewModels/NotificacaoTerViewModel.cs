@@ -18,7 +18,7 @@ namespace GTI_Mvc.ViewModels {
         public string Endereco_Prop { get; set; }
         public int Prazo { get; set; }
         public DateTime Data_Cadastro { get; set; }
-        public string Nome2 { get; set; }
+        public string Nome_Proprietario2 { get; set; }
         public string Endereco_prop2 { get; set; }
         public string Endereco_entrega2 { get; set; }
         public string Cpf { get; set; }
