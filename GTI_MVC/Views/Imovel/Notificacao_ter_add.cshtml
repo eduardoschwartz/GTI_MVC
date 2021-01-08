@@ -81,8 +81,10 @@
                         @Html.HiddenFor(m => m.Inscricao, new { Value = Model.Inscricao })
                         @Html.HiddenFor(m => m.Ano_Notificacao)
                         @Html.HiddenFor(m => m.Endereco_Entrega, new { Value = Model.Endereco_Entrega })
+                        @Html.HiddenFor(m => m.Endereco_entrega2, new { Value = Model.Endereco_entrega2 })
                         @Html.HiddenFor(m => m.Endereco_Local, new { Value = Model.Endereco_Local })
                         @Html.HiddenFor(m => m.Endereco_Prop, new { Value = Model.Endereco_Prop })
+                        @Html.HiddenFor(m => m.Endereco_prop2, new { Value = Model.Endereco_prop2 })
                         @Html.HiddenFor(m => m.Nome_Proprietario, new { Value = Model.Nome_Proprietario })
                         @Html.HiddenFor(m => m.Nome_Proprietario2, new { Value = Model.Nome_Proprietario2 })
                         @Html.HiddenFor(m => m.Cpf, new { Value = Model.Cpf })
@@ -117,7 +119,7 @@
                             <br />
                             <table style="font-size:13px;width:640px">
                                 <tr>
-                                    <td style="width:160px;height:20px">
+                                    <td style="width:180px;height:20px">
                                         Nome do Proprietário 1:
                                     </td>
                                     <td style="width:480px;color:brown">
@@ -150,6 +152,16 @@
                                         @Model.Endereco_Prop
                                     </td>
                                 </tr>
+                                @if (Model.Endereco_prop2 != null) {
+                                    <tr>
+                                        <td style="width:160px;height:20px">
+                                            Endereço do Proprietário 2:
+                                        </td>
+                                        <td style="width:480px;color:brown">
+                                            @Model.Endereco_prop2
+                                        </td>
+                                    </tr>
+                                }
                                 <tr>
                                     <td style="width:160px;height:20px">
                                         Endereço Entrega:
@@ -158,7 +170,7 @@
                                         @Model.Endereco_Entrega
                                     </td>
                                 </tr>
-
+                               
                             </table>
                             <br />
                             <table style="font-size:14px;width:600px">

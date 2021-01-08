@@ -1259,11 +1259,17 @@ namespace GTI_Mvc.Controllers {
                 model.Endereco_Local = _endLocal.Endereco + ", " +_endLocal.Numero.ToString()  + _compl +  " - " + _endLocal.NomeBairro.ToString() + " - " + _endLocal.NomeCidade + "/" + _endLocal.UF + " Cep:" + _endLocal.Cep;
 
 
-                EnderecoStruct _endProp = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Proprietario);
+                Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+                Contribuinte_Header_Struct _endProp = sistemaRepository.Contribuinte_Header(model.Codigo_cidadao);
                 _compl = _endProp.Complemento == null ? "" : " " + _endProp.Complemento;
-                model.Endereco_Prop = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _compl + " - " + _endProp.NomeBairro.ToString() + " - " + _endProp.NomeCidade + "/" + _endProp.UF + " Cep:" + _endProp.Cep ;
-             
-                
+                model.Endereco_Prop = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _compl + " - " + _endProp.Nome_bairro.ToString() + " - " + _endProp.Nome_cidade + "/" + _endProp.Nome_uf + " Cep:" + _endProp.Cep ;
+
+                if (model.Codigo_cidadao2 > 0) {
+                    _endProp = sistemaRepository.Contribuinte_Header(model.Codigo_cidadao2);
+                    _compl = _endProp.Complemento == null ? "" : " " + _endProp.Complemento;
+                    model.Endereco_prop2 = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _compl + " - " + _endProp.Nome_bairro.ToString() + " - " + _endProp.Nome_cidade + "/" + _endProp.Nome_uf + " Cep:" + _endProp.Cep;
+                }
+
                 EnderecoStruct _endEntrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Entrega);
                 if (_endEntrega.Endereco != null) {
                     _compl = _endEntrega.Complemento == null ? "" : " " + _endEntrega.Complemento;
@@ -1302,8 +1308,10 @@ namespace GTI_Mvc.Controllers {
                 Codigo = model.Codigo_Imovel,
                 Inscricao = model.Inscricao,
                 Endereco_entrega = model.Endereco_Entrega,
+                Endereco_entrega2 = model.Endereco_entrega2,
                 Endereco_infracao = model.Endereco_Local,
                 Endereco_prop = model.Endereco_Prop,
+                Endereco_prop2 = model.Endereco_prop2,
                 Prazo = model.Prazo,
                 Nome = model.Nome_Proprietario,
                 Situacao = 3,//concluido
@@ -1369,9 +1377,11 @@ namespace GTI_Mvc.Controllers {
                 Cpf=_not.Cpf??"",
                 Rg=_not.Rg??"",
                 Endereco_Entrega = _not.Endereco_Entrega,
-                Endereco_Local=_not.Endereco_Local,
+                Endereco_entrega2 = _not.Endereco_entrega2,
+                Endereco_Local =_not.Endereco_Local,
                 Endereco_Prop=_not.Endereco_Prop,
-                Prazo=_not.Prazo,
+                Endereco_prop2 = _not.Endereco_prop2,
+                Prazo =_not.Prazo,
                 Usuario=_not.UsuarioNome,
                 Inscricao=_not.Inscricao,
                 PrazoText=Functions.Escrever_Valor_Extenso(_not.Prazo),

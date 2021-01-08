@@ -108,7 +108,7 @@ namespace GTI_Dal.Classes {
             string _endereco_entrega = "", _complemento_entrega = "", _bairro_entrega = "", _cidade_entrega = "", _uf_entrega = "", _cep_entrega = "";
             string _cpf_cnpj = "",_atividade="",_rg="",_endereco_abreviado="",_endereco_entrega_abreviado="";
             int _numero = 0, _numero_entrega = 0;
-            GTI_Models.modelCore.TipoEndereco _tipo_end = GTI_Models.modelCore.TipoEndereco.Local;
+            TipoEndereco _tipo_end = TipoEndereco.Local;
             bool _ativo = false;
             TipoCadastro _tipo_cadastro;
             _tipo_cadastro = _codigo < 100000 ? TipoCadastro.Imovel : (_codigo >= 100000 && _codigo < 500000) ? TipoCadastro.Empresa : TipoCadastro.Cidadao;
