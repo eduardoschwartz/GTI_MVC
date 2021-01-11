@@ -2437,7 +2437,6 @@ namespace GTI_Mvc.Controllers {
                 Lista.Add("Nenhum documento foi anexado");
             }
 
-
             return Lista;
         }
 
@@ -2457,7 +2456,9 @@ namespace GTI_Mvc.Controllers {
                 return RedirectToAction("Itbi_query", new { e = "P" });
             } else {
                 Itbi_main _itbi = imovelRepository.Retorna_Itbi_Main(p);
-                if (_itbi.Data_Vencimento < DateTime.Now) {
+                string _data1 =Convert.ToDateTime(_itbi.Data_Vencimento).ToString("dd/MM/yyyy");
+                string _data2 =DateTime.Now.ToString("dd/MM/yyyy");
+                if (Convert.ToDateTime( _data1) < Convert.ToDateTime(_data2) ){
                     return RedirectToAction("Itbi_query", new { e = "V" });
                 }
 

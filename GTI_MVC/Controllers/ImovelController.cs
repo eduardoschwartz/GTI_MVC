@@ -1364,7 +1364,40 @@ namespace GTI_Mvc.Controllers {
             return View(model);
         }
 
-        public ActionResult Notificacao_terreno_print(int a,int n) {
+        [Route("Notificacao_ter_query")]
+        [HttpPost]
+        public ActionResult Notificacao_ter_query(NotificacaoTerQueryViewModel model2) {
+            int _ano = model2.Ano_Selected;
+            List<int> Lista_Ano = new List<int>();
+            for (int i = 2020; i <= DateTime.Now.Year; i++) {
+                Lista_Ano.Add(i);
+            }
+            ViewBag.Lista_Ano = new SelectList(Lista_Ano);
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            List<NotificacaoTerViewModel> ListaNot = new List<NotificacaoTerViewModel>();
+            List < Notificacao_Terreno_Struct >_listaNot = imovelRepository.Lista_Notificacao_Terreno(_ano);
+            foreach (Notificacao_Terreno_Struct item in _listaNot) {
+                NotificacaoTerViewModel reg = new NotificacaoTerViewModel() {
+                    AnoNumero = item.AnoNumero,
+                    Ano_Notificacao = item.Ano_Notificacao,
+                    Numero_Notificacao = item.Numero_Notificacao,
+                    Codigo_Imovel = item.Codigo_Imovel,
+                    Data_Cadastro = item.Data_Cadastro,
+                    Prazo = item.Prazo,
+                    Nome_Proprietario = item.Nome_Proprietario,
+                    Situacao = item.Situacao
+                };
+                ListaNot.Add(reg);
+            }
+
+            NotificacaoTerQueryViewModel model = new NotificacaoTerQueryViewModel();
+            model.ListaNotificacao = ListaNot;
+            model.Ano_Selected = _ano;
+            return View( model);
+        }
+
+
+            public ActionResult Notificacao_terreno_print(int a,int n) {
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             Notificacao_Terreno_Struct _not = imovelRepository.Retorna_Notificacao_Terreno(a, n);
 
