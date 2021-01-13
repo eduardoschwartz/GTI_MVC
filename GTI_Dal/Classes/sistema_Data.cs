@@ -201,7 +201,7 @@ namespace GTI_Dal.Classes {
                             else
                                 _cep = endereco_Class.RetornaCep((int)_cidadao.CodigoLogradouroC, Convert.ToInt16(_cidadao.NumeroC)).ToString("00000000");
                         } else {
-                            _endereco = _cidadao.CodigoCidadeC.ToString();
+                            _endereco = _cidadao.EnderecoC.ToString();
                             _cep = _cidadao.CepC.ToString();
                         }
                         _numero = (int)_cidadao.NumeroC;
@@ -211,14 +211,14 @@ namespace GTI_Dal.Classes {
                         _uf = _cidadao.UfC;
                     } else {
                         if (_cidadao.CodigoCidadeR == 413) {
-                            _endereco = _cidadao.EnderecoR??""                            ;
+                            _endereco = _cidadao.EnderecoR??"";
                             Endereco_Data endereco_Class = new Endereco_Data(_connection);
                             if (_cidadao.NumeroR == null || _cidadao.NumeroR == 0 || _cidadao.CodigoLogradouroR == null || _cidadao.CodigoLogradouroR == 0)
                                 _cep = "14870000";
                             else
                                 _cep = endereco_Class.RetornaCep((int)_cidadao.CodigoLogradouroR, Convert.ToInt16(_cidadao.NumeroR)).ToString("00000000");
                         } else {
-                            _endereco = _cidadao.CodigoCidadeR.ToString();
+                            _endereco = _cidadao.EnderecoR.ToString();
                             _cep = _cidadao.CepR.ToString();
                         }
                         _numero =  _cidadao.NumeroR==null?0: (int)_cidadao.NumeroR;

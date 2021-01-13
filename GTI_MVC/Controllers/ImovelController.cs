@@ -1258,7 +1258,6 @@ namespace GTI_Mvc.Controllers {
                 string _compl = _endLocal.Complemento == null ? "" : " " + _endLocal.Complemento;
                 model.Endereco_Local = _endLocal.Endereco + ", " +_endLocal.Numero.ToString()  + _compl +  " - " + _endLocal.NomeBairro.ToString() + " - " + _endLocal.NomeCidade + "/" + _endLocal.UF + " Cep:" + _endLocal.Cep;
 
-
                 Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
                 Contribuinte_Header_Struct _endProp = sistemaRepository.Contribuinte_Header(model.Codigo_cidadao);
                 _compl = _endProp.Complemento == null ? "" : " " + _endProp.Complemento;
