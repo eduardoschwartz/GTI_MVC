@@ -21,5 +21,8 @@ namespace GTI_Models.Models {
         public DateTime Validade { get; set; }
         public DateTime Data_Gravada { get; set; }
         public byte[] QRCodeImage { get; set; }
+        public DateTime? Data_protocolo_vre { get; set; }
+        public string Num_protocolo_vre { get; set; }
+        public string Num_processo { get; set; }
     }
 }

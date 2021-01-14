@@ -2058,6 +2058,12 @@ namespace GTI_Mvc.Controllers {
                 string _bairro = "",_endereco="",_compl="",_cidade="JABOTICABAL",_nome="";
                 string _cpf_cnpj = string.IsNullOrWhiteSpace(_cidadao.Cnpj) ? _cidadao.Cpf : _cidadao.Cnpj;
                 int _cep = 14870000, _codigo = model.Codigo_Cidadao,_fiscal= Convert.ToInt32(Session["hashid"]);
+                if (_fiscal == 0) {
+                    ViewBag.Result = "Sua sessão expirou, por favor fazer login novamente.";
+                    return View(model);
+                }
+
+
                 short _ano=(short)model.Ano_Notificacao;
                 _nome = _cidadao.Nome;
                 _endereco = _imovel.Endereco ;
