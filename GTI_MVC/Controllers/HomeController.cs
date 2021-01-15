@@ -131,6 +131,7 @@ namespace GTI_Mvc.Controllers {
                     Session["hashfname"] = _user.Nome_completo;
                     Session["hashfiscalitbi"] = _user.Fiscal_Itbi ? "S" : "N";
                     Session["hashfiscalpostura"] = _user.Fiscal_postura ? "S" : "N";
+                    Session["hashfiscalmov"] = _user.Fiscal_mov ? "S" : "N";
                     Session["hashfiscal"] = _user.Fiscal ? "S" : "N";
                     if (Session["hashid"] == null) {
                         Session.Add("hashid", _user.Id);
@@ -138,6 +139,7 @@ namespace GTI_Mvc.Controllers {
                         Session.Add("hashlname", _user.Nome_login);
                         Session.Add("hashfiscalitbi", "N");
                         Session.Add("hashfiscalpostura", "N");
+                        Session.Add("hashfiscalmov", "N");
                         Session.Add("hashfiscal", "N");
                         Session.Add("hashfunc", "N");
                     }

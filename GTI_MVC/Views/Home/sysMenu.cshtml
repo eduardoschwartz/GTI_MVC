@@ -16,6 +16,7 @@
     .actionlink {
         color: darkslateblue;
     }
+
     .card-header {
         background-color: mistyrose;
         color: brown;
@@ -24,47 +25,47 @@
 
     .card {
         font-family: Arial, Helvetica, sans-serif;
-        font-size:14px;
+        font-size: 14px;
     }
 
     .card-footer {
         background-color: whitesmoke;
         font-size: 14px
     }
-
-
 </style>
 <br />
 
-    <div class="center container" style="width:500px">
-        <div class="card">
-            <div class="card-header">Selecione um serviço</div>
-            <div class="card-body">
-                @if (Session["hashfunc"].ToString() == "S") {
-                    @Html.ActionLink("Tramitação de processos", "Tramite_Processo", "Protocolo", null, new { @class = "actionlink" })<br />
+<div class="center container" style="width:500px">
+    <div class="card">
+        <div class="card-header">Selecione um serviço</div>
+        <div class="card-body">
+            @if (Session["hashfunc"].ToString() == "S") {
+                @Html.ActionLink("Tramitação de processos", "Tramite_Processo", "Protocolo", null, new { @class = "actionlink" })<br />
 
-                    if (Session["hashfiscal"].ToString() == "S") {
-                        @Html.ActionLink("Notificação de ISS Contrução Civil", "Notificacao_menu", "Tributario", null, new { @class = "actionlink" })<br />
-                    }
-                    if (Session["hashfiscalpostura"].ToString() == "S") {
-                        @Html.ActionLink("Notificação de Limpeza de Terreno", "Notificacao_ter_menu", "Imovel", null, new { @class = "actionlink" })<br />
-                    }
+                if (Session["hashfiscal"].ToString() == "S") {
+                    @Html.ActionLink("Notificação de ISS Contrução Civil", "Notificacao_menu", "Tributario", null, new { @class = "actionlink" })<br />
                 }
-                @if (ViewBag.UsoPlataforma == "S") {
-                    @Html.ActionLink("Uso de Plataforma (terminal Rodoviário)", "Rod_menu", "Tributario", null, new { @class = "actionlink" })<br />
+                if (Session["hashfiscalpostura"].ToString() == "S") {
+                    @Html.ActionLink("Notificação de Limpeza de Terreno", "Notificacao_ter_menu", "Imovel", null, new { @class = "actionlink" })<br />
                 }
+                if (Session["hashfiscalmov"].ToString() == "S") {
+                    @Html.ActionLink("Alvará de Funcionamento", "Alvara", "Tributario", null, new { @class = "actionlink" })<br />
+                }
+            }
+            @if (ViewBag.UsoPlataforma == "S") {
+                @Html.ActionLink("Uso de Plataforma (terminal Rodoviário)", "Rod_menu", "Tributario", null, new { @class = "actionlink" })<br />
+            }
 
-                @*@if (Session["hashid"].ToString() == "433") {
-            @Html.ActionLink("Cadastro de imóvel", "CadImovel", "Imovel",null, new { Codigo = 1 ,  @class = "actionlink" })<br />
-        }*@
-                @Html.ActionLink("Inclusão de Cep não cadastrado", "Cep_inc", "Shared", null, new { @class = "actionlink" })<br />
-                @Html.ActionLink("Imposto sobre Transmissão de Bens Imóveis (ITBI)", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })<br />
+            @*@if (Session["hashid"].ToString() == "433") {
+                    @Html.ActionLink("Cadastro de imóvel", "CadImovel", "Imovel",null, new { Codigo = 1 ,  @class = "actionlink" })<br />
+                }*@
+            @Html.ActionLink("Inclusão de Cep não cadastrado", "Cep_inc", "Shared", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Imposto sobre Transmissão de Bens Imóveis (ITBI)", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })<br />
 
-            </div>
-            <div class="card-footer">
-                @Html.ActionLink("Alterar a senha", "Login_update", "Home", null, new { @class = "actionlink" })<br />
-                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
-
-            </div>
-            </div>
         </div>
+        <div class="card-footer">
+            @Html.ActionLink("Alterar a senha", "Login_update", "Home", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+        </div>
+    </div>
+</div>

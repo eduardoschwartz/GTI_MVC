@@ -1386,6 +1386,19 @@ namespace GTI_Mvc.Controllers {
             return dt;
         }
 
+        [Route("Alvara")]
+        [HttpGet]
+        public ViewResult Alvara() {
+            AlvaraViewModel model = new AlvaraViewModel();
+            return View(model);
+        }
+
+        [Route("Alvara")]
+        [HttpPost]
+        public ViewResult Alvara(AlvaraViewModel model) {
+            return View(model);
+        }
+
 
     }
 }

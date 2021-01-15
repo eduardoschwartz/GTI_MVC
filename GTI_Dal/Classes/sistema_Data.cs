@@ -492,7 +492,8 @@ namespace GTI_Dal.Classes {
                            where t.Id==Id
                            orderby t.Nomelogin select new usuarioStruct {Nome_login= t.Nomelogin,  Nome_completo=t.Nomecompleto,Ativo= t.Ativo,
                                Id=  t.Id, Senha= t.Senha,Senha2= t.Senha2, Setor_atual= t.Setor_atual, Nome_setor= cc.Descricao ,
-                               Fiscal_Itbi= (bool)t.Fiscal_Itbi, Fiscal = (bool)t.Fiscal, Fiscal_postura = (bool)t.Fiscal_postura}).FirstOrDefault();
+                               Fiscal_Itbi= (bool)t.Fiscal_Itbi, Fiscal = (bool)t.Fiscal, Fiscal_postura = (bool)t.Fiscal_postura,
+                               Fiscal_mov=(bool)t.Fiscal_mov}).FirstOrDefault();
                 usuarioStruct Sql = new usuarioStruct {
                     Id = reg.Id,
                     Nome_completo = reg.Nome_completo,
@@ -504,7 +505,8 @@ namespace GTI_Dal.Classes {
                     Ativo = reg.Ativo,
                     Fiscal_Itbi=reg.Fiscal_Itbi,
                     Fiscal=reg.Fiscal,
-                    Fiscal_postura=reg.Fiscal_postura
+                    Fiscal_postura=reg.Fiscal_postura,
+                    Fiscal_mov=reg.Fiscal_mov
                 };
                 return Sql;
             }
