@@ -1388,17 +1388,119 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Alvara")]
         [HttpGet]
-        public ViewResult Alvara() {
+        public ActionResult Alvara() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
             AlvaraViewModel model = new AlvaraViewModel();
             return View(model);
         }
 
         [Route("Alvara")]
         [HttpPost]
-        public ViewResult Alvara(AlvaraViewModel model) {
-            return View(model);
-        }
+        public ActionResult Alvara(AlvaraViewModel model) {
+            int _codigo = Convert.ToInt32(model.Codigo);
+            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+            bool _existeCod = empresaRepository.Existe_Empresa(_codigo);
+            if (!_existeCod) {
+                ViewBag.Result = "Empresa não cadastrada.";
+                return View(model);
+            }
 
+            string _processoStr = model.Numero_Processo;
+            ProcessoNumero _processo = Functions.Split_Processo_Numero(_processoStr);
+            Processo_bll processoRepository = new Processo_bll("GTIconnection");
+            Exception ex  = processoRepository.ValidaProcesso(_processoStr);
+            if(ex!=null){
+                ViewBag.Result = "Nº de processo inválido.";
+                return View(model);
+            }
+
+            bool IsVre = string.IsNullOrEmpty(model.Protocolo_Vre) ? false : true;
+            if (IsVre){
+                if(model.Data_Vre==null || !Functions.IsDate(model.Data_Vre)) {
+                    ViewBag.Result = "Data do protocolo inválida.";
+                    return View(model);
+                }
+                DateTime.TryParse(model.Data_Vre.ToString(), out DateTime _dataVre);
+            }
+
+            Empresa_bll empresa_Bll = new Empresa_bll("GTIconnection");
+            EmpresaStruct _dados = empresaRepository.Retorna_Empresa(_codigo);
+            if (_dados.Data_Encerramento!=null) {
+                ViewBag.Result = "Esta empresa esta encerrada.";
+                return View(model);
+            }
+
+            int _ano =  DateTime.Now.Year;
+            int _numero = empresaRepository.Retorna_Alvara_Disponivel(_ano);
+
+            Alvara_funcionamento _alvara = new Alvara_funcionamento() {
+                Ano=_ano,
+                Numero=_numero,
+                Codigo=_codigo,
+                Razao_social=_dados.Razao_social,
+                Endereco=_dados.Endereco_nome+ ", " + _dados.Numero.ToString() + " " + _dados.Complemento.ToString(),
+                Bairro=_dados.Bairro_nome,
+                Atividade=_dados.Atividade_nome,
+                Horario=_dados.Horario_Nome,
+                Num_processo=model.Numero_Processo,
+                Data_Gravada=DateTime.Now
+            };
+
+            if (IsVre) {
+                _alvara.Num_protocolo_vre = model.Protocolo_Vre;
+                _alvara.Data_protocolo_vre = model.Data_Vre;
+            }
+
+
+            string controle = _numero.ToString("00000") + _ano.ToString("0000") + "/" + _codigo.ToString() + "-AF";
+            //##### QRCode ##########################################################
+            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + _alvara.Controle;
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
+            using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+                using (MemoryStream ms = new MemoryStream()) {
+                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    byte[] byteImage = ms.ToArray();
+                    _alvara.QRCodeImage = byteImage;
+                }
+            }
+            //#######################################################################
+
+
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+             ex = tributarioRepository.Insert_Alvara_Funcionamento(_alvara);
+            if (ex != null) {
+                ViewBag.Result = "Erro ao gravar!";
+                return View(model);
+            }
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Alvara_Funcionamento_Def.rpt"));
+            TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+            TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+            ConnectionInfo crConnectionInfo = new ConnectionInfo();
+            Tables CrTables;
+            crConnectionInfo.ServerName = "200.232.123.115";
+            crConnectionInfo.DatabaseName = "Tributacao";
+            crConnectionInfo.UserID = "gtisys";
+            crConnectionInfo.Password = "everest";
+            CrTables = rd.Database.Tables;
+            foreach (Table CrTable in CrTables) {
+                crtableLogoninfo = CrTable.LogOnInfo;
+                crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                CrTable.ApplyLogOnInfo(crtableLogoninfo);
+            }
+
+            try {
+                rd.RecordSelectionFormula = "{Alvara_Funcionamento.ano}=" + _alvara.Ano + " and {Alvara_Funcionamento.numero}=" + _alvara.Numero;
+                Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                return File(stream, "application/pdf", "Alvara.pdf");
+            } catch {
+                throw;
+            }
+
+        }
 
     }
 }

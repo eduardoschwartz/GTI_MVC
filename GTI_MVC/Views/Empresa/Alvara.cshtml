@@ -63,20 +63,73 @@
 <div class="center container" style="width:450px">
     @using (Html.BeginForm("Alvara", "Empresa", FormMethod.Post, new { @id = "MainForm" })) {
         <div class="card">
-            <div class="card-header">Renovação de alvará de funcionamento</div>
+            <div class="card-header">Alvará de funcionamento</div>
             <div class="card-body">
 
                 <table width="500px">
                     <tr>
-                        <td style="width:150px">Inscrição Municipal:</td>
-                        <td style="width:300px">@Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)", @onchange = "ClearError()" })</td>
+                        <td style="width:150px">
+                            <label style="font-weight:normal;padding-top:7px;font-size:14px">Inscrição Municipal: </label>
+                        </td>
+                        @if (Model.Codigo > 0) {
+                            <td style="width:300px">@Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "max-width:100px;height:23px;font-size:14px", @onKeyPress = "return formata(this, '§§§§§§', event)", @onchange = "ClearError()" })</td>
+                        } else {
+                            <td style="width:300px">@Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "max-width:100px;height:23px;font-size:14px", @onKeyPress = "return formata(this, '§§§§§§', event)", @onchange = "ClearError()", @Value = "" })</td>
+                        }
                     </tr>
-
+                    <tr>
+                        <td style="width:150px">
+                            <label style="font-weight:normal;padding-top:7px;font-size:14px">Nº Processo:</label>
+                        </td>
+                        <td style="width:300px">
+                            @Html.TextBoxFor(m => m.Numero_Processo, new { @id = "txtProcesso", style = "width:100px;height:23px;font-size:14px" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label style="font-weight:normal;padding-top:7px;font-size:14px">Data Vencimento: </label>
+                        </td>
+                        <td style="width:200px;font-size:13px">
+                            @if (Model.Data_Vencimento == null || Model.Data_Vencimento==DateTime.MinValue) {
+                                @Html.TextBoxFor(x => x.Data_Vencimento, "{0:dd/MM/yyyy}", new { @id = "DataVencto", @style = "width:100px;height:23px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)", @Value = "" })
+                            } else {
+                                @Html.TextBoxFor(x => x.Data_Vencimento, "{0:dd/MM/yyyy}", new { @id = "DataVencto", @style = "width:100px;height:23px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)"})
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px">
+                            <label style="font-weight:normal;padding-top:7px;font-size:14px">Protocolo Redesim:</label>
+                        </td>
+                        <td style="width:300px">
+                            @Html.TextBoxFor(m => m.Protocolo_Vre, new { @id = "txtProcesso", style = "width:200px;height:23px;font-size:14px" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label style="font-weight:normal;padding-top:7px;font-size:14px">Data Validade: </label>
+                        </td>
+                        <td style="width:200px;font-size:13px">
+                            @if (Model.Data_Vre == null) {
+                                @Html.TextBoxFor(x => x.Data_Vre, "{0:dd/MM/yyyy}", new { @id = "DataVencto", @style = "width:100px;height:23px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)", @Value = "" })
+                            } else {
+                                @Html.TextBoxFor(x => x.Data_Vre, "{0:dd/MM/yyyy}", new { @id = "DataVencto", @style = "width:100px;height:23px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)"})
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label style="font-weight:normal;padding-top:7px;font-size:14px">Alvará Provisório: </label>
+                        </td>
+                        <td style="width:200px;font-size:13px">
+                            @Html.EditorFor(m=>m.IsProvisorio)
+                        </td>
+                    </tr>
                 </table>
                 <br />
                 <button type="submit" class="btn btn-primary"> Imprimir</button>
             </div>
-            <label id="errorLabel" class="errorlabel"> @ViewBag.ErrorMessage</label>
+            <label id="errorLabel" class="errorlabel"> @ViewBag.Result</label>
             <div class="card-footer">
                 @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
             </div>
@@ -92,6 +145,8 @@
             $("#MainForm").submit(function () {
                 return ValidateForm();
             });
+            
+
         });
 
         function ValidateForm() {
@@ -101,6 +156,18 @@
 
             if (_codigo == "" || parseInt(_codigo) == 0) {
                 document.getElementById('errorLabel').innerHTML = "Digite a inscrição da empresa.";
+                return false;
+            }
+
+            var _proc = document.getElementById('txtProcesso').value;
+            var _error = Valida_Numero_Processo(_proc);
+            if (_error != "") {
+                document.getElementById('errorLabel').innerHTML = _error;
+                return false;
+            }
+            var _datavencto = document.getElementById('DataVencto').value;
+            if (!Valida_Data(_datavencto)) {
+                document.getElementById('errorLabel').innerHTML = "Data de vencimento inválida";
                 return false;
             }
 

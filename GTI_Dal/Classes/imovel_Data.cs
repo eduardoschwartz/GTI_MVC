@@ -2319,7 +2319,7 @@ namespace GTI_Dal.Classes {
                 Parametros[13] = new SqlParameter { ParameterName = "@codigo_cidadao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo_cidadao };
                 Parametros[14] = new SqlParameter { ParameterName = "@codigo_cidadao2", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo_cidadao2 };
                 Parametros[15] = new SqlParameter { ParameterName = "@cpf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cpf };
-                Parametros[16] = new SqlParameter { ParameterName = "@rg", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Rg };
+                Parametros[16] = new SqlParameter { ParameterName = "@rg", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Rg??"" };
                 Parametros[17] = new SqlParameter { ParameterName = "@cpf2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cpf2??"" };
                 Parametros[18] = new SqlParameter { ParameterName = "@rg2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Rg2??"" };
                 Parametros[19] = new SqlParameter { ParameterName = "@endereco_prop2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_prop2??"" };

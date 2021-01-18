@@ -799,14 +799,25 @@ namespace GTI_Mvc.Controllers {
                 _codigo = Convert.ToInt32(model.Inscricao);
                 if (_codigo < 50000)
                     _existeCod = imovelRepository.Existe_Imovel(_codigo);
-            } else {
+                else {
+                    model.ErrorMessage = "Código inválido.";
+                    return View(model);
+                }
+                if (!_existeCod) {
+                    model.ErrorMessage = "Imóvel não cadastrado.";
+                    return View(model);
+                }
                 if (model.CnpjValue != null) {
                     string _cnpj = model.CnpjValue;
                     bool _valida = Functions.ValidaCNPJ(_cnpj); //CNPJ válido?
                     if (_valida) {
-                        _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo, _cnpj);
+                        _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo,Functions.RetornaNumero( _cnpj));
                     } else {
                         model.ErrorMessage = "Cnpj inválido.";
+                        return View(model);
+                    }
+                    if (!_existeCod) {
+                        model.ErrorMessage = "Este Cnpj não pertence ao imóvel.";
                         return View(model);
                     }
                 } else {
@@ -814,14 +825,22 @@ namespace GTI_Mvc.Controllers {
                         string _cpf = model.CpfValue;
                         bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
                         if (_valida) {
-                            _existeCod = imovelRepository.Existe_Imovel_Cpf(_codigo, _cpf);
+                            _existeCod = imovelRepository.Existe_Imovel_Cpf(_codigo, Functions.RetornaNumero( _cpf));
                         } else {
                             model.ErrorMessage = "Cpf inválido.";
                             return View(model);
                         }
+                        if (!_existeCod) {
+                            model.ErrorMessage = "Este Cpf não pertence ao imóvel.";
+                            return View(model);
+                        }
                     }
                 }
+            } else {
+                model.ErrorMessage = "Digite o Código do imóvel.";
+                return View(model);
             }
+
 
             if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
                 model.ErrorMessage = "Código de verificação inválido.";
