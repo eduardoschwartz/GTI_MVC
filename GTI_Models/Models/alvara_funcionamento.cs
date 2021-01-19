@@ -24,5 +24,7 @@ namespace GTI_Models.Models {
         public DateTime? Data_protocolo_vre { get; set; }
         public string Num_protocolo_vre { get; set; }
         public string Num_processo { get; set; }
+        public bool Redesim { get; set; }
+        public bool Provisorio { get; set; }
     }
 }

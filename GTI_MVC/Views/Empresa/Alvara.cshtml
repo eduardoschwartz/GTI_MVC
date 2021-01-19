@@ -86,18 +86,6 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <label style="font-weight:normal;padding-top:7px;font-size:14px">Data Vencimento: </label>
-                        </td>
-                        <td style="width:200px;font-size:13px">
-                            @if (Model.Data_Vencimento == null || Model.Data_Vencimento==DateTime.MinValue) {
-                                @Html.TextBoxFor(x => x.Data_Vencimento, "{0:dd/MM/yyyy}", new { @id = "DataVencto", @style = "width:100px;height:23px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)", @Value = "" })
-                            } else {
-                                @Html.TextBoxFor(x => x.Data_Vencimento, "{0:dd/MM/yyyy}", new { @id = "DataVencto", @style = "width:100px;height:23px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)"})
-                            }
-                        </td>
-                    </tr>
-                    <tr>
                         <td style="width:150px">
                             <label style="font-weight:normal;padding-top:7px;font-size:14px">Protocolo Redesim:</label>
                         </td>
@@ -107,13 +95,13 @@
                     </tr>
                     <tr>
                         <td>
-                            <label style="font-weight:normal;padding-top:7px;font-size:14px">Data Validade: </label>
+                            <label style="font-weight:normal;padding-top:7px;font-size:14px">Validade Redesim: </label>
                         </td>
                         <td style="width:200px;font-size:13px">
                             @if (Model.Data_Vre == null) {
                                 @Html.TextBoxFor(x => x.Data_Vre, "{0:dd/MM/yyyy}", new { @id = "DataVencto", @style = "width:100px;height:23px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)", @Value = "" })
                             } else {
-                                @Html.TextBoxFor(x => x.Data_Vre, "{0:dd/MM/yyyy}", new { @id = "DataVencto", @style = "width:100px;height:23px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)"})
+                                @Html.TextBoxFor(x => x.Data_Vre, "{0:dd/MM/yyyy}", new { @id = "DataVencto", @style = "width:100px;height:23px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })
                             }
                         </td>
                     </tr>
@@ -122,7 +110,19 @@
                             <label style="font-weight:normal;padding-top:7px;font-size:14px">Alvará Provisório: </label>
                         </td>
                         <td style="width:200px;font-size:13px">
-                            @Html.EditorFor(m=>m.IsProvisorio)
+                            @Html.EditorFor(m => m.IsProvisorio)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label style="font-weight:normal;padding-top:7px;font-size:14px">Validade Provisório: </label>
+                        </td>
+                        <td style="width:200px;font-size:13px">
+                            @if (Model.Data_Vencimento == null || Model.Data_Vencimento == DateTime.MinValue) {
+                                @Html.TextBoxFor(x => x.Data_Vencimento, "{0:dd/MM/yyyy}", new { @id = "DataVencto", @style = "width:100px;height:23px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)", @Value = "" })
+                            } else {
+                                @Html.TextBoxFor(x => x.Data_Vencimento, "{0:dd/MM/yyyy}", new { @id = "DataVencto", @style = "width:100px;height:23px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })
+                            }
                         </td>
                     </tr>
                 </table>
@@ -165,11 +165,11 @@
                 document.getElementById('errorLabel').innerHTML = _error;
                 return false;
             }
-            var _datavencto = document.getElementById('DataVencto').value;
-            if (!Valida_Data(_datavencto)) {
-                document.getElementById('errorLabel').innerHTML = "Data de vencimento inválida";
-                return false;
-            }
+            //var _datavencto = document.getElementById('DataVencto').value;
+            //if (!Valida_Data(_datavencto)) {
+            //    document.getElementById('errorLabel').innerHTML = "Data de vencimento inválida";
+            //    return false;
+            //}
 
             return true;
         }

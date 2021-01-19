@@ -1431,6 +1431,12 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
+            bool IsProvisorio = model.IsProvisorio;
+            if(IsProvisorio && model.Data_Vencimento==DateTime.MinValue) {
+                ViewBag.Result = "Data de validade do alvará provisório não informada.";
+                return View(model);
+            }
+
             int _ano =  DateTime.Now.Year;
             int _numero = empresaRepository.Retorna_Alvara_Disponivel(_ano);
 
@@ -1439,19 +1445,30 @@ namespace GTI_Mvc.Controllers {
                 Numero=_numero,
                 Codigo=_codigo,
                 Razao_social=_dados.Razao_social,
+                Documento= Functions.FormatarCpfCnpj(_dados.Cpf_cnpj),
                 Endereco=_dados.Endereco_nome+ ", " + _dados.Numero.ToString() + " " + _dados.Complemento.ToString(),
                 Bairro=_dados.Bairro_nome,
                 Atividade=_dados.Atividade_nome,
                 Horario=_dados.Horario_Nome,
                 Num_processo=model.Numero_Processo,
-                Data_Gravada=DateTime.Now
+                Data_Gravada=DateTime.Now,
+                Validade=new DateTime(2021,12,31),
+                Redesim=IsVre,
+                Provisorio=IsProvisorio
             };
+            if (IsProvisorio)
+                _alvara.Validade = model.Data_Vencimento;
 
             if (IsVre) {
                 _alvara.Num_protocolo_vre = model.Protocolo_Vre;
                 _alvara.Data_protocolo_vre = model.Data_Vre;
             }
 
+            if (_alvara.Provisorio) {
+                _alvara.Redesim = false;
+                _alvara.Num_protocolo_vre = null;
+                _alvara.Data_protocolo_vre = null;
+            }
 
             string controle = _numero.ToString("00000") + _ano.ToString("0000") + "/" + _codigo.ToString() + "-AF";
             //##### QRCode ##########################################################
@@ -1463,20 +1480,23 @@ namespace GTI_Mvc.Controllers {
                     bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
                     byte[] byteImage = ms.ToArray();
                     _alvara.QRCodeImage = byteImage;
+                    _alvara.Controle = controle;
                 }
             }
             //#######################################################################
 
-
             Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
-             ex = tributarioRepository.Insert_Alvara_Funcionamento(_alvara);
+             ex = tributarioRepository.Insert_Alvara_Funcionamento_Def(_alvara);
             if (ex != null) {
                 ViewBag.Result = "Erro ao gravar!";
                 return View(model);
             }
 
             ReportDocument rd = new ReportDocument();
-            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Alvara_Funcionamento_Def.rpt"));
+            if(IsProvisorio)
+                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Alvara_Funcionamento_Prov.rpt"));
+            else
+                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Alvara_Funcionamento_Def.rpt"));
             TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
             TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
             ConnectionInfo crConnectionInfo = new ConnectionInfo();

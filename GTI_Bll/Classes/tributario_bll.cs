@@ -823,6 +823,12 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Insert_Alvara_Funcionamento_Def(Alvara_funcionamento Reg) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            Exception ex = obj.Insert_Alvara_Funcionamento_Def(Reg);
+            return ex;
+        }
+
         /// <summary>
         /// Exclui uma remessa de Cartas de cobrança
         /// </summary>
