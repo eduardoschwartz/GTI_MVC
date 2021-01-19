@@ -1472,7 +1472,7 @@ namespace GTI_Mvc.Controllers {
 
             string controle = _numero.ToString("00000") + _ano.ToString("0000") + "/" + _codigo.ToString() + "-AF";
             //##### QRCode ##########################################################
-            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + _alvara.Controle;
+            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + controle;
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
             using (Bitmap bitmap = qrCode.GetGraphic(20)) {
