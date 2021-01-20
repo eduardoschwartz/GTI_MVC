@@ -26,5 +26,7 @@ namespace GTI_Models.Models {
         public string Num_processo { get; set; }
         public bool Redesim { get; set; }
         public bool Provisorio { get; set; }
+        public string Placa { get; set; }
+        public string Ponto { get; set; }
     }
 }

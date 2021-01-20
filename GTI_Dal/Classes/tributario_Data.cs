@@ -1336,6 +1336,14 @@ namespace GTI_Dal.Classes {
         public Exception Insert_Certidao_Impressao(Certidao_impressao Reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 try {
+                db.Database.ExecuteSqlCommand("DELETE FROM certidao_impressao WHERE ano=@ano and numero=@numero",
+                        new SqlParameter("@ano", Reg.Ano), new SqlParameter("@numero", Reg.Numero));
+                } catch (Exception ex) {
+                    return ex;
+                }
+
+
+                try {
                     db.Certidao_impressao.Add(Reg);
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -1398,7 +1406,7 @@ namespace GTI_Dal.Classes {
 
         public Exception Insert_Alvara_Funcionamento_Def(Alvara_funcionamento Reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[18];
+                object[] Parametros = new object[20];
                 Parametros[0] = new SqlParameter { ParameterName = "@Ano", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano };
                 Parametros[1] = new SqlParameter { ParameterName = "@Numero", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero };
                 Parametros[2] = new SqlParameter { ParameterName = "@Controle", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Controle };
@@ -1420,9 +1428,18 @@ namespace GTI_Dal.Classes {
                     Parametros[15] = new SqlParameter { ParameterName = "@Data_protocolo_vre", SqlDbType = SqlDbType.SmallDateTime, SqlValue = DBNull.Value };
                 Parametros[16] = new SqlParameter { ParameterName = "@Redesim", SqlDbType = SqlDbType.Bit, SqlValue = Reg.Redesim };
                 Parametros[17] = new SqlParameter { ParameterName = "@Provisorio", SqlDbType = SqlDbType.Bit, SqlValue = Reg.Provisorio };
+                if (string.IsNullOrEmpty( Reg.Placa) )
+                    Parametros[18] = new SqlParameter { ParameterName = "@Placa", SqlDbType = SqlDbType.VarChar, SqlValue = DBNull.Value };
+                else
+                    Parametros[18] = new SqlParameter { ParameterName = "@Placa", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Placa };
+                if (string.IsNullOrEmpty(Reg.Ponto))
+                    Parametros[19] = new SqlParameter { ParameterName = "@Ponto", SqlDbType = SqlDbType.VarChar, SqlValue = DBNull.Value };
+                else
+                    Parametros[19] = new SqlParameter { ParameterName = "@Ponto", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Ponto };
                 db.Database.ExecuteSqlCommand("INSERT INTO Alvara_Funcionamento(ano,numero,controle,codigo,razao_social,documento,endereco,bairro,atividade,horario,validade," +
-                    "data_gravada,QRCodeImage,num_protocolo_vre,num_processo,data_protocolo_vre,redesim,provisorio) VALUES(@ano,@numero,@controle,@codigo,@razao_social,@documento,@endereco," +
-                    "@bairro,@atividade,@horario,@validade,@data_gravada,@QRCodeImage,@num_protocolo_vre,@num_processo,@data_protocolo_vre,@redesim,@provisorio)", Parametros);
+                    "data_gravada,QRCodeImage,num_protocolo_vre,num_processo,data_protocolo_vre,redesim,provisorio,placa,ponto) VALUES(@ano,@numero,@controle,@codigo,@razao_social," +
+                    "@documento,@endereco,@bairro,@atividade,@horario,@validade,@data_gravada,@QRCodeImage,@num_protocolo_vre,@num_processo,@data_protocolo_vre,@redesim,@provisorio," +
+                    "@placa,@ponto)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {

@@ -1454,8 +1454,15 @@ namespace GTI_Mvc.Controllers {
                 Data_Gravada=DateTime.Now,
                 Validade=new DateTime(2021,12,31),
                 Redesim=IsVre,
-                Provisorio=IsProvisorio
+                Provisorio=IsProvisorio,
+                Ponto=_dados.Ponto_agencia??""
             };
+            List<string> ListaPlaca = empresaRepository.Lista_Placas(_codigo);
+            string _placa = "";
+            if (ListaPlaca.Count > 0) {
+                _placa = ListaPlaca[0];
+            }
+            _alvara.Placa = _placa;
             if (IsProvisorio)
                 _alvara.Validade = model.Data_Vencimento;
 
