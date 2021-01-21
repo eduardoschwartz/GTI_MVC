@@ -1157,8 +1157,13 @@ namespace GTI_Mvc.Controllers {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             ImovelDetailsViewModel model = new ImovelDetailsViewModel();
-            if (string.IsNullOrEmpty(c)) c = "1";
-            int _codigo = Convert.ToInt32(c);
+            int _codigo = 0;
+            try {
+                _codigo = Convert.ToInt32(Functions.Decrypt(c));
+            } catch {
+                return RedirectToAction("Login_gti", "Home");
+            }
+            
             model = HomeLoad(_codigo);
             return View(model);
         }
@@ -1369,14 +1374,14 @@ namespace GTI_Mvc.Controllers {
             List<Notificacao_Terreno_Struct> _listaNot = imovelRepository.Lista_Notificacao_Terreno(DateTime.Now.Year);
             foreach (Notificacao_Terreno_Struct item in _listaNot) {
                 NotificacaoTerViewModel reg = new NotificacaoTerViewModel() {
-                    AnoNumero=item.AnoNumero,
-                    Ano_Notificacao=item.Ano_Notificacao,
-                    Numero_Notificacao=item.Numero_Notificacao,
-                    Codigo_Imovel=item.Codigo_Imovel,
-                    Data_Cadastro=item.Data_Cadastro,
-                    Prazo=item.Prazo,
-                    Nome_Proprietario=item.Nome_Proprietario,
-                    Situacao=item.Situacao
+                    AnoNumero = item.AnoNumero,
+                    Ano_Notificacao = item.Ano_Notificacao,
+                    Numero_Notificacao = item.Numero_Notificacao,
+                    Codigo_Imovel = item.Codigo_Imovel,
+                    Data_Cadastro = item.Data_Cadastro,
+                    Prazo = item.Prazo,
+                    Nome_Proprietario = item.Nome_Proprietario,
+                    Situacao = item.Situacao
                 };
                 ListaNot.Add(reg);
             }
@@ -1398,7 +1403,7 @@ namespace GTI_Mvc.Controllers {
             ViewBag.Lista_Ano = new SelectList(Lista_Ano);
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             List<NotificacaoTerViewModel> ListaNot = new List<NotificacaoTerViewModel>();
-            List < Notificacao_Terreno_Struct >_listaNot = imovelRepository.Lista_Notificacao_Terreno(_ano);
+            List<Notificacao_Terreno_Struct> _listaNot = imovelRepository.Lista_Notificacao_Terreno(_ano);
             foreach (Notificacao_Terreno_Struct item in _listaNot) {
                 NotificacaoTerViewModel reg = new NotificacaoTerViewModel() {
                     AnoNumero = item.AnoNumero,
@@ -1416,31 +1421,30 @@ namespace GTI_Mvc.Controllers {
             NotificacaoTerQueryViewModel model = new NotificacaoTerQueryViewModel();
             model.ListaNotificacao = ListaNot;
             model.Ano_Selected = _ano;
-            return View( model);
+            return View(model);
         }
 
-
-            public ActionResult Notificacao_terreno_print(int a,int n) {
+        public ActionResult Notificacao_terreno_print(int a, int n) {
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             Notificacao_Terreno_Struct _not = imovelRepository.Retorna_Notificacao_Terreno(a, n);
 
             List<DtNotificacao> ListaNot = new List<DtNotificacao>();
 
             DtNotificacao reg = new DtNotificacao() {
-                AnoNumero=_not.AnoNumero,
-                Codigo=_not.Codigo_Imovel.ToString("00000"),
-                Nome= _not.Codigo_cidadao.ToString() + "-" + _not.Nome_Proprietario,
-                Cpf=_not.Cpf??"",
-                Rg=_not.Rg??"",
+                AnoNumero = _not.AnoNumero,
+                Codigo = _not.Codigo_Imovel.ToString("00000"),
+                Nome = _not.Codigo_cidadao.ToString() + "-" + _not.Nome_Proprietario,
+                Cpf = _not.Cpf ?? "",
+                Rg = _not.Rg ?? "",
                 Endereco_Entrega = _not.Endereco_Entrega,
                 Endereco_entrega2 = _not.Endereco_entrega2,
-                Endereco_Local =_not.Endereco_Local,
-                Endereco_Prop=_not.Endereco_Prop,
+                Endereco_Local = _not.Endereco_Local,
+                Endereco_Prop = _not.Endereco_Prop,
                 Endereco_prop2 = _not.Endereco_prop2,
-                Prazo =_not.Prazo,
-                Usuario=_not.UsuarioNome,
-                Inscricao=_not.Inscricao,
-                PrazoText=Functions.Escrever_Valor_Extenso(_not.Prazo),
+                Prazo = _not.Prazo,
+                Usuario = _not.UsuarioNome,
+                Inscricao = _not.Inscricao,
+                PrazoText = Functions.Escrever_Valor_Extenso(_not.Prazo),
                 Cpf2 = _not.Cpf2 ?? "",
                 Rg2 = _not.Rg2 ?? ""
             };
@@ -1460,9 +1464,78 @@ namespace GTI_Mvc.Controllers {
 
                 throw;
             }
-       
+
         }
 
+        [Route("CadImovelMnu")]
+        [HttpGet]
+        public ActionResult CadImovelMnu() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            ImovelDetailsViewModel model = new ImovelDetailsViewModel();
+            return View(model);
+        }
+
+        [Route("CadImovelMnu")]
+        [HttpPost]
+        public ActionResult CadImovelMnu(ImovelDetailsViewModel model) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            int _codigo = Convert.ToInt32(model.Inscricao);
+            bool _existe = imovelRepository.Existe_Imovel(_codigo);
+            if (!_existe) {
+                ViewBag.Result = "Código de imóvel não cadastrado.";
+                return View(model);
+            }
+            string _codStr = Functions.Encrypt(_codigo.ToString());
+            return RedirectToAction("CadImovel", new { c = _codStr });
+        }
+
+        [Route("CadImovelqryP")]
+        [HttpGet]
+        public ActionResult CadImovelqryP() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            ImovelDetailsViewModel model = new ImovelDetailsViewModel();
+            model.Lista_Imovel = new List<ImovelStruct>();
+            return View(model);
+        }
+
+        [Route("CadImovelqryP")]
+        [HttpPost]
+        public ActionResult CadImovelqryP(ImovelDetailsViewModel model) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            model.Lista_Imovel = new List<ImovelStruct>();
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            string _nome = model.NomeProprietario;
+            if (_nome.Length < 5) {
+                ViewBag.Result = "Digite ao menos 5 caracteres do nome.";
+                return View(model);
+            }
+            List<ImovelStruct> ListaImovel = imovelRepository.Lista_Imovel_Proprietario(_nome);
+            if (ListaImovel.Count == 0) {
+                ViewBag.Result = "Não foi localizado nenhum imóvel com este proprietário.";
+                return View(model);
+            }
+
+            List<ImovelStruct> _lista = new List<ImovelStruct>();
+            foreach (ImovelStruct item in ListaImovel) {
+                ImovelStruct reg = new ImovelStruct() {
+                    Codigo = item.Codigo,
+                    Proprietario_Nome= Functions.TruncateTo(  item.Proprietario_Nome,37),
+                    NomeLogradouro=item.NomeLogradouro + ", " + item.Numero.ToString() + " " + item.Complemento,
+                    Numero=item.Numero,
+                    Complemento=item.Complemento
+                };
+                reg.NomeLogradouro = Functions.TruncateTo(reg.NomeLogradouro, 52);
+                _lista.Add(reg);
+            }
+
+            model.Lista_Imovel = _lista;
+            return View(model);
+        }
 
     }
 }

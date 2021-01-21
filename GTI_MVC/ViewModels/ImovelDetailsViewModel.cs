@@ -19,5 +19,7 @@ namespace GTI_Mvc.ViewModels {
         public string CnpjValue { get; set; }
         public string ErrorMessage { get; set; }
         public string CaptchaCode { get; set; }
+        public string NomeProprietario { get; set; }
+        public List<ImovelStruct> Lista_Imovel { get; set; }
     }
 }

@@ -57,7 +57,8 @@
             }
 
             @if (Session["hashid"].ToString() == "433") {
-                @Html.ActionLink("Consulta aos dados de imóvel", "CadImovel", "Imovel",  new { c = "1"  },new { @class = "actionlink" })<br />
+                @*@Html.ActionLink("Consulta aos dados de imóvel", "CadImovel", "Imovel",  new { c = "1"  },new { @class = "actionlink" })<br />*@
+                @Html.ActionLink("Consulta aos dados de imóvel", "CadImovelMnu", "Imovel", null, new { @class = "actionlink" })<br />
             }
             @Html.ActionLink("Inclusão de Cep não cadastrado", "Cep_inc", "Shared", null, new { @class = "actionlink" })<br />
             @Html.ActionLink("Imposto sobre Transmissão de Bens Imóveis (ITBI)", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })<br />
