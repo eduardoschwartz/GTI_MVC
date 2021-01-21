@@ -1563,23 +1563,9 @@ namespace GTI_Dal.Classes {
                     TimeSpan difference = DateTime.Now - item.Datavencimento;
                     var days = difference.TotalDays;
                     if ((item.Statuslanc == 3 | item.Statuslanc == 18 | item.Statuslanc == 42 | item.Statuslanc == 43 | item.Statuslanc == 38 | item.Statuslanc == 39) && days > 1) {
-                        //if (item.Anoexercicio == DateTime.Now.Year  && item.Codlancamento == 1) {
-                        //    if (item.Numparcela > 4) {
-                        //        bNaoPagoVencido = true;
-                        //        for (int i = 0; i < alArrayNaoPagoVencido.Count; i++) {
-                        //            if (item.Codtributo == 26 || item.Codtributo == 90 || item.Codtributo == 112 || item.Codtributo == 113 || item.Codtributo == 585 || item.Codtributo == 587 || item.Codtributo == 24 || item.Codtributo == 28) {
-                        //                bFind = true;
-                        //                break;
-                        //            }
-                        //            if (alArrayNaoPagoVencido[i].ToString() == sDescTmp) {
-                        //                bFind = true;
-                        //                break;
-                        //            }
-                        //        }
-                        //        if (!bFind)
-                        //            alArrayNaoPagoVencido.Add(sDescTmp);
-                        //    }
-                        //} else {
+                        if (item.Anoexercicio == DateTime.Now.Year  && item.Codlancamento == 1 && item.Numparcela < 4 && DateTime.Now < new DateTime(DateTime.Now.Year, 03, 20)) {
+                            int hr = 1;
+                        } else { 
                             bNaoPagoVencido = true;
                             for (int i = 0; i < alArrayNaoPagoVencido.Count; i++) {
                                 if (item.Codtributo == 26 || item.Codtributo == 90 || item.Codtributo == 112 || item.Codtributo == 113 || item.Codtributo == 585 || item.Codtributo == 587 || item.Codtributo == 24 || item.Codtributo == 28) {
@@ -1593,8 +1579,8 @@ namespace GTI_Dal.Classes {
                             }
                             if (!bFind)
                                 alArrayNaoPagoVencido.Add(sDescTmp);
-                        //}
-                    }
+                        }
+                   }
 
                     //*** suspensos ou em julgamento
                      if ((item.Statuslanc == 18 | item.Statuslanc == 19 | item.Statuslanc == 20) && item.Datavencimento < DateTime.Now) {

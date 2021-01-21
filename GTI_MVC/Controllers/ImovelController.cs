@@ -1153,8 +1153,13 @@ namespace GTI_Mvc.Controllers {
 
         [Route("CadImovel")]
         [HttpGet]
-        public ViewResult CadImovel() {
+        public ActionResult CadImovel(string c) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
             ImovelDetailsViewModel model = new ImovelDetailsViewModel();
+            if (string.IsNullOrEmpty(c)) c = "1";
+            int _codigo = Convert.ToInt32(c);
+            model = HomeLoad(_codigo);
             return View(model);
         }
 
