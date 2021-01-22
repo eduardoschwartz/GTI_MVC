@@ -20,6 +20,7 @@ namespace GTI_Mvc.ViewModels {
         public string ErrorMessage { get; set; }
         public string CaptchaCode { get; set; }
         public string NomeProprietario { get; set; }
+        public string NomeEndereco { get; set; }
         public List<ImovelLista> Lista_Imovel { get; set; }
     }
 }

@@ -761,7 +761,7 @@ namespace GTI_Dal.Classes {
                                Complemento = c.Li_compl
                            });
                 Sql = Sql.Where(p => p.Proprietario_Nome.Contains(PartialName));
-                Sql = Sql.OrderBy(p => p.Proprietario_Nome);
+                Sql = Sql.OrderBy(p => p.Proprietario_Nome).ThenBy(n=>n.NomeLogradouro).ThenBy(o=>o.Numero);
 
                 List<ImovelStruct> Lista = new List<ImovelStruct>();
                 foreach (var item in Sql) {
@@ -778,6 +778,38 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<ImovelStruct> Lista_Imovel_Endereco(string PartialName) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from c in db.Cadimob
+                           join f in db.Facequadra on new { p1 = c.Distrito, p2 = c.Setor, p3 = c.Quadra, p4 = c.Seq } equals new { p1 = f.Coddistrito, p2 = f.Codsetor, p3 = f.Codquadra, p4 = f.Codface } into fc from f in fc.DefaultIfEmpty()
+                           join l in db.Logradouro on f.Codlogr equals l.Codlogradouro into fl from l in fl.DefaultIfEmpty()
+                           join b in db.Bairro on new { p1 = c.Li_uf, p2 = (short)c.Li_codcidade, p3 = (short)c.Li_codbairro } equals new { p1 = b.Siglauf, p2 = b.Codcidade, p3 = b.Codbairro } into cb from b in cb.DefaultIfEmpty()
+                           join o in db.Condominio on c.Codcondominio equals o.Cd_codigo into co from o in co.DefaultIfEmpty()
+                           join p in db.Proprietario on c.Codreduzido equals p.Codreduzido into pc from p in pc.DefaultIfEmpty()
+                           join i in db.Cidadao on p.Codcidadao equals i.Codcidadao into ip from i in ip.DefaultIfEmpty()
+                           select new ImovelStruct {
+                               Codigo = c.Codreduzido, Distrito = c.Distrito, Setor = c.Setor, Quadra = c.Quadra, Lote = c.Lote, Seq = c.Seq, Unidade = c.Unidade,
+                               SubUnidade = c.Subunidade, Proprietario_Codigo = p.Codcidadao, Proprietario_Nome = i.Nomecidadao, Proprietario_Principal = p.Principal, CodigoLogradouro = f.Codlogr,
+                               NomeLogradouroAbreviado = l.Endereco_resumido, NomeLogradouro = l.Endereco, Numero = c.Li_num, CodigoCondominio = c.Codcondominio, NomeCondominio = o.Cd_nomecond, CodigoBairro = c.Li_codbairro, NomeBairro = b.Descbairro,
+                               Complemento = c.Li_compl
+                           });
+                Sql = Sql.Where(p => p.NomeLogradouro.Contains(PartialName));
+                Sql = Sql.OrderBy(p => p.NomeLogradouro ).ThenBy(n=>n.Numero);
+
+                List<ImovelStruct> Lista = new List<ImovelStruct>();
+                foreach (var item in Sql) {
+                    ImovelStruct Linha = new ImovelStruct {
+                        Codigo = item.Codigo,
+                        Inscricao = item.Distrito.ToString() + "." + item.Setor.ToString("00") + "." + item.Quadra.ToString("0000") + "." + item.Lote.ToString("00000") + "." + item.Seq.ToString("00") + "." + item.Unidade.ToString("00") + "." + item.SubUnidade.ToString("000"),
+                        Proprietario_Codigo = item.Proprietario_Codigo, Proprietario_Nome = item.Proprietario_Nome, CodigoLogradouro = item.CodigoLogradouro, NomeLogradouro = item.NomeLogradouro, Numero = item.Numero, NomeCondominio = item.NomeCondominio,
+                        CodigoBairro = item.CodigoBairro, NomeBairro = item.NomeBairro, CodigoCondominio = item.CodigoCondominio, Complemento = item.Complemento, Distrito = item.Distrito, Setor = item.Setor, Quadra = item.Quadra, Lote = item.Lote, Seq = item.Seq,
+                        Unidade = item.Unidade, SubUnidade = item.SubUnidade, NomeLogradouroAbreviado = item.NomeLogradouroAbreviado
+                    };
+                    Lista.Add(Linha);
+                }
+                return Lista.ToList();
+            }
+        }
 
         public Laseriptu Dados_IPTU(int Codigo,int Ano) {
             using (GTI_Context db = new GTI_Context(_connection)) {

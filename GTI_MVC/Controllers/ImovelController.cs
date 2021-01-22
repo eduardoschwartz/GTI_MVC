@@ -1528,7 +1528,7 @@ namespace GTI_Mvc.Controllers {
             foreach (ImovelStruct item in ListaImovel) {
                 ImovelLista reg = new ImovelLista() {
                     Codigo = item.Codigo.ToString("00000"),
-                    Nome= Functions.TruncateTo(  item.Proprietario_Nome,37),
+                    Nome= Functions.TruncateTo(  item.Proprietario_Nome,30),
                     Endereco=string.IsNullOrEmpty(item.NomeLogradouroAbreviado)?item.NomeLogradouro:item.NomeLogradouroAbreviado
                 };
                 reg.Endereco += ", " + item.Numero.ToString() + " " + item.Complemento;
@@ -1548,5 +1548,52 @@ namespace GTI_Mvc.Controllers {
             return View();
         }
 
+        [Route("CadImovelqryE")]
+        [HttpGet]
+        public ActionResult CadImovelqryE(string id) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            ImovelDetailsViewModel model = new ImovelDetailsViewModel();
+            if (string.IsNullOrEmpty(id))
+                model.Lista_Imovel = new List<ImovelLista>();
+            else {
+                return RedirectToAction("CadImovel", new { c = id.Replace('-', '/') });
+            }
+            return View(model);
+        }
+
+        [Route("CadImovelqryE")]
+        [HttpPost]
+        public ActionResult CadImovelqryE(ImovelDetailsViewModel model) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            model.Lista_Imovel = new List<ImovelLista>();
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            string _nome = model.NomeEndereco;
+            if (_nome.Length < 5) {
+                ViewBag.Result = "Digite ao menos 5 caracteres do endereço.";
+                return View(model);
+            }
+            List<ImovelStruct> ListaImovel = imovelRepository.Lista_Imovel_Endereco(_nome);
+            if (ListaImovel.Count == 0) {
+                ViewBag.Result = "Não foi localizado nenhum imóvel com este endereço.";
+                return View(model);
+            }
+
+            List<ImovelLista> _lista = new List<ImovelLista>();
+            foreach (ImovelStruct item in ListaImovel) {
+                ImovelLista reg = new ImovelLista() {
+                    Codigo = item.Codigo.ToString("00000"),
+                    Nome = Functions.TruncateTo(item.Proprietario_Nome, 30),
+                    Endereco = string.IsNullOrEmpty(item.NomeLogradouroAbreviado) ? item.NomeLogradouro : item.NomeLogradouroAbreviado
+                };
+                reg.Endereco += ", " + item.Numero.ToString() + " " + item.Complemento;
+                reg.Endereco = Functions.TruncateTo(reg.Endereco, 52);
+                _lista.Add(reg);
+            }
+
+            model.Lista_Imovel = _lista;
+            return View(model);
+        }
     }
 }
