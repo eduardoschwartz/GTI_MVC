@@ -79,12 +79,14 @@
                 <div class="card-header">Consulta de imóvel pelo endereço</div>
                 <div class="card-body">
                     <div>
-                        <label style="font-weight:normal;font-size:13px;color:brown">Digite uma parte do endereço e clique em pesquisar</label><br />
-                        @Html.TextBoxFor(m => m.NomeEndereco, new { @id = "nome", @style = "width:450px;height:25px" })<br /><br />
-                        <button id="btnPesquisar" type="submit" class="btn btn-primary" name="action" value="btnPesquisar">Pesquisar</button>
+                        <label style="font-weight:normal;font-size:13px;color:brown">Digite uma parte do endereço e clique em pesquisar (*O nº é opcional)</label><br />
+                        @Html.TextBoxFor(m => m.NomeEndereco, new { @id = "nome", @style = "width:450px;height:25px" })
+                        <label style="font-weight:normal;font-size:13px;padding-left:10px">Número: </label>&nbsp;
+                        @Html.TextBoxFor(m => m.Numero, new { @id = "nome", @style = "width:80px;height:25px", @onKeyPress = "return formata(this, '§§§§', event)" })<span>&nbsp;&nbsp;</span>
+                        <button  id="btnPesquisar" type="submit" class="btn btn-primary" name="action" value="btnPesquisar">Pesquisar</button>
                     </div>
+                    
                     <br />
-
                     @if (Model.Lista_Imovel.Count > 0) {
                         <table style="font-size:12px;width:730px">
                             <thead style="background-color:darkred;color:whitesmoke">
@@ -112,6 +114,7 @@
                 <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
                 <div class="card-footer">
                     @Html.ActionLink("Pesquisar imóvel pelo código", "CadImovelqryC", "Imovel", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Pesquisar imóvel pela inscrição cadastral", "CadImovelqryI", "Imovel", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Pesquisar imóvel pelo proprietário", "CadImovelqryP", "Imovel", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
                 </div>

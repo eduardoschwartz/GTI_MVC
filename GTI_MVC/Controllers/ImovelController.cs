@@ -1570,11 +1570,15 @@ namespace GTI_Mvc.Controllers {
             model.Lista_Imovel = new List<ImovelLista>();
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             string _nome = model.NomeEndereco;
+            string _num = string.IsNullOrEmpty(model.Numero) ? "0" : Functions.RetornaNumero( model.Numero);
+            if(_num=="") _num = "0";
+            int _numero = Convert.ToInt32(_num);
+
             if (_nome.Length < 5) {
                 ViewBag.Result = "Digite ao menos 5 caracteres do endereço.";
                 return View(model);
             }
-            List<ImovelStruct> ListaImovel = imovelRepository.Lista_Imovel_Endereco(_nome);
+            List<ImovelStruct> ListaImovel = imovelRepository.Lista_Imovel_Endereco(_nome,_numero);
             if (ListaImovel.Count == 0) {
                 ViewBag.Result = "Não foi localizado nenhum imóvel com este endereço.";
                 return View(model);
@@ -1595,5 +1599,43 @@ namespace GTI_Mvc.Controllers {
             model.Lista_Imovel = _lista;
             return View(model);
         }
+
+        [Route("CadImovelqryI")]
+        [HttpGet]
+        public ActionResult CadImovelqryI(string id) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            ImovelDetailsViewModel model = new ImovelDetailsViewModel();
+            if (string.IsNullOrEmpty(id))
+                model.Lista_Imovel = new List<ImovelLista>();
+            else {
+                return RedirectToAction("CadImovel", new { c = id.Replace('-', '/') });
+            }
+            return View(model);
+        }
+
+        [Route("CadImovelqryI")]
+        [HttpPost]
+        public ActionResult CadImovelqryI(ImovelDetailsViewModel model) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            string _insc = Functions.RetornaNumero(model.Inscricao);
+            int _distrito = Convert.ToInt32(_insc.Substring(0, 1));
+            int _setor = Convert.ToInt32(_insc.Substring(1, 2));
+            int _quadra = Convert.ToInt32(_insc.Substring(3, 4));
+            int _lote = Convert.ToInt32(_insc.Substring(7, 5));
+            int _unidade = Convert.ToInt32(_insc.Substring(14, 2));
+            int _subunidade = Convert.ToInt32(_insc.Substring(16, 3));
+
+            int _codigo = imovelRepository.Existe_Imovel(_distrito,_setor,_quadra,_lote,_unidade,_subunidade);
+            if (_codigo==0) {
+                ViewBag.Result = "Inscrição cadastral não cadastrada.";
+                return View(model);
+            }
+            string _codStr = Functions.Encrypt(_codigo.ToString());
+            return RedirectToAction("CadImovel", new { c = _codStr });
+        }
     }
 }
+

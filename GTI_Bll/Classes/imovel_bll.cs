@@ -537,9 +537,9 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Imovel_Proprietario(PartialName);
         }
 
-        public List<ImovelStruct> Lista_Imovel_Endereco(string PartialName) {
+        public List<ImovelStruct> Lista_Imovel_Endereco(string PartialName,int Numero) {
             Imovel_Data obj = new Imovel_Data(_connection);
-            return obj.Lista_Imovel_Endereco(PartialName);
+            return obj.Lista_Imovel_Endereco(PartialName,Numero);
         }
 
         #region ITBI

@@ -21,6 +21,7 @@ namespace GTI_Mvc.ViewModels {
         public string CaptchaCode { get; set; }
         public string NomeProprietario { get; set; }
         public string NomeEndereco { get; set; }
+        public string Numero { get; set; }
         public List<ImovelLista> Lista_Imovel { get; set; }
     }
 }

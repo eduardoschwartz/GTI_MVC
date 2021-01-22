@@ -778,7 +778,7 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public List<ImovelStruct> Lista_Imovel_Endereco(string PartialName) {
+        public List<ImovelStruct> Lista_Imovel_Endereco(string PartialName,int Numero) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var Sql = (from c in db.Cadimob
                            join f in db.Facequadra on new { p1 = c.Distrito, p2 = c.Setor, p3 = c.Quadra, p4 = c.Seq } equals new { p1 = f.Coddistrito, p2 = f.Codsetor, p3 = f.Codquadra, p4 = f.Codface } into fc from f in fc.DefaultIfEmpty()
@@ -794,6 +794,8 @@ namespace GTI_Dal.Classes {
                                Complemento = c.Li_compl
                            });
                 Sql = Sql.Where(p => p.NomeLogradouro.Contains(PartialName));
+                if(Numero>0)
+                    Sql = Sql.Where(p => p.Numero==Numero);
                 Sql = Sql.OrderBy(p => p.NomeLogradouro ).ThenBy(n=>n.Numero);
 
                 List<ImovelStruct> Lista = new List<ImovelStruct>();

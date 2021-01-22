@@ -72,15 +72,15 @@
 
 <div class="center">
 
-    @using (Html.BeginForm("CadImovelqryC", "Imovel", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @using (Html.BeginForm("CadImovelqryI", "Imovel", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
-    <div class="container" style="width:400px">
+    <div class="container" style="width:500px">
         <div class="card">
-            <div class="card-header">Consulta de imóvel pelo código</div>
+            <div class="card-header">Consulta de imóvel pela inscrição cadastral</div>
             <div class="card-body">
                 <div >
-                    <label style="font-weight:normal;font-size:14px">Código do imóvel:</label>
-                    @Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @style = "width:100px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)" })
+                    <label style="font-weight:normal;font-size:14px">Inscrição cadastral:</label>
+                    @Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @style = "width:250px;height:25px", @onKeyPress = "return formata(this, '§.§§.§§§§.§§§§§.§§.§§.§§§', event)" })
                     <label>&nbsp;&nbsp;</label>
                     <button id="btnCodigo" type="submit" class="btn btn-primary" name="action" value="btnCodigoOK">Consultar</button>
                 </div>
@@ -88,7 +88,7 @@
             </div>
             <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
             <div class="card-footer">
-                @Html.ActionLink("Pesquisar imóvel pela inscrição cadastral", "CadImovelqryI", "Imovel", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Pesquisar imóvel pelo código", "CadImovelqryC", "Imovel", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Pesquisar imóvel pelo proprietário", "CadImovelqryP", "Imovel", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Pesquisar imóvel pelo endereço", "CadImovelqryE", "Imovel", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
@@ -114,8 +114,8 @@
             ClearError();
             var _cod = document.getElementById('codigo').value;
 
-            if (_cod == "" || parseInt(_cod) == 0) {
-                document.getElementById('errorLabel').innerHTML = "Digite o código do imóvel";
+            if (_cod.length<25) {
+                document.getElementById('errorLabel').innerHTML = "Digite a inscrição completa";
                 return false;
             }
         }
