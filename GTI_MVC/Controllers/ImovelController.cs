@@ -1636,6 +1636,9 @@ namespace GTI_Mvc.Controllers {
             string _codStr = Functions.Encrypt(_codigo.ToString());
             return RedirectToAction("CadImovel", new { c = _codStr });
         }
+
+
+
     }
 }
 

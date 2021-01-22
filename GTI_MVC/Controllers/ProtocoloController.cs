@@ -427,5 +427,38 @@ namespace GTI_Mvc.Controllers {
             return processoViewModel;
         }
 
+
+        [Route("ProcessoMnu")]
+        [HttpGet]
+        public ActionResult ProcessoMnu() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            return View();
+        }
+
+        [Route("ProcessoqryC")]
+        [HttpGet]
+        public ActionResult ProcessoqryC() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            ProcessoViewModel model = new ProcessoViewModel();
+            return View(model);
+        }
+
+        [Route("ProcessoqryC")]
+        [HttpPost]
+        public ActionResult ProcessoqryC(ProcessoViewModel model) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            ProcessoViewModel processoViewModel = new ProcessoViewModel();
+            ProcessoNumero processoNumero = Functions.Split_Processo_Numero(model.Numero_Ano);
+            processoViewModel.Numero_Ano = model.Numero_Ano;
+            processoViewModel.Numero = processoNumero.Numero;
+            processoViewModel.Ano = processoNumero.Ano;
+
+            return RedirectToAction("Consulta_Processo2", new { Ano = Functions.Encrypt(processoViewModel.Ano.ToString()), Numero = Functions.Encrypt(processoViewModel.Numero.ToString()) });
+        }
+
+
     }
 }
