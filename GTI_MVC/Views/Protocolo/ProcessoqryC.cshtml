@@ -74,13 +74,13 @@
 
     @using (Html.BeginForm("ProcessoQryC", "Protocolo", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
-    <div class="container" style="width:400px">
+    <div class="container" style="width:450px">
         <div class="card">
-            <div class="card-header">Consulta de imóvel pelo código</div>
+            <div class="card-header">Consulta de processo por número</div>
             <div class="card-body">
                 <div >
-                    <label style="font-weight:normal;font-size:14px">Código do imóvel:</label>
-                    <td style="width:300px">@Html.TextBoxFor(m => m.Numero_Ano, new { @id = "numprocesso", @class = "textBoxBlue", @style = "max-width:150px" })</td>
+                    <label style="font-weight:normal;font-size:14px">Nº do processo:</label>&nbsp;
+                    @Html.TextBoxFor(m => m.Numero_Ano, new { @id = "numprocesso", @class = "textBoxBlue", @style = "max-width:150px" })
                     <label>&nbsp;&nbsp;</label>
                     <button id="btnCodigo" type="submit" class="btn btn-primary" name="action" value="btnCodigoOK">Consultar</button>
                 </div>
@@ -112,7 +112,6 @@
         function ValidateForm() {
             ClearError();
             var _numero = document.getElementById('numprocesso').value.trim();
-            var _captcha = document.getElementById('captchaTxt').value;
 
             var _error = Valida_Numero_Processo(_numero);
             if (_error != "") {

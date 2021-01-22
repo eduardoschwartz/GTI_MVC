@@ -180,6 +180,13 @@ namespace GTI_Models.Models {
         public int Dv { get; set; }
     }
 
+    public class ProcessoLista {
+        public string AnoNumero { get; set; }
+        public int Ano { get; set; }
+        public int Numero { get; set; }
+        public string Requerente { get; set; }
+        public string Endereco { get; set; }
+    }
 
 
 }

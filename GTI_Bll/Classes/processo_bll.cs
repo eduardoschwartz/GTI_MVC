@@ -603,5 +603,11 @@ namespace GTI_Bll.Classes {
             return obj.Tramite_Enviado(Ano, Numero, Seq);
         }
 
+        public short ExtractDvProcesso(string NumProc) {
+            int _traco = NumProc.LastIndexOf('-');
+            return Convert.ToInt16(NumProc.Substring(_traco+1,1));
+        }
+
+
     }
 }

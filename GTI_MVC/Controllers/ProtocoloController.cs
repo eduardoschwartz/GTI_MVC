@@ -450,13 +450,96 @@ namespace GTI_Mvc.Controllers {
         public ActionResult ProcessoqryC(ProcessoViewModel model) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
-            ProcessoViewModel processoViewModel = new ProcessoViewModel();
             ProcessoNumero processoNumero = Functions.Split_Processo_Numero(model.Numero_Ano);
-            processoViewModel.Numero_Ano = model.Numero_Ano;
-            processoViewModel.Numero = processoNumero.Numero;
-            processoViewModel.Ano = processoNumero.Ano;
+            string _numStr = model.Numero_Ano;
+            int _numero = processoNumero.Numero;
+            int _ano = processoNumero.Ano;
+            
+            Processo_bll processoRepository = new Processo_bll("GTIconnection");
+            short _dv = processoRepository.ExtractDvProcesso(_numStr);
+            short _realdv = Convert.ToInt16(processoRepository.DvProcesso(_numero));
+            if (_dv != _realdv) {
+                ViewBag.Result = "Nº de processo inválido.";
+                return View(model);
+            }
 
-            return RedirectToAction("Consulta_Processo2", new { Ano = Functions.Encrypt(processoViewModel.Ano.ToString()), Numero = Functions.Encrypt(processoViewModel.Numero.ToString()) });
+            bool _existe = processoRepository.Existe_Processo(_ano, _numero);
+            if (!_existe) {
+                ViewBag.Result = "Nº de processo não cadastrado.";
+                return View(model);
+            }
+
+            return RedirectToAction("ProcessoData", new { c = Functions.Encrypt(_numStr) });
+        }
+
+        [Route("ProcessoData")]
+        [HttpGet]
+        public ActionResult ProcessoData(string c) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            string _numStr;
+            try {
+                _numStr = Functions.Decrypt(c);
+            } catch  {
+                return RedirectToAction("Login", "Home");
+            }
+            
+            ProcessoNumero processoNumero = Functions.Split_Processo_Numero(_numStr);
+            int _numero = processoNumero.Numero;
+            int _ano = processoNumero.Ano;
+
+            ProcessoViewModel modelt = Exibe_Tramite2(_numStr);
+            modelt.Numero_Ano = _numStr;
+            return View(modelt);
+
+        }
+
+        [Route("ProcessoqryR")]
+        [HttpGet]
+        public ActionResult ProcessoqryR(string id) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            ProcessoViewModel model = new ProcessoViewModel();
+            if (string.IsNullOrEmpty(id))
+                model.Lista_Processo = new List<ProcessoLista>();
+            else {
+                return RedirectToAction("ProcessoData", new { c = id.Replace('-', '/') });
+            }
+            return View(model);
+        }
+
+        [Route("ProcessoqryR")]
+        [HttpPost]
+        public ActionResult ProcessoqryR(ImovelDetailsViewModel model) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            model.Lista_Imovel = new List<ImovelLista>();
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            string _nome = model.NomeProprietario;
+            if (_nome.Length < 5) {
+                ViewBag.Result = "Digite ao menos 5 caracteres do nome.";
+                return View(model);
+            }
+            List<ImovelStruct> ListaImovel = imovelRepository.Lista_Imovel_Proprietario(_nome);
+            if (ListaImovel.Count == 0) {
+                ViewBag.Result = "Não foi localizado nenhum imóvel com este proprietário.";
+                return View(model);
+            }
+
+            List<ImovelLista> _lista = new List<ImovelLista>();
+            foreach (ImovelStruct item in ListaImovel) {
+                ImovelLista reg = new ImovelLista() {
+                    Codigo = item.Codigo.ToString("00000"),
+                    Nome = Functions.TruncateTo(item.Proprietario_Nome, 30),
+                    Endereco = string.IsNullOrEmpty(item.NomeLogradouroAbreviado) ? item.NomeLogradouro : item.NomeLogradouroAbreviado
+                };
+                reg.Endereco += ", " + item.Numero.ToString() + " " + item.Complemento;
+                reg.Endereco = Functions.TruncateTo(reg.Endereco, 52);
+                _lista.Add(reg);
+            }
+
+            model.Lista_Imovel = _lista;
+            return View(model);
         }
 
 

@@ -25,6 +25,6 @@ namespace GTI_Mvc.ViewModels {
         public List<TramiteStruct > Lista_Tramite { get; set; }
         public string Lista_CC { get; set; }
         public int User_Id { get; set; }
-
+        public List<ProcessoLista> Lista_Processo { get; set; }
     }
 }

@@ -889,6 +889,8 @@
     <Content Include="Views\Imovel\CadImovelqryI.cshtml" />
     <Content Include="Views\Protocolo\ProcessoMnu.cshtml" />
     <Content Include="Views\Protocolo\ProcessoqryC.cshtml" />
+    <Content Include="Views\Protocolo\ProcessoData.cshtml" />
+    <Content Include="Views\Protocolo\ProcessoqryR.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
