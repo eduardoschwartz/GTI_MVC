@@ -280,6 +280,8 @@
             <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
 
             <div class="card-footer">
+                @Html.ActionLink("Pesquisar imóvel pelo código", "CadImovelqryC", "Imovel", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Pesquisar imóvel pelo endereço", "CadImovelqryE", "Imovel", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
             </div>
         </div>

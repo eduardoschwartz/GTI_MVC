@@ -95,15 +95,15 @@
                                     <td style="width:50px;text-align:center"></td>
                                 </tr>
                             </thead>
-                            @foreach (GTI_Models.Models.ImovelStruct item in Model.Lista_Imovel) {
-                                <tr style="height:20px;">
-                                    <td style="width:50px;text-align:center;font-weight:normal">@Html.DisplayFor(modelItem => item.Codigo)</td>
-                                    <td style="width:260px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Proprietario_Nome)</td>
-                                    <td style="width:370px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.NomeLogradouro)</td>
-                                    <td style="width:50px;text-align:right">
-                                        <a href="@Url.Action("Notificacao_terreno_print", "Imovel", new { c = item.Codigo })" title="Consultar"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
-                                    </td>
-                                </tr>
+                            @foreach (GTI_Models.Models.ImovelLista item in Model.Lista_Imovel) {
+                        <tr style="height:20px;">
+                            <td style="width:50px;text-align:center;font-weight:normal">@Html.DisplayFor(modelItem => item.Codigo)</td>
+                            <td style="width:260px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome)</td>
+                            <td style="width:370px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Endereco)</td>
+                            <td style="width:50px;text-align:right">
+                                <a href="@Url.Action("CadImovelqryP", "Imovel", new { id = Functions.Encrypt(item.Codigo).Replace('/', '-') })" title="Consultar"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                            </td>
+                        </tr>
                             }
                         </table>
                     }
@@ -111,8 +111,8 @@
                 </div>
                 <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
                 <div class="card-footer">
-                    @Html.ActionLink("Pesquisar imóvel pelo código", "CadImovelMnu", "Imovel", null, new { @class = "actionlink" })<br />
-                    @Html.ActionLink("Pesquisar imóvel pelo endereço", "CadImovelqryE", "Imovel", null, new { @class = "actionlink" })
+                    @Html.ActionLink("Pesquisar imóvel pelo código", "CadImovelqryC", "Imovel", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Pesquisar imóvel pelo endereço", "CadImovelqryE", "Imovel", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
                 </div>
             </div>

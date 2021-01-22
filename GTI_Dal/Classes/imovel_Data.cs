@@ -757,7 +757,7 @@ namespace GTI_Dal.Classes {
                            select new ImovelStruct {
                                Codigo = c.Codreduzido, Distrito = c.Distrito, Setor = c.Setor, Quadra = c.Quadra, Lote = c.Lote, Seq = c.Seq, Unidade = c.Unidade,
                                SubUnidade = c.Subunidade, Proprietario_Codigo = p.Codcidadao, Proprietario_Nome = i.Nomecidadao, Proprietario_Principal = p.Principal, CodigoLogradouro = f.Codlogr,
-                               NomeLogradouro = l.Endereco_resumido, Numero = c.Li_num, CodigoCondominio = c.Codcondominio, NomeCondominio = o.Cd_nomecond, CodigoBairro = c.Li_codbairro, NomeBairro = b.Descbairro,
+                               NomeLogradouroAbreviado = l.Endereco_resumido,NomeLogradouro=l.Endereco , Numero = c.Li_num, CodigoCondominio = c.Codcondominio, NomeCondominio = o.Cd_nomecond, CodigoBairro = c.Li_codbairro, NomeBairro = b.Descbairro,
                                Complemento = c.Li_compl
                            });
                 Sql = Sql.Where(p => p.Proprietario_Nome.Contains(PartialName));
@@ -770,7 +770,7 @@ namespace GTI_Dal.Classes {
                         Inscricao = item.Distrito.ToString() + "." + item.Setor.ToString("00") + "." + item.Quadra.ToString("0000") + "." + item.Lote.ToString("00000") + "." + item.Seq.ToString("00") + "." + item.Unidade.ToString("00") + "." + item.SubUnidade.ToString("000"),
                         Proprietario_Codigo = item.Proprietario_Codigo, Proprietario_Nome = item.Proprietario_Nome, CodigoLogradouro = item.CodigoLogradouro, NomeLogradouro = item.NomeLogradouro, Numero = item.Numero, NomeCondominio = item.NomeCondominio,
                         CodigoBairro = item.CodigoBairro, NomeBairro = item.NomeBairro, CodigoCondominio = item.CodigoCondominio, Complemento = item.Complemento, Distrito = item.Distrito, Setor = item.Setor, Quadra = item.Quadra, Lote = item.Lote, Seq = item.Seq,
-                        Unidade = item.Unidade, SubUnidade = item.SubUnidade
+                        Unidade = item.Unidade, SubUnidade = item.SubUnidade,NomeLogradouroAbreviado=item.NomeLogradouroAbreviado
                     };
                     Lista.Add(Linha);
                 }

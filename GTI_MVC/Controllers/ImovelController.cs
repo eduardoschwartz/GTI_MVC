@@ -1467,18 +1467,18 @@ namespace GTI_Mvc.Controllers {
 
         }
 
-        [Route("CadImovelMnu")]
+        [Route("CadImovelqryC")]
         [HttpGet]
-        public ActionResult CadImovelMnu() {
+        public ActionResult CadImovelqryC() {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             ImovelDetailsViewModel model = new ImovelDetailsViewModel();
             return View(model);
         }
 
-        [Route("CadImovelMnu")]
+        [Route("CadImovelqryC")]
         [HttpPost]
-        public ActionResult CadImovelMnu(ImovelDetailsViewModel model) {
+        public ActionResult CadImovelqryC(ImovelDetailsViewModel model) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
@@ -1494,11 +1494,15 @@ namespace GTI_Mvc.Controllers {
 
         [Route("CadImovelqryP")]
         [HttpGet]
-        public ActionResult CadImovelqryP() {
+        public ActionResult CadImovelqryP(string id) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             ImovelDetailsViewModel model = new ImovelDetailsViewModel();
-            model.Lista_Imovel = new List<ImovelStruct>();
+            if(string.IsNullOrEmpty(id))
+                model.Lista_Imovel = new List<ImovelLista>();
+            else {
+                return RedirectToAction("CadImovel", new { c = id.Replace('-','/') });
+            }
             return View(model);
         }
 
@@ -1507,7 +1511,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult CadImovelqryP(ImovelDetailsViewModel model) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
-            model.Lista_Imovel = new List<ImovelStruct>();
+            model.Lista_Imovel = new List<ImovelLista>();
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             string _nome = model.NomeProprietario;
             if (_nome.Length < 5) {
@@ -1520,21 +1524,28 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
-            List<ImovelStruct> _lista = new List<ImovelStruct>();
+            List<ImovelLista> _lista = new List<ImovelLista>();
             foreach (ImovelStruct item in ListaImovel) {
-                ImovelStruct reg = new ImovelStruct() {
-                    Codigo = item.Codigo,
-                    Proprietario_Nome= Functions.TruncateTo(  item.Proprietario_Nome,37),
-                    NomeLogradouro=item.NomeLogradouro + ", " + item.Numero.ToString() + " " + item.Complemento,
-                    Numero=item.Numero,
-                    Complemento=item.Complemento
+                ImovelLista reg = new ImovelLista() {
+                    Codigo = item.Codigo.ToString("00000"),
+                    Nome= Functions.TruncateTo(  item.Proprietario_Nome,37),
+                    Endereco=string.IsNullOrEmpty(item.NomeLogradouroAbreviado)?item.NomeLogradouro:item.NomeLogradouroAbreviado
                 };
-                reg.NomeLogradouro = Functions.TruncateTo(reg.NomeLogradouro, 52);
+                reg.Endereco += ", " + item.Numero.ToString() + " " + item.Complemento;
+                reg.Endereco = Functions.TruncateTo(reg.Endereco, 52);
                 _lista.Add(reg);
             }
 
             model.Lista_Imovel = _lista;
             return View(model);
+        }
+
+        [Route("CadImovelMnu")]
+        [HttpGet]
+        public ActionResult CadImovelMnu() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            return View();
         }
 
     }

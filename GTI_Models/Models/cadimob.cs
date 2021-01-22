@@ -113,5 +113,11 @@ namespace GTI_Models.Models {
         public string Cep { get; set; }
     }
 
+    public class ImovelLista {
+        public string Codigo { get; set; }
+        public string Nome { get; set; }
+        public string Endereco { get; set; }
+    }
+
 
 }
