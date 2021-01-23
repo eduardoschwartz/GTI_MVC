@@ -117,12 +117,17 @@
                     </tr>
                     <tr>
                         <td>
-                            @Html.TextBoxFor(m => m.Endereco, new { @id = "nome", @style = "width:450px;height:25px;font-size:12px" })
+                            @Html.TextBoxFor(m => m.Endereco, new { @id = "endereco", @style = "width:450px;height:25px;font-size:12px" })
                         </td>
                         <td>
                         </td>
                         <td>
-                            @Html.TextBoxFor(m => m.EnderecoNumero, new { @id = "nome", @style = "width:80px;height:25px;font-size:12px", @onKeyPress = "return formata(this, '§§§§', event)", @Value = "" })<span>&nbsp;&nbsp;</span>
+                            @if (Model.EnderecoNumero > 0) {
+                                @Html.TextBoxFor(m => m.EnderecoNumero, new { @id = "numero", @style = "width:80px;height:25px;font-size:12px", @onKeyPress = "return formata(this, '§§§§', event)" })<span>&nbsp;&nbsp;</span>
+                            } else {
+                                @Html.TextBoxFor(m => m.EnderecoNumero, new { @id = "numero", @style = "width:80px;height:25px;font-size:12px", @onKeyPress = "return formata(this, '§§§§', event)", @Value = "" })<span>&nbsp;&nbsp;</span>
+                            }
+
                         </td>
                     </tr>
                     <tr style="height:8px">
@@ -134,7 +139,7 @@
 
                 <br />
                 <button id="btnCodigo" type="submit" class="btn btn-primary" name="action" value="btnCodigoOK">Consultar</button>
-                <br />
+                <br /><br />
                 @if (Model.Lista_Processo.Count > 0) {
                     <table style="font-size:12px;width:880px">
                         <thead style="background-color:darkred;color:whitesmoke">
@@ -153,7 +158,7 @@
                                 <td style="width:240px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Assunto)</td>
                                 <td style="width:240px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Endereco)</td>
                                 <td style="width:50px;text-align:right">
-                                    <a href="@Url.Action("ProcessoqryR", "Protocolo", new { id = Functions.Encrypt(item.AnoNumero).Replace('/', '-') })" title="Consultar"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                                    <a href="@Url.Action("ProcessoqryC", "Protocolo", new { id = Functions.Encrypt(item.AnoNumero).Replace('/', '-') })" title="Consultar"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
                                 </td>
                             </tr>
                         }
@@ -164,8 +169,7 @@
             </div>
             <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
             <div class="card-footer">
-                @Html.ActionLink("Pesquisar processo pelo requerente", "ProcessoqryR", "Protocolo", null, new { @class = "actionlink" })<br />
-                @Html.ActionLink("Pesquisar processo pelo endereço", "ProcessoqryE", "Protocolo", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
             </div>
         </div>
@@ -188,12 +192,22 @@
         function ValidateForm() {
             ClearError();
             var _numero = document.getElementById('numprocesso').value.trim();
+            var _nome = document.getElementById('nome').value.trim();
+            var _endereco = document.getElementById('endereco').value.trim();
 
-            var _error = Valida_Numero_Processo(_numero);
-            if (_error != "") {
-                document.getElementById('errorLabel').innerHTML = _error;
+            if (_numero == '' && _nome == '' && _endereco == '') {
+                document.getElementById('errorLabel').innerHTML = "Nenhum filtro selecionado!";
                 return false;
             }
+
+            if (_numero != '') {
+                var _error = Valida_Numero_Processo(_numero);
+                if (_error != "") {
+                    document.getElementById('errorLabel').innerHTML = _error;
+                    return false;
+                }
+            }
+
         }
 
         function ClearError() {

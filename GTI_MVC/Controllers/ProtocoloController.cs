@@ -505,6 +505,20 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
+            string _nome = model.Requerente;
+            string _endereco = model.Endereco;
+            if (!string.IsNullOrEmpty(_nome)){
+                if (_nome.Length < 5) {
+                    ViewBag.Result = "Digite ao menos 5 caracteres do nome.";
+                    return View(model);
+                }
+            }
+            if (!string.IsNullOrEmpty(_endereco)) {
+                if (_endereco.Length < 5) {
+                    ViewBag.Result = "Digite ao menos 5 caracteres do endereco.";
+                    return View(model);
+                }
+            }
 
             List<ProcessoStruct> ListaProcesso = processoRepository.Lista_Processos(_ano,_numero,model.Requerente,model.Endereco,model.EnderecoNumero);
             if (ListaProcesso.Count == 0) {
