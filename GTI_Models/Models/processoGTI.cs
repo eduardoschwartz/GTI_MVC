@@ -186,6 +186,7 @@ namespace GTI_Models.Models {
         public int Numero { get; set; }
         public string Requerente { get; set; }
         public string Endereco { get; set; }
+        public string Assunto { get; set; }
     }
 
 

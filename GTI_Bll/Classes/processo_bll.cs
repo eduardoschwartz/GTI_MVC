@@ -608,6 +608,10 @@ namespace GTI_Bll.Classes {
             return Convert.ToInt16(NumProc.Substring(_traco+1,1));
         }
 
+        public List<ProcessoStruct> Lista_Processos_Requerente(string PartialName) {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Lista_Processos_Requerente(PartialName);
+        }
 
     }
 }

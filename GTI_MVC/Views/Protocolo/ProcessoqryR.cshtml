@@ -74,7 +74,7 @@
 
     @using (Html.BeginForm("ProcessoqryR", "Protocolo", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
-        <div class="container" style="width:800px">
+        <div class="container" style="width:890px">
             <div class="card">
                 <div class="card-header">Consulta de processos pelo requerente</div>
                 <div class="card-body">
@@ -86,24 +86,26 @@
                     <br />
 
                     @if (Model.Lista_Processo.Count > 0) {
-                        <table style="font-size:12px;width:730px">
+                        <table style="font-size:12px;width:820px">
                             <thead style="background-color:darkred;color:whitesmoke">
                                 <tr style="height:10px">
                                     <td style="width:50px;text-align:center">Número</td>
-                                    <td style="width:260px" ;text-align:left">Requerente</td>
-                                    <td style="width:370px;text-align:left">Endereço</td>
+                                    <td style="width:240px" ;text-align:left">Requerente</td>
+                                    <td style="width:240px" ;text-align:left">Assunto</td>
+                                    <td style="width:240px;text-align:left">Endereço</td>
                                     <td style="width:50px;text-align:center"></td>
                                 </tr>
                             </thead>
                             @foreach (GTI_Models.Models.ProcessoLista item in Model.Lista_Processo) {
-                        <tr style="height:20px;">
-                            <td style="width:50px;text-align:center;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
-                            <td style="width:260px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Requerente)</td>
-                            <td style="width:370px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Endereco)</td>
-                            <td style="width:50px;text-align:right">
-                                <a href="@Url.Action("ProcessoqryR", "Protocolo", new { id = Functions.Encrypt(item.AnoNumero).Replace('/', '-') })" title="Consultar"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
-                            </td>
-                        </tr>
+                                <tr style="height:20px;">
+                                    <td style="width:50px;text-align:center;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
+                                    <td style="width:240px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Requerente)</td>
+                                    <td style="width:240px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Assunto)</td>
+                                    <td style="width:240px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Endereco)</td>
+                                    <td style="width:50px;text-align:right">
+                                        <a href="@Url.Action("ProcessoqryR", "Protocolo", new { id = Functions.Encrypt(item.AnoNumero).Replace('/', '-') })" title="Consultar"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                                    </td>
+                                </tr>
                             }
                         </table>
                     }

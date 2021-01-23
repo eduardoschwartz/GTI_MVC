@@ -427,7 +427,6 @@ namespace GTI_Mvc.Controllers {
             return processoViewModel;
         }
 
-
         [Route("ProcessoMnu")]
         [HttpGet]
         public ActionResult ProcessoMnu() {
@@ -510,35 +509,38 @@ namespace GTI_Mvc.Controllers {
 
         [Route("ProcessoqryR")]
         [HttpPost]
-        public ActionResult ProcessoqryR(ImovelDetailsViewModel model) {
+        public ActionResult ProcessoqryR(ProcessoViewModel model) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
-            model.Lista_Imovel = new List<ImovelLista>();
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
-            string _nome = model.NomeProprietario;
+            model.Lista_Processo = new List<ProcessoLista>();
+            Processo_bll processoRepository = new Processo_bll("GTIconnection");
+            string _nome = model.Requerente;
             if (_nome.Length < 5) {
                 ViewBag.Result = "Digite ao menos 5 caracteres do nome.";
                 return View(model);
             }
-            List<ImovelStruct> ListaImovel = imovelRepository.Lista_Imovel_Proprietario(_nome);
-            if (ListaImovel.Count == 0) {
-                ViewBag.Result = "Não foi localizado nenhum imóvel com este proprietário.";
+            List<ProcessoStruct> ListaProcesso = processoRepository.Lista_Processos_Requerente(_nome);
+            if (ListaProcesso.Count == 0) {
+                ViewBag.Result = "Não foi localizado nenhum processo com este requerente.";
                 return View(model);
             }
 
-            List<ImovelLista> _lista = new List<ImovelLista>();
-            foreach (ImovelStruct item in ListaImovel) {
-                ImovelLista reg = new ImovelLista() {
-                    Codigo = item.Codigo.ToString("00000"),
-                    Nome = Functions.TruncateTo(item.Proprietario_Nome, 30),
-                    Endereco = string.IsNullOrEmpty(item.NomeLogradouroAbreviado) ? item.NomeLogradouro : item.NomeLogradouroAbreviado
+            List<ProcessoLista> _lista = new List<ProcessoLista>();
+            foreach (ProcessoStruct item in ListaProcesso) {
+                ProcessoLista reg = new ProcessoLista() {
+                    AnoNumero = item.Numero.ToString("00000") + Functions.RetornaDvProcesso(item.Numero).ToString() + "/" + item.Ano.ToString(),
+                    Requerente = Functions.TruncateTo(item.NomeCidadao, 30),
+                    Assunto = Functions.TruncateTo(item.Assunto, 30),
+                    Endereco = string.IsNullOrEmpty( item.LogradouroNome)?"":item.LogradouroNome
                 };
-                reg.Endereco += ", " + item.Numero.ToString() + " " + item.Complemento;
-                reg.Endereco = Functions.TruncateTo(reg.Endereco, 52);
+                if (reg.Endereco != "") {
+                    reg.Endereco += ", " + item.LogradouroNumero.ToString();
+                    reg.Endereco = Functions.TruncateTo(reg.Endereco, 32);
+                }
                 _lista.Add(reg);
             }
 
-            model.Lista_Imovel = _lista;
+            model.Lista_Processo = _lista;
             return View(model);
         }
 
