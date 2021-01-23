@@ -74,17 +74,93 @@
 
     @using (Html.BeginForm("ProcessoQryC", "Protocolo", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
-    <div class="container" style="width:450px">
+    <div class="container" style="width:950px">
         <div class="card">
-            <div class="card-header">Consulta de processo por número</div>
+            <div class="card-header">Consulta de Processos</div>
             <div class="card-body">
-                <div >
-                    <label style="font-weight:normal;font-size:14px">Nº do processo:</label>&nbsp;
-                    @Html.TextBoxFor(m => m.Numero_Ano, new { @id = "numprocesso", @class = "textBoxBlue", @style = "max-width:150px" })
-                    <label>&nbsp;&nbsp;</label>
-                    <button id="btnCodigo" type="submit" class="btn btn-primary" name="action" value="btnCodigoOK">Consultar</button>
-                </div>
-          
+                <table>
+                    <tr style="font-weight:normal;font-size:12px">
+                        <td>
+                            Nº do processo
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.TextBoxFor(m => m.Numero_Ano, new { @id = "numprocesso", @style = "width:150px;height:25px;font-size:12px" })
+                        </td>
+                    </tr>
+                    <tr style="height:8px">
+                        <td></td>
+                    </tr>
+                    <tr style="font-weight:normal;font-size:12px">
+                        <td>
+                            Nome do requerente
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.TextBoxFor(m => m.Requerente, new { @id = "nome", @style = "width:450px;height:25px;font-size:12px" })
+                        </td>
+                    </tr>
+                    <tr style="height:8px">
+                        <td></td>
+                    </tr>
+                    <tr style="font-weight:normal;font-size:12px">
+                        <td>
+                            Endereço de Ocorrência
+                        </td>
+                        <td style="width:10px">
+                        </td>
+                        <td>
+                            Número
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.TextBoxFor(m => m.Endereco, new { @id = "nome", @style = "width:450px;height:25px;font-size:12px" })
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.EnderecoNumero, new { @id = "nome", @style = "width:80px;height:25px;font-size:12px", @onKeyPress = "return formata(this, '§§§§', event)", @Value = "" })<span>&nbsp;&nbsp;</span>
+                        </td>
+                    </tr>
+                    <tr style="height:8px">
+                        <td></td>
+                    </tr>
+
+                </table>
+
+
+                <br />
+                <button id="btnCodigo" type="submit" class="btn btn-primary" name="action" value="btnCodigoOK">Consultar</button>
+                <br />
+                @if (Model.Lista_Processo.Count > 0) {
+                    <table style="font-size:12px;width:880px">
+                        <thead style="background-color:darkred;color:whitesmoke">
+                            <tr style="height:10px">
+                                <td style="width:80px;text-align:center">Número</td>
+                                <td style="width:240px" ;text-align:left">Requerente</td>
+                                <td style="width:240px" ;text-align:left">Assunto</td>
+                                <td style="width:240px;text-align:left">Endereço</td>
+                                <td style="width:50px;text-align:center"></td>
+                            </tr>
+                        </thead>
+                        @foreach (GTI_Models.Models.ProcessoLista item in Model.Lista_Processo) {
+                            <tr style="height:20px;">
+                                <td style="width:80px;text-align:center;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
+                                <td style="width:240px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Requerente)</td>
+                                <td style="width:240px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Assunto)</td>
+                                <td style="width:240px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Endereco)</td>
+                                <td style="width:50px;text-align:right">
+                                    <a href="@Url.Action("ProcessoqryR", "Protocolo", new { id = Functions.Encrypt(item.AnoNumero).Replace('/', '-') })" title="Consultar"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                }
+
+
             </div>
             <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
             <div class="card-footer">

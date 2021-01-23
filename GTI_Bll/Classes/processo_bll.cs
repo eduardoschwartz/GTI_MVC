@@ -613,5 +613,10 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Processos_Requerente(PartialName);
         }
 
+        public List<ProcessoStruct> Lista_Processos(int Ano, int Numero, string PartialName, string PartialEndereco, int EnderecoNumero) {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Lista_Processos( Ano,Numero,  PartialName,PartialEndereco,EnderecoNumero);
+        }
+
     }
 }

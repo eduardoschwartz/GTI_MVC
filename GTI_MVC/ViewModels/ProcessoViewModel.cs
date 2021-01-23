@@ -11,6 +11,8 @@ namespace GTI_Mvc.ViewModels {
         public string Numero_Ano { get; set; }
         public string Data_Processo { get; set; }
         public string Requerente { get; set; }
+        public string Endereco { get; set; }
+        public int EnderecoNumero { get; set; }
         public int? Despacho_Codigo { get; set; }
         public string Despacho_Nome { get; set; }
         public int? CCusto_Codigo { get; set; }

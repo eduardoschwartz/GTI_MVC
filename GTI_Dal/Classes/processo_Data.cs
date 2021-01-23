@@ -1421,6 +1421,37 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<ProcessoStruct> Lista_Processos(int Ano, int Numero, string PartialName,string PartialEndereco,int EnderecoNumero) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+                var Sql = (from p in db.Processogti
+                           join c in db.Cidadao on p.Codcidadao equals c.Codcidadao into cp from c in cp.DefaultIfEmpty()
+                           join a in db.Assunto on p.Codassunto equals a.Codigo into ap from a in ap.DefaultIfEmpty()
+                           join e in db.Processoend on new { P1 = p.Ano, P2 = p.Numero } equals new { P1 = e.Ano, P2 = e.Numprocesso } into ep from e in ep.DefaultIfEmpty()
+                           join l in db.Logradouro on e.Codlogr equals l.Codlogradouro into le from l in le.DefaultIfEmpty()
+                           join u in db.Centrocusto on p.Centrocusto equals u.Codigo into pu from u in pu.DefaultIfEmpty()
+                           orderby p.Ano, p.Numero
+                           select new ProcessoStruct {
+                               Ano = p.Ano, Numero = p.Numero, NomeCidadao = c.Nomecidadao, Assunto = a.Nome, DataEntrada = p.Dataentrada, DataCancelado = p.Datacancel,
+                               DataReativacao = p.Datareativa, DataArquivado = p.Dataarquiva, DataSuspensao = p.Datasuspenso, Interno = p.Interno, Fisico = p.Fisico, LogradouroNome = l.Endereco,
+                               LogradouroNumero = e.Numero, Complemento = p.Complemento, CentroCustoNome = u.Descricao, Inscricao = p.Insc, CodigoCidadao = p.Codcidadao, CodigoAssunto = p.Codassunto,
+                               CentroCusto = p.Centrocusto
+                           });
+                if (Ano > 0)
+                    Sql = Sql.Where(a => a.Ano == Ano & a.Numero == Numero);
+                if(!string.IsNullOrEmpty(PartialName))
+                    Sql = Sql.Where(c => c.NomeCidadao.Contains(PartialName));
+                if (!string.IsNullOrEmpty(PartialEndereco))
+                    Sql = Sql.Where(c => c.LogradouroNome.Contains(PartialEndereco));
+                if (EnderecoNumero>0)
+                    Sql = Sql.Where(c => c.LogradouroNumero==EnderecoNumero.ToString());
+
+
+                Sql = Sql.OrderBy(m => m.Ano).ThenBy(n => n.Numero);
+                return Sql.ToList();
+            }
+        }
+
 
     }
 }

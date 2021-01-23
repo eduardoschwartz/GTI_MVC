@@ -435,42 +435,6 @@ namespace GTI_Mvc.Controllers {
             return View();
         }
 
-        [Route("ProcessoqryC")]
-        [HttpGet]
-        public ActionResult ProcessoqryC() {
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
-            ProcessoViewModel model = new ProcessoViewModel();
-            return View(model);
-        }
-
-        [Route("ProcessoqryC")]
-        [HttpPost]
-        public ActionResult ProcessoqryC(ProcessoViewModel model) {
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
-            ProcessoNumero processoNumero = Functions.Split_Processo_Numero(model.Numero_Ano);
-            string _numStr = model.Numero_Ano;
-            int _numero = processoNumero.Numero;
-            int _ano = processoNumero.Ano;
-            
-            Processo_bll processoRepository = new Processo_bll("GTIconnection");
-            short _dv = processoRepository.ExtractDvProcesso(_numStr);
-            short _realdv = Convert.ToInt16(processoRepository.DvProcesso(_numero));
-            if (_dv != _realdv) {
-                ViewBag.Result = "Nº de processo inválido.";
-                return View(model);
-            }
-
-            bool _existe = processoRepository.Existe_Processo(_ano, _numero);
-            if (!_existe) {
-                ViewBag.Result = "Nº de processo não cadastrado.";
-                return View(model);
-            }
-
-            return RedirectToAction("ProcessoData", new { c = Functions.Encrypt(_numStr) });
-        }
-
         [Route("ProcessoData")]
         [HttpGet]
         public ActionResult ProcessoData(string c) {
@@ -479,10 +443,10 @@ namespace GTI_Mvc.Controllers {
             string _numStr;
             try {
                 _numStr = Functions.Decrypt(c);
-            } catch  {
+            } catch {
                 return RedirectToAction("Login", "Home");
             }
-            
+
             ProcessoNumero processoNumero = Functions.Split_Processo_Numero(_numStr);
             int _numero = processoNumero.Numero;
             int _ano = processoNumero.Ano;
@@ -493,9 +457,10 @@ namespace GTI_Mvc.Controllers {
 
         }
 
-        [Route("ProcessoqryR")]
+
+        [Route("ProcessoqryC")]
         [HttpGet]
-        public ActionResult ProcessoqryR(string id) {
+        public ActionResult ProcessoqryC(string id) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             ProcessoViewModel model = new ProcessoViewModel();
@@ -507,31 +472,52 @@ namespace GTI_Mvc.Controllers {
             return View(model);
         }
 
-        [Route("ProcessoqryR")]
+        [Route("ProcessoqryC")]
         [HttpPost]
-        public ActionResult ProcessoqryR(ProcessoViewModel model) {
+        public ActionResult ProcessoqryC(ProcessoViewModel model) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
-            model.Lista_Processo = new List<ProcessoLista>();
             Processo_bll processoRepository = new Processo_bll("GTIconnection");
-            string _nome = model.Requerente;
-            if (_nome.Length < 5) {
-                ViewBag.Result = "Digite ao menos 5 caracteres do nome.";
-                return View(model);
+
+            bool _filterN = false;
+            if (!string.IsNullOrEmpty(model.Numero_Ano)) _filterN = true;
+
+            int _ano = 0,_numero = 0;
+            List<ProcessoLista> _lista = new List<ProcessoLista>();
+            model.Lista_Processo = _lista;
+            if (_filterN) {
+                ProcessoNumero processoNumero = Functions.Split_Processo_Numero(model.Numero_Ano);
+                string _numStr = model.Numero_Ano;
+                _numero = processoNumero.Numero;
+                _ano = processoNumero.Ano;
+
+                short _dv = processoRepository.ExtractDvProcesso(_numStr);
+                short _realdv = Convert.ToInt16(processoRepository.DvProcesso(_numero));
+                if (_dv != _realdv) {
+                    ViewBag.Result = "Nº de processo inválido.";
+                    return View(model);
+                }
+
+                bool _existe = processoRepository.Existe_Processo(_ano, _numero);
+                if (!_existe) {
+                    ViewBag.Result = "Nº de processo não cadastrado.";
+                    return View(model);
+                }
             }
-            List<ProcessoStruct> ListaProcesso = processoRepository.Lista_Processos_Requerente(_nome);
+
+
+            List<ProcessoStruct> ListaProcesso = processoRepository.Lista_Processos(_ano,_numero,model.Requerente,model.Endereco,model.EnderecoNumero);
             if (ListaProcesso.Count == 0) {
                 ViewBag.Result = "Não foi localizado nenhum processo com este requerente.";
                 return View(model);
             }
 
-            List<ProcessoLista> _lista = new List<ProcessoLista>();
             foreach (ProcessoStruct item in ListaProcesso) {
                 ProcessoLista reg = new ProcessoLista() {
-                    AnoNumero = item.Numero.ToString("00000") + Functions.RetornaDvProcesso(item.Numero).ToString() + "/" + item.Ano.ToString(),
+                    AnoNumero = item.Numero.ToString("00000") +"-"+ Functions.RetornaDvProcesso(item.Numero).ToString() + "/" + item.Ano.ToString(),
                     Requerente = Functions.TruncateTo(item.NomeCidadao, 30),
                     Assunto = Functions.TruncateTo(item.Assunto, 30),
-                    Endereco = string.IsNullOrEmpty( item.LogradouroNome)?"":item.LogradouroNome
+                    Endereco = string.IsNullOrEmpty(item.LogradouroNome) ? "" : item.LogradouroNome
                 };
                 if (reg.Endereco != "") {
                     reg.Endereco += ", " + item.LogradouroNumero.ToString();
@@ -542,7 +528,60 @@ namespace GTI_Mvc.Controllers {
 
             model.Lista_Processo = _lista;
             return View(model);
+
+
         }
+
+        //[Route("ProcessoqryR")]
+        //[HttpGet]
+        //public ActionResult ProcessoqryR(string id) {
+        //    if (Session["hashid"] == null)
+        //        return RedirectToAction("Login", "Home");
+        //    ProcessoViewModel model = new ProcessoViewModel();
+        //    if (string.IsNullOrEmpty(id))
+        //        model.Lista_Processo = new List<ProcessoLista>();
+        //    else {
+        //        return RedirectToAction("ProcessoData", new { c = id.Replace('-', '/') });
+        //    }
+        //    return View(model);
+        //}
+
+        //[Route("ProcessoqryR")]
+        //[HttpPost]
+        //public ActionResult ProcessoqryR(ProcessoViewModel model) {
+        //    if (Session["hashid"] == null)
+        //        return RedirectToAction("Login", "Home");
+        //    model.Lista_Processo = new List<ProcessoLista>();
+        //    Processo_bll processoRepository = new Processo_bll("GTIconnection");
+        //    string _nome = model.Requerente;
+        //    if (_nome.Length < 5) {
+        //        ViewBag.Result = "Digite ao menos 5 caracteres do nome.";
+        //        return View(model);
+        //    }
+        //    List<ProcessoStruct> ListaProcesso = processoRepository.Lista_Processos_Requerente(_nome);
+        //    if (ListaProcesso.Count == 0) {
+        //        ViewBag.Result = "Não foi localizado nenhum processo com este requerente.";
+        //        return View(model);
+        //    }
+
+        //    List<ProcessoLista> _lista = new List<ProcessoLista>();
+        //    foreach (ProcessoStruct item in ListaProcesso) {
+        //        ProcessoLista reg = new ProcessoLista() {
+        //            AnoNumero = item.Numero.ToString("00000") + Functions.RetornaDvProcesso(item.Numero).ToString() + "/" + item.Ano.ToString(),
+        //            Requerente = Functions.TruncateTo(item.NomeCidadao, 30),
+        //            Assunto = Functions.TruncateTo(item.Assunto, 30),
+        //            Endereco = string.IsNullOrEmpty( item.LogradouroNome)?"":item.LogradouroNome
+        //        };
+        //        if (reg.Endereco != "") {
+        //            reg.Endereco += ", " + item.LogradouroNumero.ToString();
+        //            reg.Endereco = Functions.TruncateTo(reg.Endereco, 32);
+        //        }
+        //        _lista.Add(reg);
+        //    }
+
+        //    model.Lista_Processo = _lista;
+        //    return View(model);
+        //}
 
 
     }
