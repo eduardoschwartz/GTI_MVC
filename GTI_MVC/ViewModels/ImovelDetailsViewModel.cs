@@ -12,7 +12,7 @@ namespace GTI_Mvc.ViewModels {
         public EnderecoStruct Endereco_Entrega { get; set; }
         public List<AreaStruct> Lista_Areas { get; set; }
         public List<Testada> Lista_Testada { get; set; }
-        [Display(Name = "Inscrição Municipal")]
+        public int Codigo { get; set; }
         public string Inscricao { get; set; }
         public string CpfCnpjLabel { get; set; }
         public string CpfValue { get; set; }

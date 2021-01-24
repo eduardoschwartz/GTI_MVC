@@ -542,6 +542,11 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Imovel_Endereco(PartialName,Numero);
         }
 
+        public List<ImovelStruct> Lista_Imovel(int Codigo, int Distrito, int Setor, int Quadra, int Lote, int Face, int Unidade, int SubUnidade, string PartialName, string PartialEndereco, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Lista_Imovel(Codigo, Distrito,  Setor,  Quadra,  Lote,  Face,  Unidade,  SubUnidade, PartialName,  PartialEndereco,  Numero);
+        }
+
         #region ITBI
         public List<Itbi_natureza> Lista_Itbi_Natureza() {
             Imovel_Data obj = new Imovel_Data(_connection);

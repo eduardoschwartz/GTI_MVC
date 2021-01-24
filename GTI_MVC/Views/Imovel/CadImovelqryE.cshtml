@@ -83,9 +83,9 @@
                         @Html.TextBoxFor(m => m.NomeEndereco, new { @id = "nome", @style = "width:450px;height:25px" })
                         <label style="font-weight:normal;font-size:13px;padding-left:10px">Número: </label>&nbsp;
                         @Html.TextBoxFor(m => m.Numero, new { @id = "nome", @style = "width:80px;height:25px", @onKeyPress = "return formata(this, '§§§§', event)" })<span>&nbsp;&nbsp;</span>
-                        <button  id="btnPesquisar" type="submit" class="btn btn-primary" name="action" value="btnPesquisar">Pesquisar</button>
+                        <button id="btnPesquisar" type="submit" class="btn btn-primary" name="action" value="btnPesquisar">Pesquisar</button>
                     </div>
-                    
+
                     <br />
                     @if (Model.Lista_Imovel.Count > 0) {
                         <table style="font-size:12px;width:730px">
@@ -98,20 +98,20 @@
                                 </tr>
                             </thead>
                             @foreach (GTI_Models.Models.ImovelLista item in Model.Lista_Imovel) {
-                        <tr style="height:20px;">
-                            <td style="width:50px;text-align:center;font-weight:normal">@Html.DisplayFor(modelItem => item.Codigo)</td>
-                            <td style="width:260px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome)</td>
-                            <td style="width:370px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Endereco)</td>
-                            <td style="width:50px;text-align:right">
-                                <a href="@Url.Action("CadImovelqryE", "Imovel", new { id = Functions.Encrypt(item.Codigo).Replace('/', '-') })" title="Consultar"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
-                            </td>
-                        </tr>
+                                <tr style="height:20px;">
+                                    <td style="width:50px;text-align:center;font-weight:normal">@Html.DisplayFor(modelItem => item.Codigo)</td>
+                                    <td style="width:260px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome)</td>
+                                    <td style="width:370px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Endereco)</td>
+                                    <td style="width:50px;text-align:right">
+                                        <a href="@Url.Action("CadImovelqryE", "Imovel", new { id = Functions.Encrypt(item.Codigo).Replace('/', '-') })" title="Consultar"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                                    </td>
+                                </tr>
                             }
                         </table>
                     }
-
+                    <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
                 </div>
-                <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+                
                 <div class="card-footer">
                     @Html.ActionLink("Pesquisar imóvel pelo código", "CadImovelqryC", "Imovel", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Pesquisar imóvel pela inscrição cadastral", "CadImovelqryI", "Imovel", null, new { @class = "actionlink" })<br />
