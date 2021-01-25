@@ -1380,7 +1380,7 @@ namespace GTI_Mvc.Controllers {
                     Codigo_Imovel = item.Codigo_Imovel,
                     Data_Cadastro = item.Data_Cadastro,
                     Prazo = item.Prazo,
-                    Nome_Proprietario = item.Nome_Proprietario,
+                    Nome_Proprietario = Functions.TruncateTo(item.Nome_Proprietario, 45),
                     Situacao = item.Situacao
                 };
                 ListaNot.Add(reg);
@@ -1412,7 +1412,7 @@ namespace GTI_Mvc.Controllers {
                     Codigo_Imovel = item.Codigo_Imovel,
                     Data_Cadastro = item.Data_Cadastro,
                     Prazo = item.Prazo,
-                    Nome_Proprietario = item.Nome_Proprietario,
+                    Nome_Proprietario = Functions.TruncateTo( item.Nome_Proprietario,45),
                     Situacao = item.Situacao
                 };
                 ListaNot.Add(reg);

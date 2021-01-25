@@ -73,8 +73,8 @@
                             <tr style="height:14px;">
                                 <td style="display:none">Guid</td>
                                 <td style="width:100px;font-weight:normal">Nº Notif.</td>
-                                <td style="width:400px;font-weight:normal">Nome do Contribuinte</td>
-                                <td style="width:140px;font-weight:normal">Data Emissão</td>
+                                <td style="width:460px;font-weight:normal">Nome do Contribuinte</td>
+                                <td style="width:80px;font-weight:normal;text-align:center">Data Emissão</td>
                                 <td style="width:105px;font-weight:normal;text-align:right">Prazo</td>
                                 <td style="width:50px;text-align:right">
                                 </td>
@@ -85,8 +85,8 @@
                                 if (item.Ano_Notificacao == Model.Ano_Selected) {
                             <tr style="height:20px;">
                                 <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
-                                <td style="width:400px;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome_Proprietario)</td>
-                                <td style="width:140px;font-weight:normal">@Html.DisplayFor(modelItem => item.Data_Cadastro)</td>
+                                <td style="width:460px;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome_Proprietario)</td>
+                                <td style="width:80px;font-weight:normal;text-align:center">@Html.DisplayFor(modelItem => item.Data_Cadastro)</td>
                                 <td style="width:105px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Prazo)@Html.Raw("&nbsp;Dias")</td>
                                 <td style="width:50px;text-align:right">
                                     <a href="@Url.Action("Notificacao_terreno_print", "Imovel", new { a = item.Ano_Notificacao,n=item.Numero_Notificacao })" title="Imprimir a Notificação"> <img src="@Url.Content("~/images/print.png")"></a>

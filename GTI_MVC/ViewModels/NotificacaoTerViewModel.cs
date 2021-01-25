@@ -1,6 +1,7 @@
 ﻿using GTI_Models.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -17,6 +18,7 @@ namespace GTI_Mvc.ViewModels {
         public string Endereco_Entrega { get; set; }
         public string Endereco_Prop { get; set; }
         public int Prazo { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime Data_Cadastro { get; set; }
         public string Nome_Proprietario2 { get; set; }
         public string Endereco_prop2 { get; set; }
