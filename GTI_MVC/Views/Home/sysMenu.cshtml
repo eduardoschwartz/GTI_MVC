@@ -47,6 +47,8 @@
                 }
                 if (Session["hashfiscalpostura"].ToString() == "S") {
                     @Html.ActionLink("Notificação de Limpeza de Terreno", "Notificacao_ter_menu", "Imovel", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Consulta aos cadastro de imóvel", "CadImovelqryC", "Imovel", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Consulta de processos", "ProcessoqryC", "Protocolo", null, new { @class = "actionlink" })<br />
                 }
                 if (Session["hashfiscalmov"].ToString() == "S") {
                     @Html.ActionLink("Alvará de Funcionamento", "Alvara", "Empresa", null, new { @class = "actionlink" })<br />
@@ -57,8 +59,6 @@
             }
 
             @if (Session["hashid"].ToString() == "433") {
-                @Html.ActionLink("Consulta aos dados de imóvel", "CadImovelqryC", "Imovel", null, new { @class = "actionlink" })<br />
-                @Html.ActionLink("Consulta de processos", "ProcessoqryC", "Protocolo", null, new { @class = "actionlink" })<br />
             }
             @Html.ActionLink("Inclusão de Cep não cadastrado", "Cep_inc", "Shared", null, new { @class = "actionlink" })<br />
             @Html.ActionLink("Imposto sobre Transmissão de Bens Imóveis (ITBI)", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })<br />

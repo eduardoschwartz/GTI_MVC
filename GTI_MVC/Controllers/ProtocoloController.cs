@@ -452,6 +452,16 @@ namespace GTI_Mvc.Controllers {
             int _ano = processoNumero.Ano;
 
             ProcessoViewModel modelt = Exibe_Tramite2(_numStr);
+            Processo_bll processoRepository = new Processo_bll("GTIconnection");
+            ProcessoStruct _dados = processoRepository.Dados_Processo(_ano, _numero);
+            modelt.Observacao = _dados.Observacao ?? "";
+            List<ProcessoEndStruct> ListaEnd = _dados.ListaProcessoEndereco;
+            string _end = "";
+            foreach (ProcessoEndStruct item in ListaEnd) {
+                _end += item.NomeLogradouro + ", " + item.Numero.ToString() + "; ";
+            }
+
+            modelt.Endereco_Ocorrencia = _end;
             modelt.Numero_Ano = _numStr;
             return View(modelt);
 
@@ -545,57 +555,6 @@ namespace GTI_Mvc.Controllers {
 
 
         }
-
-        //[Route("ProcessoqryR")]
-        //[HttpGet]
-        //public ActionResult ProcessoqryR(string id) {
-        //    if (Session["hashid"] == null)
-        //        return RedirectToAction("Login", "Home");
-        //    ProcessoViewModel model = new ProcessoViewModel();
-        //    if (string.IsNullOrEmpty(id))
-        //        model.Lista_Processo = new List<ProcessoLista>();
-        //    else {
-        //        return RedirectToAction("ProcessoData", new { c = id.Replace('-', '/') });
-        //    }
-        //    return View(model);
-        //}
-
-        //[Route("ProcessoqryR")]
-        //[HttpPost]
-        //public ActionResult ProcessoqryR(ProcessoViewModel model) {
-        //    if (Session["hashid"] == null)
-        //        return RedirectToAction("Login", "Home");
-        //    model.Lista_Processo = new List<ProcessoLista>();
-        //    Processo_bll processoRepository = new Processo_bll("GTIconnection");
-        //    string _nome = model.Requerente;
-        //    if (_nome.Length < 5) {
-        //        ViewBag.Result = "Digite ao menos 5 caracteres do nome.";
-        //        return View(model);
-        //    }
-        //    List<ProcessoStruct> ListaProcesso = processoRepository.Lista_Processos_Requerente(_nome);
-        //    if (ListaProcesso.Count == 0) {
-        //        ViewBag.Result = "Não foi localizado nenhum processo com este requerente.";
-        //        return View(model);
-        //    }
-
-        //    List<ProcessoLista> _lista = new List<ProcessoLista>();
-        //    foreach (ProcessoStruct item in ListaProcesso) {
-        //        ProcessoLista reg = new ProcessoLista() {
-        //            AnoNumero = item.Numero.ToString("00000") + Functions.RetornaDvProcesso(item.Numero).ToString() + "/" + item.Ano.ToString(),
-        //            Requerente = Functions.TruncateTo(item.NomeCidadao, 30),
-        //            Assunto = Functions.TruncateTo(item.Assunto, 30),
-        //            Endereco = string.IsNullOrEmpty( item.LogradouroNome)?"":item.LogradouroNome
-        //        };
-        //        if (reg.Endereco != "") {
-        //            reg.Endereco += ", " + item.LogradouroNumero.ToString();
-        //            reg.Endereco = Functions.TruncateTo(reg.Endereco, 32);
-        //        }
-        //        _lista.Add(reg);
-        //    }
-
-        //    model.Lista_Processo = _lista;
-        //    return View(model);
-        //}
 
 
     }

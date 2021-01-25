@@ -21,6 +21,8 @@ namespace GTI_Mvc.ViewModels {
         public string ObsInterna { get; set; }
         public string Assunto_Nome { get; set; }
         public string ErrorMessage { get; set; }
+        public string Endereco_Ocorrencia { get; set; }
+        public string Observacao { get; set; }
         [Required]
         [StringLength(4)]
         public string CaptchaCode { get; set; }
