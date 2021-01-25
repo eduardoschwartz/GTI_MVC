@@ -1448,7 +1448,7 @@ namespace GTI_Mvc.Controllers {
                 Documento= Functions.FormatarCpfCnpj(_dados.Cpf_cnpj),
                 Endereco=_dados.Endereco_nome+ ", " + _dados.Numero.ToString() + " " + _dados.Complemento.ToString(),
                 Bairro=_dados.Bairro_nome,
-                Atividade=_dados.Atividade_nome,
+                Atividade=_dados.Atividade_extenso,
                 Horario=_dados.Horario_Nome,
                 Num_processo=model.Numero_Processo,
                 Data_Gravada=DateTime.Now,

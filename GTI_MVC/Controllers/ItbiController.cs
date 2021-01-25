@@ -1984,13 +1984,16 @@ namespace GTI_Mvc.Controllers {
                     if (_bcnpj)
                         _comprador.Cnpj = Functions.FormatarCpfCnpj(model.Cpf_Cnpj);
 
+                    Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+                    
                     if (_cidadao.EtiquetaR == "S") {
+                        Bairro _bairro = enderecoRepository.RetornaLogradouroBairro((int)_cidadao.CodigoLogradouroR, (short)_cidadao.NumeroR);
                         _comprador.Logradouro_Codigo = _cidadao.CodigoLogradouroR == null ? 0 : (int)_cidadao.CodigoLogradouroR;
                         _comprador.Logradouro_Nome = _cidadao.EnderecoR;
                         _comprador.Numero = (int)_cidadao.NumeroR;
                         _comprador.Complemento = _cidadao.ComplementoR;
-                        _comprador.Bairro_Codigo = (int)_cidadao.CodigoBairroR;
-                        _comprador.Bairro_Nome = _cidadao.NomeBairroR;
+                        _comprador.Bairro_Codigo = _bairro.Codbairro;
+                        _comprador.Bairro_Nome = _bairro.Descbairro;
                         _comprador.Cidade_Codigo = (int)_cidadao.CodigoCidadeR;
                         _comprador.Cidade_Nome = _cidadao.NomeCidadeR;
                         _comprador.UF = _cidadao.UfR;
@@ -1998,12 +2001,13 @@ namespace GTI_Mvc.Controllers {
                         _comprador.Email = _cidadao.EmailR;
                         _comprador.Telefone = _cidadao.TelefoneR;
                     } else {
+                        Bairro _bairro = enderecoRepository.RetornaLogradouroBairro((int)_cidadao.CodigoLogradouroC, (short)_cidadao.NumeroC);
                         _comprador.Logradouro_Codigo = _cidadao.CodigoLogradouroC == null ? 0 : (int)_cidadao.CodigoLogradouroC;
                         _comprador.Logradouro_Nome = _cidadao.EnderecoC;
                         _comprador.Numero = (int)_cidadao.NumeroC;
                         _comprador.Complemento = _cidadao.ComplementoC;
-                        _comprador.Bairro_Codigo = (int)_cidadao.CodigoBairroC;
-                        _comprador.Bairro_Nome = _cidadao.NomeBairroC;
+                        _comprador.Bairro_Codigo = _bairro.Codbairro;
+                        _comprador.Bairro_Nome = _bairro.Descbairro;
                         _comprador.Cidade_Codigo = (int)_cidadao.CodigoCidadeC;
                         _comprador.Cidade_Nome = _cidadao.NomeCidadeC;
                         _comprador.UF = _cidadao.UfC;

@@ -2453,7 +2453,7 @@ namespace GTI_Mvc.Controllers {
 
             List<Rodo_empresa> Lista = tributarioRepository.Lista_Rodo_empresa(_userid,_func);
             ViewBag.Lista_Empresa = new SelectList(Lista, "Codigo", "Nome");
-            
+
             RodoviariaViewModel model = new RodoviariaViewModel();
             return View(model);
         }
@@ -2490,7 +2490,16 @@ namespace GTI_Mvc.Controllers {
                 Nome=_nome,
                 Lista_uso_plataforma=Lista
             };
+            List<AnoList> ListaAno = new List<AnoList>();
+            for (int i = 2020; i <= DateTime.Now.Year; i++) {
+                AnoList _reg = new AnoList() {
+                    Codigo = i,
+                    Descricao = i.ToString()
+                };
+                ListaAno.Add(_reg);
+            }
 
+            ViewBag.ListaAno = new SelectList(ListaAno, "Codigo", "Descricao", ListaAno[ListaAno.Count - 1].Codigo);
             return View(model);
         }
 
