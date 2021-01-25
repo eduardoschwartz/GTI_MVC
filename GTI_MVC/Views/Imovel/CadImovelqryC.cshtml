@@ -78,21 +78,76 @@
         <div class="card">
             <div class="card-header">Consulta de imóveis</div>
             <div class="card-body">
-                <table>
-                    <tr style="font-weight:normal;font-size:12px">
+                <table style="font-weight:normal;font-size:12px">
+                    <tr>
                         <td>
                             Código:
+                        </td>
+                        <td style="width:10px">
+                        </td>
+                        <td>
+                            Inscrição Cadastral
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)" })
+                            @if (Model.Codigo > 0) {
+                                @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)" })
+                            } else {
+                                @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)", @Value = "" })
+                            }
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @style = "width:250px;height:25px", @onKeyPress = "return formata(this, '§.§§.§§§§.§§§§§.§§.§§.§§§', event)" })
+                        </td>
+                    </tr>
+                    <tr style="height:10px">
+                        <td></td>
+                    </tr>
+                    </Table>
+                <table style="font-weight:normal;font-size:12px">
+                    <tr>
+                        <td>
+                            Nome do proprietário
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.TextBoxFor(m => m.NomeProprietario, new { @id = "nome", @style = "width:450px;height:25px" })
+                        </td>
+                    </tr>
+                    <tr style="height:10px">
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Endereço do imóvel
+                        </td>
+                        <td></td>
+                        <td>
+                            Número
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.TextBoxFor(m => m.NomeEndereco, new { @id = "endereco", @style = "width:450px;height:25px" })
+                        </td>
+                        <td style="width:10px"></td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(Model.Numero)) {
+                                @Html.TextBoxFor(m => m.Numero, new { @id = "numero", @style = "width:80px;height:25px", @onKeyPress = "return formata(this, '§§§§', event)" })
+                            } else {
+                                @Html.TextBoxFor(m => m.Numero, new { @id = "numero", @style = "width:80px;height:25px", @onKeyPress = "return formata(this, '§§§§', event)", @Value = "" })
+                            }
+
                         </td>
                     </tr>
                 </table>
                 <br />
                 <button id="btnCodigo" type="submit" class="btn btn-primary" name="action" value="btnCodigoOK">Consultar</button>
-                <br />
+                <br /><br />
                 @if (Model.Lista_Imovel.Count > 0) {
                     <table style="font-size:12px;width:730px">
                         <thead style="background-color:darkred;color:whitesmoke">
@@ -109,7 +164,7 @@
                                 <td style="width:260px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome)</td>
                                 <td style="width:370px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Endereco)</td>
                                 <td style="width:50px;text-align:right">
-                                    <a href="@Url.Action("CadImovelqryE", "Imovel", new { id = Functions.Encrypt(item.Codigo).Replace('/', '-') })" title="Consultar"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                                    <a href="@Url.Action("CadImovelqryC", "Imovel", new { id = Functions.Encrypt(item.Codigo).Replace('/', '-') })" title="Consultar"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
                                 </td>
                             </tr>
                         }
@@ -119,9 +174,7 @@
                 </div>
             <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
             <div class="card-footer">
-                @Html.ActionLink("Pesquisar imóvel pela inscrição cadastral", "CadImovelqryI", "Imovel", null, new { @class = "actionlink" })<br />
-                @Html.ActionLink("Pesquisar imóvel pelo proprietário", "CadImovelqryP", "Imovel", null, new { @class = "actionlink" })<br />
-                @Html.ActionLink("Pesquisar imóvel pelo endereço", "CadImovelqryE", "Imovel", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
             </div>
         </div>
@@ -144,9 +197,12 @@
         function ValidateForm() {
             ClearError();
             var _cod = document.getElementById('codigo').value;
+            var _nome = document.getElementById('nome').value;
+            var _endereco = document.getElementById('endereco').value;
+            var _numero = document.getElementById('numero').value;
 
-            if (_cod == "" || parseInt(_cod) == 0) {
-                document.getElementById('errorLabel').innerHTML = "Digite o código do imóvel";
+            if ( parseInt(_cod) == 0  && _nome=="" && _endereco=="" && parseInt(_numero)==0  ) {
+                document.getElementById('errorLabel').innerHTML = "Nenhum critério selecionado!";
                 return false;
             }
         }

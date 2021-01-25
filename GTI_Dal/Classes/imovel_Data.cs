@@ -838,7 +838,7 @@ namespace GTI_Dal.Classes {
                     Sql = Sql.Where(p => p.NomeLogradouro.Contains(PartialEndereco));
                 if (Numero > 0)
                     Sql = Sql.Where(p => p.Numero == Numero);
-                Sql = Sql.OrderBy(p => p.Codigo;
+                Sql = Sql.OrderBy(p => p.Codigo);
 
                 List<ImovelStruct> Lista = new List<ImovelStruct>();
                 foreach (var item in Sql) {
