@@ -885,6 +885,8 @@
     <Content Include="Views\Imovel\CadImovelqryC.cshtml" />
     <Content Include="Views\Protocolo\ProcessoqryC.cshtml" />
     <Content Include="Views\Protocolo\ProcessoData.cshtml" />
+    <Content Include="Views\Imovel\AutoInfracao_ter_add.cshtml" />
+    <Content Include="Views\Imovel\AutoInfracao_ter_query.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

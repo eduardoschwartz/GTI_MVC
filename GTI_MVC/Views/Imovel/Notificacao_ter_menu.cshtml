@@ -62,9 +62,10 @@
         <div class="card">
             <div class="card-header">Notificação de Limpeza de Terreno</div>
             <div class="card-body">
-                @*<span style="color:brown;font-weight:bold;font-style:italic">Notificação de ISS contrução civil</span><br /><br />*@
                 @Html.ActionLink("Preencher nova notificação", "Notificacao_ter_add", "Imovel", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Consultar notificações emitidas", "Notificacao_ter_query", "Imovel", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Gerar auto de infração", "AutoInfracao_ter_add", "Imovel", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Consultar os autos de infrações emitidos", "AutoInfracao_ter_query", "Imovel", null, new { @class = "actionlink" })<br />
             </div>
             <div class="card-footer">
                 @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />

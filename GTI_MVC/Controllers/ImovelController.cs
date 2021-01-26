@@ -1550,7 +1550,74 @@ namespace GTI_Mvc.Controllers {
 
         }
 
-       
+        [Route("AutoInfracao_ter_add")]
+        [HttpGet]
+        public ActionResult AutoInfracao_ter_add() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            NotificacaoTerViewModel model = new NotificacaoTerViewModel();
+            List<int> Lista_Ano = new List<int>();
+            for (int i = 2020; i <= DateTime.Now.Year; i++) {
+                Lista_Ano.Add(i);
+            }
+            ViewBag.Lista_Ano = new SelectList(Lista_Ano);
+            model.Ano_Notificacao = DateTime.Now.Year;
+            return View(model);
+        }
+
+        [Route("AutoInfracao_ter_add")]
+        [HttpPost]
+        public ActionResult AutoInfracao_ter_add(NotificacaoTerViewModel model, string action) {
+            List<int> Lista_Ano = new List<int>();
+            for (int i = 2020; i <= DateTime.Now.Year; i++) {
+                Lista_Ano.Add(i);
+            }
+            ViewBag.Lista_Ano = new SelectList(Lista_Ano);
+
+            if (action == "btnCodigoCancel") {
+                model = new NotificacaoTerViewModel();
+                return View(model);
+            }
+
+            int _num = model.Numero_Notificacao;
+            int _ano = model.Ano_Notificacao;
+
+            if (action == "btnCodigoOK") {
+                Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+                bool _existe = imovelRepository.Existe_Notificacao_Terreno(_ano, _num);
+                if (!_existe) {
+                    ViewBag.Result = "Notificação não cadastrada.";
+                    return View(model);
+                }
+                Notificacao_Terreno_Struct _dados = imovelRepository.Retorna_Notificacao_Terreno(_ano, _num);
+                model.Codigo_cidadao = _dados.Codigo_cidadao;
+                model.Codigo_cidadao2 = _dados.Codigo_cidadao2;
+                model.Nome_Proprietario = _dados.Nome_Proprietario;
+                model.Nome_Proprietario2 = _dados.Nome_Proprietario2;
+                model.Codigo_Imovel = _dados.Codigo_Imovel;
+                model.Endereco_Local = _dados.Endereco_Local;
+                model.Endereco_Prop = _dados.Endereco_Prop;
+                model.Endereco_prop2 = _dados.Endereco_prop2;
+                model.Endereco_Entrega = _dados.Endereco_Entrega;
+                model.Endereco_entrega2 = _dados.Endereco_entrega2;
+                model.Data_Cadastro = _dados.Data_Cadastro;
+            }
+            model.Data_Notificacao = model.Data_Notificacao==null?model.Data_Cadastro.ToString("dd/MM/yyyy"):model.Data_Notificacao;
+
+            if (action == "btnValida") {
+                //bool _existe = imovelRepository.Existe_Notificacao_Terreno(model.Ano_Notificacao, model.Numero_Notificacao);
+                //if (_existe) {
+                    ViewBag.Result = "Nº de notificação já cadastrado.";
+                //    return View(model);
+                //} else {
+                //    Save_Notificacao_Terreno(model);
+                //    return RedirectToAction("Notificacao_ter_query");
+                //}
+            }
+
+            return View(model);
+        }
+
 
     }
 }

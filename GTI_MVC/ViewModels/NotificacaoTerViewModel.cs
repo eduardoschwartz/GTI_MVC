@@ -29,6 +29,9 @@ namespace GTI_Mvc.ViewModels {
         public string Rg2 { get; set; }
         public int Codigo_cidadao { get; set; }
         public int Codigo_cidadao2 { get; set; }
+        public string Data_Notificacao { get; set; }
+        public int Ano_Auto { get; set; }
+        public int Numero_Auto { get; set; }
 
     }
 
