@@ -547,6 +547,27 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Imovel(Codigo, Distrito,  Setor,  Quadra,  Lote,  Face,  Unidade,  SubUnidade, PartialName,  PartialEndereco,  Numero);
         }
 
+        public Exception Incluir_auto_infracao(Auto_infracao Reg) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Incluir_auto_infracao(Reg);
+            return ex;
+        }
+
+        public bool Existe_Auto_Infracao(int Ano, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Existe_Auto_Infracao(Ano, Numero);
+        }
+
+        public List<Auto_Infracao_Struct> Lista_Auto_Infracao(int Ano) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Lista_Auto_Infracao(Ano);
+        }
+
+        public Auto_Infracao_Struct Retorna_Auto_Infracao(int Ano, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Auto_Infracao(Ano,Numero);
+        }
+
         #region ITBI
         public List<Itbi_natureza> Lista_Itbi_Natureza() {
             Imovel_Data obj = new Imovel_Data(_connection);

@@ -1,12 +1,25 @@
-﻿using GTI_Models.Models;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GTI_Mvc.ViewModels {
-    public class NotificacaoTerViewModel {
+namespace GTI_Models.Models {
+    public class Auto_infracao {
+        [Key]
+        [Column(Order=1)]
+        public int Ano_auto { get; set; }
+        [Key]
+        [Column(Order = 2)]
+        public int Numero_auto { get; set; }
+        public int Ano_notificacao { get; set; }
+        public int Numero_notificacao { get; set; }
+        public DateTime Data_notificacao { get; set; }
+        public DateTime Data_cadastro { get; set; }
+        public int Userid { get; set; }
+    }
+
+    public class Auto_Infracao_Struct {
+        public int Ano_Auto { get; set; }
+        public int Numero_Auto { get; set; }
         public int Ano_Notificacao { get; set; }
         public int Numero_Notificacao { get; set; }
         public string AnoNumero { get; set; }
@@ -18,9 +31,10 @@ namespace GTI_Mvc.ViewModels {
         public string Endereco_Local { get; set; }
         public string Endereco_Entrega { get; set; }
         public string Endereco_Prop { get; set; }
-        public int Prazo { get; set; }
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime Data_Cadastro { get; set; }
+        public DateTime Data_Notificacao { get; set; }
+        public int Userid { get; set; }
+        public string UsuarioNome { get; set; }
         public string Nome_Proprietario2 { get; set; }
         public string Endereco_prop2 { get; set; }
         public string Endereco_entrega2 { get; set; }
@@ -30,16 +44,6 @@ namespace GTI_Mvc.ViewModels {
         public string Rg2 { get; set; }
         public int Codigo_cidadao { get; set; }
         public int Codigo_cidadao2 { get; set; }
-        public string Data_Notificacao { get; set; }
-        public int Ano_Auto { get; set; }
-        public int Numero_Auto { get; set; }
-
-    }
-
-    public class NotificacaoTerQueryViewModel {
-        public int Ano_Selected { get; set; }
-        public int Situacao_Selected { get; set; }
-        public List<NotificacaoTerViewModel> ListaNotificacao { get; set; }
     }
 
 }

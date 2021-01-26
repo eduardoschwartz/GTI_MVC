@@ -12,7 +12,7 @@
   <xs:element name="dsNotificacaoTerreno" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsNotificacaoTerreno" msprop:Generator_UserDSName="dsNotificacaoTerreno">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="dtNotificacao" msprop:Generator_TableClassName="dtNotificacaoDataTable" msprop:Generator_TableVarName="tabledtNotificacao" msprop:Generator_RowChangedName="dtNotificacaoRowChanged" msprop:Generator_TablePropName="dtNotificacao" msprop:Generator_RowDeletingName="dtNotificacaoRowDeleting" msprop:Generator_RowChangingName="dtNotificacaoRowChanging" msprop:Generator_RowEvHandlerName="dtNotificacaoRowChangeEventHandler" msprop:Generator_RowDeletedName="dtNotificacaoRowDeleted" msprop:Generator_RowClassName="dtNotificacaoRow" msprop:Generator_UserTableName="dtNotificacao" msprop:Generator_RowEvArgName="dtNotificacaoRowChangeEvent">
+        <xs:element name="dtNotificacao" msprop:Generator_TableClassName="dtNotificacaoDataTable" msprop:Generator_TableVarName="tabledtNotificacao" msprop:Generator_TablePropName="dtNotificacao" msprop:Generator_RowDeletingName="dtNotificacaoRowDeleting" msprop:Generator_RowChangingName="dtNotificacaoRowChanging" msprop:Generator_RowEvHandlerName="dtNotificacaoRowChangeEventHandler" msprop:Generator_RowDeletedName="dtNotificacaoRowDeleted" msprop:Generator_UserTableName="dtNotificacao" msprop:Generator_RowChangedName="dtNotificacaoRowChanged" msprop:Generator_RowEvArgName="dtNotificacaoRowChangeEvent" msprop:Generator_RowClassName="dtNotificacaoRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="AnoNumero" msprop:Generator_ColumnVarNameInTable="columnAnoNumero" msprop:Generator_ColumnPropNameInRow="AnoNumero" msprop:Generator_ColumnPropNameInTable="AnoNumeroColumn" msprop:Generator_UserColumnName="AnoNumero" type="xs:string" minOccurs="0" />
@@ -35,6 +35,8 @@
               <xs:element name="Rg2" msprop:Generator_ColumnVarNameInTable="columnRg2" msprop:Generator_ColumnPropNameInRow="Rg2" msprop:Generator_ColumnPropNameInTable="Rg2Column" msprop:Generator_UserColumnName="Rg2" type="xs:string" minOccurs="0" />
               <xs:element name="Codigo_cidadao" msprop:Generator_ColumnVarNameInTable="columnCodigo_cidadao" msprop:Generator_ColumnPropNameInRow="Codigo_cidadao" msprop:Generator_ColumnPropNameInTable="Codigo_cidadaoColumn" msprop:Generator_UserColumnName="Codigo_cidadao" type="xs:int" minOccurs="0" />
               <xs:element name="Codigo_cidadao2" msprop:Generator_ColumnVarNameInTable="columnCodigo_cidadao2" msprop:Generator_ColumnPropNameInRow="Codigo_cidadao2" msprop:Generator_ColumnPropNameInTable="Codigo_cidadao2Column" msprop:Generator_UserColumnName="Codigo_cidadao2" type="xs:int" minOccurs="0" />
+              <xs:element name="AnoNumeroAuto" msprop:Generator_ColumnVarNameInTable="columnAnoNumeroAuto" msprop:Generator_ColumnPropNameInRow="AnoNumeroAuto" msprop:Generator_ColumnPropNameInTable="AnoNumeroAutoColumn" msprop:Generator_UserColumnName="AnoNumeroAuto" type="xs:string" minOccurs="0" />
+              <xs:element name="Data_Notificacao" msprop:Generator_ColumnVarNameInTable="columnData_Notificacao" msprop:Generator_ColumnPropNameInRow="Data_Notificacao" msprop:Generator_ColumnPropNameInTable="Data_NotificacaoColumn" msprop:Generator_UserColumnName="Data_Notificacao" type="xs:dateTime" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

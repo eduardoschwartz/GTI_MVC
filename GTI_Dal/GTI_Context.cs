@@ -174,5 +174,6 @@ namespace GTI_Dal {
         public DbSet<Rodo_uso_plataforma> Rodo_Uso_Palataforma { get; set; }
         public DbSet<Rodo_uso_plataforma_user> Rodo_Uso_Palataforma_User { get; set; }
         public DbSet<Notificacao_terreno> Notificacao_Terreno { get; set; }
-    }
+        public DbSet<Auto_infracao> Auto_Infracao { get; set; }
+        }
 }

@@ -319,6 +319,10 @@ namespace GTI_MVC.Datasets {
             
             private global::System.Data.DataColumn columnCodigo_cidadao2;
             
+            private global::System.Data.DataColumn columnAnoNumeroAuto;
+            
+            private global::System.Data.DataColumn columnData_Notificacao;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public dtNotificacaoDataTable() {
@@ -514,6 +518,22 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn AnoNumeroAutoColumn {
+                get {
+                    return this.columnAnoNumeroAuto;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn Data_NotificacaoColumn {
+                get {
+                    return this.columnData_Notificacao;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -569,7 +589,9 @@ namespace GTI_MVC.Datasets {
                         string Cpf2, 
                         string Rg2, 
                         int Codigo_cidadao, 
-                        int Codigo_cidadao2) {
+                        int Codigo_cidadao2, 
+                        string AnoNumeroAuto, 
+                        System.DateTime Data_Notificacao) {
                 dtNotificacaoRow rowdtNotificacaoRow = ((dtNotificacaoRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         AnoNumero,
@@ -591,7 +613,9 @@ namespace GTI_MVC.Datasets {
                         Cpf2,
                         Rg2,
                         Codigo_cidadao,
-                        Codigo_cidadao2};
+                        Codigo_cidadao2,
+                        AnoNumeroAuto,
+                        Data_Notificacao};
                 rowdtNotificacaoRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowdtNotificacaoRow);
                 return rowdtNotificacaoRow;
@@ -634,6 +658,8 @@ namespace GTI_MVC.Datasets {
                 this.columnRg2 = base.Columns["Rg2"];
                 this.columnCodigo_cidadao = base.Columns["Codigo_cidadao"];
                 this.columnCodigo_cidadao2 = base.Columns["Codigo_cidadao2"];
+                this.columnAnoNumeroAuto = base.Columns["AnoNumeroAuto"];
+                this.columnData_Notificacao = base.Columns["Data_Notificacao"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -679,6 +705,10 @@ namespace GTI_MVC.Datasets {
                 base.Columns.Add(this.columnCodigo_cidadao);
                 this.columnCodigo_cidadao2 = new global::System.Data.DataColumn("Codigo_cidadao2", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCodigo_cidadao2);
+                this.columnAnoNumeroAuto = new global::System.Data.DataColumn("AnoNumeroAuto", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnAnoNumeroAuto);
+                this.columnData_Notificacao = new global::System.Data.DataColumn("Data_Notificacao", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnData_Notificacao);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1141,6 +1171,38 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string AnoNumeroAuto {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtNotificacao.AnoNumeroAutoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'AnoNumeroAuto\' in table \'dtNotificacao\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtNotificacao.AnoNumeroAutoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public System.DateTime Data_Notificacao {
+                get {
+                    try {
+                        return ((global::System.DateTime)(this[this.tabledtNotificacao.Data_NotificacaoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Data_Notificacao\' in table \'dtNotificacao\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtNotificacao.Data_NotificacaoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsAnoNumeroNull() {
                 return this.IsNull(this.tabledtNotificacao.AnoNumeroColumn);
             }
@@ -1377,6 +1439,30 @@ namespace GTI_MVC.Datasets {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetCodigo_cidadao2Null() {
                 this[this.tabledtNotificacao.Codigo_cidadao2Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsAnoNumeroAutoNull() {
+                return this.IsNull(this.tabledtNotificacao.AnoNumeroAutoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetAnoNumeroAutoNull() {
+                this[this.tabledtNotificacao.AnoNumeroAutoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsData_NotificacaoNull() {
+                return this.IsNull(this.tabledtNotificacao.Data_NotificacaoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetData_NotificacaoNull() {
+                this[this.tabledtNotificacao.Data_NotificacaoColumn] = global::System.Convert.DBNull;
             }
         }
         

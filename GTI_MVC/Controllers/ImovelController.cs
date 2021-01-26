@@ -1320,7 +1320,12 @@ namespace GTI_Mvc.Controllers {
                 if (_existe) {
                     ViewBag.Result = "Nº de notificação já cadastrado.";
                     return View(model);
-                } else { 
+                } else {
+                    int _userid = Convert.ToInt32(Session["hashid"]);
+                    if (_userid == 0) {
+                        ViewBag.Result = "Sua sessão foi encerrada, favor fazer login novamente.";
+                        return View(model);
+                    }
                     Save_Notificacao_Terreno(model);
                     return RedirectToAction("Notificacao_ter_query");
                 }
@@ -1562,6 +1567,7 @@ namespace GTI_Mvc.Controllers {
             }
             ViewBag.Lista_Ano = new SelectList(Lista_Ano);
             model.Ano_Notificacao = DateTime.Now.Year;
+            model.Ano_Auto = DateTime.Now.Year;
             return View(model);
         }
 
@@ -1582,8 +1588,9 @@ namespace GTI_Mvc.Controllers {
             int _num = model.Numero_Notificacao;
             int _ano = model.Ano_Notificacao;
 
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             if (action == "btnCodigoOK") {
-                Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+
                 bool _existe = imovelRepository.Existe_Notificacao_Terreno(_ano, _num);
                 if (!_existe) {
                     ViewBag.Result = "Notificação não cadastrada.";
@@ -1605,20 +1612,163 @@ namespace GTI_Mvc.Controllers {
             model.Data_Notificacao = model.Data_Notificacao==null?model.Data_Cadastro.ToString("dd/MM/yyyy"):model.Data_Notificacao;
 
             if (action == "btnValida") {
-                //bool _existe = imovelRepository.Existe_Notificacao_Terreno(model.Ano_Notificacao, model.Numero_Notificacao);
-                //if (_existe) {
-                    ViewBag.Result = "Nº de notificação já cadastrado.";
-                //    return View(model);
-                //} else {
-                //    Save_Notificacao_Terreno(model);
-                //    return RedirectToAction("Notificacao_ter_query");
-                //}
+
+                int _num_auto = model.Numero_Auto;
+                int _ano_auto = model.Ano_Auto;
+                if (_num_auto==0) {
+                    ViewBag.Result = "Digite o nº do auto de infração.";
+                    return View(model);
+                }
+
+                bool _isdata = Functions.IsDate(model.Data_Notificacao);
+                if (!_isdata) {
+                    ViewBag.Result = "Data de infração inválida.";
+                    return View(model);
+                }
+
+                bool _existe = imovelRepository.Existe_Auto_Infracao(_ano_auto, _num_auto);
+                if (_existe) {
+                    ViewBag.Result = "Auto de infração já cadastrado.";
+                    return View(model);
+                } else {
+                    int _userid = Convert.ToInt32(Session["hashid"]);
+                    if (_userid == 0) {
+                        ViewBag.Result = "Sua sessão foi encerrada, favor fazer login novamente.";
+                        return View(model);
+                    }
+                    Save_Auto_Infracao(model);
+                    return RedirectToAction("AutoInfracao_ter_query");
+                }
             }
 
             return View(model);
         }
 
+        private ActionResult Save_Auto_Infracao(NotificacaoTerViewModel model) {
+            int _userid = Convert.ToInt32(Session["hashid"]);
+            Auto_infracao reg = new Auto_infracao() {
+                Ano_auto = model.Ano_Auto,
+                Numero_auto = model.Numero_Auto,
+                Ano_notificacao = model.Ano_Notificacao,
+                Numero_notificacao = model.Numero_Notificacao,
+                Data_notificacao = Convert.ToDateTime(model.Data_Notificacao),
+                Userid = _userid
+            };
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Exception ex = imovelRepository.Incluir_auto_infracao(reg);
+            return null;
 
+        }
+
+        [Route("AutoInfracao_ter_query")]
+        [HttpGet]
+        public ActionResult AutoInfracao_ter_query() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            List<int> Lista_Ano = new List<int>();
+            for (int i = 2020; i <= DateTime.Now.Year; i++) {
+                Lista_Ano.Add(i);
+            }
+            ViewBag.Lista_Ano = new SelectList(Lista_Ano);
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            List<NotificacaoTerViewModel> ListaNot = new List<NotificacaoTerViewModel>();
+            List<Auto_Infracao_Struct> _listaNot = imovelRepository.Lista_Auto_Infracao(DateTime.Now.Year);
+            foreach (Auto_Infracao_Struct item in _listaNot) {
+                NotificacaoTerViewModel reg = new NotificacaoTerViewModel() {
+                    AnoNumero = item.AnoNumero,
+                    Ano_Auto=item.Ano_Auto,
+                    Numero_Auto=item.Numero_Auto,
+                    AnoNumeroAuto=item.AnoNumeroAuto,
+                    Ano_Notificacao = item.Ano_Notificacao,
+                    Numero_Notificacao = item.Numero_Notificacao,
+                    Codigo_Imovel = item.Codigo_Imovel,
+                    Data_Cadastro = item.Data_Cadastro,
+                    Nome_Proprietario = Functions.TruncateTo(item.Nome_Proprietario, 45),
+                    Situacao = item.Situacao
+                };
+                ListaNot.Add(reg);
+            }
+
+            NotificacaoTerQueryViewModel model = new NotificacaoTerQueryViewModel();
+            model.ListaNotificacao = ListaNot;
+            model.Ano_Selected = DateTime.Now.Year;
+            return View(model);
+        }
+
+        [Route("AutoInfracao_ter_query")]
+        [HttpPost]
+        public ActionResult AutoInfracao_ter_query(NotificacaoTerQueryViewModel model2) {
+            int _ano = model2.Ano_Selected;
+            List<int> Lista_Ano = new List<int>();
+            for (int i = 2020; i <= DateTime.Now.Year; i++) {
+                Lista_Ano.Add(i);
+            }
+            ViewBag.Lista_Ano = new SelectList(Lista_Ano);
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            List<NotificacaoTerViewModel> ListaNot = new List<NotificacaoTerViewModel>();
+            List<Notificacao_Terreno_Struct> _listaNot = imovelRepository.Lista_Notificacao_Terreno(_ano);
+            foreach (Notificacao_Terreno_Struct item in _listaNot) {
+                NotificacaoTerViewModel reg = new NotificacaoTerViewModel() {
+                    AnoNumero = item.AnoNumero,
+                    Ano_Notificacao = item.Ano_Notificacao,
+                    Numero_Notificacao = item.Numero_Notificacao,
+                    Codigo_Imovel = item.Codigo_Imovel,
+                    Data_Cadastro = item.Data_Cadastro,
+                    Prazo = item.Prazo,
+                    Nome_Proprietario = Functions.TruncateTo(item.Nome_Proprietario, 45),
+                    Situacao = item.Situacao
+                };
+                ListaNot.Add(reg);
+            }
+
+            NotificacaoTerQueryViewModel model = new NotificacaoTerQueryViewModel();
+            model.ListaNotificacao = ListaNot;
+            model.Ano_Selected = _ano;
+            return View(model);
+        }
+
+        public ActionResult AutoInfracao_print(int a, int n) {
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Auto_Infracao_Struct _not = imovelRepository.Retorna_Auto_Infracao(a, n);
+
+            List<DtNotificacao> ListaNot = new List<DtNotificacao>();
+
+            DtNotificacao reg = new DtNotificacao() {
+                AnoNumeroAuto=_not.AnoNumeroAuto,
+                AnoNumero = _not.AnoNumero,
+                Data_Notificacao=_not.Data_Notificacao,
+                Codigo = _not.Codigo_Imovel.ToString("00000"),
+                Nome = _not.Codigo_cidadao.ToString() + "-" + _not.Nome_Proprietario,
+                Cpf = _not.Cpf ?? "",
+                Rg = _not.Rg ?? "",
+                Endereco_Entrega = _not.Endereco_Entrega,
+                Endereco_entrega2 = _not.Endereco_entrega2,
+                Endereco_Local = _not.Endereco_Local,
+                Endereco_Prop = _not.Endereco_Prop,
+                Endereco_prop2 = _not.Endereco_prop2,
+                Usuario = _not.UsuarioNome,
+                Inscricao = _not.Inscricao,
+                Cpf2 = _not.Cpf2 ?? "",
+                Rg2 = _not.Rg2 ?? ""
+            };
+            if (_not.Codigo_cidadao2 > 0) {
+                reg.Nome2 = _not.Codigo_cidadao2.ToString() + "-" + _not.Nome_Proprietario2;
+            }
+            ListaNot.Add(reg);
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Auto_Infracao.rpt"));
+
+            try {
+                rd.SetDataSource(ListaNot);
+                Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                return File(stream, "application/pdf", "Auto_Infracao.pdf");
+            } catch {
+
+                throw;
+            }
+
+        }
     }
 }
 

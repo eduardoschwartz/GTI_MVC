@@ -2522,11 +2522,117 @@ namespace GTI_Dal.Classes {
                     };
                 }
                 return reg;
-
             }
-
         }
 
+        public Exception Incluir_auto_infracao(Auto_infracao Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+                object[] Parametros = new object[7];
+                Parametros[0] = new SqlParameter { ParameterName = "@ano_auto", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano_auto };
+                Parametros[1] = new SqlParameter { ParameterName = "@numero_auto", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_auto };
+                Parametros[2] = new SqlParameter { ParameterName = "@ano_notificacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano_notificacao };
+                Parametros[3] = new SqlParameter { ParameterName = "@numero_notificacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_notificacao };
+                Parametros[4] = new SqlParameter { ParameterName = "@data_notificacao", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_notificacao };
+                Parametros[5] = new SqlParameter { ParameterName = "@data_cadastro", SqlDbType = SqlDbType.SmallDateTime, SqlValue = DateTime.Now };
+                Parametros[6] = new SqlParameter { ParameterName = "@userid", SqlDbType = SqlDbType.Int, SqlValue = Reg.Userid };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO auto_infracao(ano_auto,numero_auto,ano_notificacao,numero_notificacao,data_notificacao,data_cadastro,userid) " +
+                                              "VALUES(@ano_auto,@numero_auto,@ano_notificacao,@numero_notificacao,@data_notificacao,@data_cadastro,@userid)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public bool Existe_Auto_Infracao(int Ano, int Numero) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from i in db.Auto_Infracao
+                           where i.Ano_auto == Ano && i.Numero_auto == Numero select i.Numero_notificacao).FirstOrDefault();
+                if (reg==0)
+                    return false;
+                else
+                    return true;
+            }
+        }
+
+        public List<Auto_Infracao_Struct> Lista_Auto_Infracao(int Ano) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from a in db.Auto_Infracao
+                           join n in db.Notificacao_Terreno on new {p1= a.Ano_notificacao,p2=a.Numero_notificacao } equals new {p1= n.Ano_not,p2=n.Numero_not } into an from n in an.DefaultIfEmpty()
+                           where a.Ano_notificacao == Ano
+                           orderby a.Numero_notificacao select new {
+                           AnoAuto=a.Ano_auto,NumeroAuto=a.Numero_auto, AnoNot = a.Ano_notificacao, NumeroNot = a.Numero_notificacao, Codigo = n.Codigo,Data_Notificaao=a.Data_notificacao, 
+                               Data_Cadastro = a.Data_cadastro, Usuario = a.Userid,  Nome = n.Nome
+                           }).ToList();
+                List<Auto_Infracao_Struct> Lista = new List<Auto_Infracao_Struct>();
+                foreach (var item in Sql) {
+                    Auto_Infracao_Struct reg = new Auto_Infracao_Struct() {
+                        Ano_Auto=item.AnoAuto,
+                        Numero_Auto=item.NumeroAuto,
+                        Ano_Notificacao = item.AnoNot,
+                        Numero_Notificacao = item.NumeroNot,
+                        Codigo_Imovel = item.Codigo,
+                        Data_Cadastro = item.Data_Cadastro,
+                        Data_Notificacao=item.Data_Notificaao,
+                        Userid = item.Usuario,
+                        AnoNumero = item.NumeroNot.ToString("0000") + "/" + item.AnoNot.ToString(),
+                        AnoNumeroAuto = item.NumeroAuto.ToString("0000") + "/" + item.AnoAuto.ToString(),
+                        Nome_Proprietario = item.Nome
+                    };
+                    Lista.Add(reg);
+                }
+                return Lista;
+            }
+        }
+
+        public Auto_Infracao_Struct Retorna_Auto_Infracao(int Ano, int Numero) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from a in db.Auto_Infracao
+                           join n in db.Notificacao_Terreno on new { p1 = a.Ano_notificacao, p2 = a.Numero_notificacao } equals new { p1 = n.Ano_not, p2 = n.Numero_not } into an from n in an.DefaultIfEmpty()
+                           join u in db.Usuario on a.Userid equals u.Id into tu from u in tu
+                           where a.Ano_auto == Ano && a.Numero_auto==Numero select new {
+                               AnoAuto = a.Ano_auto, NumeroAuto = a.Numero_auto, AnoNot = a.Ano_notificacao, NumeroNot = a.Numero_notificacao, Codigo = n.Codigo, Data_Notificaao = a.Data_notificacao,
+                               Data_Cadastro = a.Data_cadastro, Usuario = a.Userid, Nome = n.Nome, Endereco_entrega = n.Endereco_entrega, Endereco_prop = n.Endereco_prop, Endereco_Infracao = n.Endereco_infracao,
+                               Usuario_Nome = u.Nomecompleto, Inscricao = n.Inscricao, n.Nome2, n.Codigo_cidadao, n.Codigo_cidadao2, n.Cpf, n.Rg, n.Cpf2, n.Rg2, n.Endereco_entrega2, n.Endereco_prop2
+
+                           }).FirstOrDefault();
+                Auto_Infracao_Struct reg = null;
+                if (Sql != null) {
+                    reg = new Auto_Infracao_Struct() {
+                        Ano_Auto=Sql.AnoAuto,
+                        Numero_Auto=Sql.NumeroAuto,
+                        Ano_Notificacao = Sql.AnoNot,
+                        Numero_Notificacao = Sql.NumeroNot,
+                        AnoNumero = Sql.NumeroNot.ToString("0000") + "/" + Sql.AnoNot.ToString(),
+                        AnoNumeroAuto = Sql.NumeroAuto.ToString("0000") + "/" + Sql.AnoAuto.ToString(),
+                        Codigo_Imovel = Sql.Codigo,
+                        Data_Cadastro = Sql.Data_Cadastro,
+                        Data_Notificacao=Sql.Data_Notificaao,
+                        Userid = Sql.Usuario,
+                        Nome_Proprietario = Sql.Nome,
+                        Endereco_Entrega = Sql.Endereco_entrega,
+                        Endereco_entrega2 = Sql.Endereco_entrega2,
+                        Endereco_Local = Sql.Endereco_Infracao,
+                        Endereco_Prop = Sql.Endereco_prop,
+                        Endereco_prop2 = Sql.Endereco_prop2,
+                        UsuarioNome = Sql.Usuario_Nome,
+                        Inscricao = Sql.Inscricao,
+                        Nome_Proprietario2 = Sql.Nome2,
+                        Codigo_cidadao = Sql.Codigo_cidadao,
+                        Codigo_cidadao2 = Sql.Codigo_cidadao2,
+                        Cpf = Sql.Cpf,
+                        Cpf2 = Sql.Cpf2,
+                        Rg = Sql.Rg,
+                        Rg2 = Sql.Rg2
+                    };
+                }
+                return reg;
+            }
+        }
 
     }//end class
 }
