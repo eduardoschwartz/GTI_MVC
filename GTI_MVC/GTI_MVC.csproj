@@ -395,6 +395,12 @@
       <DependentUpon>Certidao_Isencao_Valida.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Auto_Infracao.cs">
+      <DependentUpon>Auto_Infracao.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Reports\Notificacao_Terreno.cs">
       <DependentUpon>Notificacao_Terreno.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -993,6 +999,10 @@
     <EmbeddedResource Include="Reports\Certidao_Isencao_Valida.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Isencao_Valida.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Auto_Infracao.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Auto_Infracao.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Notificacao_Terreno.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
