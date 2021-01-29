@@ -1125,7 +1125,8 @@ namespace GTI_Mvc.Controllers {
                     reg.Digitavel = _linha_digitavel;
                     reg.Codbarra = _codigo_barra;
                     reg.Nossonumero = _convenio + String.Format("{0:D10}", Convert.ToInt64(reg.Numdoc));
-                    ListaBoleto.Add(reg);
+                    if (Convert.ToDateTime(Convert.ToDateTime(reg.Datavencto).ToString("dd/MM/yyyy")) >= Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy")))
+                        ListaBoleto.Add(reg);
                     _index++;
                 }
 
@@ -1317,7 +1318,8 @@ namespace GTI_Mvc.Controllers {
                     reg.Digitavel = _linha_digitavel;
                     reg.Codbarra = _codigo_barra;
                     reg.Nossonumero = _convenio + String.Format("{0:D10}", Convert.ToInt64(reg.Numdoc));
-                    ListaBoleto.Add(reg);
+                    if (Convert.ToDateTime(Convert.ToDateTime(reg.Datavencto).ToString("dd/MM/yyyy")) >= Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy")))
+                        ListaBoleto.Add(reg);
 
                     _index++;
                 }
