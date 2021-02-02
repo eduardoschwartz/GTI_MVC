@@ -192,10 +192,10 @@ namespace GTI_Dal.Classes {
                     _cpf_cnpj = _cidadao.Cpf;
                     _rg = _cidadao.Rg;
                     _ativo = true;
+                    Endereco_Data endereco_Class = new Endereco_Data(_connection);
                     if (_cidadao.EtiquetaC == "S") {
                         if (_cidadao.CodigoCidadeC == 413) {
                             _endereco = _cidadao.EnderecoC.ToString();
-                            Endereco_Data endereco_Class = new Endereco_Data(_connection);
                             if (_cidadao.NumeroC == null || _cidadao.NumeroC == 0 || _cidadao.CodigoLogradouroC == null || _cidadao.CodigoLogradouroC == 0)
                                 _cep = "14870000";
                             else
@@ -206,13 +206,17 @@ namespace GTI_Dal.Classes {
                         }
                         _numero = (int)_cidadao.NumeroC;
                         _complemento = _cidadao.ComplementoC;
-                        _bairro = _cidadao.NomeBairroC;
+                        if (_cidadao.NomeCidadeC.ToUpper() == "JABOTICABAL") {
+                            Bairro b = endereco_Class.RetornaLogradouroBairro((int)_cidadao.CodigoLogradouroC, (short)_numero);
+                            _bairro = b.Descbairro??"";
+                        } else
+                            _bairro = _cidadao.NomeBairroC??"";
                         _cidade = _cidadao.NomeCidadeC;
                         _uf = _cidadao.UfC;
                     } else {
                         if (_cidadao.CodigoCidadeR == 413) {
                             _endereco = _cidadao.EnderecoR??"";
-                            Endereco_Data endereco_Class = new Endereco_Data(_connection);
+                            
                             if (_cidadao.NumeroR == null || _cidadao.NumeroR == 0 || _cidadao.CodigoLogradouroR == null || _cidadao.CodigoLogradouroR == 0)
                                 _cep = "14870000";
                             else
@@ -223,7 +227,11 @@ namespace GTI_Dal.Classes {
                         }
                         _numero =  _cidadao.NumeroR==null?0: (int)_cidadao.NumeroR;
                         _complemento = _cidadao.ComplementoR;
-                        _bairro = _cidadao.NomeBairroR;
+                        if (_cidadao.NomeCidadeR.ToUpper() == "JABOTICABAL") {
+                            Bairro b = endereco_Class.RetornaLogradouroBairro((int)_cidadao.CodigoLogradouroR, (short)_numero);
+                            _bairro = b.Descbairro??"";
+                        } else
+                            _bairro = _cidadao.NomeBairroR??"";
                         _cidade = _cidadao.NomeCidadeR;
                         _uf = _cidadao.UfR;
                     }

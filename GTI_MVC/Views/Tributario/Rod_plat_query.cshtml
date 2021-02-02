@@ -77,10 +77,10 @@
                     @*@Html.HiddenFor(m => m.DataDeTmp, new { @id = "DataDeTmp" })*@
 
                     Consulta ao uso da plataforma
-                    @*<label style="font-weight:normal;color:black;padding-left:200px">
+                    <label style="font-weight:normal;color:black;padding-left:200px">
                         Exercício:&nbsp;
                         @Html.DropDownListFor(m => m.Ano, ViewBag.ListaAno as SelectList, null, new { @id = "AnoDropDown" })
-                    </label>  <br />*@
+                    </label>  <br />
                     @Html.HiddenFor(m=>m.Codigo,new { id="Codigo"})
                     <Label>Empresa:&nbsp;@Model.Codigo.ToString()&nbsp;-&nbsp;@Model.Nome</Label>
 

@@ -2500,16 +2500,44 @@ namespace GTI_Mvc.Controllers {
             }
 
             ViewBag.ListaAno = new SelectList(ListaAno, "Codigo", "Descricao", ListaAno[ListaAno.Count - 1].Codigo);
+            if (model.Ano == 0)
+                model.Ano = DateTime.Now.Year;
             return View(model);
         }
 
         [Route("Rod_plat_query")]
         [HttpPost]
-        public ActionResult Rod_plat_query(string DataDe,string DataAte,string Codigo,string Qtde1,string Qtde2,string Qtde3) {
-            //            FormCollection collection=new FormCollection();
+        public ActionResult Rod_plat_query(RodoviariaViewModel model,  string DataDe,string DataAte,string Codigo,string Qtde1,string Qtde2,string Qtde3) {
+            //            FormCollection collection=new FormCollection
+            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
+            string _name = "";
+            int _cod = model.Codigo;
+            int _year = model.Ano;
             var data1 = DataDe;
             bool t = DateTime.TryParse(data1, out DateTime _data1);
             t = DateTime.TryParse(DataAte, out DateTime _data2);
+            if (DataDe == null) {
+                List<Rodo_uso_plataforma_Struct> Lista = tributarioRepository.Lista_Rodo_uso_plataforma(_cod, _year);
+                _name = cidadaoRepository.Retorna_Nome_Cidadao(_cod);
+                RodoviariaViewModel model2 = new RodoviariaViewModel {
+                    Codigo = _cod,
+                    Nome = _name,
+                    Lista_uso_plataforma = Lista
+                };
+                List<AnoList> ListaAno = new List<AnoList>();
+                for (int i = 2020; i <= DateTime.Now.Year; i++) {
+                    AnoList _reg = new AnoList() {
+                        Codigo = i,
+                        Descricao = i.ToString()
+                    };
+                    ListaAno.Add(_reg);
+                }
+
+                ViewBag.ListaAno = new SelectList(ListaAno, "Codigo", "Descricao", ListaAno[ListaAno.Count - 1].Codigo);
+                return View(model2);
+            }
+
             var cod = Codigo;
             int _codigo=Convert.ToInt32(cod);
             var qtde1 = Qtde1;
@@ -2522,7 +2550,6 @@ namespace GTI_Mvc.Controllers {
             int _userId =  Convert.ToInt32(Session["hashid"]);
             decimal _valorGuia =0;
 
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
             decimal _valor1 = tributarioRepository.Retorna_Valor_Tributo(_ano, 154);
             decimal _valor2 = tributarioRepository.Retorna_Valor_Tributo(_ano, 155);
             decimal _valor3 = tributarioRepository.Retorna_Valor_Tributo(_ano, 156);
@@ -2670,7 +2697,6 @@ namespace GTI_Mvc.Controllers {
             ex2 = tributarioRepository.Insert_Rodo_Uso_Plataforma(regR);
 
             //Enviar para registrar 
-            Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
             CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(_codigo);
             string _bairro = "", _endereco = "", _compl = "", _cidade = "JABOTICABAL";
             string _cpf_cnpj = string.IsNullOrWhiteSpace(_cidadao.Cnpj) ? _cidadao.Cpf : _cidadao.Cnpj;
