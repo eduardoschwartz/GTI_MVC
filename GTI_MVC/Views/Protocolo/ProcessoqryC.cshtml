@@ -67,6 +67,30 @@
         font-size: 13px;
         font-family: Arial, Helvetica, sans-serif;
     }
+    a:link {
+        color: darkslateblue;
+        background-color: transparent;
+        text-decoration: none;
+    }
+
+    a:visited {
+        color: darkslateblue;
+        background-color: transparent;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: red;
+        background-color: transparent;
+        text-decoration: underline;
+    }
+
+    a:active {
+        color: yellow;
+        background-color: transparent;
+        text-decoration: underline;
+    }
+
 </style>
 
 
@@ -152,15 +176,19 @@
                             </tr>
                         </thead>
                         @foreach (GTI_Models.Models.ProcessoLista item in Model.Lista_Processo) {
-                            <tr style="height:20px;">
-                                <td style="width:80px;text-align:center;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
-                                <td style="width:240px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Requerente)</td>
-                                <td style="width:240px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Assunto)</td>
-                                <td style="width:240px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Endereco)</td>
-                                <td style="width:50px;text-align:right">
-                                    <a href="@Url.Action("ProcessoqryC", "Protocolo", new { id = Functions.Encrypt(item.AnoNumero).Replace('/', '-') })" title="Consultar"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
-                                </td>
-                            </tr>
+                    <tr style="height:20px;">
+                        <td style="width:80px;text-align:center;font-weight:normal"><a href="@Url.Action("ProcessoqryC", "Protocolo", new { id = Functions.Encrypt(item.AnoNumero).Replace('/', '-') })" title="Consultar">@Html.DisplayFor(modelItem => item.AnoNumero)</a></td>
+                        <td style="width:240px;text-align:left;font-weight:normal"><a href="@Url.Action("ProcessoqryC", "Protocolo", new { id = Functions.Encrypt(item.AnoNumero).Replace('/', '-') })" title="Consultar">@Html.DisplayFor(modelItem => item.Requerente)</a></td>
+                        <td style="width:240px;text-align:left;font-weight:normal"><a href="@Url.Action("ProcessoqryC", "Protocolo", new { id = Functions.Encrypt(item.AnoNumero).Replace('/', '-') })" title="Consultar">@Html.DisplayFor(modelItem => item.Assunto)</a></td>
+                        <td style="width:240px;text-align:left;font-weight:normal"><a href="@Url.Action("ProcessoqryC", "Protocolo", new { id = Functions.Encrypt(item.AnoNumero).Replace('/', '-') })" title="Consultar">@Html.DisplayFor(modelItem => item.Endereco)</a></td>
+                        @*<td style="width:80px;text-align:center;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
+        <td style="width:240px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Requerente)</td>
+        <td style="width:240px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Assunto)</td>
+        <td style="width:240px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Endereco)</td>
+        <td style="width:50px;text-align:right">
+            <a href="@Url.Action("ProcessoqryC", "Protocolo", new { id = Functions.Encrypt(item.AnoNumero).Replace('/', '-') })" title="Consultar"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+        </td>*@
+                    </tr>
                         }
                     </table>
                 }

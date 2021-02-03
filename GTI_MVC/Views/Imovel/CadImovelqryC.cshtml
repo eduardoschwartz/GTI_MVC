@@ -67,118 +67,145 @@
         font-size: 13px;
         font-family: Arial, Helvetica, sans-serif;
     }
+
+    a:link {
+        color: darkslateblue;
+        background-color: transparent;
+        text-decoration: none;
+    }
+
+    a:visited {
+        color: darkslateblue;
+        background-color: transparent;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: red;
+        background-color: transparent;
+        text-decoration: underline;
+    }
+
+    a:active {
+        color: yellow;
+        background-color: transparent;
+        text-decoration: underline;
+    }
+
 </style>
 
 
 <div class="center">
 
     @using (Html.BeginForm("CadImovelqryC", "Imovel", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
-
-    <div class="container" style="width:800px">
-        <div class="card">
-            <div class="card-header">Consulta de imóveis</div>
-            <div class="card-body">
-                <table style="font-weight:normal;font-size:12px">
-                    <tr>
-                        <td>
-                            Código:
-                        </td>
-                        <td style="width:10px">
-                        </td>
-                        <td>
-                            Inscrição Cadastral
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            @if (Model.Codigo > 0) {
-                                @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)" })
-                            } else {
-                                @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)", @Value = "" })
-                            }
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-                            @Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @style = "width:250px;height:25px", @onKeyPress = "return formata(this, '§.§§.§§§§.§§§§§.§§.§§.§§§', event)" })
-                        </td>
-                    </tr>
-                    <tr style="height:10px">
-                        <td></td>
-                    </tr>
-                    </Table>
-                <table style="font-weight:normal;font-size:12px">
-                    <tr>
-                        <td>
-                            Nome do proprietário
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            @Html.TextBoxFor(m => m.NomeProprietario, new { @id = "nome", @style = "width:450px;height:25px" })
-                        </td>
-                    </tr>
-                    <tr style="height:10px">
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Endereço do imóvel
-                        </td>
-                        <td></td>
-                        <td>
-                            Número
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            @Html.TextBoxFor(m => m.NomeEndereco, new { @id = "endereco", @style = "width:450px;height:25px" })
-                        </td>
-                        <td style="width:10px"></td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(Model.Numero)) {
-                                @Html.TextBoxFor(m => m.Numero, new { @id = "numero", @style = "width:80px;height:25px", @onKeyPress = "return formata(this, '§§§§', event)" })
-                            } else {
-                                @Html.TextBoxFor(m => m.Numero, new { @id = "numero", @style = "width:80px;height:25px", @onKeyPress = "return formata(this, '§§§§', event)", @Value = "" })
-                            }
-
-                        </td>
-                    </tr>
-                </table>
-                <br />
-                <button id="btnCodigo" type="submit" class="btn btn-primary" name="action" value="btnCodigoOK">Consultar</button>
-                <br /><br />
-                @if (Model.Lista_Imovel.Count > 0) {
-                    <table style="font-size:12px;width:730px">
-                        <thead style="background-color:darkred;color:whitesmoke">
-                            <tr style="height:10px">
-                                <td style="width:50px;text-align:center">Código</td>
-                                <td style="width:260px" ;text-align:left">Proprietário</td>
-                                <td style="width:370px;text-align:left">Endereço</td>
-                                <td style="width:50px;text-align:center"></td>
-                            </tr>
-                        </thead>
-                        @foreach (GTI_Models.Models.ImovelLista item in Model.Lista_Imovel) {
-                            <tr style="height:20px;">
-                                <td style="width:50px;text-align:center;font-weight:normal">@Html.DisplayFor(modelItem => item.Codigo)</td>
-                                <td style="width:260px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome)</td>
-                                <td style="width:370px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Endereco)</td>
-                                <td style="width:50px;text-align:right">
-                                    <a href="@Url.Action("CadImovelqryC", "Imovel", new { id = Functions.Encrypt(item.Codigo).Replace('/', '-') })" title="Consultar"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
-                                </td>
-                            </tr>
-                        }
+        <div class="container" style="width:800px">
+            <div class="card">
+                <div class="card-header">Consulta de imóveis</div>
+                <div class="card-body">
+                    <table style="font-weight:normal;font-size:12px">
+                        <tr>
+                            <td>
+                                Código:
+                            </td>
+                            <td style="width:10px">
+                            </td>
+                            <td>
+                                Inscrição Cadastral
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @if (Model.Codigo > 0) {
+                                    @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)" })
+                                } else {
+                                    @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)", @Value = "" })
+                                }
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @style = "width:250px;height:25px", @onKeyPress = "return formata(this, '§.§§.§§§§.§§§§§.§§.§§.§§§', event)" })
+                            </td>
+                        </tr>
+                        <tr style="height:10px">
+                            <td></td>
+                        </tr>
                     </table>
-                }
+                    <table style="font-weight:normal;font-size:12px">
+                        <tr>
+                            <td>
+                                Nome do proprietário
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.TextBoxFor(m => m.NomeProprietario, new { @id = "nome", @style = "width:450px;height:25px" })
+                            </td>
+                        </tr>
+                        <tr style="height:10px">
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Endereço do imóvel
+                            </td>
+                            <td></td>
+                            <td>
+                                Número
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.TextBoxFor(m => m.NomeEndereco, new { @id = "endereco", @style = "width:450px;height:25px" })
+                            </td>
+                            <td style="width:10px"></td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(Model.Numero)) {
+                                    @Html.TextBoxFor(m => m.Numero, new { @id = "numero", @style = "width:80px;height:25px", @onKeyPress = "return formata(this, '§§§§', event)" })
+                                } else {
+                                    @Html.TextBoxFor(m => m.Numero, new { @id = "numero", @style = "width:80px;height:25px", @onKeyPress = "return formata(this, '§§§§', event)", @Value = "" })
+                                }
+
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                    <button id="btnCodigo" type="submit" class="btn btn-primary" name="action" value="btnCodigoOK">Consultar</button>
+                    <br /><br />
+                    @if (Model.Lista_Imovel.Count > 0) {
+                        <table style="font-size:12px;width:730px">
+                            <thead style="background-color:darkred;color:whitesmoke">
+                                <tr style="height:10px">
+                                    <td style="width:50px;text-align:center">Código</td>
+                                    <td style="width:260px" ;text-align:left">Proprietário</td>
+                                    <td style="width:370px;text-align:left">Endereço</td>
+                                    <td style="width:50px;text-align:center"></td>
+                                </tr>
+                            </thead>
+                            @foreach (GTI_Models.Models.ImovelLista item in Model.Lista_Imovel) {
+                                <tr style="height:20px;">
+                                    @*<td style="width:50px;text-align:center;font-weight:normal">@Html.DisplayFor(modelItem => item.Codigo)</td>*@
+                                    <td style="width:50px;text-align:center;font-weight:normal"><a href="@Url.Action("CadImovelqryC", "Imovel", new { id = Functions.Encrypt(item.Codigo).Replace('/', '-') })" title="Consultar">@Html.DisplayFor(modelItem => item.Codigo) </a></td>
+                                    @*<td style="width:260px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome)</td>
+                                        <td style="width:370px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Endereco)</td>*@
+                                    <td style="width:260px;text-align:left;font-weight:normal"><a href="@Url.Action("CadImovelqryC", "Imovel", new { id = Functions.Encrypt(item.Codigo).Replace('/', '-') })" title="Consultar">@Html.DisplayFor(modelItem => item.Nome) </a></td>
+                                    <td style="width:370px;text-align:left;font-weight:normal"><a href="@Url.Action("CadImovelqryC", "Imovel", new { id = Functions.Encrypt(item.Codigo).Replace('/', '-') })" title="Consultar">@Html.DisplayFor(modelItem => item.Endereco) </a></td>
+                                    @*<td style="width:50px;text-align:right">
+                                            <a href="@Url.Action("CadImovelqryC", "Imovel", new { id = Functions.Encrypt(item.Codigo).Replace('/', '-') })" title="Consultar"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                                        </td>*@
+                                </tr>
+                            }
+                        </table>
+                    }
 
                 </div>
-            <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
-            <div class="card-footer">
-                @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
-                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+                <div class="card-footer">
+                    @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink", style = "color:darkslateblue" })<br />
+                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink", style = "color:darkslateblue" })
+                </div>
             </div>
         </div>
-    </div>
 
     }
 </div>
