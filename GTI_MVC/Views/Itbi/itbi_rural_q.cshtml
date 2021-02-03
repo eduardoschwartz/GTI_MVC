@@ -92,15 +92,15 @@
 
                         </table>
                         @*<table style="font-size:13px;width:640px">
-                                <tr style="height:30px">
-                                    <td style="width:154px">
-                                        <label style="font-weight:normal;padding-top:7px">Proprietário principal:</label>
-                                    </td>
-                                    <td>
-                                        <label style="font-weight:normal;padding-top:7px;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Proprietario_Nome, new { @readonly = true, style = "width:470px;height:25px" })</label>
-                                    </td>
-                                </tr>
-                            </table>*@
+                    <tr style="height:30px">
+                        <td style="width:154px">
+                            <label style="font-weight:normal;padding-top:7px">Proprietário principal:</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;padding-top:7px;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Proprietario_Nome, new { @readonly = true, style = "width:470px;height:25px" })</label>
+                        </td>
+                    </tr>
+                </table>*@
                         @Html.HiddenFor(m => m.Dados_Imovel.Proprietario_Nome)
                         <label style="font-weight:normal;text-decoration:underline;color:brown;padding-top:7px">Dados do Imóvel:</label><br />
 
@@ -633,7 +633,7 @@
                             }
                         </table>
                     </div>
-                    <br />
+
 
                 </div>
 
@@ -644,21 +644,24 @@
                         <label style="font-weight:normal;color:red;padding-left:28px" id="errorLabel">@ViewBag.Error</label>
                     </div>
                 }
+                <div style="text-align:center">
+                    <br />
+                    <button type="submit" class="btn btn-success" data-balloon-length="medium" aria-label="Imprimir os dados do formulário." data-balloon-pos="up" name="button" value="print">Imprimir</button>
+                    @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo == 1) {
+                        <span style="padding-left:5px"><button type="submit" class="btn btn-primary" data-balloon-length="medium" aria-label="Liberar a guia para pagamento." data-balloon-pos="up" , name="button" value="guia">Liberar Guia</button></span>
+                    }
+                    @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo == 2) {
+                        <span style="padding-left:5px"><button type="submit" onclick="return cancelarCodigo()" class="btn btn-danger" data-balloon-length="medium" aria-label="Excluir a guia e reenviar o processo para análise." data-balloon-pos="up" , name="button" value="excluir_guia">Excluir a Guia</button></span>
+                    }
+
+                </div>
+                <br />
+                <div class="card-footer">
+                    <div>@Html.ActionLink("Consultar outro ITBI", "Itbi_query", "Itbi", null, new { @class = "actionlink" })</div>
+                    <div>@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })</div>
+                </div>
             </div>
         </div>
-        <div style="text-align:center">
-            <br />
-            <button type="submit" class="btn btn-success" data-balloon-length="medium" aria-label="Imprimir os dados do formulário." data-balloon-pos="up" name="button" value="print">Imprimir</button>
-            @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo == 1) {
-                <span style="padding-left:5px"><button type="submit" class="btn btn-primary" data-balloon-length="medium" aria-label="Liberar a guia para pagamento." data-balloon-pos="up" , name="button" value="guia">Liberar Guia</button></span>
-            }
-            @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo == 2) {
-                <span style="padding-left:5px"><button type="submit" onclick="return cancelarCodigo()" class="btn btn-danger" data-balloon-length="medium" aria-label="Excluir a guia e reenviar o processo para análise." data-balloon-pos="up" , name="button" value="excluir_guia">Excluir a Guia</button></span>
-            }
-        </div>
-
-        <div style="padding-left:15px">@Html.ActionLink("Consultar outro ITBI", "Itbi_query", "Itbi", null, new { @class = "actionlink" })</div>
-        <div style="padding-left:15px">@Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })</div>
     }
 
 </div>
