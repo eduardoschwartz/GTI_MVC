@@ -103,7 +103,8 @@
                 </table>
 
                 <br />
-                <button type="submit" class="btn btn-primary"> Imprimir</button>
+                <button type="submit" class="btn btn-primary" onclick="return confirm('Boletos liberados até as 16:30h podem ser quitados a partir do dia seguinte de sua liberação, após às 16:30h será necessário mais um dia útil para o registro. Você deseja emitir o boleto?')"> Imprimir</button>
+
             </div>
             <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
             <div class="card-footer">

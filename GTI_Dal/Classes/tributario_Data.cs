@@ -2366,6 +2366,19 @@ Proximo:;
             }
         }
 
+        public Exception Alterar_Valor_Documento(int Numero,decimal Valor) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Numdocumento d = db.Numdocumento.First(i => i.numdocumento ==Numero);
+                d.Valorguia = Valor ;
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
         public Exception Alterar_Pagina_Livro(int _codigo, short _ano, short _lanc, short _seq, byte _parc, byte _compl, int _pagina) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 Debitoparcela d = db.Debitoparcela.First(i => i.Codreduzido == _codigo && i.Anoexercicio == _ano && i.Codlancamento == _lanc && i.Seqlancamento == _seq && i.Numparcela == _parc && i.Codcomplemento == _compl);

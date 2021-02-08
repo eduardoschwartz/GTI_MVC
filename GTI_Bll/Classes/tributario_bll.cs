@@ -1558,6 +1558,12 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Ano_Notificacao();
         }
 
+        public Exception Alterar_Valor_Documento(int Numero, decimal Valor) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            Exception ex = obj.Alterar_Valor_Documento(Numero,Valor);
+            return ex;
+        }
+
     }//end class
 }
 

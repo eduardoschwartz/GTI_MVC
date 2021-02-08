@@ -976,16 +976,6 @@ namespace GTI_Mvc.Controllers {
             bool _temtaxa = Lista_Taxa.Count > 0 ? true : false;
             bool _temiss = Lista_Iss.Count > 0 ? true : false;
 
-            //if (_temtaxa) {
-            //    if(Lista_Taxa[0].Data_Base.ToString("dd/MM/yyyy")!="01/01/" + DateTime.Now.Year.ToString()) {
-            //        _temtaxa = false;
-            //    }
-            //}
-            //if (_temiss) {
-            //    if (Lista_Iss[0].Data_Base.ToString("dd/MM/yyyy") != "01/01/" + DateTime.Now.Year.ToString()) {
-            //        _temiss = false;
-            //    }
-            //}
             int _novo_documento = 0;
             List<DebitoStructure> Lista_Unificada = new List<DebitoStructure>();
             foreach (DebitoStructure item in Lista_Taxa) {//carrega a lista unificada com os dados das taxas
@@ -1007,7 +997,7 @@ namespace GTI_Mvc.Controllers {
                     Valorguia = item.Soma_Principal,
                     Emissor = "Gti.Web/2ViaTL",
                     Datadocumento = DateTime.Now,
-                    Registrado = true,
+                    Registrado = false,
                     Percisencao = 0
                 };
                 regDoc.Percisencao = 0;
@@ -1015,6 +1005,24 @@ namespace GTI_Mvc.Controllers {
                 reg.Numero_Documento = _novo_documento;
                 item.Numero_Documento = _novo_documento;
                 Lista_Unificada.Add(reg);
+
+                //grava o documento na parcela
+                Parceladocumento regParc = new Parceladocumento {
+                    Codreduzido = item.Codigo_Reduzido,
+                    Anoexercicio = Convert.ToInt16(item.Ano_Exercicio),
+                    Codlancamento = Convert.ToInt16(item.Codigo_Lancamento),
+                    Seqlancamento = Convert.ToInt16(item.Sequencia_Lancamento),
+                    Numparcela = Convert.ToByte(item.Numero_Parcela),
+                    Codcomplemento = Convert.ToByte(item.Complemento),
+                    Numdocumento = _novo_documento,
+                    Valorjuros = 0,
+                    Valormulta = 0,
+                    Valorcorrecao = 0,
+                    Plano = 0
+                };
+                Exception ex= tributarioRepository.Insert_Parcela_Documento(regParc);
+                if (item.Data_Vencimento >= Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy")))
+                    _SomaTaxa += item.Soma_Principal;
             }
 
             if (_temiss) {
@@ -1027,8 +1035,30 @@ namespace GTI_Mvc.Controllers {
                             if (item.Ano_Exercicio == item2.Ano_Exercicio  && item.Numero_Parcela==item2.Numero_Parcela ) {
                                 _valor_principal = item2.Soma_Principal;
                                 Lista_Unificada[_index].Soma_Principal += _valor_principal;
-                                if (item.Numero_Parcela > 0)
-                                    _SomaISS += item2.Soma_Principal;
+                                if (item2.Numero_Parcela > 0) {
+                                    if (item2.Data_Vencimento >= Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy")))
+                                        _SomaISS += item2.Soma_Principal;
+                                    Numdocumento _doc = tributarioRepository.Retorna_Dados_Documento((int)item.Numero_Documento);
+                                    decimal _valorDoc = (decimal)_doc.Valorguia;
+                                    _valorDoc += item2.Soma_Principal;
+                                    //Altera valor do documento
+                                    Exception ex = tributarioRepository.Alterar_Valor_Documento((int)item.Numero_Documento,_valorDoc);
+                                    //grava o documento na parcela
+                                    Parceladocumento regParc = new Parceladocumento {
+                                        Codreduzido = item2.Codigo_Reduzido,
+                                        Anoexercicio = Convert.ToInt16(item2.Ano_Exercicio),
+                                        Codlancamento = Convert.ToInt16(item2.Codigo_Lancamento),
+                                        Seqlancamento = Convert.ToInt16(item2.Sequencia_Lancamento),
+                                        Numparcela = Convert.ToByte(item2.Numero_Parcela),
+                                        Codcomplemento = Convert.ToByte(item2.Complemento),
+                                        Numdocumento = (int)item.Numero_Documento,
+                                        Valorjuros = 0,
+                                        Valormulta = 0,
+                                        Valorcorrecao = 0,
+                                        Plano = 0
+                                    };
+                                    ex = tributarioRepository.Insert_Parcela_Documento(regParc);
+                                }
                                 _index++;
                                 break;
                             }
@@ -1036,6 +1066,8 @@ namespace GTI_Mvc.Controllers {
                     }
                 } else { //se não tiver taxa, a lista unficada conterá apenas os dados de iss
                     foreach (DebitoStructure item in Lista_Iss) {
+                        if (item.Data_Vencimento >= Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy")))
+                            _SomaISS += item.Soma_Principal;
                         DebitoStructure reg = new DebitoStructure();
                         reg.Ano_Exercicio = item.Ano_Exercicio;
                         reg.Codigo_Lancamento = item.Codigo_Lancamento;
@@ -1054,15 +1086,30 @@ namespace GTI_Mvc.Controllers {
                             Valorguia = item.Soma_Principal,
                             Emissor = "Gti.Web/2ViaTL",
                             Datadocumento = DateTime.Now,
-                            Registrado = true,
+                            Registrado = false,
                             Percisencao = 0
                         };
                         regDoc.Percisencao = 0;
                         _novo_documento = tributarioRepository.Insert_Documento(regDoc);
                         reg.Numero_Documento = _novo_documento;
                         item.Numero_Documento = _novo_documento;
-
                         Lista_Unificada.Add(reg);
+
+                        //grava o documento na parcela
+                        Parceladocumento regParc = new Parceladocumento {
+                            Codreduzido = item.Codigo_Reduzido,
+                            Anoexercicio = Convert.ToInt16(item.Ano_Exercicio),
+                            Codlancamento = Convert.ToInt16(item.Codigo_Lancamento),
+                            Seqlancamento = Convert.ToInt16(item.Sequencia_Lancamento),
+                            Numparcela = Convert.ToByte(item.Numero_Parcela),
+                            Codcomplemento = Convert.ToByte(item.Complemento),
+                            Numdocumento = _novo_documento,
+                            Valorjuros = 0,
+                            Valormulta = 0,
+                            Valorcorrecao = 0,
+                            Plano = 0
+                        };
+                        Exception ex = tributarioRepository.Insert_Parcela_Documento(regParc);
                     }
                 }
             }
@@ -1081,33 +1128,6 @@ namespace GTI_Mvc.Controllers {
                         _descricao_lancamento = "ISS FIXO";
                 }
                 int nSid = Functions.GetRandomNumber();
-
-          
-                    //grava o documento na parcela
-                    //Registrar os novos documentos
-                    //Ficha_compensacao_documento ficha = new Ficha_compensacao_documento {
-                    //    Nome = _nome.Length > 40 ? _nome.Substring(0, 40) : _nome,
-                    //    Endereco = _endereco.Length > 40 ? _endereco.Substring(0, 40) : _endereco,
-                    //    Bairro = _bairro.Length > 15 ? _bairro.Substring(0, 15) : _bairro,
-                    //    Cidade = _cidade.Length > 30 ? _cidade.Substring(0, 30) : _cidade,
-                    //    Cep = _cep ?? "14870000",
-                    //    Cpf = _cpfcnpj,
-                    //    Numero_documento = _novo_documento,
-                    //    Data_vencimento = Convert.ToDateTime(item.Data_Vencimento),
-                    //    Valor_documento = Convert.ToDecimal(item.Soma_Principal),
-                    //    Uf = _uf
-                    //};
-                    //if (item.Data_Vencimento >= Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy"))) {
-                    //    Exception ex = tributario_class.Insert_Ficha_Compensacao_Documento(ficha);
-                    //    if (ex == null)
-                    //        ex = tributario_class.Marcar_Documento_Registrado(_novo_documento);
-                    //}
-
-                //}
-
-
-
-
                 EmpresaStruct _empresa = empresaRepository.Retorna_Empresa(_codigo);
                 string _razao = _empresa.Razao_social;
                 string _cpfcnpj;
@@ -1119,11 +1139,35 @@ namespace GTI_Mvc.Controllers {
                     else
                         _cpfcnpj = "";
                 }
+                string _cidade = _empresa.Cidade_nome ?? "";
+                string _uf = _empresa.UF ?? "";
                 string _endereco = _empresa.Endereco_nome;
                 short _numimovel = (short)_empresa.Numero;
                 string _complemento = _empresa.Complemento;
                 string _bairro = _empresa.Bairro_nome;
                 string _cep = _empresa.Cep;
+
+
+                //Registrar os novos documentos
+                foreach (DebitoStructure item in Lista_Unificada) {
+                    Ficha_compensacao_documento ficha = new Ficha_compensacao_documento {
+                        Nome = _razao.Length > 40 ? _razao.Substring(0, 40) : _razao,
+                        Endereco = _endereco.Length > 40 ? _endereco.Substring(0, 40) : _endereco,
+                        Bairro = _bairro.Length > 15 ? _bairro.Substring(0, 15) : _bairro,
+                        Cidade = _cidade.Length > 30 ? _cidade.Substring(0, 30) : _cidade,
+                        Cep = Functions.RetornaNumero( _cep) ?? "14870000",
+                        Cpf = Functions.RetornaNumero( _cpfcnpj),
+                        Numero_documento = (int)item.Numero_Documento,
+                        Data_vencimento = Convert.ToDateTime(item.Data_Vencimento),
+                        Valor_documento = Convert.ToDecimal(item.Soma_Principal),
+                        Uf = _uf
+                    };
+                    if (item.Data_Vencimento >= Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy"))) {
+                        Exception ex = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
+                        if (ex == null)
+                            ex = tributarioRepository.Marcar_Documento_Registrado((int)item.Numero_Documento);
+                    }
+                }
 
                 short _index = 0;
                 string _convenio = "2873532";
