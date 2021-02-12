@@ -840,6 +840,13 @@ namespace GTI_Bll.Classes {
             return obj.Dados_IPTU_Ext(Codigo,Ano);
         }
 
+        public Exception Alterar_Itbi_Isencao_Natureza(string p, int n) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Alterar_Itbi_Isencao_Natureza(p,n);
+            return ex;
+        }
+
+
         #endregion
 
     }//end class

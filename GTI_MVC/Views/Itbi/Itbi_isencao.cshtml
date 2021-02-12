@@ -138,12 +138,12 @@
             <br /><br />
 
             <Label style="font-size:14px">Selecione a natureza </Label>
-            <select name="natureza">
+            <select name="natureza" id="natureza"  >
                 <optgroup label="Artigo 3">
                     @foreach (var item in Model.Lista_Natureza_Isencao) {
 
                         if (item.Group.Name == "Artigo 3") {
-                            <option value=@item.Value selected="@item.Selected">@item.Text</option>
+                            <option value=@item.Value selected="@item.Selected" >@item.Text</option>
                         }
 
                     }
@@ -153,7 +153,7 @@
                     @foreach (var item in Model.Lista_Natureza_Isencao) {
 
                         if (item.Group.Name == "Artigo 110") {
-                            <option value=@item.Value selected="@item.Selected">@item.Text</option>
+                            <option value=@item.Value selected="@item.Selected" >@item.Text</option>
                         }
 
                     }
@@ -250,7 +250,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <input id="descTxt" name="descRural" style="width:550px;height:25px;font-size:13px" type="text" value="" />
+                            <input id="descTxt" name="descRural" style="width:470px;height:25px;font-size:13px" type="text" value="" />
                         </td>
 
                     </tr>
@@ -305,10 +305,9 @@
                     $("#MainForm").submit();
                 }
             });
-            
         });
 
-
+      
 
         function EditarRural() {
             $('#RuralModal').modal();
@@ -334,7 +333,7 @@
             return true;
         }
 
-
+        
 
     </script>
 }

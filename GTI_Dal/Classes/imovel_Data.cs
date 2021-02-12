@@ -2215,6 +2215,19 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Alterar_Itbi_Isencao_Natureza(string p, int n) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Itbi_isencao_main i = db.Itbi_Isencao_Main.First(g => g.Guid == p);
+                i.Natureza = n;
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
         public Exception Incluir_Itbi_isencao_imovel(List<Itbi_isencao_imovel> Lista) {
             using (var db = new GTI_Context(_connection)) {
                 string guid = Lista[0].Guid;
