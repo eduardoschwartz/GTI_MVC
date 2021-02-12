@@ -1146,7 +1146,7 @@ namespace GTI_Mvc.Controllers {
                 string _complemento = _empresa.Complemento;
                 string _bairro = _empresa.Bairro_nome;
                 string _cep = _empresa.Cep;
-
+                _endereco += ", " + _numimovel.ToString();
 
                 //Registrar os novos documentos
                 foreach (DebitoStructure item in Lista_Unificada) {
@@ -1261,7 +1261,7 @@ namespace GTI_Mvc.Controllers {
                     List<ReportParameter> parameters = new List<ReportParameter>();
                     parameters.Add(new ReportParameter("DATADOC", Convert.ToDateTime(ListaBoleto[0].Datadoc).ToString("dd/MM/yyyy")));
                     parameters.Add(new ReportParameter("NOME", ListaBoleto[0].Nome));
-                    parameters.Add(new ReportParameter("ENDERECO", ListaBoleto[0].Endereco + " " + ListaBoleto[0].Complemento));
+                    parameters.Add(new ReportParameter("ENDERECO", ListaBoleto[0].Endereco  + " " + ListaBoleto[0].Complemento));
                     parameters.Add(new ReportParameter("BAIRRO", ListaBoleto[0].Bairro));
                     parameters.Add(new ReportParameter("CIDADE", ListaBoleto[0].Cidade + "/" + ListaBoleto[0].Uf));
                     parameters.Add(new ReportParameter("CODIGO", _codigo.ToString()));
@@ -1561,8 +1561,8 @@ namespace GTI_Mvc.Controllers {
                 Codigo=_codigo,
                 Razao_social=_dados.Razao_social,
                 Documento= Functions.FormatarCpfCnpj(_dados.Cpf_cnpj),
-                Endereco=_dados.Endereco_nome+ ", " + _dados.Numero.ToString() + " " + _dados.Complemento.ToString(),
-                Bairro=_dados.Bairro_nome,
+                Endereco=_dados.Endereco_nome+ ", " + _dados.Numero.ToString() + " " + _dados.Complemento??"",
+                Bairro=_dados.Bairro_nome??"",
                 Atividade=_dados.Atividade_extenso,
                 Horario=_dados.Horario_Nome,
                 Num_processo=model.Numero_Processo,
