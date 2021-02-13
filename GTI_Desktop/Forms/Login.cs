@@ -134,16 +134,17 @@ namespace GTI_Desktop.Forms {
                         MessageBox.Show("Senha deve ter no mínimo 6 caracteres.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     else {
                         string _connection = gtiCore.Connection_Name();
-                        Sistema_bll sistemaClass = new Sistema_bll(_connection);
-                        string sPwd =  sistemaClass.Retorna_User_Password(txtLogin.Text);
-                        if (!string.IsNullOrEmpty(sPwd) && gtiCore.Decrypt( sPwd) != txtPwd.Text) {
+                        Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+                        string sPwd =  sistemaRepository.Retorna_User_Password(txtLogin.Text);
+                        TAcessoFunction _tAcesso = new TAcessoFunction();
+                        if (!string.IsNullOrEmpty(sPwd) && _tAcesso.DecryptGTI( sPwd) != txtPwd.Text) {
                             MessageBox.Show("Senha atual inválida!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         } else {
                             GTI_Models.Models.Usuario reg = new GTI_Models.Models.Usuario {
                                 Nomelogin = txtLogin.Text.ToUpper(),
-                                Senha2 = gtiCore.Encrypt( txtPwd1.Text)
+                                Senha = _tAcesso.Encrypt128(txtPwd1.Text)
                             };
-                            Exception ex = sistemaClass.Alterar_Senha(reg);
+                            Exception ex = sistemaRepository.Alterar_Senha(reg);
                             if (ex != null) {
                                 ErrorBox eBox = new ErrorBox("Atenção", "Erro ao gravar nova senha.", ex);
                                 eBox.ShowDialog();
@@ -211,11 +212,12 @@ namespace GTI_Desktop.Forms {
                 string sPwd = sistema_Class.Retorna_User_Password(txtLogin.Text);
                 if (string.IsNullOrEmpty(sPwd)) {
                     gtiCore.Liberado(this);
-//                    MessageBox.Show("Por favor cadastre uma senha!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
-//                    SenhaButton_Click(null, null);
- //                   return;
+                    MessageBox.Show("Por favor cadastre uma senha!", "Senha não cadastrada", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    SenhaButton_Click(null, null);
+                    return;
                 } else {
-                    if (string.Compare(txtPwd.Text, gtiCore.Decrypt(sPwd)) != 0) {
+                    TAcessoFunction _tAcesso = new TAcessoFunction();
+                    if (string.Compare(txtPwd.Text, _tAcesso.DecryptGTI(sPwd)) != 0) {
                         gtiCore.Liberado(this);
                         MessageBox.Show("Senha inválida.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -226,10 +228,10 @@ namespace GTI_Desktop.Forms {
                 MessageBox.Show(ex.InnerException.Message, "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            GTI_Desktop.Properties.Settings.Default.ServerName = txtServer.Text.ToUpper();
-            GTI_Desktop.Properties.Settings.Default.LastUser = txtLogin.Text.ToUpper();
-            GTI_Desktop.Properties.Settings.Default.UserId = sistema_Class.Retorna_User_LoginId(txtLogin.Text);
-            GTI_Desktop.Properties.Settings.Default.Save();
+            Properties.Settings.Default.ServerName = txtServer.Text.ToUpper();
+            Properties.Settings.Default.LastUser = txtLogin.Text.ToUpper();
+            Properties.Settings.Default.UserId = sistema_Class.Retorna_User_LoginId(txtLogin.Text);
+            Properties.Settings.Default.Save();
 
             int nId = Properties.Settings.Default.UserId;
             usuarioStruct cUser = sistema_Class.Retorna_Usuario(nId);

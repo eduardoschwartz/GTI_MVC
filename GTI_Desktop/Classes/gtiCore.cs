@@ -615,9 +615,9 @@ namespace GTI_Desktop.Classes {
 
         public static void UpdateUserBinary() {
             string _connection = gtiCore.Connection_Name();
-            Sistema_bll sistema_Class = new Sistema_bll(_connection);
-            string sTmp = sistema_Class.GetUserBinary(Properties.Settings.Default.UserId);
-            int nSize = sistema_Class.GetSizeofBinary();
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            string sTmp = sistemaRepository.GetUserBinary(Properties.Settings.Default.UserId);
+            int nSize = sistemaRepository.GetSizeofBinary();
             GtiTypes.UserBinary = gtiCore.Decrypt(sTmp);
             if (nSize > GtiTypes.UserBinary.Length) {
                 int nDif = nSize - GtiTypes.UserBinary.Length;

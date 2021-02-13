@@ -36,18 +36,19 @@ namespace GTI_Desktop.Forms
             };
             TopBarToolStrip.Renderer = new MySR();
             t.CloseUp += new System.EventHandler(SbDataBase_CloseUp);
-
+            
             BarStatus.Items.Insert(17, new ToolStripControlHost(t));
             MaquinaToolStripStatus.Text = Environment.MachineName;
-            DataBaseToolStripStatus.Text = Properties.Settings.Default.DataBaseReal;
+            DataBaseToolStripStatus.Text = "PRODUÇÂO";
 
         }
 
         private void Main_Load(object sender, EventArgs e)
         {
             this.IsMdiContainer = true;
+            FillBackgroundColor(false);
             this.Refresh();
-
+            
             this.SetStyle(ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             //FillBackgroundImage(false);
 
@@ -64,7 +65,7 @@ namespace GTI_Desktop.Forms
             login.ShowDialog();
         }
 
-        private void CorFundo()
+        private void CorFundo(Color cor)
         {
             MdiClient ctlMDI;
 
@@ -73,7 +74,7 @@ namespace GTI_Desktop.Forms
                 try
                 {
                     ctlMDI = (MdiClient)ctl;
-                    ctlMDI.BackColor = this.BackColor;
+                    ctlMDI.BackColor = cor;
                     //ctlMDI.BackgroundImage = Properties.Resources.GTI_logo;
 
                 }
@@ -174,8 +175,8 @@ namespace GTI_Desktop.Forms
             foreach (Form chform in charr)
                 chform.Close();
 
-            FillBackgroundImage(false);
-            DataBaseToolStripStatus.Text = Properties.Settings.Default.DataBaseReal;
+            FillBackgroundColor(false);
+            DataBaseToolStripStatus.Text = "PRODUÇÂO";
             gtiCore.UpdateUserBinary();
             this.Refresh();
         }
@@ -186,40 +187,16 @@ namespace GTI_Desktop.Forms
             foreach (Form chform in charr)
                 chform.Close();
 
-            FillBackgroundImage(true);
-            DataBaseToolStripStatus.Text = Properties.Settings.Default.DataBaseTeste;
+            FillBackgroundColor(true);
+            DataBaseToolStripStatus.Text = "BASE TESTE";
             gtiCore.UpdateUserBinary();
             this.Refresh();
         }
 
-        private void FillBackgroundImage(bool bTeste)
+        private void FillBackgroundColor(bool bTeste)
         {
-            Bitmap img = bTeste ? Properties.Resources.rosa : Properties.Resources.bege;
-            Color cor = bTeste ? Color.FromArgb(250, 218, 226) : Color.OldLace;
-            this.BackgroundImage = img;
-            BarStatus.BackgroundImage = img;
-            LedGreen.BackgroundImage = img;
-            LedRed.BackgroundImage = img;
-            VersaotoolStripStatusLabel.BackgroundImage = img;
-            VersaoToolStripStatus.BackgroundImage = img;
-            UsuariotoolStripStatusLabel.BackgroundImage = img;
-            UserToolStripStatus.BackgroundImage = img;
-            ServidorToolStripStatus.BackgroundImage = img;
-            ServidortoolStripStatusLabel.BackgroundImage = img;
-            DataBaseToolStripStatus.BackgroundImage = img;
-            DataBasetoolStripStatusLabel.BackgroundImage = img;
-            MaquinaToolStripStatus.BackgroundImage = img;
-            MaquinatoolStripStatusLabel.BackgroundImage = img;
-            NomeBaseDadostoolStripStatusLabel.BackgroundImage = img;
-            Div1.BackColor = cor;
-            Div2.BackColor = cor;
-            Div3.BackColor = cor;
-            Div4.BackColor = cor;
-            Div5.BackColor = cor;
-            MenuBarStrip.BackColor = cor;
-            TopBarToolStrip.BackColor = cor;
-            PanelDV.BackColor = cor;
-            PanelDV.GradientEndColor = cor;
+            Color cor = bTeste ? Color.FromArgb(250, 218, 226) : Color.LightBlue;
+            CorFundo(cor);
         }
 
         private void BtCidadao_Click(object sender, EventArgs e)
