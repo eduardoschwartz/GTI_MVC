@@ -1,22 +1,19 @@
 using GTI_Bll.Classes;
 using GTI_Desktop.Classes;
 using GTI_Models.Models;
-using GTI_Desktop.Properties;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using static GTI_Desktop.Classes.GtiTypes;
-using System.Drawing;
 
 namespace GTI_Desktop.Forms {
     public partial class Endereco : Form {
         bool _camposObrigatorios;
         bool _telefone;
         string _connection = gtiCore.Connection_Name();
-        private int StartLocationX;
-        private int StartLocationY;
-        private string _title;
+        int StartLocationX;
+        int StartLocationY;
+        string _title;
         public GTI_Models.Models.Endereco EndRetorno { get; set; }
 
         public Endereco( GTI_Models.Models.Endereco  reg, bool EnderecoLocal , bool EditarBairro,bool CamposObrigatorios ,bool Telefone,int xPos=200,int yPos=200,string Title="Cadastro de endereço") {
@@ -33,9 +30,10 @@ namespace GTI_Desktop.Forms {
             TelefoneText.Enabled = _telefone;
             TemFoneCheck.Enabled = _telefone;
             WhatsAppCheck.Enabled = _telefone;
-            this.StartLocationX = xPos;
-            this.StartLocationY = yPos;
-            this._title = Title;
+            StartLocationX = xPos;
+            StartLocationY = yPos;
+            _title = Title;
+            Esconde_Bairro(reg.Sigla_uf, reg.Id_cidade);
         }
 
         private void CmbUF_SelectedIndexChanged(object sender, EventArgs e) {
@@ -52,13 +50,14 @@ namespace GTI_Desktop.Forms {
                 if (UFList.SelectedIndex > 0 && UFList.SelectedValue.ToString() == "SP") {
                     CidadeList.SelectedValue = 413;
                 }
+                Esconde_Bairro(UFList.SelectedValue.ToString(), Convert.ToInt32(CidadeList.SelectedValue));
             }
         }
 
         private void Carrega_Bairro() {
             if (CidadeList.SelectedIndex > -1) {
-                Endereco_bll clsBairro = new Endereco_bll(_connection);
-                List<GTI_Models.Models.Bairro> lista = clsBairro.Lista_Bairro(UFList.SelectedValue.ToString(), Convert.ToInt32(CidadeList.SelectedValue));
+                Endereco_bll EnderecoRepository = new Endereco_bll(_connection);
+                List<GTI_Models.Models.Bairro> lista = EnderecoRepository.Lista_Bairro(UFList.SelectedValue.ToString(), Convert.ToInt32(CidadeList.SelectedValue));
                 List<CustomListBoxItem> myItems = new List<CustomListBoxItem>();
                 foreach (GTI_Models.Models.Bairro item in lista) {
                     myItems.Add(new CustomListBoxItem(item.Descbairro, item.Codbairro));
@@ -76,6 +75,7 @@ namespace GTI_Desktop.Forms {
                 CepMask.ReadOnly = true;
             else
                 CepMask.ReadOnly = false;
+            Esconde_Bairro(UFList.SelectedValue.ToString(), Convert.ToInt32(CidadeList.SelectedValue));
         }
 
         private void Carrega_Pais() {
@@ -86,10 +86,17 @@ namespace GTI_Desktop.Forms {
         }
 
         private void Carrega_UF() {
-            Endereco_bll clsCidade = new Endereco_bll(_connection);
-            UFList.DataSource = clsCidade.Lista_UF();
-            UFList.DisplayMember = "descuf";
-            UFList.ValueMember = "siglauf";
+            Endereco_bll EnderecoRepository = new Endereco_bll(_connection);
+            List<GTI_Models.Models.Uf> lista = EnderecoRepository.Lista_UF();
+            List<CustomListBoxItem6> myItems = new List<CustomListBoxItem6>();
+            myItems.Add(new CustomListBoxItem6(" ", "EX"));
+            foreach (GTI_Models.Models.Uf item in lista) {
+                myItems.Add(new CustomListBoxItem6(item.Descuf, item.Siglauf));
+            }
+            UFList.DisplayMember = "_name";
+            UFList.ValueMember = "_value";
+            UFList.DataSource = myItems;
+
         }
 
         private void BtPais_Refresh_Click(object sender, EventArgs e) {
@@ -164,92 +171,12 @@ namespace GTI_Desktop.Forms {
             BairroList.Focus();
         }
 
-        private void BtReturn_Click(object sender, EventArgs e) {
-            if (_camposObrigatorios) {
-                if (Convert.ToInt32(CidadeList.SelectedValue) == 413) {
-                    if (LogradouroText.Tag.ToString() == "") LogradouroText.Tag = "0";
-                    if (Convert.ToInt32(LogradouroText.Tag.ToString()) == 0) {
-                        MessageBox.Show("Selecione um logradouro válido!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                } else {
-                    if (string.IsNullOrWhiteSpace(LogradouroText.Text)) {
-                        MessageBox.Show("Digite o nome do logradouro!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                }
-                if (CepMask.Text.Trim() != "-") {
-                    if (!CepMask.MaskFull) {
-                        MessageBox.Show("Cep inválido!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                }
-
-                if (!string.IsNullOrWhiteSpace(EmailText.Text) & !gtiCore.Valida_Email(EmailText.Text)) {
-                    MessageBox.Show("Endereço de email inválido.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                if (TelefoneText.Text.Trim()=="" && WhatsAppCheck.Checked) {
-                    MessageBox.Show("Digite o nº do WhatsApp, ou desmarque esta opção.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
-
-
-            EndRetorno = new GTI_Models.Models.Endereco();
-            if (PaisList.SelectedIndex > -1) {
-                EndRetorno.Id_pais = Convert.ToInt32(PaisList.SelectedValue);
-                EndRetorno.Nome_pais = PaisList.Text;
-            } else {
-                EndRetorno.Id_pais = 0;
-                EndRetorno.Nome_pais = "";
-            }
-            if (UFList.SelectedIndex > -1) {
-                EndRetorno.Sigla_uf = UFList.SelectedValue.ToString();
-                EndRetorno.Nome_uf = UFList.Text;
-            } else {
-                EndRetorno.Sigla_uf = "";
-                EndRetorno.Nome_uf = "";
-            }
-            if (CidadeList.SelectedIndex > -1) {
-                EndRetorno.Id_cidade = Convert.ToInt32(CidadeList.SelectedValue);
-                EndRetorno.Nome_cidade = CidadeList.Text;
-            } else {
-                EndRetorno.Id_cidade = 0;
-                EndRetorno.Nome_cidade = "";
-            }
-            if (BairroList.SelectedIndex > -1) {
-                EndRetorno.Id_bairro = Convert.ToInt32(BairroList.SelectedValue);
-                EndRetorno.Nome_bairro = BairroList.Text;
-            } else {
-                EndRetorno.Id_bairro = 0;
-                EndRetorno.Nome_bairro = "";
-            }
-
-            if (String.IsNullOrEmpty(LogradouroText.Tag.ToString())) LogradouroText.Tag = "0";
-            EndRetorno.Id_logradouro = Convert.ToInt32(LogradouroText.Tag.ToString());
-            EndRetorno.Nome_logradouro = LogradouroText.Text;
-            if (String.IsNullOrEmpty(NumeroList.Text.ToString())) NumeroList.Text = "0";
-            EndRetorno.Numero_imovel = Convert.ToInt32(NumeroList.Text);
-            EndRetorno.Complemento = ComplementoText.Text;
-            EndRetorno.Email = EmailText.Text;
-            string _cep = gtiCore.ExtractNumber(CepMask.Text);
-            EndRetorno.Cep = _cep == "" ? 0 : Convert.ToInt32(_cep);
-            EndRetorno.Cancelar = false;
-            EndRetorno.Telefone = TelefoneText.Text;
-            EndRetorno.TemFone = TemFoneCheck.Checked;
-            EndRetorno.WhatsApp = WhatsAppCheck.Checked;
-            this.Close();
-            return;
-        }
-
         private void TxtLogradouro_KeyDown(object sender, KeyEventArgs e) {
             if (Convert.ToInt32(CidadeList.SelectedValue) != 413) {
                 CepMask.Text = "";
                 return;
             }
-            if (!String.IsNullOrEmpty(LogradouroText.Text) && e.KeyCode == Keys.Enter) {
+            if (!string.IsNullOrEmpty(LogradouroText.Text) && e.KeyCode == Keys.Enter) {
                 Endereco_bll clsImovel = new Endereco_bll(_connection);
                 List<Logradouro> Listalogradouro = clsImovel.Lista_Logradouro(LogradouroText.Text);
 
@@ -340,7 +267,7 @@ namespace GTI_Desktop.Forms {
                 EndRetorno = new GTI_Models.Models.Endereco {
                     Cancelar = true
                 };
-                this.Close();
+                Close();
                 return;
             }
         }
@@ -360,8 +287,114 @@ namespace GTI_Desktop.Forms {
         }
 
         private void Endereco_Load(object sender, EventArgs e) {
-            this.SetDesktopLocation(StartLocationX, StartLocationY);
+            SetDesktopLocation(StartLocationX, StartLocationY);
             this.Text = _title;
         }
+
+        private void Esconde_Bairro(string UF,int Bairro) {
+            if (UF == "SP" && Bairro == 413) {
+                BairroList.Visible = false;
+                BairroButton_Refresh.Visible = false;
+                BairroText.Visible = true;
+            } else {
+                BairroList.Visible = true;
+                BairroButton_Refresh.Visible = true;
+                BairroText.Visible = false;
+            }
+        }
+
+        private void BtReturn_Click(object sender, EventArgs e) {
+            if (_camposObrigatorios) {
+                if (Convert.ToInt32(CidadeList.SelectedValue) == 413) {
+                    if (LogradouroText.Tag.ToString() == "") LogradouroText.Tag = "0";
+                    if (Convert.ToInt32(LogradouroText.Tag.ToString()) == 0) {
+                        MessageBox.Show("Selecione um logradouro válido!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                } else {
+                    if (string.IsNullOrWhiteSpace(LogradouroText.Text)) {
+                        MessageBox.Show("Digite o nome do logradouro!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                if (CepMask.Text.Trim() != "-") {
+                    if (!CepMask.MaskFull) {
+                        MessageBox.Show("Cep inválido!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(EmailText.Text) & !gtiCore.Valida_Email(EmailText.Text)) {
+                    MessageBox.Show("Endereço de email inválido.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (TelefoneText.Text.Trim() == "" && WhatsAppCheck.Checked) {
+                    MessageBox.Show("Digite o nº do WhatsApp, ou desmarque esta opção.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
+
+            EndRetorno = new GTI_Models.Models.Endereco();
+            if (PaisList.SelectedIndex > -1) {
+                EndRetorno.Id_pais = Convert.ToInt32(PaisList.SelectedValue);
+                EndRetorno.Nome_pais = PaisList.Text;
+            } else {
+                EndRetorno.Id_pais = 0;
+                EndRetorno.Nome_pais = "";
+            }
+
+
+            if (UFList.SelectedIndex > -1) {
+                EndRetorno.Sigla_uf = UFList.SelectedValue.ToString();
+                EndRetorno.Nome_uf = UFList.Text;
+            } else {
+                EndRetorno.Sigla_uf = "";
+                EndRetorno.Nome_uf = "";
+            }
+
+            if (EndRetorno.Id_pais == 1 && EndRetorno.Sigla_uf == "EX") {
+                MessageBox.Show("Selecione a UF.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (EndRetorno.Id_pais != 1 && EndRetorno.Sigla_uf != "EX") {
+                MessageBox.Show("Apenas o Brasil pode ter UF.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (CidadeList.SelectedIndex > -1) {
+                EndRetorno.Id_cidade = Convert.ToInt32(CidadeList.SelectedValue);
+                EndRetorno.Nome_cidade = CidadeList.Text;
+            } else {
+                EndRetorno.Id_cidade = 0;
+                EndRetorno.Nome_cidade = "";
+            }
+            if (BairroList.SelectedIndex > -1) {
+                EndRetorno.Id_bairro = Convert.ToInt32(BairroList.SelectedValue);
+                EndRetorno.Nome_bairro = BairroList.Text;
+            } else {
+                EndRetorno.Id_bairro = 0;
+                EndRetorno.Nome_bairro = "";
+            }
+
+            if (string.IsNullOrEmpty(LogradouroText.Tag.ToString())) LogradouroText.Tag = "0";
+            EndRetorno.Id_logradouro = Convert.ToInt32(LogradouroText.Tag.ToString());
+            EndRetorno.Nome_logradouro = LogradouroText.Text;
+            if (string.IsNullOrEmpty(NumeroList.Text.ToString())) NumeroList.Text = "0";
+            EndRetorno.Numero_imovel = Convert.ToInt32(NumeroList.Text);
+            EndRetorno.Complemento = ComplementoText.Text;
+            EndRetorno.Email = EmailText.Text;
+            string _cep = gtiCore.ExtractNumber(CepMask.Text);
+            EndRetorno.Cep = _cep == "" ? 0 : Convert.ToInt32(_cep);
+            EndRetorno.Cancelar = false;
+            EndRetorno.Telefone = TelefoneText.Text;
+            EndRetorno.TemFone = TemFoneCheck.Checked;
+            EndRetorno.WhatsApp = WhatsAppCheck.Checked;
+            Close();
+            return;
+        }
+
     }
 }

@@ -1,11 +1,9 @@
 ﻿using GTI_Bll.Classes;
 using GTI_Desktop.Classes;
-using GTI_Models;
 using GTI_Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace GTI_Desktop.Forms {
@@ -160,7 +158,7 @@ namespace GTI_Desktop.Forms {
 
         private void BtFindCodigo_Click(object sender, EventArgs e) {
             inputBox z = new inputBox();
-            String sCod = z.Show("", "Informação", "Digite o código do cidadão.", 6, gtiCore.eTweakMode.IntegerPositive);
+            string sCod = z.Show("", "Informação", "Digite o código do cidadão.", 6, gtiCore.eTweakMode.IntegerPositive);
             if (!string.IsNullOrEmpty(sCod)) {
                 gtiCore.Ocupado(this);
                 Cidadao_bll clsCidadao = new Cidadao_bll(_connection);
@@ -207,7 +205,7 @@ namespace GTI_Desktop.Forms {
         }
 
         private void BtCancelar_Click(object sender, EventArgs e) {
-            Int32 nCod = Convert.ToInt32(CodigoText.Text);
+            int nCod = Convert.ToInt32(CodigoText.Text);
             if (nCod > 0)
                 LoadReg(nCod);
             ControlBehaviour(true);
@@ -227,7 +225,7 @@ namespace GTI_Desktop.Forms {
             }
         }
 
-        private void LoadReg(Int32 nCodigo) {
+        private void LoadReg(int nCodigo) {
             Cidadao_bll clsCidadao = new Cidadao_bll(_connection);
             CidadaoStruct reg = clsCidadao.LoadReg(nCodigo);
             CodigoText.Text = reg.Codigo.ToString("000000");
@@ -596,7 +594,7 @@ namespace GTI_Desktop.Forms {
             reg.TemFone = TemFoneCCheck.Checked;
             reg.WhatsApp = WhatsAppCCheck.Checked;
 
-            Forms.Endereco f1 = new Forms.Endereco(reg, false, true, true, true,Cursor.Position.X-20,Cursor.Position.Y-20,"Cadastro de endereço comercial");
+            Endereco f1 = new Forms.Endereco(reg, false, true, true, true,Cursor.Position.X-20,Cursor.Position.Y-20,"Cadastro de endereço comercial");
             f1.ShowDialog();
             if (!f1.EndRetorno.Cancelar) {
                 PaisCText.Text = f1.EndRetorno.Nome_pais;

@@ -52,6 +52,7 @@ namespace GTI_Desktop.Forms {
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.TelefoneText = new System.Windows.Forms.TextBox();
+            this.BairroText = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // UFList
@@ -336,6 +337,14 @@ namespace GTI_Desktop.Forms {
             this.TelefoneText.Size = new System.Drawing.Size(171, 20);
             this.TelefoneText.TabIndex = 26;
             // 
+            // BairroText
+            // 
+            this.BairroText.Location = new System.Drawing.Point(75, 91);
+            this.BairroText.MaxLength = 50;
+            this.BairroText.Name = "BairroText";
+            this.BairroText.Size = new System.Drawing.Size(197, 20);
+            this.BairroText.TabIndex = 162;
+            // 
             // Endereco
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -343,6 +352,7 @@ namespace GTI_Desktop.Forms {
             this.BackColor = System.Drawing.Color.Linen;
             this.ClientSize = new System.Drawing.Size(472, 176);
             this.ControlBox = false;
+            this.Controls.Add(this.BairroText);
             this.Controls.Add(this.TemFoneCheck);
             this.Controls.Add(this.WhatsAppCheck);
             this.Controls.Add(this.TelefoneText);
@@ -412,5 +422,6 @@ namespace GTI_Desktop.Forms {
         private System.Windows.Forms.TextBox TelefoneText;
         private System.Windows.Forms.CheckBox TemFoneCheck;
         private System.Windows.Forms.CheckBox WhatsAppCheck;
+        private System.Windows.Forms.TextBox BairroText;
     }
 }

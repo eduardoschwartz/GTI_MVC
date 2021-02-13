@@ -17,6 +17,7 @@ namespace GTI_Desktop.Classes {
                 _value = value;
             }
 
+
             public override string ToString() {
                 return _name;
             }
@@ -86,6 +87,19 @@ namespace GTI_Desktop.Classes {
             }
         }
 
+        internal class CustomListBoxItem6 {
+            public string _name { get; set; }
+            public string _value { get; set; }
+
+            public CustomListBoxItem6(string name, string value) {
+                _name = name;
+                _value = value;
+            }
+
+            public override string ToString() {
+                return _name;
+            }
+        }
     }
 
 }
