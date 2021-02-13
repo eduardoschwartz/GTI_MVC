@@ -1,11 +1,8 @@
-﻿using System;
-using System.Windows.Forms;
-using GTI_Bll.Classes;
-using GTI_Models.Models;
+﻿using GTI_Bll.Classes;
 using GTI_Desktop.Classes;
-using GTI_Desktop.Properties;
+using System;
 using System.Collections.Generic;
-using GTI_Models;
+using System.Windows.Forms;
 
 namespace GTI_Desktop.Forms {
     public partial class Pais : Form {
@@ -23,8 +20,8 @@ namespace GTI_Desktop.Forms {
 
         private void Carrega_Lista() {
             gtiCore.Ocupado(this);
-            Endereco_bll endereco_class = new Endereco_bll(_connection);
-            List<GTI_Models.Models.Pais> lista = endereco_class.Lista_Pais();
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+            List<GTI_Models.Models.Pais> lista = enderecoRepository.Lista_Pais();
             lstMain.DataSource = lista;
             lstMain.DisplayMember = "Nome_pais";
             lstMain.ValueMember = "Id_pais";
@@ -42,11 +39,11 @@ namespace GTI_Desktop.Forms {
 
             String sCod = iBox.Show("", "Informação", "Digite o nome do país.", 40);
             if (!string.IsNullOrEmpty(sCod)) {
-                Endereco_bll endereco_class = new Endereco_bll(_connection);
+                Endereco_bll enderecoRepository = new Endereco_bll(_connection);
                 GTI_Models.Models.Pais reg = new GTI_Models.Models.Pais {
                     Nome_pais = sCod.ToUpper()
                 };
-                Exception ex = endereco_class.Incluir_Pais(reg);
+                Exception ex = enderecoRepository.Incluir_Pais(reg);
                 if (ex != null) {
                     ErrorBox eBox = new ErrorBox("Atenção", "País já cadastrado.", ex);
                     eBox.ShowDialog();
@@ -66,12 +63,12 @@ namespace GTI_Desktop.Forms {
             inputBox iBox = new inputBox();
             String sCod = iBox.Show(lstMain.Text, "Informação", "Digite o nome do país.", 50);
             if (!string.IsNullOrEmpty(sCod)) {
-                Endereco_bll endereco_class = new Endereco_bll(_connection);
+                Endereco_bll enderecoRepository = new Endereco_bll(_connection);
                 GTI_Models.Models.Pais reg = new GTI_Models.Models.Pais {
                     Id_pais = Convert.ToInt16(lstMain.SelectedValue.ToString()),
                     Nome_pais = sCod.ToUpper()
                 };
-                Exception ex = endereco_class.Alterar_Pais(reg);
+                Exception ex = enderecoRepository.Alterar_Pais(reg);
                 if (ex != null) {
                     ErrorBox eBox = new ErrorBox("Atenção", "País já cadastrado.", ex);
                     eBox.ShowDialog();
@@ -90,11 +87,11 @@ namespace GTI_Desktop.Forms {
             }
 
             if (MessageBox.Show("Excluir este país?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
-                Endereco_bll endereco_class = new Endereco_bll(_connection);
+                Endereco_bll enderecoRepository = new Endereco_bll(_connection);
                 GTI_Models.Models.Pais reg = new GTI_Models.Models.Pais {
                     Id_pais = Convert.ToInt16(lstMain.SelectedValue.ToString())
                 };
-                Exception ex = endereco_class.Excluir_Pais(reg);
+                Exception ex = enderecoRepository.Excluir_Pais(reg);
                 if (ex != null) {
                     ErrorBox eBox = new ErrorBox("Atenção", ex.Message, ex);
                     eBox.ShowDialog();

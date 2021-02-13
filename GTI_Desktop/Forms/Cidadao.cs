@@ -553,8 +553,7 @@ namespace GTI_Desktop.Forms {
             reg.Telefone = FoneRText.Text;
             reg.TemFone = TemFoneRCheck.Checked;
             reg.WhatsApp = WhatsAppRCheck.Checked;
-
-            Forms.Endereco f1 = new Forms.Endereco(reg,false,true,true,true );
+            Endereco f1 = new Endereco(reg,false,true,true,true,Cursor.Position.X-20,Cursor.Position.Y-20,"Cadastro de endereço residencial" );
             f1.ShowDialog();
             if (!f1.EndRetorno.Cancelar) {
                 PaisRText.Text = f1.EndRetorno.Nome_pais;
@@ -597,7 +596,7 @@ namespace GTI_Desktop.Forms {
             reg.TemFone = TemFoneCCheck.Checked;
             reg.WhatsApp = WhatsAppCCheck.Checked;
 
-            Forms.Endereco f1 = new Forms.Endereco(reg, false, true, true, true);
+            Forms.Endereco f1 = new Forms.Endereco(reg, false, true, true, true,Cursor.Position.X-20,Cursor.Position.Y-20,"Cadastro de endereço comercial");
             f1.ShowDialog();
             if (!f1.EndRetorno.Cancelar) {
                 PaisCText.Text = f1.EndRetorno.Nome_pais;

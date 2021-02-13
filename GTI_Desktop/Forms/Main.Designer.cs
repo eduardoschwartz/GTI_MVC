@@ -142,7 +142,7 @@
             // 
             // BarStatus
             // 
-            this.BarStatus.BackColor = System.Drawing.Color.White;
+            this.BarStatus.BackColor = System.Drawing.Color.Linen;
             this.BarStatus.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.VersaotoolStripStatusLabel,
             this.VersaoToolStripStatus,

@@ -45,38 +45,39 @@ namespace GTI_Desktop.Forms {
             this.LogradouroText = new System.Windows.Forms.TextBox();
             this.LogradouroList = new System.Windows.Forms.ComboBox();
             this.CancelarButton = new System.Windows.Forms.Button();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.tTp = new System.Windows.Forms.ToolTip(this.components);
+            this.TemFoneCheck = new System.Windows.Forms.CheckBox();
+            this.WhatsAppCheck = new System.Windows.Forms.CheckBox();
             this.EmailText = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.TelefoneText = new System.Windows.Forms.TextBox();
-            this.TemFoneCheck = new System.Windows.Forms.CheckBox();
-            this.WhatsAppCheck = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // UFList
             // 
+            this.UFList.BackColor = System.Drawing.Color.White;
             this.UFList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.UFList.FormattingEnabled = true;
-            this.UFList.Location = new System.Drawing.Point(287, 18);
+            this.UFList.Location = new System.Drawing.Point(75, 12);
             this.UFList.Name = "UFList";
-            this.UFList.Size = new System.Drawing.Size(163, 21);
+            this.UFList.Size = new System.Drawing.Size(157, 21);
             this.UFList.TabIndex = 1;
             this.UFList.SelectedIndexChanged += new System.EventHandler(this.CmbUF_SelectedIndexChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(241, 21);
+            this.label1.Location = new System.Drawing.Point(7, 15);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 13);
+            this.label1.Size = new System.Drawing.Size(64, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Estado.:";
+            this.label1.Text = "Estado.......:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 46);
+            this.label2.Location = new System.Drawing.Point(240, 15);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(46, 13);
             this.label2.TabIndex = 2;
@@ -86,9 +87,9 @@ namespace GTI_Desktop.Forms {
             // 
             this.CidadeList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CidadeList.FormattingEnabled = true;
-            this.CidadeList.Location = new System.Drawing.Point(52, 42);
+            this.CidadeList.Location = new System.Drawing.Point(288, 12);
             this.CidadeList.Name = "CidadeList";
-            this.CidadeList.Size = new System.Drawing.Size(157, 21);
+            this.CidadeList.Size = new System.Drawing.Size(174, 21);
             this.CidadeList.TabIndex = 2;
             this.CidadeList.SelectedIndexChanged += new System.EventHandler(this.CmbCidade_SelectedIndexChanged);
             // 
@@ -96,88 +97,88 @@ namespace GTI_Desktop.Forms {
             // 
             this.BairroList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.BairroList.FormattingEnabled = true;
-            this.BairroList.Location = new System.Drawing.Point(264, 42);
+            this.BairroList.Location = new System.Drawing.Point(75, 91);
             this.BairroList.Name = "BairroList";
-            this.BairroList.Size = new System.Drawing.Size(162, 21);
+            this.BairroList.Size = new System.Drawing.Size(175, 21);
             this.BairroList.TabIndex = 3;
             this.BairroList.SelectedIndexChanged += new System.EventHandler(this.CmbBairro_SelectedIndexChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(217, 46);
+            this.label3.Location = new System.Drawing.Point(8, 94);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(46, 13);
+            this.label3.Size = new System.Drawing.Size(64, 13);
             this.label3.TabIndex = 4;
-            this.label3.Text = "Bairro...:";
+            this.label3.Text = "Bairro.........:";
             // 
             // PaisList
             // 
             this.PaisList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.PaisList.FormattingEnabled = true;
-            this.PaisList.Location = new System.Drawing.Point(52, 17);
+            this.PaisList.Location = new System.Drawing.Point(319, 91);
             this.PaisList.Name = "PaisList";
-            this.PaisList.Size = new System.Drawing.Size(157, 21);
+            this.PaisList.Size = new System.Drawing.Size(121, 21);
             this.PaisList.TabIndex = 0;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 20);
+            this.label4.Location = new System.Drawing.Point(278, 94);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(47, 13);
+            this.label4.Size = new System.Drawing.Size(35, 13);
             this.label4.TabIndex = 6;
-            this.label4.Text = "País.....:";
+            this.label4.Text = "País.:";
             // 
             // PaisButton_Refresh
             // 
             this.PaisButton_Refresh.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.PaisButton_Refresh.Image = global::GTI_Desktop.Properties.Resources.Alterar;
-            this.PaisButton_Refresh.Location = new System.Drawing.Point(209, 15);
+            this.PaisButton_Refresh.Image = global::GTI_Desktop.Properties.Resources.add;
+            this.PaisButton_Refresh.Location = new System.Drawing.Point(442, 92);
             this.PaisButton_Refresh.Name = "PaisButton_Refresh";
-            this.PaisButton_Refresh.Size = new System.Drawing.Size(25, 25);
+            this.PaisButton_Refresh.Size = new System.Drawing.Size(20, 20);
             this.PaisButton_Refresh.TabIndex = 7;
             this.PaisButton_Refresh.TabStop = false;
             this.PaisButton_Refresh.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.toolTip1.SetToolTip(this.PaisButton_Refresh, "Atualizar lista de países");
+            this.tTp.SetToolTip(this.PaisButton_Refresh, "Atualizar lista de países");
             this.PaisButton_Refresh.UseVisualStyleBackColor = true;
             this.PaisButton_Refresh.Click += new System.EventHandler(this.BtPais_Refresh_Click);
             // 
             // BairroButton_Refresh
             // 
             this.BairroButton_Refresh.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.BairroButton_Refresh.Image = global::GTI_Desktop.Properties.Resources.Alterar;
-            this.BairroButton_Refresh.Location = new System.Drawing.Point(426, 40);
+            this.BairroButton_Refresh.Image = global::GTI_Desktop.Properties.Resources.add;
+            this.BairroButton_Refresh.Location = new System.Drawing.Point(252, 92);
             this.BairroButton_Refresh.Name = "BairroButton_Refresh";
-            this.BairroButton_Refresh.Size = new System.Drawing.Size(25, 25);
+            this.BairroButton_Refresh.Size = new System.Drawing.Size(20, 20);
             this.BairroButton_Refresh.TabIndex = 4;
             this.BairroButton_Refresh.TabStop = false;
             this.BairroButton_Refresh.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.toolTip1.SetToolTip(this.BairroButton_Refresh, "Atualizar lista de bairros");
+            this.tTp.SetToolTip(this.BairroButton_Refresh, "Atualizar lista de bairros");
             this.BairroButton_Refresh.UseVisualStyleBackColor = true;
             this.BairroButton_Refresh.Click += new System.EventHandler(this.BtBairro_Refresh_Click);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(7, 72);
+            this.label5.Location = new System.Drawing.Point(7, 42);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(67, 13);
+            this.label5.Size = new System.Drawing.Size(64, 13);
             this.label5.TabIndex = 13;
-            this.label5.Text = "Logradouro.:";
+            this.label5.Text = "Logradouro:";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(369, 72);
+            this.label6.Location = new System.Drawing.Point(376, 42);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(28, 13);
+            this.label6.Size = new System.Drawing.Size(25, 13);
             this.label6.TabIndex = 15;
-            this.label6.Text = "Nº..:";
+            this.label6.Text = "Nº.:";
             // 
             // NumeroList
             // 
-            this.NumeroList.Location = new System.Drawing.Point(397, 69);
+            this.NumeroList.Location = new System.Drawing.Point(407, 40);
             this.NumeroList.MaxLength = 4;
             this.NumeroList.Name = "NumeroList";
             this.NumeroList.Size = new System.Drawing.Size(54, 20);
@@ -187,17 +188,17 @@ namespace GTI_Desktop.Forms {
             // 
             // ComplementoText
             // 
-            this.ComplementoText.Location = new System.Drawing.Point(75, 95);
+            this.ComplementoText.Location = new System.Drawing.Point(75, 65);
             this.ComplementoText.MaxLength = 50;
             this.ComplementoText.Name = "ComplementoText";
-            this.ComplementoText.Size = new System.Drawing.Size(261, 20);
+            this.ComplementoText.Size = new System.Drawing.Size(268, 20);
             this.ComplementoText.TabIndex = 7;
             this.ComplementoText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtComplemento_KeyDown);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(7, 98);
+            this.label7.Location = new System.Drawing.Point(7, 68);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(68, 13);
             this.label7.TabIndex = 17;
@@ -206,30 +207,30 @@ namespace GTI_Desktop.Forms {
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(342, 98);
+            this.label8.Location = new System.Drawing.Point(355, 69);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(37, 13);
+            this.label8.Size = new System.Drawing.Size(32, 13);
             this.label8.TabIndex = 19;
-            this.label8.Text = "CEP..:";
+            this.label8.Text = "Cep.:";
             // 
             // ReturnButton
             // 
             this.ReturnButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.ReturnButton.Image = global::GTI_Desktop.Properties.Resources.OK;
             this.ReturnButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ReturnButton.Location = new System.Drawing.Point(386, 143);
+            this.ReturnButton.Location = new System.Drawing.Point(397, 142);
             this.ReturnButton.Name = "ReturnButton";
             this.ReturnButton.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.ReturnButton.Size = new System.Drawing.Size(32, 25);
             this.ReturnButton.TabIndex = 9;
             this.ReturnButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.toolTip1.SetToolTip(this.ReturnButton, "Retornar o endereço");
+            this.tTp.SetToolTip(this.ReturnButton, "Retornar o endereço");
             this.ReturnButton.UseVisualStyleBackColor = true;
             this.ReturnButton.Click += new System.EventHandler(this.BtReturn_Click);
             // 
             // CepMask
             // 
-            this.CepMask.Location = new System.Drawing.Point(382, 95);
+            this.CepMask.Location = new System.Drawing.Point(393, 66);
             this.CepMask.Mask = "99999-999";
             this.CepMask.Name = "CepMask";
             this.CepMask.Size = new System.Drawing.Size(68, 20);
@@ -239,10 +240,10 @@ namespace GTI_Desktop.Forms {
             // LogradouroText
             // 
             this.LogradouroText.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.LogradouroText.Location = new System.Drawing.Point(75, 69);
+            this.LogradouroText.Location = new System.Drawing.Point(75, 39);
             this.LogradouroText.MaxLength = 50;
             this.LogradouroText.Name = "LogradouroText";
-            this.LogradouroText.Size = new System.Drawing.Size(288, 20);
+            this.LogradouroText.Size = new System.Drawing.Size(292, 20);
             this.LogradouroText.TabIndex = 4;
             this.LogradouroText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtLogradouro_KeyDown);
             // 
@@ -250,9 +251,9 @@ namespace GTI_Desktop.Forms {
             // 
             this.LogradouroList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.LogradouroList.FormattingEnabled = true;
-            this.LogradouroList.Location = new System.Drawing.Point(75, 69);
+            this.LogradouroList.Location = new System.Drawing.Point(75, 39);
             this.LogradouroList.Name = "LogradouroList";
-            this.LogradouroList.Size = new System.Drawing.Size(288, 21);
+            this.LogradouroList.Size = new System.Drawing.Size(292, 21);
             this.LogradouroList.TabIndex = 5;
             this.LogradouroList.TabStop = false;
             this.LogradouroList.Visible = false;
@@ -265,61 +266,26 @@ namespace GTI_Desktop.Forms {
             this.CancelarButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.CancelarButton.Image = global::GTI_Desktop.Properties.Resources.cancel2;
             this.CancelarButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.CancelarButton.Location = new System.Drawing.Point(419, 143);
+            this.CancelarButton.Location = new System.Drawing.Point(430, 142);
             this.CancelarButton.Name = "CancelarButton";
             this.CancelarButton.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.CancelarButton.Size = new System.Drawing.Size(32, 25);
             this.CancelarButton.TabIndex = 10;
             this.CancelarButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.toolTip1.SetToolTip(this.CancelarButton, "Cancelar operação");
+            this.tTp.SetToolTip(this.CancelarButton, "Cancelar operação");
             this.CancelarButton.UseVisualStyleBackColor = true;
             this.CancelarButton.Click += new System.EventHandler(this.BtCancel_Click);
-            // 
-            // EmailText
-            // 
-            this.EmailText.Location = new System.Drawing.Point(75, 119);
-            this.EmailText.MaxLength = 50;
-            this.EmailText.Name = "EmailText";
-            this.EmailText.Size = new System.Drawing.Size(376, 20);
-            this.EmailText.TabIndex = 9;
-            this.EmailText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EmailText_KeyDown);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(7, 122);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(68, 13);
-            this.label9.TabIndex = 24;
-            this.label9.Text = "E-mail..........:";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(7, 146);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(67, 13);
-            this.label10.TabIndex = 25;
-            this.label10.Text = "Telefone.....:";
-            // 
-            // TelefoneText
-            // 
-            this.TelefoneText.Location = new System.Drawing.Point(75, 143);
-            this.TelefoneText.MaxLength = 50;
-            this.TelefoneText.Name = "TelefoneText";
-            this.TelefoneText.Size = new System.Drawing.Size(171, 20);
-            this.TelefoneText.TabIndex = 26;
             // 
             // TemFoneCheck
             // 
             this.TemFoneCheck.AutoSize = true;
             this.TemFoneCheck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.TemFoneCheck.Image = global::GTI_Desktop.Properties.Resources.PhoneCancel;
-            this.TemFoneCheck.Location = new System.Drawing.Point(308, 146);
+            this.TemFoneCheck.Location = new System.Drawing.Point(309, 147);
             this.TemFoneCheck.Name = "TemFoneCheck";
             this.TemFoneCheck.Size = new System.Drawing.Size(28, 16);
             this.TemFoneCheck.TabIndex = 161;
-            this.toolTip1.SetToolTip(this.TemFoneCheck, "Não possui telefone");
+            this.tTp.SetToolTip(this.TemFoneCheck, "Não possui telefone");
             this.TemFoneCheck.UseVisualStyleBackColor = true;
             this.TemFoneCheck.CheckedChanged += new System.EventHandler(this.TemFoneCheck_CheckedChanged);
             // 
@@ -328,19 +294,54 @@ namespace GTI_Desktop.Forms {
             this.WhatsAppCheck.AutoSize = true;
             this.WhatsAppCheck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.WhatsAppCheck.Image = global::GTI_Desktop.Properties.Resources.whatsapp;
-            this.WhatsAppCheck.Location = new System.Drawing.Point(264, 145);
+            this.WhatsAppCheck.Location = new System.Drawing.Point(265, 146);
             this.WhatsAppCheck.Name = "WhatsAppCheck";
             this.WhatsAppCheck.Size = new System.Drawing.Size(28, 17);
             this.WhatsAppCheck.TabIndex = 160;
-            this.toolTip1.SetToolTip(this.WhatsAppCheck, "Possui WhatsApp");
+            this.tTp.SetToolTip(this.WhatsAppCheck, "Possui WhatsApp");
             this.WhatsAppCheck.UseVisualStyleBackColor = true;
+            // 
+            // EmailText
+            // 
+            this.EmailText.Location = new System.Drawing.Point(75, 117);
+            this.EmailText.MaxLength = 50;
+            this.EmailText.Name = "EmailText";
+            this.EmailText.Size = new System.Drawing.Size(387, 20);
+            this.EmailText.TabIndex = 9;
+            this.EmailText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EmailText_KeyDown);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(8, 120);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(65, 13);
+            this.label9.TabIndex = 24;
+            this.label9.Text = "E-mail.........:";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(8, 147);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(67, 13);
+            this.label10.TabIndex = 25;
+            this.label10.Text = "Telefone.....:";
+            // 
+            // TelefoneText
+            // 
+            this.TelefoneText.Location = new System.Drawing.Point(76, 144);
+            this.TelefoneText.MaxLength = 50;
+            this.TelefoneText.Name = "TelefoneText";
+            this.TelefoneText.Size = new System.Drawing.Size(171, 20);
+            this.TelefoneText.TabIndex = 26;
             // 
             // Endereco
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.ClientSize = new System.Drawing.Size(457, 175);
+            this.BackColor = System.Drawing.Color.Linen;
+            this.ClientSize = new System.Drawing.Size(472, 176);
             this.ControlBox = false;
             this.Controls.Add(this.TemFoneCheck);
             this.Controls.Add(this.WhatsAppCheck);
@@ -375,6 +376,7 @@ namespace GTI_Desktop.Forms {
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Cadastro de endereço";
+            this.Load += new System.EventHandler(this.Endereco_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -403,7 +405,7 @@ namespace GTI_Desktop.Forms {
         private System.Windows.Forms.TextBox LogradouroText;
         private System.Windows.Forms.ComboBox LogradouroList;
         private System.Windows.Forms.Button CancelarButton;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip tTp;
         private System.Windows.Forms.TextBox EmailText;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;

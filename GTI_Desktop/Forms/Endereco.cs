@@ -7,16 +7,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using static GTI_Desktop.Classes.GtiTypes;
+using System.Drawing;
 
 namespace GTI_Desktop.Forms {
     public partial class Endereco : Form {
         bool _camposObrigatorios;
         bool _telefone;
         string _connection = gtiCore.Connection_Name();
-
+        private int StartLocationX;
+        private int StartLocationY;
+        private string _title;
         public GTI_Models.Models.Endereco EndRetorno { get; set; }
 
-        public Endereco( GTI_Models.Models.Endereco  reg, bool EnderecoLocal , bool EditarBairro,bool CamposObrigatorios ,bool Telefone) {
+        public Endereco( GTI_Models.Models.Endereco  reg, bool EnderecoLocal , bool EditarBairro,bool CamposObrigatorios ,bool Telefone,int xPos=200,int yPos=200,string Title="Cadastro de endereço") {
             InitializeComponent();
             Carrega_Endereco(reg);
             PaisList.Enabled = !EnderecoLocal;
@@ -30,6 +33,9 @@ namespace GTI_Desktop.Forms {
             TelefoneText.Enabled = _telefone;
             TemFoneCheck.Enabled = _telefone;
             WhatsAppCheck.Enabled = _telefone;
+            this.StartLocationX = xPos;
+            this.StartLocationY = yPos;
+            this._title = Title;
         }
 
         private void CmbUF_SelectedIndexChanged(object sender, EventArgs e) {
@@ -353,5 +359,9 @@ namespace GTI_Desktop.Forms {
                 TelefoneText.Text = "";
         }
 
+        private void Endereco_Load(object sender, EventArgs e) {
+            this.SetDesktopLocation(StartLocationX, StartLocationY);
+            this.Text = _title;
+        }
     }
 }
