@@ -8,10 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GTI_Desktop {
-    public partial class Form1 : Form {
-        public Form1() {
+namespace GTI_Desktop.Forms {
+    public partial class Login : Form {
+        public Login() {
             InitializeComponent();
+        }
+
+        private void Login_Load(object sender, EventArgs e) {
+
         }
     }
 }
