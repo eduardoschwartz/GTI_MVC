@@ -37,7 +37,7 @@ namespace GTI_Desktop.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Deutsch")]
+        [global::System.Configuration.DefaultSettingValueAttribute("200.232.123.115")]
         public string ServerName {
             get {
                 return ((string)(this["ServerName"]));
@@ -74,9 +74,9 @@ namespace GTI_Desktop.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("900")]
-        public string Form_Extrato_width {
+        public int Form_Extrato_width {
             get {
-                return ((string)(this["Form_Extrato_width"]));
+                return ((int)(this["Form_Extrato_width"]));
             }
             set {
                 this["Form_Extrato_width"] = value;
@@ -86,9 +86,9 @@ namespace GTI_Desktop.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("600")]
-        public string Form_Extrato_height {
+        public int Form_Extrato_height {
             get {
-                return ((string)(this["Form_Extrato_height"]));
+                return ((int)(this["Form_Extrato_height"]));
             }
             set {
                 this["Form_Extrato_height"] = value;
@@ -98,9 +98,9 @@ namespace GTI_Desktop.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public string UserId {
+        public int UserId {
             get {
-                return ((string)(this["UserId"]));
+                return ((int)(this["UserId"]));
             }
             set {
                 this["UserId"] = value;
@@ -110,9 +110,9 @@ namespace GTI_Desktop.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("690")]
-        public string Form_Processo_Tramite_width {
+        public int Form_Processo_Tramite_width {
             get {
-                return ((string)(this["Form_Processo_Tramite_width"]));
+                return ((int)(this["Form_Processo_Tramite_width"]));
             }
             set {
                 this["Form_Processo_Tramite_width"] = value;
@@ -122,9 +122,9 @@ namespace GTI_Desktop.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("368")]
-        public string Form_Processo_Tramite_height {
+        public int Form_Processo_Tramite_height {
             get {
-                return ((string)(this["Form_Processo_Tramite_height"]));
+                return ((int)(this["Form_Processo_Tramite_height"]));
             }
             set {
                 this["Form_Processo_Tramite_height"] = value;
@@ -134,9 +134,9 @@ namespace GTI_Desktop.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("810")]
-        public string Form_Processo_Lista_width {
+        public int Form_Processo_Lista_width {
             get {
-                return ((string)(this["Form_Processo_Lista_width"]));
+                return ((int)(this["Form_Processo_Lista_width"]));
             }
             set {
                 this["Form_Processo_Lista_width"] = value;
@@ -146,9 +146,9 @@ namespace GTI_Desktop.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("490")]
-        public string Form_Processo_Lista_height {
+        public int Form_Processo_Lista_height {
             get {
-                return ((string)(this["Form_Processo_Lista_height"]));
+                return ((int)(this["Form_Processo_Lista_height"]));
             }
             set {
                 this["Form_Processo_Lista_height"] = value;
@@ -182,9 +182,9 @@ namespace GTI_Desktop.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public string gti_001_version {
+        public int gti_001_version {
             get {
-                return ((string)(this["gti_001_version"]));
+                return ((int)(this["gti_001_version"]));
             }
             set {
                 this["gti_001_version"] = value;
@@ -194,9 +194,9 @@ namespace GTI_Desktop.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public string gti_002_version {
+        public int gti_002_version {
             get {
-                return ((string)(this["gti_002_version"]));
+                return ((int)(this["gti_002_version"]));
             }
             set {
                 this["gti_002_version"] = value;
@@ -206,9 +206,9 @@ namespace GTI_Desktop.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public string gti_003_version {
+        public int gti_003_version {
             get {
-                return ((string)(this["gti_003_version"]));
+                return ((int)(this["gti_003_version"]));
             }
             set {
                 this["gti_003_version"] = value;
@@ -218,9 +218,9 @@ namespace GTI_Desktop.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public string gti_004_version {
+        public int gti_004_version {
             get {
-                return ((string)(this["gti_004_version"]));
+                return ((int)(this["gti_004_version"]));
             }
             set {
                 this["gti_004_version"] = value;
@@ -230,9 +230,9 @@ namespace GTI_Desktop.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("700")]
-        public string Form_Report_width {
+        public int Form_Report_width {
             get {
-                return ((string)(this["Form_Report_width"]));
+                return ((int)(this["Form_Report_width"]));
             }
             set {
                 this["Form_Report_width"] = value;
@@ -242,9 +242,9 @@ namespace GTI_Desktop.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("600")]
-        public string Form_Report_height {
+        public int Form_Report_height {
             get {
-                return ((string)(this["Form_Report_height"]));
+                return ((int)(this["Form_Report_height"]));
             }
             set {
                 this["Form_Report_height"] = value;

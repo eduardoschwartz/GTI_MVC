@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using GTI_Desktop.Forms;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
@@ -11,6 +12,9 @@ using System.IO;
 using GTI_Bll.Classes;
 
 namespace GTI_Desktop.Classes {
+    /// <summary>
+    /// Classe que contêm as funções genéricas do sistema
+    /// </summary>
     public static class gtiCore {
         
         public enum eTweakMode { Normal, AllLetters, AllLettersAllCaps, AllLettersAllSmall, AlphaNumeric, AlphaNumericAllCaps, AlphaNumericAllSmall, IntegerPositive, DecimalPositive };
@@ -48,7 +52,7 @@ namespace GTI_Desktop.Classes {
         }
 
         public static void Ocupado(Form frm) {
-            Main f1 = (Main)Application.OpenForms["Main"];
+            Forms.Main f1 = (Forms.Main)Application.OpenForms["Main"];
             f1.LedGreen.Enabled = false;
             f1.LedRed.Enabled = true;
             f1.Refresh();
@@ -58,7 +62,7 @@ namespace GTI_Desktop.Classes {
         }
 
         public static void Liberado(Form frm) {
-            Main f1 = (Main)Application.OpenForms["Main"];
+            Forms.Main f1 = (Forms.Main)Application.OpenForms["Main"];
             f1.LedGreen.Enabled = true;
             f1.LedRed.Enabled = false;
             frm.Cursor = Cursors.Default;
@@ -238,7 +242,8 @@ namespace GTI_Desktop.Classes {
         /// </summary>
         /// <returns>Date DataBase</returns>
         public static DateTime Retorna_Data_Base_Sistema() {
-            Main f1 = (Main)Application.OpenForms.Cast<Form>().FirstOrDefault(c => c is Main);
+    //        Main f1 = (Main)Application.OpenForms["MainForm"];
+            Main f1 = (Main)Application.OpenForms.Cast<Form>().FirstOrDefault(c => c is Forms.Main);
             return f1.ReturnDataBaseValue();
         }
 
@@ -610,10 +615,9 @@ namespace GTI_Desktop.Classes {
 
         public static void UpdateUserBinary() {
             string _connection = gtiCore.Connection_Name();
-            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
-            int _userid = Convert.ToInt32(Properties.Settings.Default.UserId);
-            string sTmp = sistemaRepository.GetUserBinary(_userid);
-            int nSize = sistemaRepository.GetSizeofBinary();
+            Sistema_bll sistema_Class = new Sistema_bll(_connection);
+            string sTmp = sistema_Class.GetUserBinary(Properties.Settings.Default.UserId);
+            int nSize = sistema_Class.GetSizeofBinary();
             GtiTypes.UserBinary = gtiCore.Decrypt(sTmp);
             if (nSize > GtiTypes.UserBinary.Length) {
                 int nDif = nSize - GtiTypes.UserBinary.Length;
