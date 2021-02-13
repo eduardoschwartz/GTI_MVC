@@ -1,0 +1,407 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{796BB2E6-B5E0-41AD-BEAB-C517FC27D8C9}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>GTI_Desktop</RootNamespace>
+    <AssemblyName>GTI_Desktop</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\SAP BusinessObjects\Crystal Reports for .NET Framework 4.0\Common\SAP BusinessObjects Enterprise XI 4.0\win32_x86\dotnet\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\SAP BusinessObjects\Crystal Reports for .NET Framework 4.0\Common\SAP BusinessObjects Enterprise XI 4.0\win32_x86\dotnet\CrystalDecisions.ReportSource.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\SAP BusinessObjects\Crystal Reports for .NET Framework 4.0\Common\SAP BusinessObjects Enterprise XI 4.0\win32_x86\dotnet\CrystalDecisions.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Windows.Forms, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\SAP BusinessObjects\Crystal Reports for .NET Framework 4.0\Common\SAP BusinessObjects Enterprise XI 4.0\win32_x86\dotnet\CrystalDecisions.Windows.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="MessageBoxManager">
+      <HintPath>Files\MessageBoxManager\bin\Release\MessageBoxManager.dll</HintPath>
+    </Reference>
+    <Reference Include="Owf.Controls.A1Panel">
+      <HintPath>Files\Owf.Controls.A1Panel.dll</HintPath>
+    </Reference>
+    <Reference Include="QRCoder">
+      <HintPath>Files\QRCoder.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GTI_Bll\GTI_Bll.csproj">
+      <Project>{9b7b83db-4417-4143-b465-52fe4870d2e0}</Project>
+      <Name>GTI_Bll</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GTI_Models\GTI_Models.csproj">
+      <Project>{859b188d-0d59-418e-af77-5235b79087f4}</Project>
+      <Name>GTI_Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1588_64x64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\6946_64x64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\7837_64x64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\8366_64x64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\9153_64x64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Abaixo.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Acima.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add_file.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\addfavorite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Alterar.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\anexo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Apagar.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\boleto.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Brasao.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btMobiliario.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Business.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cancel2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cancelar.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chave.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\comment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\config.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Consultar.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dc33ac11.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Debito.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Direita.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\doc.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\downarrow.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\downarrow1.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\download.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\email[1]_2.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\email1.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\email2.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\emoji_1f3ed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\emoji_1f4c3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\emoji_1f6e0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\emoji_1f510.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\enviar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ErrorIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Esquerda.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\executar.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fabrica.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder_sent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\funnel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gravar.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GTI.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GTI_logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Historico.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\History2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\History21.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Home.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Hourglass.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_excel.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\if_Application_105234.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\if_Folder_27849.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\if_folder_61771.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\if_Gnome-Application-Certificate-48_55221.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\if_Login_73221.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ledgreen.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ledred.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\leftarrow.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Menu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Menu1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mi_ico_up[1].gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\more[1].gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Noeli.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NoPhone.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NoPhone1.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OK.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\option.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\parcela.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pasta-azul-lupa.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pasta-azul-lupa1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\people.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\people1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\people2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PhoneCancel.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\photo_16x16.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\print.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\processo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\receber.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\refresh-16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\removefavorite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rightarrow.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Sair.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Sair.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sair2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\search.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\uparrow.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\usuarios.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\whatsapp.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\write.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zoomer.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
