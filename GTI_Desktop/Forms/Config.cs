@@ -11,8 +11,8 @@ namespace GTI_Desktop.Forms {
         private void FillGrid() {
             gtiConfig Pms = new gtiConfig {
                 PathApp = AppDomain.CurrentDomain.BaseDirectory,
-                DataBaseReal = Properties.Settings.Default.DataBaseReal,
-                DataBaseTeste = Properties.Settings.Default.DataBaseTeste
+                DataBaseReal = Properties.Settings.Default.DataBase,
+//                DataBaseTeste = Properties.Settings.Default.DataBaseTeste
             };
             Pms.PathReport = Pms.PathApp + "\\report";
             Pms.PathAnexo = Properties.Settings.Default.Path_Anexo_Local;

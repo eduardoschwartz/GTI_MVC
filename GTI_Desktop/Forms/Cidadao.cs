@@ -161,8 +161,8 @@ namespace GTI_Desktop.Forms {
             string sCod = z.Show("", "Informação", "Digite o código do cidadão.", 6, gtiCore.eTweakMode.IntegerPositive);
             if (!string.IsNullOrEmpty(sCod)) {
                 gtiCore.Ocupado(this);
-                Cidadao_bll clsCidadao = new Cidadao_bll(_connection);
-                if (clsCidadao.ExisteCidadao(Convert.ToInt32(sCod))) {
+                Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+                if (cidadaoRepository.ExisteCidadao(Convert.ToInt32(sCod))) {
                     Clear_Reg();
                     LoadReg(Convert.ToInt32(sCod));
                 } else
@@ -226,8 +226,8 @@ namespace GTI_Desktop.Forms {
         }
 
         private void LoadReg(int nCodigo) {
-            Cidadao_bll clsCidadao = new Cidadao_bll(_connection);
-            CidadaoStruct reg = clsCidadao.LoadReg(nCodigo);
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+            CidadaoStruct reg = cidadaoRepository.LoadReg(nCodigo);
             CodigoText.Text = reg.Codigo.ToString("000000");
             NomeText.Text = reg.Nome;
             RGText.Text = reg.Rg ?? "";
@@ -426,10 +426,10 @@ namespace GTI_Desktop.Forms {
                     reg.Nomelogradouro = reg.Codcidade != 413 ? LogradouroRText.Text : "";
                     reg.Numimovel = NumeroRText.Text == "" ? (short)0 : Convert.ToInt16(NumeroRText.Text);
                     reg.Complemento = ComplementoRText.Text;
-                    reg.Cep = reg.Codcidade != 413 ? CepRText.Text == "" ? 0 : Convert.ToInt32(CepRText.Text) : 0;
+                    reg.Cep = reg.Codcidade != 413 ? CepRText.Text == "" ? 0 : Convert.ToInt32(gtiCore.RetornaNumero( CepRText.Text)) : 0;
                     reg.Email = EmailRText.Text;
                     reg.Etiqueta = EtiquetaRCheck.Checked ? "S" : "N";
-                    reg.Telefone = String.IsNullOrWhiteSpace(FoneRText.Text) ? null : FoneRText.Text;
+                    reg.Telefone = string.IsNullOrWhiteSpace(FoneRText.Text) ? null : FoneRText.Text;
                     reg.Temfone = TemFoneRCheck.Checked;
                     reg.Whatsapp = WhatsAppRCheck.Checked;
                 }
@@ -443,30 +443,30 @@ namespace GTI_Desktop.Forms {
                     reg.Nomelogradouro2 = reg.Codcidade2 != 413 ? LogradouroCText.Text : "";
                     reg.Numimovel2 = NumeroCText.Text == "" ? (short)0 : Convert.ToInt16(NumeroCText.Text);
                     reg.Complemento2 = ComplementoCText.Text;
-                    reg.Cep2 = reg.Codcidade2 != 413 ? CepCText.Text == "" ? 0 : Convert.ToInt32(CepCText.Text) : 0;
+                    reg.Cep2 = reg.Codcidade2 != 413 ? CepCText.Text == "" ? 0 : Convert.ToInt32(gtiCore.RetornaNumero( CepCText.Text)) : 0;
                     reg.Email2 = EmailCText.Text;
                     reg.Etiqueta2 = EtiquetaCButton.Checked ? "S" : "N";
-                    reg.Telefone2 = String.IsNullOrWhiteSpace(FoneCText.Text) ? null : FoneCText.Text;
+                    reg.Telefone2 = string.IsNullOrWhiteSpace(FoneCText.Text) ? null : FoneCText.Text;
                     reg.Temfone2 = TemFoneCCheck.Checked;
                     reg.Whatsapp2 = WhatsAppCCheck.Checked;
                 }
 
-                Cidadao_bll clsCidadao = new Cidadao_bll(_connection);
+                Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
                 Exception ex;
                 
                 if (bAddNew) {
-                    ex = clsCidadao.Incluir_cidadao(reg);
+                    ex = cidadaoRepository.Incluir_cidadao(reg);
                     if (ex != null) {
                         ErrorBox eBox = new ErrorBox("Atenção", ex.Message, ex);
                         eBox.ShowDialog();
                     } else {
-                        int nLastCod = clsCidadao.Retorna_Ultimo_Codigo_Cidadao();
+                        int nLastCod = cidadaoRepository.Retorna_Ultimo_Codigo_Cidadao();
                         LoadReg(nLastCod);
                         ControlBehaviour(true);
                     }
                 } else {
                     reg.Codcidadao = Convert.ToInt32(CodigoText.Text);
-                    ex = clsCidadao.Alterar_cidadao(reg);
+                    ex = cidadaoRepository.Alterar_cidadao(reg);
                     if (ex != null) {
                         ErrorBox eBox = new ErrorBox("Atenção", ex.Message, ex);
                         eBox.ShowDialog();
@@ -477,7 +477,7 @@ namespace GTI_Desktop.Forms {
 
                 int nCodigo = 0;
                 if (bAddNew)
-                    nCodigo = clsCidadao.Retorna_Ultimo_Codigo_Cidadao();
+                    nCodigo = cidadaoRepository.Retorna_Ultimo_Codigo_Cidadao();
                 else
                     nCodigo = Convert.ToInt32(CodigoText.Text);
 
@@ -493,8 +493,8 @@ namespace GTI_Desktop.Forms {
                     MessageBox.Show("Selecione um cidadão.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else {
                     if (MessageBox.Show("Excluir este registro?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
-                        Cidadao_bll clsCidadao = new Cidadao_bll(_connection);
-                        Exception ex = clsCidadao.Excluir_cidadao(nCodigo);
+                        Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+                        Exception ex = cidadaoRepository.Excluir_cidadao(nCodigo);
                         if (ex != null) {
                             ErrorBox eBox = new ErrorBox("Atenção", ex.Message, ex);
                             eBox.ShowDialog();
@@ -551,7 +551,9 @@ namespace GTI_Desktop.Forms {
             reg.Telefone = FoneRText.Text;
             reg.TemFone = TemFoneRCheck.Checked;
             reg.WhatsApp = WhatsAppRCheck.Checked;
-            Endereco f1 = new Endereco(reg,false,true,true,true,Cursor.Position.X-20,Cursor.Position.Y-20,"Cadastro de endereço residencial" );
+            int _x = Location.X + EndRPanel.Location.X + AddEnderecoRButton.Location.X;
+            int _y = Location.Y + EndRPanel.Location.Y + AddEnderecoRButton.Location.Y;
+            Endereco f1 = new Endereco(reg, false, true, true, true, _x, _y, "Cadastro de endereço residencial");
             f1.ShowDialog();
             if (!f1.EndRetorno.Cancelar) {
                 PaisRText.Text = f1.EndRetorno.Nome_pais;
@@ -593,8 +595,9 @@ namespace GTI_Desktop.Forms {
             reg.Cep = reg.Id_cidade != 413 ? CepCText.Text == "" ? 0 : Convert.ToInt32(gtiCore.ExtractNumber( CepCText.Text)) : 0;
             reg.TemFone = TemFoneCCheck.Checked;
             reg.WhatsApp = WhatsAppCCheck.Checked;
-
-            Endereco f1 = new Forms.Endereco(reg, false, true, true, true,Cursor.Position.X-20,Cursor.Position.Y-20,"Cadastro de endereço comercial");
+            int _x = Location.X + EndRPanel.Location.X + AddEnderecoCButton.Location.X;
+            int _y = Location.Y + EndRPanel.Location.Y + AddEnderecoCButton.Location.Y;
+            Endereco f1 = new Endereco(reg, false, true, true, true,_x,_y,"Cadastro de endereço comercial");
             f1.ShowDialog();
             if (!f1.EndRetorno.Cancelar) {
                 PaisCText.Text = f1.EndRetorno.Nome_pais;

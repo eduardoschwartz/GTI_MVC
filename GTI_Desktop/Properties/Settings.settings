@@ -8,11 +8,8 @@
     <Setting Name="ServerName" Type="System.String" Scope="User">
       <Value Profile="(Default)">200.232.123.115</Value>
     </Setting>
-    <Setting Name="DataBaseReal" Type="System.String" Scope="User">
+    <Setting Name="DataBase" Type="System.String" Scope="User">
       <Value Profile="(Default)">Tributacao</Value>
-    </Setting>
-    <Setting Name="DataBaseTeste" Type="System.String" Scope="User">
-      <Value Profile="(Default)">TributacaoTeste</Value>
     </Setting>
     <Setting Name="Form_Extrato_width" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">900</Value>

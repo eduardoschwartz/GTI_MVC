@@ -25,6 +25,10 @@ namespace GTI_Desktop.Forms
         public Main()
         {
             InitializeComponent();
+            Properties.Settings.Default.DataBase = "TRIBUTACAO";
+            Properties.Settings.Default.Save();
+            _connection = gtiCore.Connection_Name();
+
             this.DoubleBuffered = true;
             DateTimePicker t = new DateTimePicker
             {
@@ -175,6 +179,9 @@ namespace GTI_Desktop.Forms
             foreach (Form chform in charr)
                 chform.Close();
 
+            Properties.Settings.Default.DataBase = "TRIBUTACAO";
+            Properties.Settings.Default.Save();
+            _connection = gtiCore.Connection_Name();
             FillBackgroundColor(false);
             DataBaseToolStripStatus.Text = "PRODUÇÂO";
             gtiCore.UpdateUserBinary();
@@ -187,6 +194,9 @@ namespace GTI_Desktop.Forms
             foreach (Form chform in charr)
                 chform.Close();
 
+            Properties.Settings.Default.DataBase = "TRIBUTACAOTESTE";
+            Properties.Settings.Default.Save();
+            _connection = gtiCore.Connection_Name();
             FillBackgroundColor(true);
             DataBaseToolStripStatus.Text = "BASE TESTE";
             gtiCore.UpdateUserBinary();

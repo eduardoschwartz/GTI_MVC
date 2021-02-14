@@ -50,24 +50,12 @@ namespace GTI_Desktop.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Tributacao")]
-        public string DataBaseReal {
+        public string DataBase {
             get {
-                return ((string)(this["DataBaseReal"]));
+                return ((string)(this["DataBase"]));
             }
             set {
-                this["DataBaseReal"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("TributacaoTeste")]
-        public string DataBaseTeste {
-            get {
-                return ((string)(this["DataBaseTeste"]));
-            }
-            set {
-                this["DataBaseTeste"] = value;
+                this["DataBase"] = value;
             }
         }
         

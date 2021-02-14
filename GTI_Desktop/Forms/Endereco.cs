@@ -139,17 +139,28 @@ namespace GTI_Desktop.Forms {
                 CidadeList.SelectedValue = Convert.ToInt32(reg.Id_cidade);
                 CmbCidade_SelectedIndexChanged(null, null);
             }
-            if (reg.Id_bairro > 0)
-                BairroList.SelectedValue = reg.Id_bairro;
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
             if (reg.Id_logradouro > 0) {
-                Endereco_bll clsEndereco = new Endereco_bll(_connection);
-                LogradouroText.Text = clsEndereco.Retorna_Logradouro(reg.Id_logradouro);
+                LogradouroText.Text = enderecoRepository.Retorna_Logradouro(reg.Id_logradouro);
             } else
                 LogradouroText.Text = reg.Nome_logradouro;
             LogradouroText.Tag = reg.Id_logradouro;
             ComplementoText.Text = reg.Complemento;
             EmailText.Text = reg.Email;
             NumeroList.Text = reg.Numero_imovel > 0 ? reg.Numero_imovel.ToString() : "";
+
+            if (reg.Id_bairro > 0) {
+                if (reg.Sigla_uf == "SP" && reg.Id_cidade == 413) {
+                    //GTI_Models.Models.Bairro _bairro = enderecoRepository.RetornaLogradouroBairro(reg.Id_logradouro, (short)reg.Numero_imovel);
+                    //BairroText.Text = _bairro.Descbairro;
+                    //BairroText.Tag = _bairro.Codbairro.ToString();
+                } else {
+                    BairroText.Text= enderecoRepository.Retorna_Bairro(reg.Sigla_uf, reg.Id_cidade,reg.Id_bairro);
+                    BairroText.Tag = reg.Id_bairro.ToString();
+                }
+                BairroList.SelectedValue = reg.Id_bairro;
+            }
+
             if (reg.Cep > 0)
                 CepMask.Text = reg.Cep.ToString();
             else
@@ -198,8 +209,11 @@ namespace GTI_Desktop.Forms {
 
         private void LstLogr_KeyDown(object sender, KeyEventArgs e) {
             if (LogradouroList.SelectedValue == null) return;
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
             if (e.KeyCode == Keys.Escape) {
                 LogradouroList.Visible = false;
+
+
                 LogradouroText.Focus();
                 return;
             }
@@ -252,10 +266,18 @@ namespace GTI_Desktop.Forms {
                 LogradouroText.Tag = "0";
 
             if (UFList.SelectedValue.ToString() == "SP" && Convert.ToInt32(CidadeList.SelectedValue) == 413)  {
-                Endereco_bll clsEndereco = new Endereco_bll(_connection);
-                int nCep = clsEndereco.RetornaCep(Convert.ToInt32(LogradouroText.Tag.ToString()), NumeroList.Text==""?(short)0:  Convert.ToInt16(NumeroList.Text));
+                Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+                int nCep = enderecoRepository.RetornaCep(Convert.ToInt32(LogradouroText.Tag.ToString()), NumeroList.Text==""?(short)0:  Convert.ToInt16(NumeroList.Text));
                 CepMask.Text = nCep.ToString("00000-000");
-            } 
+
+                short _num = 0;
+                if (gtiCore.IsNumeric(NumeroList.Text))
+                    _num = Convert.ToInt16(NumeroList.Text);
+                GTI_Models.Models.Bairro _bairro = enderecoRepository.RetornaLogradouroBairro(Convert.ToInt32(LogradouroText.Tag.ToString()), _num);
+                BairroText.Text = _bairro.Descbairro;
+                BairroText.Tag = _bairro.Codbairro.ToString();
+
+            }
         }
 
         private void LstLogr_TextChanged(object sender, EventArgs e) {
@@ -291,8 +313,8 @@ namespace GTI_Desktop.Forms {
             this.Text = _title;
         }
 
-        private void Esconde_Bairro(string UF,int Bairro) {
-            if (UF == "SP" && Bairro == 413) {
+        private void Esconde_Bairro(string UF,int Cidade) {
+            if (UF == "SP" && Cidade == 413) {
                 BairroList.Visible = false;
                 BairroButton_Refresh.Visible = false;
                 BairroText.Visible = true;
@@ -331,6 +353,10 @@ namespace GTI_Desktop.Forms {
 
                 if (TelefoneText.Text.Trim() == "" && WhatsAppCheck.Checked) {
                     MessageBox.Show("Digite o nº do WhatsApp, ou desmarque esta opção.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (TelefoneText.Text.Trim() != "" && TemFoneCheck.Checked) {
+                    MessageBox.Show("Apague o número de telefone, ou desmarque a opção que não possui telefone.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }

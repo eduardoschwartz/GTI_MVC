@@ -215,8 +215,7 @@ namespace GTI_Desktop.Classes {
             Ul = "gtisys"; Up = "everest";
             Main f1 = (Main)Application.OpenForms["Main"];
             try {
-//                BaseDados = f1.DataBaseToolStripStatus.Text;
-                connString = CreateConnectionString(Properties.Settings.Default.ServerName, Properties.Settings.Default.DataBaseReal, Ul, Up);
+                connString = CreateConnectionString(Properties.Settings.Default.ServerName, Properties.Settings.Default.DataBase, Ul, Up);
             } catch (Exception) {
             }
             return connString;
@@ -231,7 +230,6 @@ namespace GTI_Desktop.Classes {
             Main f1 = (Main)Application.OpenForms["Main"];
             try {
                 BaseDados = DataBase_Name;
-                //connString = CreateConnectionString(Properties.Settings.Default.ServerName, BaseDados, Ul, Up);
                 connString = CreateConnectionString("SKYNET", BaseDados, Ul, Up); //Base de testes por enquanto
             } catch (Exception) {
             }

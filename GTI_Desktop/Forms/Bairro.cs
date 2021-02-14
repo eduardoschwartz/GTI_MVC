@@ -87,20 +87,25 @@ namespace GTI_Desktop.Forms {
                 return;
             }
 
-            String sCod = iBox.Show("", "Informação", "Digite o nome do bairro.", 40);
-            if (!string.IsNullOrEmpty(sCod)) {
+            string _nomeBairro = iBox.Show("", "Informação", "Digite o nome do bairro.", 40);
+            if (!string.IsNullOrEmpty(_nomeBairro)) {
+                _nomeBairro = _nomeBairro.ToUpper();
+                string _uf =UFCombo.SelectedValue.ToString();
+                short _cidade = Convert.ToInt16(CidadeCombo.SelectedValue.ToString());
                 Endereco_bll bairro_class = new Endereco_bll(_connection);
-                GTI_Models.Models.Bairro reg = new GTI_Models.Models.Bairro {
-                    Siglauf = UFCombo.SelectedValue.ToString(),
-                    Codcidade = Convert.ToInt16(CidadeCombo.SelectedValue.ToString()),
-                    Descbairro = sCod.ToUpper()
-                };
-                int _cod = bairro_class.Incluir_bairro(reg);
-                if (_cod>0) {
-                    ErrorBox eBox = new ErrorBox("Atenção", "Bairro já cadastrado.", null);
-                    eBox.ShowDialog();
-                } else
+                bool _existe = bairro_class.Existe_Bairro(_uf,_cidade,_nomeBairro);
+                if (_existe) {
+                    MessageBox.Show("Bairro já cadastrado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                } else {
+                    GTI_Models.Models.Bairro reg = new GTI_Models.Models.Bairro {
+                        Siglauf = _uf,
+                        Codcidade = _cidade,
+                        Descbairro = _nomeBairro.ToUpper()
+                    };
+                    int _cod = bairro_class.Incluir_bairro(reg);
                     CmbCidade_SelectedIndexChanged(sender, e);
+                }
             }
         }
 
