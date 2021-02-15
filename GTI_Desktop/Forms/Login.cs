@@ -220,6 +220,7 @@ namespace GTI_Desktop.Forms {
                     if (string.Compare(txtPwd.Text, _tAcesso.DecryptGTI(sPwd)) != 0) {
                         gtiCore.Liberado(this);
                         MessageBox.Show("Senha inválida.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        txtPwd.Text = "";
                         return;
                     }
                 }

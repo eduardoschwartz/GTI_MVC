@@ -1095,6 +1095,7 @@
             this.AddEnderecoRButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.Ttp.SetToolTip(this.AddEnderecoRButton, "Adicionar/Alterar o endereço residencial");
             this.AddEnderecoRButton.UseVisualStyleBackColor = true;
+            this.AddEnderecoRButton.Click += new System.EventHandler(this.BtAddEnderecoR_Click);
             // 
             // TipoCidadaoText
             // 

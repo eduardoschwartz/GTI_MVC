@@ -70,6 +70,8 @@ namespace GTI_Models.Models {
         public bool? Temfone2 { get; set; }
         public bool? Whatsapp { get; set; }
         public bool? Whatsapp2 { get; set; }
+        public string Cnh { get; set; }
+        public string Orgaocnh { get; set; }
     }
 
     public class CidadaoStruct {
@@ -118,6 +120,8 @@ namespace GTI_Models.Models {
         public bool? Temfone2 { get; set; }
         public bool? Whatsapp { get; set; }
         public bool? Whatsapp2 { get; set; }
+        public string Cnh { get; set; }
+        public string Orgaocnh { get; set; }
     }
 
 }

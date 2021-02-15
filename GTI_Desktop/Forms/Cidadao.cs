@@ -461,6 +461,7 @@ namespace GTI_Desktop.Forms {
                 
                 if (bAddNew) {
                     int nLastCod = cidadaoRepository.Incluir_cidadao(reg);
+                    CodigoText.Text = nLastCod.ToString();
                     ControlBehaviour(true);
                 } else {
                     reg.Codcidadao = Convert.ToInt32(CodigoText.Text);
@@ -474,8 +475,8 @@ namespace GTI_Desktop.Forms {
                 }
 
                 int nCodigo = 0;
-                if (bAddNew)
-                    nCodigo = cidadaoRepository.Retorna_Ultimo_Codigo_Cidadao();
+                if (bAddNew) { }
+                //                    nCodigo = cidadaoRepository.Retorna_Ultimo_Codigo_Cidadao();
                 else
                     nCodigo = Convert.ToInt32(CodigoText.Text);
 
@@ -551,7 +552,7 @@ namespace GTI_Desktop.Forms {
             reg.WhatsApp = WhatsAppRCheck.Checked;
             int _x = Location.X + EndRPanel.Location.X + AddEnderecoRButton.Location.X;
             int _y = Location.Y + EndRPanel.Location.Y + AddEnderecoRButton.Location.Y;
-            Endereco f1 = new Endereco(reg, false, true, true, true, _x, _y, "Cadastro de endereço residencial");
+            Endereco f1 = new Endereco(reg, false, true, true, true, _x, _y-20, "Cadastro de endereço residencial");
             f1.ShowDialog();
             if (!f1.EndRetorno.Cancelar) {
                 PaisRText.Text = f1.EndRetorno.Nome_pais;
@@ -595,7 +596,7 @@ namespace GTI_Desktop.Forms {
             reg.WhatsApp = WhatsAppCCheck.Checked;
             int _x = Location.X + EndRPanel.Location.X + AddEnderecoCButton.Location.X;
             int _y = Location.Y + EndRPanel.Location.Y + AddEnderecoCButton.Location.Y;
-            Endereco f1 = new Endereco(reg, false, true, true, true,_x,_y,"Cadastro de endereço comercial");
+            Endereco f1 = new Endereco(reg, false, true, true, true,_x,_y-20,"Cadastro de endereço comercial");
             f1.ShowDialog();
             if (!f1.EndRetorno.Cancelar) {
                 PaisCText.Text = f1.EndRetorno.Nome_pais;
