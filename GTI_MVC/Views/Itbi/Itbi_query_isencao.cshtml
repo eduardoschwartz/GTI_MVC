@@ -94,7 +94,8 @@
                                     <td style="width:130px">
                                         <a href="@Url.Action("Itbi_isencao_q", "Itbi", new { p = item.Guid })" title="Visualizar certidão"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
                                         @if (item.Situacao_Itbi_codigo == 1) {
-                                            <a href="@Url.Action("Itbi_isencao_cancel", "Itbi", new { p = item.Guid, s = 4 })" onclick="return confirm('Cancelar esta certidão?')" })" title="Cancelar este ITBI"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
+                                            <a href="@Url.Action("Itbi_isencao_cancel", "Itbi", new { p = item.Guid, s = 4 })" onclick="return confirm('Cancelar esta certidão?')" })" title="Cancelar esta certidão"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
+                                            <a href="@Url.Action("Itbi_isencao_e", "Itbi", new { guid = item.Guid, s = 4 })"  title="Alterar esta certidão"> <img src="@Url.Content("~/images/alterar.gif")"></a>
                                         }
                                         @if (item.Situacao_Itbi_codigo == 5) {
                                             <a href="@Url.Action("Itbi_isencao_print", "Itbi", new { p = item.Guid, u = item.Tipo_Imovel == "Urbano" })" title="Imprimir a certidão"> <img src="@Url.Content("~/images/print.png")"></a>

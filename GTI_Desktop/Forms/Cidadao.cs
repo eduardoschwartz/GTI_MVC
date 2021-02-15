@@ -391,6 +391,11 @@ namespace GTI_Desktop.Forms {
                 return false;
             }
 
+            if (!gtiCore.IsDate(DataNasctoMask.Text)) {
+                MessageBox.Show("Data de nascimento inválida.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
             return true;
         }
 
@@ -455,15 +460,8 @@ namespace GTI_Desktop.Forms {
                 Exception ex;
                 
                 if (bAddNew) {
-                    ex = cidadaoRepository.Incluir_cidadao(reg);
-                    if (ex != null) {
-                        ErrorBox eBox = new ErrorBox("Atenção", ex.Message, ex);
-                        eBox.ShowDialog();
-                    } else {
-                        int nLastCod = cidadaoRepository.Retorna_Ultimo_Codigo_Cidadao();
-                        LoadReg(nLastCod);
-                        ControlBehaviour(true);
-                    }
+                    int nLastCod = cidadaoRepository.Incluir_cidadao(reg);
+                    ControlBehaviour(true);
                 } else {
                     reg.Codcidadao = Convert.ToInt32(CodigoText.Text);
                     ex = cidadaoRepository.Alterar_cidadao(reg);
@@ -675,5 +673,6 @@ namespace GTI_Desktop.Forms {
             }
 
         }
+
     }
 }

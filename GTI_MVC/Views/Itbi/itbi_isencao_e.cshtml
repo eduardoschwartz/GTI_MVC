@@ -1,0 +1,337 @@
+﻿@model GTI_Mvc.ViewModels.ItbiViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Certidão de não incidência de ITBI";
+}
+<script src="~/Scripts/jquery.giantdropdown.js"></script>
+
+<script type="text/javascript">
+        // <![CDATA[
+        $(function () { $("select").giantDropdown(); });
+        // ]]>
+</script>
+
+<link href="~/Content/giantdropdown.css" rel="stylesheet" />
+<style>
+    .center {
+        margin: auto;
+
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+</style>
+
+<div class="center container" style="width:700px">
+
+    @using (Html.BeginForm("Itbi_isencao_e", "Itbi", FormMethod.Post, new { @id = "MainForm" })) {
+
+
+        <div class="card">
+            <div class="card-header">Certidão de não incidência de ITBI (Imóvel Urbano) </div>
+            <div class="card-body">
+                <label id="Guidtmp" style="display: none">@Model.Guid</label>
+                @Html.HiddenFor(m => m.Guid, new { @id = "Guid" })@*Armazenar o guid*@
+                @Html.HiddenFor(m => m.Natureza_Isencao_Codigo, new { @id = "Natureza_Isencao_Codigo" })@*Armazenar o guid*@
+                @Html.HiddenFor(m => m.Vendedor_Cpf_cnpj_tmp, new { @id = "Vendedor_Cpf_cnpj_tmp" })@*Armazenar o código do imóvel*@
+                @Html.HiddenFor(m => m.Vendedor_Nome_tmp, new { @id = "Vendedor_Nome_tmp" })@*Armazenar a descrição do imóvel*@
+                @Html.HiddenFor(m => m.Lista_Isencao)
+                <div id="VendedorTable" style="max-height: 247px; overflow: auto;width:630px;padding-top:7px">
+                    <table id="tblVendedor" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                        <thead style="background-color:brown;color:white;font-size:13px;font-weight:normal">
+                            <tr style="height:12px;">
+                                <th style="width:20px;font-weight:normal">
+                                    #
+                                </th>
+                                <th style="width:60px;font-weight:normal">
+                                    Tipo
+                                </th>
+                                <th style="width:60px;font-weight:normal">
+                                    Código
+                                </th>
+                                <th style="width:490px;font-weight:normal;text-align:left">
+                                    Descrição
+                                </th>
+                                <th style="width:20px;text-align:left">
+
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <table id="tblVendedor" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px">
+                        @if (Model.Lista_Isencao != null) {
+                            foreach (var item in Model.Lista_Isencao) {
+                                if (item != null) {
+                                    <tr>
+                                        <td style="width:20px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Seq)
+                                            @Html.HiddenFor(modelItem => item.Seq)
+                                        </td>
+                                        <td style="width:60px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Tipo)
+                                            @Html.HiddenFor(modelItem => item.Tipo)
+                                        </td>
+                                        <td style="width:60px;font-weight:normal;color:blue;text-align:left">
+                                            @Html.DisplayFor(modelItem => item.Codigo)
+                                            @Html.HiddenFor(modelItem => item.Codigo)
+                                        </td>
+                                        <td style="width:490px;font-weight:normal;color:blue;text-align:left">
+                                            @Html.DisplayFor(modelItem => item.Descricao)
+                                            @Html.HiddenFor(modelItem => item.Descricao)
+                                        </td>
+                                        <td style="width:20px">
+                                            <a href="@Url.Action("Itbi_isencao_e", "Itbi", new { @a = "rv", @s = item.Seq, @guid = Model.Guid })" title="Remover imóvel"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </table>
+                </div>
+
+
+                <br />
+                <button type="button" class="btn btn-info" name="action" value="btnUrbanoAdd" onclick="EditarUrbano()">Incluir imóvel urbano</button>
+                <button style="padding-left:5px" type="button" class="btn btn-info" name="action" value="btnRuralAdd" onclick="EditarRural()">Incluir imóvel rural</button>
+                <br /><br />
+
+                <Label style="font-size:14px">Selecione a natureza </Label>
+                <select name="natureza" id="natureza">
+                    <optgroup label="Artigo 3">
+                        @foreach (var item in Model.Lista_Natureza_Isencao) {
+
+                            if (item.Group.Name == "Artigo 3") {
+                                <option value=@item.Value selected="@item.Selected">@item.Text</option>
+                            }
+
+                        }
+                    </optgroup>
+
+                    <optgroup label="Artigo 110">
+                        @foreach (var item in Model.Lista_Natureza_Isencao) {
+
+                            if (item.Group.Name == "Artigo 110") {
+                                <option value=@item.Value selected="@item.Selected">@item.Text</option>
+                            }
+
+                        }
+                    </optgroup>
+                    <optgroup label="Artigo 111">
+                        @foreach (var item in Model.Lista_Natureza_Isencao) {
+
+                            if (item.Group.Name == "Artigo 111") {
+                                <option value=@item.Value selected="@item.Selected">@item.Text</option>
+                            }
+
+                        }
+                    </optgroup>
+                    <optgroup label="Artigo 150">
+                        @foreach (var item in Model.Lista_Natureza_Isencao) {
+
+                            if (item.Group.Name == "Artigo 150") {
+                                <option value=@item.Value selected="@item.Selected">@item.Text</option>
+                            }
+
+                        }
+                    </optgroup>
+                    <optgroup label="Artigo 150b">
+                        @foreach (var item in Model.Lista_Natureza_Isencao) {
+
+                            if (item.Group.Name == "Artigo 150b") {
+                                <option value=@item.Value selected="@item.Selected">@item.Text</option>
+                            }
+
+                        }
+                    </optgroup>
+                </select>
+                <button type="submit" class="btn btn-primary" name="action" value="btnValida">Enviar solicitação</button>&nbsp;&nbsp;
+            </div>
+            <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+            <div class="card-footer">
+                @Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
+        </div>
+
+    }
+</div>
+
+
+<!-- Modal Urbano -->
+<div class="modal fade" id="UrbanoModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Adicionar imóvel urbano</h4>
+            </div>
+            <div class="modal-body">
+
+                <table>
+                    <tr style="height:30px">
+                        <td>
+                            <label style="font-weight:normal;font-size:13px">Digite o Código:&nbsp;&nbsp;</label>
+                        </td>
+                        <td>
+                            <input id="codigoTxt" name="CodigoUrbano" onKeyPress="return formata(this, '§§§§§', event)" onpaste="return false" style="width:90px;height:25px;font-size:13px" type="text" value="" />
+                        </td>
+                    </tr>
+
+                </table>
+                <br />
+                <label style="font-weight:normal;font-size:13px;color:brown">*** O código do imóvel encontra-se na capa do carnê de IPTU</label>
+                <br />
+
+                <label style="font-weight:normal;color:red;padding-left:7px" id="errorUrbano">@ViewBag.Error</label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnUrbanoOk">Incluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Rural -->
+<div class="modal fade" id="RuralModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Adicionar imóvel rural</h4>
+            </div>
+            <div class="modal-body">
+
+                <table>
+                    <tr style="height:30px">
+                        <td>
+                            <label style="font-weight:normal;font-size:13px">Digite a descrição do imóvel&nbsp;&nbsp;</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="descTxt" name="descRural" style="width:470px;height:25px;font-size:13px" type="text" value="" />
+                        </td>
+
+                    </tr>
+
+                </table>
+                <br />
+
+                <label style="font-weight:normal;color:red;padding-left:7px" id="errorRural">@ViewBag.Error</label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnRuralOk">Incluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+            $(".maskValor").mask("99999");
+
+
+            $('#btnUrbanoOk').click(function () {
+                var codurbanoback = $("#UrbanoModal #codigoTxt").val();
+                if (codurbanoback.trim() == "") {
+                    document.getElementById('errorUrbano').innerHTML = "Digite o código do imóvel";
+                } else {
+                    document.getElementById('Guid').value = document.getElementById('Guidtmp').innerHTML;
+                    document.getElementById('Vendedor_Cpf_cnpj_tmp').value = codurbanoback;
+
+                    $('#UrbanoModal').modal('hide');
+                    $("#MainForm").submit();
+                }
+            });
+            $('#btnRuralOk').click(function () {
+                var descruralback = $("#RuralModal #descTxt").val();
+                if (descruralback.trim() == "") {
+                    document.getElementById('errorRural').innerHTML = "Digite a descrição do imóvel";
+                } else {
+                    document.getElementById('Guid').value = document.getElementById('Guidtmp').innerHTML;
+                    document.getElementById('Vendedor_Nome_tmp').value = descruralback;
+                    $('#RuralModal').modal('hide');
+                    $("#MainForm").submit();
+                }
+            });
+        });
+
+
+
+        function EditarRural() {
+            $('#RuralModal').modal();
+            document.getElementById('errorRural').innerHTML = "";
+            $('input').val('');
+        }
+
+        function EditarUrbano() {
+            $('#UrbanoModal').modal();
+            document.getElementById('errorUrbano').innerHTML = "";
+            $('input').val('');
+        }
+
+        function ValidateForm() {
+            var rows = $('#tblVendedor tbody tr').length;
+            var codurbanoback = $("#UrbanoModal #codigoTxt").val();
+            var descruralback = $("#RuralModal #descTxt").val();
+            if (rows == 0 && !codurbanoback>0 & !descruralback!="") {
+                document.getElementById('errorLabel').innerHTML = "Nenhum imóvel selecionado!";
+                return false;
+            }
+            $("#UrbanoModal #codigoTxt").val("");
+            return true;
+        }
+
+
+
+    </script>
+}
+
+

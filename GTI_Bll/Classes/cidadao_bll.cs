@@ -44,12 +44,12 @@ namespace GTI_Bll.Classes {
             return obj.ExisteCidadao(nCodigo);
         }
 
-        public Exception Incluir_cidadao(Cidadao reg) {
-            Exception AppEx = Validated(reg);
-            if (AppEx != null) return AppEx;
+        public int Incluir_cidadao(Cidadao reg) {
+ //           Exception AppEx = Validated(reg);
+//            if (AppEx != null) return AppEx;
             Cidadao_Data obj = new Cidadao_Data(_connection);
-            Exception ex = obj.Incluir_cidadao(reg);
-            return ex;
+            int _cod = obj.Incluir_cidadao(reg);
+            return _cod;
         }
 
         public Exception Alterar_cidadao(Cidadao reg) {

@@ -405,6 +405,11 @@ namespace GTI_Desktop.Forms {
                 EndRetorno.Nome_bairro = "";
             }
 
+            if (BairroText.Text != "") {
+                EndRetorno.Id_bairro = Convert.ToInt32( BairroText.Tag.ToString());
+                EndRetorno.Nome_bairro = BairroText.Text;
+            }
+
             if (string.IsNullOrEmpty(LogradouroText.Tag.ToString())) LogradouroText.Tag = "0";
             EndRetorno.Id_logradouro = Convert.ToInt32(LogradouroText.Tag.ToString());
             EndRetorno.Nome_logradouro = LogradouroText.Text;

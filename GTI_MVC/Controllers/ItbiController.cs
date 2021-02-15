@@ -2961,10 +2961,6 @@ namespace GTI_Mvc.Controllers {
                 }
             }
             Exception ex = imovelRepository.Incluir_Itbi_isencao_imovel(Lista);
-
-            
-
-
             Itbi_isencao_main regM = new Itbi_isencao_main();
             regM.Guid = model.Guid;
             regM.Natureza = Convert.ToInt32(natureza);
@@ -2994,6 +2990,7 @@ namespace GTI_Mvc.Controllers {
             ItbiViewModel itbi = new ItbiViewModel {
                 Guid = regMain.Guid,
                 Data_cadastro = regMain.Data_cadastro,
+                Natureza_Isencao_Codigo=regMain.Natureza,
                 Itbi_NumeroAno = regMain.Isencao_numero.ToString("00000") + "/" + regMain.Isencao_ano.ToString(),
                 Natureza_Nome = regMain.Natureza_Nome,
                 Situacao_Itbi_codigo = regMain.Situacao,
@@ -3166,6 +3163,162 @@ namespace GTI_Mvc.Controllers {
 
         #endregion
 
+        [Route("Itbi_isencao_e")]
+        [HttpGet]
+        public ActionResult Itbi_isencao_e( string guid, string a, int s = 0, string natureza = "27") {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            ItbiViewModel model = Retorna_Itbi_Isencao_Gravado(guid);
+            natureza = model.Natureza_Isencao_Codigo.ToString();
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            if (String.IsNullOrWhiteSpace(guid)) {
+                bool bFuncionario = Session["hashfunc"].ToString() == "S" ? true : false;
+                int nId = Convert.ToInt32(Session["hashid"]);
+                string usuario_Nome = "", usuario_Doc = "";
+                Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+                if (bFuncionario) {
+                    usuarioStruct _user = sistemaRepository.Retorna_Usuario(nId);
+                    usuario_Nome = _user.Nome_completo;
+                } else {
+                    Usuario_web _user = sistemaRepository.Retorna_Usuario_Web(nId);
+                    usuario_Nome = _user.Nome;
+                    usuario_Doc = Functions.FormatarCpfCnpj(_user.Cpf_Cnpj);
+                }
+
+                model.UserId = Convert.ToInt32(Session["hashid"]);
+                model.Guid = Guid.NewGuid().ToString("N");
+                model.Data_cadastro = DateTime.Now;
+
+                model.Lista_Natureza_Isencao = Lista_Natureza_Isencao(natureza);
+
+                Itbi_isencao_main regMain = new Itbi_isencao_main() {
+                    Guid = model.Guid,
+                    Data_cadastro = DateTime.Now,
+                    Situacao = 1,
+                    Fiscal_id = 0,
+                    Usuario_nome = usuario_Nome,
+                    Usuario_doc = usuario_Doc,
+                    Natureza = 0,
+                    Isencao_ano = 0,
+                    Isencao_numero = 0,
+                    Usuario_id = nId
+                };
+                Exception ex = imovelRepository.Incluir_isencao_main(regMain);
+            } else {
+                if (a == "rv") {//remover imóvel
+                    Exception ex = imovelRepository.Excluir_Itbi_Isencao_Imovel(guid, s);
+                }
+
+                model = Retorna_Itbi_Isencao_Gravado(guid);
+                natureza = model.Natureza_Isencao_Codigo.ToString();
+                model.Lista_Natureza_Isencao = Lista_Natureza_Isencao(natureza);
+            }
+            return View(model);
+        }
+
+        [Route("Itbi_isencao_e")]
+        [HttpPost]
+        public ActionResult Itbi_isencao_e(ItbiViewModel model, string natureza, string action) {
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            if (action == "btnValida") {
+                Exception ex2 = imovelRepository.Alterar_Itbi_Isencao_Natureza(model.Guid, Convert.ToInt32(natureza));
+                goto ActionPos;
+            }
+
+            int _codigo = Convert.ToInt32(model.Vendedor_Cpf_cnpj_tmp);
+            model.Tipo_Imovel = _codigo == 0 ? "Rural" : "Urbano";
+            bool _urbano = model.Tipo_Imovel == "Urbano";
+            List<Itbi_isencao_imovel> Lista = imovelRepository.Retorna_Itbi_Isencao_Imovel(model.Guid);
+            if (_urbano && !imovelRepository.Existe_Imovel(_codigo)) {
+                ViewBag.Result = "Imóvel não cadastrado.";
+                model = Retorna_Itbi_Isencao_Gravado(model.Guid);
+                model.Vendedor_Cpf_cnpj_tmp = "";
+                model.Lista_Natureza_Isencao = Lista_Natureza_Isencao(natureza);
+                return View(model);
+            } else {
+                if (_urbano) {
+                    ImovelStruct imovel = imovelRepository.Dados_Imovel(_codigo);
+                    model.Codigo = imovel.Codigo.ToString("00000");
+                    model.Inscricao = imovel.Inscricao;
+                    model.Dados_Imovel = imovel;
+                    decimal _somaarea = imovelRepository.Soma_Area(_codigo);
+                    bool _predial = _somaarea > 0;
+                    string _descricao = "";
+                    Imovel_Isencao reg = new Imovel_Isencao() {
+                        Tipo = model.Tipo_Imovel,
+                        Codigo = _codigo.ToString()
+                    };
+                    if (_predial)
+                        _descricao = "um imóvel ";
+                    else
+                        _descricao = "um terreno ";
+
+                    _descricao += "com " + imovel.Area_Terreno.ToString("#.#0") + "m² localizado no(a) " + imovel.NomeLogradouroAbreviado + ", " + imovel.Numero.ToString();
+                    if (imovel.Complemento != "")
+                        _descricao += " " + imovel.Complemento;
+                    if (imovel.QuadraOriginal != "")
+                        _descricao += " Quadra: " + imovel.QuadraOriginal + " Lote: " + imovel.LoteOriginal;
+
+                    _descricao += " no bairro " + imovel.NomeBairro + " na cidade de JABOTICABAL/SP, ";
+                    _descricao += "inscrição municipal: " + imovel.Inscricao + ", cadastro municipal: " + imovel.Codigo.ToString() + ",";
+                    reg.Descricao = _descricao;
+                    model.Lista_Isencao.Add(reg);
+                } else {
+                    model.Codigo = "0";
+                    model.Inscricao = "";
+                    decimal _somaarea = 0;
+                    bool _predial = _somaarea > 0;
+                    string _descricao = model.Descricao_Imovel;
+                    Imovel_Isencao reg = new Imovel_Isencao() {
+                        Tipo = model.Tipo_Imovel,
+                        Codigo = _codigo.ToString(),
+                        Descricao = model.Vendedor_Nome_tmp
+                    };
+
+                    model.Lista_Isencao.Add(reg);
+                }
+            }
+
+            byte y = 1;
+            foreach (Itbi_isencao_imovel i in Lista) {
+                i.Seq = y;
+                y++;
+            }
+            foreach (Imovel_Isencao item in model.Lista_Isencao) {
+                if (item != null) {
+                    Itbi_isencao_imovel regC = new Itbi_isencao_imovel() {
+                        Guid = model.Guid,
+                        Seq = y,
+                        Tipo = item.Tipo,
+                        Codigo = Convert.ToInt32(item.Codigo),
+                        Descricao = item.Descricao
+                    };
+                    Lista.Add(regC);
+                    y++;
+                }
+            }
+            Exception ex = imovelRepository.Incluir_Itbi_isencao_imovel(Lista);
+            Itbi_isencao_main regM = new Itbi_isencao_main();
+            regM.Guid = model.Guid;
+            regM.Natureza = Convert.ToInt32(natureza);
+            if (regM.Isencao_numero == 0) {
+                regM.Isencao_numero = imovelRepository.Retorna_Itbi_Isencao_Disponivel();
+                regM.Isencao_ano = (short)DateTime.Now.Year;
+            }
+
+            ex = imovelRepository.Alterar_Itbi_Isencao(regM);
+        ActionPos:
+
+            if (action == "btnValida")
+                return RedirectToAction("itbi_isencao_ok");
+            else {
+                model = Retorna_Itbi_Isencao_Gravado(model.Guid);
+                model.Lista_Natureza_Isencao = Lista_Natureza_Isencao(natureza);
+                model.Vendedor_Cpf_cnpj_tmp = null;
+                model.Vendedor_Nome_tmp = null;
+                return View(model);
+            }
+        }
 
 
     }

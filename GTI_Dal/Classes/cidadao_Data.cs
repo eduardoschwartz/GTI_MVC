@@ -136,23 +136,82 @@ namespace GTI_Dal.Classes {
             }
         }
         
-        public Exception Incluir_cidadao(Cidadao reg) {
+        public int Incluir_cidadao(Cidadao reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var cntCod = (from c in db.Cidadao select c).Count();
-                int nMax;
-                if (cntCod > 0) {
-                    var maxCod = (from c in db.Cidadao select c.Codcidadao).Max();
-                    nMax = Convert.ToInt32(maxCod + 1);
-                } else
-                    nMax = 1;
-                reg.Codcidadao = nMax;
-                db.Cidadao.Add(reg);
-                try {
-                    db.SaveChanges();
-                } catch (Exception ex) {
-                    return ex;
-                }
-                return null;
+                int _codigo = 0;
+                object[] Parametros = new object[45];
+                Parametros[0] = new SqlParameter { ParameterName = "@codcidadao", SqlDbType = SqlDbType.Int, SqlValue = _codigo };
+                Parametros[1] = new SqlParameter { ParameterName = "@nomecidadao", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Nomecidadao };
+                if (string.IsNullOrEmpty(reg.Cpf) || reg.Cpf == "0")
+                    Parametros[2] = new SqlParameter { ParameterName = "@cpf", SqlValue = DBNull.Value };
+                else
+                    Parametros[2] = new SqlParameter { ParameterName = "@cpf", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cpf };
+                if (string.IsNullOrEmpty(reg.Cnpj) || reg.Cnpj == "0")
+                    Parametros[3] = new SqlParameter { ParameterName = "@cnpj", SqlValue = DBNull.Value };
+                else
+                    Parametros[3] = new SqlParameter { ParameterName = "@cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnpj };
+                Parametros[4] = new SqlParameter { ParameterName = "@codlogradouro", SqlDbType = SqlDbType.Int, SqlValue = reg.Codlogradouro };
+                Parametros[5] = new SqlParameter { ParameterName = "@numimovel", SqlDbType = SqlDbType.SmallInt, SqlValue = reg.Numimovel };
+                if (string.IsNullOrWhiteSpace(reg.Complemento))
+                    Parametros[6] = new SqlParameter { ParameterName = "@complemento", SqlValue = DBNull.Value };
+                else
+                    Parametros[6] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Complemento };
+                Parametros[7] = new SqlParameter { ParameterName = "@codbairro", SqlDbType = SqlDbType.SmallInt, SqlValue = reg.Codbairro };
+                Parametros[8] = new SqlParameter { ParameterName = "@codcidade", SqlDbType = SqlDbType.SmallInt, SqlValue = reg.Codcidade };
+                if (string.IsNullOrWhiteSpace(reg.Complemento))
+                    Parametros[9] = new SqlParameter { ParameterName = "@siglauf",  SqlValue = DBNull.Value };
+                else
+                    Parametros[9] = new SqlParameter { ParameterName = "@siglauf", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Siglauf };
+                Parametros[10] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.SmallInt, SqlValue = reg.Cep };
+                if (string.IsNullOrWhiteSpace(reg.Telefone))
+                    Parametros[11] = new SqlParameter { ParameterName = "@telefone", SqlValue = DBNull.Value };
+                else
+                    Parametros[11] = new SqlParameter { ParameterName = "@telefone", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Telefone };
+                if (string.IsNullOrWhiteSpace(reg.Email))
+                    Parametros[12] = new SqlParameter { ParameterName = "@email", SqlValue = DBNull.Value };
+                else
+                    Parametros[12] = new SqlParameter { ParameterName = "@email", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Email };
+                if (string.IsNullOrWhiteSpace(reg.Rg))
+                    Parametros[13] = new SqlParameter { ParameterName = "@rg", SqlValue = DBNull.Value };
+                else
+                    Parametros[13] = new SqlParameter { ParameterName = "@rg", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Rg };
+                if (string.IsNullOrWhiteSpace(reg.Orgao))
+                    Parametros[14] = new SqlParameter { ParameterName = "@orgao", SqlValue = DBNull.Value };
+                else
+                    Parametros[14] = new SqlParameter { ParameterName = "@orgao", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Orgao };
+                if (string.IsNullOrWhiteSpace(reg.Nomelogradouro))
+                    Parametros[15] = new SqlParameter { ParameterName = "@nomelogradouro", SqlValue = DBNull.Value };
+                else
+                    Parametros[15] = new SqlParameter { ParameterName = "@nomelogradouro", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Nomelogradouro };
+                if (string.IsNullOrWhiteSpace(reg.Nomecidade))
+                    Parametros[16] = new SqlParameter { ParameterName = "@nomecidade", SqlValue = DBNull.Value };
+                else
+                    Parametros[16] = new SqlParameter { ParameterName = "@nomecidade", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Nomecidade };
+                if (string.IsNullOrWhiteSpace(reg.Nomebairro))
+                    Parametros[17] = new SqlParameter { ParameterName = "@nomebairro", SqlValue = DBNull.Value };
+                else
+                    Parametros[17] = new SqlParameter { ParameterName = "@nomebairro", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Nomebairro };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                db.Database.ExecuteSqlCommand("INSERT INTO cidadao(codcidadao,nomecidadao,cpf,cnpj,codlogradouro,numimovel,complemento,codbairro,codcidade,siglauf,telefone," +
+                    "email,etiqueta,nomelogradouro,cep) VALUES(@codcidadao,@nomecidadao,@cpf,@cnpj,@codlogradouro,@numimovel,@complemento,@codbairro,@codcidade,@siglauf,@telefone," +
+                    "@email,@etiqueta,@nomelogradouro,@cep)", Parametros);
+                db.SaveChanges();
+                return _codigo;
             }
         }
 

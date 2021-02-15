@@ -104,15 +104,19 @@
             this.Ttp = new System.Windows.Forms.ToolTip(this.components);
             this.DelEnderecoCButton = new System.Windows.Forms.Button();
             this.AddEnderecoCButton = new System.Windows.Forms.Button();
-            this.DelEnderecoRButton = new System.Windows.Forms.Button();
-            this.AddEnderecoRButton = new System.Windows.Forms.Button();
             this.FindCodigoButton = new System.Windows.Forms.Button();
             this.CpfCnpjButton = new System.Windows.Forms.Button();
             this.Profissao_DelButton = new System.Windows.Forms.Button();
             this.Profissao_EditButton = new System.Windows.Forms.Button();
+            this.DelEnderecoRButton = new System.Windows.Forms.Button();
+            this.AddEnderecoRButton = new System.Windows.Forms.Button();
             this.TipoCidadaoText = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
             this.OrgaoText = new System.Windows.Forms.TextBox();
+            this.CnhOrgaotext = new System.Windows.Forms.TextBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.CnhText = new System.Windows.Forms.TextBox();
+            this.label29 = new System.Windows.Forms.Label();
             this.BarToolStrip.SuspendLayout();
             this.EndCPanel.SuspendLayout();
             this.EndRPanel.SuspendLayout();
@@ -121,7 +125,7 @@
             // label28
             // 
             this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(7, 112);
+            this.label28.Location = new System.Drawing.Point(7, 134);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(59, 13);
             this.label28.TabIndex = 153;
@@ -141,7 +145,7 @@
             this.DataNasctoMask.Mask = "00/00/0000";
             this.DataNasctoMask.Name = "DataNasctoMask";
             this.DataNasctoMask.Size = new System.Drawing.Size(88, 20);
-            this.DataNasctoMask.TabIndex = 4;
+            this.DataNasctoMask.TabIndex = 5;
             // 
             // label27
             // 
@@ -222,7 +226,7 @@
             this.CNPJMask.Mask = "99,999,999/9999-99";
             this.CNPJMask.Name = "CNPJMask";
             this.CNPJMask.Size = new System.Drawing.Size(110, 20);
-            this.CNPJMask.TabIndex = 6;
+            this.CNPJMask.TabIndex = 7;
             this.CNPJMask.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
             // 
             // RGText
@@ -272,7 +276,7 @@
             this.PessoaList.Location = new System.Drawing.Point(70, 83);
             this.PessoaList.Name = "PessoaList";
             this.PessoaList.Size = new System.Drawing.Size(94, 21);
-            this.PessoaList.TabIndex = 5;
+            this.PessoaList.TabIndex = 6;
             this.PessoaList.SelectedIndexChanged += new System.EventHandler(this.CmbPessoa_SelectedIndexChanged);
             // 
             // FoneRText
@@ -287,10 +291,10 @@
             // 
             this.ProfissaoList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ProfissaoList.FormattingEnabled = true;
-            this.ProfissaoList.Location = new System.Drawing.Point(70, 109);
+            this.ProfissaoList.Location = new System.Drawing.Point(70, 131);
             this.ProfissaoList.Name = "ProfissaoList";
             this.ProfissaoList.Size = new System.Drawing.Size(312, 21);
-            this.ProfissaoList.TabIndex = 9;
+            this.ProfissaoList.TabIndex = 12;
             this.ProfissaoList.SelectedIndexChanged += new System.EventHandler(this.CmbProfissao_SelectedIndexChanged);
             // 
             // toolStripSeparator1
@@ -315,11 +319,11 @@
             this.CancelarButton,
             this.HistoricoButton,
             this.ObservaçãoButton});
-            this.BarToolStrip.Location = new System.Drawing.Point(0, 433);
+            this.BarToolStrip.Location = new System.Drawing.Point(0, 458);
             this.BarToolStrip.Name = "BarToolStrip";
             this.BarToolStrip.Padding = new System.Windows.Forms.Padding(6, 0, 1, 0);
             this.BarToolStrip.Size = new System.Drawing.Size(457, 25);
-            this.BarToolStrip.TabIndex = 154;
+            this.BarToolStrip.TabIndex = 21;
             this.BarToolStrip.Text = "toolStrip1";
             // 
             // AddButton
@@ -450,7 +454,7 @@
             this.EndCPanel.Controls.Add(this.label22);
             this.EndCPanel.Controls.Add(this.label23);
             this.EndCPanel.ForeColor = System.Drawing.Color.Maroon;
-            this.EndCPanel.Location = new System.Drawing.Point(8, 285);
+            this.EndCPanel.Location = new System.Drawing.Point(10, 312);
             this.EndCPanel.Name = "EndCPanel";
             this.EndCPanel.Size = new System.Drawing.Size(442, 145);
             this.EndCPanel.TabIndex = 157;
@@ -492,7 +496,7 @@
             this.EtiquetaCButton.Location = new System.Drawing.Point(320, -1);
             this.EtiquetaCButton.Name = "EtiquetaCButton";
             this.EtiquetaCButton.Size = new System.Drawing.Size(114, 17);
-            this.EtiquetaCButton.TabIndex = 15;
+            this.EtiquetaCButton.TabIndex = 20;
             this.EtiquetaCButton.TabStop = true;
             this.EtiquetaCButton.Text = "Endereço Principal";
             this.EtiquetaCButton.UseVisualStyleBackColor = true;
@@ -736,7 +740,7 @@
             this.EndRPanel.Controls.Add(this.label9);
             this.EndRPanel.Controls.Add(this.label8);
             this.EndRPanel.ForeColor = System.Drawing.Color.Maroon;
-            this.EndRPanel.Location = new System.Drawing.Point(8, 137);
+            this.EndRPanel.Location = new System.Drawing.Point(8, 165);
             this.EndRPanel.Name = "EndRPanel";
             this.EndRPanel.Size = new System.Drawing.Size(442, 142);
             this.EndRPanel.TabIndex = 156;
@@ -778,7 +782,7 @@
             this.EtiquetaRCheck.Location = new System.Drawing.Point(320, -1);
             this.EtiquetaRCheck.Name = "EtiquetaRCheck";
             this.EtiquetaRCheck.Size = new System.Drawing.Size(114, 17);
-            this.EtiquetaRCheck.TabIndex = 12;
+            this.EtiquetaRCheck.TabIndex = 17;
             this.EtiquetaRCheck.TabStop = true;
             this.EtiquetaRCheck.Text = "Endereço Principal";
             this.EtiquetaRCheck.UseVisualStyleBackColor = true;
@@ -965,15 +969,15 @@
             this.PessoaText.Location = new System.Drawing.Point(70, 83);
             this.PessoaText.Name = "PessoaText";
             this.PessoaText.Size = new System.Drawing.Size(94, 20);
-            this.PessoaText.TabIndex = 159;
+            this.PessoaText.TabIndex = 6;
             this.PessoaText.TabStop = false;
             // 
             // ProfissaoText
             // 
-            this.ProfissaoText.Location = new System.Drawing.Point(70, 109);
+            this.ProfissaoText.Location = new System.Drawing.Point(70, 131);
             this.ProfissaoText.Name = "ProfissaoText";
             this.ProfissaoText.Size = new System.Drawing.Size(312, 20);
-            this.ProfissaoText.TabIndex = 160;
+            this.ProfissaoText.TabIndex = 12;
             this.ProfissaoText.TabStop = false;
             // 
             // JuridicaCheck
@@ -983,7 +987,7 @@
             this.JuridicaCheck.Location = new System.Drawing.Point(386, 87);
             this.JuridicaCheck.Name = "JuridicaCheck";
             this.JuridicaCheck.Size = new System.Drawing.Size(64, 17);
-            this.JuridicaCheck.TabIndex = 8;
+            this.JuridicaCheck.TabIndex = 9;
             this.JuridicaCheck.Text = "Jurídica";
             this.JuridicaCheck.UseVisualStyleBackColor = true;
             // 
@@ -991,10 +995,10 @@
             // 
             this.DelEnderecoCButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.DelEnderecoCButton.Image = global::GTI_Desktop.Properties.Resources.cancelar;
-            this.DelEnderecoCButton.Location = new System.Drawing.Point(162, 281);
+            this.DelEnderecoCButton.Location = new System.Drawing.Point(162, 308);
             this.DelEnderecoCButton.Name = "DelEnderecoCButton";
             this.DelEnderecoCButton.Size = new System.Drawing.Size(30, 20);
-            this.DelEnderecoCButton.TabIndex = 14;
+            this.DelEnderecoCButton.TabIndex = 19;
             this.DelEnderecoCButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.Ttp.SetToolTip(this.DelEnderecoCButton, "Apagar o endereço comercial");
             this.DelEnderecoCButton.UseVisualStyleBackColor = true;
@@ -1004,40 +1008,14 @@
             // 
             this.AddEnderecoCButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.AddEnderecoCButton.Image = global::GTI_Desktop.Properties.Resources.add;
-            this.AddEnderecoCButton.Location = new System.Drawing.Point(129, 281);
+            this.AddEnderecoCButton.Location = new System.Drawing.Point(129, 308);
             this.AddEnderecoCButton.Name = "AddEnderecoCButton";
             this.AddEnderecoCButton.Size = new System.Drawing.Size(30, 20);
-            this.AddEnderecoCButton.TabIndex = 13;
+            this.AddEnderecoCButton.TabIndex = 18;
             this.AddEnderecoCButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.Ttp.SetToolTip(this.AddEnderecoCButton, "Adicionar/Alterar o endereço comercial");
             this.AddEnderecoCButton.UseVisualStyleBackColor = true;
             this.AddEnderecoCButton.Click += new System.EventHandler(this.BtAddEnderecoC_Click);
-            // 
-            // DelEnderecoRButton
-            // 
-            this.DelEnderecoRButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.DelEnderecoRButton.Image = global::GTI_Desktop.Properties.Resources.cancelar;
-            this.DelEnderecoRButton.Location = new System.Drawing.Point(162, 133);
-            this.DelEnderecoRButton.Name = "DelEnderecoRButton";
-            this.DelEnderecoRButton.Size = new System.Drawing.Size(30, 20);
-            this.DelEnderecoRButton.TabIndex = 11;
-            this.DelEnderecoRButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.Ttp.SetToolTip(this.DelEnderecoRButton, "Apagar o endereço residencial");
-            this.DelEnderecoRButton.UseVisualStyleBackColor = true;
-            this.DelEnderecoRButton.Click += new System.EventHandler(this.DelEnderecoRButton_Click);
-            // 
-            // AddEnderecoRButton
-            // 
-            this.AddEnderecoRButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.AddEnderecoRButton.Image = global::GTI_Desktop.Properties.Resources.add;
-            this.AddEnderecoRButton.Location = new System.Drawing.Point(129, 133);
-            this.AddEnderecoRButton.Name = "AddEnderecoRButton";
-            this.AddEnderecoRButton.Size = new System.Drawing.Size(30, 20);
-            this.AddEnderecoRButton.TabIndex = 10;
-            this.AddEnderecoRButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.Ttp.SetToolTip(this.AddEnderecoRButton, "Adicionar/Alterar o endereço residencial");
-            this.AddEnderecoRButton.UseVisualStyleBackColor = true;
-            this.AddEnderecoRButton.Click += new System.EventHandler(this.BtAddEnderecoR_Click);
             // 
             // FindCodigoButton
             // 
@@ -1060,7 +1038,7 @@
             this.CpfCnpjButton.Location = new System.Drawing.Point(338, 80);
             this.CpfCnpjButton.Name = "CpfCnpjButton";
             this.CpfCnpjButton.Size = new System.Drawing.Size(25, 25);
-            this.CpfCnpjButton.TabIndex = 7;
+            this.CpfCnpjButton.TabIndex = 8;
             this.CpfCnpjButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.Ttp.SetToolTip(this.CpfCnpjButton, "Verificar situação tributária do cidadão");
             this.CpfCnpjButton.UseVisualStyleBackColor = true;
@@ -1070,10 +1048,10 @@
             // 
             this.Profissao_DelButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Profissao_DelButton.Image = global::GTI_Desktop.Properties.Resources.delete;
-            this.Profissao_DelButton.Location = new System.Drawing.Point(415, 106);
+            this.Profissao_DelButton.Location = new System.Drawing.Point(415, 130);
             this.Profissao_DelButton.Name = "Profissao_DelButton";
             this.Profissao_DelButton.Size = new System.Drawing.Size(25, 25);
-            this.Profissao_DelButton.TabIndex = 11;
+            this.Profissao_DelButton.TabIndex = 14;
             this.Profissao_DelButton.TabStop = false;
             this.Profissao_DelButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.Ttp.SetToolTip(this.Profissao_DelButton, "Limpar campo de profissão");
@@ -1084,15 +1062,39 @@
             // 
             this.Profissao_EditButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Profissao_EditButton.Image = global::GTI_Desktop.Properties.Resources.refresh_16x16;
-            this.Profissao_EditButton.Location = new System.Drawing.Point(388, 106);
+            this.Profissao_EditButton.Location = new System.Drawing.Point(388, 130);
             this.Profissao_EditButton.Name = "Profissao_EditButton";
             this.Profissao_EditButton.Size = new System.Drawing.Size(25, 25);
-            this.Profissao_EditButton.TabIndex = 10;
+            this.Profissao_EditButton.TabIndex = 13;
             this.Profissao_EditButton.TabStop = false;
             this.Profissao_EditButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.Ttp.SetToolTip(this.Profissao_EditButton, "Atualizar a lista de profissões");
             this.Profissao_EditButton.UseVisualStyleBackColor = true;
             this.Profissao_EditButton.Click += new System.EventHandler(this.BtProfissao_Edit_Click);
+            // 
+            // DelEnderecoRButton
+            // 
+            this.DelEnderecoRButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.DelEnderecoRButton.Image = global::GTI_Desktop.Properties.Resources.cancelar;
+            this.DelEnderecoRButton.Location = new System.Drawing.Point(161, 160);
+            this.DelEnderecoRButton.Name = "DelEnderecoRButton";
+            this.DelEnderecoRButton.Size = new System.Drawing.Size(30, 20);
+            this.DelEnderecoRButton.TabIndex = 16;
+            this.DelEnderecoRButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.Ttp.SetToolTip(this.DelEnderecoRButton, "Apagar o endereço residencial");
+            this.DelEnderecoRButton.UseVisualStyleBackColor = true;
+            // 
+            // AddEnderecoRButton
+            // 
+            this.AddEnderecoRButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.AddEnderecoRButton.Image = global::GTI_Desktop.Properties.Resources.add;
+            this.AddEnderecoRButton.Location = new System.Drawing.Point(129, 160);
+            this.AddEnderecoRButton.Name = "AddEnderecoRButton";
+            this.AddEnderecoRButton.Size = new System.Drawing.Size(30, 20);
+            this.AddEnderecoRButton.TabIndex = 15;
+            this.AddEnderecoRButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.Ttp.SetToolTip(this.AddEnderecoRButton, "Adicionar/Alterar o endereço residencial");
+            this.AddEnderecoRButton.UseVisualStyleBackColor = true;
             // 
             // TipoCidadaoText
             // 
@@ -1121,19 +1123,57 @@
             this.OrgaoText.Size = new System.Drawing.Size(53, 20);
             this.OrgaoText.TabIndex = 4;
             // 
+            // CnhOrgaotext
+            // 
+            this.CnhOrgaotext.Location = new System.Drawing.Point(280, 107);
+            this.CnhOrgaotext.MaxLength = 30;
+            this.CnhOrgaotext.Name = "CnhOrgaotext";
+            this.CnhOrgaotext.Size = new System.Drawing.Size(170, 20);
+            this.CnhOrgaotext.TabIndex = 11;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(7, 109);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(60, 13);
+            this.label26.TabIndex = 165;
+            this.label26.Text = "CNH.........:";
+            // 
+            // CnhText
+            // 
+            this.CnhText.Location = new System.Drawing.Point(70, 107);
+            this.CnhText.MaxLength = 30;
+            this.CnhText.Name = "CnhText";
+            this.CnhText.Size = new System.Drawing.Size(153, 20);
+            this.CnhText.TabIndex = 10;
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(235, 109);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(42, 13);
+            this.label29.TabIndex = 166;
+            this.label29.Text = "Orgão.:";
+            // 
             // Cidadao
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(457, 458);
+            this.ClientSize = new System.Drawing.Size(457, 483);
+            this.Controls.Add(this.DelEnderecoRButton);
+            this.Controls.Add(this.label29);
+            this.Controls.Add(this.CnhOrgaotext);
+            this.Controls.Add(this.AddEnderecoRButton);
+            this.Controls.Add(this.label26);
+            this.Controls.Add(this.CnhText);
             this.Controls.Add(this.OrgaoText);
             this.Controls.Add(this.label25);
             this.Controls.Add(this.TipoCidadaoText);
             this.Controls.Add(this.DelEnderecoCButton);
             this.Controls.Add(this.AddEnderecoCButton);
-            this.Controls.Add(this.DelEnderecoRButton);
-            this.Controls.Add(this.AddEnderecoRButton);
             this.Controls.Add(this.JuridicaCheck);
             this.Controls.Add(this.EndRPanel);
             this.Controls.Add(this.EndCPanel);
@@ -1257,8 +1297,6 @@
         private System.Windows.Forms.CheckBox JuridicaCheck;
         private System.Windows.Forms.RadioButton EtiquetaCButton;
         private System.Windows.Forms.RadioButton EtiquetaRCheck;
-        private System.Windows.Forms.Button AddEnderecoRButton;
-        private System.Windows.Forms.Button DelEnderecoRButton;
         private System.Windows.Forms.Button DelEnderecoCButton;
         private System.Windows.Forms.Button AddEnderecoCButton;
         private System.Windows.Forms.ToolTip Ttp;
@@ -1269,5 +1307,11 @@
         private System.Windows.Forms.CheckBox TemFoneRCheck;
         private System.Windows.Forms.CheckBox TemFoneCCheck;
         private System.Windows.Forms.CheckBox WhatsAppCCheck;
+        internal System.Windows.Forms.TextBox CnhOrgaotext;
+        internal System.Windows.Forms.Label label26;
+        internal System.Windows.Forms.TextBox CnhText;
+        internal System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Button DelEnderecoRButton;
+        private System.Windows.Forms.Button AddEnderecoRButton;
     }
 }
