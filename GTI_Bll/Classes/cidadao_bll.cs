@@ -181,6 +181,10 @@ namespace GTI_Bll.Classes {
             return obj.Incluir_Cidadao_Itbi(reg);
         }
 
-
+        public Exception Incluir_Historico_Cidadao(historicocidadao reg) {
+            Cidadao_Data obj = new Cidadao_Data(_connection);
+            Exception ex = obj.Incluir_Historico_Cidadao(reg);
+            return ex;
+        }
     }
 }

@@ -70,6 +70,27 @@ namespace GTI_Desktop.Classes {
             System.Windows.Forms.Application.DoEvents();
         }
 
+        public static string SubNull(string _string) {
+            if (_string == null)
+                return "";
+            else
+                return _string;
+        }
+
+        public static int SubNull(int? _number) {
+            if (_number == null)
+                return 0;
+            else
+                return (int)_number;
+        }
+
+        public static short SubNull(short? _number) {
+            if (_number == null)
+                return 0;
+            else
+                return (short)_number;
+        }
+
         private static bool IsCAPS(int nKey) {
             bool bRet = false;
             if (nKey > 64 && nKey < 91)

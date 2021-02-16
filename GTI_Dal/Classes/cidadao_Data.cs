@@ -452,7 +452,7 @@ namespace GTI_Dal.Classes {
                     Parametros[33] = new SqlParameter { ParameterName = "@telefone2", SqlValue = DBNull.Value };
                 else
                     Parametros[33] = new SqlParameter { ParameterName = "@telefone2", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Telefone2 };
-                if (string.IsNullOrWhiteSpace(reg.Email))
+                if (string.IsNullOrWhiteSpace(reg.Email2))
                     Parametros[34] = new SqlParameter { ParameterName = "@email2", SqlValue = DBNull.Value };
                 else
                     Parametros[34] = new SqlParameter { ParameterName = "@email2", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Email2 };
@@ -543,6 +543,21 @@ namespace GTI_Dal.Classes {
                 int nMax = Convert.ToInt32(maxCod + 1);
                 reg.Codigo = nMax;
                 db.Profissao.Add(reg);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Incluir_Historico_Cidadao(historicocidadao reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var maxCod = (from p in db.Historicocidadao where p.Codigo==reg.Codigo select (int?)p.Id ).Max();
+                int nMax = Convert.ToInt32(maxCod + 1);
+                reg.Id = nMax;
+                db.Historicocidadao.Add(reg);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {

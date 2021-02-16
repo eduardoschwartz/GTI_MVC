@@ -435,6 +435,9 @@ namespace GTI_Desktop.Forms {
                 if (ProfissaoList.SelectedIndex > -1)
                     reg.Codprofissao = Convert.ToInt32(ProfissaoList.SelectedValue);
 
+
+                if (PaisRText.Tag.ToString()=="") PaisRText.Tag = "1";
+                if (PaisCText.Tag.ToString() == "") PaisCText.Tag = "1";
                 if (!string.IsNullOrWhiteSpace(LogradouroRText.Text)) {
                     reg.Codpais = PaisRText.Tag == null ? 0 : Convert.ToInt32(PaisRText.Tag.ToString());
                     reg.Siglauf = UFRText.Text;
@@ -682,10 +685,53 @@ namespace GTI_Desktop.Forms {
         }
 
         private void Save_Historico(GTI_Models.Models.Cidadao regNew) {
+            List<string> aLog = new List<string>();
             if (regNew.Nomecidadao != regHist.Nome) {
-                MessageBox.Show("Alterado o nome");
+                aLog.Add("Alterado o nome de " + regHist.Nome + " para " + regNew.Nomecidadao);
+            }
+            if (gtiCore.SubNull(regNew.Rg) != gtiCore.SubNull(regHist.Rg)) {
+                aLog.Add("Alterado o Rg de " + regHist.Rg + " para " + regNew.Rg);
+            }
+            if (gtiCore.SubNull(regNew.Cpf) != gtiCore.SubNull(regHist.Cpf)) {
+                aLog.Add("Alterado o Cpf de " + regHist.Cpf + " para " + regNew.Cpf);
+            }
+            if (gtiCore.SubNull(regNew.Cnpj) != gtiCore.SubNull(regHist.Cnpj)) {
+                aLog.Add("Alterado o Cnpj de " + regHist.Cnpj + " para " + regNew.Cnpj);
+            }
+            if (gtiCore.SubNull(regNew.Cnh) != gtiCore.SubNull(regHist.Cnh)) {
+                aLog.Add("Alterado a Cnh de " + regHist.Cnh + " para " + regNew.Cnh);
+            }
+            if (regNew.Data_nascimento != regHist.DataNascto) {
+                aLog.Add("Alterado a data de nascto. de " + regHist.DataNascto + " para " + regNew.Data_nascimento);
+            }
+            if (gtiCore.SubNull(LogradouroRText.Text) != gtiCore.SubNull(regHist.EnderecoR)) {
+                aLog.Add("Alterado o logradouro res. de " + regHist.EnderecoR + " para " + regNew.Nomelogradouro);
+            }
+            if (gtiCore.SubNull(LogradouroCText.Text) != gtiCore.SubNull(regHist.EnderecoC)) {
+                aLog.Add("Alterado o logradouro com. de " + regHist.EnderecoC + " para " + regNew.Nomelogradouro2);
+            }
+            if( gtiCore.SubNull(regNew.Numimovel) != gtiCore.SubNull(regHist.NumeroR)) {
+                aLog.Add("Alterado o nº res. de " + regHist.NumeroR + " para " + regNew.Numimovel);
+            }
+            if (gtiCore.SubNull(regNew.Numimovel2) != gtiCore.SubNull(regHist.NumeroC)) {
+                aLog.Add("Alterado o nº com. de " + regHist.NumeroC + " para " + regNew.Numimovel2);
+            }
+            if (gtiCore.SubNull(regNew.Profissao) != gtiCore.SubNull(regHist.Profissao)) {
+                aLog.Add("Alterado a profissão de " + regHist.Profissao + " para " + regNew.Profissao);
+            }
+
+            if (aLog.Count > 0) {
+                Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+                foreach (string item in aLog) {
+                    historicocidadao _hist = new historicocidadao {
+                        Codigo = regNew.Codcidadao,
+                        Obs = item,
+                        Userid = Properties.Settings.Default.UserId,
+                        Data=DateTime.Now
+                    };
+                    Exception ex = cidadaoRepository.Incluir_Historico_Cidadao(_hist);
+                }
             }
         }
-
     }
 }
