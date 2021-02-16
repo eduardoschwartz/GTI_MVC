@@ -121,7 +121,7 @@ namespace GTI_Dal.Classes {
         public bool ExisteCidadao(int nCodigo) {
             bool bRet = false;
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var existingReg = db.Cidadao.Count(a => a.Codcidadao == nCodigo && a.Codcidadao>=500000);
+                var existingReg = db.Cidadao.Count(a => a.Codcidadao == nCodigo );
                 if (existingReg != 0) {
                     bRet = true;
                 }
@@ -824,6 +824,23 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public int Novo_Codigo_Cidadao(int OldCod) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                int _codigo = 0;
+                try {
+                    _codigo = db.Cidadao.Select(x => x.Codcidadao).Max();
+                    _codigo++;
+
+                    db.Database.ExecuteSqlCommand("UPDATE cidadao SET codcidadao=@newcod WHERE codcidadao=@codcidadao",
+                        new SqlParameter("@codcidadao", OldCod), new SqlParameter("@newcod", _codigo));
+                    db.SaveChanges();
+
+                } catch (Exception ex) {
+                    return 0;
+                }
+                return _codigo;
+            }
+        }
 
     }
 }

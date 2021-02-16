@@ -117,6 +117,7 @@
             this.label26 = new System.Windows.Forms.Label();
             this.CnhText = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
+            this.NewCodButton = new System.Windows.Forms.ToolStripButton();
             this.BarToolStrip.SuspendLayout();
             this.EndCPanel.SuspendLayout();
             this.EndRPanel.SuspendLayout();
@@ -313,6 +314,7 @@
             this.EditButton,
             this.DelButton,
             this.FindButton,
+            this.NewCodButton,
             this.ExitButton,
             this.toolStripSeparator1,
             this.GravarButton,
@@ -1160,6 +1162,17 @@
             this.label29.TabIndex = 166;
             this.label29.Text = "Orgão.:";
             // 
+            // NewCodButton
+            // 
+            this.NewCodButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.NewCodButton.Image = global::GTI_Desktop.Properties.Resources.executar;
+            this.NewCodButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.NewCodButton.Name = "NewCodButton";
+            this.NewCodButton.Size = new System.Drawing.Size(23, 22);
+            this.NewCodButton.Text = "toolStripButton1";
+            this.NewCodButton.ToolTipText = "Criar um código de cidadão novo";
+            this.NewCodButton.Click += new System.EventHandler(this.NewCodButton_Click);
+            // 
             // Cidadao
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1316,5 +1329,6 @@
         internal System.Windows.Forms.Label label29;
         private System.Windows.Forms.Button DelEnderecoRButton;
         private System.Windows.Forms.Button AddEnderecoRButton;
+        private System.Windows.Forms.ToolStripButton NewCodButton;
     }
 }

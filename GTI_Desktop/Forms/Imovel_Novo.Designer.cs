@@ -70,6 +70,7 @@
             // TipoList
             // 
             this.TipoList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.TipoList.DropDownWidth = 300;
             this.TipoList.FormattingEnabled = true;
             this.TipoList.Location = new System.Drawing.Point(107, 41);
             this.TipoList.Name = "TipoList";

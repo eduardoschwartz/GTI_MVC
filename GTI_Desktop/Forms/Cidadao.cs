@@ -103,6 +103,7 @@ namespace GTI_Desktop.Forms {
             DelButton.Enabled = bStart;
             ExitButton.Enabled = bStart;
             FindButton.Enabled = bStart;
+            NewCodButton.Enabled = bStart;
             GravarButton.Enabled = !bStart;
             CancelarButton.Enabled = !bStart;
             Profissao_EditButton.Enabled = !bStart;
@@ -193,8 +194,14 @@ namespace GTI_Desktop.Forms {
                 if (Convert.ToInt32(CodigoText.Text) == 0)
                     MessageBox.Show("Selecione um cidadão.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else {
-                    bAddNew = false;
-                    ControlBehaviour(false);
+                    int _cod = Convert.ToInt32(CodigoText.Text);
+                    if (_cod == 0) return;
+                    if (_cod < 500000) {
+                        MessageBox.Show("Apenas códigos válidos podem ser alterados.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    } else {
+                        bAddNew = false;
+                        ControlBehaviour(false);
+                    }
                 }
             } else
                 MessageBox.Show("Acesso não permitido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -223,7 +230,12 @@ namespace GTI_Desktop.Forms {
                 var result = form.ShowDialog(this);
                 if (result == DialogResult.OK) {
                     int val = form.ReturnValue;
-                    LoadReg(val);
+                    Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+                    if(cidadaoRepository.ExisteCidadao(val))
+                        LoadReg(val);
+                    else {
+                        MessageBox.Show("Cidadão não cadastrado!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }
@@ -733,5 +745,27 @@ namespace GTI_Desktop.Forms {
                 }
             }
         }
+
+        private void NewCodButton_Click(object sender, EventArgs e) {
+            int _cod = Convert.ToInt32(CodigoText.Text);
+            if (_cod == 0) return;
+            if (_cod >= 500000) {
+                MessageBox.Show("Apenas códigos antigos podem ser renumerados.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+            int _newcod = cidadaoRepository.Novo_Codigo_Cidadao(_cod);
+            CodigoText.Text = _newcod.ToString();
+
+            historicocidadao _hist = new historicocidadao {
+                Codigo = _newcod,
+                Obs = "Alterado código de " + _cod.ToString() + " para " + _newcod.ToString(),
+                Userid = Properties.Settings.Default.UserId,
+                Data = DateTime.Now
+            };
+            Exception ex = cidadaoRepository.Incluir_Historico_Cidadao(_hist);
+        }
+
+
     }
 }

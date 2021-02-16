@@ -186,5 +186,11 @@ namespace GTI_Bll.Classes {
             Exception ex = obj.Incluir_Historico_Cidadao(reg);
             return ex;
         }
+
+        public int Novo_Codigo_Cidadao(int OldCod) {
+            Cidadao_Data obj = new Cidadao_Data(_connection);
+            return obj.Novo_Codigo_Cidadao(OldCod);
+        }
+
     }
 }
