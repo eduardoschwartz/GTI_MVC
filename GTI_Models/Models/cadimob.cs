@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -117,6 +118,32 @@ namespace GTI_Models.Models {
         public string Codigo { get; set; }
         public string Nome { get; set; }
         public string Endereco { get; set; }
+    }
+
+    public class ImovelLoad {
+        public int Codigo { get; set; }
+        public List<ProprietarioStruct> Lista_Proprietario { get; set; }
+        public EnderecoStruct Endereco_Imovel { get; set; }
+        public string QuadraOriginal { get; set; }
+        public string LoteOriginal { get; set; }
+        public string TipoMat { get; set; }
+        public long? NumMatricula { get; set; }
+        public bool? ResideImovel { get; set; }
+        public short? EE_TipoEndereco { get; set; }
+        public EnderecoStruct Endereco_Entrega { get; set; }
+        public List<Testada> Lista_Testada { get; set; }
+        public decimal Area_Terreno { get; set; }
+        public short? Uso_terreno { get; set; }
+        public short? Benfeitoria { get; set; }
+        public short? Topografia { get; set; }
+        public short? Categoria { get; set; }
+        public short? Situacao { get; set; }
+        public short? Pedologia { get; set; }
+        public decimal FracaoIdeal { get; set; }
+        public List<AreaStruct> Lista_Area { get; set; }
+        public bool? Imunidade { get; set; }
+        public bool? Cip { get; set; }
+        public bool? Conjugado { get; set; }
     }
 
 

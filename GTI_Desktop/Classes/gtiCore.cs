@@ -91,6 +91,12 @@ namespace GTI_Desktop.Classes {
                 return (short)_number;
         }
 
+        public static long SubNull(long? _number) {
+            if (_number == null)
+                return 0;
+            else
+                return (short)_number;
+        }
         private static bool IsCAPS(int nKey) {
             bool bRet = false;
             if (nKey > 64 && nKey < 91)
