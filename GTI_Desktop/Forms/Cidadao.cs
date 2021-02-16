@@ -11,6 +11,7 @@ namespace GTI_Desktop.Forms {
         bool bAddNew;
         int _CodCidadao = 0;
         string _connection = gtiCore.Connection_Name();
+        CidadaoStruct regHist = null;
 
         public int CodCidadao {
             get { return (_CodCidadao); }
@@ -30,8 +31,8 @@ namespace GTI_Desktop.Forms {
         }
 
         private void Carrega_Profissao() {
-            Cidadao_bll clsProfissao = new Cidadao_bll(_connection);
-            List<GTI_Models.Models.Profissao> lista = clsProfissao.Lista_Profissao();
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+            List<GTI_Models.Models.Profissao> lista = cidadaoRepository.Lista_Profissao();
             ProfissaoList.DataSource = lista;
             ProfissaoList.DisplayMember = "nome";
             ProfissaoList.ValueMember = "codigo";
@@ -62,6 +63,8 @@ namespace GTI_Desktop.Forms {
             CNPJMask.Text = "";
             RGText.Text = "";
             OrgaoText.Text = "";
+            CnhText.Text = "";
+            CnhOrgaotext.Text = "";
             DataNasctoMask.Text = "";
             ProfissaoList.SelectedIndex = -1;
             ProfissaoText.Text = "";
@@ -228,10 +231,13 @@ namespace GTI_Desktop.Forms {
         private void LoadReg(int nCodigo) {
             Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
             CidadaoStruct reg = cidadaoRepository.LoadReg(nCodigo);
+            regHist = reg;
             CodigoText.Text = reg.Codigo.ToString("000000");
             NomeText.Text = reg.Nome;
             RGText.Text = reg.Rg ?? "";
             OrgaoText.Text = reg.Orgao ?? "";
+            CnhText.Text = reg.Cnh ?? "";
+            CnhOrgaotext.Text = reg.Orgaocnh ?? "";
             if (reg.DataNascto != null)
                 DataNasctoMask.Text = Convert.ToDateTime(reg.DataNascto).ToString("dd/MM/yyyy");
             if (reg.CodigoProfissao == null || reg.CodigoProfissao == 0) {
@@ -336,7 +342,12 @@ namespace GTI_Desktop.Forms {
         }
 
         private bool ValidateReg() {
-            if (!gtiCore.IsEmptyDate(DataNasctoMask.Text) && !gtiCore.IsDate(DataNasctoMask.Text)) {
+            if (gtiCore.IsEmptyDate(DataNasctoMask.Text) || !gtiCore.IsDate(DataNasctoMask.Text)) {
+                MessageBox.Show("Data de nascimento inválida.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            if (Convert.ToDateTime(DataNasctoMask.Text) >= DateTime.Now) {
                 MessageBox.Show("Data de nascimento inválida.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
@@ -403,8 +414,10 @@ namespace GTI_Desktop.Forms {
             if (MessageBox.Show("Gravar os dados?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question)== DialogResult.Yes){
                 GTI_Models.Models.Cidadao reg = new GTI_Models.Models.Cidadao {
                     Nomecidadao = NomeText.Text,
-                    Rg = String.IsNullOrWhiteSpace(RGText.Text) ? null : RGText.Text,
-                    Orgao = String.IsNullOrWhiteSpace(OrgaoText.Text) ? null : OrgaoText.Text
+                    Rg = string.IsNullOrWhiteSpace(RGText.Text) ? null : RGText.Text,
+                    Orgao = string.IsNullOrWhiteSpace(OrgaoText.Text) ? null : OrgaoText.Text,
+                    Cnh = string.IsNullOrWhiteSpace(CnhText.Text) ? null : CnhText.Text,
+                    Orgaocnh = string.IsNullOrWhiteSpace(CnhOrgaotext.Text) ? null : CnhOrgaotext.Text
                 };
                 if (PessoaList.SelectedIndex == 0) {
                     if (CPFMask.Text != "")
@@ -470,17 +483,10 @@ namespace GTI_Desktop.Forms {
                         ErrorBox eBox = new ErrorBox("Atenção", ex.Message, ex);
                         eBox.ShowDialog();
                     } else {
+                        Save_Historico(reg);
                         ControlBehaviour(true);
                     }
                 }
-
-                int nCodigo = 0;
-                if (bAddNew) { }
-                //                    nCodigo = cidadaoRepository.Retorna_Ultimo_Codigo_Cidadao();
-                else
-                    nCodigo = Convert.ToInt32(CodigoText.Text);
-
-
             }
         }
 
@@ -673,6 +679,12 @@ namespace GTI_Desktop.Forms {
                 frm.ShowDialog();
             }
 
+        }
+
+        private void Save_Historico(GTI_Models.Models.Cidadao regNew) {
+            if (regNew.Nomecidadao != regHist.Nome) {
+                MessageBox.Show("Alterado o nome");
+            }
         }
 
     }

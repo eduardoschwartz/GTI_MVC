@@ -1118,6 +1118,7 @@
             // 
             // OrgaoText
             // 
+            this.OrgaoText.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.OrgaoText.Location = new System.Drawing.Point(226, 59);
             this.OrgaoText.MaxLength = 25;
             this.OrgaoText.Name = "OrgaoText";
@@ -1126,6 +1127,7 @@
             // 
             // CnhOrgaotext
             // 
+            this.CnhOrgaotext.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.CnhOrgaotext.Location = new System.Drawing.Point(280, 107);
             this.CnhOrgaotext.MaxLength = 30;
             this.CnhOrgaotext.Name = "CnhOrgaotext";

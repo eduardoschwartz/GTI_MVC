@@ -93,8 +93,8 @@
                                     <td style="width:170px;font-weight:normal">@Html.DisplayFor(modelItem => item.Situacao_Itbi_Nome)</td>
                                     <td style="width:130px">
                                         <a href="@Url.Action("Itbi_isencao_q", "Itbi", new { p = item.Guid })" title="Visualizar certidão"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                                        <a href="@Url.Action("Itbi_isencao_cancel", "Itbi", new { p = item.Guid, s = 4 })" onclick="return confirm('Cancelar esta certidão?')" })" title="Cancelar esta certidão"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
                                         @if (item.Situacao_Itbi_codigo == 1) {
-                                            <a href="@Url.Action("Itbi_isencao_cancel", "Itbi", new { p = item.Guid, s = 4 })" onclick="return confirm('Cancelar esta certidão?')" })" title="Cancelar esta certidão"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
                                             <a href="@Url.Action("Itbi_isencao_e", "Itbi", new { guid = item.Guid, s = 4 })"  title="Alterar esta certidão"> <img src="@Url.Content("~/images/alterar.gif")"></a>
                                         }
                                         @if (item.Situacao_Itbi_codigo == 5) {
