@@ -141,23 +141,23 @@ namespace GTI_Desktop.Forms {
             reg.Email = Email.Text;
             reg.Cep = reg.Id_cidade != 413 ? Cep.Text == "" ? 0 : Convert.ToInt32(gtiCore.ExtractNumber(Cep.Text)) : 0;
 
-            Forms.Endereco f1 = new Forms.Endereco(reg, false, true, true, true);
-            f1.ShowDialog();
-            if (!f1.EndRetorno.Cancelar) {
-                Pais.Text = "BRASIL";
-                Pais.Tag = "1";
-                UF.Text = f1.EndRetorno.Sigla_uf;
-                Cidade.Text = f1.EndRetorno.Nome_cidade;
-                Cidade.Tag = f1.EndRetorno.Id_cidade.ToString();
-                Bairro.Text = f1.EndRetorno.Nome_bairro;
-                Bairro.Tag = f1.EndRetorno.Id_bairro.ToString();
-                Logradouro.Text = f1.EndRetorno.Nome_logradouro;
-                Logradouro.Tag = f1.EndRetorno.Id_logradouro.ToString();
-                Numero.Text = f1.EndRetorno.Numero_imovel.ToString();
-                Complemento.Text = f1.EndRetorno.Complemento;
-                Email.Text = f1.EndRetorno.Email;
-                Cep.Text = f1.EndRetorno.Cep.ToString("00000-000");
-            }
+            //Forms.Endereco f1 = new Forms.Endereco(reg, false, true, true, true);
+            //f1.ShowDialog();
+            //if (!f1.EndRetorno.Cancelar) {
+            //    Pais.Text = "BRASIL";
+            //    Pais.Tag = "1";
+            //    UF.Text = f1.EndRetorno.Sigla_uf;
+            //    Cidade.Text = f1.EndRetorno.Nome_cidade;
+            //    Cidade.Tag = f1.EndRetorno.Id_cidade.ToString();
+            //    Bairro.Text = f1.EndRetorno.Nome_bairro;
+            //    Bairro.Tag = f1.EndRetorno.Id_bairro.ToString();
+            //    Logradouro.Text = f1.EndRetorno.Nome_logradouro;
+            //    Logradouro.Tag = f1.EndRetorno.Id_logradouro.ToString();
+            //    Numero.Text = f1.EndRetorno.Numero_imovel.ToString();
+            //    Complemento.Text = f1.EndRetorno.Complemento;
+            //    Email.Text = f1.EndRetorno.Email;
+            //    Cep.Text = f1.EndRetorno.Cep.ToString("00000-000");
+            //}
         }
 
         private void GravarButton_Click(object sender, EventArgs e) {

@@ -8,7 +8,7 @@ using static GTI_Desktop.Classes.GtiTypes;
 
 namespace GTI_Desktop.Forms {
     public partial class Endereco : Form {
-        bool _camposObrigatorios;
+        bool _camposObrigatorios=false;
         bool _telefone;
         string _connection = gtiCore.Connection_Name();
         int StartLocationX;
@@ -16,17 +16,23 @@ namespace GTI_Desktop.Forms {
         string _title;
         public GTI_Models.Models.Endereco EndRetorno { get; set; }
 
-        public Endereco( GTI_Models.Models.Endereco  reg, bool EnderecoLocal , bool EditarBairro,bool CamposObrigatorios ,bool Telefone,int xPos=200,int yPos=200,string Title="Cadastro de endereço") {
+        public Endereco( GTI_Models.Models.Endereco reg, Endereco_Enable fields, int xPos=200,int yPos=200,string Title="Cadastro de endereço") {
             InitializeComponent();
             Carrega_Endereco(reg);
-            PaisList.Enabled = !EnderecoLocal;
-            UFList.Enabled = !EnderecoLocal;
-            CidadeList.Enabled = !EnderecoLocal;
-            BairroList.Enabled = EditarBairro;
-            PaisButton_Refresh.Enabled = !EnderecoLocal;
-            BairroButton_Refresh.Enabled = !EnderecoLocal;
-            _camposObrigatorios = CamposObrigatorios;
-            _telefone = Telefone;
+            LogradouroText.Enabled = fields.Endereco;
+            LogradouroList.Enabled = fields.Endereco;
+            NumeroList.Enabled = fields.Numero;
+            ComplementoText.Enabled = fields.Complemento;
+            PaisList.Enabled = fields.Pais;
+            EmailText.Enabled = fields.Email;
+            UFList.Enabled = fields.Uf;
+            CidadeList.Enabled = fields.Cidade;
+            BairroList.Enabled = fields.Bairro;
+            BairroText.Enabled = fields.Bairro;
+            CepMask.Enabled = fields.Endereco;
+            PaisButton_Refresh.Enabled = fields.Pais;
+            BairroButton_Refresh.Enabled = fields.Bairro;
+            _telefone = fields.Telefone;
             TelefoneText.Enabled = _telefone;
             TemFoneCheck.Enabled = _telefone;
             WhatsAppCheck.Enabled = _telefone;

@@ -175,40 +175,40 @@ namespace GTI_Desktop.Forms {
         }
 
         private void Carrega_Lista() {
-            Imovel_bll clsImovel = new Imovel_bll(_connection);
-            CategoriaTerrenoList.DataSource = clsImovel.Lista_Categoria_Propriedade();
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            CategoriaTerrenoList.DataSource = imovelRepository.Lista_Categoria_Propriedade();
             CategoriaTerrenoList.DisplayMember = "Desccategprop";
             CategoriaTerrenoList.ValueMember = "Codcategprop";
 
-            TopografiaList.DataSource = clsImovel.Lista_Topografia();
+            TopografiaList.DataSource = imovelRepository.Lista_Topografia();
             TopografiaList.DisplayMember = "Desctopografia";
             TopografiaList.ValueMember = "Codtopografia";
 
-            SituacaoList.DataSource = clsImovel.Lista_Situacao();
+            SituacaoList.DataSource = imovelRepository.Lista_Situacao();
             SituacaoList.DisplayMember = "Descsituacao";
             SituacaoList.ValueMember = "Codsituacao";
 
-            BenfeitoriaList.DataSource = clsImovel.Lista_Benfeitoria();
+            BenfeitoriaList.DataSource = imovelRepository.Lista_Benfeitoria();
             BenfeitoriaList.DisplayMember = "Descbenfeitoria";
             BenfeitoriaList.ValueMember = "Codbenfeitoria";
 
-            PedologiaList.DataSource = clsImovel.Lista_Pedologia();
+            PedologiaList.DataSource = imovelRepository.Lista_Pedologia();
             PedologiaList.DisplayMember = "Descpedologia";
             PedologiaList.ValueMember = "Codpedologia";
 
-            UsoTerrenoList.DataSource = clsImovel.Lista_uso_terreno();
+            UsoTerrenoList.DataSource = imovelRepository.Lista_uso_terreno();
             UsoTerrenoList.DisplayMember = "Descusoterreno";
             UsoTerrenoList.ValueMember = "Codusoterreno";
 
-            UsoConstrucaoList.DataSource = clsImovel.Lista_Uso_Construcao();
+            UsoConstrucaoList.DataSource = imovelRepository.Lista_Uso_Construcao();
             UsoConstrucaoList.DisplayMember = "Descusoconstr";
             UsoConstrucaoList.ValueMember = "Codusoconstr";
 
-            CategoriaConstrucaoList.DataSource = clsImovel.Lista_Categoria_Construcao();
+            CategoriaConstrucaoList.DataSource = imovelRepository.Lista_Categoria_Construcao();
             CategoriaConstrucaoList.DisplayMember = "Desccategconstr";
             CategoriaConstrucaoList.ValueMember = "Codcategconstr";
 
-            TipoConstrucaoList.DataSource = clsImovel.Lista_Tipo_Construcao();
+            TipoConstrucaoList.DataSource = imovelRepository.Lista_Tipo_Construcao();
             TipoConstrucaoList.DisplayMember = "Desctipoconstr";
             TipoConstrucaoList.ValueMember = "Codtipoconstr";
 
@@ -304,8 +304,8 @@ namespace GTI_Desktop.Forms {
                     if (reg.Numero_Processo.Contains("-"))//se já tiver DV não precisa inserir novamente
                         lvItem.SubItems.Add(reg.Numero_Processo);
                     else {
-                        Processo_bll processo_Class = new Processo_bll(_connection);
-                        lvItem.SubItems.Add(processo_Class.Retorna_Processo_com_DV(reg.Numero_Processo));//corrige o DV
+                        Processo_bll processoRepository = new Processo_bll(_connection);
+                        lvItem.SubItems.Add(processoRepository.Retorna_Processo_com_DV(reg.Numero_Processo));//corrige o DV
                     }
                 }
                 lvItem.Tag = reg.Seq.ToString();
@@ -367,7 +367,7 @@ namespace GTI_Desktop.Forms {
         }
 
         private void SaveReg() {
-            
+            gtiCore.Ocupado(this);
             Cadimob reg = new Cadimob();
             reg.Cip = IsentoCIPCheck.Checked;
             reg.Codcondominio = Convert.ToInt32( Condominio.Tag.ToString());
@@ -436,8 +436,18 @@ namespace GTI_Desktop.Forms {
 
             if (reg.Ee_tipoend == 2) {
                 //grava o endereo de entrega
-
-                Exception ex = imovelRepository.
+                Endentrega regEnd = new Endentrega() {
+                    Codreduzido = nCodReduzido,
+                    Ee_codlog = Convert.ToInt32(Logradouro_EE.Tag.ToString()),
+                    Ee_nomelog = Logradouro_EE.Text,
+                    Ee_numimovel = Convert.ToInt16(Numero_EE.Text),
+                    Ee_complemento = Complemento_EE.Text ?? "",
+                    Ee_cep=gtiCore.RetornaNumero( CEP_EE.Text),
+                    Ee_bairro=Convert.ToInt16(Bairro_EE.Tag.ToString()),
+                    Ee_cidade=Convert.ToInt16(Cidade_EE.Tag.ToString()),
+                    Ee_uf=UF_EE.Text
+                };
+                Exception ex2 = imovelRepository.Incluir_Endereco_Entrega(regEnd);
             }
 
             //grava proprietário
@@ -571,13 +581,6 @@ namespace GTI_Desktop.Forms {
                     Lista_Proprietario=ListaPHist,
                     Lista_Testada=ListaTestada
                 };
-                EnderecoStruct _end = new EnderecoStruct() {
-                    CodLogradouro = Convert.ToInt32(Logradouro.Tag.ToString()),
-                    CodigoBairro = Convert.ToInt16(Bairro.Tag.ToString()),
-                    Complemento = Complemento.Text,
-                    Numero = Convert.ToInt16(Numero.Text)
-                };
-                regNew.Endereco_Imovel = _end;
                 EnderecoStruct _end2 = new EnderecoStruct() {
                     CodLogradouro = Convert.ToInt32(Logradouro_EE.Tag.ToString()),
                     CodigoBairro = Convert.ToInt16(Bairro_EE.Tag.ToString()),
@@ -593,6 +596,7 @@ namespace GTI_Desktop.Forms {
             }
 
         Final:;
+            gtiCore.Liberado(this);
             ControlBehaviour(true);
         }
 
@@ -609,8 +613,8 @@ namespace GTI_Desktop.Forms {
             String sCod = z.Show("", "Informação", "Digite o código do imóvel.", 6, gtiCore.eTweakMode.IntegerPositive);
             if (!string.IsNullOrEmpty(sCod)) {
                 gtiCore.Ocupado(this);
-                Imovel_bll clsImovel = new Imovel_bll(_connection);
-                if (clsImovel.Existe_Imovel(Convert.ToInt32(sCod))) {
+                Imovel_bll imovelRepository = new Imovel_bll(_connection);
+                if (imovelRepository.Existe_Imovel(Convert.ToInt32(sCod))) {
                     int Codigo = Convert.ToInt32(sCod);
                     this.Codigo.Text = Codigo.ToString("000000");
                     ControlBehaviour(true);
@@ -843,7 +847,10 @@ namespace GTI_Desktop.Forms {
             reg.Complemento = Complemento.Text;
             reg.Email ="";
 
-            Forms.Endereco f1 = new Forms.Endereco(reg, true, true, true, true);
+            int _x = Location.X + 350;
+            int _y = Location.Y + 300;
+            Endereco_Enable _fields = new Endereco_Enable() { Numero = true, Complemento = true };
+            Endereco f1 = new Endereco(reg, _fields, _x, _y, "Local do imóvel");
             f1.ShowDialog();
             if (!f1.EndRetorno.Cancelar) {
                 Bairro.Text = f1.EndRetorno.Nome_bairro;
@@ -875,8 +882,10 @@ namespace GTI_Desktop.Forms {
             reg.Complemento = Complemento_EE.Text;
             reg.Email = "";
 
-
-            Endereco f1 = new Endereco(reg, false, true, true, false);
+            int _x = Location.X + 150;
+            int _y = Location.Y + 300;
+            Endereco_Enable _fields = new Endereco_Enable() { Bairro = true, Cidade = true, Endereco = true, Uf = true,Numero=true,Complemento=true };
+            Endereco f1 = new Endereco(reg, _fields, _x, _y, "Endereço de Entrega");
             f1.ShowDialog();
             if (!f1.EndRetorno.Cancelar) {
                 UF_EE.Text = f1.EndRetorno.Sigla_uf;
@@ -1057,16 +1066,16 @@ namespace GTI_Desktop.Forms {
             }
 
             if(!string.IsNullOrWhiteSpace(ProcessoArea.Text)) {
-                Processo_bll processo_Class = new Processo_bll(_connection);
-                Exception ex = processo_Class.ValidaProcesso(ProcessoArea.Text);
+                Processo_bll processoRepository = new Processo_bll(_connection);
+                Exception ex = processoRepository.ValidaProcesso(ProcessoArea.Text);
                 if (ex != null) {
                     ErrorBox eBox = new ErrorBox("Atenção", ex.Message, ex);
                     eBox.ShowDialog();
                     return;
                 }
-                int Numero = processo_Class.ExtractNumeroProcessoNoDV(ProcessoArea.Text);
-                int Ano = processo_Class.ExtractAnoProcesso(ProcessoArea.Text);
-                bool Existe = processo_Class.Existe_Processo(Ano, Numero);
+                int Numero = processoRepository.ExtractNumeroProcessoNoDV(ProcessoArea.Text);
+                int Ano = processoRepository.ExtractAnoProcesso(ProcessoArea.Text);
+                bool Existe = processoRepository.Existe_Processo(Ano, Numero);
                 if (!Existe) {
                     MessageBox.Show("Número de processo inválido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -1474,8 +1483,8 @@ namespace GTI_Desktop.Forms {
         private void CarregaImovel(int Codigo) {
             if (string.IsNullOrEmpty(this.Codigo.Text)) return;
 
-            Imovel_bll clsImovel = new Imovel_bll(_connection);
-            ImovelStruct regImovel = clsImovel.Dados_Imovel(Codigo);
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            ImovelStruct regImovel = imovelRepository.Dados_Imovel(Codigo);
             if (regImovel.Codigo == 0)
                 MessageBox.Show("Imóvel não cadastrado", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else {
@@ -1538,7 +1547,7 @@ namespace GTI_Desktop.Forms {
                 UsoTerreno.Text = regImovel.Uso_terreno_Nome;
 
                 //Carrega proprietário
-                List<ProprietarioStruct> Lista = clsImovel.Lista_Proprietario(Codigo);
+                List<ProprietarioStruct> Lista = imovelRepository.Lista_Proprietario(Codigo);
                 foreach (ProprietarioStruct reg in Lista) {
                     ListViewItem lvItem = new ListViewItem();
                     if (reg.Tipo == "P")
@@ -1554,7 +1563,7 @@ namespace GTI_Desktop.Forms {
                 }
 
                 //Carrega testada
-                List<GTI_Models.Models.Testada> ListaT = clsImovel.Lista_Testada(Codigo);
+                List<GTI_Models.Models.Testada> ListaT = imovelRepository.Lista_Testada(Codigo);
                 foreach (GTI_Models.Models.Testada reg in ListaT) {
                     ListViewItem lvItem = new ListViewItem(reg.Numface.ToString("00"));
                     lvItem.SubItems.Add(string.Format("{0:0.00}", (decimal)reg.Areatestada));
@@ -1571,24 +1580,24 @@ namespace GTI_Desktop.Forms {
                     End3Option.Checked = true;
 
                 TipoEndereco Tipoend = regImovel.EE_TipoEndereco == 0 ? TipoEndereco.Local : regImovel.EE_TipoEndereco == 1 ? TipoEndereco.Proprietario : TipoEndereco.Entrega;
-                EnderecoStruct regEntrega = clsImovel.Dados_Endereco(Codigo, Tipoend);
+                EnderecoStruct regEntrega = imovelRepository.Dados_Endereco(Codigo, Tipoend);
                 if (regEntrega != null) {
-                    Logradouro_EE.Text = regEntrega.Endereco.ToString();
-                    Logradouro_EE.Tag = regEntrega.CodLogradouro.ToString();
-                    Numero_EE.Text = regEntrega.Numero.ToString();
+                    Logradouro_EE.Text = regEntrega.Endereco ?? "";
+                    Logradouro_EE.Tag = gtiCore.SubNull(regEntrega.CodLogradouro).ToString();
+                    Numero_EE.Text = gtiCore.SubNull(regEntrega.Numero).ToString();
                     Complemento_EE.Text = regEntrega.Complemento ?? "";
-                    UF_EE.Text = regEntrega.UF.ToString();
-                    Cidade_EE.Text = regEntrega.NomeCidade.ToString();
-                    Cidade_EE.Tag = regEntrega.CodigoCidade.ToString();
-                    Bairro_EE.Text = regEntrega.NomeBairro.ToString();
-                    Bairro_EE.Tag = regEntrega.CodigoBairro.ToString();
+                    UF_EE.Text = regEntrega.UF ?? "";
+                    Cidade_EE.Text = regEntrega.NomeCidade ?? "";
+                    Cidade_EE.Tag = gtiCore.SubNull(regEntrega.CodigoCidade).ToString();
+                    Bairro_EE.Text = regEntrega.NomeBairro ?? "";
+                    Bairro_EE.Tag = gtiCore.SubNull(regEntrega.CodigoBairro).ToString();
                     CEP_EE.Text = regEntrega.Cep == null ? "00000-000" : Convert.ToInt32(regEntrega.Cep.ToString()).ToString("00000-000");
                 }
 
                 //Carrega Área
                 short n = 1;
                 decimal SomaArea = 0;
-                List<AreaStruct> ListaA = clsImovel.Lista_Area(Codigo);
+                List<AreaStruct> ListaA = imovelRepository.Lista_Area(Codigo);
                 foreach (AreaStruct reg in ListaA) {
                     ListViewItem lvItem = new ListViewItem(n.ToString("00"));
                     lvItem.SubItems.Add(string.Format("{0:0.00}", (decimal)reg.Area));
@@ -1606,8 +1615,8 @@ namespace GTI_Desktop.Forms {
                         if (reg.Numero_Processo.Contains("-"))//se já tiver DV não precisa inserir novamente
                             lvItem.SubItems.Add(reg.Numero_Processo);
                         else {
-                            Processo_bll processo_Class = new Processo_bll(_connection);
-                            lvItem.SubItems.Add(processo_Class.Retorna_Processo_com_DV(reg.Numero_Processo));//corrige o DV
+                            Processo_bll processoRepository = new Processo_bll(_connection);
+                            lvItem.SubItems.Add(processoRepository.Retorna_Processo_com_DV(reg.Numero_Processo));//corrige o DV
                         }
                     }
                     lvItem.Tag = reg.Seq.ToString();
@@ -1624,7 +1633,7 @@ namespace GTI_Desktop.Forms {
 
                 //Carrega Histórico
                 n = 1;
-                List<HistoricoStruct> ListaH = clsImovel.Lista_Historico(Codigo);
+                List<HistoricoStruct> ListaH = imovelRepository.Lista_Historico(Codigo);
                 foreach (HistoricoStruct reg in ListaH) {
                     ListViewItem lvItem = new ListViewItem(n.ToString("000"));
                     lvItem.SubItems.Add(Convert.ToDateTime(reg.Data).ToString("dd/MM/yyyy"));
@@ -1667,12 +1676,6 @@ namespace GTI_Desktop.Forms {
                     Lista_Area = ListaA,
                     Lista_Proprietario = Lista
                 };
-                regHist.Endereco_Imovel = new EnderecoStruct() {
-                    CodLogradouro = regImovel.CodigoLogradouro,
-                    CodigoBairro = regImovel.CodigoBairro,
-                    Complemento = regImovel.Complemento,
-                    Numero = regImovel.Numero
-                };
                 regHist.Endereco_Entrega = new EnderecoStruct() {
                     CodLogradouro = regEntrega.CodLogradouro,
                     CodigoBairro = regEntrega.CodigoBairro,
@@ -1681,10 +1684,30 @@ namespace GTI_Desktop.Forms {
                     UF = regEntrega.UF,
                     Endereco = regEntrega.Endereco,
                     Numero = regEntrega.Numero,
-                    Cep = regEntrega.Cep
+                    Cep = regEntrega.Cep,
+                    NomeBairro=regEntrega.NomeBairro,
+                    NomeCidade=regEntrega.NomeCidade
                 };
 
             }
+        }
+
+        private string RetornaTipoendereco(short? tipo) {
+            string _ret = "";
+            switch (tipo) {
+                case 0:
+                    _ret = "Imóvel";
+                    break;
+                case 1:
+                    _ret = "Proprietário";
+                    break;
+                case 2:
+                    _ret = "Entrega";
+                    break;
+                default:
+                    break;
+            }
+            return _ret;
         }
 
         private void Save_Historico(ImovelLoad regNew) {
@@ -1726,9 +1749,32 @@ namespace GTI_Desktop.Forms {
             if (regNew.Imunidade != regHist.Imunidade) {
                 aLog.Add("Alterada imunidade de " + regHist.Imunidade + " para " + regNew.Imunidade);
             }
-
             if (regNew.EE_TipoEndereco != regHist.EE_TipoEndereco) {
                 aLog.Add("Alterado tipo de endereço de " + RetornaTipoendereco(regHist.EE_TipoEndereco) + " para " + RetornaTipoendereco(regNew.EE_TipoEndereco));
+            }
+            if (regNew.QuadraOriginal != regHist.QuadraOriginal) {
+                aLog.Add("Alterada quadra de " + regHist.QuadraOriginal + " para " + regNew.QuadraOriginal);
+            }
+            if (regNew.LoteOriginal != regHist.LoteOriginal) {
+                aLog.Add("Alterada lote de " + regHist.LoteOriginal + " para " + regNew.LoteOriginal);
+            }
+            if (regNew.TipoMat != regHist.TipoMat) {
+                aLog.Add("Alterado tipo de matricula de " + regHist.TipoMat + " para " + regNew.TipoMat);
+            }
+            if (regNew.NumMatricula != regHist.NumMatricula) {
+                aLog.Add("Alterado nº de matrícula de " + regHist.NumMatricula + " para " + regNew.NumMatricula);
+            }
+            if (regNew.Endereco_Entrega.Endereco != regHist.Endereco_Entrega.Endereco) {
+                aLog.Add("Alterado rua end. de entrega de " + regHist.Endereco_Entrega.Endereco + " para " + regNew.Endereco_Entrega.Endereco);
+            }
+            if (regNew.Endereco_Entrega.Numero != regHist.Endereco_Entrega.Numero) {
+                aLog.Add("Alterado nº end. de entrega de " + regHist.Endereco_Entrega.Numero + " para " + regNew.Endereco_Entrega.Numero);
+            }
+            if (regNew.Endereco_Entrega.CodigoBairro != regHist.Endereco_Entrega.CodigoBairro) {
+                aLog.Add("Alterado bairro end. de entrega de " + regHist.Endereco_Entrega.NomeBairro + " para " + Bairro_EE.Text);
+            }
+            if (regNew.Endereco_Entrega.CodigoCidade != regHist.Endereco_Entrega.CodigoCidade) {
+                aLog.Add("Alterada cidade end. de entrega de " + regHist.Endereco_Entrega.NomeCidade + "/" + regHist.Endereco_Entrega.UF + " para " + Cidade_EE.Text + "/" + regNew.Endereco_Entrega.UF);
             }
 
 
@@ -1745,23 +1791,7 @@ namespace GTI_Desktop.Forms {
             }
         }
 
-        private string RetornaTipoendereco(short? tipo) {
-            string _ret = "";
-            switch (tipo) {
-                case 0:
-                    _ret = "Imóvel";
-                    break;
-                case 1:
-                    _ret = "Proprietário";
-                    break;
-                case 2:
-                    _ret = "Entrega";
-                    break;
-                default:
-                    break;
-            }
-            return _ret;
-        }
+        
 
     }
 }

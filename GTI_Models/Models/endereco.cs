@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
+﻿
 namespace GTI_Models.Models {
     public class Endereco {
-
         public int Id_pais { get; set; }
         public string Nome_pais { get; set; }
         public string Sigla_uf { get; set; }
@@ -25,4 +21,15 @@ namespace GTI_Models.Models {
         public bool? WhatsApp { get; set; }
     }
 
+    public class Endereco_Enable {
+        public bool Pais { get; set; } = false;
+        public bool Uf { get; set; } = false;
+        public bool Cidade { get; set; } = false;
+        public bool Bairro { get; set; } = false;
+        public bool Endereco { get; set; } = false;
+        public bool Numero { get; set; } = false;
+        public bool Complemento { get; set; } = false;
+        public bool Email { get; set; } = false;
+        public bool Telefone { get; set; } = false;
+    }
 }

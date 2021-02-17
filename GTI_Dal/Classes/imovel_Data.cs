@@ -2718,7 +2718,7 @@ namespace GTI_Dal.Classes {
                     return ex;
                 }
 
-                object[] Parametros = new object[11];
+                object[] Parametros = new object[9];
                 Parametros[0] = new SqlParameter { ParameterName = "@codreduzido", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codreduzido };
                 Parametros[1] = new SqlParameter { ParameterName = "@ee_codlog", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ee_codlog };
                 Parametros[2] = new SqlParameter { ParameterName = "@ee_nomelog", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Ee_nomelog };

@@ -1442,27 +1442,27 @@ namespace GTI_Desktop.Forms {
                 Sigla_uf = "SP",
                 Id_cidade = 413
             };
-            Forms.Endereco f1 = new Forms.Endereco(reg, true, false, true, false);
-            f1.ShowDialog();
+            //Forms.Endereco f1 = new Forms.Endereco(reg, true, false, true, false);
+            //f1.ShowDialog();
 
-            if (!String.IsNullOrEmpty(f1.EndRetorno.Nome_logradouro.Trim())) {
-                bool bFind = false;
-                foreach (ListViewItem item in EnderecoListView.Items) {
-                    if (item.SubItems[1].Text == f1.EndRetorno.Id_logradouro.ToString() && item.SubItems[2].Text == f1.EndRetorno.Numero_imovel.ToString()) {
-                        bFind = true;
-                        break;
-                    }
-                }
-                if (bFind)
-                    MessageBox.Show("Endereço já incluso na lista.", "erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                else {
-                    ListViewItem lvi = new ListViewItem(f1.EndRetorno.Nome_logradouro);
-                    lvi.SubItems.Add(f1.EndRetorno.Id_logradouro.ToString());
-                    lvi.SubItems.Add(f1.EndRetorno.Numero_imovel.ToString());
-                    EnderecoListView.Items.Add(lvi);
-                    int s = EnderecoListView.Items.Count;
-                }
-            }
+            //if (!String.IsNullOrEmpty(f1.EndRetorno.Nome_logradouro.Trim())) {
+            //    bool bFind = false;
+            //    foreach (ListViewItem item in EnderecoListView.Items) {
+            //        if (item.SubItems[1].Text == f1.EndRetorno.Id_logradouro.ToString() && item.SubItems[2].Text == f1.EndRetorno.Numero_imovel.ToString()) {
+            //            bFind = true;
+            //            break;
+            //        }
+            //    }
+            //    if (bFind)
+            //        MessageBox.Show("Endereço já incluso na lista.", "erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    else {
+            //        ListViewItem lvi = new ListViewItem(f1.EndRetorno.Nome_logradouro);
+            //        lvi.SubItems.Add(f1.EndRetorno.Id_logradouro.ToString());
+            //        lvi.SubItems.Add(f1.EndRetorno.Numero_imovel.ToString());
+            //        EnderecoListView.Items.Add(lvi);
+            //        int s = EnderecoListView.Items.Count;
+            //    }
+            //}
         }
 
         private void BtDelEndereco_Click(object sender, EventArgs e)

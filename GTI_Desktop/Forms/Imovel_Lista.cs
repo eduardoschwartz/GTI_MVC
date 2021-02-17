@@ -277,15 +277,15 @@ namespace GTI_Desktop.Forms {
             reg.Complemento = "";
             reg.Email = "";
 
-            Forms.Endereco f1 = new Forms.Endereco(reg, true, true, false, true);
-            f1.ShowDialog();
-            if (!f1.EndRetorno.Cancelar) {
-                Bairro.Text = f1.EndRetorno.Nome_bairro;
-                Bairro.Tag = f1.EndRetorno.Id_bairro.ToString();
-                Logradouro.Text = f1.EndRetorno.Nome_logradouro;
-                Logradouro.Tag = f1.EndRetorno.Id_logradouro.ToString();
-                Numero.Text = f1.EndRetorno.Numero_imovel.ToString();
-            }
+            //Forms.Endereco f1 = new Forms.Endereco(reg, true, true, false, true);
+            //f1.ShowDialog();
+            //if (!f1.EndRetorno.Cancelar) {
+            //    Bairro.Text = f1.EndRetorno.Nome_bairro;
+            //    Bairro.Tag = f1.EndRetorno.Id_bairro.ToString();
+            //    Logradouro.Text = f1.EndRetorno.Nome_logradouro;
+            //    Logradouro.Tag = f1.EndRetorno.Id_logradouro.ToString();
+            //    Numero.Text = f1.EndRetorno.Numero_imovel.ToString();
+            //}
         }
 
         private void EnderecoDelButton_Click(object sender, EventArgs e) {

@@ -810,20 +810,20 @@ namespace GTI_Desktop.Forms {
             reg.Complemento = Complemento_EE.Text;
             reg.Email = "";
 
-            Forms.Endereco f1 = new Forms.Endereco(reg, false, true,true,false,Cursor.Position.X,Cursor.Position.Y);
-            f1.ShowDialog();
-            if (!f1.EndRetorno.Cancelar) {
-                UF_EE.Text = f1.EndRetorno.Sigla_uf;
-                Cidade_EE.Text = f1.EndRetorno.Nome_cidade;
-                Cidade_EE.Tag = f1.EndRetorno.Id_cidade.ToString();
-                Bairro_EE.Text = f1.EndRetorno.Nome_bairro;
-                Bairro_EE.Tag = f1.EndRetorno.Id_bairro.ToString();
-                Logradouro_EE.Text = f1.EndRetorno.Nome_logradouro;
-                Logradouro_EE.Tag = f1.EndRetorno.Id_logradouro.ToString();
-                Numero_EE.Text = f1.EndRetorno.Numero_imovel.ToString();
-                Complemento_EE.Text = f1.EndRetorno.Complemento;
-                Cep_EE.Text = f1.EndRetorno.Cep.ToString("00000-000");
-            }
+            //Forms.Endereco f1 = new Forms.Endereco(reg, false, true,true,false,Cursor.Position.X,Cursor.Position.Y);
+            //f1.ShowDialog();
+            //if (!f1.EndRetorno.Cancelar) {
+            //    UF_EE.Text = f1.EndRetorno.Sigla_uf;
+            //    Cidade_EE.Text = f1.EndRetorno.Nome_cidade;
+            //    Cidade_EE.Tag = f1.EndRetorno.Id_cidade.ToString();
+            //    Bairro_EE.Text = f1.EndRetorno.Nome_bairro;
+            //    Bairro_EE.Tag = f1.EndRetorno.Id_bairro.ToString();
+            //    Logradouro_EE.Text = f1.EndRetorno.Nome_logradouro;
+            //    Logradouro_EE.Tag = f1.EndRetorno.Id_logradouro.ToString();
+            //    Numero_EE.Text = f1.EndRetorno.Numero_imovel.ToString();
+            //    Complemento_EE.Text = f1.EndRetorno.Complemento;
+            //    Cep_EE.Text = f1.EndRetorno.Cep.ToString("00000-000");
+            //}
         }
 
         private void EnderecoButton_Click(object sender, EventArgs e) {
@@ -842,32 +842,32 @@ namespace GTI_Desktop.Forms {
             reg.Complemento = Complemento.Text;
             reg.Email = "";
 
-            Forms.Endereco f1 = new Forms.Endereco(reg, false, true, true, false);
-            f1.ShowDialog();
-            if (!f1.EndRetorno.Cancelar) {
-                UF.Text = f1.EndRetorno.Sigla_uf;
-                Cidade.Text = f1.EndRetorno.Nome_cidade;
-                Cidade.Tag = f1.EndRetorno.Id_cidade.ToString();
-                Bairro.Text = f1.EndRetorno.Nome_bairro;
-                Bairro.Tag = f1.EndRetorno.Id_bairro.ToString();
-                Logradouro.Text = f1.EndRetorno.Nome_logradouro;
-                Logradouro.Tag = f1.EndRetorno.Id_logradouro.ToString();
-                Numero.Text = f1.EndRetorno.Numero_imovel.ToString();
-                Complemento.Text = f1.EndRetorno.Complemento;
-                Cep.Text = f1.EndRetorno.Cep.ToString("00000-000");
-                if (MesmoEndereco.Checked) {
-                    Logradouro_EE.Text = Logradouro.Text;
-                    Logradouro_EE.Tag = Logradouro.Tag;
-                    Numero_EE.Text = Numero.Text;
-                    Complemento_EE.Text = Complemento.Text;
-                    Bairro_EE.Text = Bairro.Text;
-                    Bairro_EE.Tag = Bairro.Tag;
-                    Cidade_EE.Text = Cidade.Text;
-                    Cidade_EE.Tag = Cidade.Tag;
-                    UF_EE.Text = UF.Text;
-                    Cep_EE.Text = Cep.Text;
-                }
-            }
+            //Forms.Endereco f1 = new Forms.Endereco(reg, false, true, true, false);
+            //f1.ShowDialog();
+            //if (!f1.EndRetorno.Cancelar) {
+            //    UF.Text = f1.EndRetorno.Sigla_uf;
+            //    Cidade.Text = f1.EndRetorno.Nome_cidade;
+            //    Cidade.Tag = f1.EndRetorno.Id_cidade.ToString();
+            //    Bairro.Text = f1.EndRetorno.Nome_bairro;
+            //    Bairro.Tag = f1.EndRetorno.Id_bairro.ToString();
+            //    Logradouro.Text = f1.EndRetorno.Nome_logradouro;
+            //    Logradouro.Tag = f1.EndRetorno.Id_logradouro.ToString();
+            //    Numero.Text = f1.EndRetorno.Numero_imovel.ToString();
+            //    Complemento.Text = f1.EndRetorno.Complemento;
+            //    Cep.Text = f1.EndRetorno.Cep.ToString("00000-000");
+            //    if (MesmoEndereco.Checked) {
+            //        Logradouro_EE.Text = Logradouro.Text;
+            //        Logradouro_EE.Tag = Logradouro.Tag;
+            //        Numero_EE.Text = Numero.Text;
+            //        Complemento_EE.Text = Complemento.Text;
+            //        Bairro_EE.Text = Bairro.Text;
+            //        Bairro_EE.Tag = Bairro.Tag;
+            //        Cidade_EE.Text = Cidade.Text;
+            //        Cidade_EE.Tag = Cidade.Tag;
+            //        UF_EE.Text = UF.Text;
+            //        Cep_EE.Text = Cep.Text;
+            //    }
+            //}
             Carrega_Inscricao_Cadastral();
         }
 

@@ -573,7 +573,8 @@ namespace GTI_Desktop.Forms {
             reg.WhatsApp = WhatsAppRCheck.Checked;
             int _x = Location.X + EndRPanel.Location.X + AddEnderecoRButton.Location.X;
             int _y = Location.Y + EndRPanel.Location.Y + AddEnderecoRButton.Location.Y;
-            Endereco f1 = new Endereco(reg, false, true, true, true, _x, _y-20, "Cadastro de endereço residencial");
+            Endereco_Enable _fields = new Endereco_Enable() { Bairro = true, Cidade = true, Email = true, Endereco = true, Pais = true, Telefone = true, Uf = true, Complemento = true, Numero = true };
+            Endereco f1 = new Endereco(reg, _fields, _x, _y - 20, "Cadastro de endereço residencial");
             f1.ShowDialog();
             if (!f1.EndRetorno.Cancelar) {
                 PaisRText.Text = f1.EndRetorno.Nome_pais;
@@ -592,7 +593,6 @@ namespace GTI_Desktop.Forms {
                 FoneRText.Text = f1.EndRetorno.Telefone;
                 TemFoneRCheck.Checked =(bool) f1.EndRetorno.TemFone;
                 WhatsAppRCheck.Checked = (bool)f1.EndRetorno.WhatsApp;
-
             }
         }
 
@@ -617,7 +617,8 @@ namespace GTI_Desktop.Forms {
             reg.WhatsApp = WhatsAppCCheck.Checked;
             int _x = Location.X + EndRPanel.Location.X + AddEnderecoCButton.Location.X;
             int _y = Location.Y + EndRPanel.Location.Y + AddEnderecoCButton.Location.Y;
-            Endereco f1 = new Endereco(reg, false, true, true, true,_x,_y-20,"Cadastro de endereço comercial");
+            Endereco_Enable _fields = new Endereco_Enable() { Bairro = true, Cidade = true, Email = true, Endereco = true, Pais = true, Telefone = true, Uf = true, Complemento = true, Numero = true };
+            Endereco f1 = new Endereco(reg, _fields,_x,_y-20,"Cadastro de endereço comercial");
             f1.ShowDialog();
             if (!f1.EndRetorno.Cancelar) {
                 PaisCText.Text = f1.EndRetorno.Nome_pais;

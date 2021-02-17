@@ -225,15 +225,15 @@ namespace GTI_Desktop.Forms {
             reg.Complemento = "";
             reg.Email = "";
 
-            Forms.Endereco f1 = new Forms.Endereco(reg, true,  true, false, false);
-            f1.ShowDialog();
-            if (!f1.EndRetorno.Cancelar) {
-                BairroText.Text = f1.EndRetorno.Nome_bairro;
-                BairroText.Tag = f1.EndRetorno.Id_bairro.ToString();
-                LogradouroText.Text = f1.EndRetorno.Nome_logradouro;
-                LogradouroText.Tag = f1.EndRetorno.Id_logradouro.ToString();
-                NumeroText.Text = f1.EndRetorno.Numero_imovel.ToString();
-            }
+            //Forms.Endereco f1 = new Forms.Endereco(reg, true,  true, false, false);
+            //f1.ShowDialog();
+            //if (!f1.EndRetorno.Cancelar) {
+            //    BairroText.Text = f1.EndRetorno.Nome_bairro;
+            //    BairroText.Tag = f1.EndRetorno.Id_bairro.ToString();
+            //    LogradouroText.Text = f1.EndRetorno.Nome_logradouro;
+            //    LogradouroText.Tag = f1.EndRetorno.Id_logradouro.ToString();
+            //    NumeroText.Text = f1.EndRetorno.Numero_imovel.ToString();
+            //}
         }
 
         private void EnderecoDelButton_Click(object sender, EventArgs e) {
