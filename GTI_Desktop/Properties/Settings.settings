@@ -33,7 +33,7 @@
       <Value Profile="(Default)">490</Value>
     </Setting>
     <Setting Name="Path_Anexo_Local" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Trabalho\GTI\Documentos\</Value>
+      <Value Profile="(Default)">D:\Trabalho\GTI\Documentos\</Value>
     </Setting>
     <Setting Name="Path_Anexo_Net" Type="System.String" Scope="User">
       <Value Profile="(Default)">\\192.168.200.130\atualizagti\documentos\</Value>

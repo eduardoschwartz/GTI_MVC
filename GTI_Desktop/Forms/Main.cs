@@ -62,7 +62,7 @@ namespace GTI_Desktop.Forms
 
             Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             VersaoToolStripStatus.Text = $"{version.Major}"+"."+ $"{version.Minor}" +"."+ $"{version.Build}";
-            this.Text += VersaoToolStripStatus.Text;
+//            this.Text += VersaoToolStripStatus.Text;
             
             LockForm(true);
             Forms.Login login = new Forms.Login();

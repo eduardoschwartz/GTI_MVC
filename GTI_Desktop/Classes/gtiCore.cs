@@ -657,7 +657,8 @@ namespace GTI_Desktop.Classes {
             if (Properties.Settings.Default.ServerName == "SKYNET" || Properties.Settings.Default.ServerName == "DEUTSCH")
                 _path = Properties.Settings.Default.Path_Anexo_Local;
             else
-                _path = Properties.Settings.Default.Path_Anexo_Net;
+                _path = Properties.Settings.Default.Path_Anexo_Local;
+            //_path = Properties.Settings.Default.Path_Anexo_Net;
             return _path;
         }
 

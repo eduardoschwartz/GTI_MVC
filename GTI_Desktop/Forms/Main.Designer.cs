@@ -173,8 +173,8 @@
             // VersaotoolStripStatusLabel
             // 
             this.VersaotoolStripStatusLabel.Name = "VersaotoolStripStatusLabel";
-            this.VersaotoolStripStatusLabel.Size = new System.Drawing.Size(88, 19);
-            this.VersaotoolStripStatusLabel.Text = "gtiNet - Versão:";
+            this.VersaotoolStripStatusLabel.Size = new System.Drawing.Size(73, 19);
+            this.VersaotoolStripStatusLabel.Text = "Versão atual:";
             // 
             // VersaoToolStripStatus
             // 
@@ -1082,7 +1082,7 @@
             this.Name = "Main";
             this.Tag = "232; 232; 213";
             this.Text = "Gestão de Tributação Municipal Integrada  (G.T.I.) - Prefeitura Municipal de Jabo" +
-    "ticabal - Versão: ";
+    "ticabal ";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);

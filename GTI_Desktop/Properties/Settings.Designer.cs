@@ -145,7 +145,7 @@ namespace GTI_Desktop.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Trabalho\\GTI\\Documentos\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Trabalho\\GTI\\Documentos\\")]
         public string Path_Anexo_Local {
             get {
                 return ((string)(this["Path_Anexo_Local"]));
