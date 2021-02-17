@@ -367,6 +367,7 @@ namespace GTI_Desktop.Forms {
         }
 
         private void SaveReg() {
+            
             Cadimob reg = new Cadimob();
             reg.Cip = IsentoCIPCheck.Checked;
             reg.Codcondominio = Convert.ToInt32( Condominio.Tag.ToString());
@@ -411,7 +412,6 @@ namespace GTI_Desktop.Forms {
 
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             Exception ex;
-            
             if (bAddNew) {
                 reg.Codreduzido = imovelRepository.Retorna_Codigo_Disponivel();
                 ex = imovelRepository.Incluir_Imovel(reg);
@@ -429,19 +429,29 @@ namespace GTI_Desktop.Forms {
                     ErrorBox eBox = new ErrorBox("Atenção", ex.Message, ex);
                     eBox.ShowDialog();
                     goto Final;
-                } 
+                }
+                
             }
             int nCodReduzido = reg.Codreduzido;
 
             //grava proprietário
             List<Proprietario> Lista = new List<Proprietario>();
+            List<ProprietarioStruct> ListaPHist = new List<ProprietarioStruct>();
             foreach (ListViewItem item in ProprietarioListView.Items) {
-                Proprietario regProp = new Proprietario();
-                regProp.Codreduzido = nCodReduzido;
-                regProp.Codcidadao = Convert.ToInt32(item.Tag.ToString());
-                regProp.Principal = item.Text.Substring(item.Text.Length - 1, 1) == ")" ? true : false;
-                regProp.Tipoprop = item.Group.Name == "groupPP" ? "P" : "C";
+                Proprietario regProp = new Proprietario {
+                    Codreduzido = nCodReduzido,
+                    Codcidadao = Convert.ToInt32(item.Tag.ToString()),
+                    Principal = item.Text.Substring(item.Text.Length - 1, 1) == ")" ? true : false,
+                    Tipoprop = item.Group.Name == "groupPP" ? "P" : "C"
+                };
                 Lista.Add(regProp);
+                ProprietarioStruct regPropH = new ProprietarioStruct() {
+                    Codigo= Convert.ToInt32(item.Tag.ToString()),
+                    Nome=item.Text,
+                    Principal = item.Text.Substring(item.Text.Length - 1, 1) == ")" ? true : false,
+                    Tipo = item.Group.Name == "groupPP" ? "P" : "C"
+                };
+                ListaPHist.Add(regPropH);
             }
             ex = imovelRepository.Incluir_Proprietario(Lista);
             if (ex != null) {
@@ -453,10 +463,11 @@ namespace GTI_Desktop.Forms {
             //grava testada
             List<Testada> ListaTestada = new List<Testada>();
             foreach (ListViewItem item in TestadaListView.Items) {
-                Testada regT = new Testada();
-                regT.Codreduzido = nCodReduzido;
-                regT.Numface = Convert.ToInt16(item.Text.ToString());
-                regT.Areatestada = Convert.ToDecimal(item.SubItems[1].Text.ToString()); 
+                Testada regT = new Testada {
+                    Codreduzido = nCodReduzido,
+                    Numface = Convert.ToInt16(item.Text.ToString()),
+                    Areatestada = Convert.ToDecimal(item.SubItems[1].Text.ToString())
+                };
                 ListaTestada.Add(regT);
             }
             if (ListaTestada.Count > 0) {
@@ -490,19 +501,28 @@ namespace GTI_Desktop.Forms {
 
             //grava area
             List<Areas> ListaArea = new List<Areas>();
+            List<AreaStruct> ListaAreaHist = new List<AreaStruct>();
             foreach (ListViewItem item in AreaListView.Items) {
-                Areas regA = new Areas();
-                regA.Codreduzido = nCodReduzido;
-                regA.Seqarea = Convert.ToInt16(item.Text.ToString());
-                regA.Areaconstr = Convert.ToDecimal(item.SubItems[1].Text.ToString());
-                regA.Usoconstr = Convert.ToInt16(item.SubItems[2].Tag.ToString());
-                regA.Tipoconstr = Convert.ToInt16(item.SubItems[3].Tag.ToString());
-                regA.Catconstr = Convert.ToInt16(item.SubItems[4].Tag.ToString());
-                regA.Tipoarea = "";
-                regA.Qtdepav = Convert.ToInt16(item.SubItems[5].Text);
-                regA.Dataaprova = Convert.ToDateTime(item.SubItems[6].Text);
-                regA.Numprocesso = item.SubItems[7].Text;
+                Areas regA = new Areas {
+                    Codreduzido = nCodReduzido,
+                    Seqarea = Convert.ToInt16(item.Text.ToString()),
+                    Areaconstr = Convert.ToDecimal(item.SubItems[1].Text.ToString()),
+                    Usoconstr = Convert.ToInt16(item.SubItems[2].Tag.ToString()),
+                    Tipoconstr = Convert.ToInt16(item.SubItems[3].Tag.ToString()),
+                    Catconstr = Convert.ToInt16(item.SubItems[4].Tag.ToString()),
+                    Tipoarea = "",
+                    Qtdepav = Convert.ToInt16(item.SubItems[5].Text),
+                    Dataaprova = Convert.ToDateTime(item.SubItems[6].Text),
+                    Numprocesso = item.SubItems[7].Text
+                };
                 ListaArea.Add(regA);
+                AreaStruct regA2 = new AreaStruct() { 
+                    Area= Convert.ToDecimal(item.SubItems[1].Text.ToString()),
+                    Categoria_Codigo= Convert.ToInt16(item.SubItems[4].Tag.ToString()),
+                    Tipo_Codigo= Convert.ToInt16(item.SubItems[3].Tag.ToString()),
+                    Uso_Codigo= Convert.ToInt16(item.SubItems[2].Tag.ToString()),
+                    Pavimentos = Convert.ToInt16(item.SubItems[5].Text)
+                };
             }
             if (ListaArea.Count > 0) {
                 ex = imovelRepository.Incluir_Area(ListaArea);
@@ -512,8 +532,58 @@ namespace GTI_Desktop.Forms {
                     goto Final;
                 }
             }
+            if (!bAddNew) {
+                ImovelLoad regNew = new ImovelLoad() {
+                    Codigo=reg.Codreduzido,
+                    Area_Terreno=reg.Dt_areaterreno,
+                    Benfeitoria=reg.Dt_codbenf,
+                    Categoria=reg.Dt_codcategprop,
+                    Situacao=reg.Dt_codsituacao,
+                    Topografia=reg.Dt_codtopog,
+                    Uso_terreno=reg.Dt_codusoterreno,
+                    Pedologia=reg.Dt_codpedol,
+                    Benfeitoria_Nome=BenfeitoriaList.Text,
+                    Categoria_Nome=CategoriaTerrenoList.Text,
+                    Situacao_Nome=SituacaoList.Text,
+                    Topografia_Nome=TopografiaList.Text,
+                    Pedologia_Nome=PedologiaList.Text,
+                    Uso_terreno_Nome=UsoTerrenoList.Text,
+                    Cip=reg.Cip,
+                    Imunidade=reg.Imune,
+                    ResideImovel=reg.Resideimovel,
+                    Conjugado=reg.Conjugado,
+                    EE_TipoEndereco=reg.Ee_tipoend,
+                    FracaoIdeal=reg.Dt_fracaoideal,
+                    LoteOriginal=reg.Li_lotes,
+                    QuadraOriginal=reg.Li_quadras,
+                    TipoMat=reg.Tipomat,
+                    NumMatricula=reg.Nummat,
+                    Lista_Area=ListaAreaHist,
+                    Lista_Proprietario=ListaPHist,
+                    Lista_Testada=ListaTestada
+                };
+                EnderecoStruct _end = new EnderecoStruct() {
+                    CodLogradouro = Convert.ToInt32(Logradouro.Tag.ToString()),
+                    CodigoBairro = Convert.ToInt16(Bairro.Tag.ToString()),
+                    Complemento = Complemento.Text,
+                    Numero = Convert.ToInt16(Numero.Text)
+                };
+                regNew.Endereco_Imovel = _end;
+                EnderecoStruct _end2 = new EnderecoStruct() {
+                    CodLogradouro = Convert.ToInt32(Logradouro_EE.Tag.ToString()),
+                    CodigoBairro = Convert.ToInt16(Bairro_EE.Tag.ToString()),
+                    CodigoCidade = Convert.ToInt16(Cidade_EE.Tag.ToString()),
+                    Complemento = Complemento_EE.Text,
+                    UF = UF_EE.Text,
+                    Endereco = Logradouro_EE.Text,
+                    Numero = Convert.ToInt16(Numero_EE.Text),
+                    Cep = CEP_EE.Text
+                };
+                regNew.Endereco_Entrega = _end2;
+                Save_Historico(regNew);
+            }
 
-            Final:;
+        Final:;
             ControlBehaviour(true);
         }
 
@@ -1567,6 +1637,12 @@ namespace GTI_Desktop.Forms {
                     Situacao = regImovel.Situacao,
                     Topografia = regImovel.Topografia,
                     Uso_terreno = regImovel.Uso_terreno,
+                    Benfeitoria_Nome = BenfeitoriaList.Text,
+                    Categoria_Nome = CategoriaTerrenoList.Text,
+                    Situacao_Nome = SituacaoList.Text,
+                    Topografia_Nome = TopografiaList.Text,
+                    Pedologia_Nome = PedologiaList.Text,
+                    Uso_terreno_Nome = UsoTerrenoList.Text,
                     Cip = IsentoCIPCheck.Checked,
                     Imunidade = ImuneCheck.Checked,
                     Conjugado = ConjugadoCheck.Checked,
@@ -1601,5 +1677,61 @@ namespace GTI_Desktop.Forms {
 
             }
         }
+
+        private void Save_Historico(ImovelLoad regNew) {
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            List<string> aLog = new List<string>();
+            if (regNew.Area_Terreno != regHist.Area_Terreno) {
+                aLog.Add("Alterada área do terreno de " + regHist.Area_Terreno + " para " + regNew.Area_Terreno);
+            }
+            if (regNew.Benfeitoria != regHist.Benfeitoria) {
+                aLog.Add("Alterada benfeitoria de " + regHist.Benfeitoria_Nome + " para " + regNew.Benfeitoria_Nome);
+            }
+            if (regNew.Categoria != regHist.Categoria) {
+                aLog.Add("Alterada categoria terreno de " + regHist.Categoria_Nome + " para " + regNew.Categoria_Nome);
+            }
+            if (regNew.Situacao != regHist.Situacao) {
+                aLog.Add("Alterada situação de " + regHist.Situacao_Nome + " para " + regNew.Situacao_Nome);
+            }
+            if (regNew.Topografia != regHist.Topografia) {
+                aLog.Add("Alterada topografia de " + regHist.Topografia_Nome + " para " + regNew.Topografia_Nome);
+            }
+            if (regNew.Uso_terreno != regHist.Uso_terreno) {
+                aLog.Add("Alterado uso terreno de " + regHist.Uso_terreno_Nome + " para " + regNew.Uso_terreno_Nome);
+            }
+            if (regNew.Pedologia != regHist.Pedologia) {
+                aLog.Add("Alterada pedologia de " + regHist.Pedologia_Nome + " para " + regNew.Pedologia_Nome);
+            }
+            if (regNew.FracaoIdeal != regHist.FracaoIdeal) {
+                aLog.Add("Alterada fraçao ideal de " + regHist.FracaoIdeal + " para " + regNew.FracaoIdeal);
+            }
+            if (regNew.Cip != regHist.Cip) {
+                aLog.Add("Alterada Cip de " + regHist.Cip + " para " + regNew.Cip);
+            }
+            if (regNew.Conjugado != regHist.Conjugado) {
+                aLog.Add("Alterada Conjugado de " + regHist.Conjugado + " para " + regNew.Conjugado);
+            }
+            if (regNew.ResideImovel != regHist.ResideImovel) {
+                aLog.Add("Alterado reside imóvel de " + regHist.ResideImovel + " para " + regNew.ResideImovel);
+            }
+            if (regNew.Imunidade != regHist.Imunidade) {
+                aLog.Add("Alterada imunidade de " + regHist.Imunidade + " para " + regNew.Imunidade);
+            }
+
+
+            if (aLog.Count > 0) {
+                foreach (string item in aLog) {
+                    Historico _hist = new Historico {
+                        Codreduzido = regNew.Codigo,
+                        Deschist = item,
+                        Userid = Properties.Settings.Default.UserId,
+                        Datahist2 = DateTime.Now
+                    };
+                    Exception ex = imovelRepository.Incluir_Historico(_hist);
+                }
+            }
+        }
+
+
     }
 }

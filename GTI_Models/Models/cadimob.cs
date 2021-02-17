@@ -139,6 +139,12 @@ namespace GTI_Models.Models {
         public short? Categoria { get; set; }
         public short? Situacao { get; set; }
         public short? Pedologia { get; set; }
+        public string Uso_terreno_Nome { get; set; }
+        public string Benfeitoria_Nome { get; set; }
+        public string Topografia_Nome { get; set; }
+        public string Categoria_Nome { get; set; }
+        public string Situacao_Nome { get; set; }
+        public string Pedologia_Nome { get; set; }
         public decimal FracaoIdeal { get; set; }
         public List<AreaStruct> Lista_Area { get; set; }
         public bool? Imunidade { get; set; }

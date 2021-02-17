@@ -846,6 +846,35 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public string Retorna_Benfeitoria_Nome(int codigo) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Benfeitoria_Nome(codigo);
+        }
+
+        public string Retorna_CategoriaProp_Nome(int codigo) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_CategoriaProp_Nome(codigo);
+        }
+
+        public string Retorna_Pedologia_Nome(int codigo) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Pedologia_Nome(codigo);
+        }
+
+        public string Retorna_Situacao_Nome(int codigo) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Situacao_Nome(codigo);
+        }
+
+        public string Retorna_Topografia_Nome(int codigo) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Topografia_Nome(codigo);
+        }
+
+        public string Retorna_UsoConstr_Nome(int codigo) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_UsoConstr_Nome(codigo);
+        }
 
         #endregion
 

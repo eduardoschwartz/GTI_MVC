@@ -2647,5 +2647,79 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public string Retorna_Benfeitoria_Nome(int codigo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Benfeitoria where t.Codbenfeitoria == codigo select t.Descbenfeitoria).FirstOrDefault();
+                if (Sql == null)
+                    return "";
+                else
+                    return Sql;
+            }
+        }
+
+        public string Retorna_CategoriaProp_Nome(int codigo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Categprop where t.Codcategprop == codigo select t.Desccategprop).FirstOrDefault();
+                if (Sql == null)
+                    return "";
+                else
+                    return Sql;
+            }
+        }
+
+        public string Retorna_Pedologia_Nome(int codigo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Pedologia where t.Codpedologia == codigo select t.Descpedologia).FirstOrDefault();
+                if (Sql == null)
+                    return "";
+                else
+                    return Sql;
+            }
+        }
+
+        public string Retorna_Situacao_Nome(int codigo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Situacao where t.Codsituacao == codigo select t.Descsituacao).FirstOrDefault();
+                if (Sql == null)
+                    return "";
+                else
+                    return Sql;
+            }
+        }
+
+        public string Retorna_Topografia_Nome(int codigo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Topografia where t.Codtopografia == codigo select t.Desctopografia).FirstOrDefault();
+                if (Sql == null)
+                    return "";
+                else
+                    return Sql;
+            }
+        }
+
+        public string Retorna_UsoConstr_Nome(int codigo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Usoconstr where t.Codusoconstr == codigo select t.Descusoconstr).FirstOrDefault();
+                if (Sql == null)
+                    return "";
+                else
+                    return Sql;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }//end class
 }
