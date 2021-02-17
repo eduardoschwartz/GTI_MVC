@@ -2186,7 +2186,7 @@
             this.InativarButton.Name = "InativarButton";
             this.InativarButton.Size = new System.Drawing.Size(23, 22);
             this.InativarButton.ToolTipText = "Tornar o i móvel inativo";
-            this.InativarButton.Click += new System.EventHandler(this.btDel_Click);
+            this.InativarButton.Click += new System.EventHandler(this.BtDel_Click);
             // 
             // LocalizarButton
             // 

@@ -12,9 +12,9 @@ using static GTI_Models.modelCore;
 namespace GTI_Desktop.Forms {
     public partial class Imovel : Form {
         Point? prevPosition = null;
-        ToolTip tooltip = new ToolTip();
+        readonly ToolTip tooltip = new ToolTip();
         bool bAddNew,bNovaArea;
-        string _connection = gtiCore.Connection_Name();
+        readonly string _connection = gtiCore.Connection_Name();
         ImovelLoad regHist = null;
 
         public Imovel() {
@@ -274,8 +274,8 @@ namespace GTI_Desktop.Forms {
             UsoTerrenoList.SelectedValue = regImovel.Uso_terreno == 0 ? -1 : regImovel.Uso_terreno;
             FracaoIdeal.Text = string.Format("{0:0.00}", regImovel.Fracao_Ideal);
 
-            Cidadao_bll cidadao_Class = new Cidadao_bll(_connection);
-            string sNome = cidadao_Class.Retorna_Nome_Cidadao((int)regImovel.Codigo_Proprietario);
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+            string sNome = cidadaoRepository.Retorna_Nome_Cidadao((int)regImovel.Codigo_Proprietario);
             ListViewItem lvProp = new ListViewItem {
                 Group = ProprietarioListView.Groups["groupPP"]
             };
@@ -368,27 +368,28 @@ namespace GTI_Desktop.Forms {
 
         private void SaveReg() {
             gtiCore.Ocupado(this);
-            Cadimob reg = new Cadimob();
-            reg.Cip = IsentoCIPCheck.Checked;
-            reg.Codcondominio = Convert.ToInt32( Condominio.Tag.ToString());
-            reg.Conjugado = ConjugadoCheck.Checked;
-            reg.Datainclusao = DateTime.Now;
-            reg.Dc_qtdeedif = (short)AreaListView.Items.Count;
-            reg.Distrito = Convert.ToInt16(Distrito.Text);
-            reg.Dt_areaterreno = Convert.ToDecimal(AreaTerreno.Text);
-            reg.Dt_codbenf = (short)BenfeitoriaList.SelectedValue;
-            reg.Dt_codcategprop = (short)CategoriaTerrenoList.SelectedValue;
-            reg.Dt_codpedol= (short)PedologiaList.SelectedValue;
-            reg.Dt_codsituacao = (short)SituacaoList.SelectedValue;
-            reg.Dt_codtopog = (short)TopografiaList.SelectedValue;
-            reg.Dt_codusoterreno = (short)UsoTerrenoList.SelectedValue;
+            Cadimob reg = new Cadimob {
+                Cip = IsentoCIPCheck.Checked,
+                Codcondominio = Convert.ToInt32(Condominio.Tag.ToString()),
+                Conjugado = ConjugadoCheck.Checked,
+                Datainclusao = DateTime.Now,
+                Dc_qtdeedif = (short)AreaListView.Items.Count,
+                Distrito = Convert.ToInt16(Distrito.Text),
+                Dt_areaterreno = Convert.ToDecimal(AreaTerreno.Text),
+                Dt_codbenf = (short)BenfeitoriaList.SelectedValue,
+                Dt_codcategprop = (short)CategoriaTerrenoList.SelectedValue,
+                Dt_codpedol = (short)PedologiaList.SelectedValue,
+                Dt_codsituacao = (short)SituacaoList.SelectedValue,
+                Dt_codtopog = (short)TopografiaList.SelectedValue,
+                Dt_codusoterreno = (short)UsoTerrenoList.SelectedValue
+            };
             if (FracaoIdeal.Text != "")
                 reg.Dt_fracaoideal = Convert.ToDecimal(FracaoIdeal.Text);
             else
                 reg.Dt_fracaoideal = 0;
             reg.Ee_tipoend = End1Option.Checked ? (short)0 : End2Option.Checked ? (short)1 : (short)2;
             reg.Imune = ImuneCheck.Checked;
-            reg.Inativo = Ativo.Text == "INATIVO" ? true : false;
+            reg.Inativo = Ativo.Text == "INATIVO";
             reg.Li_cep = Cep.Text;
             reg.Li_codbairro = Convert.ToInt16( Bairro.Tag.ToString());
             reg.Li_codcidade = 413;
@@ -448,6 +449,10 @@ namespace GTI_Desktop.Forms {
                     Ee_uf=UF_EE.Text
                 };
                 Exception ex2 = imovelRepository.Incluir_Endereco_Entrega(regEnd);
+                if (ex2 != null) {
+                    MessageBox.Show(ex2.InnerException.ToString());
+                }
+
             }
 
             //grava proprietário
@@ -457,14 +462,14 @@ namespace GTI_Desktop.Forms {
                 Proprietario regProp = new Proprietario {
                     Codreduzido = nCodReduzido,
                     Codcidadao = Convert.ToInt32(item.Tag.ToString()),
-                    Principal = item.Text.Substring(item.Text.Length - 1, 1) == ")" ? true : false,
+                    Principal = item.Text.Substring(item.Text.Length - 1, 1) == ")",
                     Tipoprop = item.Group.Name == "groupPP" ? "P" : "C"
                 };
                 Lista.Add(regProp);
                 ProprietarioStruct regPropH = new ProprietarioStruct() {
                     Codigo= Convert.ToInt32(item.Tag.ToString()),
                     Nome=item.Text,
-                    Principal = item.Text.Substring(item.Text.Length - 1, 1) == ")" ? true : false,
+                    Principal = item.Text.Substring(item.Text.Length - 1, 1) == ")",
                     Tipo = item.Group.Name == "groupPP" ? "P" : "C"
                 };
                 ListaPHist.Add(regPropH);
@@ -498,12 +503,13 @@ namespace GTI_Desktop.Forms {
             //grava historico
             List<Historico> ListaHist = new List<Historico>();
             foreach (ListViewItem item in HistoricoListView.Items) {
-                Historico regH = new Historico();
-                regH.Codreduzido = nCodReduzido;
-                regH.Seq = Convert.ToInt16(item.Text.ToString());
-                regH.Datahist2 = Convert.ToDateTime(item.SubItems[1].Text.ToString());
-                regH.Deschist = item.SubItems[2].Text;
-                regH.Userid = Properties.Settings.Default.UserId;
+                Historico regH = new Historico {
+                    Codreduzido = nCodReduzido,
+                    Seq = Convert.ToInt16(item.Text.ToString()),
+                    Datahist2 = Convert.ToDateTime(item.SubItems[1].Text.ToString()),
+                    Deschist = item.SubItems[2].Text,
+                    Userid = Properties.Settings.Default.UserId
+                };
                 ListaHist.Add(regH);
             }
             if (ListaHist.Count > 0) {
@@ -533,15 +539,19 @@ namespace GTI_Desktop.Forms {
                 if  (gtiCore.IsDate(item.SubItems[6].Text)) {
                     regA.Dataaprova = Convert.ToDateTime(item.SubItems[6].Text);
                 }
-                
                 ListaArea.Add(regA);
-                AreaStruct regA2 = new AreaStruct() { 
-                    Area= Convert.ToDecimal(item.SubItems[1].Text.ToString()),
-                    Categoria_Codigo= Convert.ToInt16(item.SubItems[4].Tag.ToString()),
-                    Tipo_Codigo= Convert.ToInt16(item.SubItems[3].Tag.ToString()),
-                    Uso_Codigo= Convert.ToInt16(item.SubItems[2].Tag.ToString()),
-                    Pavimentos = Convert.ToInt16(item.SubItems[5].Text)
+
+                AreaStruct regB = new AreaStruct() {
+                    Uso_Codigo = Convert.ToInt16(item.SubItems[2].Tag.ToString()),
+                    Uso_Nome = item.SubItems[2].Text.ToString(),
+                    Tipo_Codigo = Convert.ToInt16(item.SubItems[3].Tag.ToString()),
+                    Tipo_Nome= item.SubItems[3].Text.ToString(),
+                    Categoria_Codigo = Convert.ToInt16(item.SubItems[4].Tag.ToString()),
+                    Categoria_Nome= item.SubItems[4].Text.ToString(),
+                    Area= Convert.ToDecimal(item.SubItems[1].Text.ToString())
                 };
+                ListaAreaHist.Add(regB);
+
             }
             if (ListaArea.Count > 0) {
                 ex = imovelRepository.Incluir_Area(ListaArea);
@@ -703,7 +713,7 @@ namespace GTI_Desktop.Forms {
 
         private void MnuProprietario_Click(object sender, EventArgs e) {
             inputBox z = new inputBox();
-            int nContaP = 0;
+            int nContaP;
             String sCod = z.Show("", "Incluir proprietário", "Digite o código do cidadão.", 6, gtiCore.eTweakMode.IntegerPositive);
             if (!string.IsNullOrEmpty(sCod)) {
                 int nCod = Convert.ToInt32(sCod);
@@ -1046,8 +1056,8 @@ namespace GTI_Desktop.Forms {
         }
 
         private void BtOkPnlArea_Click(object sender, EventArgs e) {
-            decimal area = 0;
-            int Pavimento = 0;
+            decimal area;
+            int Pavimento ;
 
             try {
                 area = decimal.Parse(AreaConstruida.Text);
@@ -1129,7 +1139,7 @@ namespace GTI_Desktop.Forms {
             }
         }
 
-        private void btDel_Click(object sender, EventArgs e) {
+        private void BtDel_Click(object sender, EventArgs e) {
             int Codigo = Convert.ToInt32(this.Codigo.Text);
             if (Codigo == 0)
                 MessageBox.Show("Selecione um imóvel.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1157,7 +1167,7 @@ namespace GTI_Desktop.Forms {
             }
         }
 
-        private void mnuAddHistorico_Click(object sender, EventArgs e) {
+        private void MnuAddHistorico_Click(object sender, EventArgs e) {
             bool bAllow = gtiCore.GetBinaryAccess((int)TAcesso.CadastroImovel_Alterar_Historico);
             if (bAllow) {
                 if (String.IsNullOrEmpty(Inscricao.Text))
@@ -1169,7 +1179,7 @@ namespace GTI_Desktop.Forms {
                 MessageBox.Show("Acesso não permitido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void mnuRemoverHistorico_Click(object sender, EventArgs e) {
+        private void MnuRemoverHistorico_Click(object sender, EventArgs e) {
             bool bAllow = gtiCore.GetBinaryAccess((int)TAcesso.CadastroImovel_Alterar_Historico);
             if (bAllow) {
                 if (String.IsNullOrEmpty(Inscricao.Text))
@@ -1245,8 +1255,7 @@ namespace GTI_Desktop.Forms {
                                             ChartElementType.DataPoint);
             foreach (var result in results) {
                 if (result.ChartElementType == ChartElementType.DataPoint) {
-                    var prop = result.Object as DataPoint;
-                    if (prop != null) {
+                    if (result.Object is DataPoint prop) {
                         var pointXPixel = result.ChartArea.AxisX.ValueToPixelPosition(prop.XValue);
                         var pointYPixel = result.ChartArea.AxisY.ValueToPixelPosition(prop.YValues[0]);
 
@@ -1283,12 +1292,12 @@ namespace GTI_Desktop.Forms {
                     string sTexto = HistoricoListView.SelectedItems[0].SubItems[2].Text;
                     ZoomBox f1 = new ZoomBox("Histórico do imóvel de " + sData, this, sTexto, false);
                     f1.ShowDialog();
-                    Sistema_bll sistema_Class = new Sistema_bll(_connection);
+                    Sistema_bll sistemaRepository = new Sistema_bll(_connection);
                     string sLogin = Properties.Settings.Default.LastUser;
                     HistoricoListView.SelectedItems[0].SubItems[1].Text = DateTime.Now.ToString("dd/MM/yyyy");
                     HistoricoListView.SelectedItems[0].SubItems[2].Text = f1.ReturnText;
-                    HistoricoListView.SelectedItems[0].SubItems[3].Text = sistema_Class.Retorna_User_FullName(sLogin);
-                    HistoricoListView.SelectedItems[0].Tag = sistema_Class.Retorna_User_LoginId(sLogin).ToString();
+                    HistoricoListView.SelectedItems[0].SubItems[3].Text = sistemaRepository.Retorna_User_FullName(sLogin);
+                    HistoricoListView.SelectedItems[0].Tag = sistemaRepository.Retorna_User_LoginId(sLogin).ToString();
                 } else
                     MessageBox.Show("Selecione um histórico.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }else
@@ -1303,13 +1312,13 @@ namespace GTI_Desktop.Forms {
                     ZoomBox f1 = new ZoomBox("Histórico do imóvel de " + sData, this, "", false);
                     f1.ShowDialog();
                     if (f1.ReturnText != "") {
-                        Sistema_bll sistema_Class = new Sistema_bll(_connection);
+                        Sistema_bll sistemaRepository = new Sistema_bll(_connection);
                         ListViewItem lvItem = new ListViewItem((HistoricoListView.Items.Count + 1).ToString("000"));
                         lvItem.SubItems.Add(sData);
                         lvItem.SubItems.Add(f1.ReturnText);
                         string sLogin = Properties.Settings.Default.LastUser;
-                        lvItem.SubItems.Add(sistema_Class.Retorna_User_FullName(sLogin));
-                        lvItem.Tag = sistema_Class.Retorna_User_LoginId(sLogin).ToString();
+                        lvItem.SubItems.Add(sistemaRepository.Retorna_User_FullName(sLogin));
+                        lvItem.Tag = sistemaRepository.Retorna_User_LoginId(sLogin).ToString();
                         HistoricoListView.Items.Add(lvItem);
                     }
                 } else
@@ -1420,8 +1429,8 @@ namespace GTI_Desktop.Forms {
             seriesTraffic.ChartType = SeriesChartType.Bubble;
             seriesTraffic.BorderWidth = 2;
 
-            Tributario_bll tributario_Class = new Tributario_bll(_connection);
-            List<SpExtrato> listaExtrato = tributario_Class.Lista_Extrato_Tributo(Codigo: Codigo);
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            List<SpExtrato> listaExtrato = tributarioRepository.Lista_Extrato_Tributo(Codigo: Codigo);
             int[] xValues=new int[0];
             decimal[] yValues = new decimal[0];
             int nSize = 0;
@@ -1511,8 +1520,8 @@ namespace GTI_Desktop.Forms {
                     Ativo.ForeColor = Color.Green;
                 }
 
-                MT1Check.Checked = regImovel.TipoMat == "M" ? true : false;
-                MT2Check.Checked = regImovel.TipoMat == "T" ? true : false;
+                MT1Check.Checked = regImovel.TipoMat == "M";
+                MT2Check.Checked = regImovel.TipoMat == "T";
                 Matricula.Text = regImovel.NumMatricula.ToString();
                 Distrito.Text = regImovel.Distrito.ToString();
                 Setor.Text = regImovel.Setor.ToString("00");
@@ -1777,6 +1786,102 @@ namespace GTI_Desktop.Forms {
                 aLog.Add("Alterada cidade end. de entrega de " + regHist.Endereco_Entrega.NomeCidade + "/" + regHist.Endereco_Entrega.UF + " para " + Cidade_EE.Text + "/" + regNew.Endereco_Entrega.UF);
             }
 
+            //########### Testadas ###################
+            foreach (Testada item in regHist.Lista_Testada) {
+                bool _find = false;
+                foreach (Testada item2 in regNew.Lista_Testada) {
+                    if (item.Numface == item2.Numface) {
+                        _find = true;
+                        if (item.Areatestada != item2.Areatestada) {
+                            aLog.Add("Alterada comprimento testada seq: " + item.Numface.ToString() + " de " + item.Areatestada.ToString("#0.00") + " m para " + item2.Areatestada.ToString("#0.00") + "m");
+                        }
+                        break;
+                    }
+                }
+                if(!_find)
+                    aLog.Add("Removida a testada da face " + item.Numface.ToString() + " de " + item.Areatestada.ToString("#0.00") + "m"   );
+            }
+            foreach (Testada item in regNew.Lista_Testada) {
+                bool _find = false;
+                foreach (Testada item2 in regHist.Lista_Testada) {
+                    if (item.Numface == item2.Numface) {
+                        _find = true;
+                        break;
+                    }
+                }
+                if (!_find)
+                    aLog.Add("Inserida testada na face " + item.Numface.ToString() + " de " + item.Areatestada.ToString("#0.00") + "m");
+            }
+
+            //############ Proprietários #####################
+            foreach (ProprietarioStruct item in regHist.Lista_Proprietario) {
+                bool _find = false;
+                foreach (ProprietarioStruct item2 in regNew.Lista_Proprietario) {
+                    if (item.Codigo == item2.Codigo) {
+                        _find = true;
+                        break;
+                    }
+                }
+                if (!_find)
+                    aLog.Add("Removido o proprietário " + item.Codigo.ToString() + " - " + item.Nome);
+            }
+
+            foreach (ProprietarioStruct item in regNew.Lista_Proprietario) {
+                bool _find = false;
+                foreach (ProprietarioStruct item2 in regHist.Lista_Proprietario) {
+                    if (item.Codigo == item2.Codigo) {
+                        _find = true;
+                        break;
+                    }
+                }
+                if (!_find)
+                    aLog.Add("Incluido o proprietário " + item.Codigo.ToString() + " - " + item.Nome);
+            }
+            int _codP1=0, _codP2=0;
+            foreach (ProprietarioStruct item in regHist.Lista_Proprietario) {
+                if(item.Principal) {
+                    _codP1 = item.Codigo;
+                    break;
+                }
+            }
+            foreach (ProprietarioStruct item in regNew.Lista_Proprietario) {
+                if (item.Principal) {
+                    _codP2 = item.Codigo;
+                    break;
+                }
+            }
+            if (_codP1 != _codP2)
+                aLog.Add("Alterado o proprietário principal de " + _codP1.ToString() + " para " + _codP2.ToString());
+
+            //############ Áreas #####################
+            foreach (AreaStruct item in regHist.Lista_Area) {
+                bool _find = false;
+                foreach (AreaStruct item2 in regNew.Lista_Area) {
+                    if (item.Uso_Codigo == item2.Uso_Codigo && item.Tipo_Codigo==item2.Tipo_Codigo && item.Categoria_Codigo==item2.Categoria_Codigo) {
+                        _find = true;
+                        if (item.Area != item2.Area) {
+                            aLog.Add("Alterada m² da área: " + item.Uso_Nome + " - " + item.Tipo_Nome + " - " + item.Categoria_Nome + " de " + item.Area.ToString("#0.00") + " m² para " + item2.Area.ToString("#0.00") + "m²");
+                        }
+                        break;
+                    }
+                }
+                if (!_find)
+                    aLog.Add("Removido a área " + item.Uso_Nome + " - " + item.Tipo_Nome + " - " + item.Categoria_Nome + " de " + item.Area.ToString("#0.00") + "m²");
+            }
+
+            foreach (AreaStruct item in regNew.Lista_Area) {
+                bool _find = false;
+                foreach (AreaStruct item2 in regHist.Lista_Area) {
+                    if (item.Uso_Codigo == item2.Uso_Codigo && item.Tipo_Codigo == item2.Tipo_Codigo && item.Categoria_Codigo == item2.Categoria_Codigo) {
+                        _find = true;
+                        break;
+                    }
+                }
+                if (!_find)
+                    aLog.Add("Inserida área " + item.Uso_Nome + " - " + item.Tipo_Nome + " - " + item.Categoria_Nome + " de " + item.Area.ToString("#0.00") + "m²");
+            }
+
+            //####################################
 
             if (aLog.Count > 0) {
                 foreach (string item in aLog) {
@@ -1787,6 +1892,9 @@ namespace GTI_Desktop.Forms {
                         Datahist2 = DateTime.Now
                     };
                     Exception ex = imovelRepository.Incluir_Historico(_hist);
+                    if (ex != null) {
+                        MessageBox.Show(ex.InnerException.ToString());
+                    }
                 }
             }
         }
