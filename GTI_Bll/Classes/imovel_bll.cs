@@ -827,7 +827,6 @@ namespace GTI_Bll.Classes {
             Imovel_Data obj = new Imovel_Data(_connection);
             Exception ex = obj.Incluir_Historico(reg);
             return ex;
-
         }
 
         public string Retorna_Imovel_Inscricao(int Codigo) {
@@ -875,6 +874,13 @@ namespace GTI_Bll.Classes {
             Imovel_Data obj = new Imovel_Data(_connection);
             return obj.Retorna_UsoConstr_Nome(codigo);
         }
+
+        public Exception Incluir_Endereco_Entrega(Endentrega Reg) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Incluir_Endereco_Entrega(Reg);
+            return ex;
+        }
+
 
         #endregion
 

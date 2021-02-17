@@ -2707,17 +2707,38 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Incluir_Endereco_Entrega(Endentrega Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
 
+                try {
+                    db.Database.ExecuteSqlCommand("DELETE FROM endentrega WHERE Codreduzido=@Codreduzido",
+                        new SqlParameter("@Codreduzido", Reg.Codreduzido));
+                } catch (Exception ex) {
+                    return ex;
+                }
 
+                object[] Parametros = new object[11];
+                Parametros[0] = new SqlParameter { ParameterName = "@codreduzido", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codreduzido };
+                Parametros[1] = new SqlParameter { ParameterName = "@ee_codlog", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ee_codlog };
+                Parametros[2] = new SqlParameter { ParameterName = "@ee_nomelog", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Ee_nomelog };
+                Parametros[3] = new SqlParameter { ParameterName = "@ee_numimovel", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Ee_numimovel };
+                Parametros[4] = new SqlParameter { ParameterName = "@ee_complemento", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Ee_complemento };
+                Parametros[5] = new SqlParameter { ParameterName = "@ee_uf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Ee_uf };
+                Parametros[6] = new SqlParameter { ParameterName = "@ee_cidade", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Ee_cidade };
+                Parametros[7] = new SqlParameter { ParameterName = "@ee_bairro", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Ee_bairro };
+                Parametros[8] = new SqlParameter { ParameterName = "@ee_cep", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Ee_cep };
 
-
-
-
-
-
-
-
-
+                db.Database.ExecuteSqlCommand("INSERT INTO endentrega(codreduzido,ee_codlog,ee_nomelog,ee_numimovel,ee_complemento,ee_uf,ee_cidade,ee_bairro,ee_cep) " +
+                                              "VALUES(@codreduzido,@ee_codlog,@ee_nomelog,@ee_numimovel,@ee_complemento,@ee_uf,@ee_cidade,@ee_bairro,@ee_cep)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
 
 
 

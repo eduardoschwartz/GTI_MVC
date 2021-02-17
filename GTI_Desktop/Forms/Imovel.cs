@@ -434,6 +434,12 @@ namespace GTI_Desktop.Forms {
             }
             int nCodReduzido = reg.Codreduzido;
 
+            if (reg.Ee_tipoend == 2) {
+                //grava o endereo de entrega
+
+                Exception ex = imovelRepository.
+            }
+
             //grava proprietário
             List<Proprietario> Lista = new List<Proprietario>();
             List<ProprietarioStruct> ListaPHist = new List<ProprietarioStruct>();
@@ -487,7 +493,7 @@ namespace GTI_Desktop.Forms {
                 regH.Seq = Convert.ToInt16(item.Text.ToString());
                 regH.Datahist2 = Convert.ToDateTime(item.SubItems[1].Text.ToString());
                 regH.Deschist = item.SubItems[2].Text;
-                regH.Userid = Convert.ToInt32(item.Tag.ToString());
+                regH.Userid = Properties.Settings.Default.UserId;
                 ListaHist.Add(regH);
             }
             if (ListaHist.Count > 0) {
@@ -512,9 +518,12 @@ namespace GTI_Desktop.Forms {
                     Catconstr = Convert.ToInt16(item.SubItems[4].Tag.ToString()),
                     Tipoarea = "",
                     Qtdepav = Convert.ToInt16(item.SubItems[5].Text),
-                    Dataaprova = Convert.ToDateTime(item.SubItems[6].Text),
                     Numprocesso = item.SubItems[7].Text
                 };
+                if  (gtiCore.IsDate(item.SubItems[6].Text)) {
+                    regA.Dataaprova = Convert.ToDateTime(item.SubItems[6].Text);
+                }
+                
                 ListaArea.Add(regA);
                 AreaStruct regA2 = new AreaStruct() { 
                     Area= Convert.ToDecimal(item.SubItems[1].Text.ToString()),
@@ -1652,7 +1661,7 @@ namespace GTI_Desktop.Forms {
                     LoteOriginal = Lotes.Text,
                     QuadraOriginal = Quadras.Text,
                     TipoMat = regImovel.TipoMat,
-                    NumMatricula =Convert.ToInt32( Matricula.Text),
+                    NumMatricula = Matricula.Text==""?0: Convert.ToInt32( Matricula.Text),
                     ResideImovel = ResideCheck.Checked,
                     Lista_Testada = ListaT,
                     Lista_Area = ListaA,
@@ -1718,6 +1727,10 @@ namespace GTI_Desktop.Forms {
                 aLog.Add("Alterada imunidade de " + regHist.Imunidade + " para " + regNew.Imunidade);
             }
 
+            if (regNew.EE_TipoEndereco != regHist.EE_TipoEndereco) {
+                aLog.Add("Alterado tipo de endereço de " + RetornaTipoendereco(regHist.EE_TipoEndereco) + " para " + RetornaTipoendereco(regNew.EE_TipoEndereco));
+            }
+
 
             if (aLog.Count > 0) {
                 foreach (string item in aLog) {
@@ -1732,6 +1745,23 @@ namespace GTI_Desktop.Forms {
             }
         }
 
+        private string RetornaTipoendereco(short? tipo) {
+            string _ret = "";
+            switch (tipo) {
+                case 0:
+                    _ret = "Imóvel";
+                    break;
+                case 1:
+                    _ret = "Proprietário";
+                    break;
+                case 2:
+                    _ret = "Entrega";
+                    break;
+                default:
+                    break;
+            }
+            return _ret;
+        }
 
     }
 }
