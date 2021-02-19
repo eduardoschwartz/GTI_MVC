@@ -1,4 +1,6 @@
-﻿using GTI_Mvc.ViewModels;
+﻿using GTI_Bll.Classes;
+using GTI_Models.Models;
+using GTI_Mvc.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,19 +25,30 @@ namespace GTI_MVC.Controllers {
         public ActionResult UploadFiles(RedesimImportViewModel model) {
             List<RedesimImportFilesViewModel> Lista_Files = new List<RedesimImportFilesViewModel>();
             int _id = 1;
-            string _msg = "",_tipo="";
+            string _msg = "",_tipo="",_guid="";
             DateTime _dataDe = DateTime.Now, _dataAte = DateTime.Now;
             bool _ok=false;
+            Redesim_bll redesimRepository = new Redesim_bll("GTIconnection");
             foreach (var file in model.Files) {
-                var fileName= Path.GetFileName(file.FileName);
                 if (file.ContentLength > 0) {
                     if (file.ContentType == "application/vnd.ms-excel") {
+                        _guid = Guid.NewGuid().ToString("N");
+                        string _path = "~/Files/Redesim/";
+                        var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path ), _guid);
+                        file.SaveAs(path);
+
+                        Redesim_arquivo reg = new Redesim_arquivo() {
+                            Guid=_guid,
+                            Periodode=DateTime.Now,
+                            Periodoate=DateTime.Now,
+                            Tipo='R'
+                        };
+                        Exception ex = redesimRepository.Incluir_Arquivo(reg);
+
                         _msg = "Arquivo importado";
                         _ok = true;
                         _tipo = "Licenciamento";
                         
-                        var filePath = Path.Combine(Server.MapPath("~/Images"), fileName);
-//                        file.SaveAs(filePath);
                     } else {
                         _msg = "Arquivo inválido";
                     }
@@ -43,8 +56,7 @@ namespace GTI_MVC.Controllers {
                     _msg = "Tamanho inválido";
                 }
                 RedesimImportFilesViewModel _reg = new RedesimImportFilesViewModel() {
-                    Id = _id,
-                    Nome=fileName,
+                    Guid=_guid,
                     Mensagem=_msg,
                     Valido=_ok,
                     Tipo=_tipo,

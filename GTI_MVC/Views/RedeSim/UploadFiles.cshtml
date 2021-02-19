@@ -71,7 +71,7 @@
 <div class="center">
 
     @using (Html.BeginForm("UploadFiles", "RedeSim", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
-        <div class="container" style="width:700px">
+        <div class="container" style="width:800px">
             <div class="card">
                 <div class="card-header">RedeSim - Importação de arquivos</div>
                 <div class="card-body">
@@ -79,31 +79,23 @@
                     <div><button type="submit" class="btn btn-info">Enviar</button><br /><br /></div>
                     @if (Model.ListaArquivo.Count > 0) {
                         foreach (GTI_Mvc.ViewModels.RedesimImportFilesViewModel reg in Model.ListaArquivo) {
-                            <table style="font-size:13px;width:640px">
+                            <table style="font-size:13px;width:480px">
                                 <thead style="background-color:darkred;color:whitesmoke">
                                     <tr style="height:10px">
-                                        <td style="width:20px;text-align:center">Id</td>
                                         <td style="width:80px;text-align:center">De</td>
                                         <td style="width:80px;text-align:center">Até</td>
-                                        <td style="width:200px;text-align:left">Nome</td>
-                                        <td style="width:100px;text-align:left">Tipo</td>
+                                        <td style="width:120px;text-align:left">Tipo</td>
                                         <td style="width:200px;text-align:left">Mensagem</td>
                                     </tr>
                                 </thead>
                                 @Html.Raw(" <tr>")
-                                @Html.Raw("<td style=" + "width:20px;text-align:center" + " >")
-                                @reg.Id.ToString("000")
-                                @Html.Raw("</td>")
                                 @Html.Raw("<td style=" + "width:80px;text-align:center" + " >")
                                 @reg.PeriodoDe.ToString("dd/MM/yyyy")
                                 @Html.Raw("</td>")
                                 @Html.Raw("<td style=" + "width:80px;text-align:center" + " >")
                                 @reg.PeriodoAte.ToString("dd/MM/yyyy")
                                 @Html.Raw("</td>")
-                                @Html.Raw(" <td style=" + "width:200px;text-align:left" + " >")
-                                @reg.Nome
-                                @Html.Raw("</td>")
-                                @Html.Raw(" <td style=" + "width:100px;text-align:left" + " >")
+                                @Html.Raw(" <td style=" + "width:120px;text-align:left" + " >")
                                 @reg.Tipo
                                 @Html.Raw("</td>")
                                 @Html.Raw(" <td style=" + "width:200px;text-align:left" + " >")
