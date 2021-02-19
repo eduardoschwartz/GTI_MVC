@@ -1,0 +1,141 @@
+﻿@model GTI_Mvc.ViewModels.RedesimImportViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Redesim - Imortação de Arquivos";
+}
+
+<style>
+
+    .center {
+        margin: auto;
+        width: 800px;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .topics tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .topics tr {
+        height: 20px;
+        font-size: 14px;
+    }
+
+    .modal-ku {
+        width: 450px;
+        margin: 200px, auto;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+</style>
+
+<div class="center">
+
+    @using (Html.BeginForm("UploadFiles", "RedeSim", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+        <div class="container" style="width:700px">
+            <div class="card">
+                <div class="card-header">RedeSim - Importação de arquivos</div>
+                <div class="card-body">
+                    <input type="file" name="files" id="files" multiple="multiple" /><br /><br />
+                    <div><button type="submit" class="btn btn-info">Enviar</button><br /><br /></div>
+                    @if (Model.ListaArquivo.Count > 0) {
+                        foreach (GTI_Mvc.ViewModels.RedesimImportFilesViewModel reg in Model.ListaArquivo) {
+                            <table style="font-size:13px;width:640px">
+                                <thead style="background-color:darkred;color:whitesmoke">
+                                    <tr style="height:10px">
+                                        <td style="width:20px;text-align:center">Id</td>
+                                        <td style="width:80px;text-align:center">De</td>
+                                        <td style="width:80px;text-align:center">Até</td>
+                                        <td style="width:200px;text-align:left">Nome</td>
+                                        <td style="width:100px;text-align:left">Tipo</td>
+                                        <td style="width:200px;text-align:left">Mensagem</td>
+                                    </tr>
+                                </thead>
+                                @Html.Raw(" <tr>")
+                                @Html.Raw("<td style=" + "width:20px;text-align:center" + " >")
+                                @reg.Id.ToString("000")
+                                @Html.Raw("</td>")
+                                @Html.Raw("<td style=" + "width:80px;text-align:center" + " >")
+                                @reg.PeriodoDe.ToString("dd/MM/yyyy")
+                                @Html.Raw("</td>")
+                                @Html.Raw("<td style=" + "width:80px;text-align:center" + " >")
+                                @reg.PeriodoAte.ToString("dd/MM/yyyy")
+                                @Html.Raw("</td>")
+                                @Html.Raw(" <td style=" + "width:200px;text-align:left" + " >")
+                                @reg.Nome
+                                @Html.Raw("</td>")
+                                @Html.Raw(" <td style=" + "width:100px;text-align:left" + " >")
+                                @reg.Tipo
+                                @Html.Raw("</td>")
+                                @Html.Raw(" <td style=" + "width:200px;text-align:left" + " >")
+                                @reg.Mensagem
+                                @Html.Raw("</td>")
+                                @Html.Raw("</tr>")
+                            </table>
+                            <br />
+                        }
+
+                    }
+                </div>
+                <div class="card-footer">
+                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                </div>
+
+            </div>
+        </div>
+    }
+
+
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+
+
+
+
+    </script>
+}

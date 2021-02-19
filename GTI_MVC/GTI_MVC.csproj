@@ -215,6 +215,7 @@
     <Compile Include="Controllers\ImovelController.cs" />
     <Compile Include="Controllers\ItbiController.cs" />
     <Compile Include="Controllers\ProtocoloController.cs" />
+    <Compile Include="Controllers\RedeSimController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
     <Compile Include="Controllers\TributarioController.cs" />
     <Compile Include="Datasets\dsBoletoGuia.cs">
@@ -491,6 +492,7 @@
     <Compile Include="ViewModels\NotificacaoIssViewModel.cs" />
     <Compile Include="ViewModels\NotificacaoTerViewModel.cs" />
     <Compile Include="ViewModels\ProcessoViewModel.cs" />
+    <Compile Include="ViewModels\RedesimImportViewModel.cs" />
     <Compile Include="ViewModels\RodoviariaViewModel.cs" />
     <Compile Include="Views\Imovel\EditorTemplates\ListAnexoEditorViewModel.cs" />
     <Compile Include="Views\Imovel\EditorTemplates\ListCompradorEditorViewModel.cs" />
@@ -894,6 +896,7 @@
     <Content Include="Views\Imovel\AutoInfracao_ter_add.cshtml" />
     <Content Include="Views\Imovel\AutoInfracao_ter_query.cshtml" />
     <Content Include="Views\Itbi\itbi_isencao_e.cshtml" />
+    <Content Include="Views\RedeSim\UploadFiles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
