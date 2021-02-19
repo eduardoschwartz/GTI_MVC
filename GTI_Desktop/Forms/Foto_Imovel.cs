@@ -16,8 +16,8 @@ namespace GTI_Desktop.Forms {
         {
             InitializeComponent();
             HeaderToolStrip.Renderer = new MySR();
-            Imovel_bll imovel_Class = new Imovel_bll(_connection);
-            List<Foto_imovel> Lista = imovel_Class.Lista_Foto_Imovel(Codigo);
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            List<Foto_imovel> Lista = imovelRepository.Lista_Foto_Imovel(Codigo);
             foreach (GTI_Models.Models.Foto_imovel item in Lista){
                 string _foto = _path + "09\\"+ item.Pasta.ToString("00") + "\\" + item.Arquivo;
                 Lista_Fotos.Add(_foto);

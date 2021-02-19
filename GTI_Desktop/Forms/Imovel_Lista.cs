@@ -148,8 +148,8 @@ namespace GTI_Desktop.Forms {
                 var result = form.ShowDialog(this);
                 if (result == DialogResult.OK) {
                     int val = form.ReturnValue;
-                    Sistema_bll sistema_Class = new Sistema_bll(_connection);
-                    Contribuinte_Header_Struct reg = sistema_Class.Contribuinte_Header(val);
+                    Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+                    Contribuinte_Header_Struct reg = sistemaRepository.Contribuinte_Header(val);
                     Proprietario.Text = reg.Nome;
                     Proprietario.Tag = val.ToString();
                 }
@@ -167,7 +167,7 @@ namespace GTI_Desktop.Forms {
             MainListView.EndUpdate();
 
             gtiCore.Ocupado(this);
-            Imovel_bll imovel_Class = new Imovel_bll(_connection);
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
 
             ImovelStruct Reg = new ImovelStruct {
                 Codigo = string.IsNullOrEmpty(Codigo.Text) ? 0 : Convert.ToInt32(Codigo.Text),
@@ -208,7 +208,7 @@ namespace GTI_Desktop.Forms {
                 _orderby.NomeBairro = "X";
             else if (OrdemList.SelectedIndex == 5)
                 _orderby.NomeCondominio = "X";
-            List<ImovelStruct> Lista = imovel_Class.Lista_Imovel(Reg, _orderby);
+            List<ImovelStruct> Lista = imovelRepository.Lista_Imovel(Reg, _orderby);
 
             int _pos = 0, _total = Lista.Count;
             if (aDatResult == null) aDatResult = new List<ArrayList>();
@@ -243,8 +243,8 @@ namespace GTI_Desktop.Forms {
                 var result = form.ShowDialog(this);
                 if (result == DialogResult.OK) {
                     short val = form.ReturnValue;
-                    Imovel_bll imovel_Class = new Imovel_bll(_connection);
-                    Condominio.Text = imovel_Class.Dados_Condominio(val).Nome;
+                    Imovel_bll imovelRepository = new Imovel_bll(_connection);
+                    Condominio.Text = imovelRepository.Dados_Condominio(val).Nome;
                     Condominio.Tag = val.ToString();
                 }
             }
@@ -276,16 +276,18 @@ namespace GTI_Desktop.Forms {
             reg.Numero_imovel = Numero.Text == "" ? 0 : Convert.ToInt32(Numero.Text);
             reg.Complemento = "";
             reg.Email = "";
-
-            //Forms.Endereco f1 = new Forms.Endereco(reg, true, true, false, true);
-            //f1.ShowDialog();
-            //if (!f1.EndRetorno.Cancelar) {
-            //    Bairro.Text = f1.EndRetorno.Nome_bairro;
-            //    Bairro.Tag = f1.EndRetorno.Id_bairro.ToString();
-            //    Logradouro.Text = f1.EndRetorno.Nome_logradouro;
-            //    Logradouro.Tag = f1.EndRetorno.Id_logradouro.ToString();
-            //    Numero.Text = f1.EndRetorno.Numero_imovel.ToString();
-            //}
+            int _x = Location.X +300;
+            int _y = Location.Y +100;
+            Endereco_Enable _fields = new Endereco_Enable() { Bairro = true, Endereco = true, Numero = true };
+            Endereco f1 = new Endereco(reg, _fields, _x, _y - 20, "Pesquisa endereço");
+            f1.ShowDialog();
+            if (!f1.EndRetorno.Cancelar) {
+                Bairro.Text = f1.EndRetorno.Nome_bairro;
+                Bairro.Tag = f1.EndRetorno.Id_bairro.ToString();
+                Logradouro.Text = f1.EndRetorno.Nome_logradouro;
+                Logradouro.Tag = f1.EndRetorno.Id_logradouro.ToString();
+                Numero.Text = f1.EndRetorno.Numero_imovel.ToString();
+            }
         }
 
         private void EnderecoDelButton_Click(object sender, EventArgs e) {

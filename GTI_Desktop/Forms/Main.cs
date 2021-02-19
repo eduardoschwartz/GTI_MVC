@@ -44,17 +44,15 @@ namespace GTI_Desktop.Forms
             BarStatus.Items.Insert(17, new ToolStripControlHost(t));
             MaquinaToolStripStatus.Text = Environment.MachineName;
             DataBaseToolStripStatus.Text = "PRODUÇÂO";
-
+            this.SetStyle(ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
+            this.IsMdiContainer = true;
+//            FillBackgroundImage(false);
         }
 
         private void Main_Load(object sender, EventArgs e)
         {
-            this.IsMdiContainer = true;
-            FillBackgroundColor(false);
-            this.Refresh();
             
-            this.SetStyle(ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
-            //FillBackgroundImage(false);
+            FillBackgroundColor(false);
 
             //typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic, null, DrawingPanel, new object[] { true });
 
@@ -183,6 +181,7 @@ namespace GTI_Desktop.Forms
             Properties.Settings.Default.Save();
             _connection = gtiCore.Connection_Name();
             FillBackgroundColor(false);
+           // FillBackgroundImage(false);
             DataBaseToolStripStatus.Text = "PRODUÇÂO";
             gtiCore.UpdateUserBinary();
             this.Refresh();
@@ -198,6 +197,7 @@ namespace GTI_Desktop.Forms
             Properties.Settings.Default.Save();
             _connection = gtiCore.Connection_Name();
             FillBackgroundColor(true);
+            //FillBackgroundImage(true);
             DataBaseToolStripStatus.Text = "BASE TESTE";
             gtiCore.UpdateUserBinary();
             this.Refresh();
@@ -966,5 +966,12 @@ namespace GTI_Desktop.Forms
             } else
                 MessageBox.Show("Acesso não permitido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+
+        //private void FillBackgroundImage(bool bTeste) {
+        //    Bitmap img = bTeste ? Properties.Resources.rosa : Properties.Resources.bege;
+        //    Color cor = bTeste ? Color.FromArgb(250, 218, 226) : Color.OldLace;
+        //    this.BackgroundImage = img;
+        //}
+
     }//end class
 }

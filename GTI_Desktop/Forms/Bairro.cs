@@ -18,8 +18,8 @@ namespace GTI_Desktop.Forms {
         }
 
         private void Bairro_Load(object sender, EventArgs e) {
-            Endereco_bll cidade_class = new Endereco_bll(_connection);
-            UFCombo.DataSource = cidade_class.Lista_UF();
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+            UFCombo.DataSource = enderecoRepository.Lista_UF();
             UFCombo.DisplayMember = "siglauf";
             UFCombo.ValueMember = "siglauf";
             UFCombo.SelectedValue = "SP";
@@ -36,8 +36,8 @@ namespace GTI_Desktop.Forms {
             Uf Estado = (Uf)UFCombo.SelectedItem;
             String sUF = Estado.Siglauf;
 
-            Endereco_bll cidade_class = new Endereco_bll(_connection);
-            List<Cidade> lista = cidade_class.Lista_Cidade(sUF);
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+            List<Cidade> lista = enderecoRepository.Lista_Cidade(sUF);
 
             List<CustomListBoxItem> myItems = new List<CustomListBoxItem>();
             foreach (Cidade item in lista) {
@@ -62,8 +62,8 @@ namespace GTI_Desktop.Forms {
             CustomListBoxItem city = (CustomListBoxItem)CidadeCombo.SelectedItem;
             Int32 nCodCidade = city._value;
 
-            Endereco_bll bairro_class = new Endereco_bll(_connection);
-            List<GTI_Models.Models.Bairro> lista = bairro_class.Lista_Bairro(sUF, nCodCidade);
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+            List<GTI_Models.Models.Bairro> lista = enderecoRepository.Lista_Bairro(sUF, nCodCidade);
             BairroListBox.DataSource = lista;
             BairroListBox.DisplayMember = "descbairro";
             BairroListBox.ValueMember = "codbairro";
@@ -92,8 +92,8 @@ namespace GTI_Desktop.Forms {
                 _nomeBairro = _nomeBairro.ToUpper();
                 string _uf =UFCombo.SelectedValue.ToString();
                 short _cidade = Convert.ToInt16(CidadeCombo.SelectedValue.ToString());
-                Endereco_bll bairro_class = new Endereco_bll(_connection);
-                bool _existe = bairro_class.Existe_Bairro(_uf,_cidade,_nomeBairro);
+                Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+                bool _existe = enderecoRepository.Existe_Bairro(_uf,_cidade,_nomeBairro);
                 if (_existe) {
                     MessageBox.Show("Bairro já cadastrado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -103,7 +103,7 @@ namespace GTI_Desktop.Forms {
                         Codcidade = _cidade,
                         Descbairro = _nomeBairro.ToUpper()
                     };
-                    int _cod = bairro_class.Incluir_bairro(reg);
+                    int _cod = enderecoRepository.Incluir_bairro(reg);
                     CmbCidade_SelectedIndexChanged(sender, e);
                 }
             }
@@ -127,14 +127,14 @@ namespace GTI_Desktop.Forms {
             inputBox iBox = new inputBox();
             String sCod = iBox.Show(BairroListBox.Text, "Informação", "Digite o nome do bairro.", 40);
             if (!string.IsNullOrEmpty(sCod)) {
-                Endereco_bll bairro_class = new Endereco_bll(_connection);
+                Endereco_bll enderecoRepository = new Endereco_bll(_connection);
                 GTI_Models.Models.Bairro reg = new GTI_Models.Models.Bairro {
                     Siglauf = UFCombo.SelectedValue.ToString(),
                     Codcidade = Convert.ToInt16(CidadeCombo.SelectedValue.ToString()),
                     Codbairro = Convert.ToInt16(BairroListBox.SelectedValue.ToString()),
                     Descbairro = sCod.ToUpper()
                 };
-                Exception ex=bairro_class.Alterar_Bairro(reg);
+                Exception ex=enderecoRepository.Alterar_Bairro(reg);
                 if (ex != null) {
                     ErrorBox eBox = new ErrorBox("Atenção", "Bairro já cadastrado.", ex);
                     eBox.ShowDialog();
@@ -160,13 +160,13 @@ namespace GTI_Desktop.Forms {
             }
 
             if (MessageBox.Show("Excluir este bairro?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
-                Endereco_bll bairro_class = new Endereco_bll(_connection);
+                Endereco_bll enderecoRepository = new Endereco_bll(_connection);
                 GTI_Models.Models.Bairro reg = new GTI_Models.Models.Bairro {
                     Siglauf = UFCombo.SelectedValue.ToString(),
                     Codcidade = Convert.ToInt16(CidadeCombo.SelectedValue.ToString()),
                     Codbairro = Convert.ToInt16(BairroListBox.SelectedValue.ToString())
                 };
-                Exception ex= bairro_class.Excluir_Bairro(reg);
+                Exception ex= enderecoRepository.Excluir_Bairro(reg);
                 if (ex != null) {
                     ErrorBox eBox = new ErrorBox("Atenção", ex.Message, ex);
                     eBox.ShowDialog();

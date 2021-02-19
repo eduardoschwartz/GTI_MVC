@@ -609,6 +609,7 @@
             this.EnderecoButton.TabIndex = 9;
             this.tTp.SetToolTip(this.EnderecoButton, "Alterar o endereço do condomínio");
             this.EnderecoButton.UseVisualStyleBackColor = true;
+            this.EnderecoButton.Click += new System.EventHandler(this.EnderecoButton_Click);
             // 
             // label28
             // 
@@ -1108,6 +1109,7 @@
             this.TestadaListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader3,
             this.columnHeader4});
+            this.TestadaListView.HideSelection = false;
             this.TestadaListView.Location = new System.Drawing.Point(424, 31);
             this.TestadaListView.Name = "TestadaListView";
             this.TestadaListView.Size = new System.Drawing.Size(167, 77);
@@ -1130,6 +1132,7 @@
             this.columnHeader1,
             this.columnHeader2});
             this.UnidadesListView.FullRowSelect = true;
+            this.UnidadesListView.HideSelection = false;
             this.UnidadesListView.Location = new System.Drawing.Point(198, 33);
             this.UnidadesListView.Name = "UnidadesListView";
             this.UnidadesListView.Size = new System.Drawing.Size(167, 77);
@@ -1335,6 +1338,7 @@
             this.columnHeader11});
             this.AreaListView.FullRowSelect = true;
             this.AreaListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.AreaListView.HideSelection = false;
             this.AreaListView.Location = new System.Drawing.Point(6, 24);
             this.AreaListView.Name = "AreaListView";
             this.AreaListView.Size = new System.Drawing.Size(418, 163);

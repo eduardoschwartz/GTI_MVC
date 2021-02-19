@@ -34,11 +34,11 @@ namespace GTI_Desktop.Forms {
 
         private void Carrega_Lista() {
             MainListView.Items.Clear();
-            Cidadao_bll cidadao_Class = new Cidadao_bll(_connection);
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
             bDirty = false;
             bExec = false;
             if (_tipo == "H") {
-                List<Historico_CidadaoStruct> Lista = cidadao_Class.Lista_Historico(_codigo);
+                List<Historico_CidadaoStruct> Lista = cidadaoRepository.Lista_Historico(_codigo);
                 foreach (Historico_CidadaoStruct item in Lista) {
                     ListViewItem lvItem = new ListViewItem(Convert.ToDateTime(item.Data).ToString("dd/MM/yyyy"));
                     lvItem.SubItems.Add(item.Nome_Usuario);
@@ -46,7 +46,7 @@ namespace GTI_Desktop.Forms {
                     MainListView.Items.Add(lvItem);
                 }
             } else {
-                List<Observacao_CidadaoStruct> Lista = cidadao_Class.Lista_Observacao(_codigo);
+                List<Observacao_CidadaoStruct> Lista = cidadaoRepository.Lista_Observacao(_codigo);
                 foreach (Observacao_CidadaoStruct item in Lista) {
                     ListViewItem lvItem = new ListViewItem(Convert.ToDateTime(item.Data_Hora).ToString("dd/MM/yyyy hh:mm"));
                     lvItem.SubItems.Add(item.Nome_Usuario);
@@ -64,15 +64,15 @@ namespace GTI_Desktop.Forms {
             if (bDirty) {
                 bDirty = false;
 
-                Sistema_bll sistema_Class = new Sistema_bll(_connection);
+                Sistema_bll sistemaRepository = new Sistema_bll(_connection);
                 obscidadao reg = new obscidadao();
                 reg.Codigo = _codigo;
-                reg.Userid = sistema_Class.Retorna_User_LoginId(Properties.Settings.Default.LastUser);
+                reg.Userid = sistemaRepository.Retorna_User_LoginId(Properties.Settings.Default.LastUser);
                 reg.timestamp = DateTime.Now;
                 reg.Obs = HistoricoText.Text;
 
-                Cidadao_bll cidadao_Class = new Cidadao_bll(_connection);
-                Exception ex = cidadao_Class.Incluir_observacao_cidadao(reg);
+                Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+                Exception ex = cidadaoRepository.Incluir_observacao_cidadao(reg);
                 if (ex != null) {
                     ErrorBox eBox = new ErrorBox("Atenção", ex.Message, ex);
                     eBox.ShowDialog();

@@ -23,8 +23,8 @@ namespace GTI_Desktop.Forms {
         private void Carrega_Lista() {
             lstMain.DataSource = null;
             gtiCore.Ocupado(this);
-            Cidadao_bll profissao_class = new Cidadao_bll(_connection);
-            List<GTI_Models.Models.Profissao> lista = profissao_class.Lista_Profissao();
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+            List<GTI_Models.Models.Profissao> lista = cidadaoRepository.Lista_Profissao();
             lstMain.DataSource = lista;
             lstMain.DisplayMember = "Nome";
             lstMain.ValueMember = "Codigo";
@@ -41,11 +41,11 @@ namespace GTI_Desktop.Forms {
 
             String sCod = iBox.Show("", "Informação", "Digite o nome da profissão.", 100);
             if (!string.IsNullOrEmpty(sCod)) {
-                Cidadao_bll profissao_class = new Cidadao_bll(_connection);
+                Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
                 GTI_Models.Models.Profissao reg = new GTI_Models.Models.Profissao {
                     Nome = sCod.ToUpper()
                 };
-                Exception ex = profissao_class.Incluir_Profissao(reg);
+                Exception ex = cidadaoRepository.Incluir_Profissao(reg);
                 if (ex != null) {
                     ErrorBox eBox = new ErrorBox("Atenção", "Profissão já cadastrada.", ex);
                     eBox.ShowDialog();
@@ -64,12 +64,12 @@ namespace GTI_Desktop.Forms {
             inputBox iBox = new inputBox();
             String sCod = iBox.Show(lstMain.Text, "Informação", "Digite o nome da profissão.", 100);
             if (!string.IsNullOrEmpty(sCod)) {
-                Cidadao_bll profissao_class = new Cidadao_bll(_connection);
+                Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
                 GTI_Models.Models.Profissao reg = new GTI_Models.Models.Profissao {
                     Codigo = Convert.ToInt16(lstMain.SelectedValue.ToString()),
                     Nome = sCod.ToUpper()
                 };
-                Exception ex = profissao_class.Alterar_Profissao(reg);
+                Exception ex = cidadaoRepository.Alterar_Profissao(reg);
                 if (ex != null) {
                     ErrorBox eBox = new ErrorBox("Atenção", "Profissão já cadastrada.", ex);
                     eBox.ShowDialog();
@@ -86,11 +86,11 @@ namespace GTI_Desktop.Forms {
                 return;
             }
             if (MessageBox.Show("Excluir esta profissão?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
-                Cidadao_bll profissao_class = new Cidadao_bll(_connection);
+                Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
                 GTI_Models.Models.Profissao reg = new GTI_Models.Models.Profissao {
                     Codigo = Convert.ToInt16(lstMain.SelectedValue.ToString())
                 };
-                Exception ex = profissao_class.Excluir_Profissao(reg);
+                Exception ex = cidadaoRepository.Excluir_Profissao(reg);
                 if (ex != null) {
                     ErrorBox eBox = new ErrorBox("Atenção", ex.Message, ex);
                     eBox.ShowDialog();

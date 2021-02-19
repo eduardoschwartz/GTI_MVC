@@ -110,8 +110,8 @@ namespace GTI_Desktop.Forms {
             this.Refresh();
             InitializeComponent();
             tBar.Renderer = new MySR();
-            Imovel_bll imovel_Class = new Imovel_bll(_connection);
-            lista_condominios = imovel_Class.Lista_Condominio();
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            lista_condominios = imovelRepository.Lista_Condominio();
             TipoList.Items.Add(new CustomListBoxItem("(Imóvel normal)", 0));
             List<CustomListBoxItem> myItems = new List<CustomListBoxItem>();
             foreach (GTI_Models.Models.Condominio item in lista_condominios) {
@@ -181,12 +181,12 @@ namespace GTI_Desktop.Forms {
                 return;
             }
 
-            Imovel_bll imovel_Class = new Imovel_bll(_connection);
-            int nCodigo = imovel_Class.Existe_Imovel(distrito, setor, quadra, lote, unidade, subunidade);
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            int nCodigo = imovelRepository.Existe_Imovel(distrito, setor, quadra, lote, unidade, subunidade);
             if (nCodigo>0) {
                 MessageBox.Show("Já existe um imóvel com esta inscrição cadastral (" + nCodigo.ToString("000000") + ")", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
             } else {
-               bool ExisteFace = imovel_Class.Existe_Face_Quadra(distrito, setor, quadra, face);
+               bool ExisteFace = imovelRepository.Existe_Face_Quadra(distrito, setor, quadra, face);
                 if (!ExisteFace) {
                     MessageBox.Show("Face de quadra não cadastrada.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 } else {
@@ -215,8 +215,8 @@ namespace GTI_Desktop.Forms {
                     SubUnidadeList.Enabled = true;
                     Inscricao.ReadOnly = true;
                     CustomListBoxItem item = (CustomListBoxItem)TipoList.SelectedItem;
-                    Imovel_bll imovel_Class = new Imovel_bll(_connection);
-                    Condominios = imovel_Class.Lista_Unidade_Condominio(item._value);
+                    Imovel_bll imovelRepository = new Imovel_bll(_connection);
+                    Condominios = imovelRepository.Lista_Unidade_Condominio(item._value);
                     foreach (Condominiounidade Unidade in Condominios) {
                         UnidadeList.Items.Add(Unidade.Cd_unidade.ToString("00"));
                     }
@@ -249,7 +249,7 @@ namespace GTI_Desktop.Forms {
 
         private void Carrega_Inscricao() {
             CustomListBoxItem item = (CustomListBoxItem)TipoList.SelectedItem;
-            Imovel_bll imovel_Class = new Imovel_bll(_connection);
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             for (int i = 0; i < lista_condominios.Count; i++) {
                 if (lista_condominios[i].Cd_codigo == item._value) {
                     StringBuilder sInscricao = new StringBuilder();

@@ -240,6 +240,7 @@ namespace GTI_Desktop.Forms {
                         if (_condominio > 0)
                             Carrega_Dados_Condominio(_condominio);
                         bAddNew = true;
+                        ResideCheck.Checked = true;
                         ControlBehaviour(false);
                     }
                 }
@@ -1511,7 +1512,10 @@ namespace GTI_Desktop.Forms {
                 ImuneCheck.Checked = Convert.ToBoolean(regImovel.Imunidade);
                 IsentoCIPCheck.Checked = Convert.ToBoolean(regImovel.Cip);
                 ConjugadoCheck.Checked = Convert.ToBoolean(regImovel.Conjugado);
-                ResideCheck.Checked = Convert.ToBoolean(regImovel.ResideImovel);
+                if (regImovel.ResideImovel == null)
+                    ResideCheck.Checked = true;
+                else
+                    ResideCheck.Checked = Convert.ToBoolean(regImovel.ResideImovel);
                 if (Convert.ToBoolean(regImovel.Inativo)) {
                     Ativo.Text = "INATIVO";
                     Ativo.ForeColor = Color.Red;

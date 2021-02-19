@@ -68,15 +68,15 @@ namespace GTI_Desktop.Forms {
         private void Fill_List() {
             gtiCore.Ocupado(this);
             string _valor = BuscaText.Text;
-            Cidadao_bll clsCidadao = new Cidadao_bll(_connection);
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
             List<GTI_Models.Models.Cidadao> Lista = new List<GTI_Models.Models.Cidadao>();
             if (TitleMenu.Tag.ToString() == "Nome")
-                Lista = clsCidadao.Lista_Cidadao(_valor, "", "");
+                Lista = cidadaoRepository.Lista_Cidadao(_valor, "", "");
             else {
                 if (TitleMenu.Tag.ToString() == "CPF")
-                    Lista = clsCidadao.Lista_Cidadao("", _valor, "");
+                    Lista = cidadaoRepository.Lista_Cidadao("", _valor, "");
                 else
-                    Lista = clsCidadao.Lista_Cidadao("", "", _valor);
+                    Lista = cidadaoRepository.Lista_Cidadao("", "", _valor);
             }
 
             int _total = Lista.Count;
