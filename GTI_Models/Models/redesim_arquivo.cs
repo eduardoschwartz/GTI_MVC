@@ -7,7 +7,7 @@ namespace GTI_Models.Models {
         public string Guid { get; set; }
         public DateTime Periodode { get; set; }
         public DateTime Periodoate { get; set; }
-        public char Tipo { get; set; }
+        public string Tipo { get; set; }
     }
 }
 

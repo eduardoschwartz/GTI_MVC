@@ -11,6 +11,7 @@ namespace GTI_Mvc.ViewModels {
 
     public class RedesimImportFilesViewModel {
         public string Guid { get; set; }
+        public string NomeArquivo { get; set; }
         public DateTime PeriodoDe { get; set; }
         public DateTime PeriodoAte { get; set; }
         public string Tipo { get; set; }

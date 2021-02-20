@@ -17,7 +17,7 @@ namespace GTI_Dal.Classes {
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@periodode", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Periodode };
                 Parametros[2] = new SqlParameter { ParameterName = "@periodoate", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Periodoate };
-                Parametros[3] = new SqlParameter { ParameterName = "@tipo", SqlDbType = SqlDbType.Char, SqlValue = reg.Tipo };
+                Parametros[3] = new SqlParameter { ParameterName = "@tipo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Tipo };
                 db.Database.ExecuteSqlCommand("INSERT INTO redesim_arquivo(guid,periodode,periodoate,tipo) " +
                                               " VALUES(@guid,@periodode,@periodoate,@tipo)", Parametros);
                 try {
