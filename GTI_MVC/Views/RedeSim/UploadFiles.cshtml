@@ -79,34 +79,34 @@
                     <div><button type="submit" class="btn btn-info">Enviar</button><br /><br /></div>
                     @if (Model.ListaArquivo.Count > 0) {
                         foreach (GTI_Mvc.ViewModels.RedesimImportFilesViewModel reg in Model.ListaArquivo) {
-                <table style="font-size:13px;width:680px">
-                    <thead style="background-color:darkred;color:whitesmoke">
-                        <tr style="height:10px">
-                            <td style="width:80px;text-align:center">De</td>
-                            <td style="width:80px;text-align:center">Até</td>
-                            <td style="width:200px;text-align:left">Nome do Arquivo</td>
-                            <td style="width:120px;text-align:left">Tipo</td>
-                            <td style="width:200px;text-align:left">Mensagem</td>
-                        </tr>
-                    </thead>
-                    @Html.Raw(" <tr>")
-                    @Html.Raw("<td style=" + "width:80px;text-align:center" + " >")
-                    @reg.PeriodoDe.ToString("dd/MM/yyyy")
-                    @Html.Raw("</td>")
-                    @Html.Raw("<td style=" + "width:80px;text-align:center" + " >")
-                    @reg.PeriodoAte.ToString("dd/MM/yyyy")
-                    @Html.Raw("</td>")
-                    @Html.Raw(" <td style=" + "width:200px;text-align:left" + " >")
-                    @Functions.TruncateTo(reg.NomeArquivo,30)
-                    @Html.Raw("</td>")
-                    @Html.Raw(" <td style=" + "width:120px;text-align:left" + " >")
-                    @reg.Tipo
-                    @Html.Raw("</td>")
-                    @Html.Raw(" <td style=" + "width:200px;text-align:left" + " >")
-                    @reg.Mensagem
-                    @Html.Raw("</td>")
-                    @Html.Raw("</tr>")
-                </table>
+                            <table style="font-size:13px;width:680px">
+                                <thead style="background-color:darkred;color:whitesmoke">
+                                    <tr style="height:10px">
+                                        <td style="width:80px;text-align:center">De</td>
+                                        <td style="width:80px;text-align:center">Até</td>
+                                        <td style="width:200px;text-align:left">Nome do Arquivo</td>
+                                        <td style="width:120px;text-align:left">Tipo</td>
+                                        <td style="width:200px;text-align:left">Mensagem</td>
+                                    </tr>
+                                </thead>
+                                @Html.Raw(" <tr>")
+                                @Html.Raw("<td style=" + "width:80px;text-align:center" + " >")
+                                @reg.PeriodoDe.ToString("dd/MM/yyyy")
+                                @Html.Raw("</td>")
+                                @Html.Raw("<td style=" + "width:80px;text-align:center" + " >")
+                                @reg.PeriodoAte.ToString("dd/MM/yyyy")
+                                @Html.Raw("</td>")
+                                @Html.Raw(" <td style=" + "width:200px;text-align:left" + " >")
+                                @Functions.TruncateTo(reg.NomeArquivo, 30)
+                                @Html.Raw("</td>")
+                                @Html.Raw(" <td style=" + "width:120px;text-align:left" + " >")
+                                @reg.Tipo
+                                @Html.Raw("</td>")
+                                @Html.Raw(" <td style=" + "width:200px;text-align:left" + " >")
+                                @reg.Mensagem
+                                @Html.Raw("</td>")
+                                @Html.Raw("</tr>")
+                            </table>
                             <br />
                         }
 
