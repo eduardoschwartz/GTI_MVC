@@ -4,6 +4,17 @@ namespace GTI_Models.Models {
     public class Redesim_Registro {
         [Key]
         public string Protocolo { get; set; }
+        public string Arquivo { get; set; }
+        public string Cnpj { get; set; }
+        public string Razao_Social { get; set; }
+        public int Numero { get; set; }
+        public string Complemento { get; set; }
+        public string Cep { get; set; }
+    }
+
+    public class Redesim_RegistroStruct {
+        [Key]
+        public string Protocolo { get; set; }
         public string Cnpj { get; set; }
         public string[] Evento { get; set; }
         public string NomeEmpresarial { get; set; }
@@ -37,4 +48,5 @@ namespace GTI_Models.Models {
         public string CpfRepresentante { get; set; }
         public string NomeRepresentante { get; set; }
     }
+
 }

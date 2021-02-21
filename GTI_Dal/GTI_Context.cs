@@ -176,5 +176,6 @@ namespace GTI_Dal {
         public DbSet<Notificacao_terreno> Notificacao_Terreno { get; set; }
         public DbSet<Auto_infracao> Auto_Infracao { get; set; }
         public DbSet<Redesim_arquivo> Redesim_Arquivo { get; set; }
+        public DbSet<Redesim_Registro> Redesim_Registro { get; set; }
     }
 }

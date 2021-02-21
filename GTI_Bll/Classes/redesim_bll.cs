@@ -16,5 +16,11 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Incluir_Registro(Redesim_Registro reg) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            Exception ex = obj.Incluir_Registro(reg);
+            return ex;
+        }
+
     }
 }

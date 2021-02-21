@@ -29,6 +29,27 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Incluir_Registro(Redesim_Registro reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[7];
+                Parametros[0] = new SqlParameter { ParameterName = "@protocolo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Protocolo };
+                Parametros[1] = new SqlParameter { ParameterName = "@arquivo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Arquivo };
+                Parametros[2] = new SqlParameter { ParameterName = "@cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnpj };
+                Parametros[3] = new SqlParameter { ParameterName = "@razao_social", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Razao_Social };
+                Parametros[4] = new SqlParameter { ParameterName = "@numero", SqlDbType = SqlDbType.Int, SqlValue = reg.Numero };
+                Parametros[5] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Complemento };
+                Parametros[6] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cep };
+                db.Database.ExecuteSqlCommand("INSERT INTO redesim_registro(protocolo,arquivo,cnpj,razao_social,numero,complemento,cep) " +
+                                              " VALUES(@protocolo,@arquivo,@cnpj,@razao_social,@numero,@complemento,@cep)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
 
     }
 }

@@ -1,11 +1,13 @@
 ﻿using GTI_Bll.Classes;
 using GTI_Models.Models;
 using GTI_Mvc.ViewModels;
+using GTI_Mvc.Classes;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Web.Mvc;
+using GTI_Mvc;
 
 namespace GTI_MVC.Controllers {
     public class RedeSimController : Controller
@@ -27,10 +29,10 @@ namespace GTI_MVC.Controllers {
             List<RedesimImportFilesViewModel> Lista_Files = new List<RedesimImportFilesViewModel>();
             int _id = 1;
             string _msg = "",_tipo="",_guid="";
-            DateTime _dataDe = DateTime.Now, _dataAte = DateTime.Now;
+            DateTime _dataDe=DateTime.Now , _dataAte=DateTime.Now ;
             bool _ok=false;
             var fileName = "";
-            List<Redesim_Registro> _listaRegistro = new List<Redesim_Registro>();
+            List<Redesim_RegistroStruct> _listaRegistro = new List<Redesim_RegistroStruct>();
             Redesim_bll redesimRepository = new Redesim_bll("GTIconnection");
             foreach (var file in model.Files) {
                 if (file == null) {
@@ -73,20 +75,34 @@ namespace GTI_MVC.Controllers {
                             goto ProximoArquivo;
                         }
 
-
                         if (_bRegistro) {
                             _listaRegistro = Read_Registro(path);
+                            foreach (Redesim_RegistroStruct item in _listaRegistro) {
+                                Redesim_Registro reg = new Redesim_Registro() {
+                                    Protocolo = item.Protocolo,
+                                    Arquivo=_guid,
+                                    Cnpj=item.Cnpj,
+                                    Razao_Social=item.NomeEmpresarial,
+                                    Cep=item.Cep,
+                                    Complemento=item.Complementos
+                                };
+                                if (Functions.RetornaNumero(item.Numero) == "")
+                                    reg.Numero = 0;
+                                else
+                                    reg.Numero = Convert.ToInt32(item.Numero);
+                                Exception ex = redesimRepository.Incluir_Registro(reg);
+                            }
                             _ok = true;
                         }
 
 
+
                     //#################################
-                    ProximoArquivo:
                         if (_ok) {
                             Redesim_arquivo reg = new Redesim_arquivo() {
                                 Guid = _guid,
-                                Periodode = DateTime.Now,
-                                Periodoate = DateTime.Now,
+                                Periodode = _dataDe,
+                                Periodoate = _dataAte,
                                 Tipo = "R"
                             };
                             Exception ex = redesimRepository.Incluir_Arquivo(reg);
@@ -99,6 +115,7 @@ namespace GTI_MVC.Controllers {
                     _ok = false;
                     _msg = "Tamanho inválido";
                 }
+            ProximoArquivo:
                 RedesimImportFilesViewModel _reg = new RedesimImportFilesViewModel() {
                     Guid = _guid,
                     NomeArquivo = fileName,
@@ -117,20 +134,90 @@ namespace GTI_MVC.Controllers {
         }
 
 
-        private List<Redesim_Registro> Read_Registro(string _path) {
+        private List<Redesim_RegistroStruct> Read_Registro(string _path) {
             int _linha = 1;
-            List<Redesim_Registro> _listaRegistro = new List<Redesim_Registro>();
+            List<Redesim_RegistroStruct> _listaRegistro = new List<Redesim_RegistroStruct>();
             StreamReader reader = new StreamReader(@_path, Encoding.Default);
             while (!reader.EndOfStream) {
                 string line = reader.ReadLine();
                 if (!string.IsNullOrWhiteSpace(line)) {
                     if (_linha > 1) {
                         string[] values = line.Split(';');
-                        Redesim_Registro _linhaReg = new Redesim_Registro() {
-                            Protocolo = values[0],
-                            Cnpj = values[1],
-                            Evento = values[2].Split(',')
-                        };
+                        Redesim_RegistroStruct _linhaReg;
+                        if (values[14] == "Sim" || values[14] == "Não") {
+                            _linhaReg = new Redesim_RegistroStruct() {
+                                Protocolo = values[0],
+                                Cnpj = values[1],
+                                Evento = values[2].Split(','),
+                                NomeEmpresarial = values[3],
+                                MatrizFilial = values[4],
+                                DataAberturaEstabelecimento = values[5],
+                                DataAberturaEmpresa = values[6],
+                                Logradouro = values[7],
+                                Numero = values[8],
+                                Complementos = values[9],
+                                Bairro = values[10],
+                                Cep = values[11],
+                                Municipio = values[12],
+                                Referencia = values[13],
+                                EmpresaEstabelecida = values[14],
+                                NaturezaJuridica = values[15],
+                                OrgaoRegistro = values[16],
+                                NumeroOrgaoRegistro = values[17],
+                                CapitalSocial = values[18],
+                                CpfResponsavel = values[19],
+                                NomeResponsavel = values[20],
+                                QualificacaoResponsavel = values[21],
+                                TelefoneResponsavel = values[22],
+                                EmailResponsavel = values[23],
+                                PorteEmpresa = values[24],
+                                CnaePrincipal = values[25],
+                                CnaeSecundaria = values[26].Split(','),
+                                AtividadeAuxiliar = values[27],
+                                TipoUnidade = values[28],
+                                FormaAtuacao = values[29].Split(','),
+                                Qsa = values[30],
+                                CpfRepresentante = values[31],
+                                NomeRepresentante = values[32]
+                            };
+                        } else {
+                            //Criado para corrigir um erro no arquivo, onde alguns registros vem com posição errada
+                            _linhaReg = new Redesim_RegistroStruct() {
+                                Protocolo = values[0],
+                                Cnpj = values[1],
+                                Evento = values[2].Split(','),
+                                NomeEmpresarial = values[3],
+                                MatrizFilial = values[4],
+                                DataAberturaEstabelecimento = values[5],
+                                DataAberturaEmpresa = values[6],
+                                Logradouro = values[7],
+                                Numero = values[8],
+                                Complementos = values[9],
+                                Bairro = values[10],
+                                Cep = values[11],
+                                Municipio = values[12],
+                                Referencia = "",
+                                EmpresaEstabelecida = values[15],
+                                NaturezaJuridica = values[16],
+                                OrgaoRegistro = values[17],
+                                NumeroOrgaoRegistro = values[18],
+                                CapitalSocial = values[19],
+                                CpfResponsavel = values[20],
+                                NomeResponsavel = values[21],
+                                QualificacaoResponsavel = values[22],
+                                TelefoneResponsavel = values[23],
+                                EmailResponsavel = values[24],
+                                PorteEmpresa = values[25],
+                                CnaePrincipal = values[26],
+                                CnaeSecundaria = values[27].Split(','),
+                                AtividadeAuxiliar = values[28],
+                                TipoUnidade = values[29],
+                                FormaAtuacao = values[30].Split(','),
+                                Qsa = values[31],
+                                CpfRepresentante = values[32],
+                                NomeRepresentante = values[33]
+                            };
+                        }
                         _listaRegistro.Add(_linhaReg);
                     }
                 }
@@ -138,8 +225,6 @@ namespace GTI_MVC.Controllers {
             }
             return _listaRegistro;
         }
-
-
 
 
 
