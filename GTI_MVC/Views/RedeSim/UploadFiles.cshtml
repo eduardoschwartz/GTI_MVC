@@ -115,7 +115,6 @@
                                             <td style="width:120px;text-align:left">Status</td>
                                         </tr>
                                     </thead>
-
                                     @foreach (GTI_Models.Models.Redesim_RegistroStruct reg in Model.ListaRegistro) {
                                         if (reg.Arquivo == arq.Guid) {
                                             @Html.Raw(" <tr>")
@@ -142,6 +141,45 @@
                                     }
                                 </table>
                             }
+
+                            if (Model.ListaViabilidade.Count > 0) {
+                                <table style="font-size:13px;width:710px">
+                                    <thead style="background-color:darkred;color:whitesmoke">
+                                        <tr style="height:10px">
+                                            <td style="width:120px;text-align:left">protocolo</td>
+                                            <td style="width:300px;text-align:left">Razão Social</td>
+                                            <td style="width:150px;text-align:left">Cnpj</td>
+                                            <td style="width:120px;text-align:left">Status</td>
+                                        </tr>
+                                    </thead>
+                                    @foreach (GTI_Models.Models.Redesim_ViabilidadeStuct reg in Model.ListaViabilidade) {
+                                        if (reg.Arquivo == arq.Guid) {
+                                            @Html.Raw(" <tr>")
+                                            @Html.Raw("<td style=" + "width:120px;text-align:left" + " >")
+                                            @reg.Protocolo
+                                            @Html.Raw("</td>")
+                                            @Html.Raw(" <td style=" + "width:300px;text-align:left" + " >")
+                                            @Functions.TruncateTo(reg.RazaoSocial, 35)
+                                            @Html.Raw("</td>")
+                                            @Html.Raw(" <td style=" + "width:120px;text-align:left" + " >")
+                                            @Functions.FormatarCpfCnpj(reg.Cnpj)
+                                            @Html.Raw("</td>")
+                                            if (reg.Duplicado) {
+                                                @Html.Raw(" <td style=" + "width:120px;text-align:left;color:red" + " >")
+                                                @Html.Raw("Duplicado")
+                                                @Html.Raw("</td>")
+                                            } else {
+                                                @Html.Raw(" <td style=" + "width:120px;text-align:left;color:darkgreen" + " >")
+                                                @Html.Raw("importado")
+                                                @Html.Raw("</td>")
+                                            }
+                                            @Html.Raw("</tr>")
+                                        }
+                                    }
+                                </table>
+                            }
+
+
 
                         }
 

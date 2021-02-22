@@ -38,11 +38,50 @@ namespace GTI_Dal.Classes {
                 Parametros[2] = new SqlParameter { ParameterName = "@cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnpj };
                 Parametros[3] = new SqlParameter { ParameterName = "@razao_social", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Razao_Social };
                 Parametros[4] = new SqlParameter { ParameterName = "@numero", SqlDbType = SqlDbType.Int, SqlValue = reg.Numero };
-                Parametros[5] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Complemento };
+                if (reg.Complemento == "")
+                    Parametros[5] = new SqlParameter { ParameterName = "@complemento", SqlValue = DBNull.Value };
+                else
+                    Parametros[5] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Complemento };
                 Parametros[6] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cep };
                 db.Database.ExecuteSqlCommand("INSERT INTO redesim_registro(protocolo,arquivo,cnpj,razao_social,numero,complemento,cep) " +
                                               " VALUES(@protocolo,@arquivo,@cnpj,@razao_social,@numero,@complemento,@cep)", Parametros);
                 try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Incluir_Viabilidade(Redesim_Viabilidade reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[15];
+                Parametros[0] = new SqlParameter { ParameterName = "@protocolo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Protocolo };
+                Parametros[1] = new SqlParameter { ParameterName = "@arquivo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Arquivo };
+                Parametros[2] = new SqlParameter { ParameterName = "@cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnpj };
+                Parametros[3] = new SqlParameter { ParameterName = "@razao_social", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Razao_Social };
+                Parametros[4] = new SqlParameter { ParameterName = "@analise", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Analise };
+                if(reg.Nire=="")
+                    Parametros[5] = new SqlParameter { ParameterName = "@nire",  SqlValue = DBNull.Value };
+                else
+                    Parametros[5] = new SqlParameter { ParameterName = "@nire", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Nire };
+                Parametros[6] = new SqlParameter { ParameterName = "@empresaestabelecida", SqlDbType = SqlDbType.Bit, SqlValue = reg.EmpresaEstabelecida };
+                Parametros[7] = new SqlParameter { ParameterName = "@dataprotocolo", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.DataProtocolo };
+                Parametros[8] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cep };
+                Parametros[9] = new SqlParameter { ParameterName = "@numeroinscricaoimovel", SqlDbType = SqlDbType.Int, SqlValue = reg.NumeroInscricaoImovel };
+                if(reg.Complemento=="")
+                    Parametros[10] = new SqlParameter { ParameterName = "@complemento",  SqlValue = DBNull.Value };
+                else
+                    Parametros[10] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Complemento };
+                Parametros[11] = new SqlParameter { ParameterName = "@numero", SqlDbType = SqlDbType.Int, SqlValue = reg.Numero };
+                Parametros[12] = new SqlParameter { ParameterName = "@tipounidade", SqlDbType = SqlDbType.VarChar, SqlValue = reg.TipoUnidade };
+                Parametros[13] = new SqlParameter { ParameterName = "@areaimovel", SqlDbType = SqlDbType.Decimal, SqlValue = reg.AreaImovel };
+                Parametros[14] = new SqlParameter { ParameterName = "@areaestabelecimento", SqlDbType = SqlDbType.Decimal, SqlValue = reg.AreaEstabelecimento };
+                try {
+                    db.Database.ExecuteSqlCommand("INSERT INTO redesim_viabilidade(protocolo,arquivo,cnpj,razao_social,analise,nire,empresaestabelecida,dataprotocolo,cep,numeroinscricaoimovel," +
+                    "complemento,numero,tipounidade,areaimovel,areaestabelecimento) VALUES(@protocolo,@arquivo,@cnpj,@razao_social,@analise,@nire,@empresaestabelecida,@dataprotocolo,@cep,@numeroinscricaoimovel," +
+                    "@complemento,@numero,@tipounidade,@areaimovel,@areaestabelecimento)", Parametros);
                     db.SaveChanges();
                 } catch (Exception ex) {
                     return ex;

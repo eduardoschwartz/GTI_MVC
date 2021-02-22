@@ -114,11 +114,30 @@ namespace GTI_MVC.Controllers {
                                 bool _existe = redesimRepository.Existe_Viabilidade(item.Protocolo);
                                 if (!_existe) {
                                     Redesim_Viabilidade reg = new Redesim_Viabilidade() {
+                                        Arquivo = _guid,
                                         Protocolo = item.Protocolo,
                                         Cnpj = item.Cnpj,
-                                        Razao_Social = item.RazaoSocial
+                                        Razao_Social = item.RazaoSocial,
+                                        Analise = item.Analise,
+                                        Nire = item.Nire.Trim(),
+                                        EmpresaEstabelecida = item.EmpresaEstabelecida == "Sim" ? true : false,
+                                        DataProtocolo = Convert.ToDateTime(item.DataProtocolo),
+                                        Cep = item.Cep,
+                                        Complemento = item.Complemento,
+                                        TipoUnidade = item.TipoUnidade,
+                                        AreaImovel = Convert.ToDecimal(item.AreaImovel),
+                                        AreaEstabelecimento = Convert.ToDecimal(item.AreaEstabelecimento)
                                     };
-//                                    Exception ex = redesimRepository.Incluir_Registro(reg);
+                                    if (Functions.RetornaNumero(item.Numero) == "")
+                                        reg.Numero = 0;
+                                    else
+                                        reg.Numero = Convert.ToInt32(item.Numero);
+                                    string _num = Functions.RetornaNumero(item.NumeroInscricaoImovel);
+                                    if (_num == "" || item.TipoInscricaoImovel.Trim()!= "Número IPTU")
+                                        reg.NumeroInscricaoImovel = 0;
+                                    else
+                                        reg.NumeroInscricaoImovel = Convert.ToInt32(_num);
+                                    Exception ex = redesimRepository.Incluir_Viabilidade(reg);
                                 }
                                 _listaViabilidade[_pos].Duplicado = _existe;
                                 _listaViabilidade[_pos].Arquivo = _guid;
@@ -159,6 +178,8 @@ namespace GTI_MVC.Controllers {
                 _id++;
             }
         Fim:
+            if (model.ListaRegistro == null)  model.ListaRegistro = new List<Redesim_RegistroStruct>();
+            if (model.ListaViabilidade == null) model.ListaViabilidade = new List<Redesim_ViabilidadeStuct>();
             model.ListaArquivo = Lista_Files;
             return View(model);
         }
@@ -268,8 +289,33 @@ namespace GTI_MVC.Controllers {
                         Redesim_ViabilidadeStuct _linhaReg;
                             _linhaReg = new Redesim_ViabilidadeStuct() {
                                 Protocolo = values[0],
-                                Cnpj = values[1],
-                                Evento = values[2].Split(',')
+                                Analise = values[1],
+                                Nire = values[2],
+                                Cnpj=values[3],
+                                EmpresaEstabelecida=values[4],
+                                Cnae=values[5].Split(','),
+                                AtividadeAuxiliar=values[6],
+                                DataProtocolo=values[7],
+                                DataResultadoAnalise=values[8],
+                                DataResultadoViabilidade=values[9],
+                                TempoAndamento=values[10],
+                                cdEvento=values[11].Split(','),
+                                Evento = values[12].Split(','),
+                                Cep=values[13],
+                                TipoInscricaoImovel=values[14],
+                                NumeroInscricaoImovel=values[15],
+                                TipoLogradouro=values[16],
+                                Logradouro=values[17],
+                                Numero=values[18],
+                                Bairro=values[19],
+                                Complemento=values[20],
+                                TipoUnidade=values[21],
+                                FormaAtuacao=values[22],
+                                Municipio=values[23],
+                                RazaoSocial=values[24],
+                                Orgao=values[25],
+                                AreaImovel=values[26],
+                                AreaEstabelecimento=values[27]
                             };
                         _listaViabilidade.Add(_linhaReg);
                     }

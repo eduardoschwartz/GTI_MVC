@@ -22,6 +22,12 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Incluir_Viabilidade(Redesim_Viabilidade reg) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            Exception ex = obj.Incluir_Viabilidade(reg);
+            return ex;
+        }
+
         public bool Existe_Registro(string Processo) {
             Redesim_Data obj = new Redesim_Data(_connection);
             return obj.Existe_Registro(Processo);
