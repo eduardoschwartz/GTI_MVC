@@ -1,7 +1,10 @@
 ﻿using GTI_Models.Models;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
+using static GTI_Models.modelCore;
 
 namespace GTI_Dal.Classes {
     public class Redesim_Data {
@@ -13,13 +16,11 @@ namespace GTI_Dal.Classes {
 
         public Exception Incluir_Arquivo(Redesim_arquivo reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[4];
+                object[] Parametros = new object[2];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Guid };
-                Parametros[1] = new SqlParameter { ParameterName = "@periodode", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Periodode };
-                Parametros[2] = new SqlParameter { ParameterName = "@periodoate", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Periodoate };
-                Parametros[3] = new SqlParameter { ParameterName = "@tipo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Tipo };
-                db.Database.ExecuteSqlCommand("INSERT INTO redesim_arquivo(guid,periodode,periodoate,tipo) " +
-                                              " VALUES(@guid,@periodode,@periodoate,@tipo)", Parametros);
+                Parametros[1] = new SqlParameter { ParameterName = "@tipo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Tipo };
+                db.Database.ExecuteSqlCommand("INSERT INTO redesim_arquivo(guid,tipo) " +
+                                              " VALUES(@guid,@tipo)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -47,6 +48,16 @@ namespace GTI_Dal.Classes {
                     return ex;
                 }
                 return null;
+            }
+        }
+
+        public bool Existe_Registro(string Processo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from i in db.Redesim_Registro where i.Protocolo == Processo select i.Razao_Social).FirstOrDefault();
+                if (reg == null)
+                    return false;
+                else
+                    return true;
             }
         }
 

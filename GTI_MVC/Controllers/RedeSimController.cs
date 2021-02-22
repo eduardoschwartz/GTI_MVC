@@ -29,7 +29,6 @@ namespace GTI_MVC.Controllers {
             List<RedesimImportFilesViewModel> Lista_Files = new List<RedesimImportFilesViewModel>();
             int _id = 1;
             string _msg = "",_tipo="",_guid="";
-            DateTime _dataDe=DateTime.Now , _dataAte=DateTime.Now ;
             bool _ok=false;
             var fileName = "";
             List<Redesim_RegistroStruct> _listaRegistro = new List<Redesim_RegistroStruct>();
@@ -77,32 +76,34 @@ namespace GTI_MVC.Controllers {
 
                         if (_bRegistro) {
                             _listaRegistro = Read_Registro(path);
+                            int _pos = 0;
                             foreach (Redesim_RegistroStruct item in _listaRegistro) {
-                                Redesim_Registro reg = new Redesim_Registro() {
-                                    Protocolo = item.Protocolo,
-                                    Arquivo=_guid,
-                                    Cnpj=item.Cnpj,
-                                    Razao_Social=item.NomeEmpresarial,
-                                    Cep=item.Cep,
-                                    Complemento=item.Complementos
-                                };
-                                if (Functions.RetornaNumero(item.Numero) == "")
-                                    reg.Numero = 0;
-                                else
-                                    reg.Numero = Convert.ToInt32(item.Numero);
-                                Exception ex = redesimRepository.Incluir_Registro(reg);
+                                bool _existe = redesimRepository.Existe_Registro(item.Protocolo);
+                                if (!_existe) {
+                                    Redesim_Registro reg = new Redesim_Registro() {
+                                        Protocolo = item.Protocolo,
+                                        Arquivo = _guid,
+                                        Cnpj = item.Cnpj,
+                                        Razao_Social = item.NomeEmpresarial,
+                                        Cep = item.Cep,
+                                        Complemento = item.Complementos
+                                    };
+                                    if (Functions.RetornaNumero(item.Numero) == "")
+                                        reg.Numero = 0;
+                                    else
+                                        reg.Numero = Convert.ToInt32(item.Numero);
+                                    Exception ex = redesimRepository.Incluir_Registro(reg);
+                                }
+                                _listaRegistro[_pos].Duplicado = _existe;
+                                _pos++;
                             }
                             _ok = true;
                         }
-
-
 
                     //#################################
                         if (_ok) {
                             Redesim_arquivo reg = new Redesim_arquivo() {
                                 Guid = _guid,
-                                Periodode = _dataDe,
-                                Periodoate = _dataAte,
                                 Tipo = "R"
                             };
                             Exception ex = redesimRepository.Incluir_Arquivo(reg);
@@ -122,8 +123,6 @@ namespace GTI_MVC.Controllers {
                     Mensagem = _msg,
                     Valido = _ok,
                     Tipo = _tipo,
-                    PeriodoDe = _dataDe,
-                    PeriodoAte = _dataAte
                 };
                 Lista_Files.Add(_reg);
                 _id++;

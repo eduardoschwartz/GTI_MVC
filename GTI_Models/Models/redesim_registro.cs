@@ -47,6 +47,7 @@ namespace GTI_Models.Models {
         public string Qsa { get; set; }
         public string CpfRepresentante { get; set; }
         public string NomeRepresentante { get; set; }
+        public bool Duplicado { get; set; }
     }
 
 }
