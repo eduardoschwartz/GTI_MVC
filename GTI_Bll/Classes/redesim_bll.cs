@@ -27,5 +27,10 @@ namespace GTI_Bll.Classes {
             return obj.Existe_Registro(Processo);
         }
 
+        public bool Existe_Viabilidade(string Processo) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            return obj.Existe_Viabilidade(Processo);
+        }
+
     }
 }

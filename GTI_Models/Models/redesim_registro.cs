@@ -13,7 +13,7 @@ namespace GTI_Models.Models {
     }
 
     public class Redesim_RegistroStruct {
-        [Key]
+        public string Arquivo { get; set; }
         public string Protocolo { get; set; }
         public string Cnpj { get; set; }
         public string[] Evento { get; set; }

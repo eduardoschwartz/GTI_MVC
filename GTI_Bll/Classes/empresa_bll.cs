@@ -395,10 +395,10 @@ namespace GTI_Bll.Classes {
             return obj.Existe_Empresa_Vre(nCodigo);
         }
 
-        public bool Existe_redeSim_Viabilidade(string Protocolo) {
-            Empresa_Data obj = new Empresa_Data(_connection);
-            return obj.Existe_redeSim_Viabilidade(Protocolo);
-        }
+        //public bool Existe_redeSim_Viabilidade(string Protocolo) {
+        //    Empresa_Data obj = new Empresa_Data(_connection);
+        //    return obj.Existe_redeSim_Viabilidade(Protocolo);
+        //}
 
 
         /// <summary>
@@ -412,11 +412,11 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
-        public Exception Incluir_redeSim_Viabilidade(Redesim_viabilidade reg) {
-            Empresa_Data obj = new Empresa_Data(_connection);
-            Exception ex = obj.Incluir_redeSim_Viabilidade(reg);
-            return ex;
-        }
+        //public Exception Incluir_redeSim_Viabilidade(Redesim_Viabilidade reg) {
+        //    Empresa_Data obj = new Empresa_Data(_connection);
+        //    Exception ex = obj.Incluir_redeSim_Viabilidade(reg);
+        //    return ex;
+        //}
 
         /// <summary>
         /// Insere na tabela vre_atividade

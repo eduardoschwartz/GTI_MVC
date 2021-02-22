@@ -61,6 +61,16 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public bool Existe_Viabilidade(string Processo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from i in db.Redesim_Viabilidade where i.Protocolo == Processo select i.Razao_Social).FirstOrDefault();
+                if (reg == null)
+                    return false;
+                else
+                    return true;
+            }
+        }
+
 
     }
 }

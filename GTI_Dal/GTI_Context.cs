@@ -148,7 +148,6 @@ namespace GTI_Dal {
         public DbSet<Debitocancel> Debitocancel { get; set; }
         public DbSet<Logevento> Logevento { get; set; }
         public DbSet<Livro> Livro { get; set; }
-        public DbSet<Redesim_viabilidade> Redesim_viabilidade { get; set; }
         public DbSet<dados_imovel_web> Dados_Imovel { get; set; }
         public DbSet<Encargo_cvd> Encargo_Cvd { get; set; }
         public DbSet<Certidao_impressao> Certidao_impressao { get; set; }
@@ -177,5 +176,6 @@ namespace GTI_Dal {
         public DbSet<Auto_infracao> Auto_Infracao { get; set; }
         public DbSet<Redesim_arquivo> Redesim_Arquivo { get; set; }
         public DbSet<Redesim_Registro> Redesim_Registro { get; set; }
+        public DbSet<Redesim_Viabilidade> Redesim_Viabilidade { get; set; }
     }
 }

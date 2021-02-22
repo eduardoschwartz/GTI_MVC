@@ -942,16 +942,16 @@ namespace GTI_Dal.Classes {
             return bRet;
         }
 
-        public bool Existe_redeSim_Viabilidade(string Protocolo) {
-            bool bRet = false;
-            using (GTI_Context db = new GTI_Context(_connection)) {
-                var existingReg = db.Redesim_viabilidade.Count(a => a.Protocolo == Protocolo);
-                if (existingReg != 0) {
-                    bRet = true;
-                }
-            }
-            return bRet;
-        }
+        //public bool Existe_redeSim_Viabilidade(string Protocolo) {
+        //    bool bRet = false;
+        //    using (GTI_Context db = new GTI_Context(_connection)) {
+        //        var existingReg = db.Redesim_viabilidade.Count(a => a.Protocolo == Protocolo);
+        //        if (existingReg != 0) {
+        //            bRet = true;
+        //        }
+        //    }
+        //    return bRet;
+        //}
 
         public Exception Incluir_Empresa(Mobiliario reg) {
             string query = "INSERT INTO mobiliario (codigomob,razaosocial,nomefantasia,codlogradouro,numero,complemento,codbairro,codcidade,siglauf,cep,homepage,horario,dataabertura,";
@@ -1723,10 +1723,10 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public Exception Incluir_redeSim_Viabilidade(Redesim_viabilidade reg) {
+        public Exception Incluir_redeSim_Viabilidade(Redesim_Viabilidade reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 try {
-                    db.Redesim_viabilidade.Add(reg);
+                    db.Redesim_Viabilidade.Add(reg);
                     db.SaveChanges();
                 } catch (Exception ex) {
                     return ex;

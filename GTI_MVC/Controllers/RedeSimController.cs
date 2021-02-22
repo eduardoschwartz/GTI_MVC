@@ -28,10 +28,11 @@ namespace GTI_MVC.Controllers {
         public ActionResult UploadFiles(RedesimImportViewModel model) {
             List<RedesimImportFilesViewModel> Lista_Files = new List<RedesimImportFilesViewModel>();
             int _id = 1;
-            string _msg = "",_tipo="",_guid="";
+            string _msg = "",_tipo="",_guid="",_tipoSigla="";
             bool _ok=false;
             var fileName = "";
             List<Redesim_RegistroStruct> _listaRegistro = new List<Redesim_RegistroStruct>();
+            List<Redesim_ViabilidadeStuct> _listaViabilidade = new List<Redesim_ViabilidadeStuct>();
             Redesim_bll redesimRepository = new Redesim_bll("GTIconnection");
             foreach (var file in model.Files) {
                 if (file == null) {
@@ -75,6 +76,7 @@ namespace GTI_MVC.Controllers {
                         }
 
                         if (_bRegistro) {
+                            //#### INCLUIR ARQUIVO DE REGISTRO #######
                             _listaRegistro = Read_Registro(path);
                             int _pos = 0;
                             foreach (Redesim_RegistroStruct item in _listaRegistro) {
@@ -95,19 +97,48 @@ namespace GTI_MVC.Controllers {
                                     Exception ex = redesimRepository.Incluir_Registro(reg);
                                 }
                                 _listaRegistro[_pos].Duplicado = _existe;
+                                _listaRegistro[_pos].Arquivo = _guid;
                                 _pos++;
                             }
+                            model.ListaRegistro = _listaRegistro;
                             _ok = true;
+                            _tipoSigla = "R";
                         }
 
-                    //#################################
+
+                        if (_bViabilidade) {
+                            //#### INCLUIR ARQUIVO DE VIABILIDADE #######
+                            _listaViabilidade = Read_Viabilidade(path);
+                            int _pos = 0;
+                            foreach (Redesim_ViabilidadeStuct item in _listaViabilidade) {
+                                bool _existe = redesimRepository.Existe_Viabilidade(item.Protocolo);
+                                if (!_existe) {
+                                    Redesim_Viabilidade reg = new Redesim_Viabilidade() {
+                                        Protocolo = item.Protocolo,
+                                        Cnpj = item.Cnpj,
+                                        Razao_Social = item.RazaoSocial
+                                    };
+//                                    Exception ex = redesimRepository.Incluir_Registro(reg);
+                                }
+                                _listaViabilidade[_pos].Duplicado = _existe;
+                                _listaViabilidade[_pos].Arquivo = _guid;
+                                _pos++;
+                            }
+                            model.ListaViabilidade = _listaViabilidade;
+                            _ok = true;
+                            _tipoSigla = "V";
+                        }
+
+
+
                         if (_ok) {
                             Redesim_arquivo reg = new Redesim_arquivo() {
                                 Guid = _guid,
-                                Tipo = "R"
+                                Tipo = _tipoSigla
                             };
                             Exception ex = redesimRepository.Incluir_Arquivo(reg);
                         }
+                        //#####FIM ARQUIVO DE REGISTRO  #######
                     } else {
                         _ok = false;
                         _msg = "Arquivo inválido";
@@ -223,6 +254,29 @@ namespace GTI_MVC.Controllers {
                 _linha++;
             }
             return _listaRegistro;
+        }
+
+        private List<Redesim_ViabilidadeStuct> Read_Viabilidade(string _path) {
+            int _linha = 1;
+            List<Redesim_ViabilidadeStuct> _listaViabilidade = new List<Redesim_ViabilidadeStuct>();
+            StreamReader reader = new StreamReader(@_path, Encoding.Default);
+            while (!reader.EndOfStream) {
+                string line = reader.ReadLine();
+                if (!string.IsNullOrWhiteSpace(line)) {
+                    if (_linha > 1) {
+                        string[] values = line.Split(';');
+                        Redesim_ViabilidadeStuct _linhaReg;
+                            _linhaReg = new Redesim_ViabilidadeStuct() {
+                                Protocolo = values[0],
+                                Cnpj = values[1],
+                                Evento = values[2].Split(',')
+                            };
+                        _listaViabilidade.Add(_linhaReg);
+                    }
+                }
+                _linha++;
+            }
+            return _listaViabilidade;
         }
 
 
