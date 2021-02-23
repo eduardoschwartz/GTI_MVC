@@ -49,5 +49,20 @@ namespace GTI_Bll.Classes {
             return obj.Incluir_Natureza_Juridica(Name);
         }
 
+        public List<Redesim_evento> Lista_Evento() {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            return obj.Lista_Evento();
+        }
+
+        public int Incluir_Evento(string Name) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            return obj.Incluir_Evento(Name);
+        }
+
+        public void Incluir_Registro_Evento(string Protocolo, int[] ListaEvento) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            obj.Incluir_Registro_Evento(Protocolo, ListaEvento);
+        }
+
     }
 }

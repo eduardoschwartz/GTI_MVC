@@ -1723,17 +1723,17 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public Exception Incluir_redeSim_Viabilidade(Redesim_Viabilidade reg) {
-            using (GTI_Context db = new GTI_Context(_connection)) {
-                try {
-                    db.Redesim_Viabilidade.Add(reg);
-                    db.SaveChanges();
-                } catch (Exception ex) {
-                    return ex;
-                }
-                return null;
-            }
-        }
+        //public Exception Incluir_redeSim_Viabilidade(Redesim_Viabilidade reg) {
+        //    using (GTI_Context db = new GTI_Context(_connection)) {
+        //        try {
+        //            db.Redesim_Viabilidade.Add(reg);
+        //            db.SaveChanges();
+        //        } catch (Exception ex) {
+        //            return ex;
+        //        }
+        //        return null;
+        //    }
+        //}
 
     }
 }

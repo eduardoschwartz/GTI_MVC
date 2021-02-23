@@ -19,6 +19,7 @@ namespace GTI_Models.Models {
         public string Protocolo { get; set; }
         public string Cnpj { get; set; }
         public string[] Evento { get; set; }
+        public int[] EventoCodigo { get; set; }
         public string NomeEmpresarial { get; set; }
         public string MatrizFilial { get; set; }
         public string DataAberturaEstabelecimento { get; set; }

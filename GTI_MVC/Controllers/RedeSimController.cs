@@ -135,6 +135,8 @@ namespace GTI_MVC.Controllers {
             int _linha = 1;
             Redesim_bll redesimRepository = new Redesim_bll("GTIconnection");
             List<Redesim_natureza_juridica> _listaNatJuridica = redesimRepository.Lista_Natureza_Juridica();
+            List<Redesim_evento> _listaEvento = redesimRepository.Lista_Evento();
+
             List<Redesim_RegistroStruct> _listaRegistro = new List<Redesim_RegistroStruct>();
             StreamReader reader = new StreamReader(@_path, Encoding.Default);
             while (!reader.EndOfStream) {
@@ -229,6 +231,27 @@ namespace GTI_MVC.Controllers {
                             _listaNatJuridica.Add(new Redesim_natureza_juridica() { Codigo = _codigo, Nome = _linhaReg.NaturezaJuridica });
                         }
                         _linhaReg.NaturezaJuridicaCodigo = _codigo;
+
+
+                        _codigo = 0;
+                        int[] _listaCod = new int[_linhaReg.Evento.Length];
+                        int _indexEvento = 0;
+                        foreach (string ev in _linhaReg.Evento) {
+                            foreach (Redesim_evento item in _listaEvento) {
+                                if (item.Nome == ev) {
+                                    _codigo = item.Codigo;
+                                    break;
+                                }
+                            }
+                            if (_codigo == 0) {
+                                _codigo = redesimRepository.Incluir_Evento(ev);
+                                _listaEvento.Add(new Redesim_evento() { Codigo = _codigo, Nome = ev });
+                            }
+                            _listaCod[_indexEvento]=_codigo;
+                            _indexEvento++;
+                        }
+                        _linhaReg.EventoCodigo= _listaCod;
+                        redesimRepository.Incluir_Registro_Evento(_linhaReg.Protocolo, _listaCod);
                         _listaRegistro.Add(_linhaReg);
                     }
                 }

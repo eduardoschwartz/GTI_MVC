@@ -114,17 +114,17 @@ namespace GTI_Dal.Classes {
 
         public List<Redesim_natureza_juridica> Lista_Natureza_Juridica() {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from c in db.redesim_Natureza_Juridica select c);
+                var Sql = (from c in db.Redesim_Natureza_Juridica select c);
                 return Sql.ToList();
             }
         }
 
         public int Incluir_Natureza_Juridica(string Name) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                int cntCod = (from c in db.redesim_Natureza_Juridica select c).Count();
+                int cntCod = (from c in db.Redesim_Natureza_Juridica select c).Count();
                 int maxCod = 1;
                 if (cntCod > 0)
-                    maxCod = (from c in db.redesim_Natureza_Juridica select c.Codigo).Max() + 1;
+                    maxCod = (from c in db.Redesim_Natureza_Juridica select c.Codigo).Max() + 1;
 
                 try {
                     db.Database.ExecuteSqlCommand("INSERT redesim_natureza_juridica(codigo,nome) values(@codigo,@nome)",
@@ -136,5 +136,46 @@ namespace GTI_Dal.Classes {
                 return maxCod;
             }
         }
+
+        public List<Redesim_evento> Lista_Evento() {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from c in db.Redesim_Evento select c);
+                return Sql.ToList();
+            }
+        }
+
+        public int Incluir_Evento(string Name) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                int cntCod = (from c in db.Redesim_Evento select c).Count();
+                int maxCod = 1;
+                if (cntCod > 0)
+                    maxCod = (from c in db.Redesim_Evento select c.Codigo).Max() + 1;
+
+                try {
+                    db.Database.ExecuteSqlCommand("INSERT redesim_evento(codigo,nome) values(@codigo,@nome)",
+                        new SqlParameter("@codigo", maxCod), new SqlParameter("@nome", Name));
+                } catch (Exception ex) {
+                    throw ex;
+                }
+
+                return maxCod;
+            }
+        }
+
+        public void Incluir_Registro_Evento(string Protocolo, int[] ListaEvento) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+
+                foreach (int item in ListaEvento) {
+                    try {
+                        db.Database.ExecuteSqlCommand("INSERT redesim_registro_evento(protocolo,evento) values(@protocolo,@evento)",
+                            new SqlParameter("@protocolo", Protocolo), new SqlParameter("@evento", item));
+                    } catch  {
+
+                    }
+                }
+            }
+        }
+
+
     }
 }

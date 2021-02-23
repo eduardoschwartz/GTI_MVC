@@ -926,6 +926,12 @@ namespace GTI_Mvc.Controllers {
                 };
                 model.Add(item);
             }
+            if (Lista.Count == 0) {
+                ItbiViewModel item = new ItbiViewModel() {
+                    Ano_Selected = DateTime.Now.Year.ToString()
+                };
+                model.Add(item);
+            }
             ViewBag.Erro = e;
             return View(model);
         }

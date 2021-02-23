@@ -105,6 +105,7 @@
                         </thead>
                         <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
                             @foreach (var item in Model) {
+                                if (item.Guid != null) {
                                 <tr style="height:14px;">
                                     <td style="display:none">@Html.DisplayFor(modelItem => item.Guid)</td>
                                     <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.Itbi_NumeroAno)</td>
@@ -116,21 +117,22 @@
                                         @if (item.Tipo_Imovel == "Urbano") {
                                             <a href="@Url.Action("Itbi_urbano_q", "Itbi", new { p = item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
                                         } else {
-                                            <a href="@Url.Action("Itbi_rural_q","Itbi",new {p=item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                                            <a href="@Url.Action("Itbi_rural_q", "Itbi", new { p = item.Guid })" title="Visualizar ITBI"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
                                         }
-                                        <a href="@Url.Action("Itbi_print","Itbi", new { p = item.Guid,u=item.Tipo_Imovel=="Urbano" })" title="Imprimir a declaração do ITBI"> <img src="@Url.Content("~/images/print.png")"></a>
+                                        <a href="@Url.Action("Itbi_print", "Itbi", new { p = item.Guid, u = item.Tipo_Imovel == "Urbano" })" title="Imprimir a declaração do ITBI"> <img src="@Url.Content("~/images/print.png")"></a>
                                         @if (item.Tipo_Imovel == "Urbano") {
-                                            <a href="@Url.Action("Itbi_urbano_e","Itbi", new { p = item.Guid } )" title="Alterar este ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>
+                                            <a href="@Url.Action("Itbi_urbano_e", "Itbi", new { p = item.Guid })" title="Alterar este ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>
                                         } else {
-                                            <a href="@Url.Action("Itbi_rural_e","Itbi", new { p = item.Guid } )" title="Alterar este ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>
+                                            <a href="@Url.Action("Itbi_rural_e", "Itbi", new { p = item.Guid })" title="Alterar este ITBI"> <img src="@Url.Content("~/images/alterar.gif")"></a>
                                         }
                                         <a href="@Url.Action("Itbi_cancel", "Itbi", new { p = item.Guid, s = 4 })" onclick="return confirm('Cancelar este Itbi?')" })" title="Cancelar este ITBI"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
-                                        <a href="@Url.Action("Itbi_forum","Itbi" , new { p = item.Guid } )" title="Processo de análise do ITBI"> <img src="@Url.Content("~/images/observacao.png")"></a>
+                                        <a href="@Url.Action("Itbi_forum", "Itbi", new { p = item.Guid })" title="Processo de análise do ITBI"> <img src="@Url.Content("~/images/observacao.png")"></a>
                                         @if (item.Situacao_Itbi_codigo == 2) {
                                             <a href="@Url.Action("Itbi_guia", "Itbi", new { p = item.Guid })" onclick="return confirm('Boletos liberados até as 16:30h podem ser quitados a partir do dia seguinte de sua liberação, após às 16:30h será necessário mais um dia útil para o registro. Você deseja emitir o boleto?')" })" title="Emitir guia para pagamento"> <img src="@Url.Content("~/images/barcode.gif")"></a>
                                         }
                                     </td>
                                 </tr>
+                                }
                             }
                         </tbody>
                     </table>

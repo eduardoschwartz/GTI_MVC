@@ -54,9 +54,6 @@ namespace GTI_Models.Models {
         public bool Duplicado { get; set; }
     }
 
-    public class Redesim_evento {
-        public int Codigo { get; set; }
-        public string Nome { get; set; }
-    }
+   
 
 }
