@@ -10,6 +10,8 @@ namespace GTI_Models.Models {
         public int Numero { get; set; }
         public string Complemento { get; set; }
         public string Cep { get; set; }
+        public string MatrizFilial { get; set; }
+        public int Natureza_Juridica { get; set; }
     }
 
     public class Redesim_RegistroStruct {
@@ -30,6 +32,7 @@ namespace GTI_Models.Models {
         public string Referencia { get; set; }
         public string EmpresaEstabelecida { get; set; }
         public string NaturezaJuridica { get; set; }
+        public int NaturezaJuridicaCodigo { get; set; }
         public string OrgaoRegistro { get; set; }
         public string NumeroOrgaoRegistro { get; set; }
         public string CapitalSocial { get; set; }

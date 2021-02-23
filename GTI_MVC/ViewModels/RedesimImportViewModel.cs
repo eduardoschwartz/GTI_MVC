@@ -7,18 +7,16 @@ namespace GTI_Mvc.ViewModels {
     public class RedesimImportViewModel {
         public IEnumerable<HttpPostedFileBase> Files { get; set; }
         public List<RedesimImportFilesViewModel> ListaArquivo { get; set; }
-        public List<Redesim_RegistroStruct> ListaRegistro { get; set; }
-        public List<Redesim_ViabilidadeStuct> ListaViabilidade { get; set; }
     }
 
     public class RedesimImportFilesViewModel {
         public string Guid { get; set; }
         public string NomeArquivo { get; set; }
-        public DateTime PeriodoDe { get; set; }
-        public DateTime PeriodoAte { get; set; }
         public string Tipo { get; set; }
         public bool Valido { get; set; }
         public string Mensagem { get; set; }
+        public List<Redesim_RegistroStruct> ListaRegistro { get; set; }
+        public List<Redesim_ViabilidadeStuct> ListaViabilidade { get; set; }
     }
 
 }

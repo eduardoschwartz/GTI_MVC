@@ -1,6 +1,7 @@
 ﻿using GTI_Dal.Classes;
 using GTI_Models.Models;
 using System;
+using System.Collections.Generic;
 
 namespace GTI_Bll.Classes {
     public class Redesim_bll {
@@ -36,6 +37,16 @@ namespace GTI_Bll.Classes {
         public bool Existe_Viabilidade(string Processo) {
             Redesim_Data obj = new Redesim_Data(_connection);
             return obj.Existe_Viabilidade(Processo);
+        }
+
+        public List<Redesim_natureza_juridica> Lista_Natureza_Juridica() {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            return obj.Lista_Natureza_Juridica();
+        }
+
+        public int Incluir_Natureza_Juridica(string Name) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            return obj.Incluir_Natureza_Juridica(Name);
         }
 
     }

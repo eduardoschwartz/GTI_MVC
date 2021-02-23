@@ -709,8 +709,9 @@ namespace GTI_Mvc.Controllers {
             if (model.Inscricao != null) {
                 _codigo = Convert.ToInt32(model.Inscricao);
                 if (_codigo == 125256 || _codigo == 122881 || _codigo == 122555 || _codigo == 124682 || _codigo == 114560 || _codigo == 116919 || _codigo == 121114 || _codigo == 120576 || 
-                    _codigo == 121081 || _codigo == 120580 || _codigo == 120597 || _codigo == 120616 || _codigo == 120699 || _codigo == 120659 || _codigo == 120582 || _codigo ==  120827 || _codigo == 120734 || _codigo == 118835 || _codigo == 118225) { 
-                    certidaoViewModel.ErrorMessage = "Empresa não pode emitir renovação de alvará.";
+                    _codigo == 121081 || _codigo == 120580 || _codigo == 120597 || _codigo == 120616 || _codigo == 120699 || _codigo == 120659 || _codigo == 120582 || _codigo ==  120827 || 
+                    _codigo == 120734 || _codigo == 118835 || _codigo == 118225 || _codigo == 126742 || _codigo == 112471) { 
+                    certidaoViewModel.ErrorMessage = "Esta empresa não pode emitir renovação de alvará.";
                     return View(certidaoViewModel);
                 }
                 if (_codigo >= 100000 && _codigo < 210000) //Se estiver fora deste intervalo nem precisa checar se a empresa existe

@@ -10,8 +10,7 @@ using System.Web.Mvc;
 using GTI_Mvc;
 
 namespace GTI_MVC.Controllers {
-    public class RedeSimController : Controller
-    {
+    public class RedeSimController : Controller {
 
         [Route("UploadFiles")]
         [HttpGet]
@@ -27,14 +26,18 @@ namespace GTI_MVC.Controllers {
         [HttpPost]
         public ActionResult UploadFiles(RedesimImportViewModel model) {
             List<RedesimImportFilesViewModel> Lista_Files = new List<RedesimImportFilesViewModel>();
-            int _id = 1;
-            string _msg = "",_tipo="",_guid="",_tipoSigla="";
-            bool _ok=false;
+            int _id = 0;
+            string _msg = "", _tipo = "", _guid = "", _tipoSigla = "";
+            bool _ok = false;
             var fileName = "";
-            List<Redesim_RegistroStruct> _listaRegistro = new List<Redesim_RegistroStruct>();
-            List<Redesim_ViabilidadeStuct> _listaViabilidade = new List<Redesim_ViabilidadeStuct>();
+            if (model.ListaArquivo == null) model.ListaArquivo = new List<RedesimImportFilesViewModel>();
+
             Redesim_bll redesimRepository = new Redesim_bll("GTIconnection");
+            
+
             foreach (var file in model.Files) {
+                List<Redesim_RegistroStruct> _listaRegistro = new List<Redesim_RegistroStruct>();
+                List<Redesim_ViabilidadeStuct> _listaViabilidade = new List<Redesim_ViabilidadeStuct>();
                 if (file == null) {
                     goto Fim;
                 }
@@ -44,7 +47,7 @@ namespace GTI_MVC.Controllers {
 
                         _guid = Guid.NewGuid().ToString("N");
                         string _path = "~/Files/Redesim/";
-                        var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path ), _guid);
+                        var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path), _guid);
                         file.SaveAs(path);
 
                         //###Verifica tipo de arquivo####
@@ -74,81 +77,23 @@ namespace GTI_MVC.Controllers {
                             _msg = "Arquivo inválido";
                             goto ProximoArquivo;
                         }
-
+                        _listaRegistro.Clear();
+                        _listaViabilidade.Clear();
+                        //Lê Registro
                         if (_bRegistro) {
-                            //#### INCLUIR ARQUIVO DE REGISTRO #######
                             _listaRegistro = Read_Registro(path);
-                            int _pos = 0;
-                            foreach (Redesim_RegistroStruct item in _listaRegistro) {
-                                bool _existe = redesimRepository.Existe_Registro(item.Protocolo);
-                                if (!_existe) {
-                                    Redesim_Registro reg = new Redesim_Registro() {
-                                        Protocolo = item.Protocolo,
-                                        Arquivo = _guid,
-                                        Cnpj = item.Cnpj,
-                                        Razao_Social = item.NomeEmpresarial,
-                                        Cep = item.Cep,
-                                        Complemento = item.Complementos
-                                    };
-                                    if (Functions.RetornaNumero(item.Numero) == "")
-                                        reg.Numero = 0;
-                                    else
-                                        reg.Numero = Convert.ToInt32(item.Numero);
-                                    Exception ex = redesimRepository.Incluir_Registro(reg);
-                                }
-                                _listaRegistro[_pos].Duplicado = _existe;
-                                _listaRegistro[_pos].Arquivo = _guid;
-                                _pos++;
-                            }
-                            model.ListaRegistro = _listaRegistro;
+                            _listaRegistro = Insert_Registro(_listaRegistro, _guid);
                             _ok = true;
                             _tipoSigla = "R";
                         }
 
-
+                        //Lê Viabilidade
                         if (_bViabilidade) {
-                            //#### INCLUIR ARQUIVO DE VIABILIDADE #######
                             _listaViabilidade = Read_Viabilidade(path);
-                            int _pos = 0;
-                            foreach (Redesim_ViabilidadeStuct item in _listaViabilidade) {
-                                bool _existe = redesimRepository.Existe_Viabilidade(item.Protocolo);
-                                if (!_existe) {
-                                    Redesim_Viabilidade reg = new Redesim_Viabilidade() {
-                                        Arquivo = _guid,
-                                        Protocolo = item.Protocolo,
-                                        Cnpj = item.Cnpj,
-                                        Razao_Social = item.RazaoSocial,
-                                        Analise = item.Analise,
-                                        Nire = item.Nire.Trim(),
-                                        EmpresaEstabelecida = item.EmpresaEstabelecida == "Sim" ? true : false,
-                                        DataProtocolo = Convert.ToDateTime(item.DataProtocolo),
-                                        Cep = item.Cep,
-                                        Complemento = item.Complemento,
-                                        TipoUnidade = item.TipoUnidade,
-                                        AreaImovel = Convert.ToDecimal(item.AreaImovel),
-                                        AreaEstabelecimento = Convert.ToDecimal(item.AreaEstabelecimento)
-                                    };
-                                    if (Functions.RetornaNumero(item.Numero) == "")
-                                        reg.Numero = 0;
-                                    else
-                                        reg.Numero = Convert.ToInt32(item.Numero);
-                                    string _num = Functions.RetornaNumero(item.NumeroInscricaoImovel);
-                                    if (_num == "" || item.TipoInscricaoImovel.Trim()!= "Número IPTU")
-                                        reg.NumeroInscricaoImovel = 0;
-                                    else
-                                        reg.NumeroInscricaoImovel = Convert.ToInt32(_num);
-                                    Exception ex = redesimRepository.Incluir_Viabilidade(reg);
-                                }
-                                _listaViabilidade[_pos].Duplicado = _existe;
-                                _listaViabilidade[_pos].Arquivo = _guid;
-                                _pos++;
-                            }
-                            model.ListaViabilidade = _listaViabilidade;
+                            _listaViabilidade = Insert_Viabilidade(_listaViabilidade, _guid);
                             _ok = true;
                             _tipoSigla = "V";
                         }
-
-
 
                         if (_ok) {
                             Redesim_arquivo reg = new Redesim_arquivo() {
@@ -156,6 +101,7 @@ namespace GTI_MVC.Controllers {
                                 Tipo = _tipoSigla
                             };
                             Exception ex = redesimRepository.Incluir_Arquivo(reg);
+                            _msg = "Arquivo importado";
                         }
                         //#####FIM ARQUIVO DE REGISTRO  #######
                     } else {
@@ -173,13 +119,13 @@ namespace GTI_MVC.Controllers {
                     Mensagem = _msg,
                     Valido = _ok,
                     Tipo = _tipo,
+                    ListaRegistro = _listaRegistro,
+                    ListaViabilidade = _listaViabilidade
                 };
                 Lista_Files.Add(_reg);
                 _id++;
             }
         Fim:
-            if (model.ListaRegistro == null)  model.ListaRegistro = new List<Redesim_RegistroStruct>();
-            if (model.ListaViabilidade == null) model.ListaViabilidade = new List<Redesim_ViabilidadeStuct>();
             model.ListaArquivo = Lista_Files;
             return View(model);
         }
@@ -187,6 +133,8 @@ namespace GTI_MVC.Controllers {
 
         private List<Redesim_RegistroStruct> Read_Registro(string _path) {
             int _linha = 1;
+            Redesim_bll redesimRepository = new Redesim_bll("GTIconnection");
+            List<Redesim_natureza_juridica> _listaNatJuridica = redesimRepository.Lista_Natureza_Juridica();
             List<Redesim_RegistroStruct> _listaRegistro = new List<Redesim_RegistroStruct>();
             StreamReader reader = new StreamReader(@_path, Encoding.Default);
             while (!reader.EndOfStream) {
@@ -269,6 +217,18 @@ namespace GTI_MVC.Controllers {
                                 NomeRepresentante = values[33]
                             };
                         }
+                        int _codigo = 0;
+                        foreach (Redesim_natureza_juridica item in _listaNatJuridica) {
+                            if (item.Nome == _linhaReg.NaturezaJuridica) {
+                                _codigo = item.Codigo;
+                                break;
+                            }
+                        }
+                        if (_codigo == 0) {
+                            _codigo = redesimRepository.Incluir_Natureza_Juridica( _linhaReg.NaturezaJuridica );
+                            _listaNatJuridica.Add(new Redesim_natureza_juridica() { Codigo = _codigo, Nome = _linhaReg.NaturezaJuridica });
+                        }
+                        _linhaReg.NaturezaJuridicaCodigo = _codigo;
                         _listaRegistro.Add(_linhaReg);
                     }
                 }
@@ -287,36 +247,36 @@ namespace GTI_MVC.Controllers {
                     if (_linha > 1) {
                         string[] values = line.Split(';');
                         Redesim_ViabilidadeStuct _linhaReg;
-                            _linhaReg = new Redesim_ViabilidadeStuct() {
-                                Protocolo = values[0],
-                                Analise = values[1],
-                                Nire = values[2],
-                                Cnpj=values[3],
-                                EmpresaEstabelecida=values[4],
-                                Cnae=values[5].Split(','),
-                                AtividadeAuxiliar=values[6],
-                                DataProtocolo=values[7],
-                                DataResultadoAnalise=values[8],
-                                DataResultadoViabilidade=values[9],
-                                TempoAndamento=values[10],
-                                cdEvento=values[11].Split(','),
-                                Evento = values[12].Split(','),
-                                Cep=values[13],
-                                TipoInscricaoImovel=values[14],
-                                NumeroInscricaoImovel=values[15],
-                                TipoLogradouro=values[16],
-                                Logradouro=values[17],
-                                Numero=values[18],
-                                Bairro=values[19],
-                                Complemento=values[20],
-                                TipoUnidade=values[21],
-                                FormaAtuacao=values[22],
-                                Municipio=values[23],
-                                RazaoSocial=values[24],
-                                Orgao=values[25],
-                                AreaImovel=values[26],
-                                AreaEstabelecimento=values[27]
-                            };
+                        _linhaReg = new Redesim_ViabilidadeStuct() {
+                            Protocolo = values[0],
+                            Analise = values[1],
+                            Nire = values[2],
+                            Cnpj = values[3],
+                            EmpresaEstabelecida = values[4],
+                            Cnae = values[5].Split(','),
+                            AtividadeAuxiliar = values[6],
+                            DataProtocolo = values[7],
+                            DataResultadoAnalise = values[8],
+                            DataResultadoViabilidade = values[9],
+                            TempoAndamento = values[10],
+                            cdEvento = values[11].Split(','),
+                            Evento = values[12].Split(','),
+                            Cep = values[13],
+                            TipoInscricaoImovel = values[14],
+                            NumeroInscricaoImovel = values[15],
+                            TipoLogradouro = values[16],
+                            Logradouro = values[17],
+                            Numero = values[18],
+                            Bairro = values[19],
+                            Complemento = values[20],
+                            TipoUnidade = values[21],
+                            FormaAtuacao = values[22],
+                            Municipio = values[23],
+                            RazaoSocial = values[24],
+                            Orgao = values[25],
+                            AreaImovel = values[26],
+                            AreaEstabelecimento = values[27]
+                        };
                         _listaViabilidade.Add(_linhaReg);
                     }
                 }
@@ -325,7 +285,73 @@ namespace GTI_MVC.Controllers {
             return _listaViabilidade;
         }
 
+        private List<Redesim_RegistroStruct> Insert_Registro(List<Redesim_RegistroStruct> _listaRegistro, string _guid) {
+            Redesim_bll redesimRepository = new Redesim_bll("GTIconnection");
+            int _pos = 0;
+            foreach (Redesim_RegistroStruct item in _listaRegistro) {
+                bool _existe = redesimRepository.Existe_Registro(item.Protocolo);
+                if (!_existe) {
+                    Redesim_Registro reg = new Redesim_Registro() {
+                        Protocolo = item.Protocolo,
+                        Arquivo = _guid,
+                        Cnpj = item.Cnpj,
+                        Razao_Social = item.NomeEmpresarial.ToUpper(),
+                        Cep = item.Cep,
+                        Complemento = item.Complementos,
+                        MatrizFilial = item.MatrizFilial,
+                        Natureza_Juridica = item.NaturezaJuridicaCodigo
+                    };
+                    if (Functions.RetornaNumero(item.Numero) == "")
+                        reg.Numero = 0;
+                    else
+                        reg.Numero = Convert.ToInt32(item.Numero);
+                    Exception ex = redesimRepository.Incluir_Registro(reg);
+                }
+                _listaRegistro[_pos].Duplicado = _existe;
+                _listaRegistro[_pos].Arquivo = _guid;
+                _pos++;
+            }
+            return _listaRegistro;
+        }
 
+        private List<Redesim_ViabilidadeStuct> Insert_Viabilidade(List<Redesim_ViabilidadeStuct> _listaViabilidade, string _guid) {
+            Redesim_bll redesimRepository = new Redesim_bll("GTIconnection");
+            int _pos = 0;
+            foreach (Redesim_ViabilidadeStuct item in _listaViabilidade) {
+                bool _existe = redesimRepository.Existe_Viabilidade(item.Protocolo);
+                if (!_existe) {
+                    Redesim_Viabilidade reg = new Redesim_Viabilidade() {
+                        Arquivo = _guid,
+                        Protocolo = item.Protocolo,
+                        Cnpj = item.Cnpj,
+                        Razao_Social = item.RazaoSocial.ToUpper(),
+                        Analise = item.Analise,
+                        Nire = item.Nire.Trim(),
+                        EmpresaEstabelecida = item.EmpresaEstabelecida == "Sim" ? true : false,
+                        DataProtocolo = Convert.ToDateTime(item.DataProtocolo),
+                        Cep = item.Cep,
+                        Complemento = item.Complemento,
+                        TipoUnidade = item.TipoUnidade,
+                        AreaImovel = Convert.ToDecimal(item.AreaImovel),
+                        AreaEstabelecimento = Convert.ToDecimal(item.AreaEstabelecimento)
+                    };
+                    if (Functions.RetornaNumero(item.Numero) == "")
+                        reg.Numero = 0;
+                    else
+                        reg.Numero = Convert.ToInt32(item.Numero);
+                    string _num = Functions.RetornaNumero(item.NumeroInscricaoImovel);
+                    if (_num == "" || item.TipoInscricaoImovel.Trim() != "Número IPTU")
+                        reg.NumeroInscricaoImovel = 0;
+                    else
+                        reg.NumeroInscricaoImovel = Convert.ToInt32(_num);
+                    Exception ex = redesimRepository.Incluir_Viabilidade(reg);
+                }
+                _listaViabilidade[_pos].Duplicado = _existe;
+                _listaViabilidade[_pos].Arquivo = _guid;
+                _pos++;
+            }
+            return _listaViabilidade;
 
+        }
     }
 }

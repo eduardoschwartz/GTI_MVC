@@ -75,7 +75,7 @@
             <div class="card">
                 <div class="card-header">RedeSim - Importação de arquivos</div>
                 <div class="card-body">
-                    <input type="file" name="files" id="files" multiple="multiple" /><br /><br />
+                    <input type="file" name="files" id="files" multiple="multiple" accept=".csv"/><br /><br />
                     <div><button type="submit" class="btn btn-info">Enviar</button><br /><br /></div>
                     @if (Model.ListaArquivo.Count > 0) {
                         foreach (GTI_Mvc.ViewModels.RedesimImportFilesViewModel arq in Model.ListaArquivo) {
@@ -105,9 +105,10 @@
                             </table>
                             <br />
 
-                            if (Model.ListaRegistro.Count > 0) {
+                            if (arq.ListaRegistro.Count > 0) {
+
                                 <table style="font-size:13px;width:710px">
-                                    <thead style="background-color:darkred;color:whitesmoke">
+                                    <thead style="background-color:darkcyan;color:whitesmoke">
                                         <tr style="height:10px">
                                             <td style="width:120px;text-align:left">protocolo</td>
                                             <td style="width:300px;text-align:left">Razão Social</td>
@@ -115,36 +116,34 @@
                                             <td style="width:120px;text-align:left">Status</td>
                                         </tr>
                                     </thead>
-                                    @foreach (GTI_Models.Models.Redesim_RegistroStruct reg in Model.ListaRegistro) {
-                                        if (reg.Arquivo == arq.Guid) {
-                                            @Html.Raw(" <tr>")
-                                            @Html.Raw("<td style=" + "width:120px;text-align:left" + " >")
-                                            @reg.Protocolo
+                                    @foreach (GTI_Models.Models.Redesim_RegistroStruct reg in arq.ListaRegistro) {
+                                        @Html.Raw(" <tr>")
+                                        @Html.Raw("<td style=" + "width:120px;text-align:left" + " >")
+                                        @reg.Protocolo
+                                        @Html.Raw("</td>")
+                                        @Html.Raw(" <td style=" + "width:300px;text-align:left" + " >")
+                                        @Functions.TruncateTo(reg.NomeEmpresarial, 35)
+                                        @Html.Raw("</td>")
+                                        @Html.Raw(" <td style=" + "width:120px;text-align:left" + " >")
+                                        @Functions.FormatarCpfCnpj(reg.Cnpj)
+                                        @Html.Raw("</td>")
+                                        if (reg.Duplicado) {
+                                            @Html.Raw(" <td style=" + "width:120px;text-align:left;color:red" + " >")
+                                            @Html.Raw("Duplicado")
                                             @Html.Raw("</td>")
-                                            @Html.Raw(" <td style=" + "width:300px;text-align:left" + " >")
-                                            @Functions.TruncateTo(reg.NomeEmpresarial, 35)
+                                        } else {
+                                            @Html.Raw(" <td style=" + "width:120px;text-align:left;color:darkgreen" + " >")
+                                            @Html.Raw("importado")
                                             @Html.Raw("</td>")
-                                            @Html.Raw(" <td style=" + "width:120px;text-align:left" + " >")
-                                            @Functions.FormatarCpfCnpj(reg.Cnpj)
-                                            @Html.Raw("</td>")
-                                            if (reg.Duplicado) {
-                                                @Html.Raw(" <td style=" + "width:120px;text-align:left;color:red" + " >")
-                                                @Html.Raw("Duplicado")
-                                                @Html.Raw("</td>")
-                                            } else {
-                                                @Html.Raw(" <td style=" + "width:120px;text-align:left;color:darkgreen" + " >")
-                                                @Html.Raw("importado")
-                                                @Html.Raw("</td>")
-                                            }
-                                            @Html.Raw("</tr>")
                                         }
+                                        @Html.Raw("</tr>")
                                     }
                                 </table>
                             }
 
-                            if (Model.ListaViabilidade.Count > 0) {
+                            if (arq.ListaViabilidade.Count > 0) {
                                 <table style="font-size:13px;width:710px">
-                                    <thead style="background-color:darkred;color:whitesmoke">
+                                    <thead style="background-color:darkcyan;color:whitesmoke">
                                         <tr style="height:10px">
                                             <td style="width:120px;text-align:left">protocolo</td>
                                             <td style="width:300px;text-align:left">Razão Social</td>
@@ -152,33 +151,31 @@
                                             <td style="width:120px;text-align:left">Status</td>
                                         </tr>
                                     </thead>
-                                    @foreach (GTI_Models.Models.Redesim_ViabilidadeStuct reg in Model.ListaViabilidade) {
-                                        if (reg.Arquivo == arq.Guid) {
-                                            @Html.Raw(" <tr>")
-                                            @Html.Raw("<td style=" + "width:120px;text-align:left" + " >")
-                                            @reg.Protocolo
+                                    @foreach (GTI_Models.Models.Redesim_ViabilidadeStuct reg in arq.ListaViabilidade) {
+                                        @Html.Raw(" <tr>")
+                                        @Html.Raw("<td style=" + "width:120px;text-align:left" + " >")
+                                        @reg.Protocolo
+                                        @Html.Raw("</td>")
+                                        @Html.Raw(" <td style=" + "width:300px;text-align:left" + " >")
+                                        @Functions.TruncateTo(reg.RazaoSocial, 35)
+                                        @Html.Raw("</td>")
+                                        @Html.Raw(" <td style=" + "width:120px;text-align:left" + " >")
+                                        @Functions.FormatarCpfCnpj(reg.Cnpj)
+                                        @Html.Raw("</td>")
+                                        if (reg.Duplicado) {
+                                            @Html.Raw(" <td style=" + "width:120px;text-align:left;color:red" + " >")
+                                            @Html.Raw("Duplicado")
                                             @Html.Raw("</td>")
-                                            @Html.Raw(" <td style=" + "width:300px;text-align:left" + " >")
-                                            @Functions.TruncateTo(reg.RazaoSocial, 35)
+                                        } else {
+                                            @Html.Raw(" <td style=" + "width:120px;text-align:left;color:darkgreen" + " >")
+                                            @Html.Raw("importado")
                                             @Html.Raw("</td>")
-                                            @Html.Raw(" <td style=" + "width:120px;text-align:left" + " >")
-                                            @Functions.FormatarCpfCnpj(reg.Cnpj)
-                                            @Html.Raw("</td>")
-                                            if (reg.Duplicado) {
-                                                @Html.Raw(" <td style=" + "width:120px;text-align:left;color:red" + " >")
-                                                @Html.Raw("Duplicado")
-                                                @Html.Raw("</td>")
-                                            } else {
-                                                @Html.Raw(" <td style=" + "width:120px;text-align:left;color:darkgreen" + " >")
-                                                @Html.Raw("importado")
-                                                @Html.Raw("</td>")
-                                            }
-                                            @Html.Raw("</tr>")
                                         }
+                                        @Html.Raw("</tr>")
                                     }
                                 </table>
                             }
-
+                            <br />
 
 
                         }
@@ -202,9 +199,5 @@
         $(document).ready(function () {
 
         });
-
-
-
-
     </script>
 }

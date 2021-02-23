@@ -200,6 +200,7 @@
     <Compile Include="Models\proprietario.cs" />
     <Compile Include="Models\certidao_inscricao_extrato.cs" />
     <Compile Include="Models\redesim_arquivo.cs" />
+    <Compile Include="Models\redesim_natureza_juridica.cs" />
     <Compile Include="Models\redesim_registro.cs" />
     <Compile Include="Models\Redesim_Viabilidade.cs" />
     <Compile Include="Models\rodo_empresa.cs" />

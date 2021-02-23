@@ -177,5 +177,6 @@ namespace GTI_Dal {
         public DbSet<Redesim_arquivo> Redesim_Arquivo { get; set; }
         public DbSet<Redesim_Registro> Redesim_Registro { get; set; }
         public DbSet<Redesim_Viabilidade> Redesim_Viabilidade { get; set; }
+        public DbSet<Redesim_natureza_juridica> redesim_Natureza_Juridica { get; set; }
     }
 }
