@@ -12,6 +12,8 @@ namespace GTI_Models.Models {
         public string Cep { get; set; }
         public string MatrizFilial { get; set; }
         public int Natureza_Juridica { get; set; }
+        public int Porte_Empresa { get; set; }
+        public string Cnae_Principal { get; set; }
     }
 
     public class Redesim_RegistroStruct {
@@ -43,11 +45,13 @@ namespace GTI_Models.Models {
         public string TelefoneResponsavel { get; set; }
         public string EmailResponsavel { get; set; }
         public string PorteEmpresa { get; set; }
+        public int PorteEmpresaCodigo { get; set; }
         public string CnaePrincipal { get; set; }
         public string[] CnaeSecundaria { get; set; }
         public string AtividadeAuxiliar { get; set; }
         public string TipoUnidade { get; set; }
         public string[] FormaAtuacao { get; set; }
+        public int[] FormaAtuacaoCodigo { get; set; }
         public string Qsa { get; set; }
         public string CpfRepresentante { get; set; }
         public string NomeRepresentante { get; set; }

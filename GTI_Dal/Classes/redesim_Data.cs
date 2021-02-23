@@ -32,7 +32,7 @@ namespace GTI_Dal.Classes {
 
         public Exception Incluir_Registro(Redesim_Registro reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[9];
+                object[] Parametros = new object[11];
                 Parametros[0] = new SqlParameter { ParameterName = "@protocolo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Protocolo };
                 Parametros[1] = new SqlParameter { ParameterName = "@arquivo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Arquivo };
                 Parametros[2] = new SqlParameter { ParameterName = "@cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnpj };
@@ -45,8 +45,10 @@ namespace GTI_Dal.Classes {
                 Parametros[6] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cep };
                 Parametros[7] = new SqlParameter { ParameterName = "@matrizfilial", SqlDbType = SqlDbType.VarChar, SqlValue = reg.MatrizFilial };
                 Parametros[8] = new SqlParameter { ParameterName = "@natureza_juridica", SqlDbType = SqlDbType.Int, SqlValue = reg.Natureza_Juridica };
-                db.Database.ExecuteSqlCommand("INSERT INTO redesim_registro(protocolo,arquivo,cnpj,razao_social,numero,complemento,cep,matrizfilial,natureza_juridica) " +
-                                              " VALUES(@protocolo,@arquivo,@cnpj,@razao_social,@numero,@complemento,@cep,@matrizfilial,@natureza_juridica)", Parametros);
+                Parametros[9] = new SqlParameter { ParameterName = "@porte_empresa", SqlDbType = SqlDbType.Int, SqlValue = reg.Porte_Empresa };
+                Parametros[10] = new SqlParameter { ParameterName = "@cnae_principal", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnae_Principal };
+                db.Database.ExecuteSqlCommand("INSERT INTO redesim_registro(protocolo,arquivo,cnpj,razao_social,numero,complemento,cep,matrizfilial,natureza_juridica,porte_empresa,cnae_principal) " +
+                                              " VALUES(@protocolo,@arquivo,@cnpj,@razao_social,@numero,@complemento,@cep,@matrizfilial,@natureza_juridica,@porte_empresa,@cnae_principal)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -175,6 +177,70 @@ namespace GTI_Dal.Classes {
                 }
             }
         }
+
+        public List<Redesim_porte_empresa> Lista_Porte_Empresa() {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from c in db.redesim_Porte_Empresa select c);
+                return Sql.ToList();
+            }
+        }
+
+        public int Incluir_Porte_Empresa(string Name) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                int cntCod = (from c in db.redesim_Porte_Empresa select c).Count();
+                int maxCod = 1;
+                if (cntCod > 0)
+                    maxCod = (from c in db.redesim_Porte_Empresa select c.Codigo).Max() + 1;
+                try {
+                    db.Database.ExecuteSqlCommand("INSERT redesim_porte_empresa(codigo,nome) values(@codigo,@nome)",
+                        new SqlParameter("@codigo", maxCod), new SqlParameter("@nome", Name));
+                } catch (Exception ex) {
+                    throw ex;
+                }
+
+                return maxCod;
+            }
+        }
+
+        public List<Redesim_forma_atuacao> Lista_Forma_Atuacao() {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from c in db.redesim_Forma_Atuacao select c);
+                return Sql.ToList();
+            }
+        }
+
+        public int Incluir_Forma_Atuacao(string Name) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                int cntCod = (from c in db.redesim_Forma_Atuacao select c).Count();
+                int maxCod = 1;
+                if (cntCod > 0)
+                    maxCod = (from c in db.redesim_Forma_Atuacao select c.Codigo).Max() + 1;
+
+                try {
+                    db.Database.ExecuteSqlCommand("INSERT redesim_forma_atuacao(codigo,nome) values(@codigo,@nome)",
+                        new SqlParameter("@codigo", maxCod), new SqlParameter("@nome", Name));
+                } catch (Exception ex) {
+                    throw ex;
+                }
+
+                return maxCod;
+            }
+        }
+
+        public void Incluir_Registro_Forma_Atuacao(string Protocolo, int[] ListaForma) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+
+                foreach (int item in ListaForma) {
+                    try {
+                        db.Database.ExecuteSqlCommand("INSERT redesim_registro_forma_atuacao(protocolo,forma_atuacao) values(@protocolo,@forma_atuacao)",
+                            new SqlParameter("@protocolo", Protocolo), new SqlParameter("@forma_atuacao", item));
+                    } catch {
+
+                    }
+                }
+            }
+        }
+
 
 
     }

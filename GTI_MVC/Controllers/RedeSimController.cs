@@ -136,6 +136,8 @@ namespace GTI_MVC.Controllers {
             Redesim_bll redesimRepository = new Redesim_bll("GTIconnection");
             List<Redesim_natureza_juridica> _listaNatJuridica = redesimRepository.Lista_Natureza_Juridica();
             List<Redesim_evento> _listaEvento = redesimRepository.Lista_Evento();
+            List<Redesim_porte_empresa> _listaPorte = redesimRepository.Lista_Porte_Empresa();
+            List<Redesim_forma_atuacao> _listaForma = redesimRepository.Lista_Forma_Atuacao();
 
             List<Redesim_RegistroStruct> _listaRegistro = new List<Redesim_RegistroStruct>();
             StreamReader reader = new StreamReader(@_path, Encoding.Default);
@@ -219,6 +221,8 @@ namespace GTI_MVC.Controllers {
                                 NomeRepresentante = values[33]
                             };
                         }
+
+                        //Natureza Juridica
                         int _codigo = 0;
                         foreach (Redesim_natureza_juridica item in _listaNatJuridica) {
                             if (item.Nome == _linhaReg.NaturezaJuridica) {
@@ -232,7 +236,7 @@ namespace GTI_MVC.Controllers {
                         }
                         _linhaReg.NaturezaJuridicaCodigo = _codigo;
 
-
+                        //Evento
                         _codigo = 0;
                         int[] _listaCod = new int[_linhaReg.Evento.Length];
                         int _indexEvento = 0;
@@ -252,6 +256,42 @@ namespace GTI_MVC.Controllers {
                         }
                         _linhaReg.EventoCodigo= _listaCod;
                         redesimRepository.Incluir_Registro_Evento(_linhaReg.Protocolo, _listaCod);
+
+                        //Porte Empresa
+                        _codigo = 0;
+                        foreach (Redesim_porte_empresa item in _listaPorte) {
+                            if (item.Nome == _linhaReg.PorteEmpresa) {
+                                _codigo = item.Codigo;
+                                break;
+                            }
+                        }
+                        if (_codigo == 0) {
+                            _codigo = redesimRepository.Incluir_Porte_Empresa(_linhaReg.PorteEmpresa);
+                            _listaPorte.Add(new Redesim_porte_empresa() { Codigo = _codigo, Nome = _linhaReg.PorteEmpresa });
+                        }
+                        _linhaReg.PorteEmpresaCodigo = _codigo;
+
+                        //Forma Atuação
+                        _codigo = 0;
+                        int[] _listaFormaCod = new int[_linhaReg.FormaAtuacao.Length];
+                        int _indexForma = 0;
+                        foreach (string ev in _linhaReg.FormaAtuacao) {
+                            foreach (Redesim_forma_atuacao item in _listaForma) {
+                                if (item.Nome == ev) {
+                                    _codigo = item.Codigo;
+                                    break;
+                                }
+                            }
+                            if (_codigo == 0) {
+                                _codigo = redesimRepository.Incluir_Forma_Atuacao(ev);
+                                _listaForma.Add(new Redesim_forma_atuacao() { Codigo = _codigo, Nome = ev });
+                            }
+                            _listaFormaCod[_indexForma] = _codigo;
+                            _indexForma++;
+                        }
+                        _linhaReg.FormaAtuacaoCodigo = _listaFormaCod;
+                        redesimRepository.Incluir_Registro_Forma_Atuacao(_linhaReg.Protocolo, _listaFormaCod);
+
                         _listaRegistro.Add(_linhaReg);
                     }
                 }
@@ -322,7 +362,9 @@ namespace GTI_MVC.Controllers {
                         Cep = item.Cep,
                         Complemento = item.Complementos,
                         MatrizFilial = item.MatrizFilial,
-                        Natureza_Juridica = item.NaturezaJuridicaCodigo
+                        Natureza_Juridica = item.NaturezaJuridicaCodigo,
+                        Porte_Empresa = item.PorteEmpresaCodigo,
+                        Cnae_Principal=item.CnaePrincipal
                     };
                     if (Functions.RetornaNumero(item.Numero) == "")
                         reg.Numero = 0;

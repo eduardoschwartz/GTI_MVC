@@ -64,5 +64,30 @@ namespace GTI_Bll.Classes {
             obj.Incluir_Registro_Evento(Protocolo, ListaEvento);
         }
 
+        public List<Redesim_porte_empresa> Lista_Porte_Empresa() {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            return obj.Lista_Porte_Empresa();
+        }
+
+        public int Incluir_Porte_Empresa(string Name) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            return obj.Incluir_Porte_Empresa(Name);
+        }
+
+        public List<Redesim_forma_atuacao> Lista_Forma_Atuacao() {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            return obj.Lista_Forma_Atuacao();
+        }
+
+        public int Incluir_Forma_Atuacao(string Name) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            return obj.Incluir_Forma_Atuacao(Name);
+        }
+
+        public void Incluir_Registro_Forma_Atuacao(string Protocolo, int[] ListaForma) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            obj.Incluir_Registro_Forma_Atuacao(Protocolo, ListaForma);
+        }
+
     }
 }
