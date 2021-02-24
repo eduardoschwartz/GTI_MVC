@@ -180,17 +180,17 @@ namespace GTI_Dal.Classes {
 
         public List<Redesim_porte_empresa> Lista_Porte_Empresa() {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from c in db.redesim_Porte_Empresa select c);
+                var Sql = (from c in db.Redesim_Porte_Empresa select c);
                 return Sql.ToList();
             }
         }
 
         public int Incluir_Porte_Empresa(string Name) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                int cntCod = (from c in db.redesim_Porte_Empresa select c).Count();
+                int cntCod = (from c in db.Redesim_Porte_Empresa select c).Count();
                 int maxCod = 1;
                 if (cntCod > 0)
-                    maxCod = (from c in db.redesim_Porte_Empresa select c.Codigo).Max() + 1;
+                    maxCod = (from c in db.Redesim_Porte_Empresa select c.Codigo).Max() + 1;
                 try {
                     db.Database.ExecuteSqlCommand("INSERT redesim_porte_empresa(codigo,nome) values(@codigo,@nome)",
                         new SqlParameter("@codigo", maxCod), new SqlParameter("@nome", Name));
@@ -204,17 +204,17 @@ namespace GTI_Dal.Classes {
 
         public List<Redesim_forma_atuacao> Lista_Forma_Atuacao() {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from c in db.redesim_Forma_Atuacao select c);
+                var Sql = (from c in db.Redesim_Forma_Atuacao select c);
                 return Sql.ToList();
             }
         }
 
         public int Incluir_Forma_Atuacao(string Name) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                int cntCod = (from c in db.redesim_Forma_Atuacao select c).Count();
+                int cntCod = (from c in db.Redesim_Forma_Atuacao select c).Count();
                 int maxCod = 1;
                 if (cntCod > 0)
-                    maxCod = (from c in db.redesim_Forma_Atuacao select c.Codigo).Max() + 1;
+                    maxCod = (from c in db.Redesim_Forma_Atuacao select c.Codigo).Max() + 1;
 
                 try {
                     db.Database.ExecuteSqlCommand("INSERT redesim_forma_atuacao(codigo,nome) values(@codigo,@nome)",
@@ -241,6 +241,21 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public void Incluir_Cnae(string Protocolo, string[] ListaCnae) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+
+                foreach (string item in ListaCnae) {
+                    if (item.Trim() != "") {
+                        try {
+                            db.Database.ExecuteSqlCommand("INSERT redesim_cnae(protocolo,cnae) values(@protocolo,@cnae)",
+                                new SqlParameter("@protocolo", Protocolo), new SqlParameter("@cnae", item));
+                        } catch {
+
+                        }
+                    }
+                }
+            }
+        }
 
 
     }

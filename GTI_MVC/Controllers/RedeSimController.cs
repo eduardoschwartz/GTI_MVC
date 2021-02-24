@@ -292,6 +292,18 @@ namespace GTI_MVC.Controllers {
                         _linhaReg.FormaAtuacaoCodigo = _listaFormaCod;
                         redesimRepository.Incluir_Registro_Forma_Atuacao(_linhaReg.Protocolo, _listaFormaCod);
 
+                        //Cnae Secundária
+                        int _size = _linhaReg.CnaeSecundaria.Length;
+                        if (_size > 0) {
+                            string[] _listaCnae = new string[_size];
+                            int _indexCnae = 0;
+                            foreach (string ev in _linhaReg.CnaeSecundaria) {
+                                _listaCnae[_indexCnae] = ev;
+                                _indexCnae++;
+                            }
+                            redesimRepository.Incluir_Cnae(_linhaReg.Protocolo, _listaCnae);
+                        }
+
                         _listaRegistro.Add(_linhaReg);
                     }
                 }

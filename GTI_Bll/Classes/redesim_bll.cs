@@ -89,5 +89,9 @@ namespace GTI_Bll.Classes {
             obj.Incluir_Registro_Forma_Atuacao(Protocolo, ListaForma);
         }
 
+        public void Incluir_Cnae(string Protocolo, string[] ListaCnae) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            obj.Incluir_Cnae(Protocolo, ListaCnae);
+        }
     }
 }

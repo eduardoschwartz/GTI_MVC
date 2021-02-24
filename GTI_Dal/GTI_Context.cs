@@ -180,8 +180,9 @@ namespace GTI_Dal {
         public DbSet<Redesim_natureza_juridica> Redesim_Natureza_Juridica { get; set; }
         public DbSet<Redesim_evento> Redesim_Evento { get; set; }
         public DbSet<Redesim_registro_evento> Redesim_Registro_Evento { get; set; }
-        public DbSet<Redesim_porte_empresa> redesim_Porte_Empresa { get; set; }
-        public DbSet<Redesim_registro_forma_atuacao> redesim_Registro_Forma_Atuacao { get; set; }
-        public DbSet<Redesim_forma_atuacao> redesim_Forma_Atuacao { get; set; }
+        public DbSet<Redesim_porte_empresa> Redesim_Porte_Empresa { get; set; }
+        public DbSet<Redesim_registro_forma_atuacao> Redesim_Registro_Forma_Atuacao { get; set; }
+        public DbSet<Redesim_forma_atuacao> Redesim_Forma_Atuacao { get; set; }
+        public DbSet<Redesim_cnae> Redesim_Cnae { get; set; }
     }
 }
