@@ -93,5 +93,22 @@ namespace GTI_Bll.Classes {
             Redesim_Data obj = new Redesim_Data(_connection);
             obj.Incluir_Cnae(Protocolo, ListaCnae);
         }
+
+        public List<Redesim_viabilidade_analise> Lista_Viabilidade_Analise() {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            return obj.Lista_Viabilidade_Analise();
+        }
+
+        public int Incluir_Viabilidade_Analise(string Name) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            return obj.Incluir_Viabilidade_Analise(Name);
+        }
+
+        public Exception Incluir_Licenciamento(Redesim_licenciamento reg) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            Exception ex = obj.Incluir_Licenciamento(reg);
+            return ex;
+        }
+
     }
 }

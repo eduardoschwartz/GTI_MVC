@@ -203,12 +203,14 @@
     <Compile Include="Models\redesim_cnae.cs" />
     <Compile Include="Models\redesim_evento.cs" />
     <Compile Include="Models\redesim_forma_atuacao.cs" />
+    <Compile Include="Models\redesim_licenciamento.cs" />
     <Compile Include="Models\redesim_natureza_juridica.cs" />
     <Compile Include="Models\redesim_porte_empresa.cs" />
     <Compile Include="Models\redesim_registro.cs" />
     <Compile Include="Models\redesim_registro_evento.cs" />
     <Compile Include="Models\redesim_registro_forma_atuacao.cs" />
     <Compile Include="Models\Redesim_Viabilidade.cs" />
+    <Compile Include="Models\redesim_viabilidade_analise.cs" />
     <Compile Include="Models\rodo_empresa.cs" />
     <Compile Include="Models\Rodo_uso_plataforma.cs" />
     <Compile Include="Models\rodo_uso_plataforma_user.cs" />

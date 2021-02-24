@@ -6,17 +6,11 @@ namespace GTI_Models.Models {
         [Key]
         public string Protocolo { get; set; }
         public string Arquivo { get; set; }
-        public string Cnpj { get; set; }
-        public string Razao_Social { get; set; }
-        public string Analise { get; set; }
+        public int Analise { get; set; }
         public string Nire { get; set; }
         public bool EmpresaEstabelecida { get; set; }
         public DateTime DataProtocolo { get; set; }
-        public string Cep { get; set; }
         public int NumeroInscricaoImovel { get; set; }
-        public string Complemento { get; set; }
-        public int Numero { get; set; }
-        public string TipoUnidade { get; set; }
         public decimal AreaImovel { get; set; }
         public decimal AreaEstabelecimento { get; set; }
     }
@@ -25,6 +19,7 @@ namespace GTI_Models.Models {
         public string Arquivo { get; set; }
         public string Protocolo { get; set; }
         public string Analise { get; set; }
+        public int AnaliseCodigo { get; set; }
         public string Nire { get; set; }
         public string Cnpj { get; set; }
         public string EmpresaEstabelecida { get; set; }
