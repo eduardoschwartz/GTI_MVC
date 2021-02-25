@@ -204,6 +204,7 @@
     <Compile Include="Models\redesim_evento.cs" />
     <Compile Include="Models\redesim_forma_atuacao.cs" />
     <Compile Include="Models\redesim_licenciamento.cs" />
+    <Compile Include="Models\redesim_master.cs" />
     <Compile Include="Models\redesim_natureza_juridica.cs" />
     <Compile Include="Models\redesim_porte_empresa.cs" />
     <Compile Include="Models\redesim_registro.cs" />

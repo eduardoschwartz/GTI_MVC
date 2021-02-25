@@ -17,6 +17,7 @@ namespace GTI_Mvc.ViewModels {
         public string Mensagem { get; set; }
         public List<Redesim_RegistroStruct> ListaRegistro { get; set; }
         public List<Redesim_ViabilidadeStuct> ListaViabilidade { get; set; }
+        public List<Redesim_licenciamentoStruct> ListaLicenciamento { get; set; }
     }
 
 }

@@ -494,6 +494,13 @@ namespace GTI_Mvc {
             return new_Word;
         }
 
+        /// <summary>
+        /// Remove multiplos espaços no meio da palavra
+        /// </summary>
+        public static string  TrimEx(string word) {
+            return  Regex.Replace(word, @"\s+", " ").Trim();
+        }
+
 
         // O método EscreverExtenso recebe um valor do tipo decimal
         public static string EscreverExtenso(decimal valor) {

@@ -184,7 +184,8 @@ namespace GTI_Dal {
         public DbSet<Redesim_registro_forma_atuacao> Redesim_Registro_Forma_Atuacao { get; set; }
         public DbSet<Redesim_forma_atuacao> Redesim_Forma_Atuacao { get; set; }
         public DbSet<Redesim_cnae> Redesim_Cnae { get; set; }
-        public DbSet<Redesim_viabilidade_analise> redesim_Viabilidade_Analise { get; set; }
-        public DbSet<Redesim_licenciamento> redesim_Licenciamento { get; set; }
+        public DbSet<Redesim_viabilidade_analise> Redesim_Viabilidade_Analise { get; set; }
+        public DbSet<Redesim_licenciamento> Redesim_Licenciamento { get; set; }
+        public DbSet<Redesim_master> Redesim_Master { get; set; }
     }
 }

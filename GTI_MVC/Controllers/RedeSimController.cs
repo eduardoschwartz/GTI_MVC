@@ -99,7 +99,7 @@ namespace GTI_MVC.Controllers {
                         //Lê Licenciamento
                         if (_bLicenciamento) {
                             _listaLicenciamento = Read_Licenciamento(path);
-//                            _listaViabilidade = Insert_Viabilidade(_listaViabilidade, _guid);
+                            _listaLicenciamento = Insert_Licenciamento(_listaLicenciamento, _guid);
                             _ok = true;
                             _tipoSigla = "L";
                         }
@@ -130,7 +130,8 @@ namespace GTI_MVC.Controllers {
                     Valido = _ok,
                     Tipo = _tipo,
                     ListaRegistro = _listaRegistro,
-                    ListaViabilidade = _listaViabilidade
+                    ListaViabilidade = _listaViabilidade,
+                    ListaLicenciamento=_listaLicenciamento
                 };
                 Lista_Files.Add(_reg);
                 _id++;
@@ -139,7 +140,6 @@ namespace GTI_MVC.Controllers {
             model.ListaArquivo = Lista_Files;
             return View(model);
         }
-
 
         private List<Redesim_RegistroStruct> Read_Registro(string _path) {
             int _linha = 1;
@@ -451,16 +451,17 @@ namespace GTI_MVC.Controllers {
                         Cnpj = item.Cnpj,
                         Razao_Social = item.NomeEmpresarial.ToUpper(),
                         Cep = item.Cep,
-                        Complemento = item.Complementos,
+                        Complemento = Functions.TrimEx( item.Complementos),
                         MatrizFilial = item.MatrizFilial,
                         Natureza_Juridica = item.NaturezaJuridicaCodigo,
                         Porte_Empresa = item.PorteEmpresaCodigo,
                         Cnae_Principal=item.CnaePrincipal
                     };
-                    if (Functions.RetornaNumero(item.Numero) == "")
+                    string _num = Functions.RetornaNumero(item.Numero);
+                    if (_num == "")
                         reg.Numero = 0;
                     else
-                        reg.Numero = Convert.ToInt32(item.Numero);
+                        reg.Numero = Convert.ToInt32(_num);
                     Exception ex = redesimRepository.Incluir_Registro(reg);
                 }
                 _listaRegistro[_pos].Duplicado = _existe;
@@ -489,8 +490,12 @@ namespace GTI_MVC.Controllers {
                     string _num = Functions.RetornaNumero(item.NumeroInscricaoImovel);
                     if (_num == "" || item.TipoInscricaoImovel.Trim() != "Número IPTU")
                         reg.NumeroInscricaoImovel = 0;
-                    else
-                        reg.NumeroInscricaoImovel = Convert.ToInt32(_num);
+                    else {
+                        if (Convert.ToInt64(_num) > 5000)
+                            reg.NumeroInscricaoImovel = 0;
+                        else
+                            reg.NumeroInscricaoImovel = Convert.ToInt32(_num);
+                    }
                     Exception ex = redesimRepository.Incluir_Viabilidade(reg);
                 }
                 _listaViabilidade[_pos].Duplicado = _existe;
@@ -498,6 +503,30 @@ namespace GTI_MVC.Controllers {
                 _pos++;
             }
             return _listaViabilidade;
+
+        }
+
+        private List<Redesim_licenciamentoStruct> Insert_Licenciamento(List<Redesim_licenciamentoStruct> _listaLicenciamento, string _guid) {
+            Redesim_bll redesimRepository = new Redesim_bll("GTIconnection");
+            int _pos = 0;
+            foreach (Redesim_licenciamentoStruct item in _listaLicenciamento) {
+                bool _existe = redesimRepository.Existe_Licenciamento(item.Protocolo,Convert.ToDateTime(item.DataSolicitacao));
+                if (!_existe) {
+                    Redesim_licenciamento reg = new Redesim_licenciamento() {
+                        Arquivo = _guid,
+                        Protocolo = item.Protocolo,
+                        Data_Solicitacao = Convert.ToDateTime(item.DataSolicitacao),
+                        Situacao_Solicitacao = Convert.ToInt32(item.SituacaoSolicitacao),
+                        Data_Validade = Functions.IsDate(item.DataValidade) ? Convert.ToDateTime(item.DataValidade) : DateTime.MinValue,
+                        Mei = item.PorteEmpresaMei == "Não" ? false : true
+                    };
+                    Exception ex = redesimRepository.Incluir_Licenciamento(reg);
+                }
+                _listaLicenciamento[_pos].Duplicado = _existe;
+                _listaLicenciamento[_pos].Arquivo = _guid;
+                _pos++;
+            }
+            return _listaLicenciamento;
 
         }
     }

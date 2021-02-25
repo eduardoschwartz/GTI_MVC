@@ -19,10 +19,8 @@ namespace GTI_Dal.Classes {
                 object[] Parametros = new object[2];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@tipo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Tipo };
-                db.Database.ExecuteSqlCommand("INSERT INTO redesim_arquivo(guid,tipo) " +
-                                              " VALUES(@guid,@tipo)", Parametros);
                 try {
-                    db.SaveChanges();
+                    db.Database.ExecuteSqlCommand("INSERT INTO redesim_arquivo(guid,tipo) VALUES(@guid,@tipo)", Parametros);
                 } catch (Exception ex) {
                     return ex;
                 }
@@ -47,10 +45,9 @@ namespace GTI_Dal.Classes {
                 Parametros[8] = new SqlParameter { ParameterName = "@natureza_juridica", SqlDbType = SqlDbType.Int, SqlValue = reg.Natureza_Juridica };
                 Parametros[9] = new SqlParameter { ParameterName = "@porte_empresa", SqlDbType = SqlDbType.Int, SqlValue = reg.Porte_Empresa };
                 Parametros[10] = new SqlParameter { ParameterName = "@cnae_principal", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnae_Principal };
-                db.Database.ExecuteSqlCommand("INSERT INTO redesim_registro(protocolo,arquivo,cnpj,razao_social,numero,complemento,cep,matrizfilial,natureza_juridica,porte_empresa,cnae_principal) " +
-                                              " VALUES(@protocolo,@arquivo,@cnpj,@razao_social,@numero,@complemento,@cep,@matrizfilial,@natureza_juridica,@porte_empresa,@cnae_principal)", Parametros);
                 try {
-                    db.SaveChanges();
+                    db.Database.ExecuteSqlCommand("INSERT INTO redesim_registro(protocolo,arquivo,cnpj,razao_social,numero,complemento,cep,matrizfilial,natureza_juridica,porte_empresa,cnae_principal) " +
+                                              " VALUES(@protocolo,@arquivo,@cnpj,@razao_social,@numero,@complemento,@cep,@matrizfilial,@natureza_juridica,@porte_empresa,@cnae_principal)", Parametros);
                 } catch (Exception ex) {
                     return ex;
                 }
@@ -77,7 +74,6 @@ namespace GTI_Dal.Classes {
                     db.Database.ExecuteSqlCommand("INSERT INTO redesim_viabilidade(protocolo,arquivo,analise,nire,empresaestabelecida,dataprotocolo," +
                     "areaimovel,areaestabelecimento) VALUES(@protocolo,@arquivo,@analise,@nire,@empresaestabelecida,@dataprotocolo," +
                     "@areaimovel,@areaestabelecimento)", Parametros);
-                    db.SaveChanges();
                 } catch (Exception ex) {
                     return ex;
                 }
@@ -98,6 +94,16 @@ namespace GTI_Dal.Classes {
         public bool Existe_Viabilidade(string Processo) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var reg = (from i in db.Redesim_Viabilidade where i.Protocolo == Processo select i.Arquivo).FirstOrDefault();
+                if (reg == null)
+                    return false;
+                else
+                    return true;
+            }
+        }
+
+        public bool Existe_Licenciamento(string Processo,DateTime DataSolicitacao) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from i in db.Redesim_Licenciamento where i.Protocolo == Processo && i.Data_Solicitacao==DataSolicitacao  select i.Arquivo).FirstOrDefault();
                 if (reg == null)
                     return false;
                 else
@@ -250,17 +256,17 @@ namespace GTI_Dal.Classes {
 
         public List<Redesim_viabilidade_analise> Lista_Viabilidade_Analise() {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from c in db.redesim_Viabilidade_Analise select c);
+                var Sql = (from c in db.Redesim_Viabilidade_Analise select c);
                 return Sql.ToList();
             }
         }
 
         public int Incluir_Viabilidade_Analise(string Name) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                int cntCod = (from c in db.redesim_Viabilidade_Analise select c).Count();
+                int cntCod = (from c in db.Redesim_Viabilidade_Analise select c).Count();
                 int maxCod = 1;
                 if (cntCod > 0)
-                    maxCod = (from c in db.redesim_Viabilidade_Analise select c.Codigo).Max() + 1;
+                    maxCod = (from c in db.Redesim_Viabilidade_Analise select c.Codigo).Max() + 1;
                 try {
                     db.Database.ExecuteSqlCommand("INSERT redesim_viabilidade_analise(codigo,nome) values(@codigo,@nome)",
                         new SqlParameter("@codigo", maxCod), new SqlParameter("@nome", Name));
@@ -273,18 +279,52 @@ namespace GTI_Dal.Classes {
 
         public Exception Incluir_Licenciamento(Redesim_licenciamento reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[7];
+                object[] Parametros = new object[6];
                 Parametros[0] = new SqlParameter { ParameterName = "@protocolo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Protocolo };
                 Parametros[1] = new SqlParameter { ParameterName = "@data_solicitacao", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_Solicitacao };
                 Parametros[2] = new SqlParameter { ParameterName = "@arquivo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Arquivo };
                 Parametros[3] = new SqlParameter { ParameterName = "@situacao_solicitacao", SqlDbType = SqlDbType.Int, SqlValue = reg.Situacao_Solicitacao };
-                Parametros[4] = new SqlParameter { ParameterName = "@data_emissao", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_Emissao };
-                Parametros[5] = new SqlParameter { ParameterName = "@data_validade", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_Validade };
-                Parametros[6] = new SqlParameter { ParameterName = "@mei", SqlDbType = SqlDbType.Bit, SqlValue = reg.Mei };
+                if(reg.Data_Validade==DateTime.MinValue)
+                    Parametros[4] = new SqlParameter { ParameterName = "@data_validade",  SqlValue = DBNull.Value };
+                else
+                    Parametros[4] = new SqlParameter { ParameterName = "@data_validade", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_Validade };
+                Parametros[5] = new SqlParameter { ParameterName = "@mei", SqlDbType = SqlDbType.Bit, SqlValue = reg.Mei };
                 try {
-                    db.Database.ExecuteSqlCommand("INSERT INTO redesim_licenciamento(protocolo,data_solicitacao,arquivo,situacao_solicitacao,data_emissao,data_validade,mei) " +
-                    " VALUES(@protocolo,@data_solicitacao,@arquivo,@situacao_solicitacao,@data_emissao,@data_validade,@mei)", Parametros);
-                    db.SaveChanges();
+                    db.Database.ExecuteSqlCommand("INSERT INTO redesim_licenciamento(protocolo,data_solicitacao,arquivo,situacao_solicitacao,data_validade,mei) " +
+                    " VALUES(@protocolo,@data_solicitacao,@arquivo,@situacao_solicitacao,@data_validade,@mei)", Parametros);
+//                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public List<Redesim_master> Lista_Master(int Ano,int Mes) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from c in db.Redesim_Master where c.Data_licenca.Year==Ano && c.Data_licenca.Month==Mes select c);
+                return Sql.ToList();
+            }
+        }
+
+        public Exception Incluir_Master(Redesim_master reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[9];
+                Parametros[0] = new SqlParameter { ParameterName = "@protocolo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Protocolo };
+                Parametros[1] = new SqlParameter { ParameterName = "@data_licenca", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_licenca };
+                Parametros[2] = new SqlParameter { ParameterName = "@razao_social", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Razao_Social };
+                Parametros[3] = new SqlParameter { ParameterName = "@cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnpj };
+                Parametros[4] = new SqlParameter { ParameterName = "@logradouro", SqlDbType = SqlDbType.Int, SqlValue = reg.Logradouro };
+                Parametros[5] = new SqlParameter { ParameterName = "@numero", SqlDbType = SqlDbType.Int, SqlValue = reg.Numero };
+                if (reg.Complemento == "")
+                    Parametros[6] = new SqlParameter { ParameterName = "@complemento", SqlValue = DBNull.Value };
+                else
+                    Parametros[6] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Complemento };
+                Parametros[7] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cep };
+                Parametros[8] = new SqlParameter { ParameterName = "@cnae_principal", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnae_Principal };
+                try {
+                    db.Database.ExecuteSqlCommand("INSERT INTO redesim_master(protocolo,data_licenca,razao_social,cnpj,logradouro,numero,complemento,cep,cnae) " +
+                        "VALUES(@protocolo,@data_licenca,@razao_social,@cnpj,@logradouro,@numero,@complemento,@cep,@cnae)", Parametros);
                 } catch (Exception ex) {
                     return ex;
                 }

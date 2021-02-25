@@ -110,5 +110,21 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public bool Existe_Licenciamento(string Processo, DateTime DataSolicitacao) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            return obj.Existe_Licenciamento(Processo,DataSolicitacao);
+        }
+
+        public List<Redesim_master> Lista_Master(int Ano, int Mes) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            return obj.Lista_Master(Ano,Mes);
+        }
+
+        public Exception Incluir_Master(Redesim_master reg) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            Exception ex = obj.Incluir_Master(reg);
+            return ex;
+        }
+
     }
 }

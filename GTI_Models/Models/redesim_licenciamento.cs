@@ -13,12 +13,12 @@ namespace GTI_Models.Models {
         public DateTime Data_Solicitacao { get; set; }
         public string Arquivo { get; set; }
         public int Situacao_Solicitacao { get; set; }
-        public DateTime Data_Emissao { get; set; }
-        public DateTime Data_Validade { get; set; }
+        public DateTime? Data_Validade { get; set; }
         public bool Mei { get; set; }
     }
 
     public class Redesim_licenciamentoStruct {
+        public string Arquivo { get; set; }
         public string Protocolo { get; set; }
         public string IdSolicitacao { get; set; }
         public string SituacaoSolicitacao { get; set; }
@@ -49,5 +49,6 @@ namespace GTI_Models.Models {
         public string EmpresaTeraEstabelecimento { get; set; }
         public string[] Cnae { get; set; }
         public string[] AtividadesAuxiliares { get; set; }
+        public bool Duplicado { get; set; }
     }
 }
