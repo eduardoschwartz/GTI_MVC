@@ -444,19 +444,19 @@ namespace GTI_MVC.Controllers {
             int _pos = 0;
             foreach (Redesim_RegistroStruct item in _listaRegistro) {
                 bool _existe = redesimRepository.Existe_Registro(item.Protocolo);
+                Redesim_Registro reg = new Redesim_Registro() {
+                    Protocolo = item.Protocolo,
+                    Arquivo = _guid,
+                    Cnpj = item.Cnpj,
+                    Razao_Social = item.NomeEmpresarial.ToUpper(),
+                    Cep = Convert.ToInt32(item.Cep),
+                    Complemento = Functions.TrimEx(item.Complementos),
+                    MatrizFilial = item.MatrizFilial,
+                    Natureza_Juridica = item.NaturezaJuridicaCodigo,
+                    Porte_Empresa = item.PorteEmpresaCodigo,
+                    Cnae_Principal = item.CnaePrincipal
+                };
                 if (!_existe) {
-                    Redesim_Registro reg = new Redesim_Registro() {
-                        Protocolo = item.Protocolo,
-                        Arquivo = _guid,
-                        Cnpj = item.Cnpj,
-                        Razao_Social = item.NomeEmpresarial.ToUpper(),
-                        Cep = item.Cep,
-                        Complemento = Functions.TrimEx( item.Complementos),
-                        MatrizFilial = item.MatrizFilial,
-                        Natureza_Juridica = item.NaturezaJuridicaCodigo,
-                        Porte_Empresa = item.PorteEmpresaCodigo,
-                        Cnae_Principal=item.CnaePrincipal
-                    };
                     string _num = Functions.RetornaNumero(item.Numero);
                     if (_num == "")
                         reg.Numero = 0;
@@ -466,6 +466,14 @@ namespace GTI_MVC.Controllers {
                 }
                 _listaRegistro[_pos].Duplicado = _existe;
                 _listaRegistro[_pos].Arquivo = _guid;
+
+                //Master
+                _existe = redesimRepository.Existe_Master(item.Protocolo);
+                if (_existe) {
+                    Exception ex = redesimRepository.Atualizar_Master_Registro(reg);
+                }
+
+
                 _pos++;
             }
             return _listaRegistro;
@@ -524,6 +532,23 @@ namespace GTI_MVC.Controllers {
                 }
                 _listaLicenciamento[_pos].Duplicado = _existe;
                 _listaLicenciamento[_pos].Arquivo = _guid;
+
+                //Master
+                _existe = redesimRepository.Existe_Master(item.Protocolo);
+                if (!_existe) {
+                    Redesim_master _master = new Redesim_master() {
+                        Protocolo=item.Protocolo,
+                        Data_licenca= Convert.ToDateTime(item.DataSolicitacao)
+                    };
+                    Exception ex = redesimRepository.Incluir_Master(_master);
+                }
+                _existe = redesimRepository.Existe_Registro(item.Protocolo);
+                if (_existe) {
+                    Redesim_Registro _registro = redesimRepository.Retorna_Registro(item.Protocolo);
+                    Exception ex = redesimRepository.Atualizar_Master_Registro(_registro);
+                }
+
+
                 _pos++;
             }
             return _listaLicenciamento;

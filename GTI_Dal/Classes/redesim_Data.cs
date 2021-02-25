@@ -40,7 +40,7 @@ namespace GTI_Dal.Classes {
                     Parametros[5] = new SqlParameter { ParameterName = "@complemento", SqlValue = DBNull.Value };
                 else
                     Parametros[5] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Complemento };
-                Parametros[6] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cep };
+                Parametros[6] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.Int, SqlValue = reg.Cep };
                 Parametros[7] = new SqlParameter { ParameterName = "@matrizfilial", SqlDbType = SqlDbType.VarChar, SqlValue = reg.MatrizFilial };
                 Parametros[8] = new SqlParameter { ParameterName = "@natureza_juridica", SqlDbType = SqlDbType.Int, SqlValue = reg.Natureza_Juridica };
                 Parametros[9] = new SqlParameter { ParameterName = "@porte_empresa", SqlDbType = SqlDbType.Int, SqlValue = reg.Porte_Empresa };
@@ -312,19 +312,31 @@ namespace GTI_Dal.Classes {
                 object[] Parametros = new object[9];
                 Parametros[0] = new SqlParameter { ParameterName = "@protocolo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Protocolo };
                 Parametros[1] = new SqlParameter { ParameterName = "@data_licenca", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_licenca };
-                Parametros[2] = new SqlParameter { ParameterName = "@razao_social", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Razao_Social };
-                Parametros[3] = new SqlParameter { ParameterName = "@cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnpj };
+                if (string.IsNullOrEmpty( reg.Razao_Social))
+                    Parametros[2] = new SqlParameter { ParameterName = "@razao_social", SqlValue = DBNull.Value };
+                else
+                    Parametros[2] = new SqlParameter { ParameterName = "@razao_social", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Razao_Social };
+                if (string.IsNullOrEmpty( reg.Cnpj))
+                    Parametros[3] = new SqlParameter { ParameterName = "@cnpj", SqlValue = DBNull.Value };
+                else
+                    Parametros[3] = new SqlParameter { ParameterName = "@cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnpj };
                 Parametros[4] = new SqlParameter { ParameterName = "@logradouro", SqlDbType = SqlDbType.Int, SqlValue = reg.Logradouro };
                 Parametros[5] = new SqlParameter { ParameterName = "@numero", SqlDbType = SqlDbType.Int, SqlValue = reg.Numero };
-                if (reg.Complemento == "")
+                if (string.IsNullOrEmpty(reg.Complemento))
                     Parametros[6] = new SqlParameter { ParameterName = "@complemento", SqlValue = DBNull.Value };
                 else
                     Parametros[6] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Complemento };
-                Parametros[7] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cep };
-                Parametros[8] = new SqlParameter { ParameterName = "@cnae_principal", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnae_Principal };
+                if (string.IsNullOrEmpty(reg.Cep))
+                    Parametros[7] = new SqlParameter { ParameterName = "@cep", SqlValue = DBNull.Value };
+                else
+                    Parametros[7] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cep };
+                if (string.IsNullOrEmpty(reg.Cnae_Principal))
+                    Parametros[8] = new SqlParameter { ParameterName = "@cnae_principal", SqlValue = DBNull.Value };
+                else
+                    Parametros[8] = new SqlParameter { ParameterName = "@cnae_principal", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnae_Principal };
                 try {
-                    db.Database.ExecuteSqlCommand("INSERT INTO redesim_master(protocolo,data_licenca,razao_social,cnpj,logradouro,numero,complemento,cep,cnae) " +
-                        "VALUES(@protocolo,@data_licenca,@razao_social,@cnpj,@logradouro,@numero,@complemento,@cep,@cnae)", Parametros);
+                    db.Database.ExecuteSqlCommand("INSERT INTO redesim_master(protocolo,data_licenca,razao_social,cnpj,logradouro,numero,complemento,cep,cnae_principal) " +
+                        "VALUES(@protocolo,@data_licenca,@razao_social,@cnpj,@logradouro,@numero,@complemento,@cep,@cnae_principal)", Parametros);
                 } catch (Exception ex) {
                     return ex;
                 }
@@ -332,6 +344,50 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public bool Existe_Master(string Protocolo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from i in db.Redesim_Master where i.Protocolo == Protocolo select i.Protocolo).FirstOrDefault();
+                if (reg == null)
+                    return false;
+                else
+                    return true;
+            }
+        }
+
+        public Exception Atualizar_Master_Registro(Redesim_Registro reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Endereco_Data enderecoRepository = new Endereco_Data("GTIconnection");
+                LogradouroStruct _log= enderecoRepository.Retorna_Logradour_Cep(Convert.ToInt32(reg.Cep));
+                int _logradouro = (int)_log.CodLogradouro;
+
+                object[] Parametros = new object[8];
+                Parametros[0] = new SqlParameter { ParameterName = "@protocolo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Protocolo };
+                Parametros[1] = new SqlParameter { ParameterName = "@razao_social", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Razao_Social };
+                Parametros[2] = new SqlParameter { ParameterName = "@cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnpj };
+                Parametros[3] = new SqlParameter { ParameterName = "@logradouro", SqlDbType = SqlDbType.Int, SqlValue = _logradouro };
+                Parametros[4] = new SqlParameter { ParameterName = "@numero", SqlDbType = SqlDbType.Int, SqlValue = reg.Numero };
+                if (string.IsNullOrEmpty(reg.Complemento))
+                    Parametros[5] = new SqlParameter { ParameterName = "@complemento", SqlValue = DBNull.Value };
+                else
+                    Parametros[5] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Complemento };
+                Parametros[6] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cep };
+                Parametros[7] = new SqlParameter { ParameterName = "@cnae_principal", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnae_Principal };
+                try {
+                    db.Database.ExecuteSqlCommand("UPDATE redesim_master SET razao_social=@razao_social,cnpj=@cnpj,logradouro=@logradouro,numero=@numero,complemento=@complemento," +
+                        "cep=@cep,cnae_principal=@cnae_principal where protocolo=@protocolo", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Redesim_Registro Retorna_Registro(string Protocolo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from c in db.Redesim_Registro select c).FirstOrDefault();
+                return Sql;
+            }
+        }
 
     }
 }

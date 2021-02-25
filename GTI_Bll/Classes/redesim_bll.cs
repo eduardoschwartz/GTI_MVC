@@ -126,5 +126,21 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public bool Existe_Master(string Protocolo) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            return obj.Existe_Master(Protocolo);
+        }
+
+        public Exception Atualizar_Master_Registro(Redesim_Registro reg) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            Exception ex = obj.Atualizar_Master_Registro(reg);
+            return ex;
+        }
+
+        public Redesim_Registro Retorna_Registro(string Protocolo) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            return obj.Retorna_Registro(Protocolo);
+        }
+
     }
 }
