@@ -303,16 +303,16 @@ namespace GTI_MVC.Controllers {
                         redesimRepository.Incluir_Registro_Forma_Atuacao(_linhaReg.Protocolo, _listaFormaCod);
 
                         //Cnae Secundária
-                        int _size = _linhaReg.CnaeSecundaria.Length;
-                        if (_size > 0) {
-                            string[] _listaCnae = new string[_size];
-                            int _indexCnae = 0;
-                            foreach (string ev in _linhaReg.CnaeSecundaria) {
-                                _listaCnae[_indexCnae] = ev;
-                                _indexCnae++;
-                            }
-                            redesimRepository.Incluir_Cnae(_linhaReg.Protocolo, _listaCnae);
-                        }
+                        //int _size = _linhaReg.CnaeSecundaria.Length;
+                        //if (_size > 0) {
+                        //    string[] _listaCnae = new string[_size];
+                        //    int _indexCnae = 0;
+                        //    foreach (string ev in _linhaReg.CnaeSecundaria) {
+                        //        _listaCnae[_indexCnae] = ev;
+                        //        _indexCnae++;
+                        //    }
+                        //    redesimRepository.Incluir_Cnae(_linhaReg.Protocolo, _listaCnae);
+                        //}
 
                         _listaRegistro.Add(_linhaReg);
                     }
@@ -483,31 +483,40 @@ namespace GTI_MVC.Controllers {
             Redesim_bll redesimRepository = new Redesim_bll("GTIconnection");
             int _pos = 0;
             foreach (Redesim_ViabilidadeStuct item in _listaViabilidade) {
+                Redesim_Viabilidade reg = new Redesim_Viabilidade() {
+                    Arquivo = _guid,
+                    Protocolo = item.Protocolo,
+                    Analise = item.AnaliseCodigo,
+                    Nire = item.Nire.Trim(),
+                    EmpresaEstabelecida = item.EmpresaEstabelecida == "Sim" ? true : false,
+                    DataProtocolo = Convert.ToDateTime(item.DataProtocolo),
+                    AreaImovel = Convert.ToDecimal(item.AreaImovel),
+                    AreaEstabelecimento = Convert.ToDecimal(item.AreaEstabelecimento)
+                };
                 bool _existe = redesimRepository.Existe_Viabilidade(item.Protocolo);
                 if (!_existe) {
-                    Redesim_Viabilidade reg = new Redesim_Viabilidade() {
-                        Arquivo = _guid,
-                        Protocolo = item.Protocolo,
-                        Analise = item.AnaliseCodigo,
-                        Nire = item.Nire.Trim(),
-                        EmpresaEstabelecida = item.EmpresaEstabelecida == "Sim" ? true : false,
-                        DataProtocolo = Convert.ToDateTime(item.DataProtocolo),
-                        AreaImovel = Convert.ToDecimal(item.AreaImovel),
-                        AreaEstabelecimento = Convert.ToDecimal(item.AreaEstabelecimento)
-                    };
                     string _num = Functions.RetornaNumero(item.NumeroInscricaoImovel);
                     if (_num == "" || item.TipoInscricaoImovel.Trim() != "Número IPTU")
                         reg.NumeroInscricaoImovel = 0;
                     else {
-                        if (Convert.ToInt64(_num) > 5000)
-                            reg.NumeroInscricaoImovel = 0;
-                        else
+                        try {
                             reg.NumeroInscricaoImovel = Convert.ToInt32(_num);
+                        } catch  {
+                            reg.NumeroInscricaoImovel = 0;
+                        }
                     }
+                        
                     Exception ex = redesimRepository.Incluir_Viabilidade(reg);
                 }
                 _listaViabilidade[_pos].Duplicado = _existe;
                 _listaViabilidade[_pos].Arquivo = _guid;
+
+                //Master
+                _existe = redesimRepository.Existe_Master(item.Protocolo);
+                if (_existe) {
+                    Exception ex = redesimRepository.Atualizar_Master_Viabilidade(reg);
+                }
+
                 _pos++;
             }
             return _listaViabilidade;
@@ -520,13 +529,36 @@ namespace GTI_MVC.Controllers {
             foreach (Redesim_licenciamentoStruct item in _listaLicenciamento) {
                 bool _existe = redesimRepository.Existe_Licenciamento(item.Protocolo,Convert.ToDateTime(item.DataSolicitacao));
                 if (!_existe) {
+                    string _cnae_principal="";
+                    int _size = item.Cnae.Length;
+                    if (_size > 0) {
+                        string[] _listaCnae = new string[_size];
+                        int _indexCnae = 0;
+                        
+                        foreach (string ev in item.Cnae) {
+                            if (_indexCnae == 0) {
+                                _cnae_principal = ev;
+                            } else {
+                                if(ev.Length==7)
+                                    _listaCnae[_indexCnae] = ev;
+                            }
+                            _indexCnae++;
+                        }
+                        redesimRepository.Incluir_Cnae(item.Protocolo, _listaCnae);
+                    }
+
                     Redesim_licenciamento reg = new Redesim_licenciamento() {
                         Arquivo = _guid,
                         Protocolo = item.Protocolo,
                         Data_Solicitacao = Convert.ToDateTime(item.DataSolicitacao),
                         Situacao_Solicitacao = Convert.ToInt32(item.SituacaoSolicitacao),
                         Data_Validade = Functions.IsDate(item.DataValidade) ? Convert.ToDateTime(item.DataValidade) : DateTime.MinValue,
-                        Mei = item.PorteEmpresaMei == "Não" ? false : true
+                        Mei = item.PorteEmpresaMei == "Não" ? false : true,
+                        Cnpj = item.Cnpj,
+                        Razao_Social = item.RazaoSocial.ToUpper(),
+                        Cep = Convert.ToInt32(item.Cep),
+                        Complemento = Functions.TrimEx(item.Complemento),
+                        Cnae_Principal = _cnae_principal
                     };
                     Exception ex = redesimRepository.Incluir_Licenciamento(reg);
                 }
@@ -535,17 +567,42 @@ namespace GTI_MVC.Controllers {
 
                 //Master
                 _existe = redesimRepository.Existe_Master(item.Protocolo);
+                if (item.Protocolo == "SPM2030017411")
+                    _guid = "A";
                 if (!_existe) {
                     Redesim_master _master = new Redesim_master() {
                         Protocolo=item.Protocolo,
-                        Data_licenca= Convert.ToDateTime(item.DataSolicitacao)
+                        Data_licenca= Convert.ToDateTime(item.DataSolicitacao),
+                        Cnpj = decimal.Parse(item.Cnpj).ToString(),
+                        Razao_Social = item.RazaoSocial.ToUpper(),
+                        Cep =item.Cep,
+                        Complemento = Functions.TrimEx(item.Complemento),
+                        Cnae_Principal = item.Cnae[0]
                     };
+                    string _num = Functions.RetornaNumero(item.Numero);
+                    if (_num == "")
+                        _master.Numero = 0;
+                    else
+                        _master.Numero = Convert.ToInt32(_num);
+                    Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+                    LogradouroStruct _log = enderecoRepository.Retorna_Logradouro_Cep(Convert.ToInt32(item.Cep));
+                    int _logradouro = 0;
+                    if (_log!=null && _log.CodLogradouro!=null)
+                        _logradouro = (int)_log.CodLogradouro;
+                    _master.Logradouro = _logradouro;
                     Exception ex = redesimRepository.Incluir_Master(_master);
                 }
+
                 _existe = redesimRepository.Existe_Registro(item.Protocolo);
                 if (_existe) {
                     Redesim_Registro _registro = redesimRepository.Retorna_Registro(item.Protocolo);
                     Exception ex = redesimRepository.Atualizar_Master_Registro(_registro);
+                }
+
+                _existe = redesimRepository.Existe_Viabilidade(item.Protocolo);
+                if (_existe) {
+                    Redesim_Viabilidade _via = redesimRepository.Retorna_Viabilidade(item.Protocolo);
+                    Exception ex = redesimRepository.Atualizar_Master_Viabilidade(_via);
                 }
 
 

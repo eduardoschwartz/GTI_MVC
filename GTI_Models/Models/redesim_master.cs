@@ -13,5 +13,7 @@ namespace GTI_Models.Models {
         public string Complemento { get; set; }
         public string Cep { get; set; }
         public string Cnae_Principal { get; set; }
+        public int Numero_Imovel { get; set; }
+        public decimal Area_Estabelecimento { get; set; }
     }
 }

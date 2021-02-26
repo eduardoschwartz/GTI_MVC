@@ -15,6 +15,12 @@ namespace GTI_Models.Models {
         public int Situacao_Solicitacao { get; set; }
         public DateTime? Data_Validade { get; set; }
         public bool Mei { get; set; }
+        public string Cnpj { get; set; }
+        public string Razao_Social { get; set; }
+        public int Numero { get; set; }
+        public string Complemento { get; set; }
+        public int Cep { get; set; }
+        public string Cnae_Principal { get; set; }
     }
 
     public class Redesim_licenciamentoStruct {

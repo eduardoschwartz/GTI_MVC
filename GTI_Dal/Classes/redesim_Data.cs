@@ -71,8 +71,8 @@ namespace GTI_Dal.Classes {
                 Parametros[7] = new SqlParameter { ParameterName = "@areaimovel", SqlDbType = SqlDbType.Decimal, SqlValue = reg.AreaImovel };
                 Parametros[8] = new SqlParameter { ParameterName = "@areaestabelecimento", SqlDbType = SqlDbType.Decimal, SqlValue = reg.AreaEstabelecimento };
                 try {
-                    db.Database.ExecuteSqlCommand("INSERT INTO redesim_viabilidade(protocolo,arquivo,analise,nire,empresaestabelecida,dataprotocolo," +
-                    "areaimovel,areaestabelecimento) VALUES(@protocolo,@arquivo,@analise,@nire,@empresaestabelecida,@dataprotocolo," +
+                    db.Database.ExecuteSqlCommand("INSERT INTO redesim_viabilidade(protocolo,arquivo,analise,nire,empresaestabelecida,dataprotocolo,numeroinscricaoimovel," +
+                    "areaimovel,areaestabelecimento) VALUES(@protocolo,@arquivo,@analise,@nire,@empresaestabelecida,@dataprotocolo,@numeroinscricaoimovel," +
                     "@areaimovel,@areaestabelecimento)", Parametros);
                 } catch (Exception ex) {
                     return ex;
@@ -240,9 +240,9 @@ namespace GTI_Dal.Classes {
 
         public void Incluir_Cnae(string Protocolo, string[] ListaCnae) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-
                 foreach (string item in ListaCnae) {
-                    if (item.Trim() != "") {
+                    
+                    if (!string.IsNullOrEmpty(item)) {
                         try {
                             db.Database.ExecuteSqlCommand("INSERT redesim_cnae(protocolo,cnae) values(@protocolo,@cnae)",
                                 new SqlParameter("@protocolo", Protocolo), new SqlParameter("@cnae", item));
@@ -279,7 +279,7 @@ namespace GTI_Dal.Classes {
 
         public Exception Incluir_Licenciamento(Redesim_licenciamento reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[6];
+                object[] Parametros = new object[12];
                 Parametros[0] = new SqlParameter { ParameterName = "@protocolo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Protocolo };
                 Parametros[1] = new SqlParameter { ParameterName = "@data_solicitacao", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_Solicitacao };
                 Parametros[2] = new SqlParameter { ParameterName = "@arquivo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Arquivo };
@@ -289,10 +289,20 @@ namespace GTI_Dal.Classes {
                 else
                     Parametros[4] = new SqlParameter { ParameterName = "@data_validade", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_Validade };
                 Parametros[5] = new SqlParameter { ParameterName = "@mei", SqlDbType = SqlDbType.Bit, SqlValue = reg.Mei };
+                Parametros[6] = new SqlParameter { ParameterName = "@cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnpj };
+                Parametros[7] = new SqlParameter { ParameterName = "@razao_social", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Razao_Social };
+                Parametros[8] = new SqlParameter { ParameterName = "@numero", SqlDbType = SqlDbType.Int, SqlValue = reg.Numero };
+                if (reg.Complemento == "")
+                    Parametros[9] = new SqlParameter { ParameterName = "@complemento", SqlValue = DBNull.Value };
+                else
+                    Parametros[9] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Complemento };
+                Parametros[10] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.Int, SqlValue = reg.Cep };
+                Parametros[11] = new SqlParameter { ParameterName = "@cnae_principal", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnae_Principal };
+
                 try {
-                    db.Database.ExecuteSqlCommand("INSERT INTO redesim_licenciamento(protocolo,data_solicitacao,arquivo,situacao_solicitacao,data_validade,mei) " +
-                    " VALUES(@protocolo,@data_solicitacao,@arquivo,@situacao_solicitacao,@data_validade,@mei)", Parametros);
-//                    db.SaveChanges();
+                    db.Database.ExecuteSqlCommand("INSERT INTO redesim_licenciamento(protocolo,data_solicitacao,arquivo,situacao_solicitacao,data_validade,mei,cnpj,razao_social," +
+                        "numero,complemento,cep,cnae_principal) VALUES(@protocolo,@data_solicitacao,@arquivo,@situacao_solicitacao,@data_validade,@mei,@cnpj,@razao_social," +
+                        "@numero,@complemento,@cep,@cnae_principal)", Parametros);
                 } catch (Exception ex) {
                     return ex;
                 }
@@ -384,10 +394,34 @@ namespace GTI_Dal.Classes {
 
         public Redesim_Registro Retorna_Registro(string Protocolo) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from c in db.Redesim_Registro select c).FirstOrDefault();
+                var Sql = (from c in db.Redesim_Registro where c.Protocolo==Protocolo select c).FirstOrDefault();
                 return Sql;
             }
         }
+
+        public Exception Atualizar_Master_Viabilidade(Redesim_Viabilidade reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[3];
+                Parametros[0] = new SqlParameter { ParameterName = "@protocolo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Protocolo };
+                Parametros[1] = new SqlParameter { ParameterName = "@numero_imovel", SqlDbType = SqlDbType.Int, SqlValue = reg.NumeroInscricaoImovel };
+                Parametros[2] = new SqlParameter { ParameterName = "@area_estabelecimento", SqlDbType = SqlDbType.Decimal, SqlValue = reg.AreaEstabelecimento };
+                try {
+                    db.Database.ExecuteSqlCommand("UPDATE redesim_master SET numero_imovel=@numero_imovel,area_estabelecimento=@area_estabelecimento where protocolo=@protocolo", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Redesim_Viabilidade Retorna_Viabilidade(string Protocolo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from c in db.Redesim_Viabilidade where c.Protocolo==Protocolo select c).FirstOrDefault();
+                return Sql;
+            }
+        }
+
+
 
     }
 }

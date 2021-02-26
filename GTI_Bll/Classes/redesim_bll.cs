@@ -142,5 +142,16 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Registro(Protocolo);
         }
 
+        public Exception Atualizar_Master_Viabilidade(Redesim_Viabilidade reg) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            Exception ex = obj.Atualizar_Master_Viabilidade(reg);
+            return ex;
+        }
+
+        public Redesim_Viabilidade Retorna_Viabilidade(string Protocolo) {
+            Redesim_Data obj = new Redesim_Data(_connection);
+            return obj.Retorna_Viabilidade(Protocolo);
+        }
+
     }
 }
