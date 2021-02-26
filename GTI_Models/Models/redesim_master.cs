@@ -15,5 +15,6 @@ namespace GTI_Models.Models {
         public string Cnae_Principal { get; set; }
         public int Numero_Imovel { get; set; }
         public decimal Area_Estabelecimento { get; set; }
+        public int Inscricao { get; set; }
     }
 }

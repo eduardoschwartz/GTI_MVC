@@ -881,6 +881,10 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public int Retorna_Codigo_Endereco(int Logradouro, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Codigo_Endereco(Logradouro,Numero);
+        }
 
         #endregion
 

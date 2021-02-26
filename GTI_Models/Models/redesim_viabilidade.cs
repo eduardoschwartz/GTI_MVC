@@ -13,6 +13,8 @@ namespace GTI_Models.Models {
         public int NumeroInscricaoImovel { get; set; }
         public decimal AreaImovel { get; set; }
         public decimal AreaEstabelecimento { get; set; }
+        public string Cnpj { get; set; }
+        public int Inscricao { get; set; }
     }
 
     public class Redesim_ViabilidadeStuct {
@@ -47,6 +49,7 @@ namespace GTI_Models.Models {
         public string AreaImovel { get; set; }
         public string AreaEstabelecimento { get; set; }
         public bool Duplicado { get; set; }
+        public int Inscricao { get; set; }
     }
 
    

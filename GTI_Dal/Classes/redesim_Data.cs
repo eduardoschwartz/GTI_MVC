@@ -319,7 +319,7 @@ namespace GTI_Dal.Classes {
 
         public Exception Incluir_Master(Redesim_master reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[9];
+                object[] Parametros = new object[11];
                 Parametros[0] = new SqlParameter { ParameterName = "@protocolo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Protocolo };
                 Parametros[1] = new SqlParameter { ParameterName = "@data_licenca", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_licenca };
                 if (string.IsNullOrEmpty( reg.Razao_Social))
@@ -344,9 +344,11 @@ namespace GTI_Dal.Classes {
                     Parametros[8] = new SqlParameter { ParameterName = "@cnae_principal", SqlValue = DBNull.Value };
                 else
                     Parametros[8] = new SqlParameter { ParameterName = "@cnae_principal", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnae_Principal };
+                Parametros[9] = new SqlParameter { ParameterName = "@inscricao", SqlDbType = SqlDbType.Int, SqlValue = reg.Inscricao };
+                Parametros[10] = new SqlParameter { ParameterName = "@numero_imovel", SqlDbType = SqlDbType.Int, SqlValue = reg.Numero_Imovel };
                 try {
-                    db.Database.ExecuteSqlCommand("INSERT INTO redesim_master(protocolo,data_licenca,razao_social,cnpj,logradouro,numero,complemento,cep,cnae_principal) " +
-                        "VALUES(@protocolo,@data_licenca,@razao_social,@cnpj,@logradouro,@numero,@complemento,@cep,@cnae_principal)", Parametros);
+                    db.Database.ExecuteSqlCommand("INSERT INTO redesim_master(protocolo,data_licenca,razao_social,cnpj,logradouro,numero,complemento,cep,cnae_principal,inscricao,numero_imovel) " +
+                        "VALUES(@protocolo,@data_licenca,@razao_social,@cnpj,@logradouro,@numero,@complemento,@cep,@cnae_principal,@inscricao,@numero_imovel)", Parametros);
                 } catch (Exception ex) {
                     return ex;
                 }
@@ -370,7 +372,7 @@ namespace GTI_Dal.Classes {
                 LogradouroStruct _log= enderecoRepository.Retorna_Logradour_Cep(Convert.ToInt32(reg.Cep));
                 int _logradouro = (int)_log.CodLogradouro;
 
-                object[] Parametros = new object[8];
+                object[] Parametros = new object[9];
                 Parametros[0] = new SqlParameter { ParameterName = "@protocolo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Protocolo };
                 Parametros[1] = new SqlParameter { ParameterName = "@razao_social", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Razao_Social };
                 Parametros[2] = new SqlParameter { ParameterName = "@cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnpj };
@@ -382,9 +384,10 @@ namespace GTI_Dal.Classes {
                     Parametros[5] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Complemento };
                 Parametros[6] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cep };
                 Parametros[7] = new SqlParameter { ParameterName = "@cnae_principal", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnae_Principal };
+                Parametros[8] = new SqlParameter { ParameterName = "@inscricao", SqlDbType = SqlDbType.Int, SqlValue = reg.Inscricao };
                 try {
                     db.Database.ExecuteSqlCommand("UPDATE redesim_master SET razao_social=@razao_social,cnpj=@cnpj,logradouro=@logradouro,numero=@numero,complemento=@complemento," +
-                        "cep=@cep,cnae_principal=@cnae_principal where protocolo=@protocolo", Parametros);
+                        "cep=@cep,cnae_principal=@cnae_principal,inscricao=@inscricao where protocolo=@protocolo", Parametros);
                 } catch (Exception ex) {
                     return ex;
                 }
@@ -401,12 +404,13 @@ namespace GTI_Dal.Classes {
 
         public Exception Atualizar_Master_Viabilidade(Redesim_Viabilidade reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[3];
+                object[] Parametros = new object[4];
                 Parametros[0] = new SqlParameter { ParameterName = "@protocolo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Protocolo };
                 Parametros[1] = new SqlParameter { ParameterName = "@numero_imovel", SqlDbType = SqlDbType.Int, SqlValue = reg.NumeroInscricaoImovel };
                 Parametros[2] = new SqlParameter { ParameterName = "@area_estabelecimento", SqlDbType = SqlDbType.Decimal, SqlValue = reg.AreaEstabelecimento };
+                Parametros[3] = new SqlParameter { ParameterName = "@inscricao", SqlDbType = SqlDbType.Int, SqlValue = reg.Inscricao };
                 try {
-                    db.Database.ExecuteSqlCommand("UPDATE redesim_master SET numero_imovel=@numero_imovel,area_estabelecimento=@area_estabelecimento where protocolo=@protocolo", Parametros);
+                    db.Database.ExecuteSqlCommand("UPDATE redesim_master SET numero_imovel=@numero_imovel,area_estabelecimento=@area_estabelecimento,inscricao=@inscricao where protocolo=@protocolo", Parametros);
                 } catch (Exception ex) {
                     return ex;
                 }

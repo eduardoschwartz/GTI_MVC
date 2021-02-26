@@ -14,6 +14,7 @@ namespace GTI_Models.Models {
         public int Natureza_Juridica { get; set; }
         public int Porte_Empresa { get; set; }
         public string Cnae_Principal { get; set; }
+        public int Inscricao { get; set; }
     }
 
     public class Redesim_RegistroStruct {
@@ -56,6 +57,7 @@ namespace GTI_Models.Models {
         public string CpfRepresentante { get; set; }
         public string NomeRepresentante { get; set; }
         public bool Duplicado { get; set; }
+        public int Inscricao { get; set; }
     }
 
 }

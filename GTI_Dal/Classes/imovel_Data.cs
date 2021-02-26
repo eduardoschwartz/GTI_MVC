@@ -2740,6 +2740,22 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public int Retorna_Codigo_Endereco(int Logradouro, int  Numero) {
+            EnderecoStruct regEnd = new EnderecoStruct();
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                    var reg = (from i in db.Cadimob
+                               join fq in db.Facequadra on new { p1 = i.Distrito, p2 = i.Setor, p3 = i.Quadra, p4 = i.Seq } equals new { p1 = fq.Coddistrito, p2 = fq.Codsetor, p3 = fq.Codquadra, p4 = fq.Codface } into ifq from fq in ifq.DefaultIfEmpty()
+                               join l in db.Logradouro on fq.Codlogr equals l.Codlogradouro into lfq from l in lfq.DefaultIfEmpty()
+                               where l.Codlogradouro == Logradouro && i.Li_num == Numero
+                               select  i.Codreduzido).FirstOrDefault();
+                if (reg == 0)
+                    return 0;
+                else
+                    return reg;
+            }
+
+        }
+
 
     }//end class
 }

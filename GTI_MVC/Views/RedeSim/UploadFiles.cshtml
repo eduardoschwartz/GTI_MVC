@@ -177,34 +177,38 @@
                             }
 
                             if (arq.ListaLicenciamento.Count > 0) {
-                                <table style="font-size:13px;width:420px">
-                                    <thead style="background-color:darkcyan;color:whitesmoke">
-                                        <tr style="height:10px">
-                                            <td style="width:120px;text-align:left">protocolo</td>
-                                            <td style="width:180px;text-align:center">Data Solicitação</td>
-                                            <td style="width:120px;text-align:left">Status</td>
-                                        </tr>
-                                    </thead>
-                                    @foreach (GTI_Models.Models.Redesim_licenciamentoStruct reg in arq.ListaLicenciamento) {
-                                        @Html.Raw(" <tr>")
-                                        @Html.Raw("<td style=" + "width:120px;text-align:left" + " >")
-                                        @reg.Protocolo
-                                        @Html.Raw("</td>")
-                                        @Html.Raw(" <td style=" + "width:180px;text-align:center" + " >")
-                                        @reg.DataSolicitacao
-                                        @Html.Raw("</td>")
-                                        if (reg.Duplicado) {
-                                            @Html.Raw(" <td style=" + "width:120px;text-align:left;color:red" + " >")
-                                            @Html.Raw("Duplicado")
-                                            @Html.Raw("</td>")
-                                        } else {
-                                            @Html.Raw(" <td style=" + "width:120px;text-align:left;color:darkgreen" + " >")
-                                            @Html.Raw("importado")
-                                            @Html.Raw("</td>")
-                                        }
-                                        @Html.Raw("</tr>")
-                                    }
-                                </table>
+                <table style="font-size:13px;width:680px">
+                    <thead style="background-color:darkcyan;color:whitesmoke">
+                        <tr style="height:10px">
+                            <td style="width:120px;text-align:left">protocolo</td>
+                            <td style="width:300px;text-align:left">Razão Social</td>
+                            <td style="width:160px;text-align:center">Data Solicitação</td>
+                            <td style="width:100px;text-align:left">Status</td>
+                        </tr>
+                    </thead>
+                    @foreach (GTI_Models.Models.Redesim_licenciamentoStruct reg in arq.ListaLicenciamento) {
+                        @Html.Raw(" <tr>")
+                        @Html.Raw("<td style=" + "width:120px;text-align:left" + " >")
+                        @reg.Protocolo
+                        @Html.Raw("</td>")
+                        @Html.Raw(" <td style=" + "width:300px;text-align:left" + " >")
+                        @Functions.TruncateTo(reg.RazaoSocial, 35)
+                        @Html.Raw("</td>")
+                        @Html.Raw(" <td style=" + "width:160px;text-align:center" + " >")
+                        @reg.DataSolicitacao
+                        @Html.Raw("</td>")
+                        if (reg.Duplicado) {
+                            @Html.Raw(" <td style=" + "width:100px;text-align:left;color:red" + " >")
+                            @Html.Raw("Duplicado")
+                            @Html.Raw("</td>")
+                        } else {
+                            @Html.Raw(" <td style=" + "width:100px;text-align:left;color:darkgreen" + " >")
+                            @Html.Raw("importado")
+                            @Html.Raw("</td>")
+                        }
+                        @Html.Raw("</tr>")
+                    }
+                </table>
                             }
 
                             <br />
