@@ -16,5 +16,7 @@ namespace GTI_Models.Models {
         public int Numero_Imovel { get; set; }
         public decimal Area_Estabelecimento { get; set; }
         public int Inscricao { get; set; }
+        public string Situacao { get; set; }
+        public DateTime? Data_Validade { get; set; }
     }
 }

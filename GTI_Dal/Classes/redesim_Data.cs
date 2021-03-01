@@ -319,7 +319,7 @@ namespace GTI_Dal.Classes {
 
         public Exception Incluir_Master(Redesim_master reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[11];
+                object[] Parametros = new object[13];
                 Parametros[0] = new SqlParameter { ParameterName = "@protocolo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Protocolo };
                 Parametros[1] = new SqlParameter { ParameterName = "@data_licenca", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_licenca };
                 if (string.IsNullOrEmpty( reg.Razao_Social))
@@ -346,9 +346,18 @@ namespace GTI_Dal.Classes {
                     Parametros[8] = new SqlParameter { ParameterName = "@cnae_principal", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cnae_Principal };
                 Parametros[9] = new SqlParameter { ParameterName = "@inscricao", SqlDbType = SqlDbType.Int, SqlValue = reg.Inscricao };
                 Parametros[10] = new SqlParameter { ParameterName = "@numero_imovel", SqlDbType = SqlDbType.Int, SqlValue = reg.Numero_Imovel };
+                if(reg.Data_Validade==DateTime.MinValue)
+                    Parametros[11] = new SqlParameter { ParameterName = "@data_validade", SqlValue =DBNull.Value };
+                else
+                    Parametros[11] = new SqlParameter { ParameterName = "@data_validade", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_Validade };
+                if(string.IsNullOrEmpty(reg.Situacao))
+                    Parametros[12] = new SqlParameter { ParameterName = "@situacao", SqlValue =DBNull.Value};
+                else
+                    Parametros[12] = new SqlParameter { ParameterName = "@situacao", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Situacao };
                 try {
-                    db.Database.ExecuteSqlCommand("INSERT INTO redesim_master(protocolo,data_licenca,razao_social,cnpj,logradouro,numero,complemento,cep,cnae_principal,inscricao,numero_imovel) " +
-                        "VALUES(@protocolo,@data_licenca,@razao_social,@cnpj,@logradouro,@numero,@complemento,@cep,@cnae_principal,@inscricao,@numero_imovel)", Parametros);
+                    db.Database.ExecuteSqlCommand("INSERT INTO redesim_master(protocolo,data_licenca,razao_social,cnpj,logradouro,numero,complemento,cep,cnae_principal," +
+                        "inscricao,numero_imovel,data_validade,situacao) VALUES(@protocolo,@data_licenca,@razao_social,@cnpj,@logradouro,@numero,@complemento,@cep,@cnae_principal," +
+                        "@inscricao,@numero_imovel,@data_validade,@situacao)", Parametros);
                 } catch (Exception ex) {
                     return ex;
                 }
@@ -397,20 +406,26 @@ namespace GTI_Dal.Classes {
 
         public Redesim_Registro Retorna_Registro(string Protocolo) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from c in db.Redesim_Registro where c.Protocolo==Protocolo select c).FirstOrDefault();
-                return Sql;
+                try {
+                    var Sql = (from c in db.Redesim_Registro where c.Protocolo == Protocolo select c).FirstOrDefault();
+                    return Sql;
+                } catch (Exception ex) {
+                    throw ex;
+                }
             }
         }
 
         public Exception Atualizar_Master_Viabilidade(Redesim_Viabilidade reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[4];
+                object[] Parametros = new object[5];
                 Parametros[0] = new SqlParameter { ParameterName = "@protocolo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Protocolo };
                 Parametros[1] = new SqlParameter { ParameterName = "@numero_imovel", SqlDbType = SqlDbType.Int, SqlValue = reg.NumeroInscricaoImovel };
                 Parametros[2] = new SqlParameter { ParameterName = "@area_estabelecimento", SqlDbType = SqlDbType.Decimal, SqlValue = reg.AreaEstabelecimento };
                 Parametros[3] = new SqlParameter { ParameterName = "@inscricao", SqlDbType = SqlDbType.Int, SqlValue = reg.Inscricao };
+                Parametros[4] = new SqlParameter { ParameterName = "@area_imovel", SqlDbType = SqlDbType.Decimal, SqlValue = reg.AreaImovel };
                 try {
-                    db.Database.ExecuteSqlCommand("UPDATE redesim_master SET numero_imovel=@numero_imovel,area_estabelecimento=@area_estabelecimento,inscricao=@inscricao where protocolo=@protocolo", Parametros);
+                    
+                    db.Database.ExecuteSqlCommand("UPDATE redesim_master SET numero_imovel=@numero_imovel,area_estabelecimento=@area_estabelecimento,inscricao=@inscricao,area_imovel=@area_imovel where protocolo=@protocolo", Parametros);
                 } catch (Exception ex) {
                     return ex;
                 }

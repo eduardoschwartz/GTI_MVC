@@ -592,7 +592,8 @@ namespace GTI_MVC.Controllers {
                         Razao_Social = item.RazaoSocial.ToUpper(),
                         Cep =item.Cep,
                         Complemento = Functions.TrimEx(item.Complemento),
-                        Cnae_Principal = item.Cnae[0]
+                        Cnae_Principal = item.Cnae[0],
+                        Data_Validade = Functions.IsDate(item.DataValidade) ? Convert.ToDateTime(item.DataValidade) : DateTime.MinValue,
                     };
                     string _num = Functions.RetornaNumero(item.Numero);
                     if (_num == "")
@@ -608,9 +609,10 @@ namespace GTI_MVC.Controllers {
 
                     if (_master.Cnpj != "") {
                         int _inscricao = empresaRepository.ExisteEmpresaCnpj(_master.Cnpj);
-                        if (_inscricao > 0)
+                        if (_inscricao > 0) {
                             _master.Inscricao = _inscricao;
-                        
+                            _master.Situacao = "Cadastrada";
+                        }
                     }
                     _master.Numero_Imovel = imovelRepository.Retorna_Codigo_Endereco(_master.Logradouro, _master.Numero);
                     Exception ex = redesimRepository.Incluir_Master(_master);
