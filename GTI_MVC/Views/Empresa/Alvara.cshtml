@@ -27,6 +27,7 @@
     .actionlink {
         color: darkslateblue;
     }
+
     .card-header {
         background-color: mistyrose;
         color: brown;
@@ -145,13 +146,13 @@
             $("#MainForm").submit(function () {
                 return ValidateForm();
             });
-            
+
 
         });
 
         function ValidateForm() {
             document.getElementById('errorLabel').innerHTML = "";
- 
+
             var _codigo = document.getElementById('codigo').value;
 
             if (_codigo == "" || parseInt(_codigo) == 0) {
@@ -179,5 +180,6 @@
         }
 
     </script>
+
 }
 

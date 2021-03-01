@@ -28,6 +28,7 @@
     .actionlink {
         color: darkslateblue;
     }
+
     .card-header {
         background-color: mistyrose;
         color: brown;
@@ -92,16 +93,17 @@
                             }
                         </td>
                     </tr>
-                    <tr>
-                        <td style="width:150px" valign="middle">
-                            <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                        </td>
-                        <td style="width:150px" valign="middle">
-                            @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:110px;" })
-                        </td>
-                    </tr>
+                    @*<tr>
+                            <td style="width:150px" valign="middle">
+                                <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+                            </td>
+                            <td style="width:150px" valign="middle">
+                                @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:110px;" })
+                            </td>
+                        </tr>*@
                 </table>
-
+                <br />
+                <div class="g-recaptcha" data-sitekey="6LfRjG0aAAAAAOEd4ksnWZYw3oX4cUsimIy7yOqD"></div>
                 <br />
                 <button type="submit" class="btn btn-primary"> Imprimir</button>
             </div>
@@ -162,7 +164,7 @@
                     if (_captcha == "") {
                         document.getElementById('errorLabel').innerHTML = "Digite o código de validação!";
                         return false;
-                    } 
+                    }
                 }
             }
             if (_cpf != "") {
@@ -269,4 +271,5 @@
 
 
     </script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 }

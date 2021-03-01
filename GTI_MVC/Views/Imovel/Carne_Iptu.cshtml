@@ -63,111 +63,114 @@
 </style>
 
 
-    <div class="center container" style="width:400px">
-        @using (Html.BeginForm("Carne_Iptu", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
-            <div class="card">
-                <div class="card-header" >Emissão de 2ª via de IPTU</div>
-                <div class="card-body">
+<div class="center container" style="width:400px">
+    @using (Html.BeginForm("Carne_Iptu", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+        <div class="card">
+            <div class="card-header">Emissão de 2ª via de IPTU</div>
+            <div class="card-body">
 
 
-                    <table width="450px">
-                        <tr style="height:40px">
-                            <td style="width:150px"><label style="font-weight:normal">Código do imóvel:</label></td>
-                            <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
-                        </tr>
-                        <tr style="height:40px">
-                            <td style="width:150px">
-                                CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
-                                &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
-                            </td>
-                            <td style="width:300px">
-                                @Html.TextBoxFor(m => m.CpfValue, new { @id = "cpfTxt", @class = "textBoxBlue", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CPF" })
-                                @Html.TextBoxFor(m => m.CnpjValue, new { @id = "cnpjTxt", @class = "textBoxBlue", @style = "max-width:200px;display:none", @onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CNPJ" })
-                            </td>
-                        </tr>
+                <table width="450px">
+                    <tr style="height:40px">
+                        <td style="width:150px"><label style="font-weight:normal">Código do imóvel:</label></td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
+                    </tr>
+                    <tr style="height:40px">
+                        <td style="width:150px">
+                            CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
+                            &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
+                        </td>
+                        <td style="width:300px">
+                            @Html.TextBoxFor(m => m.CpfValue, new { @id = "cpfTxt", @class = "textBoxBlue", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CPF" })
+                            @Html.TextBoxFor(m => m.CnpjValue, new { @id = "cnpjTxt", @class = "textBoxBlue", @style = "max-width:200px;display:none", @onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CNPJ" })
+                        </td>
+                    </tr>
 
-                        <tr style="height:40px">
-                            <td style="width:150px" valign="middle">
-                                <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                            </td>
-                            <td style="width:150px" valign="middle">
-                                @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
-                            </td>
-                        </tr>
-                    </table>
-                    <br />
-                    <button type="submit" class="btn btn-primary"> Consultar</button>
-
-                </div>
-                
-                <label class="errorlabel" id="errorLabel">@Model.ErrorMessage</label>
-                <div class="card-footer">
-                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
-                </div>
+                    @*<tr style="height:40px">
+                <td style="width:150px" valign="middle">
+                    <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+                </td>
+                <td style="width:150px" valign="middle">
+                    @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
+                </td>
+            </tr>*@
+                </table>
+                <br />
+                <div class="g-recaptcha" data-sitekey="6LfRjG0aAAAAAOEd4ksnWZYw3oX4cUsimIy7yOqD"></div>
+                <br />
+                <button type="submit" class="btn btn-primary"> Consultar</button>
 
             </div>
 
+            <label class="errorlabel" id="errorLabel">@Model.ErrorMessage</label>
+            <div class="card-footer">
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
+
+        </div>
+
+    }
+
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+        });
+
+        function radioCheck() {
+            document.getElementById('cnpjTxt').value = "";
+            document.getElementById('cpfTxt').value = "";
+            if (document.getElementById('cpfCheck').checked) {
+                document.getElementById('cpfTxt').style.display = 'block';
+            }
+            else {
+                document.getElementById('cpfTxt').style.display = 'none';
+            }
+            if (document.getElementById('cnpjCheck').checked) {
+                document.getElementById('cnpjTxt').style.display = 'block';
+            }
+            else {
+                document.getElementById('cnpjTxt').style.display = 'none';
+            }
         }
 
-    </div>
+        function ValidateForm() {
+            ClearError();
+            var _cod = document.getElementById('codigo').value;
+            var _cpf = document.getElementById('cpfTxt').value;
+            var _cnpj = document.getElementById('cnpjTxt').value;
+            var _captcha = document.getElementById('captchaTxt').value;
 
-    @section scripts{
-
-        <script type="text/javascript">
-
-            $(document).ready(function () {
-                $("#MainForm").submit(function () {
-                    return ValidateForm();
-                });
-            });
-
-            function radioCheck() {
-                document.getElementById('cnpjTxt').value = "";
-                document.getElementById('cpfTxt').value = "";
-                if (document.getElementById('cpfCheck').checked) {
-                    document.getElementById('cpfTxt').style.display = 'block';
-                }
-                else {
-                    document.getElementById('cpfTxt').style.display = 'none';
-                }
-                if (document.getElementById('cnpjCheck').checked) {
-                    document.getElementById('cnpjTxt').style.display = 'block';
-                }
-                else {
-                    document.getElementById('cnpjTxt').style.display = 'none';
-                }
+            if (_cod == "" || parseInt(_cod) == 0) {
+                document.getElementById('errorLabel').innerHTML = "Digite o código do imóvel";
+                return false;
             }
-
-            function ValidateForm() {
-                ClearError();
-                var _cod = document.getElementById('codigo').value;
-                var _cpf = document.getElementById('cpfTxt').value;
-                var _cnpj = document.getElementById('cnpjTxt').value;
-                var _captcha = document.getElementById('captchaTxt').value;
-
-                if (_cod == "" || parseInt(_cod) == 0) {
-                    document.getElementById('errorLabel').innerHTML = "Digite o código do imóvel";
+            else {
+                if (parseInt(_cod) > 0 && _cpf == "" && _cnpj == "") {
+                    document.getElementById('errorLabel').innerHTML = "Digite o Cpf ou o CNPJ!";
                     return false;
-                }
-                else {
-                    if (parseInt(_cod) > 0 && _cpf == "" && _cnpj == "") {
-                        document.getElementById('errorLabel').innerHTML = "Digite o Cpf ou o CNPJ!";
+                } else {
+                    if (_captcha == "") {
+                        document.getElementById('errorLabel').innerHTML = "Digite o código de validação!";
                         return false;
                     } else {
-                        if (_captcha == "") {
-                            document.getElementById('errorLabel').innerHTML = "Digite o código de validação!";
-                            return false;
-                        } else {
-                            return true;
-                        }
+                        return true;
                     }
                 }
             }
+        }
 
-            function ClearError() {
-                document.getElementById('errorLabel').innerHTML = "";
-            }
+        function ClearError() {
+            document.getElementById('errorLabel').innerHTML = "";
+        }
 
 
-        </script>
-    }
+    </script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+}

@@ -74,16 +74,19 @@
                         <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
                     </tr>
 
-                    <tr style="height:40px">
-                        <td style="width:150px" valign="middle">
-                            <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                        </td>
-                        <td style="width:150px" valign="middle">
-                            @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
-                        </td>
-                    </tr>
+                    @*<tr style="height:40px">
+                <td style="width:150px" valign="middle">
+                    <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+                </td>
+                <td style="width:150px" valign="middle">
+                    @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
+                </td>
+            </tr>*@
                 </table>
                 <br />
+                <div class="g-recaptcha" data-sitekey="6LfRjG0aAAAAAOEd4ksnWZYw3oX4cUsimIy7yOqD"></div>
+                <br />
+
                 <button type="submit" class="btn btn-primary"> Consultar</button>
             </div>
             <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
@@ -151,4 +154,5 @@
 
 
     </script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 }
