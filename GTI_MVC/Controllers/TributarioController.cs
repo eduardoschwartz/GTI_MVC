@@ -17,6 +17,8 @@ using System.Linq;
 using System.Web.Mvc;
 using static GTI_Models.modelCore;
 using static GTI_Mvc.Functions;
+using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace GTI_Mvc.Controllers {
     [Route("Tributario")]
@@ -60,10 +62,22 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-                ViewBag.Result = "Código de verificação inválido.";
-                return View(certidaoViewModel);
+            var response = Request["g-recaptcha-response"];
+            string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
+            var client = new WebClient();
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+            string msg = status ? "Sucesso" : "Falha";
+            if (!status) {
+                ViewBag.Result = "Código Recaptcha inválido.";
+                return View(model);
             }
+
+            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+            //    ViewBag.Result = "Código de verificação inválido.";
+            //    return View(certidaoViewModel);
+            //}
 
             if (!_existeCod) {
                 ViewBag.Result = "Inscrição não cadastrada.";
@@ -334,10 +348,22 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-                ViewBag.Result = "Código de verificação inválido.";
+            var response = Request["g-recaptcha-response"];
+            string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
+            var client = new WebClient();
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+            string msg = status ? "Sucesso" : "Falha";
+            if (!status) {
+                ViewBag.Result = "Código Recaptcha inválido.";
                 return View(model);
             }
+
+            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+            //    ViewBag.Result = "Código de verificação inválido.";
+            //    return View(model);
+            //}
 
             //####################################
 
@@ -561,8 +587,19 @@ namespace GTI_Mvc.Controllers {
 
             ViewBag.Result = "";
 
-            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-                ViewBag.Result = "Código de verificação inválido.";
+            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+            //    ViewBag.Result = "Código de verificação inválido.";
+            //    return View(model);
+            //}
+            var response = Request["g-recaptcha-response"];
+            string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
+            var client = new WebClient();
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+            string msg = status ? "Sucesso" : "Falha";
+            if (!status) {
+                ViewBag.Result = "Código Recaptcha inválido.";
                 return View(model);
             }
 
@@ -720,13 +757,27 @@ namespace GTI_Mvc.Controllers {
                     return View(model);
                 }
             }
-            if (Codigo == 0) {
-                
-            }
-            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-                ViewBag.Result = "Código de verificação inválido.";
+
+            var response = Request["g-recaptcha-response"];
+            string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
+            var client = new WebClient();
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+            string msg = status ? "Sucesso" : "Falha";
+            if (!status) {
+                ViewBag.Result = "Código Recaptcha inválido.";
                 return View(model);
             }
+
+
+            //if (Codigo == 0) {
+
+            //}
+            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+            //    ViewBag.Result = "Código de verificação inválido.";
+            //    return View(model);
+            //}
             Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
             Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
             Cidadao_bll requerenteRepository = new Cidadao_bll("GTIconnection");
@@ -1438,8 +1489,19 @@ namespace GTI_Mvc.Controllers {
             model.ProcessoAntigo =null;
             model.ProcessoNovo = null;
 
-            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-                ViewBag.Result = "Código de verificação inválido.";
+            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+            //    ViewBag.Result = "Código de verificação inválido.";
+            //    return View(model);
+            //}
+            var response = Request["g-recaptcha-response"];
+            string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
+            var client = new WebClient();
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+            string msg = status ? "Sucesso" : "Falha";
+            if (!status) {
+                ViewBag.Result = "Código Recaptcha inválido.";
                 return View(model);
             }
 
@@ -1829,8 +1891,19 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-                ViewBag.Result = "Código de verificação inválido.";
+            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+            //    ViewBag.Result = "Código de verificação inválido.";
+            //    return View(model);
+            //}
+            var response = Request["g-recaptcha-response"];
+            string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
+            var client = new WebClient();
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+            string msg = status ? "Sucesso" : "Falha";
+            if (!status) {
+                ViewBag.Result = "Código Recaptcha inválido.";
                 return View(model);
             }
 

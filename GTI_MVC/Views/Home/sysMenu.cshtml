@@ -51,6 +51,7 @@
                     @Html.ActionLink("Consulta de processos", "ProcessoqryC", "Protocolo", null, new { @class = "actionlink" })<br />
                 }
                 if (Session["hashfiscalmov"].ToString() == "S") {
+                    @Html.ActionLink("Redesim", "UploadFiles", "RedeSim", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Alvará de Funcionamento", "Alvara", "Empresa", null, new { @class = "actionlink" })<br />
                 }
             }

@@ -27,6 +27,7 @@
     .actionlink {
         color: darkslateblue;
     }
+
     .card-header {
         background-color: mistyrose;
         color: brown;
@@ -81,18 +82,20 @@
                         <td style="width:300px">@Html.TextBoxFor(m => m.Numero_Processo, new { @id = "numprocesso", @class = "textBoxBlue", @style = "max-width:150px" })</td>
                     </tr>
 
-                    <tr style="height:40px">
-                        <td style="width:150px" valign="middle">
-                            <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                        </td>
-                        <td style="width:150px" valign="middle">
-                            @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
-                        </td>
-                    </tr>
+                    @*<tr style="height:40px">
+                            <td style="width:150px" valign="middle">
+                                <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+                            </td>
+                            <td style="width:150px" valign="middle">
+                                @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
+                            </td>
+                        </tr>*@
                 </table>
 
                 <br />
-                <button type="submit" id="btnOK"  class="btn btn-primary"> Consultar</button>
+                <div class="g-recaptcha" data-sitekey="6LfRjG0aAAAAAOEd4ksnWZYw3oX4cUsimIy7yOqD"></div>
+                <br />
+                <button type="submit" id="btnOK" class="btn btn-primary"> Consultar</button>
                 <br />
                 <br />
                 <span style="color:brown;text-decoration: underline">Observação:</span><br />
@@ -105,10 +108,10 @@
                         </td>
                         <td style="width:575px">
 
-                                @Html.TextBoxFor(m => m.ProcessoAntigo, new { @id = "codigo", @class = "textBoxBlue", @style = "width:100px;height:25px" })
-                                <label>&nbsp;&nbsp;</label>
-                                <button id="btnDigito" type="submit" class="btn btn-success" name="action" value="btnDigito">Verificar</button>
-                                <span style="padding-left:10px">Nº Processo Novo:&nbsp;</span><span style="color:brown">@Model.ProcessoNovo</span>
+                            @Html.TextBoxFor(m => m.ProcessoAntigo, new { @id = "codigo", @class = "textBoxBlue", @style = "width:100px;height:25px" })
+                            <label>&nbsp;&nbsp;</label>
+                            <button id="btnDigito" type="submit" class="btn btn-success" name="action" value="btnDigito">Verificar</button>
+                            <span style="padding-left:10px">Nº Processo Novo:&nbsp;</span><span style="color:brown">@Model.ProcessoNovo</span>
                         </td>
                     </tr>
                 </table>
@@ -165,6 +168,7 @@
         }
 
     </script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 }
 
 

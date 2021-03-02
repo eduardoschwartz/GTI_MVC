@@ -27,6 +27,7 @@
     .actionlink {
         color: darkslateblue;
     }
+
     .card-header {
         background-color: mistyrose;
         color: brown;
@@ -78,15 +79,17 @@
                         <td style="width:300px">@Html.TextBoxFor(m => m.Documento, new { @id = "documento", @class = "textBoxBlue", @style = "max-width:250px", @onKeyPress = "return formata(this, '§§§§§§§§§§§§§§§§§', event)" })</td>
                     </tr>
 
-                    <tr style="height:40px">
-                        <td style="width:150px" valign="middle">
-                            <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                        </td>
-                        <td style="width:150px" valign="middle">
-                            @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
-                        </td>
-                    </tr>
+                    @*<tr style="height:40px">
+                            <td style="width:150px" valign="middle">
+                                <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+                            </td>
+                            <td style="width:150px" valign="middle">
+                                @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
+                            </td>
+                        </tr>*@
                 </table>
+                <br />
+                <div class="g-recaptcha" data-sitekey="6LfRjG0aAAAAAOEd4ksnWZYw3oX4cUsimIy7yOqD"></div>
                 <br />
                 <button type="submit" class="btn btn-primary"> Consultar</button>
             </div>
@@ -258,4 +261,5 @@
         }
 
     </script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 }
