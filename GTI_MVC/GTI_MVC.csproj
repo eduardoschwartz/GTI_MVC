@@ -214,6 +214,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImovelController.cs" />
     <Compile Include="Controllers\ItbiController.cs" />
+    <Compile Include="Controllers\MiscController.cs" />
     <Compile Include="Controllers\ProtocoloController.cs" />
     <Compile Include="Controllers\RedeSimController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
@@ -897,6 +898,7 @@
     <Content Include="Views\Imovel\AutoInfracao_ter_query.cshtml" />
     <Content Include="Views\Itbi\itbi_isencao_e.cshtml" />
     <Content Include="Views\RedeSim\UploadFiles.cshtml" />
+    <Content Include="Views\Misc\Calevent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

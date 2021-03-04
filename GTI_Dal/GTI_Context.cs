@@ -187,5 +187,7 @@ namespace GTI_Dal {
         public DbSet<Redesim_viabilidade_analise> Redesim_Viabilidade_Analise { get; set; }
         public DbSet<Redesim_licenciamento> Redesim_Licenciamento { get; set; }
         public DbSet<Redesim_master> Redesim_Master { get; set; }
+        public DbSet<Calendar_event> Calendar_Event { get; set; }
+
     }
 }

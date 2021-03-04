@@ -1,14 +1,11 @@
 ﻿using GTI_Bll.Classes;
-using GTI_Models;
 using GTI_Models.Models;
 using GTI_Mvc.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
-using System.Security.Policy;
 using System.Web.Mvc;
-using System.Web.UI;
 using static GTI_Models.modelCore;
 
 namespace GTI_Mvc.Controllers {
@@ -509,6 +506,7 @@ namespace GTI_Mvc.Controllers {
             return View(model);
         }
 
+      
 
     }
 }

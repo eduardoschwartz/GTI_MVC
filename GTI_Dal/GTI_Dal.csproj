@@ -102,6 +102,7 @@
     <Compile Include="Classes\endereco_Data.cs" />
     <Compile Include="Classes\imovel_Data.cs" />
     <Compile Include="Classes\integrativa_Data.cs" />
+    <Compile Include="Classes\misc_Data.cs" />
     <Compile Include="Classes\redesim_Data.cs" />
     <Compile Include="Integrativa_Context.cs" />
     <Compile Include="Classes\sistema_Data.cs" />
