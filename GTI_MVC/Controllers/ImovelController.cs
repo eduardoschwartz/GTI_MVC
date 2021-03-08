@@ -1079,8 +1079,15 @@ namespace GTI_Mvc.Controllers {
             ImovelDetailsViewModel imovelDetailsViewModel = new ImovelDetailsViewModel();
 
 
-            if (model.CnpjValue == null && model.CpfValue == null) {
-                model.ErrorMessage = "Cpf/Cnpj não informado.";
+            var response = Request["g-recaptcha-response"];
+            string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
+            var client = new WebClient();
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+            string msg = status ? "Sucesso" : "Falha";
+            if (!status) {
+                imovelDetailsViewModel.ErrorMessage = "Código Recaptcha inválido.";
                 return View(model);
             }
 
@@ -1116,10 +1123,10 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
-            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-                imovelDetailsViewModel.ErrorMessage = "Código de verificação inválido.";
-                return View(imovelDetailsViewModel);
-            }
+            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+            //    imovelDetailsViewModel.ErrorMessage = "Código de verificação inválido.";
+            //    return View(imovelDetailsViewModel);
+            //}
 
             Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
             List<AreaStruct> areas = imovelRepository.Lista_Area(_codigo);

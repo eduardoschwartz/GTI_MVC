@@ -113,7 +113,6 @@
             ClearError();
             var _cpfcnpj = document.getElementById('cpfcnpjTxt').value;
             var _doc = document.getElementById('documento').value;
-            var _captcha = document.getElementById('captchaTxt').value;
 
             var _consultar = false;
             var _autenticar = false;
@@ -131,10 +130,6 @@
                 return false;
             }
 
-            if (_consultar == true && _captcha == "") {
-                document.getElementById('errorLabel').innerHTML = "Digite o código de validação.";
-                return false;
-            }
 
             var cnpjtmp = _cpfcnpj.padStart(14, '0');
             var cpftmp = _cpfcnpj.padStart(11, '0');

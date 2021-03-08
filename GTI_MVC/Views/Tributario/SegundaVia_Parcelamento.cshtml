@@ -139,7 +139,6 @@
         function ValidateForm() {
             ClearError();
             var _numero = document.getElementById('numprocesso').value.trim();
-            var _captcha = document.getElementById('captchaTxt').value;
             var _cod = document.getElementById('Codigo').value;
 
             if ((_cod == "" || parseInt(_cod) == 0)) {
@@ -153,12 +152,6 @@
                 return false;
             }
 
-            if (_captcha == "") {
-                document.getElementById('errorLabel').innerHTML = "Digite o código de validação!";
-                return false;
-            } else {
-                return true;
-            }
 
             return true;
         }

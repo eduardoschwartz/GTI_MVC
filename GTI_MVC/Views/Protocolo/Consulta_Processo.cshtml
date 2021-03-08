@@ -110,19 +110,11 @@
         function ValidateForm() {
             ClearError();
             var _numero = document.getElementById('numprocesso').value.trim();
-            var _captcha = document.getElementById('captchaTxt').value;
 
             var _error = Valida_Numero_Processo(_numero);
             if (_error != "") {
                 document.getElementById('errorLabel').innerHTML = _error;
                 return false;
-            }
-
-            if (_captcha == "") {
-                document.getElementById('errorLabel').innerHTML = "Digite o código de validação!";
-                return false;
-            } else {
-                return true;
             }
 
             return true;

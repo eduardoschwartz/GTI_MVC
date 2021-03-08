@@ -7,6 +7,9 @@ using System.Net;
 using System.Net.Mail;
 using System.Web.Mvc;
 using static GTI_Models.modelCore;
+using System.Net;
+using Newtonsoft.Json.Linq;
+
 
 namespace GTI_Mvc.Controllers {
     public class HomeController : Controller {
@@ -278,10 +281,18 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Login_create(LoginViewModel model) {
 
-            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-                ViewBag.Result = "Código de verificação inválido.";
+            var response = Request["g-recaptcha-response"];
+            var client = new WebClient();
+            string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+            string msg = status ? "Sucesso" : "Falha";
+            if (!status) {
+                ViewBag.Result = "Código Recaptcha inválido.";
                 return View(model);
             }
+
             Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
 
             if (sistemaRepository.Existe_Usuario_Web(model.Email)) {
@@ -371,8 +382,19 @@ namespace GTI_Mvc.Controllers {
         [Route("Login_resend")]
         [HttpPost]
         public ViewResult Login_resend(LoginViewModel model) {
-            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-                ViewBag.Result = "Código de verificação inválido.";
+            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
+            //    ViewBag.Result = "Código de verificação inválido.";
+            //    return View(model);
+            //}
+            var response = Request["g-recaptcha-response"];
+            var client = new WebClient();
+            string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+            string msg = status ? "Sucesso" : "Falha";
+            if (!status) {
+                ViewBag.Result = "Código Recaptcha inválido.";
                 return View(model);
             }
 
@@ -426,8 +448,15 @@ namespace GTI_Mvc.Controllers {
         [Route("Login_resend_pwd")]
         [HttpPost]
         public ViewResult Login_resend_pwd(LoginViewModel model) {
-            if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-                ViewBag.Result = "Código de verificação inválido.";
+            var response = Request["g-recaptcha-response"];
+            var client = new WebClient();
+            string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+            string msg = status ? "Sucesso" : "Falha";
+            if (!status) {
+                ViewBag.Result = "Código Recaptcha inválido.";
                 return View(model);
             }
 
@@ -496,6 +525,18 @@ namespace GTI_Mvc.Controllers {
             //    Functions.pUserFullName = "Visitante";
             //    return View(model);
             //}
+            var response = Request["g-recaptcha-response"];
+            var client = new WebClient();
+            string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+            string msg = status ? "Sucesso" : "Falha";
+            if (!status) {
+                ViewBag.Result = "Código Recaptcha inválido.";
+                return View(model);
+            }
+
             Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
             Usuario_web reg = sistemaRepository.Retorna_Usuario_Web(model.Email);
             int Id = reg.Id;

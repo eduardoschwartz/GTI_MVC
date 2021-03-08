@@ -30,8 +30,9 @@
 
     .actionlink {
         color: darkslateblue;
-        font-size:14px;
+        font-size: 14px;
     }
+
     .card-header {
         background-color: mistyrose;
         color: brown;
@@ -83,15 +84,17 @@
                 <td>@Html.TextBoxFor(m => m.Senha3, new { @type = "password", @id = "senha3", @class = "textBoxBlue", @style = "max-width:400px" })</td>
             </tr>
 
-            <tr style="height:40px">
-                <td valign="middle">
-                    <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                </td>
-                <td valign="middle">
-                    @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
-                </td>
-            </tr>
+            @*<tr style="height:40px">
+                    <td valign="middle">
+                        <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+                    </td>
+                    <td valign="middle">
+                        @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
+                    </td>
+                </tr>*@
         </table>
+        <br />
+        <div class="g-recaptcha" data-sitekey="6LfRjG0aAAAAAOEd4ksnWZYw3oX4cUsimIy7yOqD"></div>
         <br />
         <button type="submit" title="Gravar a nova senha" class="btn btn-primary"> Redefinir</button>
 
@@ -129,7 +132,6 @@
 
         function ValidateForm() {
             ClearError();
-            var _captcha = document.getElementById('captchaTxt').value;
             var _senha2 = document.getElementById('senha2').value;
             var _senha3 = document.getElementById('senha3').value;
 
@@ -144,11 +146,6 @@
                 return false;
             }
 
-            if (_captcha.length < 6) {
-                document.getElementById('errorLabel').innerHTML = "Código de validação inválido";
-                document.getElementById('captchaTxt').focus();
-                return false;
-            }
 
             return true;
         }
@@ -162,5 +159,6 @@
 
 
     </script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 }
 

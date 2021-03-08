@@ -162,7 +162,6 @@
             ClearError();
             var _cpf = document.getElementById('cpfTxt').value;
             var _cnpj = document.getElementById('cnpjTxt').value;
-            var _captcha = document.getElementById('captchaTxt').value;
             var _chave = document.getElementById('chave').value;
             var _inscricao = document.getElementById('inscricao').value;
             var _buscar_codigos = false;
@@ -183,10 +182,7 @@
                 return false;
             }
 
-            if (_consultar == true && _captcha == "") {
-                document.getElementById('errorLabel').innerHTML = "Digite o código de validação.";
-                return false;
-            }
+           
 
             if (_autenticar == true && _chave == "") {
                 document.getElementById('errorLabel').innerHTML = "Digite a chave de autenticação.";

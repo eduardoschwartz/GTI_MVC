@@ -148,7 +148,6 @@
             var _cod = document.getElementById('codigo').value;
             var _cpf = document.getElementById('cpfTxt').value;
             var _cnpj = document.getElementById('cnpjTxt').value;
-            var _captcha = document.getElementById('captchaTxt').value;
 
             if ((_cod == "" || parseInt(_cod) == 0) && _cpf == "" && _cnpj == "") {
                 document.getElementById('errorLabel').innerHTML = "Digite ao menos um dos campos!";
@@ -158,15 +157,9 @@
                 if (parseInt(_cod) > 0 && (_cpf != "" || _cnpj != "")) {
                     document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal ou o Cpf ou o CNPJ!";
                     return false;
-                } else {
-                    if (_captcha == "") {
-                        document.getElementById('errorLabel').innerHTML = "Digite o código de validação!";
-                        return false;
-                    } else {
-                        return true;
-                    }
-                }
+                } 
             }
+            return true;
         }
 
         function ClearError() {

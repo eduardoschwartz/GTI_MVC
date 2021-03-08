@@ -133,8 +133,6 @@
             ClearError();
             var _cpf = document.getElementById('cpfTxt').value;
             var _cnpj = document.getElementById('cnpjTxt').value;
-            var _captcha = document.getElementById('captchaTxt').value;
-            var _chave = document.getElementById('chave').value;
 
             var _consultar = false;
             var _autenticar = false;
@@ -150,28 +148,6 @@
                 return false;
             }
 
-            if (_consultar == true && _captcha == "") {
-                document.getElementById('errorLabel').innerHTML = "Digite o código de validação.";
-                return false;
-            }
-
-            if (_autenticar == true && _chave == "") {
-                document.getElementById('errorLabel').innerHTML = "Digite a chave de autenticação.";
-                return false;
-            }
-
-            if (_chave.length > 8) {
-                var _sufixo = _chave.substring(_chave.length - 3, _chave.length);
-                if (_sufixo != "-XA" && _sufixo != "-XE" && _sufixo != "-IE") {
-                    document.getElementById('errorLabel').innerHTML = "Chave de autenticação inválida!";
-                    return false;
-                }
-            } else {
-                if (_chave.length != "") {
-                    document.getElementById('errorLabel').innerHTML = "Chave de autenticação inválida!";
-                    return false;
-                }
-            }
             return true;
         }
 
