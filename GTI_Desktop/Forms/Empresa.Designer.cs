@@ -60,6 +60,8 @@
             this.CnaeVSButton = new System.Windows.Forms.Button();
             this.CnaeButton = new System.Windows.Forms.Button();
             this.AtividadePrincipalButton = new System.Windows.Forms.Button();
+            this.AtividadeISSButton = new System.Windows.Forms.Button();
+            this.AtividadeISSDelButton = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.DGtab = new System.Windows.Forms.TabPage();
             this.SilToolStrip = new System.Windows.Forms.ToolStrip();
@@ -225,7 +227,6 @@
             this.columnHeader16 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader17 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label80 = new System.Windows.Forms.Label();
-            this.AtividadeISSButton = new System.Windows.Forms.Button();
             this.a1Panel9 = new Owf.Controls.A1Panel();
             this.Cnae = new System.Windows.Forms.TextBox();
             this.label73 = new System.Windows.Forms.Label();
@@ -259,7 +260,6 @@
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader15 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.AtividadeISSDelButton = new System.Windows.Forms.Button();
             this.a1Panel1.SuspendLayout();
             this.CodigoToolStrip.SuspendLayout();
             this.tBar.SuspendLayout();
@@ -678,6 +678,32 @@
             this.Ttp.SetToolTip(this.AtividadePrincipalButton, "Selecione a atividade principal");
             this.AtividadePrincipalButton.UseVisualStyleBackColor = true;
             this.AtividadePrincipalButton.Click += new System.EventHandler(this.AtividadePrincipalButton_Click);
+            // 
+            // AtividadeISSButton
+            // 
+            this.AtividadeISSButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.AtividadeISSButton.Image = global::GTI_Desktop.Properties.Resources.add;
+            this.AtividadeISSButton.Location = new System.Drawing.Point(698, 31);
+            this.AtividadeISSButton.Name = "AtividadeISSButton";
+            this.AtividadeISSButton.Size = new System.Drawing.Size(23, 22);
+            this.AtividadeISSButton.TabIndex = 195;
+            this.AtividadeISSButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.Ttp.SetToolTip(this.AtividadeISSButton, "Adicionar uma atividade de ISS");
+            this.AtividadeISSButton.UseVisualStyleBackColor = true;
+            this.AtividadeISSButton.Click += new System.EventHandler(this.AtividadeISSButton_Click);
+            // 
+            // AtividadeISSDelButton
+            // 
+            this.AtividadeISSDelButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.AtividadeISSDelButton.Image = global::GTI_Desktop.Properties.Resources.cancelar;
+            this.AtividadeISSDelButton.Location = new System.Drawing.Point(698, 56);
+            this.AtividadeISSDelButton.Name = "AtividadeISSDelButton";
+            this.AtividadeISSDelButton.Size = new System.Drawing.Size(23, 22);
+            this.AtividadeISSDelButton.TabIndex = 227;
+            this.AtividadeISSDelButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.Ttp.SetToolTip(this.AtividadeISSDelButton, "Remover uma atividade de ISS");
+            this.AtividadeISSDelButton.UseVisualStyleBackColor = true;
+            this.AtividadeISSDelButton.Click += new System.EventHandler(this.AtividadeISSDeslButton_Click);
             // 
             // tabControl1
             // 
@@ -2508,6 +2534,7 @@
             this.columnHeader12,
             this.columnHeader13});
             this.AtividadeVSListView.FullRowSelect = true;
+            this.AtividadeVSListView.HideSelection = false;
             this.AtividadeVSListView.Location = new System.Drawing.Point(6, 20);
             this.AtividadeVSListView.Name = "AtividadeVSListView";
             this.AtividadeVSListView.ShowItemToolTips = true;
@@ -2581,6 +2608,7 @@
             this.columnHeader16,
             this.columnHeader17});
             this.AtividadeISSListView.FullRowSelect = true;
+            this.AtividadeISSListView.HideSelection = false;
             this.AtividadeISSListView.Location = new System.Drawing.Point(6, 21);
             this.AtividadeISSListView.Name = "AtividadeISSListView";
             this.AtividadeISSListView.ShowGroups = false;
@@ -2629,19 +2657,6 @@
             this.label80.TabIndex = 224;
             this.label80.Text = "Atividade para pagamento de ISS";
             this.label80.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // AtividadeISSButton
-            // 
-            this.AtividadeISSButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.AtividadeISSButton.Image = global::GTI_Desktop.Properties.Resources.add;
-            this.AtividadeISSButton.Location = new System.Drawing.Point(698, 31);
-            this.AtividadeISSButton.Name = "AtividadeISSButton";
-            this.AtividadeISSButton.Size = new System.Drawing.Size(23, 22);
-            this.AtividadeISSButton.TabIndex = 195;
-            this.AtividadeISSButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.Ttp.SetToolTip(this.AtividadeISSButton, "Adicionar uma atividade de ISS");
-            this.AtividadeISSButton.UseVisualStyleBackColor = true;
-            this.AtividadeISSButton.Click += new System.EventHandler(this.AtividadeISSButton_Click);
             // 
             // a1Panel9
             // 
@@ -2934,6 +2949,7 @@
             this.columnHeader3,
             this.columnHeader4});
             this.ProcessosListView.FullRowSelect = true;
+            this.ProcessosListView.HideSelection = false;
             this.ProcessosListView.Location = new System.Drawing.Point(8, 162);
             this.ProcessosListView.Name = "ProcessosListView";
             this.ProcessosListView.Size = new System.Drawing.Size(690, 123);
@@ -2972,6 +2988,7 @@
             this.columnHeader8,
             this.columnHeader15});
             this.HistoricoListView.FullRowSelect = true;
+            this.HistoricoListView.HideSelection = false;
             this.HistoricoListView.Location = new System.Drawing.Point(8, 12);
             this.HistoricoListView.Name = "HistoricoListView";
             this.HistoricoListView.Size = new System.Drawing.Size(690, 144);
@@ -3004,19 +3021,6 @@
             // 
             this.columnHeader15.Text = "UsuarioId";
             this.columnHeader15.Width = 0;
-            // 
-            // AtividadeISSDelButton
-            // 
-            this.AtividadeISSDelButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.AtividadeISSDelButton.Image = global::GTI_Desktop.Properties.Resources.cancelar;
-            this.AtividadeISSDelButton.Location = new System.Drawing.Point(698, 56);
-            this.AtividadeISSDelButton.Name = "AtividadeISSDelButton";
-            this.AtividadeISSDelButton.Size = new System.Drawing.Size(23, 22);
-            this.AtividadeISSDelButton.TabIndex = 227;
-            this.AtividadeISSDelButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.Ttp.SetToolTip(this.AtividadeISSDelButton, "Remover uma atividade de ISS");
-            this.AtividadeISSDelButton.UseVisualStyleBackColor = true;
-            this.AtividadeISSDelButton.Click += new System.EventHandler(this.AtividadeISSDeslButton_Click);
             // 
             // Empresa
             // 
@@ -3116,7 +3120,6 @@
         internal System.Windows.Forms.Label label1;
         internal System.Windows.Forms.Label label5;
         internal System.Windows.Forms.TextBox RG;
-        private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage DGtab;
         private System.Windows.Forms.TabPage ENtab;
         internal System.Windows.Forms.Label label11;
@@ -3327,5 +3330,6 @@
         private System.Windows.Forms.ToolStripButton DelHistoricoButton;
         private System.Windows.Forms.ToolStripButton ZoomHistoricoButton;
         private System.Windows.Forms.Button AtividadeISSDelButton;
+        public System.Windows.Forms.TabControl tabControl1;
     }
 }
