@@ -215,6 +215,7 @@
     <Compile Include="Controllers\ImovelController.cs" />
     <Compile Include="Controllers\ItbiController.cs" />
     <Compile Include="Controllers\MiscController.cs" />
+    <Compile Include="Controllers\ParcelamentoController.cs" />
     <Compile Include="Controllers\ProtocoloController.cs" />
     <Compile Include="Controllers\RedeSimController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
@@ -899,6 +900,8 @@
     <Content Include="Views\Itbi\itbi_isencao_e.cshtml" />
     <Content Include="Views\RedeSim\UploadFiles.cshtml" />
     <Content Include="Views\Misc\Calevent.cshtml" />
+    <Content Include="Views\Parcelamento\Requerente.cshtml" />
+    <Content Include="Views\Parcelamento\Parc_index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
