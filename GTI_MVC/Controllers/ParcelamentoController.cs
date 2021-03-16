@@ -29,7 +29,19 @@ namespace GTI_MVC.Controllers
             return View();
         }
 
+        [Route("Parc_req")]
+        [HttpGet]
+        public ActionResult Parc_req() {
+            ParcelamentoViewModel model = new ParcelamentoViewModel();
+            model.Requerente = new Parc_Requerente();
+            return View(model);
+        }
 
+        [Route("Parc_req")]
+        [HttpPost]
+        public ActionResult Parc_req(ParcelamentoViewModel model) {
+            return View(model);
+        }
 
 
 

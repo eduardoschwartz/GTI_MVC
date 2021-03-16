@@ -57,8 +57,9 @@
         <div class="card">
             <div class="card-header">Parcelamento de débitos</div>
             <div class="card-body">
-                @Html.ActionLink("Efetuar um novo parcelamento", "Itbi_urbano", "Parcelamento", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Efetuar um novo parcelamento", "parc_req", "Parcelamento", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Consultar parcelamentos efetuados", "Itbi_query", "Parcelamento", null, new { @class = "actionlink" })<br />
+                <a href="~/Files/ITBI Manual do Usuario.pdf" class="actionlink">Download do manual do usuário</a><br />
             </div>
             <div class="card-footer">
                 @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />

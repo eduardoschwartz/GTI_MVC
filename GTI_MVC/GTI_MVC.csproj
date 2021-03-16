@@ -493,6 +493,7 @@
     <Compile Include="ViewModels\MemoryViewModel.cs" />
     <Compile Include="ViewModels\NotificacaoIssViewModel.cs" />
     <Compile Include="ViewModels\NotificacaoTerViewModel.cs" />
+    <Compile Include="ViewModels\ParcelamentoViewModel.cs" />
     <Compile Include="ViewModels\ProcessoViewModel.cs" />
     <Compile Include="ViewModels\RedesimImportViewModel.cs" />
     <Compile Include="ViewModels\RodoviariaViewModel.cs" />
@@ -900,7 +901,7 @@
     <Content Include="Views\Itbi\itbi_isencao_e.cshtml" />
     <Content Include="Views\RedeSim\UploadFiles.cshtml" />
     <Content Include="Views\Misc\Calevent.cshtml" />
-    <Content Include="Views\Parcelamento\Requerente.cshtml" />
+    <Content Include="Views\Parcelamento\Parc_req.cshtml" />
     <Content Include="Views\Parcelamento\Parc_index.cshtml" />
   </ItemGroup>
   <ItemGroup>
