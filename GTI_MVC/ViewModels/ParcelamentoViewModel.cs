@@ -15,8 +15,6 @@ namespace GTI_Mvc.ViewModels {
     public class Parc_Requerente {
         public int Codigo { get; set; }
         public string Nome { get; set; }
-        public string Cpf { get; set; }
-        public string Cnpj { get; set; }
         public string Cpf_Cnpj { get; set; }
         public int Logradouro_Codigo { get; set; }
         public string Logradouro_Nome { get; set; }
@@ -29,6 +27,7 @@ namespace GTI_Mvc.ViewModels {
         public string Cidade_Nome { get; set; }
         public string UF { get; set; }
         public string Telefone { get; set; }
+        public string TipoEnd { get; set; }
         public string Email { get; set; }
     }
 

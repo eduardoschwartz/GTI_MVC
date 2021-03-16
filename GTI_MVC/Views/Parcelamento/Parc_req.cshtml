@@ -58,125 +58,113 @@
     @using (Html.BeginForm("Parc_req", "Parcelamento", FormMethod.Post, new { @id = "MainForm" })) {
 
 
-        <div class="card">
-            <div class="card-header">Dados do Requerente</div>
-            <div class="card-body">
+    <div class="card">
+        <div class="card-header">Dados do Requerente</div>
+        <div class="card-body">
+
+
+            <table style="font-size:14px;width:640px">
+                <tr style="height:30px">
+                    <td style="width:103px">
+                        <label style="font-weight:normal;padding-top:7px">Nº Cpf/Cnpj:</label>
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Requerente.Cpf_Cnpj, new { @id = "cpfcnpjTxt", @style = "max-width:200px;height:25px", @readonly = true })
+                    </td>
+                </tr>
+
+            </table>
+            <div style="padding-top:5px">
+                <table style="font-size:14px;width:640px">
+                    <tr style="height:30px">
+                        <td style="width:103px">
+                            <label style="font-weight:normal">Nome:&nbsp;&nbsp;</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;color:blue">
+                                @Html.TextBoxFor(m => m.Requerente.Nome, new { style = "width:527px;height:25px", @readonly = true })
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
 
                 <table style="font-size:14px;width:640px">
                     <tr style="height:30px">
                         <td style="width:103px">
-                            <label style="font-weight:normal;">Nº Cpf/Cnpj:</label>
+                            <label style="font-weight:normal">Logradouro:</label>
                         </td>
                         <td>
-                            @Html.TextBoxFor(m => m.Requerente.Cpf_Cnpj, new { @id = "cpfcnpjTxt", @style = "max-width:200px;height:25px;color:blue", @onKeyPress = "return formata(this, '§§§§§§§§§§§§§§', event)", @readonly = true })
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Logradouro_Nome, new { style = "width:392px;height:25px", @readonly = true })</label>
+                            <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal">
+                                @Html.TextBoxFor(m => m.Requerente.Numero, new { style = "width:60px;height:25px", @readonly = true })
+                            </label>
                         </td>
                     </tr>
                 </table>
 
+            <table style="font-size:14px;width:640px">
+                <tr style="height:30px">
+                    <td style="width:103px">
+                        <label style="font-weight:normal;">Complemento:</label>
+                    </td>
+                    <td>
+                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Requerente.Complemento, new { style = "width:230px;height:25px", @readonly = true })</label>
 
-                    <div style="padding-top:5px">
-                        <table style="font-size:14px;width:640px">
-                            <tr style="height:30px">
-                                <td style="width:103px">
-                                    <label style="font-weight:normal">Nome:&nbsp;&nbsp;</label>
-                                </td>
-                                <td>
-                                    <label style="font-weight:normal;color:blue">
-                                        @Html.TextBoxFor(m => m.Requerente.Nome, new { style = "width:527px;height:25px", @readonly = true, @value = @Model.Requerente.Nome })
-                                    </label>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                    </td>
+                    <td>
+                        <label style="font-weight:normal">&nbsp;&nbsp;Bairro:&nbsp;&nbsp;</label>
+                    </td>
+                    <td>
+                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Bairro_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
+                    </td>
+                </tr>
+                <tr style="height:30px">
+                    <td>
+                        <label style="font-weight:normal">Cidade/UF:</label>
+                    </td>
+                    <td>
+                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Cidade_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
 
-                    <table style="font-size:14px;width:640px">
-                        <tr style="height:30px">
-                            <td style="width:103px">
-                                <label style="font-weight:normal;">Nº do Cep:</label>
-                            </td>
-                            <td>
-                                <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Cep, new { @class = "maskCep", @id = "txtCep", style = "width:90px;height:25px" })</label>
-                                <button type="submit" class="btn btn-info" name="action" value="btnCepCompradorOK" data-balloon-length="medium" aria-label="Digite um Cep válido e clique em pesquisar." data-balloon-pos="up">Pesquisar</button>
-                                <label style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank">aqui</a> para consultar o Cep</label><span style="color:red">&nbsp;*</span><br /><br />
-                            </td>
-                        </tr>
-                    </table>
+                    </td>
+                    <td>
+                        <label style="font-weight:normal;padding-left:10px">Cep:&nbsp;&nbsp;</label>
+                    </td>
+                    <td>
+                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Cep, new { style = "width:230px;height:25px", @readonly = true })</label>
+                    </td>
+                </tr>
+                <tr style="height:30px">
+                    <td>
+                        <label style="font-weight:normal">Telefone:</label>
+                    </td>
+                    <td>
+                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Telefone, new { style = "width:230px;height:25px", @readonly = true })</label>
 
-                    <div style="padding-top:5px">
-                        <table style="font-size:14px;width:640px">
-                            <tr style="height:30px">
-                                <td style="width:103px">
-                                    <label style="font-weight:normal">Logradouro:</label>
-                                </td>
-                                <td>
-                                    <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Logradouro_Nome, new { style = "width:392px;height:25px", @readonly = true })</label>
-                                    <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal">
-                                        @Html.TextBoxFor(m => m.Requerente.Numero, new { style = "width:60px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)" })
-                                    </label>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <table style="font-size:14px;width:640px">
-                        <tr style="height:30px">
-                            <td style="width:103px">
-                                <label style="font-weight:normal;">Complemento:</label>
-                            </td>
-                            <td>
-                                <label style="font-weight:normal">@Html.TextBoxFor(m => m.Requerente.Complemento, new { style = "width:230px;height:25px" })</label>
-
-                            </td>
-                            <td>
-                                <label style="font-weight:normal">&nbsp;&nbsp;Bairro:&nbsp;&nbsp;</label>
-                            </td>
-                            <td>
-                                <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Bairro_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
-                            </td>
-                        </tr>
-                        <tr style="height:30px">
-                            <td>
-                                <label style="font-weight:normal">Cidade:</label>
-                            </td>
-                            <td>
-                                <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Cidade_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
-
-                            </td>
-                            <td>
-                                <label style="font-weight:normal;padding-left:10px">UF:&nbsp;&nbsp;</label>
-                            </td>
-                            <td>
-                                <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.UF, new { style = "width:230px;height:25px", @readonly = true })</label>
-                            </td>
-                        </tr>
-                        <tr style="height:30px">
-                            <td>
-                                <label style="font-weight:normal">Telefone:</label>
-                            </td>
-                            <td>
-                                <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Telefone, new { style = "width:230px;height:25px" })</label>
-
-                            </td>
-                            <td>
-                                <label style="font-weight:normal;padding-left:10px">Email:</label>
-                            </td>
-                            <td>
-                                <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Email, new { style = "width:230px;height:25px" })</label>
-                            </td>
-                        </tr>
-                    </table>
-                    <span style="color:red;font-size:12px">*Caso o cep não retorne os dados do endereço, retorne ao menu de opções e faça o cadastro do mesmo. Mais informações no manual do usuário.</span>
-                
+                    </td>
+                    <td>
+                        <label style="font-weight:normal;padding-left:10px">Email:</label>
+                    </td>
+                    <td>
+                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Email, new { style = "width:230px;height:25px", @readonly = true })</label>
+                    </td>
+                </tr>
+            </table>
 
 
 
-            </div>
+        </div>
+        <div class="card-header">Selecione o imóvel, empresa ou inscrição que deseja parcelar</div>
+        <div class="card-body">
+            tabela
+        </div>
             <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
             <div class="card-footer">
                 @Html.ActionLink("Retornar ao menu de opções", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
             </div>
         </div>
-    }
-</div>
+        }
+    </div>
 
