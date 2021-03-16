@@ -886,7 +886,19 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Codigo_Endereco(Logradouro,Numero);
         }
 
+        public List<int> Lista_Imovel_Cpf(string Cpf) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Lista_Imovel_Cpf(Cpf);
+        }
+
+        public List<int> Lista_Imovel_Cnpj(string Cnpj) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Lista_Imovel_Cnpj(Cnpj);
+        }
+
+
+
         #endregion
 
     }//end class
-    }
+}

@@ -10,6 +10,7 @@ namespace GTI_Mvc.ViewModels {
         public int Processo_numero { get; set; }
         public string NumeroProcesso { get; set; }
         public Parc_Requerente Requerente { get; set; }
+        public List<Parc_Codigos> Lista_Codigos { get; set; }
     }
 
     public class Parc_Requerente {
@@ -30,6 +31,15 @@ namespace GTI_Mvc.ViewModels {
         public string TipoEnd { get; set; }
         public string Email { get; set; }
     }
+
+    public class Parc_Codigos {
+        public int Codigo { get; set; }
+        public string Tipo { get; set; }
+        public string Nome { get; set; }
+        public string Endereco { get; set; }
+    }
+
+
 
 
 }

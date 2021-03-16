@@ -41,15 +41,22 @@ namespace GTI_MVC.Controllers
             Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
             Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
             Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+
             int _user_id = Convert.ToInt32(Session["hashid"]);
             Usuario_web _user = sistemaRepository.Retorna_Usuario_Web(_user_id);
                         
             string _cpfcnpj = _user.Cpf_Cnpj;
             int _codigo;
-            if (_cpfcnpj.Length == 11) 
-                _codigo=cidadaoRepository.Existe_Cidadao_Cpf(_cpfcnpj);
-            else 
+            bool _bCpf = false, _bCnpj = false;
+            if (_cpfcnpj.Length == 11) {
+                _codigo = cidadaoRepository.Existe_Cidadao_Cpf(_cpfcnpj);
+                _bCpf = true;
+            } else {
                 _codigo = cidadaoRepository.Existe_Cidadao_Cnpj(_cpfcnpj);
+                _bCnpj = true;
+            }
 
             CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(_codigo);
             Parc_Requerente _req = new Parc_Requerente {
@@ -91,6 +98,23 @@ namespace GTI_MVC.Controllers
 
             ParcelamentoViewModel model = new ParcelamentoViewModel();
             model.Requerente = _req;
+
+            List<int> _listaImovel = null;
+            //Lista de imóvel
+            if(_bCpf)
+                _listaImovel = imovelRepository.Lista_Imovel_Cpf(_req.Cpf_Cnpj);
+            else
+                _listaImovel = imovelRepository.Lista_Imovel_Cnpj(_req.Cpf_Cnpj);
+
+            if (_listaImovel != null) {
+
+            }
+
+
+
+
+
+
             return View(model);
         }
 
