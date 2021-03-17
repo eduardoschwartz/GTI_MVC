@@ -190,5 +190,6 @@ namespace GTI_Dal {
         public DbSet<Calendar_event> Calendar_Event { get; set; }
         public DbSet<SpParcelamentoOrigem> spParcelamentoOrigem { get; set; }
         public DbSet<SpExtrato_Parcelamento>  spExtrato_Parcelamento { get; set; }
+        public DbSet<Parcelamento_web_master> parcelamento_Web_Master { get; set; }
     }
 }

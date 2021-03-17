@@ -1,17 +1,14 @@
-﻿using GTI_Models.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace GTI_Mvc.ViewModels {
     public class ParcelamentoViewModel {
+        public string  Guid { get; set; }
         public int Processo_ano { get; set; }
         public int Processo_numero { get; set; }
         public string NumeroProcesso { get; set; }
         public Parc_Requerente Requerente { get; set; }
-        public List<SelectListItem> Lista_Codigos { get; set; }
+        public  List<SelectListItem> Lista_Codigos { get; set; }
     }
 
     public class Parc_Requerente {

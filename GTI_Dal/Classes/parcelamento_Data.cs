@@ -29,50 +29,35 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Incluir_Parcelamento_Web_Master(Parcelamento_web_master Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
 
+                object[] Parametros = new object[2];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
 
-        //public List<SpParcelamentoOrigem> Lista_Parcelamento_Origem(int Codigo,char Tipo) {
+                db.Database.ExecuteSqlCommand("INSERT INTO parcelamento_web_master(guid,codigo) " +
+                                              "VALUES(@guid,@codigo)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
 
-        //    using (GTI_Context db = new GTI_Context(_connection)) {
-        //        db.Database.CommandTimeout = 600;
-        //        object[] Parametros = new object[12];
-        //        Parametros[0] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Codigo };
-        //        Parametros[1] = new SqlParameter { ParameterName = "@tipo", SqlDbType = SqlDbType.Char, SqlValue = Tipo };
-        //        Parametros[2] = new SqlParameter { ParameterName = "@juros", SqlDbType = SqlDbType.Bit, SqlValue = 1 };
-        //        Parametros[3] = new SqlParameter { ParameterName = "@multa", SqlDbType = SqlDbType.Bit, SqlValue = 1 };
-        //        Parametros[4] = new SqlParameter { ParameterName = "@correcao", SqlDbType = SqlDbType.Bit, SqlValue = 1 }; 
-        //        Parametros[5] = new SqlParameter { ParameterName = "@dataatualiza", SqlDbType = SqlDbType.SmallDateTime, SqlValue = DateTime.Now };
-        //        var result = db.spParcelamentoOrigem.SqlQuery("EXEC spParcelamentoOrigem @codigo, @tipo, @juros ,@multa, @correcao, @dataatualiza",Parametros).ToList();
-
-        //        List<SpParcelamentoOrigem> ListaOrigem = new List<SpParcelamentoOrigem>();
-        //        int _x = 1;
-        //        foreach (SpParcelamentoOrigem item in result) {
-        //            SpParcelamentoOrigem reg = new SpParcelamentoOrigem {
-        //                Idx=_x,
-        //                Exercicio=item.Exercicio,
-        //                Lancamento=item.Lancamento,
-        //                Nome_lancamento=item.Nome_lancamento,
-        //                Sequencia=item.Sequencia,
-        //                Parcela=item.Parcela,
-        //                Complemento=item.Complemento,
-        //                Data_vencimento=item.Data_vencimento,
-        //                Ajuizado=item.Ajuizado,
-        //                Valor_principal=item.Valor_principal,
-        //                Valor_juros=item.Valor_juros,
-        //                Valor_multa=item.Valor_multa,
-        //                Valor_correcao=item.Valor_correcao,
-        //                Valor_total=item.Valor_total,
-        //                Valor_penalidade=item.Valor_penalidade,
-        //                Perc_penalidade=item.Perc_penalidade,
-        //                Qtde_parcelamento=item.Qtde_parcelamento
-        //            };
-        //            _x++;
-        //            ListaOrigem.Add(reg);
-        //        }
-        //        return ListaOrigem;
-        //    }
-        //}
-
+        public bool Existe_Parcelamento_Web_Master(string _guid) {
+            bool bRet = false;
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var existingReg = db.parcelamento_Web_Master.Count(a => a.Guid == _guid);
+                if (existingReg != 0) {
+                    bRet = true;
+                }
+            }
+            return bRet;
+        }
 
 
     }

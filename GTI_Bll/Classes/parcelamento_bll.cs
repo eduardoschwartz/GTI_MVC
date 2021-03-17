@@ -16,6 +16,16 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Parcelamento_Origem(Codigo,Tipo);
         }
 
+        public bool Existe_Parcelamento_Web_Master(string _guid) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            return obj.Existe_Parcelamento_Web_Master(_guid);
+        }
+
+        public Exception Incluir_Parcelamento_Web_Master(Parcelamento_web_master Reg) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Incluir_Parcelamento_Web_Master(Reg);
+            return ex;
+        }
 
     }
 }

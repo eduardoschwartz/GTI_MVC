@@ -1,26 +1,13 @@
-﻿using CrystalDecisions.CrystalReports.Engine;
-using CrystalDecisions.Shared;
-using GTI_Bll.Classes;
+﻿using GTI_Bll.Classes;
 using GTI_Models.Models;
-using GTI_Models.ReportModels;
+using GTI_Mvc;
 using GTI_Mvc.ViewModels;
-using GTI_Mvc.Views.Imovel.EditorTemplates;
-using Microsoft.Reporting.WebForms;
-using QRCoder;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Web;
 using System.Web.Mvc;
-using static GTI_Models.modelCore;
-using System.Net;
-using Newtonsoft.Json.Linq;
-using GTI_Mvc;
+//using System.Configuration;
 
-namespace GTI_MVC.Controllers
-{
+namespace GTI_MVC.Controllers {
     public class ParcelamentoController : Controller
     {
         [Route("Parc_index")]
@@ -29,6 +16,7 @@ namespace GTI_MVC.Controllers
         {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
+            //string myConn = ConfigurationManager.ConnectionStrings["GTIconnectionTeste"].ToString();
             return View();
         }
 
@@ -38,11 +26,11 @@ namespace GTI_MVC.Controllers
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             
-            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
-            Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
-            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnectionTeste");
+            Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnectionTeste");
+            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnectionTeste");
+            Imovel_bll imovelRepository = new Imovel_bll("GTIconnectionTeste");
+            Empresa_bll empresaRepository = new Empresa_bll("GTIconnectionTeste");
 
             int _user_id = Convert.ToInt32(Session["hashid"]);
             Usuario_web _user = sistemaRepository.Retorna_Usuario_Web(_user_id);
@@ -185,6 +173,19 @@ namespace GTI_MVC.Controllers
 
             model.Lista_Codigos = _listaCodigo;
 
+            //Antes de retornar gravamos os dados
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll("GTIconnection");
+            if (model.Guid == null) {
+                //Grava Master
+                model.Guid = Guid.NewGuid().ToString("N");
+                Parcelamento_web_master reg = new Parcelamento_web_master() {
+                    Guid = model.Guid
+                };
+
+                Exception ex = parcelamentoRepository.Incluir_Parcelamento_Web_Master(reg);
+            }
+
+
             return View(model);
         }
 
@@ -193,12 +194,13 @@ namespace GTI_MVC.Controllers
         public ActionResult Parc_req(ParcelamentoViewModel model,string listacod) {
             int _codigo = Convert.ToInt32(listacod);
 
-            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnectionTeste");
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll("GTIconenction");
             Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(_codigo);
             char _tipo = _header.Cpf_cnpj.Length == 11 ? 'F' : 'J';
 
             List<SpParcelamentoOrigem> Lista_Origem = parcelamentoRepository.Lista_Parcelamento_Origem(_codigo, _tipo);
+
             if (Lista_Origem.Count == 0) {
                 ViewBag.Result = "Não existem débitos a serem parcelados para esta inscrição.";
                 return View(model);
