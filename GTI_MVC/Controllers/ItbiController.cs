@@ -216,9 +216,6 @@ namespace GTI_Mvc.Controllers {
                 editorViewModel.Seq = model.Lista_Comprador.Count;
                 editorViewModel.Nome = model.Comprador_Nome_tmp != null ? model.Comprador_Nome_tmp.ToUpper() : model.Comprador_Nome_tmp;
 
-                if (string.IsNullOrEmpty(model.Comprador_Cpf_cnpj_tmp) && model.Cpf_Cnpj != null)
-                    model.Comprador_Cpf_cnpj_tmp = model.Cpf_Cnpj;
-
                 string _cpfMask = model.Comprador_Cpf_cnpj_tmp;
                 if (_cpfMask != null) {
                     if (_cpfMask.Length>11 &&   Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
@@ -256,8 +253,6 @@ namespace GTI_Mvc.Controllers {
                 var editorViewModel = new ListVendedorEditorViewModel();
                 editorViewModel.Seq = model.Lista_Vendedor.Count;
                 editorViewModel.Nome = model.Vendedor_Nome_tmp != null ? model.Vendedor_Nome_tmp.ToUpper() : model.Vendedor_Nome_tmp;
-                if (string.IsNullOrEmpty(model.Vendedor_Cpf_cnpj_tmp) && model.Cpf_Cnpj != null)
-                    model.Vendedor_Cpf_cnpj_tmp = model.Cpf_Cnpj;
                 string _cpfMask = model.Vendedor_Cpf_cnpj_tmp;
                 if (_cpfMask != null) {
                     if (_cpfMask.Length > 11 && Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
@@ -630,7 +625,7 @@ namespace GTI_Mvc.Controllers {
                 editorViewModel.Nome = model.Vendedor_Nome_tmp != null ? model.Vendedor_Nome_tmp.ToUpper() : model.Vendedor_Nome_tmp;
                 string _cpfMask = model.Vendedor_Cpf_cnpj_tmp;
                 if (_cpfMask != null) {
-                    if (Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
+                    if (_cpfMask.Length>11 &&  Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
                         _cpfMask = _cpfMask.PadLeft(14, '0');
                     } else {
                         if (Functions.ValidaCpf(_cpfMask.PadLeft(11, '0'))) {
@@ -705,7 +700,7 @@ namespace GTI_Mvc.Controllers {
                             _bcnpj = true;
                         }
                     } else {
-                        if (Functions.ValidaCNPJ(_cpfCnpj.PadLeft(14, '0'))) {
+                        if (_cpfCnpj.Length>11 &&   Functions.ValidaCNPJ(_cpfCnpj.PadLeft(14, '0'))) {
                             _bcnpj = true;
                         } else {
                             if (Functions.ValidaCpf(_cpfCnpj.PadLeft(11, '0'))) {
@@ -1090,7 +1085,7 @@ namespace GTI_Mvc.Controllers {
                 editorViewModel.Nome = model.Comprador_Nome_tmp != null ? model.Comprador_Nome_tmp.ToUpper() : model.Comprador_Nome_tmp;
                 string _cpfMask = model.Comprador_Cpf_cnpj_tmp;
                 if (_cpfMask != null) {
-                    if (Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
+                    if (_cpfMask.Length<11 &&  Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
                         _cpfMask = _cpfMask.PadLeft(14, '0');
                     } else {
                         if (Functions.ValidaCpf(_cpfMask.PadLeft(11, '0'))) {
@@ -1125,15 +1120,17 @@ namespace GTI_Mvc.Controllers {
                 var editorViewModel = new ListVendedorEditorViewModel();
                 editorViewModel.Seq = model.Lista_Vendedor.Count;
                 editorViewModel.Nome = model.Vendedor_Nome_tmp != null ? model.Vendedor_Nome_tmp.ToUpper() : model.Vendedor_Nome_tmp;
-                string _cpfMask = model.Vendedor_Cpf_cnpj_tmp;
+
+                string _cpfMask = Convert.ToInt64(model.Vendedor_Cpf_cnpj_tmp).ToString();
                 if (_cpfMask != null) {
-                    if (Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
-                        _cpfMask = _cpfMask.PadLeft(14, '0');
+                    if (Functions.ValidaCpf(_cpfMask.PadLeft(11, '0'))) {
+                        _cpfMask = _cpfMask.PadLeft(11, '0');
                     } else {
-                        if (Functions.ValidaCpf(_cpfMask.PadLeft(11, '0'))) {
-                            _cpfMask = _cpfMask.PadLeft(11, '0');
+                        if (Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
+                            _cpfMask = _cpfMask.PadLeft(14, '0');
                         }
                     }
+
                     _cpfMask = Functions.FormatarCpfCnpj(_cpfMask);
                 }
                 editorViewModel.Cpf_Cnpj = _cpfMask;
@@ -1443,13 +1440,15 @@ namespace GTI_Mvc.Controllers {
                 editorViewModel.Nome = model.Comprador_Nome_tmp != null ? model.Comprador_Nome_tmp.ToUpper() : model.Comprador_Nome_tmp;
                 string _cpfMask = model.Comprador_Cpf_cnpj_tmp;
                 if (_cpfMask != null) {
-                    if (Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
-                        _cpfMask = _cpfMask.PadLeft(14, '0');
+
+                    if ( Functions.ValidaCpf(_cpfMask.PadLeft(11, '0'))) {
+                        _cpfMask = _cpfMask.PadLeft(11, '0');
                     } else {
-                        if (Functions.ValidaCpf(_cpfMask.PadLeft(11, '0'))) {
-                            _cpfMask = _cpfMask.PadLeft(11, '0');
+                        if (Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
+                            _cpfMask = _cpfMask.PadLeft(14, '0');
                         }
                     }
+
                     _cpfMask = Functions.FormatarCpfCnpj(_cpfMask);
                 }
                 editorViewModel.Cpf_Cnpj = _cpfMask;
@@ -1478,15 +1477,16 @@ namespace GTI_Mvc.Controllers {
                 var editorViewModel = new ListVendedorEditorViewModel();
                 editorViewModel.Seq = model.Lista_Vendedor.Count;
                 editorViewModel.Nome = model.Vendedor_Nome_tmp != null ? model.Vendedor_Nome_tmp.ToUpper() : model.Vendedor_Nome_tmp;
-                string _cpfMask = model.Vendedor_Cpf_cnpj_tmp;
+                string _cpfMask = Convert.ToInt64( model.Vendedor_Cpf_cnpj_tmp).ToString();
                 if (_cpfMask != null) {
-                    if (Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
-                        _cpfMask = _cpfMask.PadLeft(14, '0');
+                    if (Functions.ValidaCpf(_cpfMask.PadLeft(11, '0'))) {
+                        _cpfMask = _cpfMask.PadLeft(11, '0');
                     } else {
-                        if (Functions.ValidaCpf(_cpfMask.PadLeft(11, '0'))) {
-                            _cpfMask = _cpfMask.PadLeft(11, '0');
+                        if (Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
+                            _cpfMask = _cpfMask.PadLeft(14, '0');
                         }
                     }
+
                     _cpfMask = Functions.FormatarCpfCnpj(_cpfMask);
                 }
                 editorViewModel.Cpf_Cnpj = _cpfMask;
@@ -1510,13 +1510,15 @@ namespace GTI_Mvc.Controllers {
                             _bcnpj = true;
                         }
                     } else {
-                        if (Functions.ValidaCNPJ(_cpfCnpj.PadLeft(14, '0'))) {
-                            _bcnpj = true;
+
+                        if (Functions.ValidaCpf(_cpfCnpj.PadLeft(11, '0'))) {
+                            _bcpf = true;
                         } else {
-                            if (Functions.ValidaCpf(_cpfCnpj.PadLeft(11, '0'))) {
-                                _bcpf = true;
+                            if (Functions.ValidaCNPJ(_cpfCnpj.PadLeft(14, '0'))) {
+                                _bcnpj = true;
                             }
                         }
+
                     }
                     if (_bcnpj) {
                         _cpfCnpj = _cpfCnpj.PadLeft(14, '0');
