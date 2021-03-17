@@ -236,6 +236,15 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Extrato_Tributo_Carta(Codigo, Ano1, Ano2, Lancamento1, Lancamento2, Sequencia1, Sequencia2, Parcela1, Parcela2, Complemento1, Complemento2, Status1, Status2, Data_Atualizacao, Usuario);
         }
 
+        ///<summary> Retorna todas as linhas da spExtrato_parcelamento
+        ///</summary>
+        public List<SpExtrato_Parcelamento> Lista_Extrato_Tributo_Parcelamento(int Codigo = 3, short Ano1 = 1990, short Ano2 = 2050, short Lancamento1 = 1, short Lancamento2 = 99, short Sequencia1 = 0, short Sequencia2 = 9999,
+            short Parcela1 = 0, short Parcela2 = 999, short Complemento1 = 0, short Complemento2 = 999, short Status1 = 0, short Status2 = 99, DateTime? Data_Atualizacao = null, string Usuario = "") {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Lista_Extrato_Tributo_Parcelamento(Codigo, Ano1, Ano2, Lancamento1, Lancamento2, Sequencia1, Sequencia2, Parcela1, Parcela2, Complemento1, Complemento2, Status1, Status2, Data_Atualizacao, Usuario);
+        }
+
+
         ///<summary> Agrupa as linhas da spExtratoNew por parcela
         ///</summary>
         public List<SpExtrato> Lista_Extrato_Parcela(List<SpExtrato> Lista_Debito) {
@@ -249,6 +258,14 @@ namespace GTI_Bll.Classes {
             Tributario_Data obj = new Tributario_Data(_connection);
             return obj.Lista_Extrato_Parcela_Carta(Lista_Debito);
         }
+
+        ///<summary> Agrupa as linhas da spExtrato_parcelamento por parcela
+        ///</summary>
+        public List<SpExtrato_Parcelamento> Lista_Extrato_Parcela_Parcelamento(List<SpExtrato_Parcelamento> Lista_Debito) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Lista_Extrato_Parcela_Parcelamento(Lista_Debito);
+        }
+
 
         ///<summary> Retorna os tipos de status dos lançamentos
         ///</summary>

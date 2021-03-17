@@ -183,7 +183,6 @@ namespace GTI_MVC.Controllers
                 _listaCodigo.Add(item);
             }
 
-
             model.Lista_Codigos = _listaCodigo;
 
             return View(model);
@@ -192,6 +191,19 @@ namespace GTI_MVC.Controllers
         [Route("Parc_req")]
         [HttpPost]
         public ActionResult Parc_req(ParcelamentoViewModel model,string listacod) {
+            int _codigo = Convert.ToInt32(listacod);
+
+            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll("GTIconenction");
+            Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(_codigo);
+            char _tipo = _header.Cpf_cnpj.Length == 11 ? 'F' : 'J';
+
+            List<SpParcelamentoOrigem> Lista_Origem = parcelamentoRepository.Lista_Parcelamento_Origem(_codigo, _tipo);
+            if (Lista_Origem.Count == 0) {
+                ViewBag.Result = "Não existem débitos a serem parcelados para esta inscrição.";
+                return View(model);
+            }
+
             return View(model);
         }
 
