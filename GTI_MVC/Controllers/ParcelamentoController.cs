@@ -174,17 +174,30 @@ namespace GTI_MVC.Controllers {
             model.Lista_Codigos = _listaCodigo;
 
             //Antes de retornar gravamos os dados
-            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll("GTIconnection");
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll("GTIconnectionTeste");
             if (model.Guid == null) {
                 //Grava Master
                 model.Guid = Guid.NewGuid().ToString("N");
                 Parcelamento_web_master reg = new Parcelamento_web_master() {
                     Guid = model.Guid
                 };
-
                 Exception ex = parcelamentoRepository.Incluir_Parcelamento_Web_Master(reg);
-            }
 
+                //Grava ListaCodigos
+                short t = 1;
+                foreach (SelectListItem item in _listaCodigo) {
+                    Parcelamento_web_lista_codigo _cod = new Parcelamento_web_lista_codigo() {
+                        Guid = model.Guid,
+                        Id = t,
+                        Grupo=item.Group.Name,
+                        Texto=item.Text,
+                        Valor=Convert.ToInt32(item.Value),
+                        Selected=item.Selected
+                    };
+                    ex = parcelamentoRepository.Incluir_Parcelamento_Web_Lista_Codigo(_cod);
+                    t++;
+                }
+            }
 
             return View(model);
         }
@@ -195,11 +208,30 @@ namespace GTI_MVC.Controllers {
             int _codigo = Convert.ToInt32(listacod);
 
             Sistema_bll sistemaRepository = new Sistema_bll("GTIconnectionTeste");
-            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll("GTIconenction");
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll("GTIconnectionTeste");
             Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(_codigo);
             char _tipo = _header.Cpf_cnpj.Length == 11 ? 'F' : 'J';
 
             List<SpParcelamentoOrigem> Lista_Origem = parcelamentoRepository.Lista_Parcelamento_Origem(_codigo, _tipo);
+            List<SelectListItem> _listaCodigo = new List<SelectListItem>();
+            List<Parcelamento_web_lista_codigo> _Lista_Codigos = parcelamentoRepository.Lista_Parcelamento_Lista_Codigo(model.Guid);
+            foreach (Parcelamento_web_lista_codigo item in _Lista_Codigos) {
+                SelectListGroup _grupo = new SelectListGroup() { Name = item.Grupo };
+                SelectListItem item2 = new SelectListItem() {
+                    Group = _grupo,
+                    Text = item.Texto,
+                    Value = item.Valor.ToString()
+                };
+                if(item.Valor==_codigo)
+                    item2.Selected = true;
+                else
+                    item2.Selected = false;
+                _listaCodigo.Add(item2);
+            }
+            model.Lista_Codigos = _listaCodigo;
+
+
+
 
             if (Lista_Origem.Count == 0) {
                 ViewBag.Result = "Não existem débitos a serem parcelados para esta inscrição.";

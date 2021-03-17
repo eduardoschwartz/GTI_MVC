@@ -191,6 +191,7 @@
     <Compile Include="Models\parceladocumento.cs" />
     <Compile Include="Models\Integrativa\partes.cs" />
     <Compile Include="Models\Parcelamento_web.cs" />
+    <Compile Include="Models\parcelamento_web_lista_codigo.cs" />
     <Compile Include="Models\parcelamento_web_master.cs" />
     <Compile Include="Models\pedologia.cs" />
     <Compile Include="Models\periodomei.cs" />
