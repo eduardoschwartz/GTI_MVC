@@ -1723,6 +1723,28 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<int> Lista_Empresa_Proprietario_Cpf(string Cpf) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from m in db.Mobiliarioproprietario
+                           join c in db.Cidadao on m.Codcidadao equals c.Codcidadao where c.Cpf == Cpf
+                           select m.Codmobiliario).ToList();
+                return Sql;
+            }
+        }
+
+        public List<int> Lista_Empresa_Proprietario_Cnpj(string Cnpj) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from m in db.Mobiliarioproprietario
+                           join c in db.Cidadao on m.Codcidadao equals c.Codcidadao where c.Cnpj == Cnpj
+                           select m.Codmobiliario).ToList();
+                return Sql;
+            }
+        }
+
+
+
+
+
         //public Exception Incluir_redeSim_Viabilidade(Redesim_Viabilidade reg) {
         //    using (GTI_Context db = new GTI_Context(_connection)) {
         //        try {

@@ -49,13 +49,12 @@ namespace GTI_MVC.Controllers
                         
             string _cpfcnpj = _user.Cpf_Cnpj;
             int _codigo;
-            bool _bCpf = false, _bCnpj = false;
+            bool _bCpf = false;
             if (_cpfcnpj.Length == 11) {
                 _codigo = cidadaoRepository.Existe_Cidadao_Cpf(_cpfcnpj);
                 _bCpf = true;
             } else {
                 _codigo = cidadaoRepository.Existe_Cidadao_Cnpj(_cpfcnpj);
-                _bCnpj = true;
             }
 
             CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(_codigo);
@@ -98,29 +97,101 @@ namespace GTI_MVC.Controllers
 
             ParcelamentoViewModel model = new ParcelamentoViewModel();
             model.Requerente = _req;
+            List<SelectListItem> _listaCodigo = new List<SelectListItem>();
 
-            List<int> _listaImovel = null;
             //Lista de imóvel
-            if(_bCpf)
-                _listaImovel = imovelRepository.Lista_Imovel_Cpf(_req.Cpf_Cnpj);
+            List<int> _listaImovel = null;
+            if (_bCpf)
+                _listaImovel = imovelRepository.Lista_Imovel_Cpf(Functions.RetornaNumero(_req.Cpf_Cnpj));
             else
-                _listaImovel = imovelRepository.Lista_Imovel_Cnpj(_req.Cpf_Cnpj);
+                _listaImovel = imovelRepository.Lista_Imovel_Cnpj(Functions.RetornaNumero(_req.Cpf_Cnpj));
 
-            if (_listaImovel != null) {
+            SelectListGroup _grupo = new SelectListGroup() { Name = "Imovel" };
+            foreach (int cod in _listaImovel) {
+                Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(cod);
+                string _desc = cod.ToString() + " - Imóvel localizado na(o) " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
+                if (!string.IsNullOrEmpty(_header.Complemento))
+                    _desc += " " + _header.Complemento;
+                _desc += ", " + _header.Nome_bairro;
+                if (!string.IsNullOrEmpty(_header.Quadra_original))
+                    _desc += " Quadra:" + _header.Quadra_original;
+                if (!string.IsNullOrEmpty(_header.Lote_original))
+                    _desc += ", Lote:" + _header.Lote_original;
 
+                SelectListItem item = new SelectListItem() {
+                    Group = _grupo,
+                    Text = _desc,
+                    Value = cod.ToString(),
+                    Selected = false
+                };
+                _listaCodigo.Add(item);
+            }
+
+            //Lista de empresas
+            List<int> _listaEmpresa = null;
+            if (_bCpf)
+                _listaEmpresa = empresaRepository.Lista_Empresa_Proprietario_Cpf(Functions.RetornaNumero(_req.Cpf_Cnpj));
+            else
+                _listaEmpresa = empresaRepository.Lista_Empresa_Proprietario_Cnpj(Functions.RetornaNumero(_req.Cpf_Cnpj));
+
+            _grupo = new SelectListGroup() { Name = "Empresa" };
+            foreach (int cod in _listaEmpresa) {
+                Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(cod);
+                string _desc = cod.ToString() + " - " + _header.Nome +  ", localizada na(o): " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
+                if (!string.IsNullOrEmpty(_header.Complemento))
+                    _desc += " " + _header.Complemento;
+                _desc += ", " + _header.Nome_bairro;
+                if (!string.IsNullOrEmpty(_header.Quadra_original))
+                    _desc += " Quadra:" + _header.Quadra_original;
+                if (!string.IsNullOrEmpty(_header.Lote_original))
+                    _desc += ", Lote:" + _header.Lote_original;
+
+                SelectListItem item = new SelectListItem() {
+                    Group = _grupo,
+                    Text = _desc,
+                    Value = cod.ToString(),
+                    Selected = false
+                };
+                _listaCodigo.Add(item);
+            }
+
+            //Lista de cidadão
+            List<Cidadao> _listaCidadao = null;
+            if (_bCpf)
+                _listaCidadao = cidadaoRepository.Lista_Cidadao(null, Functions.RetornaNumero( _req.Cpf_Cnpj),null);
+            else
+                _listaCidadao = cidadaoRepository.Lista_Cidadao(null,null, Functions.RetornaNumero(_req.Cpf_Cnpj));
+
+            _grupo = new SelectListGroup() { Name = "Cidadao" };
+            foreach (Cidadao cod in _listaCidadao) {
+                Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(cod.Codcidadao);
+                string _desc = cod.Codcidadao.ToString() + " - Inscrição localizada na(o): " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
+                if (!string.IsNullOrEmpty(_header.Complemento))
+                    _desc += " " + _header.Complemento;
+                _desc += ", " + _header.Nome_bairro;
+                if (!string.IsNullOrEmpty(_header.Quadra_original))
+                    _desc += " Quadra:" + _header.Quadra_original;
+                if (!string.IsNullOrEmpty(_header.Lote_original))
+                    _desc += ", Lote:" + _header.Lote_original;
+
+                SelectListItem item = new SelectListItem() {
+                    Group = _grupo,
+                    Text = _desc,
+                    Value = cod.Codcidadao.ToString(),
+                    Selected = false
+                };
+                _listaCodigo.Add(item);
             }
 
 
-
-
-
+            model.Lista_Codigos = _listaCodigo;
 
             return View(model);
         }
 
         [Route("Parc_req")]
         [HttpPost]
-        public ActionResult Parc_req(ParcelamentoViewModel model) {
+        public ActionResult Parc_req(ParcelamentoViewModel model,string listacod) {
             return View(model);
         }
 

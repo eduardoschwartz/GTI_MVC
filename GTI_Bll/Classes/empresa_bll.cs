@@ -882,6 +882,17 @@ namespace GTI_Bll.Classes {
                 AppEx = new Exception("Exclusão não permitida. Critério em uso.");
             return AppEx;
         }
+
+        public List<int> Lista_Empresa_Proprietario_Cpf(string Cpf) {
+            Empresa_Data obj = new Empresa_Data(_connection);
+            return obj.Lista_Empresa_Proprietario_Cpf(Cpf);
+        }
+
+        public List<int> Lista_Empresa_Proprietario_Cnpj(string Cnpj) {
+            Empresa_Data obj = new Empresa_Data(_connection);
+            return obj.Lista_Empresa_Proprietario_Cnpj(Cnpj);
+        }
+
     }
 }
 
