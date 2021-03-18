@@ -54,24 +54,18 @@ namespace GTI_MVC.Controllers {
             string _tipoEnd = _cidadao.EnderecoC == "S" ? "C" : "R";
             _req.TipoEnd = _tipoEnd == "R" ? "RESIDENCIAL" : "COMERCIAL";
             if (_tipoEnd == "R") {
-                _req.Bairro_Codigo = (int)_cidadao.CodigoBairroR;
                 _req.Bairro_Nome = _cidadao.NomeBairroR;
-                _req.Cidade_Codigo = (int)_cidadao.CodigoCidadeR;
                 _req.Cidade_Nome = _cidadao.NomeCidadeR;
                 _req.UF = _cidadao.UfR;
-                _req.Logradouro_Codigo = (int)_cidadao.CodigoLogradouroR;
                 _req.Logradouro_Nome = _cidadao.EnderecoR;
                 _req.Numero = (int)_cidadao.NumeroR;
                 _req.Complemento = _cidadao.ComplementoR;
                 _req.Telefone = _cidadao.TelefoneR;
                 _req.Cep = _cidadao.CepR.ToString();
             } else {
-                _req.Bairro_Codigo = (int)_cidadao.CodigoBairroC;
                 _req.Bairro_Nome = _cidadao.NomeBairroC;
-                _req.Cidade_Codigo = (int)_cidadao.CodigoCidadeC;
                 _req.Cidade_Nome = _cidadao.NomeCidadeC;
                 _req.UF = _cidadao.UfC;
-                _req.Logradouro_Codigo = (int)_cidadao.CodigoLogradouroC;
                 _req.Logradouro_Nome = _cidadao.EnderecoC;
                 _req.Numero = (int)_cidadao.NumeroC;
                 _req.Complemento = _cidadao.ComplementoC;
@@ -244,22 +238,35 @@ namespace GTI_MVC.Controllers {
             if (Lista_Origem.Count == 0) {
                 ViewBag.Result = "Não existem débitos a serem parcelados para esta inscrição.";
                 return View(model);
+            } else {
+                foreach (SpParcelamentoOrigem item in Lista_Origem) {
+                    Parcelamento_web_origem reg = new Parcelamento_web_origem() {
+                        Guid=model.Guid,
+                        Idx=item.Idx,
+                        Ano=item.Exercicio,
+                        Lancamento=item.Lancamento,
+                        Sequencia=item.Sequencia,
+                        Parcela=item.Parcela,
+                        Complemento=item.Complemento,
+                        Data_Vencimento=item.Data_vencimento,
+                        Lancamento_Nome=item.Nome_lancamento,
+                        Ajuizado=item.Ajuizado,
+                        Valor_Tributo=item.Valor_principal,
+                        Valor_Juros=item.Valor_juros,
+                        Valor_Multa=item.Valor_multa,
+                        Valor_Correcao=item.Valor_correcao,
+                        Valor_Total=item.Valor_total,
+                        Valor_Penalidade=item.Valor_penalidade,
+                        Perc_Penalidade=item.Perc_penalidade,
+                        Qtde_Parcelamento=item.Qtde_parcelamento
+                    };
+                    Exception ex = parcelamentoRepository.Incluir_Parcelamento_Web_Origem(reg);
+                }
             }
+
 
             return View(model);
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

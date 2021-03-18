@@ -24,7 +24,14 @@ namespace GTI_Dal.Classes {
                 List<SpExtrato_Parcelamento> _extrato = tributarioRepository.Lista_Extrato_Parcela_Parcelamento(_listaTributo);
 
                 int _pos = 1;
+                DateTime _dataNow = Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy"));
                 foreach (SpExtrato_Parcelamento _row in _extrato) {
+                    if (_row.Datavencimento >= _dataNow) {
+                        if (_row.Codlancamento != 65 && _row.Codlancamento != 62 && _row.Codlancamento != 16 && _row.Codlancamento != 38 && _row.Codlancamento != 76) {
+                            goto NextReg;
+                        }
+                    }
+
                     SpParcelamentoOrigem _reg = new SpParcelamentoOrigem() {
                         Idx=_pos,
                         Exercicio=_row.Anoexercicio,
@@ -43,12 +50,23 @@ namespace GTI_Dal.Classes {
                         Qtde_parcelamento=Qtde_Parcelamento_Efetuados(Codigo,_row.Anoexercicio,_row.Codlancamento,_row.Seqlancamento,_row.Numparcela)
                     };
 
+                    //DECRETO ANISITIA MULTA E JUROS PARA PARCELAS 4,5, E 6 DE 2020
+                    if (_row.Anoexercicio == 2020 && (_row.Datavencimento.Month == 4 || _row.Datavencimento.Month == 5 || _row.Datavencimento.Month == 6)) {
+                        _reg.Valor_juros = 0;
+                        _reg.Valor_multa = 0;
+                        _reg.Valor_total = _reg.Valor_principal + _reg.Valor_correcao;
+                    }
 
+                    if (Tipo == 'F')  //empresa física 5 % por parcelamento
+                        _reg.Perc_penalidade = _reg.Qtde_parcelamento * 5;
+                     else 
+                        _reg.Perc_penalidade = _reg.Qtde_parcelamento * 10;
 
-
+                    _reg.Valor_penalidade = _reg.Valor_total * (_reg.Perc_penalidade / 100);
 
                     ListaOrigem.Add(_reg);
                     _pos++;
+                NextReg:;
                 }
                 
                 return ListaOrigem;
@@ -154,7 +172,41 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Incluir_Parcelamento_Web_Origem(Parcelamento_web_origem Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
 
+                object[] Parametros = new object[18];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@idx", SqlDbType = SqlDbType.Int, SqlValue = Reg.Idx };
+                Parametros[2] = new SqlParameter { ParameterName = "@ano", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Ano};
+                Parametros[3] = new SqlParameter { ParameterName = "@lancamento", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Lancamento };
+                Parametros[4] = new SqlParameter { ParameterName = "@sequencia", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Sequencia };
+                Parametros[5] = new SqlParameter { ParameterName = "@parcela", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Parcela };
+                Parametros[6] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Complemento };
+                Parametros[7] = new SqlParameter { ParameterName = "@data_vencimento", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_Vencimento };
+                Parametros[8] = new SqlParameter { ParameterName = "@valor_tributo", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Tributo };
+                Parametros[9] = new SqlParameter { ParameterName = "@valor_multa", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Multa };
+                Parametros[10] = new SqlParameter { ParameterName = "@valor_juros", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Juros };
+                Parametros[11] = new SqlParameter { ParameterName = "@valor_correcao", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Correcao };
+                Parametros[12] = new SqlParameter { ParameterName = "@valor_total", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Total };
+                Parametros[13] = new SqlParameter { ParameterName = "@qtde_parcelamento", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Qtde_Parcelamento };
+                Parametros[14] = new SqlParameter { ParameterName = "@perc_penalidade", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Perc_Penalidade };
+                Parametros[15] = new SqlParameter { ParameterName = "@valor_penalidade", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Penalidade };
+                Parametros[16] = new SqlParameter { ParameterName = "@lancamento_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Lancamento_Nome };
+                Parametros[17] = new SqlParameter { ParameterName = "@ajuizado", SqlDbType = SqlDbType.Char, SqlValue = Reg.Ajuizado };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO parcelamento_web_origem(guid,idx,ano,lancamento,sequencia,parcela,complemento,data_vencimento,valor_tributo,valor_multa,valor_juros,valor_correcao," +
+                    "valor_total,qtde_parcelamento,perc_penalidade,valor_penalidade,lancamento_nome,ajuizado) VALUES(@guid,@idx,@ano,@lancamento,@sequencia,@parcela,@complemento,@data_vencimento,@valor_tributo," +
+                    "@valor_multa,@valor_juros,@valor_correcao,@valor_total,@qtde_parcelamento,@perc_penalidade,@valor_penalidade,@lancamento_nome,@ajuizado)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
 
     }
 }

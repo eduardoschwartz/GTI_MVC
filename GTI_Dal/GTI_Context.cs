@@ -192,5 +192,6 @@ namespace GTI_Dal {
         public DbSet<SpExtrato_Parcelamento>  spExtrato_Parcelamento { get; set; }
         public DbSet<Parcelamento_web_master> Parcelamento_Web_Master { get; set; }
         public DbSet<Parcelamento_web_lista_codigo> Parcelamento_Web_Lista_Codigo { get; set; }
+        public DbSet<Parcelamento_web_origem> Parcelamento_Web_Origem { get; set; }
     }
 }
