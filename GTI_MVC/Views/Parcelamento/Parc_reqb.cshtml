@@ -1,0 +1,203 @@
+﻿@model GTI_Mvc.ViewModels.ParcelamentoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Dados do Requerente";
+}
+
+<script src="~/Scripts/jquery.giantdropdown.js"></script>
+
+<script type="text/javascript">
+        // <![CDATA[
+        $(function () { $("select").giantDropdown(); });
+        // ]]>
+</script>
+
+<link href="~/Content/giantdropdown.css" rel="stylesheet" />
+<style>
+    .center {
+        margin: auto;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+</style>
+
+<h5 style="text-align:center">Parcelamento de Débitos</h5>
+
+<div class="center container" style="width:700px">
+
+    @using (Html.BeginForm("Parc_req", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+
+        @Html.HiddenFor(m=>m.Guid)
+        <div class="card">
+            <div class="card-header">Dados do Requerente</div>
+            <div class="card-body">
+
+
+                <table style="font-size:14px;width:640px">
+                    <tr style="height:30px">
+                        <td style="width:103px">
+                            <label style="font-weight:normal;padding-top:7px">Nº Cpf/Cnpj:</label>
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.Requerente.Cpf_Cnpj, new { @id = "cpfcnpjTxt", @style = "max-width:200px;height:25px", @readonly = true })
+                        </td>
+                    </tr>
+
+                </table>
+                <div style="padding-top:5px">
+                    <table style="font-size:14px;width:640px">
+                        <tr style="height:30px">
+                            <td style="width:103px">
+                                <label style="font-weight:normal">Nome:&nbsp;&nbsp;</label>
+                            </td>
+                            <td>
+                                <label style="font-weight:normal;color:blue">
+                                    @Html.TextBoxFor(m => m.Requerente.Nome, new { style = "width:527px;height:25px", @readonly = true })
+                                </label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <table style="font-size:14px;width:640px">
+                    <tr style="height:30px">
+                        <td style="width:103px">
+                            <label style="font-weight:normal">Logradouro:</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Logradouro_Nome, new { style = "width:392px;height:25px", @readonly = true })</label>
+                            <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal">
+                                @Html.TextBoxFor(m => m.Requerente.Numero, new { style = "width:60px;height:25px", @readonly = true })
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+
+                <table style="font-size:14px;width:640px">
+                    <tr style="height:30px">
+                        <td style="width:103px">
+                            <label style="font-weight:normal;">Complemento:</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal">@Html.TextBoxFor(m => m.Requerente.Complemento, new { style = "width:230px;height:25px", @readonly = true })</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal">&nbsp;&nbsp;Bairro:&nbsp;&nbsp;</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Bairro_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
+                        </td>
+                    </tr>
+                    <tr style="height:30px">
+                        <td>
+                            <label style="font-weight:normal">Cidade/UF:</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Cidade_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
+
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;padding-left:10px">Cep:&nbsp;&nbsp;</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Cep, new { style = "width:230px;height:25px", @readonly = true })</label>
+                        </td>
+                    </tr>
+                    <tr style="height:30px">
+                        <td>
+                            <label style="font-weight:normal">Telefone:</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Telefone, new { style = "width:230px;height:25px", @readonly = true })</label>
+
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;padding-left:10px">Email:</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Email, new { style = "width:230px;height:25px", @readonly = true })</label>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="card-header">Selecione o imóvel, empresa ou a inscrição que deseja parcelar</div>
+            <div class="card-body">
+                @Model.Guid
+                @*<select name="listacod" id="listacod" style="width:630px;height:auto">
+                    <optgroup label="Imóvel">
+                        @foreach (var item in Model.Lista_Codigos) {
+                            if (item.Group.Name == "Imovel") {
+                                <option value=@item.Value selected="@item.Selected">@item.Text</option>
+                            }
+                        }
+                    </optgroup>
+
+                    <optgroup label="Empresa">
+                        @foreach (var item in Model.Lista_Codigos) {
+
+                            if (item.Group.Name == "Empresa") {
+                                <option value=@item.Value selected="@item.Selected">@item.Text</option>
+                            }
+                        }
+                    </optgroup>
+                    <optgroup label="Outras inscrições">
+                        @foreach (var item in Model.Lista_Codigos) {
+
+                            if (item.Group.Name == "Cidadao") {
+                                <option value=@item.Value selected="@item.Selected">@item.Text</option>
+                            }
+                        }
+                    </optgroup>
+                </select>*@
+                <button type="submit" class="btn btn-primary" name="action" value="btnValida">Verificar débitos</button>&nbsp;&nbsp;
+            </div>
+
+            <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+            <div class="card-footer">
+                @Html.ActionLink("Retornar ao menu de opções", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
+        </div>
+    }
+</div>
+

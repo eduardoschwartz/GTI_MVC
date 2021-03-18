@@ -17,6 +17,7 @@ namespace GTI_Models.Models {
         public string Requerente_Complemento { get; set; }
         public int Requerente_Cep { get; set; }
         public string Requerente_Telefone { get; set; }
+        public string Requerente_Email { get; set; }
 
     }
 }

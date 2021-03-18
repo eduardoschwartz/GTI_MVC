@@ -10,13 +10,14 @@ using System.Web.Mvc;
 namespace GTI_MVC.Controllers {
     public class ParcelamentoController : Controller
     {
+        private readonly string _connection = "GTIconnectionTeste";
         [Route("Parc_index")]
         [HttpGet]
         public ActionResult Parc_index()
         {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
-            //string myConn = ConfigurationManager.ConnectionStrings["GTIconnectionTeste"].ToString();
+            //string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
             return View();
         }
 
@@ -26,11 +27,11 @@ namespace GTI_MVC.Controllers {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             
-            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnectionTeste");
-            Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnectionTeste");
-            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnectionTeste");
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnectionTeste");
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnectionTeste");
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
 
             int _user_id = Convert.ToInt32(Session["hashid"]);
             Usuario_web _user = sistemaRepository.Retorna_Usuario_Web(_user_id);
@@ -57,6 +58,7 @@ namespace GTI_MVC.Controllers {
                 _req.Bairro_Nome = _cidadao.NomeBairroR;
                 _req.Cidade_Nome = _cidadao.NomeCidadeR;
                 _req.UF = _cidadao.UfR;
+                _req.Logradouro_Codigo = (int)_cidadao.CodigoLogradouroR;
                 _req.Logradouro_Nome = _cidadao.EnderecoR;
                 _req.Numero = (int)_cidadao.NumeroR;
                 _req.Complemento = _cidadao.ComplementoR;
@@ -66,6 +68,7 @@ namespace GTI_MVC.Controllers {
                 _req.Bairro_Nome = _cidadao.NomeBairroC;
                 _req.Cidade_Nome = _cidadao.NomeCidadeC;
                 _req.UF = _cidadao.UfC;
+                _req.Logradouro_Codigo = (int)_cidadao.CodigoLogradouroC;
                 _req.Logradouro_Nome = _cidadao.EnderecoC;
                 _req.Numero = (int)_cidadao.NumeroC;
                 _req.Complemento = _cidadao.ComplementoC;
@@ -168,7 +171,7 @@ namespace GTI_MVC.Controllers {
             model.Lista_Codigos = _listaCodigo;
 
             //Antes de retornar gravamos os dados
-            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll("GTIconnectionTeste");
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             if (model.Guid == null) {
                 //Grava Master
                 model.Guid = Guid.NewGuid().ToString("N");
@@ -184,7 +187,8 @@ namespace GTI_MVC.Controllers {
                     Requerente_Nome=_req.Nome,
                     Requerente_Numero=_req.Numero,
                     Requerente_Telefone=_req.Telefone,
-                    Requerente_Uf=_req.UF
+                    Requerente_Uf=_req.UF,
+                    Requerente_Email=_req.Email
                 };
                 Exception ex = parcelamentoRepository.Incluir_Parcelamento_Web_Master(reg);
 
@@ -212,8 +216,8 @@ namespace GTI_MVC.Controllers {
         public ActionResult Parc_req(ParcelamentoViewModel model,string listacod) {
             int _codigo = Convert.ToInt32(listacod);
 
-            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnectionTeste");
-            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll("GTIconnectionTeste");
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(_codigo);
             char _tipo = _header.Cpf_cnpj.Length == 11 ? 'F' : 'J';
 
@@ -264,11 +268,46 @@ namespace GTI_MVC.Controllers {
                 }
             }
 
+            return RedirectToAction("Parc_reqb", new { p = model.Guid });
 
-            return View(model);
         }
 
+        [Route("Parc_reqb")]
+        [HttpGet]
+        public ActionResult Parc_reqb(string p) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
 
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+            bool _existe = parcelamentoRepository.Existe_Parcelamento_Web_Master(p);
+            if (!_existe) 
+                return RedirectToAction("Login_gti", "Home");
+
+            //Load Master
+            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
+
+            ParcelamentoViewModel model = new ParcelamentoViewModel() {
+                Guid = p
+            };
+
+            model.Requerente = new Parc_Requerente() {
+                Nome = _master.Requerente_Nome,
+                Cpf_Cnpj = _master.Requerente_CpfCnpj,
+                Logradouro_Nome=_master.Requerente_Logradouro,
+                Numero=_master.Requerente_Numero,
+                Complemento=_master.Requerente_Complemento,
+                Bairro_Nome=_master.Requerente_Bairro,
+                Cidade_Nome=_master.Requerente_Cidade,
+                UF=_master.Requerente_Uf,
+                Telefone=_master.Requerente_Telefone,
+                Email=_master.Requerente_Email,
+                Cep=_master.Requerente_Cep.ToString("00000-000")
+            };
+
+
+            return View(model);
+
+        }
 
 
     }

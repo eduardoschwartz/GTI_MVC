@@ -44,6 +44,10 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Parcelamento_web_master Retorna_Parcelamento_Web_Master(string guid) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            return obj.Retorna_Parcelamento_Web_Master(guid);
+        }
 
     }
 }
