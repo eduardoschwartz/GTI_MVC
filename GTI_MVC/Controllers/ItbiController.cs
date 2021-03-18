@@ -2141,30 +2141,30 @@ namespace GTI_Mvc.Controllers {
                 ex = imovelRepository.Incluir_Itbi_main(regMain);
             } else {
                 _guid = model.Guid;
-                if (model.Comprador != null && model.Comprador.Nome != null) {
-                    string a = Functions.RetornaNumero(model.Comprador.Logradouro_Nome);
-                    if (a != "") {
-                        int b = Convert.ToInt32(a);
-                        if (b > 0) {
-                            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
-                            int _ceptmp = Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep));
-                            List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_ceptmp);
-                            List<Logradouro> Lista_Logradouro = new List<Logradouro>();
-                            int s = 1;
-                            foreach (string item in Lista_Tmp) {
-                                Lista_Logradouro.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
-                                s++;
-                            }
-                            oldpos = b.ToString();
-                            if (Lista_Logradouro.Count > 0) {
-                                if (b < Lista_Logradouro.Count)
-                                    model.Comprador.Logradouro_Nome = Lista_Logradouro[b - 1].Endereco;
-                                else
-                                    model.Comprador.Logradouro_Nome = Lista_Logradouro[Lista_Logradouro.Count - 1].Endereco;
-                            }
-                        }
-                    }
-                }
+                //if (model.Comprador != null && model.Comprador.Nome != null) {
+                //    string a = Functions.RetornaNumero(model.Comprador.Logradouro_Nome);
+                //    if (a != "") {
+                //        int b = Convert.ToInt32(a);
+                //        if (b > 0) {
+                //            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+                //            int _ceptmp = Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep));
+                //            List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_ceptmp);
+                //            List<Logradouro> Lista_Logradouro = new List<Logradouro>();
+                //            int s = 1;
+                //            foreach (string item in Lista_Tmp) {
+                //                Lista_Logradouro.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
+                //                s++;
+                //            }
+                //            oldpos = b.ToString();
+                //            if (Lista_Logradouro.Count > 0) {
+                //                if (b < Lista_Logradouro.Count)
+                //                    model.Comprador.Logradouro_Nome = Lista_Logradouro[b - 1].Endereco;
+                //                else
+                //                    model.Comprador.Logradouro_Nome = Lista_Logradouro[Lista_Logradouro.Count - 1].Endereco;
+                //            }
+                //        }
+                //    }
+                //}
 
                 Itbi_main regMain = imovelRepository.Retorna_Itbi_Main(_guid);
                 if (Functions.IsDate(model.Data_Transacao))

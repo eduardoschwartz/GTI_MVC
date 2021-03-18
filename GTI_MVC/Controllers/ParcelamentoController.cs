@@ -179,7 +179,18 @@ namespace GTI_MVC.Controllers {
                 //Grava Master
                 model.Guid = Guid.NewGuid().ToString("N");
                 Parcelamento_web_master reg = new Parcelamento_web_master() {
-                    Guid = model.Guid
+                    Guid = model.Guid,
+                    User_id=_user_id,
+                    Requerente_Bairro=_req.Bairro_Nome,
+                    Requerente_Cep=Convert.ToInt32(Functions.RetornaNumero(_req.Cep)),
+                    Requerente_Cidade=_req.Cidade_Nome,
+                    Requerente_Complemento=_req.Complemento,
+                    Requerente_CpfCnpj=_req.Cpf_Cnpj,
+                    Requerente_Logradouro=_req.Logradouro_Nome,
+                    Requerente_Nome=_req.Nome,
+                    Requerente_Numero=_req.Numero,
+                    Requerente_Telefone=_req.Telefone,
+                    Requerente_Uf=_req.UF
                 };
                 Exception ex = parcelamentoRepository.Incluir_Parcelamento_Web_Master(reg);
 
@@ -229,9 +240,6 @@ namespace GTI_MVC.Controllers {
                 _listaCodigo.Add(item2);
             }
             model.Lista_Codigos = _listaCodigo;
-
-
-
 
             if (Lista_Origem.Count == 0) {
                 ViewBag.Result = "Não existem débitos a serem parcelados para esta inscrição.";

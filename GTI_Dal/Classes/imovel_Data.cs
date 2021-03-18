@@ -2758,6 +2758,7 @@ namespace GTI_Dal.Classes {
 
         public List<int> Lista_Imovel_Cpf(string Cpf) {
             using (GTI_Context db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
                 var reg = (from p in db.Proprietario
                            join c in db.Cidadao on p.Codcidadao equals c.Codcidadao into pc from c in pc.DefaultIfEmpty()
                            where c.Cpf == Cpf select p.Codreduzido).ToList();
@@ -2767,6 +2768,7 @@ namespace GTI_Dal.Classes {
 
         public List<int> Lista_Imovel_Cnpj(string Cnpj) {
             using (GTI_Context db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
                 var reg = (from p in db.Proprietario
                            join c in db.Cidadao on p.Codcidadao equals c.Codcidadao into pc from c in pc.DefaultIfEmpty()
                            where c.Cnpj == Cnpj select p.Codreduzido).ToList();

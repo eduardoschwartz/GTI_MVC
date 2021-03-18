@@ -566,6 +566,9 @@ namespace GTI_Dal.Classes {
             List<SpExtrato_Parcelamento> ListaDebito = new List<SpExtrato_Parcelamento>();
 
             foreach (SpExtrato_Parcelamento item in Lista_Tributo) {
+                if (item.Codlancamento == 20 || item.Codlancamento == 41)
+                    goto NextReg;
+
                 bool bFind = false;
                 int x;
                 for (x = 0; x < ListaDebito.Count; x++) {
@@ -617,6 +620,7 @@ namespace GTI_Dal.Classes {
                     ListaDebito[x].Valorcorrecao += item.Valorcorrecao;
                     ListaDebito[x].Valortotal += item.Valortotal;
                 }
+            NextReg:;
             }
 
             return ListaDebito;
