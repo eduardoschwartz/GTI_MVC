@@ -55,8 +55,7 @@ namespace GTI_Mvc.Controllers {
                 Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
                 return File(stream, "application/pdf", "Resumo_Pagto_Itbi.pdf");
             } catch (Exception ex) {
-
-                throw;
+                    throw ex;
             }
         }
 
@@ -67,7 +66,6 @@ namespace GTI_Mvc.Controllers {
                 return RedirectToAction("Login", "Home");
             ItbiViewModel model = new ItbiViewModel() {
                 UserId = Convert.ToInt32(Session["hashid"])
-                //UserId = Functions.pUserId
             };
             if (guid == "" || guid == null) {
                 model.Codigo = "";
@@ -84,12 +82,21 @@ namespace GTI_Mvc.Controllers {
 
                 if (a == "rc") {//remover comprador
                     Exception ex = imovelRepository.Excluir_Itbi_comprador(guid, s);
+                    if (ex != null)
+                        throw ex;
+
                 }
                 if (a == "rv") {//remover vendedor
                     Exception ex = imovelRepository.Excluir_Itbi_vendedor(guid, s);
+                    if (ex != null)
+                        throw ex;
+
                 }
                 if (a == "ra") {//remover anexo
                     Exception ex = imovelRepository.Excluir_Itbi_anexo(guid, s);
+                    if (ex != null)
+                        throw ex;
+
                 }
                 model = Retorna_Itbi_Gravado(guid);
 
@@ -2975,6 +2982,9 @@ namespace GTI_Mvc.Controllers {
                 }
             }
             Exception ex = imovelRepository.Incluir_Itbi_isencao_imovel(Lista);
+            if (ex != null)
+                throw ex;
+
             Itbi_isencao_main regM = new Itbi_isencao_main();
             regM.Guid = model.Guid;
             regM.Natureza = Convert.ToInt32(natureza);
@@ -3312,6 +3322,9 @@ namespace GTI_Mvc.Controllers {
                 }
             }
             Exception ex = imovelRepository.Incluir_Itbi_isencao_imovel(Lista);
+            if (ex != null)
+                throw ex;
+
             Itbi_isencao_main regM = new Itbi_isencao_main();
             regM.Guid = model.Guid;
             regM.Natureza = Convert.ToInt32(natureza);
@@ -3321,7 +3334,10 @@ namespace GTI_Mvc.Controllers {
             }
 
             ex = imovelRepository.Alterar_Itbi_Isencao(regM);
-        ActionPos:
+            if (ex != null)
+                throw ex;
+
+            ActionPos:
 
             if (action == "btnValida")
                 return RedirectToAction("itbi_isencao_ok");

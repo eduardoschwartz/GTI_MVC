@@ -8,7 +8,9 @@ namespace GTI_Mvc.ViewModels {
         public int Processo_numero { get; set; }
         public string NumeroProcesso { get; set; }
         public Parc_Requerente Requerente { get; set; }
+        public Parc_Requerente Contribuinte { get; set; }
         public  List<SelectListItem> Lista_Codigos { get; set; }
+        public string Data_Vencimento { get; set; }
     }
 
     public class Parc_Requerente {
@@ -28,5 +30,5 @@ namespace GTI_Mvc.ViewModels {
         public string Email { get; set; }
     }
 
-
+    
 }

@@ -8,9 +8,9 @@
 <script src="~/Scripts/jquery.giantdropdown.js"></script>
 
 <script type="text/javascript">
-        // <![CDATA[
-        $(function () { $("select").giantDropdown(); });
-        // ]]>
+    // <![CDATA[
+    $(function () { $("select").giantDropdown(); });
+    // ]]>
 </script>
 
 <link href="~/Content/giantdropdown.css" rel="stylesheet" />
@@ -64,9 +64,9 @@
 
 <div class="center container" style="width:700px">
 
-    @using (Html.BeginForm("Parc_req", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @using (Html.BeginForm("Parc_reqb", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
-        @Html.HiddenFor(m=>m.Guid)
+        @Html.HiddenFor(m => m.Guid)
         <div class="card">
             <div class="card-header">Dados do Requerente</div>
             <div class="card-body">
@@ -78,7 +78,7 @@
                             <label style="font-weight:normal;padding-top:7px">Nº Cpf/Cnpj:</label>
                         </td>
                         <td>
-                            @Html.TextBoxFor(m => m.Requerente.Cpf_Cnpj, new { @id = "cpfcnpjTxt", @style = "max-width:200px;height:25px", @readonly = true })
+                            @Html.TextBoxFor(m => m.Requerente.Cpf_Cnpj, new { @style = "max-width:200px;height:25px", @readonly = true })
                         </td>
                     </tr>
 
@@ -160,38 +160,82 @@
                 </table>
 
             </div>
-            <div class="card-header">Selecione o imóvel, empresa ou a inscrição que deseja parcelar</div>
+            <div class="card-header">Dados do contribuinte selecionado</div>
             <div class="card-body">
-                @Model.Guid
-                @*<select name="listacod" id="listacod" style="width:630px;height:auto">
-                    <optgroup label="Imóvel">
-                        @foreach (var item in Model.Lista_Codigos) {
-                            if (item.Group.Name == "Imovel") {
-                                <option value=@item.Value selected="@item.Selected">@item.Text</option>
-                            }
-                        }
-                    </optgroup>
 
-                    <optgroup label="Empresa">
-                        @foreach (var item in Model.Lista_Codigos) {
+                <table style="font-size:14px;width:640px">
+                    <tr style="height:30px">
+                        <td style="width:103px">
+                            <label style="font-weight:normal;padding-top:7px">Nº da Inscrição:</label>
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.Contribuinte.Codigo, new { @style = "max-width:100px;height:25px", @readonly = true })
+                        </td>
+                        <td style="width:144px"></td>
+                        <td style="width:98px">
+                            <label style="font-weight:normal;padding-top:7px;text-align:right">Nº Cpf/Cnpj:</label>
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.Contribuinte.Cpf_Cnpj, new { @style = "max-width:200px;height:25px", @readonly = true })
+                        </td>
+                    </tr>
 
-                            if (item.Group.Name == "Empresa") {
-                                <option value=@item.Value selected="@item.Selected">@item.Text</option>
-                            }
-                        }
-                    </optgroup>
-                    <optgroup label="Outras inscrições">
-                        @foreach (var item in Model.Lista_Codigos) {
+                </table>
+                <div style="padding-top:5px">
+                    <table style="font-size:14px;width:640px">
+                        <tr style="height:30px">
+                            <td style="width:103px">
+                                <label style="font-weight:normal">Nome:&nbsp;&nbsp;</label>
+                            </td>
+                            <td>
+                                <label style="font-weight:normal;color:blue">
+                                    @Html.TextBoxFor(m => m.Contribuinte.Nome, new { style = "width:527px;height:25px", @readonly = true })
+                                </label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
 
-                            if (item.Group.Name == "Cidadao") {
-                                <option value=@item.Value selected="@item.Selected">@item.Text</option>
-                            }
-                        }
-                    </optgroup>
-                </select>*@
-                <button type="submit" class="btn btn-primary" name="action" value="btnValida">Verificar débitos</button>&nbsp;&nbsp;
+                <table style="font-size:14px;width:640px">
+                    <tr style="height:30px">
+                        <td style="width:103px">
+                            <label style="font-weight:normal">Endereco:</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Contribuinte.Logradouro_Nome, new { style = "width:527px;height:25px", @readonly = true })</label>
+                        </td>
+                    </tr>
+                </table>
+
+                <table style="font-size:14px;width:640px">
+                    <tr style="height:30px">
+                        <td style="width:103px">
+                            <label style="font-weight:normal">Bairro/Cidade:</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Contribuinte.Bairro_Nome, new { style = "width:385px;height:25px", @readonly = true })</label>
+
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;color:blue"><span style="color:black">Cep:</span>&nbsp;&nbsp;@Html.TextBoxFor(m => m.Contribuinte.Cep, new { style = "width:80px;height:25px", @readonly = true })</label>
+                        </td>
+                    </tr>
+                </table>
+
+
             </div>
+            <div class="card-header">Parâmetros do parcelamento</div>
+            <div class="card-body">
+                <table style="font-size:14px;width:640px">
+                    <tr >
+                        <td >Data do 1º vencimento:&nbsp;@Html.TextBoxFor(m => m.Data_Vencimento, new { @id = "vencto", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })</td>
+                    </tr>
 
+                </table>
+                <br />
+                <br />
+                <button type="submit" class="btn btn-primary" name="action" value="btnValida">Analisar...</button>&nbsp;&nbsp;
+            </div>
             <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
             <div class="card-footer">
                 @Html.ActionLink("Retornar ao menu de opções", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<br />
@@ -201,3 +245,31 @@
     }
 </div>
 
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+        });
+
+        function ValidateForm() {
+            ClearError();
+            var _data = document.getElementById('vencto').value;
+
+            if (_data.length < 10) {
+                document.getElementById('errorLabel').innerHTML = "Data de vencimento inválida";
+                return false;
+            }
+
+            return true;
+        }
+
+        function ClearError() {
+            document.getElementById('errorLabel').innerHTML = "";
+        }
+
+    </script>
+}

@@ -48,7 +48,9 @@ namespace GTI_MVC.Controllers {
 
             CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(_codigo);
             Parc_Requerente _req = new Parc_Requerente {
+                Codigo=_cidadao.Codigo,
                 Nome=_cidadao.Nome,
+
                 Email=_user.Email
             };
             _req.Cpf_Cnpj = Functions.FormatarCpfCnpj(_cpfcnpj);
@@ -80,12 +82,13 @@ namespace GTI_MVC.Controllers {
                 _req.Cep = nCep.ToString("00000-000");
             }
 
-            ParcelamentoViewModel model = new ParcelamentoViewModel();
-            model.Requerente = _req;
+            ParcelamentoViewModel model = new ParcelamentoViewModel {
+                Requerente = _req
+            };
             List<SelectListItem> _listaCodigo = new List<SelectListItem>();
 
             //Lista de imóvel
-            List<int> _listaImovel = null;
+            List<int> _listaImovel ;
             if (_bCpf)
                 _listaImovel = imovelRepository.Lista_Imovel_Cpf(Functions.RetornaNumero(_req.Cpf_Cnpj));
             else
@@ -113,7 +116,7 @@ namespace GTI_MVC.Controllers {
             }
 
             //Lista de empresas
-            List<int> _listaEmpresa = null;
+            List<int> _listaEmpresa ;
             if (_bCpf)
                 _listaEmpresa = empresaRepository.Lista_Empresa_Proprietario_Cpf(Functions.RetornaNumero(_req.Cpf_Cnpj));
             else
@@ -141,7 +144,7 @@ namespace GTI_MVC.Controllers {
             }
 
             //Lista de cidadão
-            List<Cidadao> _listaCidadao = null;
+            List<Cidadao> _listaCidadao ;
             if (_bCpf)
                 _listaCidadao = cidadaoRepository.Lista_Cidadao(null, Functions.RetornaNumero( _req.Cpf_Cnpj),null);
             else
@@ -178,6 +181,7 @@ namespace GTI_MVC.Controllers {
                 Parcelamento_web_master reg = new Parcelamento_web_master() {
                     Guid = model.Guid,
                     User_id=_user_id,
+                    Requerente_Codigo = _req.Codigo,
                     Requerente_Bairro=_req.Bairro_Nome,
                     Requerente_Cep=Convert.ToInt32(Functions.RetornaNumero(_req.Cep)),
                     Requerente_Cidade=_req.Cidade_Nome,
@@ -191,7 +195,8 @@ namespace GTI_MVC.Controllers {
                     Requerente_Email=_req.Email
                 };
                 Exception ex = parcelamentoRepository.Incluir_Parcelamento_Web_Master(reg);
-
+                if (ex != null)
+                    throw ex;
                 //Grava ListaCodigos
                 short t = 1;
                 foreach (SelectListItem item in _listaCodigo) {
@@ -204,6 +209,8 @@ namespace GTI_MVC.Controllers {
                         Selected=item.Selected
                     };
                     ex = parcelamentoRepository.Incluir_Parcelamento_Web_Lista_Codigo(_cod);
+                    if (ex != null)
+                        throw ex;
                     t++;
                 }
             }
@@ -265,6 +272,9 @@ namespace GTI_MVC.Controllers {
                         Qtde_Parcelamento=item.Qtde_parcelamento
                     };
                     Exception ex = parcelamentoRepository.Incluir_Parcelamento_Web_Origem(reg);
+                    if (ex != null)
+                        throw ex;
+
                 }
             }
 
@@ -279,16 +289,18 @@ namespace GTI_MVC.Controllers {
                 _end += ", Lote:" + _header.Lote_original;
             Parcelamento_web_master regP = new Parcelamento_web_master() {
                 Guid = model.Guid,
-                Codigo = _codigo,
-                contribuinte_nome = _header.Nome,
-                contribuinte_cpfcnpj = _header.Cpf_cnpj,
-                contribuinte_endereco = _end,
-                contribuinte_bairro = _header.Nome_bairro,
-                contribuinte_cep = Convert.ToInt32(Functions.RetornaNumero(_header.Cep)),
-                contribuinte_cidade = _header.Nome_cidade,
-                contribuinte_uf = _header.Nome_uf
+                Contribuinte_Codigo = _codigo,
+                Contribuinte_nome = _header.Nome,
+                Contribuinte_cpfcnpj = _header.Cpf_cnpj,
+                Contribuinte_endereco = _end,
+                Contribuinte_bairro = _header.Nome_bairro,
+                Contribuinte_cep = Convert.ToInt32(Functions.RetornaNumero(_header.Cep)),
+                Contribuinte_cidade = _header.Nome_cidade,
+                Contribuinte_uf = _header.Nome_uf
             };
             Exception ex2 = parcelamentoRepository.Atualizar_Codigo_Master(regP);
+            if (ex2 != null)
+                throw ex2;
 
             return RedirectToAction("Parc_reqb", new { p = model.Guid });
 
@@ -308,9 +320,11 @@ namespace GTI_MVC.Controllers {
             //Load Master
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
             ParcelamentoViewModel model = new ParcelamentoViewModel() {
-                Guid = p
+                Guid = p,
+                Data_Vencimento= _master.Data_Vencimento==null?"": Convert.ToDateTime(_master.Data_Vencimento).ToString("dd/MM/yyyy")
             };
             model.Requerente = new Parc_Requerente() {
+                Codigo=_master.Requerente_Codigo,
                 Nome = _master.Requerente_Nome,
                 Cpf_Cnpj = _master.Requerente_CpfCnpj,
                 Logradouro_Nome = _master.Requerente_Logradouro,
@@ -324,12 +338,22 @@ namespace GTI_MVC.Controllers {
                 Cep = _master.Requerente_Cep.ToString("00000-000")
             };
 
-
-
-
+            model.Contribuinte = new Parc_Requerente() {
+                Codigo = _master.Contribuinte_Codigo,
+                Nome = _master.Contribuinte_nome,
+                Cpf_Cnpj =  Functions.FormatarCpfCnpj( _master.Contribuinte_cpfcnpj),
+                Logradouro_Nome = _master.Contribuinte_endereco,
+                Bairro_Nome = _master.Contribuinte_bairro+" - " + _master.Contribuinte_cidade + "/" + _master.Contribuinte_uf,
+                Cep = _master.Contribuinte_cep.ToString("00000-000")
+            };
 
             return View(model);
+        }
 
+        [Route("Parc_reqb")]
+        [HttpPost]
+        public ActionResult Parc_reqb(ParcelamentoViewModel model) {
+            return View(model);
         }
 
 

@@ -79,7 +79,7 @@ namespace GTI_Dal.Classes {
 
                 object[] Parametros = new object[14];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
-                Parametros[1] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
+                Parametros[1] = new SqlParameter { ParameterName = "@Requerente_Codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Requerente_Codigo };
                 Parametros[2] = new SqlParameter { ParameterName = "@user_id", SqlDbType = SqlDbType.Int, SqlValue = Reg.User_id };
                 Parametros[3] = new SqlParameter { ParameterName = "@Requerente_Nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Requerente_Nome };
                 Parametros[4] = new SqlParameter { ParameterName = "@Requerente_CpfCnpj", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Requerente_CpfCnpj };
@@ -98,8 +98,8 @@ namespace GTI_Dal.Classes {
                 else
                     Parametros[12] = new SqlParameter { ParameterName = "@Requerente_Telefone", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Requerente_Telefone };
                 Parametros[13] = new SqlParameter { ParameterName = "@Requerente_email", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Requerente_Email };
-                db.Database.ExecuteSqlCommand("INSERT INTO parcelamento_web_master(guid,codigo,user_id,Requerente_Nome,Requerente_CpfCnpj,Requerente_Bairro,Requerente_Cidade,Requerente_Uf,Requerente_Logradouro," +
-                    "Requerente_Numero,Requerente_Complemento,Requerente_Cep,Requerente_Telefone,Requerente_Email) VALUES(@guid,@codigo,@user_id,@Requerente_Nome,@Requerente_CpfCnpj,@Requerente_Bairro,@Requerente_Cidade," +
+                db.Database.ExecuteSqlCommand("INSERT INTO parcelamento_web_master(guid,Requerente_Codigo,user_id,Requerente_Nome,Requerente_CpfCnpj,Requerente_Bairro,Requerente_Cidade,Requerente_Uf,Requerente_Logradouro," +
+                    "Requerente_Numero,Requerente_Complemento,Requerente_Cep,Requerente_Telefone,Requerente_Email) VALUES(@guid,@Requerente_Codigo,@user_id,@Requerente_Nome,@Requerente_CpfCnpj,@Requerente_Bairro,@Requerente_Cidade," +
                     "@Requerente_Uf,@Requerente_Logradouro,@Requerente_Numero,@Requerente_Complemento,@Requerente_Cep,@Requerente_Telefone,@Requerente_Email)", Parametros);
                 try {
                     db.SaveChanges();
@@ -218,16 +218,16 @@ namespace GTI_Dal.Classes {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 object[] Parametros = new object[9];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Guid };
-                Parametros[1] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = reg.Codigo };
-                Parametros[2] = new SqlParameter { ParameterName = "@contribuinte_nome", SqlDbType = SqlDbType.VarChar, SqlValue = reg.contribuinte_nome };
-                Parametros[3] = new SqlParameter { ParameterName = "@contribuinte_cpfcnpj", SqlDbType = SqlDbType.VarChar, SqlValue = reg.contribuinte_cpfcnpj };
-                Parametros[4] = new SqlParameter { ParameterName = "@contribuinte_endereco", SqlDbType = SqlDbType.VarChar, SqlValue = reg.contribuinte_endereco };
-                Parametros[5] = new SqlParameter { ParameterName = "@contribuinte_bairro", SqlDbType = SqlDbType.VarChar, SqlValue = reg.contribuinte_bairro };
-                Parametros[6] = new SqlParameter { ParameterName = "@contribuinte_cep", SqlDbType = SqlDbType.Int, SqlValue = reg.contribuinte_cep };
-                Parametros[7] = new SqlParameter { ParameterName = "@contribuinte_cidade", SqlDbType = SqlDbType.VarChar, SqlValue = reg.contribuinte_cidade };
-                Parametros[8] = new SqlParameter { ParameterName = "@contribuinte_uf", SqlDbType = SqlDbType.VarChar, SqlValue = reg.contribuinte_uf };
+                Parametros[1] = new SqlParameter { ParameterName = "@Contribuinte_Codigo", SqlDbType = SqlDbType.Int, SqlValue = reg.Contribuinte_Codigo };
+                Parametros[2] = new SqlParameter { ParameterName = "@contribuinte_nome", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Contribuinte_nome };
+                Parametros[3] = new SqlParameter { ParameterName = "@contribuinte_cpfcnpj", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Contribuinte_cpfcnpj };
+                Parametros[4] = new SqlParameter { ParameterName = "@contribuinte_endereco", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Contribuinte_endereco };
+                Parametros[5] = new SqlParameter { ParameterName = "@contribuinte_bairro", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Contribuinte_bairro };
+                Parametros[6] = new SqlParameter { ParameterName = "@contribuinte_cep", SqlDbType = SqlDbType.Int, SqlValue = reg.Contribuinte_cep };
+                Parametros[7] = new SqlParameter { ParameterName = "@contribuinte_cidade", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Contribuinte_cidade };
+                Parametros[8] = new SqlParameter { ParameterName = "@contribuinte_uf", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Contribuinte_uf };
                 try {
-                    db.Database.ExecuteSqlCommand("UPDATE parcelamento_web_master set codigo=@codigo,contribuinte_nome=@contribuinte_nome,contribuinte_cpfcnpj=@contribuinte_cpfcnpj,contribuinte_endereco=@contribuinte_endereco," +
+                    db.Database.ExecuteSqlCommand("UPDATE parcelamento_web_master set Contribuinte_Codigo=@Contribuinte_Codigo,contribuinte_nome=@contribuinte_nome,contribuinte_cpfcnpj=@contribuinte_cpfcnpj,contribuinte_endereco=@contribuinte_endereco," +
                         "contribuinte_bairro=@contribuinte_bairro,contribuinte_cep=@contribuinte_cep,contribuinte_cidade=@contribuinte_cidade,contribuinte_uf=@contribuinte_uf WHERE guid=@guid", Parametros);
                 } catch (Exception ex) {
                     return ex;
