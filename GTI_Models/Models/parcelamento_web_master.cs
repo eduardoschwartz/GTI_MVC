@@ -28,6 +28,8 @@ namespace GTI_Models.Models {
         public string Contribuinte_cidade { get; set; }
         public string Contribuinte_uf { get; set; }
         public DateTime? Data_Vencimento { get; set; }
+        public DateTime Data_Geracao { get; set; }
+        public string Plano_Desconto { get; set; } ="Nenhum";
     }
 }
 

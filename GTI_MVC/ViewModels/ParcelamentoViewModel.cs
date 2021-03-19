@@ -11,6 +11,8 @@ namespace GTI_Mvc.ViewModels {
         public Parc_Requerente Contribuinte { get; set; }
         public  List<SelectListItem> Lista_Codigos { get; set; }
         public string Data_Vencimento { get; set; }
+        public string Plano_desconto { get; set; } = "Nenhum";
+        public string[] Lista_Plano_Desconto = new[] { "Nenhum", "Refis" };
     }
 
     public class Parc_Requerente {

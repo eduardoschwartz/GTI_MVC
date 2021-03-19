@@ -77,7 +77,7 @@ namespace GTI_Dal.Classes {
             using (var db = new GTI_Context(_connection)) {
                 db.Database.CommandTimeout = 180;
 
-                object[] Parametros = new object[14];
+                object[] Parametros = new object[15];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@Requerente_Codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Requerente_Codigo };
                 Parametros[2] = new SqlParameter { ParameterName = "@user_id", SqlDbType = SqlDbType.Int, SqlValue = Reg.User_id };
@@ -98,9 +98,10 @@ namespace GTI_Dal.Classes {
                 else
                     Parametros[12] = new SqlParameter { ParameterName = "@Requerente_Telefone", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Requerente_Telefone };
                 Parametros[13] = new SqlParameter { ParameterName = "@Requerente_email", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Requerente_Email };
+                Parametros[14] = new SqlParameter { ParameterName = "@Data_Geracao", SqlDbType = SqlDbType.SmallDateTime, SqlValue = DateTime.Now };
                 db.Database.ExecuteSqlCommand("INSERT INTO parcelamento_web_master(guid,Requerente_Codigo,user_id,Requerente_Nome,Requerente_CpfCnpj,Requerente_Bairro,Requerente_Cidade,Requerente_Uf,Requerente_Logradouro," +
-                    "Requerente_Numero,Requerente_Complemento,Requerente_Cep,Requerente_Telefone,Requerente_Email) VALUES(@guid,@Requerente_Codigo,@user_id,@Requerente_Nome,@Requerente_CpfCnpj,@Requerente_Bairro,@Requerente_Cidade," +
-                    "@Requerente_Uf,@Requerente_Logradouro,@Requerente_Numero,@Requerente_Complemento,@Requerente_Cep,@Requerente_Telefone,@Requerente_Email)", Parametros);
+                    "Requerente_Numero,Requerente_Complemento,Requerente_Cep,Requerente_Telefone,Requerente_Email,Data_Geracao) VALUES(@guid,@Requerente_Codigo,@user_id,@Requerente_Nome,@Requerente_CpfCnpj,@Requerente_Bairro,@Requerente_Cidade," +
+                    "@Requerente_Uf,@Requerente_Logradouro,@Requerente_Numero,@Requerente_Complemento,@Requerente_Cep,@Requerente_Telefone,@Requerente_Email,@Data_Geracao)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -236,6 +237,19 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Atualizar_Criterio_Master(Parcelamento_web_master reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[2];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@Plano_Desconto", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Plano_Desconto };
+                try {
+                    db.Database.ExecuteSqlCommand("UPDATE parcelamento_web_master set Plano_Desconto=@Plano_Desconto WHERE guid=@guid", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
 
 
     }

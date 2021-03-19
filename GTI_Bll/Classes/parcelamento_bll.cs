@@ -55,5 +55,11 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Atualizar_Criterio_Master(Parcelamento_web_master reg) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Atualizar_Criterio_Master(reg);
+            return ex;
+        }
+
     }
 }

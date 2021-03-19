@@ -904,6 +904,7 @@
     <Content Include="Views\Parcelamento\Parc_req.cshtml" />
     <Content Include="Views\Parcelamento\Parc_index.cshtml" />
     <Content Include="Views\Parcelamento\Parc_reqb.cshtml" />
+    <Content Include="Views\Parcelamento\Parc_reqc.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

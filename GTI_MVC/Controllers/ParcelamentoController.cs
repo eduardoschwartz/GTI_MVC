@@ -320,8 +320,7 @@ namespace GTI_MVC.Controllers {
             //Load Master
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
             ParcelamentoViewModel model = new ParcelamentoViewModel() {
-                Guid = p,
-                Data_Vencimento= _master.Data_Vencimento==null?"": Convert.ToDateTime(_master.Data_Vencimento).ToString("dd/MM/yyyy")
+                Guid = p
             };
             model.Requerente = new Parc_Requerente() {
                 Codigo=_master.Requerente_Codigo,
@@ -353,8 +352,69 @@ namespace GTI_MVC.Controllers {
         [Route("Parc_reqb")]
         [HttpPost]
         public ActionResult Parc_reqb(ParcelamentoViewModel model) {
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+            Parcelamento_web_master regP = new Parcelamento_web_master() {
+                Guid = model.Guid,
+                Plano_Desconto=model.Plano_desconto
+            };
+            Exception ex = parcelamentoRepository.Atualizar_Criterio_Master(regP);
+            if (ex != null)
+                throw ex;
+
+            return RedirectToAction("Parc_reqc", new { p = model.Guid });
+        }
+
+        [Route("Parc_reqc")]
+        [HttpGet]
+        public ActionResult Parc_reqc(string p) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+            bool _existe = parcelamentoRepository.Existe_Parcelamento_Web_Master(p);
+            if (!_existe)
+                return RedirectToAction("Login_gti", "Home");
+
+            //Load Master
+            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
+            ParcelamentoViewModel model = new ParcelamentoViewModel() {
+                Guid = p,
+                Plano_desconto=_master.Plano_Desconto
+            };
+            model.Requerente = new Parc_Requerente() {
+                Codigo = _master.Requerente_Codigo,
+                Nome = _master.Requerente_Nome,
+                Cpf_Cnpj = _master.Requerente_CpfCnpj,
+                Logradouro_Nome = _master.Requerente_Logradouro,
+                Numero = _master.Requerente_Numero,
+                Complemento = _master.Requerente_Complemento,
+                Bairro_Nome = _master.Requerente_Bairro,
+                Cidade_Nome = _master.Requerente_Cidade,
+                UF = _master.Requerente_Uf,
+                Telefone = _master.Requerente_Telefone,
+                Email = _master.Requerente_Email,
+                Cep = _master.Requerente_Cep.ToString("00000-000")
+            };
+
+            model.Contribuinte = new Parc_Requerente() {
+                Codigo = _master.Contribuinte_Codigo,
+                Nome = _master.Contribuinte_nome,
+                Cpf_Cnpj = Functions.FormatarCpfCnpj(_master.Contribuinte_cpfcnpj),
+                Logradouro_Nome = _master.Contribuinte_endereco,
+                Bairro_Nome = _master.Contribuinte_bairro + " - " + _master.Contribuinte_cidade + "/" + _master.Contribuinte_uf,
+                Cep = _master.Contribuinte_cep.ToString("00000-000")
+            };
+
             return View(model);
         }
+
+
+        [Route("Parc_reqc")]
+        [HttpPost]
+        public ActionResult Parc_reqc(ParcelamentoViewModel model) {
+            return View(model);
+        }
+
 
 
     }
