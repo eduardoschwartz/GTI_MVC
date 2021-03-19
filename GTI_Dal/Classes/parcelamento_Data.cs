@@ -214,6 +214,28 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Atualizar_Codigo_Master(Parcelamento_web_master reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[9];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = reg.Codigo };
+                Parametros[2] = new SqlParameter { ParameterName = "@contribuinte_nome", SqlDbType = SqlDbType.VarChar, SqlValue = reg.contribuinte_nome };
+                Parametros[3] = new SqlParameter { ParameterName = "@contribuinte_cpfcnpj", SqlDbType = SqlDbType.VarChar, SqlValue = reg.contribuinte_cpfcnpj };
+                Parametros[4] = new SqlParameter { ParameterName = "@contribuinte_endereco", SqlDbType = SqlDbType.VarChar, SqlValue = reg.contribuinte_endereco };
+                Parametros[5] = new SqlParameter { ParameterName = "@contribuinte_bairro", SqlDbType = SqlDbType.VarChar, SqlValue = reg.contribuinte_bairro };
+                Parametros[6] = new SqlParameter { ParameterName = "@contribuinte_cep", SqlDbType = SqlDbType.Int, SqlValue = reg.contribuinte_cep };
+                Parametros[7] = new SqlParameter { ParameterName = "@contribuinte_cidade", SqlDbType = SqlDbType.VarChar, SqlValue = reg.contribuinte_cidade };
+                Parametros[8] = new SqlParameter { ParameterName = "@contribuinte_uf", SqlDbType = SqlDbType.VarChar, SqlValue = reg.contribuinte_uf };
+                try {
+                    db.Database.ExecuteSqlCommand("UPDATE parcelamento_web_master set codigo=@codigo,contribuinte_nome=@contribuinte_nome,contribuinte_cpfcnpj=@contribuinte_cpfcnpj,contribuinte_endereco=@contribuinte_endereco," +
+                        "contribuinte_bairro=@contribuinte_bairro,contribuinte_cep=@contribuinte_cep,contribuinte_cidade=@contribuinte_cidade,contribuinte_uf=@contribuinte_uf WHERE guid=@guid", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
 
 
     }

@@ -49,5 +49,11 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Parcelamento_Web_Master(guid);
         }
 
+        public Exception Atualizar_Codigo_Master(Parcelamento_web_master reg) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Atualizar_Codigo_Master(reg);
+            return ex;
+        }
+
     }
 }

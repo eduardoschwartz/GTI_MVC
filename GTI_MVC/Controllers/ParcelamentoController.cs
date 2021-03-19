@@ -268,6 +268,28 @@ namespace GTI_MVC.Controllers {
                 }
             }
 
+            _header = sistemaRepository.Contribuinte_Header(_codigo);
+            string _end = _header.Endereco + ", " + _header.Numero.ToString();
+            if (!string.IsNullOrEmpty(_header.Complemento))
+                _end += " " + _header.Complemento;
+            _end += ", " + _header.Nome_bairro;
+            if (!string.IsNullOrEmpty(_header.Quadra_original))
+                _end += " Quadra:" + _header.Quadra_original;
+            if (!string.IsNullOrEmpty(_header.Lote_original))
+                _end += ", Lote:" + _header.Lote_original;
+            Parcelamento_web_master regP = new Parcelamento_web_master() {
+                Guid = model.Guid,
+                Codigo = _codigo,
+                contribuinte_nome = _header.Nome,
+                contribuinte_cpfcnpj = _header.Cpf_cnpj,
+                contribuinte_endereco = _end,
+                contribuinte_bairro = _header.Nome_bairro,
+                contribuinte_cep = Convert.ToInt32(Functions.RetornaNumero(_header.Cep)),
+                contribuinte_cidade = _header.Nome_cidade,
+                contribuinte_uf = _header.Nome_uf
+            };
+            Exception ex2 = parcelamentoRepository.Atualizar_Codigo_Master(regP);
+
             return RedirectToAction("Parc_reqb", new { p = model.Guid });
 
         }
@@ -285,24 +307,25 @@ namespace GTI_MVC.Controllers {
 
             //Load Master
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
-
             ParcelamentoViewModel model = new ParcelamentoViewModel() {
                 Guid = p
             };
-
             model.Requerente = new Parc_Requerente() {
                 Nome = _master.Requerente_Nome,
                 Cpf_Cnpj = _master.Requerente_CpfCnpj,
-                Logradouro_Nome=_master.Requerente_Logradouro,
-                Numero=_master.Requerente_Numero,
-                Complemento=_master.Requerente_Complemento,
-                Bairro_Nome=_master.Requerente_Bairro,
-                Cidade_Nome=_master.Requerente_Cidade,
-                UF=_master.Requerente_Uf,
-                Telefone=_master.Requerente_Telefone,
-                Email=_master.Requerente_Email,
-                Cep=_master.Requerente_Cep.ToString("00000-000")
+                Logradouro_Nome = _master.Requerente_Logradouro,
+                Numero = _master.Requerente_Numero,
+                Complemento = _master.Requerente_Complemento,
+                Bairro_Nome = _master.Requerente_Bairro,
+                Cidade_Nome = _master.Requerente_Cidade,
+                UF = _master.Requerente_Uf,
+                Telefone = _master.Requerente_Telefone,
+                Email = _master.Requerente_Email,
+                Cep = _master.Requerente_Cep.ToString("00000-000")
             };
+
+
+
 
 
             return View(model);

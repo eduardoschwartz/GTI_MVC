@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using System.ComponentModel.DataAnnotations;
 
 namespace GTI_Models.Models {
@@ -18,7 +18,14 @@ namespace GTI_Models.Models {
         public int Requerente_Cep { get; set; }
         public string Requerente_Telefone { get; set; }
         public string Requerente_Email { get; set; }
-
+        public string contribuinte_nome { get; set; }
+        public string contribuinte_cpfcnpj { get; set; }
+        public string contribuinte_endereco { get; set; }
+        public string contribuinte_bairro { get; set; }
+        public int contribuinte_cep { get; set; }
+        public string contribuinte_cidade { get; set; }
+        public string contribuinte_uf { get; set; }
     }
 }
+
 
