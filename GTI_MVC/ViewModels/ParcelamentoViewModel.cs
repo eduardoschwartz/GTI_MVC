@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using GTI_Models.Models;
+using System.Collections;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace GTI_Mvc.ViewModels {
@@ -13,6 +15,7 @@ namespace GTI_Mvc.ViewModels {
         public string Data_Vencimento { get; set; }
         public string Plano_desconto { get; set; } = "Nenhum";
         public string[] Lista_Plano_Desconto = new[] { "Nenhum", "Refis" };
+        public List<SpParcelamentoOrigem> Lista_Origem{ get; set; }
     }
 
     public class Parc_Requerente {
@@ -32,5 +35,6 @@ namespace GTI_Mvc.ViewModels {
         public string Email { get; set; }
     }
 
-    
+
+
 }

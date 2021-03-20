@@ -61,5 +61,10 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public List<SpParcelamentoOrigem> Lista_Parcelamento_Origem(string guid) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            return obj.Lista_Parcelamento_Origem(guid);
+        }
+
     }
 }

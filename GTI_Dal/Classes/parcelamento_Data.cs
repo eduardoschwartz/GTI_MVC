@@ -251,6 +251,34 @@ namespace GTI_Dal.Classes {
             }
         }
 
-
+        public List<SpParcelamentoOrigem> Lista_Parcelamento_Origem(string guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from t in db.Parcelamento_Web_Origem where t.Guid == guid orderby t.Idx select t).ToList();
+                List<SpParcelamentoOrigem> Lista = new List<SpParcelamentoOrigem>();
+                foreach (var item in reg) {
+                    SpParcelamentoOrigem Linha = new SpParcelamentoOrigem {
+                        Idx=item.Idx,
+                        Exercicio=item.Ano,
+                        Lancamento=item.Lancamento,
+                        Nome_lancamento=item.Lancamento_Nome,
+                        Sequencia=item.Sequencia,
+                        Parcela=item.Parcela,
+                        Complemento=item.Complemento,
+                        Data_vencimento=item.Data_Vencimento,
+                        Ajuizado=item.Ajuizado,
+                        Perc_penalidade=item.Perc_Penalidade,
+                        Qtde_parcelamento=item.Qtde_Parcelamento,
+                        Valor_principal=item.Valor_Tributo,
+                        Valor_juros=item.Valor_Juros,
+                        Valor_multa=item.Valor_Multa,
+                        Valor_correcao=item.Valor_Correcao,
+                        Valor_total=item.Valor_Total,
+                        Valor_penalidade=item.Valor_Penalidade
+                    };
+                    Lista.Add(Linha);
+                }
+                return Lista;
+            }
+        }
     }
 }

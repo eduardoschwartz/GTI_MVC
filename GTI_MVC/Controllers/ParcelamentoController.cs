@@ -405,6 +405,9 @@ namespace GTI_MVC.Controllers {
                 Cep = _master.Contribuinte_cep.ToString("00000-000")
             };
 
+            //Load Origem
+            List<SpParcelamentoOrigem> ListaOrigem = parcelamentoRepository.Lista_Parcelamento_Origem(p);
+            model.Lista_Origem = ListaOrigem;
             return View(model);
         }
 

@@ -49,15 +49,20 @@
         font-size: 13px;
         font-family: Arial, Helvetica, sans-serif;
     }
+
+    #chkSel {
+        cursor: pointer;
+    }
 </style>
 
 <h5 style="text-align:center">Parcelamento de Débitos</h5>
 
-<div class="center container" style="width:700px">
+<div class="center container" style="width:850px">
 
     @using (Html.BeginForm("Parc_reqc", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
         @Html.HiddenFor(m => m.Guid)
+        @Html.HiddenFor(m=>m.Lista_Origem)
         <div class="card">
             <div class="card-header">Dados do Requerente</div>
             <div class="card-body">
@@ -219,9 +224,90 @@
             <div class="card-body">
                 <table style="font-size:14px;width:640px">
                     <tr>
-                        <td >Plano de desconto:&nbsp;<span style="color:blue">@Model.Plano_desconto</span></td>
+                        <td>Plano de desconto:&nbsp;<span style="color:blue">@Model.Plano_desconto</span></td>
                     </tr>
                 </table>
+            </div>
+            <div class="card-header">Débitos disponíveis para parcelamento</div>
+            <div class="card-body">
+                <div id="DebitoTable" style="height: 342px; overflow: auto;width:780px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;border-left-color:cadetblue;border-left-style:solid;border-left-width:1px;border-right-color:cadetblue;border-right-style:solid;border-right-width:1px">
+                    <table id="tblMain" style="font-size:12px">
+                        <tr>
+                            <th style="text-align:center">
+                                #
+                            </th>
+                            <th style="display:none">
+                                Id
+                            </th>
+                            <th style="width:50px;text-align:center">
+                                Ano
+                            </th>
+                            <th style="display:none">
+                                Lanc
+                            </th>
+                            <th style="width:180px">
+                                Lancamento
+                            </th>
+                            <th style="display:none">
+                                Seq
+                            </th>
+                            <th style="display:none">
+                                Parc
+                            </th>
+                            <th style="display:none">
+                                Compl
+                            </th>
+                            <th style="width:60px;text-align:center">
+                                Dt.Vencto
+                            </th>
+                            <th style="width:25px;text-align:center">
+                                Aj
+                            </th>
+                            <th style="width:60px;text-align:right">
+                                Principal
+                            </th>
+                            <th style="width:60px;text-align:right">
+                                Juros
+                            </th>
+                            <th style="width:60px;text-align:right">
+                                Multa
+                            </th>
+                            <th style="width:60px;text-align:right">
+                                Correção
+                            </th>
+                            <th style="width:70px;text-align:right">
+                                Total
+                            </th>
+                            <th style="display:none">
+                                Honorário
+                            </th>
+                            <th style="width:25px;text-align:center">
+                                Pt
+                            </th>
+                            <th style="width:25px;text-align:center">
+                                Ep
+                            </th>
+                        </tr>
+                        <tbody class="item-model-number">
+                            @foreach (var item in Model.Lista_Origem) {
+                                <tr style="height:14px;">
+                                    <td>
+                                        @Html.CheckBoxFor(modelItem => item.Selected, new { id = "chkSel" })
+                                    </td>
+                                    <td style="display:none">@Html.DisplayFor(modelItem => item.Idx)</td>
+                                    <td style="width:50px;font-weight:normal;text-align:center">@Html.DisplayFor(modelItem => item.Exercicio)</td>
+                                    <td style="display: none">@Html.DisplayFor(modelItem => item.Lancamento)</td>
+                                    <td style="width:180px;font-weight:normal;text-align:left">@Html.DisplayFor(modelItem => item.Nome_lancamento)</td>
+                                    <td style="display: none">@Html.DisplayFor(modelItem => item.Sequencia)</td>
+                                    <td style="display: none">@Html.DisplayFor(modelItem => item.Parcela)</td>
+                                    <td style="display: none">@Html.DisplayFor(modelItem => item.Complemento)</td>
+                                    <td style="width:60px;font-weight:normal;text-align:center">@item.Data_vencimento.ToString("dd/MM/yyyy")</td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
                 <br />
                 <br />
                 <button type="submit" class="btn btn-primary" name="action" value="btnValida">Carregar Simulado...</button>&nbsp;&nbsp;
@@ -234,4 +320,29 @@
         </div>
     }
 </div>
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#tblMain tr:odd").css({
+                "background-color": "lavender"
+            });
+        });
+
+
+        function ValidateForm() {
+            ClearError();
+            return true;
+        }
+
+        function ClearError() {
+            document.getElementById('errorGuia').innerHTML = "";
+        }
+
+
+    </script>
+}
+
+
 
