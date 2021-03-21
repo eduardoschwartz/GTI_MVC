@@ -2,6 +2,7 @@
 using GTI_Models.Models;
 using GTI_Mvc;
 using GTI_Mvc.ViewModels;
+using GTI_Mvc.Views.Parcelamento.EditorTemplates;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
@@ -407,7 +408,32 @@ namespace GTI_MVC.Controllers {
 
             //Load Origem
             List<SpParcelamentoOrigem> ListaOrigem = parcelamentoRepository.Lista_Parcelamento_Origem(p);
-            model.Lista_Origem = ListaOrigem;
+            List<SelectDebitoParcelamentoEditorViewModel> _listaP = new List<SelectDebitoParcelamentoEditorViewModel>();
+            foreach (SpParcelamentoOrigem item in ListaOrigem) {
+                SelectDebitoParcelamentoEditorViewModel d = new SelectDebitoParcelamentoEditorViewModel() {
+                    Ajuizado=item.Ajuizado,
+                    Complemento=item.Complemento,
+                    Data_vencimento=item.Data_vencimento,
+                    Exercicio=item.Exercicio,
+                    Idx=item.Idx,
+                    Lancamento=item.Lancamento,
+                    Nome_lancamento=item.Nome_lancamento,
+                    Parcela=item.Parcela,
+                    Perc_penalidade=item.Perc_penalidade,
+                    Qtde_parcelamento=item.Qtde_parcelamento,
+                    Selected=item.Selected,
+                    Sequencia=item.Sequencia,
+                    Valor_correcao=item.Valor_correcao,
+                    Valor_juros=item.Valor_juros,
+                    Valor_multa=item.Valor_multa,
+                    Valor_penalidade=item.Valor_penalidade,
+                    Valor_principal=item.Valor_principal,
+                    Valor_total=item.Valor_total
+                };
+                _listaP.Add(d);
+            }
+
+            model.Lista_Origem = _listaP;
             return View(model);
         }
 
@@ -418,7 +444,13 @@ namespace GTI_MVC.Controllers {
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult SubmitSelected(ParcelamentoViewModel model) {
+            var selectedIds = model.getSelectedIds();
 
+
+            return null;
+        }
 
     }
 }

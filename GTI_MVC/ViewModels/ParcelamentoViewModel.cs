@@ -1,6 +1,9 @@
 ﻿using GTI_Models.Models;
+using GTI_Mvc.Views.Parcelamento.EditorTemplates;
+using GTI_Mvc.Views.Tributario.EditorTemplates;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace GTI_Mvc.ViewModels {
@@ -15,7 +18,16 @@ namespace GTI_Mvc.ViewModels {
         public string Data_Vencimento { get; set; }
         public string Plano_desconto { get; set; } = "Nenhum";
         public string[] Lista_Plano_Desconto = new[] { "Nenhum", "Refis" };
-        public List<SpParcelamentoOrigem> Lista_Origem{ get; set; }
+        public List<SelectDebitoParcelamentoEditorViewModel> Lista_Origem { get; set; }
+
+        public ParcelamentoViewModel() {
+            this.Lista_Origem = new List<SelectDebitoParcelamentoEditorViewModel>();
+        }
+
+        public IEnumerable<int> getSelectedIds() {
+            return (from p in this.Lista_Origem where p.Selected select p.Idx).ToList();
+        }
+
     }
 
     public class Parc_Requerente {
@@ -34,7 +46,6 @@ namespace GTI_Mvc.ViewModels {
         public string TipoEnd { get; set; }
         public string Email { get; set; }
     }
-
 
 
 }
