@@ -62,7 +62,7 @@
     @using (Html.BeginForm("SubmitSelected", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
         @Html.HiddenFor(m => m.Guid)
-        
+
         <div class="card">
             <div class="card-header">Dados do Requerente</div>
             <div class="card-body">
@@ -245,7 +245,7 @@
                             <th style="display:none">
                                 Lanc
                             </th>
-                            <th style="width:180px">
+                            <th style="width:198px">
                                 Lancamento
                             </th>
                             <th style="display:none">
@@ -260,55 +260,122 @@
                             <th style="width:60px;text-align:center">
                                 Dt.Vencto
                             </th>
-                            <th style="width:25px;text-align:center">
+                            <th style="width:26px;text-align:center">
                                 Aj
                             </th>
-                            <th style="width:60px;text-align:right">
+                            <th style="width:70px;text-align:right">
                                 Principal
                             </th>
-                            <th style="width:60px;text-align:right">
+                            <th style="width:70px;text-align:right">
                                 Juros
                             </th>
-                            <th style="width:60px;text-align:right">
+                            <th style="width:70px;text-align:right">
                                 Multa
                             </th>
-                            <th style="width:60px;text-align:right">
+                            <th style="width:70px;text-align:right">
                                 Correção
+                            </th>
+                            <th style="width:40px;text-align:right">
+                                Qtde
+                            </th>
+                            <th style="width:50px;text-align:right">
+                                %
+                            </th>
+                            <th style="width:60px;text-align:right">
+                                Entrada
                             </th>
                             <th style="width:70px;text-align:right">
                                 Total
                             </th>
-                            <th style="display:none">
-                                Honorário
-                            </th>
-                            <th style="width:25px;text-align:center">
-                                Pt
-                            </th>
-                            <th style="width:25px;text-align:center">
-                                Ep
-                            </th>
                         </tr>
                         <tbody class="item-model-number">
                             @Html.EditorFor(model => model.Lista_Origem)
-                            @*@foreach (var item in Model.Lista_Origem) {
-        <tr style="height:14px;">
-            <td>
-                @Html.EditorFor(modelItem => item.Selected, new { id = "chkSel" })
-            </td>
-            <td style="display:none">@Html.DisplayFor(modelItem => item.Idx)</td>
-            <td style="width:50px;font-weight:normal;text-align:center">@Html.DisplayFor(modelItem => item.Exercicio)</td>
-            <td style="display: none">@Html.DisplayFor(modelItem => item.Lancamento)</td>
-            <td style="width:180px;font-weight:normal;text-align:left">@Html.DisplayFor(modelItem => item.Nome_lancamento)</td>
-            <td style="display: none">@Html.DisplayFor(modelItem => item.Sequencia)</td>
-            <td style="display: none">@Html.DisplayFor(modelItem => item.Parcela)</td>
-            <td style="display: none">@Html.DisplayFor(modelItem => item.Complemento)</td>
-            <td style="width:60px;font-weight:normal;text-align:center">@item.Data_vencimento.ToString("dd/MM/yyyy")</td>
-
-        </tr>
-        }*@
                         </tbody>
                     </table>
                 </div>
+                <br />
+                <div style="width: 100%; overflow: hidden;">
+                    <div style="width: 400px; float: left;">
+                        <table id="ResumoTable" style="font-size:14px;border:solid;border-width:thin;border-color:brown">
+                            <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                <td></td>
+                                <td style="width:100px;color:red;" align="right">Devidos</td>
+                                <td style="width:100px;color:green;" align="right">Selecionados</td>
+                            </tr>
+                            <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                <td>Total Principal:</td>
+                                <td style="width:100px;color:red" align="right">@Model.Soma_Principal.ToString("#0.00")</td>
+                                <td id="somaPrincipal" style="width:100px;color:green" align="right">0,00</td>
+                            </tr>
+                            <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                <td>Total Juros:</td>
+                                <td style="width:100px;color:red" align="right">@Model.Soma_Juros.ToString("#0.00")</td>
+                                <td id="somaJuros" style="width:100px;color:green" align="right">0,00</td>
+                            </tr>
+                            <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                <td>Total Multa:</td>
+                                <td style="width:100px;color:red" align="right">@Model.Soma_Multa.ToString("#0.00")</td>
+                                <td id="somaMulta" style="width:100px;color:green" align="right">0,00</td>
+                            </tr>
+                            <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                <td>Total Correção:</td>
+                                <td style="width:100px;color:red" align="right">@Model.Soma_Correcao.ToString("#0.00")</td>
+                                <td id="somaCorrecao" style="width:100px;color:green" align="right">0,00</td>
+                            </tr>
+                            <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                <td>Total Entrada:</td>
+                                <td style="width:100px;color:red" align="right">@Model.Soma_Penalidade.ToString("#0.00")</td>
+                                <td id="somaEntrada" style="width:100px;color:green" align="right">0,00</td>
+                            </tr>
+                            <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                <td>Total Geral:</td>
+                                <td style="width:100px;color:red" align="right">@Model.Soma_Total.ToString("#0.00")</td>
+                                <td id="somaTotal" style="width:100px;color:green" align="right">0,00</td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <div style="margin-left: 420px;">
+                        <table style="border: 1px">
+                            <tr>
+                                <td style="font-weight:bold;color:brown;font-size:small" width="25px">
+                                    Aj
+                                </td>
+                                <td style="font-size:small">
+                                    - Débito Ajuizado
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;color:brown;font-size:small" width="25px">
+                                    Qtde
+                                </td>
+
+                                <td style="font-size:small">
+                                    - Qtde de vezes que o débito foi parcelado
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;color:brown;font-size:small" width="25px">
+                                    %
+                                </td>
+                                <td style="font-size:small">
+                                    - % de penalidade 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;color:brown;font-size:small" width="25px">
+                                    Entrada
+                                </td>
+                                <td style="font-size:small">
+                                    - Valor da penalidade aplicada ao valor de entrada
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
+
                 <br />
                 <br />
                 <button type="submit" class="btn btn-primary" name="action" value="btnValida">Carregar Simulado...</button>&nbsp;&nbsp;
@@ -329,6 +396,14 @@
             $("#tblMain tr:odd").css({
                 "background-color": "lavender"
             });
+
+
+            $('#tblMain').floatThead({
+                top: $('.topbar').height(),
+                autoReflow: true,
+                zIndex: 1
+            });
+
         });
 
 
@@ -340,6 +415,51 @@
         function ClearError() {
             document.getElementById('errorGuia').innerHTML = "";
         }
+
+        var sumP = 0, sumJ = 0, sumM = 0, sumC = 0, sumE = 0, sumT = 0;
+        var valP = 0, valJ = 0, valM = 0, valC = 0, valE = 0, valT = 0;
+
+        $('table input[type="checkbox"]').on('change', function () {
+            $('#ResumoTable').find(somaPrincipal).html("0,00");
+            $('#ResumoTable').find(somaJuros).html("0,00");
+            $('#ResumoTable').find(somaMulta).html("0,00");
+            $('#ResumoTable').find(somaCorrecao).html("0,00");
+            $('#ResumoTable').find(somaEntrada).html("0,00");
+            $('#ResumoTable').find(somaTotal).html("0,00");
+
+            var table = $(this).closest('table'),
+                checked = table.find('input[type=checkbox]:checked'),
+                valP = checked.closest('tr').find('td:nth-child(11)'),
+                sumP = valP.map(function () { return parseFloat(this.textContent.replace(',', '.').trim()) || 0; }).get().reduce(function (a, b) {
+                    return a + b;
+                });
+            valJ = checked.closest('tr').find('td:nth-child(12)'),
+                sumJ = valJ.map(function () { return parseFloat(this.textContent.replace(',', '.').trim()) || 0; }).get().reduce(function (a, b) {
+                    return a + b;
+                });
+            valM = checked.closest('tr').find('td:nth-child(13)'),
+                sumM = valM.map(function () { return parseFloat(this.textContent.replace(',', '.').trim()) || 0; }).get().reduce(function (a, b) {
+                    return a + b;
+                });
+            valC = checked.closest('tr').find('td:nth-child(14)'),
+                sumC = valC.map(function () { return parseFloat(this.textContent.replace(',', '.').trim()) || 0; }).get().reduce(function (a, b) {
+                    return a + b;
+                });
+            valE = checked.closest('tr').find('td:nth-child(17)'),
+                sumE = valE.map(function () { return (parseFloat(this.textContent.replace(',', '.').trim())) || 0; }).get().reduce(function (a, b) {
+                    return a + b;
+                });
+
+            sumT = sumP + sumJ + sumM + sumC ;
+
+            $('#ResumoTable').find(somaPrincipal).html(sumP.toFixed(2).replace('.', ','));
+            $('#ResumoTable').find(somaJuros).html(sumJ.toFixed(2).replace('.', ','));
+            $('#ResumoTable').find(somaMulta).html(sumM.toFixed(2).replace('.', ','));
+            $('#ResumoTable').find(somaCorrecao).html(sumC.toFixed(2).replace('.', ','));
+            $('#ResumoTable').find(somaEntrada).html(sumE.toFixed(2).replace('.', ','));
+            $('#ResumoTable').find(somaTotal).html(sumT.toFixed(2).replace('.', ','));
+        }).change();
+
 
 
     </script>

@@ -32,6 +32,9 @@ namespace GTI_Dal.Classes {
                         }
                     }
 
+                    if(_row.Numparcela==0)
+                        goto NextReg;
+
                     SpParcelamentoOrigem _reg = new SpParcelamentoOrigem() {
                         Idx=_pos,
                         Exercicio=_row.Anoexercicio,

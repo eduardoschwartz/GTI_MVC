@@ -207,7 +207,8 @@ namespace GTI_Dal.Classes {
                         _numero = (int)_cidadao.NumeroC;
                         _complemento = _cidadao.ComplementoC;
                         if (_cidadao.NomeCidadeC.ToUpper() == "JABOTICABAL") {
-                            Bairro b = endereco_Class.RetornaLogradouroBairro((int)_cidadao.CodigoLogradouroC, (short)_numero);
+                            int _logC = _cidadao.CodigoLogradouroC == null ? 0 : (int)_cidadao.CodigoLogradouroC;
+                            Bairro b = endereco_Class.RetornaLogradouroBairro(_logC, (short)_numero);
                             _bairro = b.Descbairro??"";
                         } else
                             _bairro = _cidadao.NomeBairroC??"";
@@ -228,7 +229,8 @@ namespace GTI_Dal.Classes {
                         _numero =  _cidadao.NumeroR==null?0: (int)_cidadao.NumeroR;
                         _complemento = _cidadao.ComplementoR;
                         if (_cidadao.NomeCidadeR.ToUpper() == "JABOTICABAL") {
-                            Bairro b = endereco_Class.RetornaLogradouroBairro((int)_cidadao.CodigoLogradouroR, (short)_numero);
+                            int _logR = _cidadao.CodigoLogradouroR == null ? 0 : (int)_cidadao.CodigoLogradouroR;
+                            Bairro b = endereco_Class.RetornaLogradouroBairro(_logR, (short)_numero);
                             _bairro = b.Descbairro??"";
                         } else
                             _bairro = _cidadao.NomeBairroR??"";

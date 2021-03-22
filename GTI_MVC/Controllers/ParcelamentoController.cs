@@ -411,7 +411,7 @@ namespace GTI_MVC.Controllers {
             List<SelectDebitoParcelamentoEditorViewModel> _listaP = new List<SelectDebitoParcelamentoEditorViewModel>();
             foreach (SpParcelamentoOrigem item in ListaOrigem) {
                 SelectDebitoParcelamentoEditorViewModel d = new SelectDebitoParcelamentoEditorViewModel() {
-                    Ajuizado=item.Ajuizado,
+                    Ajuizado=item.Ajuizado==1?'S':'N',
                     Complemento=item.Complemento,
                     Data_vencimento=item.Data_vencimento,
                     Exercicio=item.Exercicio,

@@ -1,64 +1,78 @@
 ﻿@model GTI_Mvc.Views.Parcelamento.EditorTemplates.SelectDebitoParcelamentoEditorViewModel
-    <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-        <td style="text-align:center">
-            @Html.CheckBoxFor(model => model.Selected)
-        </td>
-        <td style="display:none">
-            @Html.HiddenFor(model => model.Idx)
-        </td>
-        <td style="width:50px;text-align:center">
-            @Html.DisplayFor(model => model.Exercicio)
-            @Html.HiddenFor(model => model.Exercicio)
-        </td>
-        <td style="display:none">
-            @Html.DisplayFor(model => model.Lancamento)
-            @Html.HiddenFor(model => model.Lancamento)
-        </td>
-        <td style="width:220px">
-            @Html.DisplayFor(model => model.Nome_lancamento)
-            @Html.HiddenFor(model => model.Nome_lancamento)
-        </td>
-        <td style="display:none">
-            @Html.DisplayFor(model => model.Sequencia)
-            @Html.HiddenFor(model => model.Sequencia)
-        </td>
-        <td style="display:none">
-            @Html.DisplayFor(model => model.Parcela)
-            @Html.HiddenFor(model => model.Parcela)
-        </td>
-        <td style="display:none">
-            @Html.DisplayFor(model => model.Complemento)
-            @Html.HiddenFor(model => model.Complemento)
-        </td>
-        <td style="width:60px" align="center">
-            @Model.Data_vencimento.ToString("dd/MM/yyyy")
-            @Html.HiddenFor(model => model.Data_vencimento)
-        </td>
-        <td style="width:25px" align="center">
-            @Html.DisplayFor(model => model.Ajuizado)
-            @Html.HiddenFor(model => model.Ajuizado)
-        </td>
-        <td style="width:60px" align="right">
-            @Html.DisplayFor(model => model.Valor_principal)
-            @Html.HiddenFor(model => model.Valor_principal)
-        </td>
-        <td style="width:60px" align="right">
-            @Html.DisplayFor(model => model.Valor_juros)
-            @Html.HiddenFor(model => model.Valor_juros)
-        </td>
-        <td style="width:60px" align="right">
-            @Html.DisplayFor(model => model.Valor_multa)
-            @Html.HiddenFor(model => model.Valor_multa)
-
-        </td>
-        <td style="width:60px" align="right">
-            @Html.DisplayFor(model => model.Valor_correcao)
-            @Html.HiddenFor(model => model.Valor_correcao)
-        </td>
-        <td style="width:70px" align="right">
-            @Html.DisplayFor(model => model.Valor_total)
-            @Html.HiddenFor(model => model.Valor_total)
-        </td>
 
 
-    </tr>
+<tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+    <td style="text-align:center">
+        @Html.CheckBoxFor(model => model.Selected, new { style = "cursor:pointer" })
+    </td>
+    <td style="display:none">
+        @Html.HiddenFor(model => model.Idx)
+    </td>
+    <td style="width:50px;text-align:center">
+        @Html.DisplayFor(model => model.Exercicio)
+        @Html.HiddenFor(model => model.Exercicio)
+    </td>
+    <td style="display:none">
+        @Html.DisplayFor(model => model.Lancamento)
+        @Html.HiddenFor(model => model.Lancamento)
+    </td>
+    <td style="width:198px">
+        @Html.DisplayFor(model => model.Nome_lancamento)
+        @Html.HiddenFor(model => model.Nome_lancamento)
+    </td>
+    <td style="display:none">
+        @Html.DisplayFor(model => model.Sequencia)
+        @Html.HiddenFor(model => model.Sequencia)
+    </td>
+    <td style="display:none">
+        @Html.DisplayFor(model => model.Parcela)
+        @Html.HiddenFor(model => model.Parcela)
+    </td>
+    <td style="display:none">
+        @Html.DisplayFor(model => model.Complemento)
+        @Html.HiddenFor(model => model.Complemento)
+    </td>
+    <td style="width:60px" align="center">
+        @Model.Data_vencimento.ToString("dd/MM/yyyy")
+        @Html.HiddenFor(model => model.Data_vencimento)
+    </td>
+    <td style="width:26px" align="center">
+        @Html.DisplayFor(model => model.Ajuizado)
+        @Html.HiddenFor(model => model.Ajuizado)
+    </td>
+    <td style="width:70px" align="right">
+        @Html.DisplayFor(model => model.Valor_principal)
+        @Html.HiddenFor(model => model.Valor_principal)
+    </td>
+    <td style="width:70px" align="right">
+        @Html.DisplayFor(model => model.Valor_juros)
+        @Html.HiddenFor(model => model.Valor_juros)
+    </td>
+    <td style="width:70px" align="right">
+        @Html.DisplayFor(model => model.Valor_multa)
+        @Html.HiddenFor(model => model.Valor_multa)
+
+    </td>
+    <td style="width:70px" align="right">
+        @Html.DisplayFor(model => model.Valor_correcao)
+        @Html.HiddenFor(model => model.Valor_correcao)
+    </td>
+    <td style="width:40px" align="right">
+        @Html.DisplayFor(model => model.Qtde_parcelamento)
+        @Html.HiddenFor(model => model.Qtde_parcelamento)
+    </td>
+    <td style="width:50px" align="right">
+        @Html.DisplayFor(model => model.Perc_penalidade)
+        @Html.HiddenFor(model => model.Perc_penalidade)
+    </td>
+    <td style="width:60px" align="right">
+        @Html.DisplayFor(model => model.Valor_penalidade)
+        @Html.HiddenFor(model => model.Valor_penalidade)
+    </td>
+    <td style="width:70px" align="right">
+        @Html.DisplayFor(model => model.Valor_total)
+        @Html.HiddenFor(model => model.Valor_total)
+    </td>
+
+
+</tr>
