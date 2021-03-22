@@ -19,6 +19,7 @@ namespace GTI_Mvc.ViewModels {
         public string Plano_desconto { get; set; } = "Nenhum";
         public string[] Lista_Plano_Desconto = new[] { "Nenhum", "Refis" };
         public List<SelectDebitoParcelamentoEditorViewModel> Lista_Origem { get; set; }
+        public List<SelectDebitoParcelamentoEditorViewModel> Lista_Origem_Selected { get; set; }
         public decimal Soma_Principal { get; set; }
         public decimal Soma_Juros { get; set; }
         public decimal Soma_Multa { get; set; }

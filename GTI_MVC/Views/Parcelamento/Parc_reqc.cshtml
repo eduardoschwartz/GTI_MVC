@@ -230,11 +230,11 @@
             </div>
             <div class="card-header">Débitos disponíveis para parcelamento</div>
             <div class="card-body">
-                <div id="DebitoTable" style="height: 342px; overflow: auto;width:780px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;border-left-color:cadetblue;border-left-style:solid;border-left-width:1px;border-right-color:cadetblue;border-right-style:solid;border-right-width:1px">
+                <div id="DebitoTable" style="height: 350px; overflow: auto;width:780px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;border-left-color:cadetblue;border-left-style:solid;border-left-width:1px;border-right-color:cadetblue;border-right-style:solid;border-right-width:1px">
                     <table id="tblMain" style="font-size:12px">
-                        <tr>
+                        <tr style="background-color:darkred;color:white;height:25px">
                             <th style="text-align:center">
-                                #
+                                <input type="checkbox" id="chkSel" />
                             </th>
                             <th style="display:none">
                                 Id
@@ -297,10 +297,10 @@
                 <div style="width: 100%; overflow: hidden;">
                     <div style="width: 400px; float: left;">
                         <table id="ResumoTable" style="font-size:14px;border:solid;border-width:thin;border-color:brown">
-                            <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                            <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;background-color:darkred;color:white">
                                 <td></td>
-                                <td style="width:100px;color:red;" align="right">Devidos</td>
-                                <td style="width:100px;color:green;" align="right">Selecionados</td>
+                                <td style="width:100px;color:white;" align="right">Devidos</td>
+                                <td style="width:100px;color:white;" align="right">Selecionados</td>
                             </tr>
                             <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
                                 <td>Total Principal:</td>
@@ -342,7 +342,7 @@
                                     Aj
                                 </td>
                                 <td style="font-size:small">
-                                    - Débito Ajuizado
+                                    - Débito Ajuizado (S-Sim, N-Não)
                                 </td>
                             </tr>
                             <tr>
@@ -359,7 +359,7 @@
                                     %
                                 </td>
                                 <td style="font-size:small">
-                                    - % de penalidade 
+                                    - % de penalidade por parcelamento efetuado
                                 </td>
                             </tr>
                             <tr>
@@ -394,7 +394,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#tblMain tr:odd").css({
-                "background-color": "lavender"
+                "background-color": "#E9FAFA"
             });
 
 
@@ -404,8 +404,19 @@
                 zIndex: 1
             });
 
+          
+
+
         });
 
+
+        $(function () {
+            $('th > :checkbox').click(function () {
+                $(this).closest('table')
+                    .find('td > :checkbox')
+                    .attr('checked', $(this).is(':checked'));
+            });
+        });
 
         function ValidateForm() {
             ClearError();

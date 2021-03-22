@@ -267,7 +267,7 @@ namespace GTI_MVC.Controllers {
                         Valor_Juros=item.Valor_juros,
                         Valor_Multa=item.Valor_multa,
                         Valor_Correcao=item.Valor_correcao,
-                        Valor_Total=item.Valor_total,
+                        Valor_Total=Math.Round( item.Valor_principal,2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros,2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa, 2, MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao, 2, MidpointRounding.AwayFromZero),
                         Valor_Penalidade=item.Valor_penalidade,
                         Perc_Penalidade=item.Perc_penalidade,
                         Qtde_Parcelamento=item.Qtde_parcelamento
@@ -407,6 +407,7 @@ namespace GTI_MVC.Controllers {
             };
 
             //Load Origem
+            decimal _SomaP=0, _SomaM=0, _SomaJ=0, _SomaC=0,_SomaT=0;
             List<SpParcelamentoOrigem> ListaOrigem = parcelamentoRepository.Lista_Parcelamento_Origem(p);
             List<SelectDebitoParcelamentoEditorViewModel> _listaP = new List<SelectDebitoParcelamentoEditorViewModel>();
             foreach (SpParcelamentoOrigem item in ListaOrigem) {
@@ -431,8 +432,17 @@ namespace GTI_MVC.Controllers {
                     Valor_total=item.Valor_total
                 };
                 _listaP.Add(d);
+                _SomaP += item.Valor_principal;
+                _SomaM += item.Valor_multa;
+                _SomaJ += item.Valor_juros;
+                _SomaC += item.Valor_correcao;
+                _SomaT += Math.Round(item.Valor_principal, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa, 2, MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao, 2, MidpointRounding.AwayFromZero);
             }
-
+            model.Soma_Principal = _SomaP;
+            model.Soma_Multa = _SomaM;
+            model.Soma_Juros = _SomaJ;
+            model.Soma_Correcao = _SomaC;
+            model.Soma_Total = _SomaT;
             model.Lista_Origem = _listaP;
             return View(model);
         }
@@ -447,7 +457,35 @@ namespace GTI_MVC.Controllers {
         [HttpPost]
         public ActionResult SubmitSelected(ParcelamentoViewModel model) {
             var selectedIds = model.getSelectedIds();
-
+            int t=1;
+            List<SelectDebitoParcelamentoEditorViewModel> _listaOrigem = new List<SelectDebitoParcelamentoEditorViewModel>();
+            foreach (SelectDebitoParcelamentoEditorViewModel item in model.Lista_Origem) {
+                if (item.Selected) {
+                    SelectDebitoParcelamentoEditorViewModel _r = new SelectDebitoParcelamentoEditorViewModel {
+                        Ajuizado=item.Ajuizado,
+                        Complemento=item.Complemento,
+                        Data_vencimento=item.Data_vencimento,
+                        Exercicio=item.Exercicio,
+                        Idx=t,
+                        Lancamento=item.Lancamento,
+                        Nome_lancamento=item.Nome_lancamento,
+                        Parcela=item.Parcela,
+                        Perc_penalidade=item.Perc_penalidade,
+                        Qtde_parcelamento=item.Qtde_parcelamento,
+                        Selected=item.Selected,
+                        Sequencia=item.Sequencia,
+                        Valor_correcao=item.Valor_correcao,
+                        Valor_juros=item.Valor_juros,
+                        Valor_multa=item.Valor_multa,
+                        Valor_penalidade=item.Valor_penalidade,
+                        Valor_principal=item.Valor_principal,
+                        Valor_total=item.Valor_total
+                    };
+                    _listaOrigem.Add(_r);
+                    t++;
+                }
+            }
+            model.Lista_Origem_Selected = _listaOrigem;
 
             return null;
         }
