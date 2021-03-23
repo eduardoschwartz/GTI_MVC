@@ -66,5 +66,11 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Parcelamento_Origem(guid);
         }
 
+        public Exception Incluir_Parcelamento_Web_Selected(Parcelamento_web_selected Reg) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Incluir_Parcelamento_Web_Selected(Reg);
+            return ex;
+        }
+
     }
 }

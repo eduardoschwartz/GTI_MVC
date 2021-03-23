@@ -456,6 +456,7 @@ namespace GTI_MVC.Controllers {
 
         [HttpPost]
         public ActionResult SubmitSelected(ParcelamentoViewModel model) {
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             var selectedIds = model.getSelectedIds();
             int t=1;
             List<SelectDebitoParcelamentoEditorViewModel> _listaOrigem = new List<SelectDebitoParcelamentoEditorViewModel>();
@@ -486,6 +487,32 @@ namespace GTI_MVC.Controllers {
                 }
             }
             model.Lista_Origem_Selected = _listaOrigem;
+            t = 1;
+            foreach (SelectDebitoParcelamentoEditorViewModel item in _listaOrigem) {
+                Parcelamento_web_selected reg = new Parcelamento_web_selected() {
+                    Ajuizado=item.Ajuizado,
+                    Ano=item.Exercicio,
+                    Complemento=item.Complemento,
+                    Data_Vencimento=item.Data_vencimento,
+                    Guid=model.Guid,
+                    Idx=t,
+                    Lancamento=item.Lancamento,
+                    Lancamento_Nome=item.Nome_lancamento,
+                    Parcela=item.Parcela,
+                    Qtde_Parcelamento=item.Qtde_parcelamento,
+                    Perc_Penalidade=item.Perc_penalidade,
+                    Valor_Correcao=item.Valor_correcao,
+                    Valor_Juros=item.Valor_juros,
+                    Valor_Multa=item.Valor_multa,
+                    Valor_Penalidade=item.Valor_penalidade,
+                    Valor_Total=item.Valor_total,
+                    Valor_Tributo=item.Valor_principal,
+                    Sequencia=item.Sequencia
+                };
+                Exception ex = parcelamentoRepository.Incluir_Parcelamento_Web_Selected(reg);
+                t++;
+            }
+
 
             return null;
         }
