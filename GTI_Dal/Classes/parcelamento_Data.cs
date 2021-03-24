@@ -220,7 +220,7 @@ namespace GTI_Dal.Classes {
 
         public Exception Atualizar_Codigo_Master(Parcelamento_web_master reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[9];
+                object[] Parametros = new object[10];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@Contribuinte_Codigo", SqlDbType = SqlDbType.Int, SqlValue = reg.Contribuinte_Codigo };
                 Parametros[2] = new SqlParameter { ParameterName = "@contribuinte_nome", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Contribuinte_nome };
@@ -230,9 +230,10 @@ namespace GTI_Dal.Classes {
                 Parametros[6] = new SqlParameter { ParameterName = "@contribuinte_cep", SqlDbType = SqlDbType.Int, SqlValue = reg.Contribuinte_cep };
                 Parametros[7] = new SqlParameter { ParameterName = "@contribuinte_cidade", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Contribuinte_cidade };
                 Parametros[8] = new SqlParameter { ParameterName = "@contribuinte_uf", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Contribuinte_uf };
+                Parametros[9] = new SqlParameter { ParameterName = "@contribuinte_tipo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Contribuinte_tipo };
                 try {
                     db.Database.ExecuteSqlCommand("UPDATE parcelamento_web_master set Contribuinte_Codigo=@Contribuinte_Codigo,contribuinte_nome=@contribuinte_nome,contribuinte_cpfcnpj=@contribuinte_cpfcnpj,contribuinte_endereco=@contribuinte_endereco," +
-                        "contribuinte_bairro=@contribuinte_bairro,contribuinte_cep=@contribuinte_cep,contribuinte_cidade=@contribuinte_cidade,contribuinte_uf=@contribuinte_uf WHERE guid=@guid", Parametros);
+                        "contribuinte_bairro=@contribuinte_bairro,contribuinte_cep=@contribuinte_cep,contribuinte_cidade=@contribuinte_cidade,contribuinte_uf=@contribuinte_uf,Contribuinte_tipo=@Contribuinte_tipo WHERE guid=@guid", Parametros);
                 } catch (Exception ex) {
                     return ex;
                 }
@@ -242,12 +243,14 @@ namespace GTI_Dal.Classes {
 
         public Exception Atualizar_Criterio_Master(Parcelamento_web_master reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[3];
+                object[] Parametros = new object[4];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Guid };
-                Parametros[1] = new SqlParameter { ParameterName = "@Plano_Desconto", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Plano_Desconto };
+                Parametros[1] = new SqlParameter { ParameterName = "@Plano_Nome", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Plano_Nome };
                 Parametros[2] = new SqlParameter { ParameterName = "@Data_Vencimento", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_Vencimento };
+                Parametros[3] = new SqlParameter { ParameterName = "@Plano_Codigo", SqlDbType = SqlDbType.Int, SqlValue = reg.Plano_Codigo };
                 try {
-                    db.Database.ExecuteSqlCommand("UPDATE parcelamento_web_master set Plano_Desconto=@Plano_Desconto,Data_Vencimento=@Data_Vencimento WHERE guid=@guid", Parametros);
+                    db.Database.ExecuteSqlCommand("UPDATE parcelamento_web_master set Plano_Nome=@Plano_Nome,Data_Vencimento=@Data_Vencimento," +
+                        "Plano_Codigo=@Plano_Codigo WHERE guid=@guid", Parametros);
                 } catch (Exception ex) {
                     return ex;
                 }

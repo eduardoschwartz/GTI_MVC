@@ -59,7 +59,7 @@
 
 <div class="center container" style="width:850px">
 
-    @using (Html.BeginForm("SubmitSelected", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @using (Html.BeginForm("Parc_reqc", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
         @Html.HiddenFor(m => m.Guid)
 
@@ -223,7 +223,7 @@
         </div>
         <div class="card-header">Parâmetros do parcelamento</div>
         <div class="card-body" style="font-size:14px">
-            Plano de desconto:&nbsp;<span style="color:blue">@Model.Plano_desconto</span><br />
+            Plano de desconto:&nbsp;<span style="color:blue">@Model.Plano_Nome</span><br />
             Data de Vencimento:&nbsp;<span style="color:blue">@Model.Data_Vencimento</span>
         </div>
         <div class="card-header">Débitos disponíveis para parcelamento</div>

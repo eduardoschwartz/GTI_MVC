@@ -27,10 +27,14 @@ namespace GTI_Models.Models {
         public int Contribuinte_cep { get; set; }
         public string Contribuinte_cidade { get; set; }
         public string Contribuinte_uf { get; set; }
+        public string Contribuinte_tipo { get; set; }
         public DateTime? Data_Vencimento { get; set; }
         public DateTime Data_Geracao { get; set; }
-        public string Plano_Desconto { get; set; } ="Nenhum";
+        public int Plano_Codigo { get; set; }
+        public string Plano_Nome { get; set; } ="Nenhum";
+        public decimal Valor_minimo { get; set; }
+        public decimal Valor_minimo_di { get; set; }
+        public bool Refis { get; set; }
     }
 }
-
 

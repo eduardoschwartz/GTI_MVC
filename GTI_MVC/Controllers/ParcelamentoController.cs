@@ -61,7 +61,7 @@ namespace GTI_MVC.Controllers {
                 _req.Bairro_Nome = _cidadao.NomeBairroR;
                 _req.Cidade_Nome = _cidadao.NomeCidadeR;
                 _req.UF = _cidadao.UfR;
-                _req.Logradouro_Codigo = (int)_cidadao.CodigoLogradouroR;
+                _req.Logradouro_Codigo = _cidadao.CodigoLogradouroR==null?0:(int)_cidadao.CodigoLogradouroR;
                 _req.Logradouro_Nome = _cidadao.EnderecoR;
                 _req.Numero = (int)_cidadao.NumeroR;
                 _req.Complemento = _cidadao.ComplementoR;
@@ -71,7 +71,7 @@ namespace GTI_MVC.Controllers {
                 _req.Bairro_Nome = _cidadao.NomeBairroC;
                 _req.Cidade_Nome = _cidadao.NomeCidadeC;
                 _req.UF = _cidadao.UfC;
-                _req.Logradouro_Codigo = (int)_cidadao.CodigoLogradouroC;
+                _req.Logradouro_Codigo = _cidadao.CodigoLogradouroC==null?0:(int)_cidadao.CodigoLogradouroC;
                 _req.Logradouro_Nome = _cidadao.EnderecoC;
                 _req.Numero = (int)_cidadao.NumeroC;
                 _req.Complemento = _cidadao.ComplementoC;
@@ -183,17 +183,17 @@ namespace GTI_MVC.Controllers {
                     Guid = model.Guid,
                     User_id=_user_id,
                     Requerente_Codigo = _req.Codigo,
-                    Requerente_Bairro=_req.Bairro_Nome,
+                    Requerente_Bairro=_req.Bairro_Nome??"",
                     Requerente_Cep=Convert.ToInt32(Functions.RetornaNumero(_req.Cep)),
                     Requerente_Cidade=_req.Cidade_Nome,
-                    Requerente_Complemento=_req.Complemento,
+                    Requerente_Complemento=_req.Complemento??"",
                     Requerente_CpfCnpj=_req.Cpf_Cnpj,
                     Requerente_Logradouro=_req.Logradouro_Nome,
                     Requerente_Nome=_req.Nome,
                     Requerente_Numero=_req.Numero,
-                    Requerente_Telefone=_req.Telefone,
+                    Requerente_Telefone=_req.Telefone??"",
                     Requerente_Uf=_req.UF,
-                    Requerente_Email=_req.Email
+                    Requerente_Email=_req.Email??""
                 };
                 Exception ex = parcelamentoRepository.Incluir_Parcelamento_Web_Master(reg);
                 if (ex != null)
@@ -280,6 +280,16 @@ namespace GTI_MVC.Controllers {
             }
 
             _header = sistemaRepository.Contribuinte_Header(_codigo);
+            bool _ativo = _header.Ativo;
+            string _tipoDoc = "F";
+            if (_header.Cpf_cnpj.Length > 11) {
+                _tipoDoc = "J";
+                if(_codigo>100000 && _codigo<300000) {
+                    if (!_ativo)
+                        _tipoDoc = "F"; //Empresas inativas são tratadas como Físicas
+                }
+            }
+
             string _end = _header.Endereco + ", " + _header.Numero.ToString();
             if (!string.IsNullOrEmpty(_header.Complemento))
                 _end += " " + _header.Complemento;
@@ -297,7 +307,8 @@ namespace GTI_MVC.Controllers {
                 Contribuinte_bairro = _header.Nome_bairro,
                 Contribuinte_cep = Convert.ToInt32(Functions.RetornaNumero(_header.Cep)),
                 Contribuinte_cidade = _header.Nome_cidade,
-                Contribuinte_uf = _header.Nome_uf
+                Contribuinte_uf = _header.Nome_uf,
+                Contribuinte_tipo=_tipoDoc
             };
             Exception ex2 = parcelamentoRepository.Atualizar_Codigo_Master(regP);
             if (ex2 != null)
@@ -356,7 +367,7 @@ namespace GTI_MVC.Controllers {
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             Parcelamento_web_master regP = new Parcelamento_web_master() {
                 Guid = model.Guid,
-                Plano_Desconto=model.Plano_desconto,
+                Plano_Nome=model.Plano_Nome,
                 Data_Vencimento=DateTime.Now
             };
             Exception ex = parcelamentoRepository.Atualizar_Criterio_Master(regP);
@@ -381,7 +392,7 @@ namespace GTI_MVC.Controllers {
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
             ParcelamentoViewModel model = new ParcelamentoViewModel() {
                 Guid = p,
-                Plano_desconto=_master.Plano_Desconto,
+                Plano_Nome=_master.Plano_Nome,
                 Data_Vencimento=Convert.ToDateTime( _master.Data_Vencimento).ToString("dd/MM/yyyy")
             };
             model.Requerente = new Parc_Requerente() {
@@ -449,40 +460,35 @@ namespace GTI_MVC.Controllers {
             return View(model);
         }
 
-
         [Route("Parc_reqc")]
         [HttpPost]
         public ActionResult Parc_reqc(ParcelamentoViewModel model) {
-            return View(model);
-        }
 
-        [HttpPost]
-        public ActionResult SubmitSelected(ParcelamentoViewModel model) {
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             var selectedIds = model.getSelectedIds();
-            int t=1;
+            int t = 1;
             List<SelectDebitoParcelamentoEditorViewModel> _listaOrigem = new List<SelectDebitoParcelamentoEditorViewModel>();
             foreach (SelectDebitoParcelamentoEditorViewModel item in model.Lista_Origem) {
                 if (item.Selected) {
                     SelectDebitoParcelamentoEditorViewModel _r = new SelectDebitoParcelamentoEditorViewModel {
-                        Ajuizado=item.Ajuizado,
-                        Complemento=item.Complemento,
-                        Data_vencimento=item.Data_vencimento,
-                        Exercicio=item.Exercicio,
-                        Idx=t,
-                        Lancamento=item.Lancamento,
-                        Nome_lancamento=item.Nome_lancamento,
-                        Parcela=item.Parcela,
-                        Perc_penalidade=item.Perc_penalidade,
-                        Qtde_parcelamento=item.Qtde_parcelamento,
-                        Selected=item.Selected,
-                        Sequencia=item.Sequencia,
-                        Valor_correcao=item.Valor_correcao,
-                        Valor_juros=item.Valor_juros,
-                        Valor_multa=item.Valor_multa,
-                        Valor_penalidade=item.Valor_penalidade,
-                        Valor_principal=item.Valor_principal,
-                        Valor_total=item.Valor_total
+                        Ajuizado = item.Ajuizado,
+                        Complemento = item.Complemento,
+                        Data_vencimento = item.Data_vencimento,
+                        Exercicio = item.Exercicio,
+                        Idx = t,
+                        Lancamento = item.Lancamento,
+                        Nome_lancamento = item.Nome_lancamento,
+                        Parcela = item.Parcela,
+                        Perc_penalidade = item.Perc_penalidade,
+                        Qtde_parcelamento = item.Qtde_parcelamento,
+                        Selected = item.Selected,
+                        Sequencia = item.Sequencia,
+                        Valor_correcao = item.Valor_correcao,
+                        Valor_juros = item.Valor_juros,
+                        Valor_multa = item.Valor_multa,
+                        Valor_penalidade = item.Valor_penalidade,
+                        Valor_principal = item.Valor_principal,
+                        Valor_total = item.Valor_total
                     };
                     _listaOrigem.Add(_r);
                     t++;
@@ -492,30 +498,31 @@ namespace GTI_MVC.Controllers {
             t = 1;
             foreach (SelectDebitoParcelamentoEditorViewModel item in _listaOrigem) {
                 Parcelamento_web_selected reg = new Parcelamento_web_selected() {
-                    Ajuizado=item.Ajuizado,
-                    Ano=item.Exercicio,
-                    Complemento=item.Complemento,
-                    Data_Vencimento=item.Data_vencimento,
-                    Guid=model.Guid,
-                    Idx=t,
-                    Lancamento=item.Lancamento,
-                    Lancamento_Nome=item.Nome_lancamento,
-                    Parcela=item.Parcela,
-                    Qtde_Parcelamento=item.Qtde_parcelamento,
-                    Perc_Penalidade=item.Perc_penalidade,
-                    Valor_Correcao=item.Valor_correcao,
-                    Valor_Juros=item.Valor_juros,
-                    Valor_Multa=item.Valor_multa,
-                    Valor_Penalidade=item.Valor_penalidade,
-                    Valor_Total=item.Valor_total,
-                    Valor_Tributo=item.Valor_principal,
-                    Sequencia=item.Sequencia
+                    Ajuizado = item.Ajuizado,
+                    Ano = item.Exercicio,
+                    Complemento = item.Complemento,
+                    Data_Vencimento = item.Data_vencimento,
+                    Guid = model.Guid,
+                    Idx = t,
+                    Lancamento = item.Lancamento,
+                    Lancamento_Nome = item.Nome_lancamento,
+                    Parcela = item.Parcela,
+                    Qtde_Parcelamento = item.Qtde_parcelamento,
+                    Perc_Penalidade = item.Perc_penalidade,
+                    Valor_Correcao = item.Valor_correcao,
+                    Valor_Juros = item.Valor_juros,
+                    Valor_Multa = item.Valor_multa,
+                    Valor_Penalidade = item.Valor_penalidade,
+                    Valor_Total = item.Valor_total,
+                    Valor_Tributo = item.Valor_principal,
+                    Sequencia = item.Sequencia
                 };
                 Exception ex = parcelamentoRepository.Incluir_Parcelamento_Web_Selected(reg);
                 t++;
             }
 
             return RedirectToAction("Parc_reqd", new { p = model.Guid });
+
         }
 
         [Route("Parc_reqd")]
@@ -533,7 +540,7 @@ namespace GTI_MVC.Controllers {
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
             ParcelamentoViewModel model = new ParcelamentoViewModel() {
                 Guid = p,
-                Plano_desconto = _master.Plano_Desconto,
+                Plano_Nome = _master.Plano_Nome,
                 Data_Vencimento=Convert.ToDateTime(_master.Data_Vencimento).ToString("dd/MM/yyyy")
             };
             model.Requerente = new Parc_Requerente() {
@@ -598,9 +605,14 @@ namespace GTI_MVC.Controllers {
             model.Soma_Correcao = _SomaC;
             model.Soma_Total = _SomaT;
             model.Lista_Origem_Selected = _listaP;
+
+            //Carrega Simulado
+
+
+
+
             return View(model);
         }
-
 
         [ChildActionOnly]
         public ActionResult Parc_simulado(string p) {
@@ -610,7 +622,7 @@ namespace GTI_MVC.Controllers {
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
             ParcelamentoViewModel model = new ParcelamentoViewModel() {
                 Guid = p,
-                Plano_desconto = _master.Plano_Desconto,
+                Plano_Nome = _master.Plano_Nome,
                 Data_Vencimento = Convert.ToDateTime(_master.Data_Vencimento).ToString("dd/MM/yyyy")
             };
 

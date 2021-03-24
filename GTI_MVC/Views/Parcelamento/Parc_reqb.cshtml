@@ -222,12 +222,12 @@
                     <tr>
                         <td style="width:153px">Plano de desconto:</td>
                         <td style="width:400px;padding-top:5px">
-                            @Html.HiddenFor(model => model.Plano_desconto)
+                            @Html.HiddenFor(model => model.Plano_Nome)
                             @foreach (var _plano in Model.Lista_Plano_Desconto) {
                                 if (_plano == "Refis") {
-                                    @Html.RadioButtonFor(model => model.Plano_desconto, _plano, new { disabled = "disabled" }) <span>&nbsp;</span>@_plano<span>&nbsp;&nbsp;</span>
+                                    @Html.RadioButtonFor(model => model.Plano_Nome, _plano, new { disabled = "disabled" }) <span>&nbsp;</span>@_plano<span>&nbsp;&nbsp;</span>
                                 } else {
-                                    @Html.RadioButtonFor(model => model.Plano_desconto, _plano) <span>&nbsp;</span>@_plano<span>&nbsp;&nbsp;</span>
+                                    @Html.RadioButtonFor(model => model.Plano_Nome, _plano) <span>&nbsp;</span>@_plano<span>&nbsp;&nbsp;</span>
                                 }
 
                             }
