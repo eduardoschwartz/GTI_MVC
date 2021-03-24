@@ -346,7 +346,7 @@ namespace GTI_MVC.Controllers {
                 Bairro_Nome = _master.Contribuinte_bairro+" - " + _master.Contribuinte_cidade + "/" + _master.Contribuinte_uf,
                 Cep = _master.Contribuinte_cep.ToString("00000-000")
             };
-
+            model.Data_Vencimento = DateTime.Now.ToString("dd/MM/yyyy");
             return View(model);
         }
 
@@ -356,7 +356,8 @@ namespace GTI_MVC.Controllers {
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             Parcelamento_web_master regP = new Parcelamento_web_master() {
                 Guid = model.Guid,
-                Plano_Desconto=model.Plano_desconto
+                Plano_Desconto=model.Plano_desconto,
+                Data_Vencimento=DateTime.Now
             };
             Exception ex = parcelamentoRepository.Atualizar_Criterio_Master(regP);
             if (ex != null)
@@ -380,7 +381,8 @@ namespace GTI_MVC.Controllers {
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
             ParcelamentoViewModel model = new ParcelamentoViewModel() {
                 Guid = p,
-                Plano_desconto=_master.Plano_Desconto
+                Plano_desconto=_master.Plano_Desconto,
+                Data_Vencimento=Convert.ToDateTime( _master.Data_Vencimento).ToString("dd/MM/yyyy")
             };
             model.Requerente = new Parc_Requerente() {
                 Codigo = _master.Requerente_Codigo,
@@ -514,7 +516,106 @@ namespace GTI_MVC.Controllers {
             }
 
 
-            return null;
+            return RedirectToAction("Parc_reqd", new { p = model.Guid });
+        }
+
+        [Route("Parc_reqd")]
+        [HttpGet]
+        public ActionResult Parc_reqd(string p) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+            bool _existe = parcelamentoRepository.Existe_Parcelamento_Web_Master(p);
+            if (!_existe)
+                return RedirectToAction("Login_gti", "Home");
+
+            //Load Master
+            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
+            ParcelamentoViewModel model = new ParcelamentoViewModel() {
+                Guid = p,
+                Plano_desconto = _master.Plano_Desconto,
+                Data_Vencimento=Convert.ToDateTime(_master.Data_Vencimento).ToString("dd/MM/yyyy")
+            };
+            model.Requerente = new Parc_Requerente() {
+                Codigo = _master.Requerente_Codigo,
+                Nome = _master.Requerente_Nome,
+                Cpf_Cnpj = _master.Requerente_CpfCnpj,
+                Logradouro_Nome = _master.Requerente_Logradouro,
+                Numero = _master.Requerente_Numero,
+                Complemento = _master.Requerente_Complemento,
+                Bairro_Nome = _master.Requerente_Bairro,
+                Cidade_Nome = _master.Requerente_Cidade,
+                UF = _master.Requerente_Uf,
+                Telefone = _master.Requerente_Telefone,
+                Email = _master.Requerente_Email,
+                Cep = _master.Requerente_Cep.ToString("00000-000")
+            };
+
+            model.Contribuinte = new Parc_Requerente() {
+                Codigo = _master.Contribuinte_Codigo,
+                Nome = _master.Contribuinte_nome,
+                Cpf_Cnpj = Functions.FormatarCpfCnpj(_master.Contribuinte_cpfcnpj),
+                Logradouro_Nome = _master.Contribuinte_endereco,
+                Bairro_Nome = _master.Contribuinte_bairro + " - " + _master.Contribuinte_cidade + "/" + _master.Contribuinte_uf,
+                Cep = _master.Contribuinte_cep.ToString("00000-000")
+            };
+
+            //Load Origem
+            decimal _SomaP = 0, _SomaM = 0, _SomaJ = 0, _SomaC = 0, _SomaT = 0;
+            List<SpParcelamentoOrigem> ListaOrigem = parcelamentoRepository.Lista_Parcelamento_Selected(p);
+            List<SelectDebitoParcelamentoEditorViewModel> _listaP = new List<SelectDebitoParcelamentoEditorViewModel>();
+            foreach (SpParcelamentoOrigem item in ListaOrigem) {
+                SelectDebitoParcelamentoEditorViewModel d = new SelectDebitoParcelamentoEditorViewModel() {
+                    Ajuizado = item.Ajuizado == 1 ? 'S' : 'N',
+                    Complemento = item.Complemento,
+                    Data_vencimento = item.Data_vencimento,
+                    Exercicio = item.Exercicio,
+                    Idx = item.Idx,
+                    Lancamento = item.Lancamento,
+                    Nome_lancamento = item.Nome_lancamento,
+                    Parcela = item.Parcela,
+                    Perc_penalidade = item.Perc_penalidade,
+                    Qtde_parcelamento = item.Qtde_parcelamento,
+                    Selected = item.Selected,
+                    Sequencia = item.Sequencia,
+                    Valor_correcao = item.Valor_correcao,
+                    Valor_juros = item.Valor_juros,
+                    Valor_multa = item.Valor_multa,
+                    Valor_penalidade = item.Valor_penalidade,
+                    Valor_principal = item.Valor_principal,
+                    Valor_total = item.Valor_total
+                };
+                _listaP.Add(d);
+                _SomaP += item.Valor_principal;
+                _SomaM += item.Valor_multa;
+                _SomaJ += item.Valor_juros;
+                _SomaC += item.Valor_correcao;
+                _SomaT += Math.Round(item.Valor_principal, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa, 2, MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao, 2, MidpointRounding.AwayFromZero);
+            }
+            model.Soma_Principal = _SomaP;
+            model.Soma_Multa = _SomaM;
+            model.Soma_Juros = _SomaJ;
+            model.Soma_Correcao = _SomaC;
+            model.Soma_Total = _SomaT;
+            model.Lista_Origem_Selected = _listaP;
+            return View(model);
+        }
+
+
+        [ChildActionOnly]
+        public ActionResult Parc_simulado(string p) {
+            
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+            //Load Master
+            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
+            ParcelamentoViewModel model = new ParcelamentoViewModel() {
+                Guid = p,
+                Plano_desconto = _master.Plano_Desconto,
+                Data_Vencimento = Convert.ToDateTime(_master.Data_Vencimento).ToString("dd/MM/yyyy")
+            };
+
+            return PartialView("Parc_simulado",model);
         }
 
     }

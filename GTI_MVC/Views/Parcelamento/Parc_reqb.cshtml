@@ -220,9 +220,9 @@
             <div class="card-body">
                 <table style="font-size:14px;width:640px">
                     <tr>
-                        <td style="width:103px">Plano de desconto:</td>
+                        <td style="width:153px">Plano de desconto:</td>
                         <td style="width:400px;padding-top:5px">
-                            @Html.HiddenFor(model=>model.Plano_desconto)
+                            @Html.HiddenFor(model => model.Plano_desconto)
                             @foreach (var _plano in Model.Lista_Plano_Desconto) {
                                 if (_plano == "Refis") {
                                     @Html.RadioButtonFor(model => model.Plano_desconto, _plano, new { disabled = "disabled" }) <span>&nbsp;</span>@_plano<span>&nbsp;&nbsp;</span>
@@ -233,6 +233,13 @@
                             }
                         </td>
 
+                    </tr>
+                    <tr>
+                        <td style="width:153px">Data de Vencimento:</td>
+                        <td style="width:400px;padding-top:5px;color:brown">
+                            @Html.HiddenFor(model => model.Data_Vencimento)
+                            @Model.Data_Vencimento
+                        </td>
                     </tr>
 
                 </table>

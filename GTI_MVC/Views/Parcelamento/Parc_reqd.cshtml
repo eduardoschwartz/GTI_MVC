@@ -226,14 +226,11 @@
             Plano de desconto:&nbsp;<span style="color:blue">@Model.Plano_desconto</span><br />
             Data de Vencimento:&nbsp;<span style="color:blue">@Model.Data_Vencimento</span>
         </div>
-        <div class="card-header">Débitos disponíveis para parcelamento</div>
+        <div class="card-header">Débitos selecionados</div>
         <div class="card-body">
-            <div id="DebitoTable" style="height: 350px; overflow: auto;width:780px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;border-left-color:cadetblue;border-left-style:solid;border-left-width:1px;border-right-color:cadetblue;border-right-style:solid;border-right-width:1px">
+            <div id="DebitoTable" style="height: auto; overflow: auto;width:780px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;border-left-color:cadetblue;border-left-style:solid;border-left-width:1px;border-right-color:cadetblue;border-right-style:solid;border-right-width:1px">
                 <table id="tblMain" style="font-size:12px">
                     <tr style="background-color:darkred;color:white;height:25px">
-                        <th style="text-align:center">
-                            <input type="checkbox" id="chkSel" />
-                        </th>
                         <th style="display:none">
                             Id
                         </th>
@@ -287,7 +284,46 @@
                         </th>
                     </tr>
                     <tbody class="item-model-number">
-                        @Html.EditorFor(model => model.Lista_Origem)
+                        @foreach (var item in Model.Lista_Origem_Selected) {
+                            <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                <td style="width:50px;text-align:center">
+                                    @item.Exercicio
+                                </td>
+                                <td style="width:198px">
+                                    @item.Nome_lancamento
+                                </td>
+                                <td style="width:60px" align="center">
+                                    @item.Data_vencimento.ToString("dd/MM/yyyy")
+                                </td>
+                                <td style="width:26px" align="center">
+                                    @item.Ajuizado
+                                </td>
+                                <td style="width:70px" align="right">
+                                    @item.Valor_principal
+                                </td>
+                                <td style="width:70px" align="right">
+                                    @item.Valor_juros
+                                </td>
+                                <td style="width:70px" align="right">
+                                    @item.Valor_multa
+                                </td>
+                                <td style="width:70px" align="right">
+                                    @item.Valor_correcao
+                                </td>
+                                <td style="width:40px" align="right">
+                                    @item.Qtde_parcelamento
+                                </td>
+                                <td style="width:50px" align="right">
+                                    @item.Perc_penalidade
+                                </td>
+                                <td style="width:60px" align="right">
+                                    @item.Valor_penalidade
+                                </td>
+                                <td style="width:70px" align="right">
+                                    @item.Valor_total
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -374,9 +410,14 @@
             </div>
 
 
-            <br />
-            <br />
-            <button type="submit" class="btn btn-primary" name="action" value="btnValida">Carregar Simulado...</button>&nbsp;&nbsp;
+         
+        </div>
+        <div class="card-header">Simulador de Parcelamento</div>
+        <div class="card-body">
+            @{Html.RenderAction("Parc_simulado","Parcelamento",new { p=Model.Guid});}
+
+
+            <button type="submit" class="btn btn-primary" name="action" value="btnValida">Exibir o Resumo...</button>&nbsp;&nbsp;
         </div>
         <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
         <div class="card-footer">
@@ -402,20 +443,10 @@
                 zIndex: 1
             });
 
-          
-
 
         });
 
-
-        $(function () {
-            $('th > :checkbox').click(function () {
-                $(this).closest('table')
-                    .find('td > :checkbox')
-                    .attr('checked', $(this).is(':checked'));
-            });
-        });
-
+     
         function ValidateForm() {
             ClearError();
             return true;
@@ -425,49 +456,7 @@
             document.getElementById('errorGuia').innerHTML = "";
         }
 
-        var sumP = 0, sumJ = 0, sumM = 0, sumC = 0, sumE = 0, sumT = 0;
-        var valP = 0, valJ = 0, valM = 0, valC = 0, valE = 0, valT = 0;
-
-        $('table input[type="checkbox"]').on('change', function () {
-            $('#ResumoTable').find(somaPrincipal).html("0,00");
-            $('#ResumoTable').find(somaJuros).html("0,00");
-            $('#ResumoTable').find(somaMulta).html("0,00");
-            $('#ResumoTable').find(somaCorrecao).html("0,00");
-            $('#ResumoTable').find(somaEntrada).html("0,00");
-            $('#ResumoTable').find(somaTotal).html("0,00");
-
-            var table = $(this).closest('table'),
-                checked = table.find('input[type=checkbox]:checked'),
-                valP = checked.closest('tr').find('td:nth-child(11)'),
-                sumP = valP.map(function () { return parseFloat(this.textContent.replace(',', '.').trim()) || 0; }).get().reduce(function (a, b) {
-                    return a + b;
-                });
-            valJ = checked.closest('tr').find('td:nth-child(12)'),
-                sumJ = valJ.map(function () { return parseFloat(this.textContent.replace(',', '.').trim()) || 0; }).get().reduce(function (a, b) {
-                    return a + b;
-                });
-            valM = checked.closest('tr').find('td:nth-child(13)'),
-                sumM = valM.map(function () { return parseFloat(this.textContent.replace(',', '.').trim()) || 0; }).get().reduce(function (a, b) {
-                    return a + b;
-                });
-            valC = checked.closest('tr').find('td:nth-child(14)'),
-                sumC = valC.map(function () { return parseFloat(this.textContent.replace(',', '.').trim()) || 0; }).get().reduce(function (a, b) {
-                    return a + b;
-                });
-            valE = checked.closest('tr').find('td:nth-child(17)'),
-                sumE = valE.map(function () { return (parseFloat(this.textContent.replace(',', '.').trim())) || 0; }).get().reduce(function (a, b) {
-                    return a + b;
-                });
-
-            sumT = sumP + sumJ + sumM + sumC ;
-
-            $('#ResumoTable').find(somaPrincipal).html(sumP.toFixed(2).replace('.', ','));
-            $('#ResumoTable').find(somaJuros).html(sumJ.toFixed(2).replace('.', ','));
-            $('#ResumoTable').find(somaMulta).html(sumM.toFixed(2).replace('.', ','));
-            $('#ResumoTable').find(somaCorrecao).html(sumC.toFixed(2).replace('.', ','));
-            $('#ResumoTable').find(somaEntrada).html(sumE.toFixed(2).replace('.', ','));
-            $('#ResumoTable').find(somaTotal).html(sumT.toFixed(2).replace('.', ','));
-        }).change();
+        
 
 
 

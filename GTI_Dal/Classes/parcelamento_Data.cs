@@ -242,11 +242,12 @@ namespace GTI_Dal.Classes {
 
         public Exception Atualizar_Criterio_Master(Parcelamento_web_master reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[2];
+                object[] Parametros = new object[3];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@Plano_Desconto", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Plano_Desconto };
+                Parametros[2] = new SqlParameter { ParameterName = "@Data_Vencimento", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_Vencimento };
                 try {
-                    db.Database.ExecuteSqlCommand("UPDATE parcelamento_web_master set Plano_Desconto=@Plano_Desconto WHERE guid=@guid", Parametros);
+                    db.Database.ExecuteSqlCommand("UPDATE parcelamento_web_master set Plano_Desconto=@Plano_Desconto,Data_Vencimento=@Data_Vencimento WHERE guid=@guid", Parametros);
                 } catch (Exception ex) {
                     return ex;
                 }
