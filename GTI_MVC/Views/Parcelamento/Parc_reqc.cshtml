@@ -402,11 +402,50 @@
                 zIndex: 1
             });
 
-          
-
-
         });
 
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                try {
+                    var table = document.getElementById("tblMain");
+                    var rows = table.getElementsByTagName('tr');
+                    var _ajuizado = false, _naoajuizado = false;
+                    var _count = 0, _datavencto = "", _parcela = 0;
+
+                    for (var i = 0; i < rows.length; i++) {
+                        var cols = rows[i].getElementsByTagName('td');
+                        if (cols.length > 1) {
+                            var value = cols[0].getElementsByTagName('input')[0].checked == true;
+                            if (value) {
+                                _count++;
+                                var _aj = table.rows[i].cells[9].textContent.trim();
+                                if (_aj == "S") {
+                                    _ajuizado = true;
+                                }
+                                if (_aj == "N") {
+                                    _naoajuizado = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if (_ajuizado && _naoajuizado) {
+                        document.getElementById('errorLabel').innerHTML = "Não é permitido parcelas débitos ajuizados e não ajuizados no mesmo parcelamento.";
+                        return false;
+                    }
+
+                    if (_count == 0) {
+                        document.getElementById('errorLabel').innerHTML = "Selecione o(s) débito(s) à parcelar.";
+                        return false;
+                    }
+
+                }
+                catch (e) {
+                    alert(e);
+                }
+                return true;
+            });
+        });
 
         $(function () {
             $('th > :checkbox').click(function () {

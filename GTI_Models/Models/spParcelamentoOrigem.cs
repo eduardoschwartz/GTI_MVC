@@ -19,7 +19,7 @@ namespace GTI_Models.Models {
         public decimal Valor_multa { get; set; }
         public decimal Valor_correcao { get; set; }
         public decimal Valor_total { get; set; }
-        public char Ajuizado { get; set; }
+        public string Ajuizado { get; set; }
         public short Qtde_parcelamento { get; set; }
         public decimal Perc_penalidade { get; set; }
         public decimal Valor_penalidade { get; set; }

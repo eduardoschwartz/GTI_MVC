@@ -25,6 +25,6 @@ namespace GTI_Models.Models {
         public decimal Perc_Penalidade { get; set; }
         public decimal Valor_Penalidade { get; set; }
         public string Lancamento_Nome { get; set; }
-        public char Ajuizado { get; set; }
+        public string Ajuizado { get; set; }
     }
 }
