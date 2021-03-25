@@ -55,9 +55,9 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
-        public Exception Atualizar_Criterio_Master(Parcelamento_web_master reg) {
+        public Exception Atualizar_Totais_Master(Parcelamento_web_master reg) {
             Parcelamento_Data obj = new Parcelamento_Data(_connection);
-            Exception ex = obj.Atualizar_Criterio_Master(reg);
+            Exception ex = obj.Atualizar_Totais_Master(reg);
             return ex;
         }
 
@@ -77,7 +77,21 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Parcelamento_Selected(guid);
         }
 
+        public Plano Retorna_Plano_Desconto(short Plano) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            return obj.Retorna_Plano_Desconto(Plano);
+        }
 
+        public decimal Retorna_Parcelamento_Valor_Minimo(short Ano, bool Distrito, string Tipo) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            return obj.Retorna_Parcelamento_Valor_Minimo(Ano,Distrito,Tipo);
+        }
+
+        public Exception Excluir_parcelamento_Web_Selected(string Guid) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Excluir_parcelamento_Web_Selected(Guid);
+            return ex;
+        }
 
     }
 }

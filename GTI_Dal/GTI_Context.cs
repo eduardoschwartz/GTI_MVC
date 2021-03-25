@@ -194,5 +194,6 @@ namespace GTI_Dal {
         public DbSet<Parcelamento_web_lista_codigo> Parcelamento_Web_Lista_Codigo { get; set; }
         public DbSet<Parcelamento_web_origem> Parcelamento_Web_Origem { get; set; }
         public DbSet<Parcelamento_web_selected> Parcelamento_Web_Selected { get; set; }
+        public DbSet<Parcelamento_valor_minimo> Parcelamento_Valor_Minimo { get; set; }
     }
 }

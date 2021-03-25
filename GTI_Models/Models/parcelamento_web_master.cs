@@ -33,8 +33,15 @@ namespace GTI_Models.Models {
         public int Plano_Codigo { get; set; }
         public string Plano_Nome { get; set; } ="Nenhum";
         public decimal Valor_minimo { get; set; }
-        public decimal Valor_minimo_di { get; set; }
         public bool Refis { get; set; }
+        public decimal Perc_Desconto { get; set; }
+        public int Qtde_Maxima_Parcela { get; set; }
+        public decimal Soma_Principal { get; set; }
+        public decimal Soma_Juros { get; set; }
+        public decimal Soma_Multa { get; set; }
+        public decimal Soma_Correcao { get; set; }
+        public decimal Soma_Total { get; set; }
     }
 }
 
+ 
