@@ -41,7 +41,15 @@ namespace GTI_Models.Models {
         public decimal Soma_Multa { get; set; }
         public decimal Soma_Correcao { get; set; }
         public decimal Soma_Total { get; set; }
+        public decimal Soma_Entrada { get; set; }
+        public decimal Perc_Principal { get; set; }
+        public decimal Perc_Juros { get; set; }
+        public decimal Perc_Multa { get; set; }
+        public decimal Perc_Correcao { get; set; }
+        public decimal Valor_add_Principal { get; set; }
+        public decimal Valor_add_Juros { get; set; }
+        public decimal Valor_add_Multa { get; set; }
+        public decimal Valor_add_Correcao { get; set; }
     }
 }
 
- 

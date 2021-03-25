@@ -515,7 +515,7 @@ namespace GTI_MVC.Controllers {
             t = 1;
             Exception ex = parcelamentoRepository.Excluir_parcelamento_Web_Selected(model.Guid);
 
-            decimal _somaP = 0, _somaJ = 0, _somaM = 0, _somaC = 0, _somaT = 0;
+            decimal _somaP = 0, _somaJ = 0, _somaM = 0, _somaC = 0, _somaT = 0,_somaE=0;
             foreach (SelectDebitoParcelamentoEditorViewModel item in _listaOrigem) {
                 Parcelamento_web_selected reg = new Parcelamento_web_selected() {
                     Ajuizado = item.Ajuizado,
@@ -542,9 +542,23 @@ namespace GTI_MVC.Controllers {
                 _somaM += item.Valor_multa;
                 _somaC += item.Valor_correcao;
                 _somaT += item.Valor_total;
+                _somaE += item.Valor_penalidade;
+                
                 ex = parcelamentoRepository.Incluir_Parcelamento_Web_Selected(reg);
                 t++;
             }
+
+            decimal _percP = 0, _percJ = 0, _percM = 0, _percC = 0;
+            decimal _valorAddP = 0, _valorAddJ = 0, _valorAddM = 0, _valorAddC = 0;
+            _percP = _somaP * 100 / _somaT;
+            _percJ = _somaJ * 100 / _somaT;
+            _percM = _somaM * 100 / _somaT;
+            _percC = _somaC * 100 / _somaT;
+
+            _valorAddP = _somaE * _percP / 100;
+            _valorAddJ = _somaE * _percJ / 100;
+            _valorAddM = _somaE * _percM / 100;
+            _valorAddC = _somaE * _percC / 100;
 
             Parcelamento_web_master regP = new Parcelamento_web_master() {
                 Guid=model.Guid,
@@ -552,7 +566,16 @@ namespace GTI_MVC.Controllers {
                 Soma_Juros=_somaJ,
                 Soma_Multa=_somaM,
                 Soma_Correcao=_somaC,
-                Soma_Total=_somaT
+                Soma_Total=_somaT,
+                Soma_Entrada=_somaE,
+                Perc_Principal=_percP,
+                Perc_Juros=_percJ,
+                Perc_Multa=_percM,
+                Perc_Correcao=_percC,
+                Valor_add_Principal=_valorAddP,
+                Valor_add_Juros=_valorAddJ,
+                Valor_add_Multa=_valorAddM,
+                Valor_add_Correcao=_valorAddC
             };
             ex = parcelamentoRepository.Atualizar_Totais_Master(regP);
 

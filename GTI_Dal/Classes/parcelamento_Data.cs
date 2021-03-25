@@ -250,16 +250,27 @@ namespace GTI_Dal.Classes {
 
         public Exception Atualizar_Totais_Master(Parcelamento_web_master reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[6];
+                object[] Parametros = new object[15];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@Soma_Principal", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Soma_Principal };
                 Parametros[2] = new SqlParameter { ParameterName = "@Soma_Juros", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Soma_Juros };
                 Parametros[3] = new SqlParameter { ParameterName = "@Soma_Multa", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Soma_Multa };
                 Parametros[4] = new SqlParameter { ParameterName = "@Soma_Correcao", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Soma_Correcao };
                 Parametros[5] = new SqlParameter { ParameterName = "@Soma_Total", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Soma_Total };
+                Parametros[6] = new SqlParameter { ParameterName = "@Soma_Entrada", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Soma_Entrada };
+                Parametros[7] = new SqlParameter { ParameterName = "@Perc_Principal", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Perc_Principal };
+                Parametros[8] = new SqlParameter { ParameterName = "@Perc_Juros", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Perc_Juros };
+                Parametros[9] = new SqlParameter { ParameterName = "@Perc_Multa", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Perc_Multa };
+                Parametros[10] = new SqlParameter { ParameterName = "@Perc_Correcao", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Perc_Correcao };
+                Parametros[11] = new SqlParameter { ParameterName = "@Valor_add_Principal", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Valor_add_Principal };
+                Parametros[12] = new SqlParameter { ParameterName = "@Valor_add_Juros", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Valor_add_Juros };
+                Parametros[13] = new SqlParameter { ParameterName = "@Valor_add_Multa", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Valor_add_Multa };
+                Parametros[14] = new SqlParameter { ParameterName = "@Valor_add_Correcao", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Valor_add_Correcao };
+
                 try {
                     db.Database.ExecuteSqlCommand("UPDATE parcelamento_web_master set Soma_Principal=@Soma_Principal,Soma_Juros=@Soma_Juros,Soma_Multa=@Soma_Multa,Soma_Correcao=@Soma_Correcao," +
-                        "Soma_Total=@Soma_Total WHERE guid=@guid", Parametros);
+                        "Soma_Total=@Soma_Total,Soma_Entrada=@Soma_Entrada,Perc_Principal=@Perc_Principal,Perc_Juros=@Perc_Juros,Perc_Multa=@Perc_Multa,Perc_Correcao=@Perc_Correcao,Valor_add_Principal=@Valor_add_Principal," +
+                        "Valor_add_Juros=@Valor_add_Juros,Valor_add_Multa=@Valor_add_Multa,Valor_add_Correcao=@Valor_add_Correcao WHERE guid=@guid", Parametros);
                 } catch (Exception ex) {
                     return ex;
                 }
