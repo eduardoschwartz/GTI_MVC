@@ -93,5 +93,33 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Incluir_Parcelamento_Web_Simulado(Parcelamento_Web_Simulado Reg) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Incluir_Parcelamento_Web_Simulado(Reg);
+            return ex;
+        }
+
+        public Exception Excluir_parcelamento_Web_Simulado(string Guid) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Excluir_parcelamento_Web_Simulado(Guid);
+            return ex;
+        }
+
+        public List<Parcelamento_Web_Simulado> Retorna_Parcelamento_Web_Simulado(string guid) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            return obj.Retorna_Parcelamento_Web_Simulado(guid);
+        }
+
+        public List<Parcelamento_Web_Simulado> Retorna_Parcelamento_Web_Simulado(string guid, int qtde_parcela) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            return obj.Retorna_Parcelamento_Web_Simulado(guid,qtde_parcela);
+        }
+
+        public List<Parcelamento_Web_Simulado> Lista_Parcelamento_Destino(string Guid, short Plano,DateTime Data_Vencimento, bool Ajuizado, bool Honorario, decimal Principal, decimal Juros, decimal Multa, decimal Correcao, decimal Total, decimal Adicional, decimal Valor_Minimo) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            return obj.Lista_Parcelamento_Destino(Guid,Plano,Data_Vencimento,Ajuizado,Honorario,Principal,Juros,Multa,Correcao,Total,Adicional,Valor_Minimo);
+        }
+
+
     }
 }

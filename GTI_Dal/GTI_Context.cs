@@ -189,11 +189,13 @@ namespace GTI_Dal {
         public DbSet<Redesim_master> Redesim_Master { get; set; }
         public DbSet<Calendar_event> Calendar_Event { get; set; }
         public DbSet<SpParcelamentoOrigem> spParcelamentoOrigem { get; set; }
+        public DbSet<SpParcelamentoDestinoWeb> spParcelamentoDestinoWeb { get; set; }
         public DbSet<SpExtrato_Parcelamento>  spExtrato_Parcelamento { get; set; }
         public DbSet<Parcelamento_web_master> Parcelamento_Web_Master { get; set; }
         public DbSet<Parcelamento_web_lista_codigo> Parcelamento_Web_Lista_Codigo { get; set; }
         public DbSet<Parcelamento_web_origem> Parcelamento_Web_Origem { get; set; }
         public DbSet<Parcelamento_web_selected> Parcelamento_Web_Selected { get; set; }
         public DbSet<Parcelamento_valor_minimo> Parcelamento_Valor_Minimo { get; set; }
+        public DbSet<Parcelamento_Web_Simulado> Parcelamento_Web_Simulado { get; set; }
     }
 }

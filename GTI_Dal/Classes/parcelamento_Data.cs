@@ -32,25 +32,25 @@ namespace GTI_Dal.Classes {
                         }
                     }
 
-                    if(_row.Numparcela==0)
+                    if (_row.Numparcela == 0)
                         goto NextReg;
 
                     SpParcelamentoOrigem _reg = new SpParcelamentoOrigem() {
-                        Idx=_pos,
-                        Exercicio=_row.Anoexercicio,
-                        Lancamento=_row.Codlancamento,
-                        Nome_lancamento=_row.Desclancamento,
-                        Sequencia=_row.Seqlancamento,
-                        Parcela=_row.Numparcela,
-                        Complemento=_row.Codcomplemento,
-                        Data_vencimento=_row.Datavencimento,
-                        Valor_principal=_row.Valortributo,
-                        Valor_juros=_row.Valorjuros,
-                        Valor_multa=_row.Valormulta,
-                        Valor_correcao=_row.Valorcorrecao,
-                        Valor_total=_row.Valortotal,
-                        Ajuizado=_row.Dataajuiza!=null?"S":"N",
-                        Qtde_parcelamento=Qtde_Parcelamento_Efetuados(Codigo,_row.Anoexercicio,_row.Codlancamento,_row.Seqlancamento,_row.Numparcela)
+                        Idx = _pos,
+                        Exercicio = _row.Anoexercicio,
+                        Lancamento = _row.Codlancamento,
+                        Nome_lancamento = _row.Desclancamento,
+                        Sequencia = _row.Seqlancamento,
+                        Parcela = _row.Numparcela,
+                        Complemento = _row.Codcomplemento,
+                        Data_vencimento = _row.Datavencimento,
+                        Valor_principal = _row.Valortributo,
+                        Valor_juros = _row.Valorjuros,
+                        Valor_multa = _row.Valormulta,
+                        Valor_correcao = _row.Valorcorrecao,
+                        Valor_total = _row.Valortotal,
+                        Ajuizado = _row.Dataajuiza != null ? "S" : "N",
+                        Qtde_parcelamento = Qtde_Parcelamento_Efetuados(Codigo, _row.Anoexercicio, _row.Codlancamento, _row.Seqlancamento, _row.Numparcela)
                     };
 
                     //DECRETO ANISITIA MULTA E JUROS PARA PARCELAS 4,5, E 6 DE 2020
@@ -62,7 +62,7 @@ namespace GTI_Dal.Classes {
 
                     if (Tipo == 'F')  //empresa física 5 % por parcelamento
                         _reg.Perc_penalidade = _reg.Qtde_parcelamento * 5;
-                     else 
+                    else
                         _reg.Perc_penalidade = _reg.Qtde_parcelamento * 10;
 
                     _reg.Valor_penalidade = _reg.Valor_total * (_reg.Perc_penalidade / 100);
@@ -71,7 +71,7 @@ namespace GTI_Dal.Classes {
                     _pos++;
                 NextReg:;
                 }
-                
+
                 return ListaOrigem;
             }
         }
@@ -91,13 +91,13 @@ namespace GTI_Dal.Classes {
                 Parametros[7] = new SqlParameter { ParameterName = "@Requerente_Uf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Requerente_Uf };
                 Parametros[8] = new SqlParameter { ParameterName = "@Requerente_Logradouro", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Requerente_Logradouro };
                 Parametros[9] = new SqlParameter { ParameterName = "@Requerente_Numero", SqlDbType = SqlDbType.Int, SqlValue = Reg.Requerente_Numero };
-                if(Reg.Requerente_Complemento==null)
+                if (Reg.Requerente_Complemento == null)
                     Parametros[10] = new SqlParameter { ParameterName = "@Requerente_Complemento", SqlValue = DBNull.Value };
                 else
                     Parametros[10] = new SqlParameter { ParameterName = "@Requerente_Complemento", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Requerente_Complemento };
                 Parametros[11] = new SqlParameter { ParameterName = "@Requerente_Cep", SqlDbType = SqlDbType.Int, SqlValue = Reg.Requerente_Cep };
-                if(Reg.Requerente_Telefone==null)
-                    Parametros[12] = new SqlParameter { ParameterName = "@Requerente_Telefone", SqlValue = DBNull.Value};
+                if (Reg.Requerente_Telefone == null)
+                    Parametros[12] = new SqlParameter { ParameterName = "@Requerente_Telefone", SqlValue = DBNull.Value };
                 else
                     Parametros[12] = new SqlParameter { ParameterName = "@Requerente_Telefone", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Requerente_Telefone };
                 Parametros[13] = new SqlParameter { ParameterName = "@Requerente_email", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Requerente_Email };
@@ -157,10 +157,10 @@ namespace GTI_Dal.Classes {
                     Parcelamento_web_lista_codigo Linha = new Parcelamento_web_lista_codigo {
                         Guid = guid,
                         Id = item.Id,
-                        Grupo=item.Grupo,
-                        Texto=item.Texto,
-                        Valor=item.Valor,
-                        Selected=item.Selected
+                        Grupo = item.Grupo,
+                        Texto = item.Texto,
+                        Valor = item.Valor,
+                        Selected = item.Selected
                     };
                     Lista.Add(Linha);
                 }
@@ -168,11 +168,11 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        private short Qtde_Parcelamento_Efetuados(int Codigo,short Ano,short Lancamento,short Sequencia,short Parcela) {
+        private short Qtde_Parcelamento_Efetuados(int Codigo, short Ano, short Lancamento, short Sequencia, short Parcela) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                return (short) (from o in db.Origemreparc
-                           join p in db.Processoreparc on o.Numprocesso equals p.Numprocesso into op from p in op.DefaultIfEmpty()
-                           where o.Codreduzido==Codigo && o.Anoexercicio==Ano && o.Codlancamento==Lancamento && o.Numsequencia==Sequencia && o.Numparcela==Parcela select o.Numprocesso).Distinct().Count();
+                return (short)(from o in db.Origemreparc
+                               join p in db.Processoreparc on o.Numprocesso equals p.Numprocesso into op from p in op.DefaultIfEmpty()
+                               where o.Codreduzido == Codigo && o.Anoexercicio == Ano && o.Codlancamento == Lancamento && o.Numsequencia == Sequencia && o.Numparcela == Parcela select o.Numprocesso).Distinct().Count();
 
             }
         }
@@ -184,7 +184,7 @@ namespace GTI_Dal.Classes {
                 object[] Parametros = new object[18];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@idx", SqlDbType = SqlDbType.Int, SqlValue = Reg.Idx };
-                Parametros[2] = new SqlParameter { ParameterName = "@ano", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Ano};
+                Parametros[2] = new SqlParameter { ParameterName = "@ano", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Ano };
                 Parametros[3] = new SqlParameter { ParameterName = "@lancamento", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Lancamento };
                 Parametros[4] = new SqlParameter { ParameterName = "@sequencia", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Sequencia };
                 Parametros[5] = new SqlParameter { ParameterName = "@parcela", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Parcela };
@@ -284,23 +284,23 @@ namespace GTI_Dal.Classes {
                 List<SpParcelamentoOrigem> Lista = new List<SpParcelamentoOrigem>();
                 foreach (var item in reg) {
                     SpParcelamentoOrigem Linha = new SpParcelamentoOrigem {
-                        Idx=item.Idx,
-                        Exercicio=item.Ano,
-                        Lancamento=item.Lancamento,
-                        Nome_lancamento=item.Lancamento_Nome,
-                        Sequencia=item.Sequencia,
-                        Parcela=item.Parcela,
-                        Complemento=item.Complemento,
-                        Data_vencimento=item.Data_Vencimento,
-                        Ajuizado=item.Ajuizado,
-                        Perc_penalidade=item.Perc_Penalidade,
-                        Qtde_parcelamento=item.Qtde_Parcelamento,
-                        Valor_principal=item.Valor_Tributo,
-                        Valor_juros=item.Valor_Juros,
-                        Valor_multa=item.Valor_Multa,
-                        Valor_correcao=item.Valor_Correcao,
-                        Valor_total=item.Valor_Total,
-                        Valor_penalidade=item.Valor_Penalidade
+                        Idx = item.Idx,
+                        Exercicio = item.Ano,
+                        Lancamento = item.Lancamento,
+                        Nome_lancamento = item.Lancamento_Nome,
+                        Sequencia = item.Sequencia,
+                        Parcela = item.Parcela,
+                        Complemento = item.Complemento,
+                        Data_vencimento = item.Data_Vencimento,
+                        Ajuizado = item.Ajuizado,
+                        Perc_penalidade = item.Perc_Penalidade,
+                        Qtde_parcelamento = item.Qtde_Parcelamento,
+                        Valor_principal = item.Valor_Tributo,
+                        Valor_juros = item.Valor_Juros,
+                        Valor_multa = item.Valor_Multa,
+                        Valor_correcao = item.Valor_Correcao,
+                        Valor_total = item.Valor_Total,
+                        Valor_penalidade = item.Valor_Penalidade
                     };
                     Lista.Add(Linha);
                 }
@@ -387,7 +387,7 @@ namespace GTI_Dal.Classes {
                 }
                 return null;
             }
-            
+
         }
 
         public Plano Retorna_Plano_Desconto(short Plano) {
@@ -396,9 +396,116 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public decimal Retorna_Parcelamento_Valor_Minimo(short Ano,bool Distrito,string Tipo) {
+        public decimal Retorna_Parcelamento_Valor_Minimo(short Ano, bool Distrito, string Tipo) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                return (from c in db.Parcelamento_Valor_Minimo where c.Ano == Ano && c.DistritoIndustrial==Distrito && c.Tipo==Tipo select c.Valor).FirstOrDefault();
+                return (from c in db.Parcelamento_Valor_Minimo where c.Ano == Ano && c.DistritoIndustrial == Distrito && c.Tipo == Tipo select c.Valor).FirstOrDefault();
+            }
+        }
+
+        public Exception Incluir_Parcelamento_Web_Simulado(Parcelamento_Web_Simulado Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+
+                object[] Parametros = new object[15];
+                Parametros[0] = new SqlParameter { ParameterName = "@Guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@Qtde_Parcela", SqlDbType = SqlDbType.Int, SqlValue = Reg.Qtde_Parcela };
+                Parametros[2] = new SqlParameter { ParameterName = "@Numero_Parcela", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Numero_Parcela };
+                Parametros[3] = new SqlParameter { ParameterName = "@Data_Vencimento", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_Vencimento };
+                Parametros[4] = new SqlParameter { ParameterName = "@Valor_Liquido", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Liquido };
+                Parametros[5] = new SqlParameter { ParameterName = "@Valor_Juros", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Juros };
+                Parametros[6] = new SqlParameter { ParameterName = "@Valor_Multa", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Multa };
+                Parametros[7] = new SqlParameter { ParameterName = "@Valor_Correcao", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Correcao };
+                Parametros[8] = new SqlParameter { ParameterName = "@Valor_Principal", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Principal };
+                Parametros[9] = new SqlParameter { ParameterName = "@Saldo", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Saldo };
+                Parametros[10] = new SqlParameter { ParameterName = "@Juros_Perc", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Juros_Perc };
+                Parametros[11] = new SqlParameter { ParameterName = "@Juros_Mes", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Juros_Mes };
+                Parametros[12] = new SqlParameter { ParameterName = "@Juros_Apl", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Juros_Apl };
+                Parametros[13] = new SqlParameter { ParameterName = "@Valor_Honorario", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Honorario };
+                Parametros[14] = new SqlParameter { ParameterName = "@Valor_Total", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Total };
+
+                try {
+                    db.Database.ExecuteSqlCommand("INSERT INTO parcelamento_web_simulado(Guid,Qtde_Parcela,Numero_Parcela,Data_Vencimento,Valor_Liquido,Valor_Juros,Valor_Multa,Valor_Correcao,Valor_Principal," +
+                        "Saldo,Juros_Perc,Juros_Mes,Juros_Apl,Valor_Honorario,Valor_Total) VALUES(@Guid,@Qtde_Parcela,@Numero_Parcela,@Data_Vencimento,@Valor_Liquido,@Valor_Juros,@Valor_Multa,@Valor_Correcao," +
+                        "@Valor_Principal,@Saldo,@Juros_Perc,@Juros_Mes,@Juros_Apl,@Valor_Honorario,@Valor_Total)", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Excluir_parcelamento_Web_Simulado(string Guid) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+
+                object[] Parametros = new object[1];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Guid };
+                try {
+                    db.Database.ExecuteSqlCommand("DELETE FROM parcelamento_web_simulado WHERE guid=@guid", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+
+        }
+
+        public List<Parcelamento_Web_Simulado> Retorna_Parcelamento_Web_Simulado(string guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                return (from p in db.Parcelamento_Web_Simulado where p.Guid == guid select p).ToList();
+            }
+        }
+
+        public List<Parcelamento_Web_Simulado> Retorna_Parcelamento_Web_Simulado(string guid, int qtde_parcela) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                return (from p in db.Parcelamento_Web_Simulado where p.Guid == guid && p.Qtde_Parcela == qtde_parcela select p).ToList();
+            }
+        }
+
+        public List<Parcelamento_Web_Simulado> Lista_Parcelamento_Destino(string Guid,short Plano, DateTime Data_Vencimento,bool Ajuizado,bool Honorario,decimal Principal,decimal Juros,decimal Multa, decimal Correcao,decimal Total,decimal Adicional,decimal Valor_Minimo) {
+            
+            Tributario_Data tributarioRepository = new Tributario_Data(_connection);
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 600;
+                object[] Parametros = new object[12];
+                Parametros[0] = new SqlParameter { ParameterName = "@Guid", SqlDbType = SqlDbType.VarChar, SqlValue = Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@Plano", SqlDbType = SqlDbType.SmallInt, SqlValue = Plano };
+                Parametros[2] = new SqlParameter { ParameterName = "@Data_Vencimento", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Data_Vencimento };
+                Parametros[3] = new SqlParameter { ParameterName = "@Ajuizado", SqlDbType = SqlDbType.Bit, SqlValue = Ajuizado };
+                Parametros[4] = new SqlParameter { ParameterName = "@Honorario", SqlDbType = SqlDbType.Bit, SqlValue = Honorario };
+                Parametros[5] = new SqlParameter { ParameterName = "@Principal", SqlDbType = SqlDbType.Decimal, SqlValue = Principal };
+                Parametros[6] = new SqlParameter { ParameterName = "@Juros", SqlDbType = SqlDbType.Decimal, SqlValue = Juros };
+                Parametros[7] = new SqlParameter { ParameterName = "@Multa", SqlDbType = SqlDbType.Decimal, SqlValue = Multa };
+                Parametros[8] = new SqlParameter { ParameterName = "@Correcao", SqlDbType = SqlDbType.Decimal, SqlValue = Correcao };
+                Parametros[9] = new SqlParameter { ParameterName = "@Total", SqlDbType = SqlDbType.Decimal, SqlValue = Total };
+                Parametros[10] = new SqlParameter { ParameterName = "@Adicional", SqlDbType = SqlDbType.Decimal, SqlValue = Adicional };
+                Parametros[11] = new SqlParameter { ParameterName = "@Valor_Minimo", SqlDbType = SqlDbType.Decimal, SqlValue = Valor_Minimo };
+                var result = db.spParcelamentoDestinoWeb.SqlQuery("EXEC spPARCELAMENTODESTINOWEB @Guid,@Plano,@Data_Vencimento, @Ajuizado, @Honorario, " +
+                    "@Principal ,@Juros ,@Multa, @Correcao ,@Total, @Adicional, @Valor_Minimo ", Parametros).ToList();
+
+
+                List<Parcelamento_Web_Simulado> Lista = new List<Parcelamento_Web_Simulado>();
+                foreach (SpParcelamentoDestinoWeb item in result) {
+                    Parcelamento_Web_Simulado reg = new Parcelamento_Web_Simulado() {
+                        Data_Vencimento=item.Data_Vencimento,
+                        Valor_Honorario=item.Valor_Honorario,
+                        Juros_Apl=item.Juros_Apl,
+                        Juros_Mes=item.Juros_Mes,
+                        Juros_Perc=item.Juros_Perc,
+                        Numero_Parcela=item.Numero_Parcela,
+                        Qtde_Parcela=item.Qtde_Parcela,
+                        Saldo=item.Saldo,
+                        Valor_Juros=item.Valor_Juros,
+                        Valor_Correcao=item.Valor_Correcao,
+                        Valor_Liquido=item.Valor_Liquido,
+                        Valor_Multa=item.Valor_Multa,
+                        Valor_Total=item.Valor_Total,
+                        Valor_Principal=item.Valor_Principal
+                    };
+                    Lista.Add(reg);
+                }
+
+                return Lista;
             }
         }
 
@@ -406,3 +513,5 @@ namespace GTI_Dal.Classes {
 
     }
 }
+
+

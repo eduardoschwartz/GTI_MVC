@@ -312,7 +312,7 @@ namespace GTI_MVC.Controllers {
                 Contribuinte_tipo=_tipoDoc
             };
 
-            short _plano_codigo = 45; //(4=sem plano)
+            short _plano_codigo = 4; //(4=sem plano)
             Plano _plano = parcelamentoRepository.Retorna_Plano_Desconto(_plano_codigo);
             regP.Qtde_Maxima_Parcela = _plano.Qtde_Parcela;
             regP.Perc_Desconto = _plano.Desconto;
@@ -634,8 +634,9 @@ namespace GTI_MVC.Controllers {
             };
 
             //Load Origem
-            decimal _SomaP = 0, _SomaM = 0, _SomaJ = 0, _SomaC = 0, _SomaT = 0;
+            decimal _SomaP = 0, _SomaM = 0, _SomaJ = 0, _SomaC = 0, _SomaT = 0,_SomaE =0;
             List<SpParcelamentoOrigem> ListaOrigem = parcelamentoRepository.Lista_Parcelamento_Selected(p);
+            bool _bAjuizado = ListaOrigem[0].Ajuizado=="S";
             List<SelectDebitoParcelamentoEditorViewModel> _listaP = new List<SelectDebitoParcelamentoEditorViewModel>();
             foreach (SpParcelamentoOrigem item in ListaOrigem) {
                 SelectDebitoParcelamentoEditorViewModel d = new SelectDebitoParcelamentoEditorViewModel() {
@@ -663,19 +664,44 @@ namespace GTI_MVC.Controllers {
                 _SomaM += item.Valor_multa;
                 _SomaJ += item.Valor_juros;
                 _SomaC += item.Valor_correcao;
+                _SomaE += item.Valor_penalidade;
                 _SomaT += Math.Round(item.Valor_principal, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa, 2, MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao, 2, MidpointRounding.AwayFromZero);
             }
             model.Soma_Principal = _SomaP;
             model.Soma_Multa = _SomaM;
             model.Soma_Juros = _SomaJ;
             model.Soma_Correcao = _SomaC;
+            model.Soma_Penalidade = _SomaE;
             model.Soma_Total = _SomaT;
             model.Lista_Origem_Selected = _listaP;
 
-            //Carrega Simulado
+            //########### Carrega Simulado ###################################
+            Exception ex = parcelamentoRepository.Excluir_parcelamento_Web_Simulado(model.Guid);
+            List<Parcelamento_Web_Simulado> _listaSimulado = parcelamentoRepository.Lista_Parcelamento_Destino(model.Guid, (short)model.Plano_Codigo,DateTime.Now, _bAjuizado, _bAjuizado, _SomaP, _SomaJ, _SomaM, _SomaC, _SomaT, _SomaE, model.Valor_Minimo);
+
+            //foreach (SpParcelamentoDestino item in _listaSimulado) {
+            //    Parcelamento_Web_Simulado reg = new Parcelamento_Web_Simulado() {
+            //        Data_Vencimento=item.Data_Vencimento,
+            //        Guid=model.Guid,
+            //        Juros_Apl=item.Juros_aplicado,
+            //        Juros_Mes=item.Juros_Mes,
+            //        Juros_Perc=item.Juros_Perc,
+            //        Numero_Parcela=item.Numero_Parcela,
+            //        Qtde_Parcela=item.Qtde_Parcela,
+            //        Saldo=item.Saldo,
+            //        Valor_Correcao=item.Valor_Correcao,
+            //        Valor_Honorario=item.Honorario,
+            //        Valor_Juros=item.Valor_Juros,
+            //        Valor_Liquido=item.Valor_Liquido,
+            //        Valor_Multa=item.Valor_Multa,
+            //        Valor_Principal=item.Valor_Principal,
+            //        Valor_Total=item.Valor_Parcela
+            //    };
+            //    ex = parcelamentoRepository.Incluir_Parcelamento_Web_Simulado(reg);
+            //}
 
 
-
+            //################################################################
 
             return View(model);
         }

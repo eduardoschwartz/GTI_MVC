@@ -196,6 +196,7 @@
     <Compile Include="Models\parcelamento_web_master.cs" />
     <Compile Include="Models\parcelamento_web_selected.cs" />
     <Compile Include="Models\parcelamento_web_origem.cs" />
+    <Compile Include="Models\parcelamento_web_simulado.cs" />
     <Compile Include="Models\pedologia.cs" />
     <Compile Include="Models\periodomei.cs" />
     <Compile Include="Models\plano.cs" />
@@ -233,6 +234,7 @@
     <Compile Include="Models\spExtrato.cs" />
     <Compile Include="Models\spExtrato_carta.cs" />
     <Compile Include="Models\spExtrato_Parcelamento.cs" />
+    <Compile Include="Models\spParcelamentoDestinoWeb.cs" />
     <Compile Include="Models\spParcelamentoOrigem.cs" />
     <Compile Include="Models\tabelaiss.cs" />
     <Compile Include="Models\Eicon\tb_inter_encerramento_giss.cs" />
