@@ -197,6 +197,7 @@
     <Compile Include="Models\parcelamento_web_selected.cs" />
     <Compile Include="Models\parcelamento_web_origem.cs" />
     <Compile Include="Models\parcelamento_web_simulado.cs" />
+    <Compile Include="Models\parcelamento_web_simulado_resumo.cs" />
     <Compile Include="Models\pedologia.cs" />
     <Compile Include="Models\periodomei.cs" />
     <Compile Include="Models\plano.cs" />

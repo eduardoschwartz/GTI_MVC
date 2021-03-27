@@ -120,6 +120,16 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Parcelamento_Destino(Guid,Plano,Data_Vencimento,Ajuizado,Honorario,Principal,Juros,Multa,Correcao,Total,Adicional,Valor_Minimo);
         }
 
+        public Exception Incluir_Parcelamento_Web_Simulado_Resumo(Parcelamento_Web_Simulado_Resumo Reg) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Incluir_Parcelamento_Web_Simulado_Resumo(Reg);
+            return ex;
+        }
 
+        public Exception Excluir_parcelamento_Web_Simulado_Resumo(string Guid) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Excluir_parcelamento_Web_Simulado_Resumo(Guid);
+            return ex;
+        }
     }
 }

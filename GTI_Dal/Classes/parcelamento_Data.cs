@@ -486,30 +486,66 @@ namespace GTI_Dal.Classes {
 
                 List<Parcelamento_Web_Simulado> Lista = new List<Parcelamento_Web_Simulado>();
                 foreach (SpParcelamentoDestinoWeb item in result) {
-                    Parcelamento_Web_Simulado reg = new Parcelamento_Web_Simulado() {
-                        Data_Vencimento=item.Data_Vencimento,
-                        Valor_Honorario=item.Valor_Honorario,
-                        Juros_Apl=item.Juros_Apl,
-                        Juros_Mes=item.Juros_Mes,
-                        Juros_Perc=item.Juros_Perc,
-                        Numero_Parcela=item.Numero_Parcela,
-                        Qtde_Parcela=item.Qtde_Parcela,
-                        Saldo=item.Saldo,
-                        Valor_Juros=item.Valor_Juros,
-                        Valor_Correcao=item.Valor_Correcao,
-                        Valor_Liquido=item.Valor_Liquido,
-                        Valor_Multa=item.Valor_Multa,
-                        Valor_Total=item.Valor_Total,
-                        Valor_Principal=item.Valor_Principal
-                    };
-                    Lista.Add(reg);
+                    if (item.Guid == Guid) {
+                        Parcelamento_Web_Simulado reg = new Parcelamento_Web_Simulado() {
+                            Data_Vencimento = item.Data_Vencimento,
+                            Valor_Honorario = item.Valor_Honorario,
+                            Juros_Apl = item.Juros_Apl,
+                            Juros_Mes = item.Juros_Mes,
+                            Juros_Perc = item.Juros_Perc,
+                            Numero_Parcela = item.Numero_Parcela,
+                            Qtde_Parcela = item.Qtde_Parcela,
+                            Saldo = item.Saldo,
+                            Valor_Juros = item.Valor_Juros,
+                            Valor_Correcao = item.Valor_Correcao,
+                            Valor_Liquido = item.Valor_Liquido,
+                            Valor_Multa = item.Valor_Multa,
+                            Valor_Total = item.Valor_Total,
+                            Valor_Principal = item.Valor_Principal
+                        };
+                        Lista.Add(reg);
+                    }
                 }
 
                 return Lista;
             }
         }
 
+        public Exception Incluir_Parcelamento_Web_Simulado_Resumo(Parcelamento_Web_Simulado_Resumo Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
 
+                object[] Parametros = new object[5];
+                Parametros[0] = new SqlParameter { ParameterName = "@Guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@Qtde_Parcela", SqlDbType = SqlDbType.Int, SqlValue = Reg.Qtde_Parcela };
+                Parametros[2] = new SqlParameter { ParameterName = "@Valor_Entrada", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Entrada };
+                Parametros[3] = new SqlParameter { ParameterName = "@Valor_N", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_N };
+                Parametros[4] = new SqlParameter { ParameterName = "@Valor_Total", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Total };
+
+                try {
+                    db.Database.ExecuteSqlCommand("INSERT INTO parcelamento_web_simulado_resumo(Guid,Qtde_Parcela,Valor_Entrada,Valor_N,Valor_Total) VALUES(@Guid,@Qtde_Parcela,@Valor_Entrada,@Valor_N,@Valor_Total)", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Excluir_parcelamento_Web_Simulado_Resumo(string Guid) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+
+                object[] Parametros = new object[1];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Guid };
+                try {
+                    db.Database.ExecuteSqlCommand("DELETE FROM parcelamento_web_simulado_resumo WHERE guid=@guid", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+
+        }
 
     }
 }

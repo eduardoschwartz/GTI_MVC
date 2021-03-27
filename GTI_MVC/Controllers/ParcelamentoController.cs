@@ -5,6 +5,7 @@ using GTI_Mvc.ViewModels;
 using GTI_Mvc.Views.Parcelamento.EditorTemplates;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 //using System.Configuration;
 
@@ -677,28 +678,31 @@ namespace GTI_MVC.Controllers {
 
             //########### Carrega Simulado ###################################
             Exception ex = parcelamentoRepository.Excluir_parcelamento_Web_Simulado(model.Guid);
+            ex = parcelamentoRepository.Excluir_parcelamento_Web_Simulado_Resumo(model.Guid);
             List<Parcelamento_Web_Simulado> _listaSimulado = parcelamentoRepository.Lista_Parcelamento_Destino(model.Guid, (short)model.Plano_Codigo,DateTime.Now, _bAjuizado, _bAjuizado, _SomaP, _SomaJ, _SomaM, _SomaC, _SomaT, _SomaE, model.Valor_Minimo);
+            IEnumerable<int> _listaQtde = _listaSimulado.Select(o => o.Qtde_Parcela).Distinct();
 
-            //foreach (SpParcelamentoDestino item in _listaSimulado) {
-            //    Parcelamento_Web_Simulado reg = new Parcelamento_Web_Simulado() {
-            //        Data_Vencimento=item.Data_Vencimento,
-            //        Guid=model.Guid,
-            //        Juros_Apl=item.Juros_aplicado,
-            //        Juros_Mes=item.Juros_Mes,
-            //        Juros_Perc=item.Juros_Perc,
-            //        Numero_Parcela=item.Numero_Parcela,
-            //        Qtde_Parcela=item.Qtde_Parcela,
-            //        Saldo=item.Saldo,
-            //        Valor_Correcao=item.Valor_Correcao,
-            //        Valor_Honorario=item.Honorario,
-            //        Valor_Juros=item.Valor_Juros,
-            //        Valor_Liquido=item.Valor_Liquido,
-            //        Valor_Multa=item.Valor_Multa,
-            //        Valor_Principal=item.Valor_Principal,
-            //        Valor_Total=item.Valor_Parcela
-            //    };
-            //    ex = parcelamentoRepository.Incluir_Parcelamento_Web_Simulado(reg);
-            //}
+            decimal _valor1 = 0, _valorN = 0;
+            foreach (int linha in _listaQtde) {
+                foreach (Parcelamento_Web_Simulado item in _listaSimulado) {
+                    if(item.Qtde_Parcela==linha && item.Numero_Parcela==1) {
+                        _valor1 = item.Valor_Total;
+                    } else {
+                        if (item.Qtde_Parcela == linha && item.Numero_Parcela == 2) {
+                            _valorN = item.Valor_Total;
+                            break;
+                        }
+                    }
+                }
+                Parcelamento_Web_Simulado_Resumo t = new Parcelamento_Web_Simulado_Resumo() {
+                    Guid=model.Guid,
+                    Qtde_Parcela=linha,
+                    Valor_Entrada = _valor1,
+                    Valor_N = _valorN,
+                    Valor_Total = _valor1 + (_valorN * (linha - 1))
+                };
+                ex = parcelamentoRepository.Incluir_Parcelamento_Web_Simulado_Resumo(t);
+            }
 
 
             //################################################################
