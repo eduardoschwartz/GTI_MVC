@@ -59,7 +59,7 @@
 
 <div class="center container" style="width:850px">
 
-    @using (Html.BeginForm("SubmitSelected", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @using (Html.BeginForm("Parc_reqd", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
         @Html.HiddenFor(m => m.Guid)
 
@@ -407,25 +407,38 @@
                         </tr>
                     </table>
                 </div>
-
             </div>
-
-
          
         </div>
         <div class="card-header">Simulador de Parcelamento</div>
         <div class="card-body">
-            @{Html.RenderAction("Parc_simulado","Parcelamento",new { p=Model.Guid});}
+            @{Html.RenderAction("Parc_simulado", "Parcelamento", new { p = Model.Guid });}
 
 
+            @*<div id="ResumoTable" style="height: auto; overflow: auto;width:780px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;border-left-color:cadetblue;border-left-style:solid;border-left-width:1px;border-right-color:cadetblue;border-right-style:solid;border-right-width:1px">
+                        <table style="padding:5px">
+                            <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                <td id="tblResumo" class="item-model-number">
+                                    @for (int i = 0; i < Model.Lista_Resumo.Count; i++) {
+                                        @Html.HiddenFor(m => m.Lista_Resumo[i].Qtde_Parcela)
+                                        @Html.RadioButtonFor(m => m.Lista_Resumo[i].Texto, Model.Lista_Resumo[i].Qtde_Parcela)
+                                        <span>&nbsp;</span>
+                                        @Model.Lista_Resumo[i].Texto
+                                        <span>&nbsp;&nbsp;</span>
+                                        <br />
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+        </div>*@
             <button type="submit" class="btn btn-primary" name="action" value="btnValida">Exibir o Resumo...</button>&nbsp;&nbsp;
         </div>
-        <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
-        <div class="card-footer">
-            @Html.ActionLink("Retornar ao menu de opções", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<br />
-            @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+            <div class="card-footer">
+                @Html.ActionLink("Retornar ao menu de opções", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
         </div>
-    </div>
     }
 </div>
 
@@ -444,6 +457,9 @@
                 zIndex: 1
             });
 
+            $("#tblResumo tr:odd").css({
+                "background-color": "#E9FAFA"
+            });
 
         });
 

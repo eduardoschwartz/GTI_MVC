@@ -683,6 +683,7 @@ namespace GTI_MVC.Controllers {
             IEnumerable<int> _listaQtde = _listaSimulado.Select(o => o.Qtde_Parcela).Distinct();
 
             decimal _valor1 = 0, _valorN = 0;
+            List<Parc_Resumo> Lista_resumo = new List<Parc_Resumo>();
             foreach (int linha in _listaQtde) {
                 foreach (Parcelamento_Web_Simulado item in _listaSimulado) {
                     if(item.Qtde_Parcela==linha && item.Numero_Parcela==1) {
@@ -702,27 +703,37 @@ namespace GTI_MVC.Controllers {
                     Valor_Total = _valor1 + (_valorN * (linha - 1))
                 };
                 ex = parcelamentoRepository.Incluir_Parcelamento_Web_Simulado_Resumo(t);
+                Parc_Resumo r = new Parc_Resumo() {
+                    Qtde_Parcela = linha,
+                    Texto = linha.ToString("00") + " parcelas, sendo 1 entrada de R$" + t.Valor_Entrada.ToString("#0.00") + " + " + (t.Qtde_Parcela-1).ToString() + " parcela(s) de R$" + t.Valor_N.ToString("#0.00") + " - Total: R$" + t.Valor_Total.ToString("#0.00")
+                };
+                Lista_resumo.Add(r);
             }
-
+            model.Lista_Resumo = Lista_resumo;
 
             //################################################################
 
             return View(model);
         }
 
+        [Route("Parc_reqd")]
+        [HttpPost]
+        public ActionResult Parc_reqd(ParcelamentoViewModel model) {
+            return null;
+        }
+
+
         [ChildActionOnly]
         public ActionResult Parc_simulado(string p) {
-            
+
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             //Load Master
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
-            ParcelamentoViewModel model = new ParcelamentoViewModel() {
-                Guid = p,
-                Plano_Nome = _master.Plano_Nome,
-                Data_Vencimento = Convert.ToDateTime(_master.Data_Vencimento).ToString("dd/MM/yyyy")
+            SelectDebitoParcelamentoEditorViewModel model = new SelectDebitoParcelamentoEditorViewModel() {
+
             };
 
-            return PartialView("Parc_simulado",model);
+            return PartialView("Parc_simulado", model);
         }
 
     }

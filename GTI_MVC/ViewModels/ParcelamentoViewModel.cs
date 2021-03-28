@@ -30,6 +30,7 @@ namespace GTI_Mvc.ViewModels {
         public int Qtde_Maxima_Parcela { get; set; }
         public decimal Perc_desconto { get; set; }
         public decimal Valor_Minimo { get; set; }
+        public List<Parc_Resumo> Lista_Resumo { get; set; }
 
 
         public ParcelamentoViewModel() {
@@ -77,5 +78,9 @@ namespace GTI_Mvc.ViewModels {
         public string Tipo { get; set; }
     }
 
+    public class Parc_Resumo {
+        public int Qtde_Parcela { get; set; }
+        public string Texto { get; set; }
+    }
 
 }
