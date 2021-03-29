@@ -210,7 +210,6 @@ namespace GTI_MVC.Controllers {
                     ex = parcelamentoRepository.Incluir_Parcelamento_Web_Lista_Codigo(_cod);
                     if (ex != null)
                         throw ex;
-                    //t++;
                 }
             }
 
@@ -228,15 +227,31 @@ namespace GTI_MVC.Controllers {
                 }
             }
 
+            List<Parc_Codigos> _listaCodigos = new List<Parc_Codigos>();
+            List<Parcelamento_web_lista_codigo> _Lista_Codigos = new List<Parcelamento_web_lista_codigo>();
             Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(_codigo);
+            if (_header.Cpf_cnpj == null) {
+                _Lista_Codigos = parcelamentoRepository.Lista_Parcelamento_Lista_Codigo(model.Guid);
+                foreach (Parcelamento_web_lista_codigo item in _Lista_Codigos) {
+                    Parc_Codigos item2 = new Parc_Codigos() {
+                        Codigo = item.Codigo,
+                        Tipo = item.Tipo,
+                        Cpf_Cnpj = item.Documento,
+                        Descricao = item.Descricao
+                    };
+                    _listaCodigos.Add(item2);
+                }
+                ViewBag.Result = "Cpf/Cnpj não cadstrado.";
+                model.Lista_Codigos = _listaCodigos;
+                return View(model);
+            }
             char _tipo = _header.Cpf_cnpj.Length == 11 ? 'F' : 'J';
 
             List<SpParcelamentoOrigem> Lista_Origem = parcelamentoRepository.Lista_Parcelamento_Origem(_codigo, _tipo);
-            List<Parc_Codigos> _listaCodigos = new List<Parc_Codigos>();
-            //List<SelectListItem> _listaCodigo = new List<SelectListItem>();
-            List<Parcelamento_web_lista_codigo> _Lista_Codigos = parcelamentoRepository.Lista_Parcelamento_Lista_Codigo(model.Guid);
+            
+            _Lista_Codigos = parcelamentoRepository.Lista_Parcelamento_Lista_Codigo(model.Guid);
             foreach (Parcelamento_web_lista_codigo item in _Lista_Codigos) {
                 Parc_Codigos item2 = new Parc_Codigos() {
                     Codigo = item.Codigo,
@@ -244,22 +259,9 @@ namespace GTI_MVC.Controllers {
                     Cpf_Cnpj = item.Documento,
                     Descricao = item.Descricao
                 };
-                model.Lista_Codigos = _listaCodigos;
+                _listaCodigos.Add(item2);
             }
-            //foreach (Parcelamento_web_lista_codigo item in _Lista_Codigos) {
-            //    SelectListGroup _grupo = new SelectListGroup() { Name = item.Grupo };
-            //    SelectListItem item2 = new SelectListItem() {
-            //        Group = _grupo,
-            //        Text = item.Texto,
-            //        Value = item.Valor.ToString()
-            //    };
-            //    if(item.Valor==_codigo)
-            //        item2.Selected = true;
-            //    else
-            //        item2.Selected = false;
-            //    _listaCodigo.Add(item2);
-            //}
-            //model.Lista_Codigos = _listaCodigo;
+            model.Lista_Codigos = _listaCodigos;
 
             if (Lista_Origem.Count == 0) {
                 ViewBag.Result = "Não existem débitos a serem parcelados para esta inscrição.";

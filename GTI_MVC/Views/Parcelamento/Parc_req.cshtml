@@ -5,15 +5,7 @@
     ViewData["Title"] = "Parcelamento de débitos";
 }
 
-<script src="~/Scripts/jquery.giantdropdown.js"></script>
 
-<script type="text/javascript">
-    // <![CDATA[
-    $(function () { $("select").giantDropdown(); });
-    // ]]>
-</script>
-
-<link href="~/Content/giantdropdown.css" rel="stylesheet" />
 <style>
     .center {
         margin: auto;
@@ -62,7 +54,7 @@
 
 <h5 style="text-align:center">Parcelamento de Débitos</h5>
 
-<div class="center container" style="width:850px">
+<div class="center container" style="width:840px">
 
     @using (Html.BeginForm("Parc_req", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
@@ -164,38 +156,44 @@
             <div class="card-body">
 
 
-                <div id="DebitoTable" style="height: auto; overflow: auto;width:750px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;border-left-color:cadetblue;border-left-style:solid;border-left-width:1px;border-right-color:cadetblue;border-right-style:solid;border-right-width:1px">
+                <div id="DebitoTable" style="height: auto; overflow: auto;width:766px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;border-left-color:cadetblue;border-left-style:solid;border-left-width:1px;border-right-color:cadetblue;border-right-style:solid;border-right-width:1px">
                     <table id="tblResumo" style="font-size:12px">
                         <tr style="background-color:darkred;color:white;height:25px">
-                            <th style="text-align:center">
+                            <th style="text-align:center;width:25px">
                                 #
                             </th>
-                            <th style="width:50px;text-align:center">
+                            <th style="width:50px;text-align:left">
                                 Tipo
                             </th>
-                            <th style="width:500px;text-align:left">
+                            <th style="width:58px;text-align:center">
+                                Código
+                            </th>
+                            <th style="width:120px;text-align:left">
+                                Cpf/Cnpj
+                            </th>
+                            <th style="width:510px;text-align:left">
                                 Descrição
                             </th>
                         </tr>
 
                         @for (int i = 0; i < Model.Lista_Codigos.Count; i++) {
                     <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                        <td style="text-align:center">
+                        <td style="text-align:center;width:25px">
                             @Html.CheckBoxFor(model => model.Lista_Codigos[i].Selected, new { style = "cursor:pointer", @onclick = "CheckOne(this)" })
                         </td>
-                        <td style="width:70px;text-align:left">
+                        <td style="width:50px;text-align:left">
                             @Html.HiddenFor(model => model.Lista_Codigos[i].Tipo)
                             @Html.DisplayFor(model => model.Lista_Codigos[i].Tipo)
                         </td>
-                        <td style="width:70px;text-align:right">
+                        <td style="width:58px;text-align:center;font-weight:bold">
                             @Html.HiddenFor(model => model.Lista_Codigos[i].Codigo)
                             @Html.DisplayFor(model => model.Lista_Codigos[i].Codigo)
                         </td>
-                        <td style="width:70px;text-align:left">
+                        <td style="width:120px;text-align:left">
                             @Html.HiddenFor(model => model.Lista_Codigos[i].Cpf_Cnpj)
                             @Html.DisplayFor(model => model.Lista_Codigos[i].Cpf_Cnpj)
                         </td>
-                        <td style="width:500px;text-align:left">
+                        <td style="width:510px;text-align:left">
                             @Html.DisplayFor(model => model.Lista_Codigos[i].Descricao)
                             @Html.HiddenFor(model => model.Lista_Codigos[i].Codigo)
                         </td>
@@ -206,35 +204,8 @@
                     </table>
                 </div>
                 <br />
-                <br />
 
 
-                @*<select name="listacod" id="listacod" style="width:630px;height:auto">
-                        <optgroup label="Imóvel">
-                            @foreach (var item in Model.Lista_Codigos) {
-                                if (item.Group.Name == "Imovel") {
-                                    <option value=@item.Value selected="@item.Selected">@item.Text</option>
-                                }
-                            }
-                        </optgroup>
-
-                        <optgroup label="Empresa">
-                            @foreach (var item in Model.Lista_Codigos) {
-
-                                if (item.Group.Name == "Empresa") {
-                                    <option value=@item.Value selected="@item.Selected">@item.Text</option>
-                                }
-                            }
-                        </optgroup>
-                        <optgroup label="Outras inscrições">
-                            @foreach (var item in Model.Lista_Codigos) {
-
-                                if (item.Group.Name == "Cidadao") {
-                                    <option value=@item.Value selected="@item.Selected">@item.Text</option>
-                                }
-                            }
-                        </optgroup>
-                    </select>*@
                 <button type="submit" class="btn btn-primary" name="action" value="btnValida">Verificar débitos</button>&nbsp;&nbsp;
             </div>
 

@@ -432,29 +432,6 @@
                             </th>
                         </tr>
 
-                        @for (int i = 0; i < Model.Lista_Resumo.Count; i++) {
-                            <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                                <td style="text-align:center">
-                                    @Html.CheckBoxFor(model => model.Lista_Resumo[i].Selected, new { style = "cursor:pointer", @onclick = "CheckOne(this)" })
-                                </td>
-                                <td style="width:40px;text-align:right">
-                                    @Html.HiddenFor(model => model.Lista_Resumo[i].Qtde_Parcela)
-                                    @Html.DisplayFor(model => model.Lista_Resumo[i].Qtde_Parcela)
-                                </td>
-                                <td style="width:80px;text-align:right">
-                                    @Html.DisplayFor(model => model.Lista_Resumo[i].Valor_Entrada)
-                                    @Html.HiddenFor(model => model.Lista_Resumo[i].Valor_Entrada)
-                                </td>
-                                <td style="width:80px;text-align:right">
-                                    @Html.DisplayFor(model => model.Lista_Resumo[i].Valor_N)
-                                    @Html.HiddenFor(model => model.Lista_Resumo[i].Valor_N)
-                                </td>
-                                <td style="width:80px;text-align:right">
-                                    @Html.DisplayFor(model => model.Lista_Resumo[i].Valor_Total)
-                                    @Html.HiddenFor(model => model.Lista_Resumo[i].Valor_Total)
-                                </td>
-                            </tr>
-                        }
 
 
                     </table>
@@ -496,41 +473,10 @@
             document.getElementById('errorGuia').innerHTML = "";
         }
 
-        function CheckOne(obj) {
-            var grid = obj.parentNode.parentNode.parentNode;
-            var inputs = grid.getElementsByTagName("input");
-            for (var i = 0; i < inputs.length; i++) {
-                if (inputs[i].type == "checkbox") {
-                    if (obj.checked && inputs[i] != obj && inputs[i].checked) {
-                        inputs[i].checked = false;
-                    }
-                }
-            }
-        }
 
         $(document).ready(function () {
             $("#MainForm").submit(function () {
-                try {
-                    var grid = document.getElementById("tblResumo");
-                    var inputs = grid.getElementsByTagName("input");
-                    var _find = false;
-                    for (var i = 0; i < inputs.length; i++) {
-                        if (inputs[i].type == "checkbox") {
-                            if (inputs[i].checked) {
-                                _find = true;
-                            }
-                        }
-                    }
-                    if (!_find) {
-                        alert("Selecione uma das opções de parcelamento!")
-                        return false;
-                    }
-
-                }
-                catch (e) {
-                    alert(e);
-                }
-                return true;
+               
             });
         });
 
