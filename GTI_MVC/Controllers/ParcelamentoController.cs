@@ -87,7 +87,7 @@ namespace GTI_MVC.Controllers {
             ParcelamentoViewModel model = new ParcelamentoViewModel {
                 Requerente = _req
             };
-            List<SelectListItem> _listaCodigo = new List<SelectListItem>();
+            List<Parc_Codigos> _listaCodigos = new List<Parc_Codigos>();
 
             //Lista de imóvel
             List<int> _listaImovel ;
@@ -96,10 +96,9 @@ namespace GTI_MVC.Controllers {
             else
                 _listaImovel = imovelRepository.Lista_Imovel_Cnpj(Functions.RetornaNumero(_req.Cpf_Cnpj));
 
-            SelectListGroup _grupo = new SelectListGroup() { Name = "Imovel" };
             foreach (int cod in _listaImovel) {
                 Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(cod);
-                string _desc = cod.ToString() + " - Imóvel localizado na(o) " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
+                string _desc = "Imóvel localizado na(o) " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
                 if (!string.IsNullOrEmpty(_header.Complemento))
                     _desc += " " + _header.Complemento;
                 _desc += ", " + _header.Nome_bairro;
@@ -108,13 +107,13 @@ namespace GTI_MVC.Controllers {
                 if (!string.IsNullOrEmpty(_header.Lote_original))
                     _desc += ", Lote:" + _header.Lote_original;
 
-                SelectListItem item = new SelectListItem() {
-                    Group = _grupo,
-                    Text = _desc,
-                    Value = cod.ToString(),
-                    Selected = false
+                Parc_Codigos item = new Parc_Codigos() {
+                    Codigo=_header.Codigo,
+                    Tipo="Imóvel",
+                    Cpf_Cnpj=Functions.FormatarCpfCnpj( _header.Cpf_cnpj),
+                    Descricao=_desc
                 };
-                _listaCodigo.Add(item);
+                _listaCodigos.Add(item);
             }
 
             //Lista de empresas
@@ -124,10 +123,9 @@ namespace GTI_MVC.Controllers {
             else
                 _listaEmpresa = empresaRepository.Lista_Empresa_Proprietario_Cnpj(Functions.RetornaNumero(_req.Cpf_Cnpj));
 
-            _grupo = new SelectListGroup() { Name = "Empresa" };
             foreach (int cod in _listaEmpresa) {
                 Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(cod);
-                string _desc = cod.ToString() + " - " + _header.Nome +  ", localizada na(o): " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
+                string _desc =  _header.Nome +  ", localizada na(o): " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
                 if (!string.IsNullOrEmpty(_header.Complemento))
                     _desc += " " + _header.Complemento;
                 _desc += ", " + _header.Nome_bairro;
@@ -136,13 +134,13 @@ namespace GTI_MVC.Controllers {
                 if (!string.IsNullOrEmpty(_header.Lote_original))
                     _desc += ", Lote:" + _header.Lote_original;
 
-                SelectListItem item = new SelectListItem() {
-                    Group = _grupo,
-                    Text = _desc,
-                    Value = cod.ToString(),
-                    Selected = false
+                Parc_Codigos item = new Parc_Codigos() {
+                    Codigo = _header.Codigo,
+                    Tipo = "Empresa",
+                    Cpf_Cnpj = Functions.FormatarCpfCnpj(_header.Cpf_cnpj),
+                    Descricao = _desc
                 };
-                _listaCodigo.Add(item);
+                _listaCodigos.Add(item);
             }
 
             //Lista de cidadão
@@ -152,7 +150,6 @@ namespace GTI_MVC.Controllers {
             else
                 _listaCidadao = cidadaoRepository.Lista_Cidadao(null,null, Functions.RetornaNumero(_req.Cpf_Cnpj));
 
-            _grupo = new SelectListGroup() { Name = "Cidadao" };
             foreach (Cidadao cod in _listaCidadao) {
                 Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(cod.Codcidadao);
                 string _desc = cod.Codcidadao.ToString() + " - Inscrição localizada na(o): " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
@@ -164,16 +161,17 @@ namespace GTI_MVC.Controllers {
                 if (!string.IsNullOrEmpty(_header.Lote_original))
                     _desc += ", Lote:" + _header.Lote_original;
 
-                SelectListItem item = new SelectListItem() {
-                    Group = _grupo,
-                    Text = _desc,
-                    Value = cod.Codcidadao.ToString(),
-                    Selected = false
+                Parc_Codigos item = new Parc_Codigos() {
+                    Codigo = _header.Codigo,
+                    Tipo = "Outros",
+                    Cpf_Cnpj = Functions.FormatarCpfCnpj(_header.Cpf_cnpj),
+                    Descricao = _desc
                 };
-                _listaCodigo.Add(item);
+                _listaCodigos.Add(item);
+
             }
 
-            model.Lista_Codigos = _listaCodigo;
+            model.Lista_Codigos = _listaCodigos;
 
             //Antes de retornar gravamos os dados
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
@@ -200,21 +198,19 @@ namespace GTI_MVC.Controllers {
                 Exception ex = parcelamentoRepository.Incluir_Parcelamento_Web_Master(reg);
                 if (ex != null)
                     throw ex;
-                //Grava ListaCodigos
-                short t = 1;
-                foreach (SelectListItem item in _listaCodigo) {
+                foreach (Parc_Codigos item in _listaCodigos) {
                     Parcelamento_web_lista_codigo _cod = new Parcelamento_web_lista_codigo() {
                         Guid = model.Guid,
-                        Id = t,
-                        Grupo=item.Group.Name,
-                        Texto=item.Text,
-                        Valor=Convert.ToInt32(item.Value),
-                        Selected=item.Selected
+                        Codigo = item.Codigo,
+                        Tipo = item.Tipo,
+                        Documento = item.Cpf_Cnpj,
+                        Descricao = item.Descricao,
+                        Selected = item.Selected
                     };
                     ex = parcelamentoRepository.Incluir_Parcelamento_Web_Lista_Codigo(_cod);
                     if (ex != null)
                         throw ex;
-                    t++;
+                    //t++;
                 }
             }
 
@@ -224,7 +220,13 @@ namespace GTI_MVC.Controllers {
         [Route("Parc_req")]
         [HttpPost]
         public ActionResult Parc_req(ParcelamentoViewModel model,string listacod) {
-            int _codigo = Convert.ToInt32(listacod);
+            int _codigo = 0;
+            for (int i = 0; i < model.Lista_Codigos.Count; i++) {
+                if (model.Lista_Codigos[i].Selected) {
+                    _codigo = Convert.ToInt32(model.Lista_Codigos[i].Codigo);
+                    break;
+                }
+            }
 
             Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
@@ -232,22 +234,32 @@ namespace GTI_MVC.Controllers {
             char _tipo = _header.Cpf_cnpj.Length == 11 ? 'F' : 'J';
 
             List<SpParcelamentoOrigem> Lista_Origem = parcelamentoRepository.Lista_Parcelamento_Origem(_codigo, _tipo);
-            List<SelectListItem> _listaCodigo = new List<SelectListItem>();
+            List<Parc_Codigos> _listaCodigos = new List<Parc_Codigos>();
+            //List<SelectListItem> _listaCodigo = new List<SelectListItem>();
             List<Parcelamento_web_lista_codigo> _Lista_Codigos = parcelamentoRepository.Lista_Parcelamento_Lista_Codigo(model.Guid);
             foreach (Parcelamento_web_lista_codigo item in _Lista_Codigos) {
-                SelectListGroup _grupo = new SelectListGroup() { Name = item.Grupo };
-                SelectListItem item2 = new SelectListItem() {
-                    Group = _grupo,
-                    Text = item.Texto,
-                    Value = item.Valor.ToString()
+                Parc_Codigos item2 = new Parc_Codigos() {
+                    Codigo = item.Codigo,
+                    Tipo = item.Tipo,
+                    Cpf_Cnpj = item.Documento,
+                    Descricao = item.Descricao
                 };
-                if(item.Valor==_codigo)
-                    item2.Selected = true;
-                else
-                    item2.Selected = false;
-                _listaCodigo.Add(item2);
+                model.Lista_Codigos = _listaCodigos;
             }
-            model.Lista_Codigos = _listaCodigo;
+            //foreach (Parcelamento_web_lista_codigo item in _Lista_Codigos) {
+            //    SelectListGroup _grupo = new SelectListGroup() { Name = item.Grupo };
+            //    SelectListItem item2 = new SelectListItem() {
+            //        Group = _grupo,
+            //        Text = item.Texto,
+            //        Value = item.Valor.ToString()
+            //    };
+            //    if(item.Valor==_codigo)
+            //        item2.Selected = true;
+            //    else
+            //        item2.Selected = false;
+            //    _listaCodigo.Add(item2);
+            //}
+            //model.Lista_Codigos = _listaCodigo;
 
             if (Lista_Origem.Count == 0) {
                 ViewBag.Result = "Não existem débitos a serem parcelados para esta inscrição.";
@@ -705,8 +717,12 @@ namespace GTI_MVC.Controllers {
                 ex = parcelamentoRepository.Incluir_Parcelamento_Web_Simulado_Resumo(t);
                 Parc_Resumo r = new Parc_Resumo() {
                     Qtde_Parcela = linha,
-                    Texto = linha.ToString("00") + " parcelas, sendo 1 entrada de R$" + t.Valor_Entrada.ToString("#0.00") + " + " + (t.Qtde_Parcela-1).ToString() + " parcela(s) de R$" + t.Valor_N.ToString("#0.00") + " - Total: R$" + t.Valor_Total.ToString("#0.00")
+                    Valor_Entrada="R$" + _valor1.ToString("#0.00"),
+                    Valor_N = "R$" + _valorN.ToString("#0.00"),
+                    Valor_Total = "R$" + t.Valor_Total.ToString("#0.00"),
                 };
+                if (linha == 2)
+                    r.Selected = true;
                 Lista_resumo.Add(r);
             }
             model.Lista_Resumo = Lista_resumo;

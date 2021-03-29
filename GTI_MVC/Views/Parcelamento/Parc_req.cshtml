@@ -8,9 +8,9 @@
 <script src="~/Scripts/jquery.giantdropdown.js"></script>
 
 <script type="text/javascript">
-        // <![CDATA[
-        $(function () { $("select").giantDropdown(); });
-        // ]]>
+    // <![CDATA[
+    $(function () { $("select").giantDropdown(); });
+    // ]]>
 </script>
 
 <link href="~/Content/giantdropdown.css" rel="stylesheet" />
@@ -62,11 +62,11 @@
 
 <h5 style="text-align:center">Parcelamento de Débitos</h5>
 
-<div class="center container" style="width:700px">
+<div class="center container" style="width:850px">
 
     @using (Html.BeginForm("Parc_req", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
-        @Html.HiddenFor(m=>m.Guid)
+        @Html.HiddenFor(m => m.Guid)
         <div class="card">
             <div class="card-header">Dados do Requerente</div>
             <div class="card-body">
@@ -163,32 +163,78 @@
             <div class="card-header">Selecione o imóvel, empresa ou a inscrição que deseja parcelar</div>
             <div class="card-body">
 
-                <select name="listacod" id="listacod" style="width:630px;height:auto">
-                    <optgroup label="Imóvel">
-                        @foreach (var item in Model.Lista_Codigos) {
-                            if (item.Group.Name == "Imovel") {
-                                <option value=@item.Value selected="@item.Selected">@item.Text</option>
-                            }
-                        }
-                    </optgroup>
 
-                    <optgroup label="Empresa">
-                        @foreach (var item in Model.Lista_Codigos) {
+                <div id="DebitoTable" style="height: auto; overflow: auto;width:750px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;border-left-color:cadetblue;border-left-style:solid;border-left-width:1px;border-right-color:cadetblue;border-right-style:solid;border-right-width:1px">
+                    <table id="tblResumo" style="font-size:12px">
+                        <tr style="background-color:darkred;color:white;height:25px">
+                            <th style="text-align:center">
+                                #
+                            </th>
+                            <th style="width:50px;text-align:center">
+                                Tipo
+                            </th>
+                            <th style="width:500px;text-align:left">
+                                Descrição
+                            </th>
+                        </tr>
 
-                            if (item.Group.Name == "Empresa") {
-                                <option value=@item.Value selected="@item.Selected">@item.Text</option>
-                            }
+                        @for (int i = 0; i < Model.Lista_Codigos.Count; i++) {
+                    <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                        <td style="text-align:center">
+                            @Html.CheckBoxFor(model => model.Lista_Codigos[i].Selected, new { style = "cursor:pointer", @onclick = "CheckOne(this)" })
+                        </td>
+                        <td style="width:70px;text-align:left">
+                            @Html.HiddenFor(model => model.Lista_Codigos[i].Tipo)
+                            @Html.DisplayFor(model => model.Lista_Codigos[i].Tipo)
+                        </td>
+                        <td style="width:70px;text-align:right">
+                            @Html.HiddenFor(model => model.Lista_Codigos[i].Codigo)
+                            @Html.DisplayFor(model => model.Lista_Codigos[i].Codigo)
+                        </td>
+                        <td style="width:70px;text-align:left">
+                            @Html.HiddenFor(model => model.Lista_Codigos[i].Cpf_Cnpj)
+                            @Html.DisplayFor(model => model.Lista_Codigos[i].Cpf_Cnpj)
+                        </td>
+                        <td style="width:500px;text-align:left">
+                            @Html.DisplayFor(model => model.Lista_Codigos[i].Descricao)
+                            @Html.HiddenFor(model => model.Lista_Codigos[i].Codigo)
+                        </td>
+                    </tr>
                         }
-                    </optgroup>
-                    <optgroup label="Outras inscrições">
-                        @foreach (var item in Model.Lista_Codigos) {
 
-                            if (item.Group.Name == "Cidadao") {
-                                <option value=@item.Value selected="@item.Selected">@item.Text</option>
+
+                    </table>
+                </div>
+                <br />
+                <br />
+
+
+                @*<select name="listacod" id="listacod" style="width:630px;height:auto">
+                        <optgroup label="Imóvel">
+                            @foreach (var item in Model.Lista_Codigos) {
+                                if (item.Group.Name == "Imovel") {
+                                    <option value=@item.Value selected="@item.Selected">@item.Text</option>
+                                }
                             }
-                        }
-                    </optgroup>
-                </select>
+                        </optgroup>
+
+                        <optgroup label="Empresa">
+                            @foreach (var item in Model.Lista_Codigos) {
+
+                                if (item.Group.Name == "Empresa") {
+                                    <option value=@item.Value selected="@item.Selected">@item.Text</option>
+                                }
+                            }
+                        </optgroup>
+                        <optgroup label="Outras inscrições">
+                            @foreach (var item in Model.Lista_Codigos) {
+
+                                if (item.Group.Name == "Cidadao") {
+                                    <option value=@item.Value selected="@item.Selected">@item.Text</option>
+                                }
+                            }
+                        </optgroup>
+                    </select>*@
                 <button type="submit" class="btn btn-primary" name="action" value="btnValida">Verificar débitos</button>&nbsp;&nbsp;
             </div>
 
@@ -200,4 +246,62 @@
         </div>
     }
 </div>
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#tblResumo tr:odd").css({
+                "background-color": "#E9FAFA"
+            });
+        });
+
+
+        function CheckOne(obj) {
+            var grid = obj.parentNode.parentNode.parentNode;
+            var inputs = grid.getElementsByTagName("input");
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].type == "checkbox") {
+                    if (obj.checked && inputs[i] != obj && inputs[i].checked) {
+                        inputs[i].checked = false;
+                    }
+                }
+            }
+        }
+
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                try {
+                    var grid = document.getElementById("tblResumo");
+                    var inputs = grid.getElementsByTagName("input");
+                    var _find = false;
+                    for (var i = 0; i < inputs.length; i++) {
+                        if (inputs[i].type == "checkbox") {
+                            if (inputs[i].checked) {
+                                _find = true;
+                            }
+                        }
+                    }
+                    if (!_find) {
+                        alert("Selecione uma inscrição!")
+                        return false;
+                    }
+
+                }
+                catch (e) {
+                    alert(e);
+                }
+                return true;
+            });
+        });
+
+
+
+
+
+
+    </script>
+}
+
+
 

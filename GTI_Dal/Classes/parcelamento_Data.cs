@@ -132,14 +132,14 @@ namespace GTI_Dal.Classes {
 
                 object[] Parametros = new object[6];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
-                Parametros[1] = new SqlParameter { ParameterName = "@id", SqlDbType = SqlDbType.Int, SqlValue = Reg.Id };
-                Parametros[2] = new SqlParameter { ParameterName = "@grupo", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Grupo };
-                Parametros[3] = new SqlParameter { ParameterName = "@texto", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Texto };
-                Parametros[4] = new SqlParameter { ParameterName = "@valor", SqlDbType = SqlDbType.Int, SqlValue = Reg.Valor };
+                Parametros[1] = new SqlParameter { ParameterName = "@Codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
+                Parametros[2] = new SqlParameter { ParameterName = "@Tipo", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Tipo };
+                Parametros[3] = new SqlParameter { ParameterName = "@Documento", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Documento };
+                Parametros[4] = new SqlParameter { ParameterName = "@Descricao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Descricao };
                 Parametros[5] = new SqlParameter { ParameterName = "@selected", SqlDbType = SqlDbType.Bit, SqlValue = Reg.Selected };
 
-                db.Database.ExecuteSqlCommand("INSERT INTO parcelamento_web_lista_codigo(guid,id,grupo,texto,valor,selected) " +
-                                              "VALUES(@guid,@id,@grupo,@texto,@valor,@selected)", Parametros);
+                db.Database.ExecuteSqlCommand("INSERT INTO parcelamento_web_lista_codigo(guid,Codigo,Tipo,Documento,Descricao,selected) " +
+                                              "VALUES(@guid,@Codigo,@Tipo,@Documento,@Descricao,@selected)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -151,15 +151,15 @@ namespace GTI_Dal.Classes {
 
         public List<Parcelamento_web_lista_codigo> Lista_Parcelamento_Lista_Codigo(string guid) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var reg = (from t in db.Parcelamento_Web_Lista_Codigo where t.Guid == guid orderby t.Id select t).ToList();
+                var reg = (from t in db.Parcelamento_Web_Lista_Codigo where t.Guid == guid orderby t.Codigo select t).ToList();
                 List<Parcelamento_web_lista_codigo> Lista = new List<Parcelamento_web_lista_codigo>();
                 foreach (var item in reg) {
                     Parcelamento_web_lista_codigo Linha = new Parcelamento_web_lista_codigo {
                         Guid = guid,
-                        Id = item.Id,
-                        Grupo = item.Grupo,
-                        Texto = item.Texto,
-                        Valor = item.Valor,
+                        Codigo = item.Codigo,
+                        Tipo = item.Tipo,
+                        Documento = item.Documento,
+                        Descricao = item.Descricao,
                         Selected = item.Selected
                     };
                     Lista.Add(Linha);

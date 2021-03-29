@@ -8,10 +8,12 @@ namespace GTI_Models.Models {
         public string Guid { get; set; }
         [Key]
         [Column(Order = 2)]
-        public short Id { get; set; }
-        public string Grupo { get; set; }
-        public string Texto { get; set; }
-        public int Valor { get; set; }
+        public int Codigo  { get; set; }
+        public string Tipo { get; set; }
+        public string Documento { get; set; }
+        public string Descricao { get; set; }
         public bool Selected { get; set; }
     }
 }
+
+

@@ -14,7 +14,7 @@ namespace GTI_Mvc.ViewModels {
         public string NumeroProcesso { get; set; }
         public Parc_Requerente Requerente { get; set; }
         public Parc_Contribuinte Contribuinte { get; set; }
-        public  List<SelectListItem> Lista_Codigos { get; set; }
+        public  List<Parc_Codigos> Lista_Codigos { get; set; }
         public string Data_Vencimento { get; set; }
         public int Plano_Codigo { get; set; }
         public string Plano_Nome { get; set; } = "Nenhum";
@@ -31,6 +31,7 @@ namespace GTI_Mvc.ViewModels {
         public decimal Perc_desconto { get; set; }
         public decimal Valor_Minimo { get; set; }
         public List<Parc_Resumo> Lista_Resumo { get; set; }
+
 
 
         public ParcelamentoViewModel() {
@@ -80,7 +81,20 @@ namespace GTI_Mvc.ViewModels {
 
     public class Parc_Resumo {
         public int Qtde_Parcela { get; set; }
+        public string Valor_Entrada { get; set; }
+        public string Valor_N { get; set; }
+        public string Valor_Total { get; set; }
         public string Texto { get; set; }
+        public bool Selected { get; set; }
     }
+
+    public class Parc_Codigos {
+        public int Codigo { get; set; }
+        public string Tipo { get; set; }
+        public string Cpf_Cnpj { get; set; }
+        public string Descricao { get; set; }
+        public bool Selected { get; set; }
+    }
+
 
 }
