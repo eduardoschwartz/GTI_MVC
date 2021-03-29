@@ -410,28 +410,94 @@
                 </div>
 
             </div>
-            <div class="card-header">Simulador de Parcelamento</div>
+            <div class="card-header">Resumo das Parcelas a serem geradas</div>
             <div class="card-body">
-                <div id="DebitoTable" style="height: 350px; overflow: auto;width:320px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;border-left-color:cadetblue;border-left-style:solid;border-left-width:1px;border-right-color:cadetblue;border-right-style:solid;border-right-width:1px">
+                <div id="DebitoTable" style="max-height: 350px; height:auto;overflow: auto;width:780px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;border-left-color:cadetblue;border-left-style:solid;border-left-width:1px;border-right-color:cadetblue;border-right-style:solid;border-right-width:1px">
                     <table id="tblResumo" style="font-size:12px">
                         <tr style="background-color:darkred;color:white;height:25px">
-                            <th style="text-align:center">
-                                #
+                            <th style="width:20px;text-align:right">
+                                Pc
                             </th>
-                            <th style="width:40px;text-align:right">
-                                Qtde
+                            <th style="width:110px;text-align:center">
+                                Dt.Vencto
                             </th>
-                            <th style="width:80px;text-align:right">
-                                Vl. Entrada
+                            <th style="width:70px;text-align:right">
+                                Vl.Líq.
                             </th>
-                            <th style="width:80px;text-align:right">
-                                Vl. Parcelas
+                            <th style="width:70px;text-align:right">
+                                Vl.Juros
                             </th>
-                            <th style="width:80px;text-align:right">
-                                Vl. Total
+                            <th style="width:70px;text-align:right">
+                                Vl.Multa
+                            </th>
+                            <th style="width:70px;text-align:right">
+                                Vl.Corr.
+                            </th>
+                            <th style="width:70px;text-align:right">
+                                Vl.Princ.
+                            </th>
+                            <th style="width:70px;text-align:right">
+                                Saldo
+                            </th>
+                            <th style="width:50px;text-align:right">
+                                Jr%
+                            </th>
+                            <th style="width:70px;text-align:right">
+                                Jur/Mês
+                            </th>
+                            <th style="width:70px;text-align:right">
+                                Jur.Apl.
+                            </th>
+                            <th style="width:70px;text-align:right">
+                                Honor.
+                            </th>
+                            <th style="width:70px;text-align:right">
+                                Total
                             </th>
                         </tr>
-
+                        @for (int i = 0; i < Model.Lista_Simulado.Count; i++) {
+                    <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                        <td style="width:20px;text-align:right">
+                            @Html.DisplayFor(model => model.Lista_Simulado[i].Numero_Parcela)
+                        </td>
+                        <td style="width:110px;text-align:center">
+                            @Model.Lista_Simulado[i].Data_Vencimento.ToString("dd/MM/yyyy")
+                        </td>
+                        <td style="width:70px;text-align:right">
+                            @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Liquido)
+                        </td>
+                        <td style="width:70px;text-align:right">
+                            @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Juros)
+                        </td>
+                        <td style="width:70px;text-align:right">
+                            @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Multa)
+                        </td>
+                        <td style="width:70px;text-align:right">
+                            @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Correcao)
+                        </td>
+                        <td style="width:70px;text-align:right">
+                            @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Principal)
+                        </td>
+                        <td style="width:70px;text-align:right">
+                            @Html.DisplayFor(model => model.Lista_Simulado[i].Saldo)
+                        </td>
+                        <td style="width:50px;text-align:right">
+                            @Html.DisplayFor(model => model.Lista_Simulado[i].Juros_Perc)
+                        </td>
+                        <td style="width:70px;text-align:right">
+                            @Html.DisplayFor(model => model.Lista_Simulado[i].Juros_Mes)
+                        </td>
+                        <td style="width:70px;text-align:right">
+                            @Html.DisplayFor(model => model.Lista_Simulado[i].Juros_Apl)
+                        </td>
+                        <td style="width:70px;text-align:right">
+                            @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Honorario)
+                        </td>
+                        <td style="width:70px;text-align:right">
+                            @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Total)
+                        </td>
+                    </tr>
+                        }
 
 
                     </table>

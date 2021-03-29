@@ -915,6 +915,7 @@
     <Content Include="Views\Parcelamento\EditorTemplates\SelectDebitoParcelamentoEditorViewModel.cshtml" />
     <Content Include="Views\Parcelamento\Parc_reqd.cshtml" />
     <Content Include="Views\Parcelamento\Parc_simulado.cshtml" />
+    <Content Include="Views\Parcelamento\Parc_reqe.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

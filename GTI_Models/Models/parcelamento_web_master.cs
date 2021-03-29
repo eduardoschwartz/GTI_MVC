@@ -50,6 +50,7 @@ namespace GTI_Models.Models {
         public decimal Valor_add_Juros { get; set; }
         public decimal Valor_add_Multa { get; set; }
         public decimal Valor_add_Correcao { get; set; }
+        public int Qtde_Parcela { get; set; }
     }
 }
 

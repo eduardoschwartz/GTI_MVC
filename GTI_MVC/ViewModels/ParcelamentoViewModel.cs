@@ -21,6 +21,7 @@ namespace GTI_Mvc.ViewModels {
         public string[] Lista_Plano_Desconto = new[] { "Nenhum", "Refis" };
         public List<SelectDebitoParcelamentoEditorViewModel> Lista_Origem { get; set; }
         public List<SelectDebitoParcelamentoEditorViewModel> Lista_Origem_Selected { get; set; }
+        public List<Parcelamento_Web_Simulado> Lista_Simulado { get; set; }
         public decimal Soma_Principal { get; set; }
         public decimal Soma_Juros { get; set; }
         public decimal Soma_Multa { get; set; }

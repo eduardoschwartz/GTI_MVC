@@ -131,5 +131,18 @@ namespace GTI_Bll.Classes {
             Exception ex = obj.Excluir_parcelamento_Web_Simulado_Resumo(Guid);
             return ex;
         }
+
+        public Exception Atualizar_QtdeParcela_Master(string Guid, int Qtde) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Atualizar_QtdeParcela_Master(Guid,Qtde);
+            return ex;
+        }
+
+        public Exception Excluir_parcelamento_Web_Origem(string Guid) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Excluir_parcelamento_Web_Origem(Guid);
+            return ex;
+        }
+
     }
 }

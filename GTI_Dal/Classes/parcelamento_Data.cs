@@ -126,6 +126,22 @@ namespace GTI_Dal.Classes {
             return bRet;
         }
 
+        public Exception Excluir_parcelamento_Web_Origem(string Guid) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+
+                object[] Parametros = new object[1];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Guid };
+                try {
+                    db.Database.ExecuteSqlCommand("DELETE FROM parcelamento_web_origem WHERE guid=@guid", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+
+        }
+
         public Exception Incluir_Parcelamento_Web_Lista_Codigo(Parcelamento_web_lista_codigo Reg) {
             using (var db = new GTI_Context(_connection)) {
                 db.Database.CommandTimeout = 180;
@@ -547,6 +563,19 @@ namespace GTI_Dal.Classes {
 
         }
 
+        public Exception Atualizar_QtdeParcela_Master(string Guid,int Qtde) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[2];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@qtde", SqlDbType = SqlDbType.Int, SqlValue =Qtde };
+                try {
+                    db.Database.ExecuteSqlCommand("UPDATE parcelamento_web_master set Qtde_Parcela=@qtde WHERE guid=@guid", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
     }
 }
 
