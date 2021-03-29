@@ -835,6 +835,40 @@ namespace GTI_MVC.Controllers {
             //Carrega Simulado
             model.Lista_Simulado=parcelamentoRepository.Retorna_Parcelamento_Web_Simulado(model.Guid, _master.Qtde_Parcela);
 
+            //Atualiza Totais
+            decimal _SomaH = 0, _SomaJapl = 0, _SomaL = 0;
+            _SomaP = 0;_SomaC = 0;_SomaJ = 0;_SomaM = 0;_SomaT = 0;
+            
+            foreach (Parcelamento_Web_Simulado item in model.Lista_Simulado) {
+                _SomaL += item.Valor_Liquido;
+                _SomaJ += item.Valor_Juros;
+                _SomaM += item.Valor_Multa;
+                _SomaC += item.Valor_Correcao;
+                _SomaP += item.Valor_Principal;
+                _SomaT += item.Valor_Total;
+                _SomaH += item.Valor_Honorario;
+                _SomaJapl += item.Juros_Apl;
+            }
+
+            Parcelamento_web_master reg = new Parcelamento_web_master() {
+                Guid=model.Guid,
+                Sim_Correcao=_SomaC,
+                Sim_Honorario=_SomaH,
+                Sim_Juros=_SomaJ,
+                Sim_Juros_apl=_SomaJapl,
+                Sim_Liquido=_SomaL,
+                Sim_Multa=_SomaM,
+                Sim_Perc_Correcao= _SomaC * 100 / _SomaT,
+                Sim_Perc_Honorario= _SomaH * 100 / _SomaT,
+                Sim_Perc_Juros= _SomaJ * 100 / _SomaT,
+                Sim_Perc_Juros_Apl= _SomaJapl * 100 / _SomaT,
+                Sim_Perc_Liquido= _SomaL * 100 / _SomaT,
+                Sim_Perc_Multa= _SomaM * 100 / _SomaT,
+                Sim_Principal= _SomaP ,
+                Sim_Total=_SomaT
+            };
+            Exception ex = parcelamentoRepository.Atualizar_Simulado_Master(reg);
+
             return View(model);
         }
 

@@ -59,7 +59,7 @@
 
 <div class="center container" style="width:850px">
 
-    @using (Html.BeginForm("Parc_reqd", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @using (Html.BeginForm("Parc_reqe", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
         @Html.HiddenFor(m => m.Guid)
 
@@ -334,38 +334,31 @@
                         <table id="ResumoTable" style="font-size:14px;border:solid;border-width:thin;border-color:brown">
                             <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;background-color:darkred;color:white">
                                 <td></td>
-                                <td style="width:100px;color:white;" align="right">Devidos</td>
-                                <td style="width:100px;color:white;" align="right">Selecionados</td>
+                                <td style="width:100px;color:white;" align="right">Valor R%</td>
                             </tr>
                             <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
                                 <td>Total Principal:</td>
                                 <td style="width:100px;color:red" align="right">@Model.Soma_Principal.ToString("#0.00")</td>
-                                <td id="somaPrincipal" style="width:100px;color:green" align="right">0,00</td>
                             </tr>
                             <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
                                 <td>Total Juros:</td>
                                 <td style="width:100px;color:red" align="right">@Model.Soma_Juros.ToString("#0.00")</td>
-                                <td id="somaJuros" style="width:100px;color:green" align="right">0,00</td>
                             </tr>
                             <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
                                 <td>Total Multa:</td>
                                 <td style="width:100px;color:red" align="right">@Model.Soma_Multa.ToString("#0.00")</td>
-                                <td id="somaMulta" style="width:100px;color:green" align="right">0,00</td>
                             </tr>
                             <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
                                 <td>Total Correção:</td>
                                 <td style="width:100px;color:red" align="right">@Model.Soma_Correcao.ToString("#0.00")</td>
-                                <td id="somaCorrecao" style="width:100px;color:green" align="right">0,00</td>
                             </tr>
                             <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
                                 <td>Total Entrada:</td>
                                 <td style="width:100px;color:red" align="right">@Model.Soma_Penalidade.ToString("#0.00")</td>
-                                <td id="somaEntrada" style="width:100px;color:green" align="right">0,00</td>
                             </tr>
                             <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
                                 <td>Total Geral:</td>
                                 <td style="width:100px;color:red" align="right">@Model.Soma_Total.ToString("#0.00")</td>
-                                <td id="somaTotal" style="width:100px;color:green" align="right">0,00</td>
                             </tr>
 
                         </table>
@@ -456,52 +449,87 @@
                             </th>
                         </tr>
                         @for (int i = 0; i < Model.Lista_Simulado.Count; i++) {
-                    <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                        <td style="width:20px;text-align:right">
-                            @Html.DisplayFor(model => model.Lista_Simulado[i].Numero_Parcela)
-                        </td>
-                        <td style="width:110px;text-align:center">
-                            @Model.Lista_Simulado[i].Data_Vencimento.ToString("dd/MM/yyyy")
-                        </td>
-                        <td style="width:70px;text-align:right">
-                            @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Liquido)
-                        </td>
-                        <td style="width:70px;text-align:right">
-                            @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Juros)
-                        </td>
-                        <td style="width:70px;text-align:right">
-                            @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Multa)
-                        </td>
-                        <td style="width:70px;text-align:right">
-                            @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Correcao)
-                        </td>
-                        <td style="width:70px;text-align:right">
-                            @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Principal)
-                        </td>
-                        <td style="width:70px;text-align:right">
-                            @Html.DisplayFor(model => model.Lista_Simulado[i].Saldo)
-                        </td>
-                        <td style="width:50px;text-align:right">
-                            @Html.DisplayFor(model => model.Lista_Simulado[i].Juros_Perc)
-                        </td>
-                        <td style="width:70px;text-align:right">
-                            @Html.DisplayFor(model => model.Lista_Simulado[i].Juros_Mes)
-                        </td>
-                        <td style="width:70px;text-align:right">
-                            @Html.DisplayFor(model => model.Lista_Simulado[i].Juros_Apl)
-                        </td>
-                        <td style="width:70px;text-align:right">
-                            @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Honorario)
-                        </td>
-                        <td style="width:70px;text-align:right">
-                            @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Total)
-                        </td>
-                    </tr>
+                            <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                <td style="width:20px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Numero_Parcela)
+                                </td>
+                                <td style="width:110px;text-align:center">
+                                    @Model.Lista_Simulado[i].Data_Vencimento.ToString("dd/MM/yyyy")
+                                </td>
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Liquido)
+                                </td>
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Juros)
+                                </td>
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Multa)
+                                </td>
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Correcao)
+                                </td>
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Principal)
+                                </td>
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Saldo)
+                                </td>
+                                <td style="width:50px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Juros_Perc)
+                                </td>
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Juros_Mes)
+                                </td>
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Juros_Apl)
+                                </td>
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Honorario)
+                                </td>
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Total)
+                                </td>
+                            </tr>
                         }
 
 
                     </table>
                 </div>
+                <br />
+                <div style="width: 400px; float: left;">
+                    <table id="ResumoTable" style="font-size:14px;border:solid;border-width:thin;border-color:brown">
+                        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;background-color:darkred;color:white">
+                            <td></td>
+                            <td style="width:100px;color:white;" align="right">Valor R$</td>
+                        </tr>
+                        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                            <td>Total Líquido:</td>
+                            <td style="width:100px;color:red" align="right">@Model.Soma_Principal.ToString("#0.00")</td>
+                        </tr>
+                        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                            <td>Total Juros:</td>
+                            <td style="width:100px;color:red" align="right">@Model.Soma_Juros.ToString("#0.00")</td>
+                        </tr>
+                        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                            <td>Total Multa:</td>
+                            <td style="width:100px;color:red" align="right">@Model.Soma_Multa.ToString("#0.00")</td>
+                        </tr>
+                        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                            <td>Total Correção:</td>
+                            <td style="width:100px;color:red" align="right">@Model.Soma_Correcao.ToString("#0.00")</td>
+                        </tr>
+                        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                            <td>Total Entrada:</td>
+                            <td style="width:100px;color:red" align="right">@Model.Soma_Penalidade.ToString("#0.00")</td>
+                        </tr>
+                        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                            <td>Total Geral:</td>
+                            <td style="width:100px;color:red" align="right">@Model.Soma_Total.ToString("#0.00")</td>
+                        </tr>
+
+                    </table>
+                </div>
+
                 <br />
                 <br />
                 <button type="submit" class="btn btn-primary" name="action" value="btnValida">Exibir o Resumo...</button>&nbsp;&nbsp;

@@ -144,5 +144,11 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Atualizar_Simulado_Master(Parcelamento_web_master reg) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Atualizar_Simulado_Master(reg);
+            return ex;
+        }
+
     }
 }

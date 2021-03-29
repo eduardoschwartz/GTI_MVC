@@ -51,6 +51,19 @@ namespace GTI_Models.Models {
         public decimal Valor_add_Multa { get; set; }
         public decimal Valor_add_Correcao { get; set; }
         public int Qtde_Parcela { get; set; }
+        public decimal Sim_Liquido { get; set; }
+        public decimal Sim_Juros { get; set; }
+        public decimal Sim_Multa { get; set; }
+        public decimal Sim_Correcao { get; set; }
+        public decimal Sim_Principal { get; set; }
+        public decimal Sim_Honorario { get; set; }
+        public decimal Sim_Juros_apl { get; set; }
+        public decimal Sim_Total { get; set; }
+        public decimal Sim_Perc_Liquido { get; set; }
+        public decimal Sim_Perc_Juros { get; set; }
+        public decimal Sim_Perc_Multa { get; set; }
+        public decimal Sim_Perc_Correcao { get; set; }
+        public decimal Sim_Perc_Juros_Apl { get; set; }
+        public decimal Sim_Perc_Honorario { get; set; }
     }
 }
-

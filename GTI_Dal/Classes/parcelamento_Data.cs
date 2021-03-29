@@ -282,7 +282,6 @@ namespace GTI_Dal.Classes {
                 Parametros[12] = new SqlParameter { ParameterName = "@Valor_add_Juros", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Valor_add_Juros };
                 Parametros[13] = new SqlParameter { ParameterName = "@Valor_add_Multa", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Valor_add_Multa };
                 Parametros[14] = new SqlParameter { ParameterName = "@Valor_add_Correcao", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Valor_add_Correcao };
-
                 try {
                     db.Database.ExecuteSqlCommand("UPDATE parcelamento_web_master set Soma_Principal=@Soma_Principal,Soma_Juros=@Soma_Juros,Soma_Multa=@Soma_Multa,Soma_Correcao=@Soma_Correcao," +
                         "Soma_Total=@Soma_Total,Soma_Entrada=@Soma_Entrada,Perc_Principal=@Perc_Principal,Perc_Juros=@Perc_Juros,Perc_Multa=@Perc_Multa,Perc_Correcao=@Perc_Correcao,Valor_add_Principal=@Valor_add_Principal," +
@@ -293,6 +292,36 @@ namespace GTI_Dal.Classes {
                 return null;
             }
         }
+
+        public Exception Atualizar_Simulado_Master(Parcelamento_web_master reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[15];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@Sim_Liquido", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Sim_Liquido };
+                Parametros[2] = new SqlParameter { ParameterName = "@Sim_Juros", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Sim_Juros };
+                Parametros[3] = new SqlParameter { ParameterName = "@Sim_Multa", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Sim_Multa };
+                Parametros[4] = new SqlParameter { ParameterName = "@Sim_Correcao", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Sim_Correcao };
+                Parametros[5] = new SqlParameter { ParameterName = "@Sim_Principal", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Sim_Principal };
+                Parametros[6] = new SqlParameter { ParameterName = "@Sim_Honorario", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Sim_Honorario };
+                Parametros[7] = new SqlParameter { ParameterName = "@Sim_Juros_apl", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Sim_Juros_apl };
+                Parametros[8] = new SqlParameter { ParameterName = "@Sim_Total", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Sim_Total };
+                Parametros[9] = new SqlParameter { ParameterName = "@Sim_Perc_Liquido", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Sim_Perc_Liquido };
+                Parametros[10] = new SqlParameter { ParameterName = "@Sim_Perc_Juros", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Sim_Perc_Juros };
+                Parametros[11] = new SqlParameter { ParameterName = "@Sim_Perc_Multa", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Sim_Perc_Multa };
+                Parametros[12] = new SqlParameter { ParameterName = "@Sim_Perc_Correcao", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Sim_Perc_Correcao };
+                Parametros[13] = new SqlParameter { ParameterName = "@Sim_Perc_Juros_Apl", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Sim_Perc_Juros_Apl };
+                Parametros[14] = new SqlParameter { ParameterName = "@Sim_Perc_Honorario", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Sim_Perc_Honorario };
+                try {
+                    db.Database.ExecuteSqlCommand("UPDATE parcelamento_web_master set Sim_Liquido=@Sim_Liquido,Sim_Juros=@Sim_Juros,Sim_Multa=@Sim_Multa,Sim_Correcao=@Sim_Correcao,Sim_Honorario=@Sim_Honorario," +
+                        "Sim_Juros_apl=@Sim_Juros_apl,Sim_Total=@Sim_Total,Sim_Perc_Liquido=@Sim_Perc_Liquido,Sim_Perc_Juros=@Sim_Perc_Juros,Sim_Perc_Multa=@Sim_Perc_Multa," +
+                        "Sim_Perc_Correcao=@Sim_Perc_Correcao,Sim_Perc_Juros_Apl=@Sim_Perc_Juros_Apl,Sim_Perc_Honorario=@Sim_Perc_Honorario WHERE guid=@guid", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
 
         public List<SpParcelamentoOrigem> Lista_Parcelamento_Origem(string guid) {
             using (GTI_Context db = new GTI_Context(_connection)) {
