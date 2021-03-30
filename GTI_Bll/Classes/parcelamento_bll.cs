@@ -150,5 +150,10 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Atualizar_Processo_Master(string Guid, short Ano, int Numero) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Atualizar_Processo_Master(Guid,Ano,Numero);
+            return ex;
+        }
     }
 }

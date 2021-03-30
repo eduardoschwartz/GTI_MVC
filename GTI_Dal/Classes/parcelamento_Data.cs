@@ -322,7 +322,6 @@ namespace GTI_Dal.Classes {
             }
         }
 
-
         public List<SpParcelamentoOrigem> Lista_Parcelamento_Origem(string guid) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var reg = (from t in db.Parcelamento_Web_Origem where t.Guid == guid orderby t.Idx select t).ToList();
@@ -605,6 +604,23 @@ namespace GTI_Dal.Classes {
                 return null;
             }
         }
+
+        public Exception Atualizar_Processo_Master(string Guid,short Ano ,int Numero) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[3];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@processo_ano", SqlDbType = SqlDbType.SmallInt, SqlValue = Ano };
+                Parametros[2] = new SqlParameter { ParameterName = "@processo_numero", SqlDbType = SqlDbType.Int, SqlValue = Numero };
+                try {
+                    db.Database.ExecuteSqlCommand("UPDATE parcelamento_web_master set processo_ano=@processo_ano,processo_numero=@processo_numero WHERE guid=@guid", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+
     }
 }
 

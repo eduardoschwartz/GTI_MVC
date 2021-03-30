@@ -880,26 +880,77 @@ namespace GTI_MVC.Controllers {
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult Parc_reqe(ParcelamentoViewModel model) {
+            if (Session["hashid"] == null) {
+                return RedirectToAction("Login", "Home");
+            }
+
+            int _userId = Convert.ToInt32(Session["hashid"]);
+            bool _funcionario = Session["hashfunc"].ToString() == "S" ? true : false;
+
+            string _guid = model.Guid;
+
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(_guid);
+            List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(_guid);
+            IEnumerable<short> _listaAnos = _listaSelected.Select(o => o.Exercicio).Distinct();
+            int _codigoR = _master.Requerente_Codigo;
+            int _codigoC = _master.Contribuinte_Codigo;
+            int _qtdeParc = _master.Qtde_Parcela;
+
+            //Criar Processo
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
+            short _ano =(short) DateTime.Now.Year;
+            int _numero = protocoloRepository.Retorna_Numero_Disponivel(_ano);
+            string _compl = "PARCELAMENTO DE DÉBITOS CÓD: " + _codigoC.ToString();
+            string _obs = "Exercícios: ";
+            foreach (short _anoP in _listaAnos) {
+                _obs += _anoP.ToString() + ", ";
+            }
+            _obs = _obs.Substring(0, _obs.Length - 1) + " parcelado em: " + _qtdeParc.ToString() + " vezes.";
+
+            Processogti _p = new Processogti() {
+                Ano=_ano,
+                Numero=_numero,
+                Interno=false,
+                Fisico=false,
+                Hora=DateTime.Now.ToString("hh:mm"),
+                Userid=_userId,
+                Codassunto=606,
+                Complemento=_compl,
+                Observacao=_obs,
+                Codcidadao=_codigoR,
+                Dataentrada=DateTime.Now,
+                Origem=2,
+                Insc=_codigoC,
+                Tipoend="R",
+                Etiqueta=false
+            };
+            Exception ex = protocoloRepository.Incluir_Processo(_p);
+            ex = parcelamentoRepository.Atualizar_Processo_Master(_guid, _ano, _numero);
 
 
 
 
+            return View(model);
+        }
 
 
 
 
-        //[ChildActionOnly]
-        //public ActionResult Parc_simulado(string p) {
+            //[ChildActionOnly]
+            //public ActionResult Parc_simulado(string p) {
 
-        //    Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
-        //    //Load Master
-        //    Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
-        //    SelectDebitoParcelamentoEditorViewModel model = new SelectDebitoParcelamentoEditorViewModel() {
+            //    Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+            //    //Load Master
+            //    Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
+            //    SelectDebitoParcelamentoEditorViewModel model = new SelectDebitoParcelamentoEditorViewModel() {
 
-        //    };
+            //    };
 
-        //    return PartialView("Parc_simulado", model);
-        //}
+            //    return PartialView("Parc_simulado", model);
+            //}
 
+        }
     }
-}

@@ -271,7 +271,7 @@ namespace GTI_Mvc.Controllers {
             var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
             var obj = JObject.Parse(result);
             var status = (bool)obj.SelectToken("success");
-            string msg = status ? "Sucesso" : "Falha";
+          //  string msg = status ? "Sucesso" : "Falha";
             if (!status) {
                 model.ErrorMessage = "Código Recaptcha inválido.";
                 return View(model);
@@ -290,7 +290,7 @@ namespace GTI_Mvc.Controllers {
                 Endereco = _dados.NomeLogradouro,
                 Endereco_Numero = (int)_dados.Numero,
                 Endereco_Complemento = _dados.Complemento,
-                Bairro = _dados.NomeBairro ?? "",
+                //Bairro = _dados.NomeBairro ?? "",
                 Nome_Requerente = listaProp[0].Nome,
                 Ano = DateTime.Now.Year,
                 Numero = _numero,
@@ -299,6 +299,11 @@ namespace GTI_Mvc.Controllers {
                 Controle = _numero.ToString("00000") + DateTime.Now.Year.ToString("0000") + "/" + _codigo.ToString() + "-VV",
                 Data_Geracao = DateTime.Now
             };
+
+            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+            Bairro _bairro = enderecoRepository.RetornaLogradouroBairro((int)_dados.CodigoLogradouro, (short)_dados.Numero);
+            reg.Bairro = _bairro.Descbairro ?? "";
+
 
             SpCalculo RegCalculo = tributarioRepository.Calculo_IPTU(_dados.Codigo, DateTime.Now.Year);
             if (RegCalculo == null) {
