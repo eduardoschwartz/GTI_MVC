@@ -155,5 +155,25 @@ namespace GTI_Bll.Classes {
             Exception ex = obj.Atualizar_Processo_Master(Guid,Ano,Numero);
             return ex;
         }
+
+        public Exception Incluir_Parcelamento_Web_Destino(Parcelamento_Web_Destino Reg) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Incluir_Parcelamento_Web_Destino(Reg);
+            return ex;
+        }
+
+        public Exception Excluir_parcelamento_Web_Destino(string Guid) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Excluir_Parcelamento_Web_Destino(Guid);
+            return ex;
+        }
+
+        public Exception Excluir_parcelamento_Web_Lista_Codigo(string Guid) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Excluir_parcelamento_Web_Lista_Codigo(Guid);
+            return ex;
+        }
+
+
     }
 }

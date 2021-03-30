@@ -46,6 +46,7 @@ namespace GTI_Models.Models {
         public bool? Etiqueta { get; set; }
         public string Hora { get; set; }
         public int? Userid { get; set; }
+        public bool Funcionario { get; set; }
     }
 
     public class ProcessoStruct {

@@ -919,7 +919,7 @@ namespace GTI_Dal.Classes {
 
         public Exception Incluir_Processo(Processogti reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[25];
+                object[] Parametros = new object[26];
                 Parametros[0] = new SqlParameter { ParameterName = "@Ano", SqlDbType = SqlDbType.SmallInt, SqlValue = reg.Ano };
                 Parametros[1] = new SqlParameter { ParameterName = "@Numero", SqlDbType = SqlDbType.Int, SqlValue = reg.Numero };
                 Parametros[2] = new SqlParameter { ParameterName = "@Fisico", SqlDbType = SqlDbType.Bit, SqlValue = reg.Fisico };
@@ -1002,12 +1002,13 @@ namespace GTI_Dal.Classes {
                     Parametros[24] = new SqlParameter { ParameterName = "@Userid", SqlDbType = SqlDbType.Int, SqlValue = reg.Userid };
                 else
                     Parametros[24] = new SqlParameter { ParameterName = "@Userid", SqlValue = DBNull.Value };
+                Parametros[25] = new SqlParameter { ParameterName = "@Funcionario", SqlDbType = SqlDbType.Bit, SqlValue = reg.Funcionario };
 
                 db.Database.ExecuteSqlCommand("INSERT INTO processogti(ano,numero,fisico,origem,interno,codassunto,complemento,observacao,dataentrada,datareativa," +
                                               "datacancel,dataarquiva,datasuspenso,etiqueta,codcidadao,motivocancel,centrocusto,obsa,obsc,obss,obsr,hora,insc,tipoend," +
-                                              "userid) VALUES(@ano,@numero,@fisico,@origem,@interno,@codassunto,@complemento,@observacao,@dataentrada,@datareativa," +
+                                              "userid,Funcionario) VALUES(@ano,@numero,@fisico,@origem,@interno,@codassunto,@complemento,@observacao,@dataentrada,@datareativa," +
                                               "@datacancel,@dataarquiva,@datasuspenso,@etiqueta,@codcidadao,@motivocancel,@centrocusto,@obsa,@obsc,@obss,@obsr,@hora," +
-                                              "@insc,@tipoend,@userid)", Parametros);
+                                              "@insc,@tipoend,@userid,@Funcionario)", Parametros);
 
                 try {
                     db.SaveChanges();

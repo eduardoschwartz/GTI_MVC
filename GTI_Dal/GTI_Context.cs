@@ -198,5 +198,6 @@ namespace GTI_Dal {
         public DbSet<Parcelamento_valor_minimo> Parcelamento_Valor_Minimo { get; set; }
         public DbSet<Parcelamento_Web_Simulado> Parcelamento_Web_Simulado { get; set; }
         public DbSet<Parcelamento_Web_Simulado_Resumo> Parcelamento_Web_Simulado_Resumo { get; set; }
+        public DbSet<Parcelamento_Web_Destino> Parcelamento_Web_Destino { get; set; }
     }
 }

@@ -925,17 +925,46 @@ namespace GTI_MVC.Controllers {
                 Origem=2,
                 Insc=_codigoC,
                 Tipoend="R",
-                Etiqueta=false
+                Etiqueta=false,
+                Funcionario=_funcionario
             };
             Exception ex = protocoloRepository.Incluir_Processo(_p);
             ex = parcelamentoRepository.Atualizar_Processo_Master(_guid, _ano, _numero);
 
+            //Grava o destino com as parcelas do simulado
+            model.Lista_Simulado = parcelamentoRepository.Retorna_Parcelamento_Web_Simulado(model.Guid, _master.Qtde_Parcela);
+            ex = parcelamentoRepository.Excluir_parcelamento_Web_Destino(model.Guid);
+            foreach (Parcelamento_Web_Simulado _s in model.Lista_Simulado.Where(m=>m.Qtde_Parcela==_qtdeParc)) {
+                Parcelamento_Web_Destino _d = new Parcelamento_Web_Destino() {
+                    Data_Vencimento=_s.Data_Vencimento,
+                    Guid=_s.Guid,
+                    Numero_Parcela=_s.Numero_Parcela,
+                    Juros_Apl=_s.Juros_Apl,
+                    Juros_Mes=_s.Juros_Mes,
+                    Juros_Perc=_s.Juros_Perc,
+                    Saldo=_s.Saldo,
+                    Valor_Correcao=_s.Valor_Correcao,
+                    Valor_Honorario=_s.Valor_Honorario,
+                    Valor_Juros=_s.Valor_Juros,
+                    Valor_Liquido=_s.Valor_Liquido,
+                    Valor_Multa=_s.Valor_Multa,
+                    Valor_Principal=_s.Valor_Principal,
+                    Valor_Total=_s.Valor_Total
+                };
+                ex = parcelamentoRepository.Incluir_Parcelamento_Web_Destino(_d);
+            }
+
+            //Apaga o simulado
+            ex = parcelamentoRepository.Excluir_parcelamento_Web_Simulado(_guid);
+            //Apaga a origem
+            ex = parcelamentoRepository.Excluir_parcelamento_Web_Origem(_guid);
+            //Apaga os códigos
+            ex = parcelamentoRepository.Excluir_parcelamento_Web_Lista_Codigo(_guid);
 
 
 
             return View(model);
         }
-
 
 
 

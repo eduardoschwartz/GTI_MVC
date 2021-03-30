@@ -620,6 +620,68 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Incluir_Parcelamento_Web_Destino(Parcelamento_Web_Destino Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+
+                object[] Parametros = new object[14];
+                Parametros[0] = new SqlParameter { ParameterName = "@Guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@Numero_Parcela", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Numero_Parcela };
+                Parametros[2] = new SqlParameter { ParameterName = "@Data_Vencimento", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_Vencimento };
+                Parametros[3] = new SqlParameter { ParameterName = "@Valor_Liquido", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Liquido };
+                Parametros[4] = new SqlParameter { ParameterName = "@Valor_Juros", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Juros };
+                Parametros[5] = new SqlParameter { ParameterName = "@Valor_Multa", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Multa };
+                Parametros[6] = new SqlParameter { ParameterName = "@Valor_Correcao", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Correcao };
+                Parametros[7] = new SqlParameter { ParameterName = "@Valor_Principal", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Principal };
+                Parametros[8] = new SqlParameter { ParameterName = "@Saldo", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Saldo };
+                Parametros[9] = new SqlParameter { ParameterName = "@Juros_Perc", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Juros_Perc };
+                Parametros[10] = new SqlParameter { ParameterName = "@Juros_Mes", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Juros_Mes };
+                Parametros[11] = new SqlParameter { ParameterName = "@Juros_Apl", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Juros_Apl };
+                Parametros[12] = new SqlParameter { ParameterName = "@Valor_Honorario", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Honorario };
+                Parametros[13] = new SqlParameter { ParameterName = "@Valor_Total", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Total };
+
+                try {
+                    db.Database.ExecuteSqlCommand("INSERT INTO parcelamento_web_destino(Guid,Numero_Parcela,Data_Vencimento,Valor_Liquido,Valor_Juros,Valor_Multa,Valor_Correcao,Valor_Principal," +
+                        "Saldo,Juros_Perc,Juros_Mes,Juros_Apl,Valor_Honorario,Valor_Total) VALUES(@Guid,@Numero_Parcela,@Data_Vencimento,@Valor_Liquido,@Valor_Juros,@Valor_Multa,@Valor_Correcao," +
+                        "@Valor_Principal,@Saldo,@Juros_Perc,@Juros_Mes,@Juros_Apl,@Valor_Honorario,@Valor_Total)", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Excluir_Parcelamento_Web_Destino(string Guid) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+
+                object[] Parametros = new object[1];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Guid };
+                try {
+                    db.Database.ExecuteSqlCommand("DELETE FROM parcelamento_web_destino WHERE guid=@guid", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+
+        }
+
+        public Exception Excluir_parcelamento_Web_Lista_Codigo(string Guid) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+
+                object[] Parametros = new object[1];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Guid };
+                try {
+                    db.Database.ExecuteSqlCommand("DELETE FROM parcelamento_web_lista_codigo WHERE guid=@guid", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+
+        }
 
     }
 }
