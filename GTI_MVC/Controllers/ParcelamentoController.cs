@@ -868,6 +868,14 @@ namespace GTI_MVC.Controllers {
                 Sim_Total=_SomaT
             };
             Exception ex = parcelamentoRepository.Atualizar_Simulado_Master(reg);
+            model.Sim_Correcao = _SomaC;
+            model.Sim_Honorario = _SomaH;
+            model.Sim_Juros = _SomaJ;
+            model.Sim_Juros_apl = _SomaJapl;
+            model.Sim_Liquido = _SomaL;
+            model.Sim_Multa = _SomaM;
+            model.Sim_Principal = _SomaP;
+            model.Sim_Total = _SomaT;
 
             return View(model);
         }

@@ -206,7 +206,7 @@
                 <br />
 
 
-                <button type="submit" class="btn btn-primary" name="action" value="btnValida">Verificar débitos</button>&nbsp;&nbsp;
+                <button type="submit" class="btn btn-primary" name="action" value="btnValida" onclick="ClearError()">Verificar débitos</button>&nbsp;&nbsp;
             </div>
 
             <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
@@ -227,6 +227,9 @@
             });
         });
 
+        function ClearError() {
+            document.getElementById('errorlabel').innerHTML = "";
+        }
 
         function CheckOne(obj) {
             var grid = obj.parentNode.parentNode.parentNode;

@@ -32,6 +32,14 @@ namespace GTI_Mvc.ViewModels {
         public decimal Perc_desconto { get; set; }
         public decimal Valor_Minimo { get; set; }
         public List<Parc_Resumo> Lista_Resumo { get; set; }
+        public decimal Sim_Liquido { get; set; }
+        public decimal Sim_Juros { get; set; }
+        public decimal Sim_Multa { get; set; }
+        public decimal Sim_Correcao { get; set; }
+        public decimal Sim_Principal { get; set; }
+        public decimal Sim_Honorario { get; set; }
+        public decimal Sim_Juros_apl { get; set; }
+        public decimal Sim_Total { get; set; }
 
 
 
