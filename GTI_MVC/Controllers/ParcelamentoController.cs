@@ -1062,6 +1062,7 @@ namespace GTI_MVC.Controllers {
             List<Parcelamento_Web_Destino> _listaDestino = parcelamentoRepository.Lista_Parcelamento_Web_Destino(_guid);
             List<Destinoreparc> _listaDestinoReparc = new List<Destinoreparc>();
             List<Debitoparcela> _listaDebitoParcela = new List<Debitoparcela>();
+            List<Debitotributo> _listaDebitoTributo = new List<Debitotributo>();
             foreach (Parcelamento_Web_Destino item in _listaDestino) {
                 Destinoreparc _d = new Destinoreparc() {
                     Numprocesso = _numProc,
@@ -1107,7 +1108,6 @@ namespace GTI_MVC.Controllers {
                 _listaDebitoParcela.Add(dp);
                 
                 //Gravar os tributos
-                List<Debitotributo> _listaDebitoTributo = new List<Debitotributo>();
 
                 List<Parcelamento_Web_Tributo> _ListaTributo = parcelamentoRepository.Lista_Parcelamento_Tributo(model.Guid);
                 foreach (Parcelamento_Web_Tributo trib in _ListaTributo) {
@@ -1124,11 +1124,10 @@ namespace GTI_MVC.Controllers {
                     _listaDebitoTributo.Add(_dt);
                 }
 
-
             }
             ex = parcelamentoRepository.Incluir_DestinoReparc(_listaDestinoReparc);
             ex = parcelamentoRepository.Incluir_Debito_Parcela(_listaDebitoParcela);
-
+            ex = parcelamentoRepository.Incluir_Debito_Tributo(_listaDebitoTributo);
 
 
             return View(model);
