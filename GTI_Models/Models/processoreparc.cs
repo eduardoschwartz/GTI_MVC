@@ -27,6 +27,7 @@ namespace GTI_Models.Models {
         public bool? Novo { get; set; }
         public DateTime? Data_exportacao { get; set; }
         public int? Userid { get; set; }
+        public bool Userweb { get; set; }
     }
 
     public class Processo_Numero {

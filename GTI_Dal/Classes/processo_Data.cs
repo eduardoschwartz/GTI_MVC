@@ -1002,13 +1002,13 @@ namespace GTI_Dal.Classes {
                     Parametros[24] = new SqlParameter { ParameterName = "@Userid", SqlDbType = SqlDbType.Int, SqlValue = reg.Userid };
                 else
                     Parametros[24] = new SqlParameter { ParameterName = "@Userid", SqlValue = DBNull.Value };
-                Parametros[25] = new SqlParameter { ParameterName = "@Funcionario", SqlDbType = SqlDbType.Bit, SqlValue = reg.Funcionario };
+                Parametros[25] = new SqlParameter { ParameterName = "@Userweb", SqlDbType = SqlDbType.Bit, SqlValue = reg.Userweb };
 
                 db.Database.ExecuteSqlCommand("INSERT INTO processogti(ano,numero,fisico,origem,interno,codassunto,complemento,observacao,dataentrada,datareativa," +
                                               "datacancel,dataarquiva,datasuspenso,etiqueta,codcidadao,motivocancel,centrocusto,obsa,obsc,obss,obsr,hora,insc,tipoend," +
-                                              "userid,Funcionario) VALUES(@ano,@numero,@fisico,@origem,@interno,@codassunto,@complemento,@observacao,@dataentrada,@datareativa," +
+                                              "userid,Userweb) VALUES(@ano,@numero,@fisico,@origem,@interno,@codassunto,@complemento,@observacao,@dataentrada,@datareativa," +
                                               "@datacancel,@dataarquiva,@datasuspenso,@etiqueta,@codcidadao,@motivocancel,@centrocusto,@obsa,@obsc,@obss,@obsr,@hora," +
-                                              "@insc,@tipoend,@userid,@Funcionario)", Parametros);
+                                              "@insc,@tipoend,@userid,@Userweb)", Parametros);
 
                 try {
                     db.SaveChanges();

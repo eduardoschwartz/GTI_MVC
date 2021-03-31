@@ -565,6 +565,36 @@ namespace GTI_MVC.Controllers {
                 t++;
             }
 
+            //Grava os tributos
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(model.Guid);
+            List<Parcelamento_Web_Tributo> _listaTributo = new List<Parcelamento_Web_Tributo>();
+            foreach (SpParcelamentoOrigem item in _listaSelected) {
+                List<SpExtrato> _listaExtrato = tributarioRepository.Lista_Extrato_Tributo(model.Contribuinte.Codigo, item.Exercicio, item.Exercicio, item.Lancamento, item.Lancamento, item.Sequencia, item.Sequencia, item.Parcela, item.Parcela, item.Complemento, item.Complemento);
+                foreach (SpExtrato _ext in _listaExtrato) {
+                    bool _find = false;
+                    foreach (Parcelamento_Web_Tributo _trib in _listaTributo) {
+                        if (_trib.Tributo == _ext.Codtributo) {
+                            _find = true;
+                            break;
+                        }
+                    }
+                    if (!_find) {
+                        Parcelamento_Web_Tributo regT = new Parcelamento_Web_Tributo() {
+                            Guid=model.Guid,
+                            Tributo=_ext.Codtributo,
+                            Valor=_ext.Valortributo,
+                            Perc=0
+                        };
+                        _listaTributo.Add(regT);
+                    }
+                }
+            }
+
+
+
+            //###################
+
             decimal _percP = 0, _percJ = 0, _percM = 0, _percC = 0;
             decimal _valorAddP = 0, _valorAddJ = 0, _valorAddM = 0, _valorAddC = 0;
             _percP = _somaP * 100 / _somaT;
@@ -887,7 +917,7 @@ namespace GTI_MVC.Controllers {
             }
 
             int _userId = Convert.ToInt32(Session["hashid"]);
-            bool _funcionario = Session["hashfunc"].ToString() == "S" ? true : false;
+            bool _userWeb = Session["hashfunc"].ToString() == "S" ? false : true;
 
             string _guid = model.Guid;
 
@@ -926,12 +956,12 @@ namespace GTI_MVC.Controllers {
                 Insc=_codigoC,
                 Tipoend="R",
                 Etiqueta=false,
-                Funcionario=_funcionario
+                Userweb=_userWeb
             };
             Exception ex = protocoloRepository.Incluir_Processo(_p);
             ex = parcelamentoRepository.Atualizar_Processo_Master(_guid, _ano, _numero);
 
-            //Grava o destino com as parcelas do simulado
+            //Grava tabela web_destino com as parcelas do simulado
             model.Lista_Simulado = parcelamentoRepository.Retorna_Parcelamento_Web_Simulado(model.Guid, _master.Qtde_Parcela);
             ex = parcelamentoRepository.Excluir_parcelamento_Web_Destino(model.Guid);
             foreach (Parcelamento_Web_Simulado _s in model.Lista_Simulado.Where(m=>m.Qtde_Parcela==_qtdeParc)) {
@@ -956,10 +986,108 @@ namespace GTI_MVC.Controllers {
 
             //Apaga o simulado
             ex = parcelamentoRepository.Excluir_parcelamento_Web_Simulado(_guid);
+            
             //Apaga a origem
             ex = parcelamentoRepository.Excluir_parcelamento_Web_Origem(_guid);
+            
             //Apaga os códigos
             ex = parcelamentoRepository.Excluir_parcelamento_Web_Lista_Codigo(_guid);
+
+            //grava tabela processoreparc
+            string _numProc = _numero.ToString() + "/" + _ano.ToString();
+            Processoreparc reg = new Processoreparc() {
+                Numprocesso = _numProc,
+                Anoproc = _ano,
+                Numproc = _numero,
+                Codigoresp = _codigoC,
+                Dataprocesso = DateTime.Now,
+                Datareparc = DateTime.Now,
+                Calculacorrecao = true,
+                Calculajuros = true,
+                Calculamulta = true,
+                Penhora = false,
+                Honorario = true,
+                Novo = true,
+                Userid = _userId,
+                Userweb = _userWeb,
+                Qtdeparcela = Convert.ToByte(_qtdeParc),
+                Plano = _master.Plano_Codigo.ToString(),
+                Valorentrada = 0,
+                Percentrada = 0
+            };
+            ex = parcelamentoRepository.Incluir_ProcessoReparc(reg);
+
+            //grava tabela origemreparc
+            foreach (SpParcelamentoOrigem item in _listaSelected) {
+                Origemreparc _o = new Origemreparc() {
+                    Numprocesso=_numProc,
+                    Anoproc=_ano,
+                    Numproc=_numero,
+                    Codreduzido=_codigoC,
+                    Anoexercicio=item.Exercicio,
+                    Codlancamento=item.Lancamento,
+                    Numsequencia=(byte)item.Sequencia,
+                    Numparcela=(byte)item.Parcela,
+                    Codcomplemento=(byte)item.Complemento,
+                    Principal=item.Valor_principal,
+                    Multa=item.Valor_multa,
+                    Juros=item.Valor_juros,
+                    Correcao=item.Valor_correcao
+                };
+                ex = parcelamentoRepository.Incluir_OrigemReparc(_o);
+            }
+
+            //grava tabela origemreparc
+            byte _lastSeq = parcelamentoRepository.Retorna_Seq_Disponivel(_codigoC);
+
+            List<Parcelamento_Web_Destino> _listaDestino = parcelamentoRepository.Lista_Parcelamento_Web_Destino(_guid);
+            foreach (Parcelamento_Web_Destino item in _listaDestino) {
+                Destinoreparc _d = new Destinoreparc() {
+                    Numprocesso = _numProc,
+                    Anoproc = _ano,
+                    Numproc = _numero,
+                    Codreduzido = _codigoC,
+                    Anoexercicio = (short)item.Data_Vencimento.Year,
+                    Codlancamento = 20,
+                    Numsequencia = _lastSeq,
+                    Numparcela = (byte)item.Numero_Parcela,
+                    Codcomplemento = 0,
+                    Valorliquido = item.Valor_Liquido,
+                    Multa = item.Valor_Multa,
+                    Juros = item.Valor_Juros,
+                    Correcao = item.Valor_Correcao,
+                    Valorprincipal = item.Valor_Principal,
+                    Honorario = item.Valor_Honorario,
+                    Jurosapl = item.Juros_Apl,
+                    Jurosperc = item.Juros_Perc,
+                    Jurosvalor = item.Juros_Mes,
+                    Saldo = item.Saldo,
+                    Total = item.Valor_Total
+                };
+                ex = parcelamentoRepository.Incluir_DestinoReparc(_d);
+
+                byte _status;
+                if (item.Numero_Parcela == 1)
+                    _status = 3;
+                else
+                    _status= 18;
+                Debitoparcela dp = new Debitoparcela() {
+                    Codreduzido=_d.Codreduzido,
+                    Anoexercicio=_d.Anoexercicio,
+                    Codlancamento=_d.Codlancamento,
+                    Seqlancamento=_d.Numsequencia,
+                    Numparcela=_d.Numparcela,
+                    Codcomplemento=_d.Codcomplemento,
+                    Datadebase=DateTime.Now,
+                    Datavencimento=item.Data_Vencimento,
+                    Numprocesso=_numProc,
+                    Statuslanc=_status
+                };
+                ex = parcelamentoRepository.Incluir_Debito_Parcela(dp);
+
+            }
+                       
+
 
 
 

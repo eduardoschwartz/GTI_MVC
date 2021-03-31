@@ -683,6 +683,193 @@ namespace GTI_Dal.Classes {
 
         }
 
+        public Exception Incluir_ProcessoReparc(Processoreparc Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+
+                object[] Parametros = new object[18];
+                Parametros[0] = new SqlParameter { ParameterName = "@Numprocesso", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Numprocesso };
+                Parametros[1] = new SqlParameter { ParameterName = "@Numproc", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numproc };
+                Parametros[2] = new SqlParameter { ParameterName = "@Anoproc", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Anoproc };
+                Parametros[3] = new SqlParameter { ParameterName = "@Dataprocesso", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Dataprocesso };
+                Parametros[4] = new SqlParameter { ParameterName = "@Datareparc", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Datareparc };
+                Parametros[5] = new SqlParameter { ParameterName = "@Qtdeparcela", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Qtdeparcela };
+                Parametros[6] = new SqlParameter { ParameterName = "@Valorentrada", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valorentrada };
+                Parametros[7] = new SqlParameter { ParameterName = "@Percentrada", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Percentrada };
+                Parametros[8] = new SqlParameter { ParameterName = "@Calculamulta", SqlDbType = SqlDbType.Bit, SqlValue = Reg.Calculamulta };
+                Parametros[9] = new SqlParameter { ParameterName = "@Calculajuros", SqlDbType = SqlDbType.Bit, SqlValue = Reg.Calculajuros };
+                Parametros[10] = new SqlParameter { ParameterName = "@Calculacorrecao", SqlDbType = SqlDbType.Bit, SqlValue = Reg.Calculacorrecao };
+                Parametros[11] = new SqlParameter { ParameterName = "@Penhora", SqlDbType = SqlDbType.Bit, SqlValue = Reg.Penhora };
+                Parametros[12] = new SqlParameter { ParameterName = "@Honorario", SqlDbType = SqlDbType.Bit, SqlValue = Reg.Honorario };
+                Parametros[13] = new SqlParameter { ParameterName = "@Codigoresp", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigoresp };
+                Parametros[14] = new SqlParameter { ParameterName = "@Plano", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Plano };
+                Parametros[15] = new SqlParameter { ParameterName = "@Novo", SqlDbType = SqlDbType.Bit, SqlValue = Reg.Novo };
+                Parametros[16] = new SqlParameter { ParameterName = "@Userid", SqlDbType = SqlDbType.Int, SqlValue = Reg.Userid };
+                Parametros[17] = new SqlParameter { ParameterName = "@Userweb", SqlDbType = SqlDbType.Bit, SqlValue = Reg.Userweb };
+
+                try {
+                    db.Database.ExecuteSqlCommand("INSERT INTO processoreparc(Numprocesso,Numproc,Anoproc,Dataprocesso,Datareparc,Qtdeparcela,Valorentrada,Percentrada,Calculamulta,Calculajuros," +
+                        "Calculacorrecao,Penhora,Honorario,Codigoresp,Plano,Novo,Userid,Userweb) VALUES(@Numprocesso,@Numproc,@Anoproc,@Dataprocesso,@Datareparc,@Qtdeparcela,@Valorentrada,@Percentrada," +
+                        "@Calculamulta,@Calculajuros,@Calculacorrecao,@Penhora,@Honorario,@Codigoresp,@Plano,@Novo,@Userid,@Userweb)", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public List<Parcelamento_Web_Destino> Lista_Parcelamento_Web_Destino(string guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from t in db.Parcelamento_Web_Destino where t.Guid == guid orderby t.Data_Vencimento select t).ToList();
+                List<Parcelamento_Web_Destino> Lista = new List<Parcelamento_Web_Destino>();
+                foreach (var item in reg) {
+                    Parcelamento_Web_Destino Linha = new Parcelamento_Web_Destino {
+                        Data_Vencimento = item.Data_Vencimento,
+                        Valor_Honorario = item.Valor_Honorario,
+                        Juros_Apl = item.Juros_Apl,
+                        Juros_Mes = item.Juros_Mes,
+                        Juros_Perc = item.Juros_Perc,
+                        Numero_Parcela = item.Numero_Parcela,
+                        Saldo = item.Saldo,
+                        Valor_Juros = item.Valor_Juros,
+                        Valor_Correcao = item.Valor_Correcao,
+                        Valor_Liquido = item.Valor_Liquido,
+                        Valor_Multa = item.Valor_Multa,
+                        Valor_Total = item.Valor_Total,
+                        Valor_Principal = item.Valor_Principal
+                    };
+                    Lista.Add(Linha);
+                }
+                return Lista;
+            }
+        }
+
+        public Exception Incluir_OrigemReparc(Origemreparc Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+
+                object[] Parametros = new object[13];
+                Parametros[0] = new SqlParameter { ParameterName = "@Numprocesso", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Numprocesso };
+                Parametros[1] = new SqlParameter { ParameterName = "@Numproc", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numproc };
+                Parametros[2] = new SqlParameter { ParameterName = "@Anoproc", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Anoproc };
+                Parametros[3] = new SqlParameter { ParameterName = "@Codreduzido", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codreduzido };
+                Parametros[4] = new SqlParameter { ParameterName = "@Anoexercicio", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Anoexercicio };
+                Parametros[5] = new SqlParameter { ParameterName = "@Codlancamento", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Codlancamento };
+                Parametros[6] = new SqlParameter { ParameterName = "@Numsequencia", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Numsequencia };
+                Parametros[7] = new SqlParameter { ParameterName = "@Numparcela", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Numparcela };
+                Parametros[8] = new SqlParameter { ParameterName = "@Codcomplemento", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Codcomplemento };
+                Parametros[9] = new SqlParameter { ParameterName = "@Principal", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Principal };
+                Parametros[10] = new SqlParameter { ParameterName = "@Juros", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Juros };
+                Parametros[11] = new SqlParameter { ParameterName = "@Multa", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Multa };
+                Parametros[12] = new SqlParameter { ParameterName = "@Correcao", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Correcao };
+
+                try {
+                    db.Database.ExecuteSqlCommand("INSERT INTO origemreparc(Numprocesso,Numproc,Anoproc,Codreduzido,Anoexercicio,Codlancamento,Numsequencia,Numparcela,Codcomplemento,Principal," +
+                        "Juros,Multa,Correcao) VALUES(@Numprocesso,@Numproc,@Anoproc,@Codreduzido,@Anoexercicio,@Codlancamento,@Numsequencia,@Numparcela,@Codcomplemento,@Principal," +
+                        "@Juros,@Multa,@Correcao)", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Incluir_DestinoReparc(Destinoreparc Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+
+                object[] Parametros = new object[20];
+                Parametros[0] = new SqlParameter { ParameterName = "@Numprocesso", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Numprocesso };
+                Parametros[1] = new SqlParameter { ParameterName = "@Numproc", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numproc };
+                Parametros[2] = new SqlParameter { ParameterName = "@Anoproc", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Anoproc };
+                Parametros[3] = new SqlParameter { ParameterName = "@Codreduzido", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codreduzido };
+                Parametros[4] = new SqlParameter { ParameterName = "@Anoexercicio", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Anoexercicio };
+                Parametros[5] = new SqlParameter { ParameterName = "@Codlancamento", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Codlancamento };
+                Parametros[6] = new SqlParameter { ParameterName = "@Numsequencia", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Numsequencia };
+                Parametros[7] = new SqlParameter { ParameterName = "@Numparcela", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Numparcela };
+                Parametros[8] = new SqlParameter { ParameterName = "@Codcomplemento", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Codcomplemento };
+                Parametros[9] = new SqlParameter { ParameterName = "@Valorliquido", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valorliquido };
+                Parametros[10] = new SqlParameter { ParameterName = "@Juros", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Juros };
+                Parametros[11] = new SqlParameter { ParameterName = "@Multa", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Multa };
+                Parametros[12] = new SqlParameter { ParameterName = "@Correcao", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Correcao };
+                Parametros[13] = new SqlParameter { ParameterName = "@Valorprincipal", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valorprincipal };
+                Parametros[14] = new SqlParameter { ParameterName = "@Saldo", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Saldo };
+                Parametros[15] = new SqlParameter { ParameterName = "@Jurosperc", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Jurosperc };
+                Parametros[16] = new SqlParameter { ParameterName = "@Jurosvalor", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Jurosvalor };
+                Parametros[17] = new SqlParameter { ParameterName = "@Jurosapl", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Jurosapl };
+                Parametros[18] = new SqlParameter { ParameterName = "@Honorario", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Honorario };
+                Parametros[19] = new SqlParameter { ParameterName = "@Total", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Total };
+
+                try {
+                    db.Database.ExecuteSqlCommand("INSERT INTO destinoreparc(Numprocesso,Numproc,Anoproc,Codreduzido,Anoexercicio,Codlancamento,Numsequencia,Numparcela,Codcomplemento,Valorliquido," +
+                        "Juros,Multa,Correcao,Valorprincipal,Saldo,Jurosperc,Jurosvalor,Jurosapl,Honorario,Total) VALUES(@Numprocesso,@Numproc,@Anoproc,@Codreduzido,@Anoexercicio,@Codlancamento," +
+                        "@Numsequencia,@Numparcela,@Codcomplemento,@Valorliquido,@Juros,@Multa,@Correcao,@Valorprincipal,@Saldo,@Jurosperc,@Jurosvalor,@Jurosapl,@Honorario,@Total)", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public byte Retorna_Seq_Disponivel(int Codigo) {
+            byte _seq = 0;
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Debitoparcela where t.Codreduzido==Codigo && t.Codlancamento==20 orderby t.Seqlancamento descending select t).FirstOrDefault();
+                if (Sql != null) {
+                    _seq = (byte)(Sql.Seqlancamento + 1);
+                }
+            }
+            return _seq;
+        }
+
+        public Exception Incluir_Debito_Parcela(Debitoparcela Reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+                object[] Parametros = new object[10];
+                Parametros[0] = new SqlParameter { ParameterName = "@codreduzido", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codreduzido };
+                Parametros[1] = new SqlParameter { ParameterName = "@anoexercicio", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Anoexercicio };
+                Parametros[2] = new SqlParameter { ParameterName = "@codlancamento", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Codlancamento };
+                Parametros[3] = new SqlParameter { ParameterName = "@seqlancamento", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Seqlancamento };
+                Parametros[4] = new SqlParameter { ParameterName = "@numparcela", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Numparcela };
+                Parametros[5] = new SqlParameter { ParameterName = "@codcomplemento", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Codcomplemento };
+                Parametros[6] = new SqlParameter { ParameterName = "@statuslanc", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Statuslanc };
+                Parametros[7] = new SqlParameter { ParameterName = "@datavencimento", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Datavencimento };
+                Parametros[8] = new SqlParameter { ParameterName = "@datadebase", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Datadebase };
+                Parametros[9] = new SqlParameter { ParameterName = "@Numprocesso", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Numprocesso };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO debitoparcela(codreduzido,anoexercicio,codlancamento,seqlancamento,numparcela,codcomplemento,statuslanc,datavencimento,datadebase,Numprocesso) " +
+                    "VALUES(@codreduzido,@anoexercicio,@codlancamento,@seqlancamento,@numparcela,@codcomplemento,@statuslanc,@datavencimento,@datadebase,@Numprocesso)", Parametros);
+
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Incluir_Parcelamento_Web_Tributo(Parcelamento_Web_Tributo Reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+                object[] Parametros = new object[4];
+                Parametros[0] = new SqlParameter { ParameterName = "@Guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@Tributo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Tributo };
+                Parametros[2] = new SqlParameter { ParameterName = "@Valor", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor };
+                Parametros[3] = new SqlParameter { ParameterName = "@Perc", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Perc };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO parcelamento_web_tributo(guid,tributo,valor,perc) VALUES(@guid,@tributo,@valor,@perc)", Parametros);
+
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+
     }
 }
 
