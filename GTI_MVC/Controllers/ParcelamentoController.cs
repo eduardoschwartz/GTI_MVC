@@ -503,8 +503,10 @@ namespace GTI_MVC.Controllers {
         public ActionResult Parc_reqc(ParcelamentoViewModel model) {
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+
             var selectedIds = model.getSelectedIds();
             int t = 1;
+            decimal _totalSel = 0;
             List<SelectDebitoParcelamentoEditorViewModel> _listaOrigem = new List<SelectDebitoParcelamentoEditorViewModel>();
             foreach (SelectDebitoParcelamentoEditorViewModel item in model.Lista_Origem) {
                 if (item.Selected) {
@@ -528,11 +530,16 @@ namespace GTI_MVC.Controllers {
                         Valor_principal = item.Valor_principal,
                         Valor_total = item.Valor_total
                     };
+                    _totalSel += item.Valor_total;
                     _listaOrigem.Add(_r);
                     t++;
                 }
             }
             model.Lista_Origem_Selected = _listaOrigem;
+            if (_totalSel /2 < model.Valor_Minimo) {
+                ViewBag.Result = "Valor mínimo da parcela deve ser de R$" + model.Valor_Minimo.ToString("#0.00");
+                return View(model);
+            }
             t = 1;
             Exception ex = parcelamentoRepository.Excluir_parcelamento_Web_Selected(model.Guid);
 
