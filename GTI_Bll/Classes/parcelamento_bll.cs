@@ -27,9 +27,9 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
-        public Exception Incluir_Parcelamento_Web_Lista_Codigo(Parcelamento_web_lista_codigo Reg) {
+        public Exception Incluir_Parcelamento_Web_Lista_Codigo(List<Parcelamento_web_lista_codigo> Lista) {
             Parcelamento_Data obj = new Parcelamento_Data(_connection);
-            Exception ex = obj.Incluir_Parcelamento_Web_Lista_Codigo(Reg);
+            Exception ex = obj.Incluir_Parcelamento_Web_Lista_Codigo(Lista);
             return ex;
         }
 
@@ -38,9 +38,9 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Parcelamento_Lista_Codigo(guid);
         }
 
-        public Exception Incluir_Parcelamento_Web_Origem(Parcelamento_web_origem Reg) {
+        public Exception Incluir_Parcelamento_Web_Origem(List<Parcelamento_web_origem> Lista) {
             Parcelamento_Data obj = new Parcelamento_Data(_connection);
-            Exception ex = obj.Incluir_Parcelamento_Web_Origem(Reg);
+            Exception ex = obj.Incluir_Parcelamento_Web_Origem(Lista);
             return ex;
         }
 
@@ -120,9 +120,9 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Parcelamento_Destino(Guid, Plano, Data_Vencimento, Ajuizado, Honorario, Principal, Juros, Multa, Correcao, Total, Adicional, Valor_Minimo);
         }
 
-        public Exception Incluir_Parcelamento_Web_Simulado_Resumo(Parcelamento_Web_Simulado_Resumo Reg) {
+        public Exception Incluir_Parcelamento_Web_Simulado_Resumo(List<Parcelamento_Web_Simulado_Resumo> Lista) {
             Parcelamento_Data obj = new Parcelamento_Data(_connection);
-            Exception ex = obj.Incluir_Parcelamento_Web_Simulado_Resumo(Reg);
+            Exception ex = obj.Incluir_Parcelamento_Web_Simulado_Resumo(Lista);
             return ex;
         }
 
@@ -156,9 +156,9 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
-        public Exception Incluir_Parcelamento_Web_Destino(Parcelamento_Web_Destino Reg) {
+        public Exception Incluir_Parcelamento_Web_Destino(List<Parcelamento_Web_Destino> Lista) {
             Parcelamento_Data obj = new Parcelamento_Data(_connection);
-            Exception ex = obj.Incluir_Parcelamento_Web_Destino(Reg);
+            Exception ex = obj.Incluir_Parcelamento_Web_Destino(Lista);
             return ex;
         }
 
@@ -185,15 +185,15 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Parcelamento_Web_Destino(guid);
         }
 
-        public Exception Incluir_OrigemReparc(Origemreparc Reg) {
+        public Exception Incluir_OrigemReparc(List<Origemreparc> Lista) {
             Parcelamento_Data obj = new Parcelamento_Data(_connection);
-            Exception ex = obj.Incluir_OrigemReparc(Reg);
+            Exception ex = obj.Incluir_OrigemReparc(Lista);
             return ex;
         }
 
-        public Exception Incluir_DestinoReparc(Destinoreparc Reg) {
+        public Exception Incluir_DestinoReparc(List<Destinoreparc> Lista) {
             Parcelamento_Data obj = new Parcelamento_Data(_connection);
-            Exception ex = obj.Incluir_DestinoReparc(Reg);
+            Exception ex = obj.Incluir_DestinoReparc(Lista);
             return ex;
         }
 
@@ -202,15 +202,38 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Seq_Disponivel(Codigo);
         }
 
-        public Exception Incluir_Debito_Parcela(Debitoparcela Reg) {
+        public Exception Incluir_Debito_Parcela(List<Debitoparcela> Lista) {
             Parcelamento_Data obj = new Parcelamento_Data(_connection);
-            Exception ex = obj.Incluir_Debito_Parcela(Reg);
+            Exception ex = obj.Incluir_Debito_Parcela(Lista);
             return ex;
         }
 
         public Exception Incluir_Parcelamento_Web_Tributo(Parcelamento_Web_Tributo Reg) {
             Parcelamento_Data obj = new Parcelamento_Data(_connection);
             Exception ex = obj.Incluir_Parcelamento_Web_Tributo(Reg);
+            return ex;
+        }
+
+        public Exception Incluir_Parcelamento_Web_Tributo(List<Parcelamento_Web_Tributo> Lista) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Incluir_Parcelamento_Web_Tributo(Lista);
+            return ex;
+        }
+
+        public Exception Incluir_Parcelamento_Web_Selected(List<Parcelamento_web_selected> Lista) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Incluir_Parcelamento_Web_Selected(Lista);
+            return ex;
+        }
+
+        public List<Parcelamento_Web_Tributo> Lista_Parcelamento_Tributo(string guid) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            return obj.Lista_Parcelamento_Tributo(guid);
+        }
+
+        public Exception Incluir_Debito_Tributo(List<Debitotributo> Lista) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Incluir_Debito_Tributo(Lista);
             return ex;
         }
 

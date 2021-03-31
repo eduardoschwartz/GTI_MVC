@@ -198,6 +198,7 @@ namespace GTI_MVC.Controllers {
                 Exception ex = parcelamentoRepository.Incluir_Parcelamento_Web_Master(reg);
                 if (ex != null)
                     throw ex;
+                List<Parcelamento_web_lista_codigo> _listaCodigo = new List<Parcelamento_web_lista_codigo>();
                 foreach (Parc_Codigos item in _listaCodigos) {
                     Parcelamento_web_lista_codigo _cod = new Parcelamento_web_lista_codigo() {
                         Guid = model.Guid,
@@ -207,10 +208,12 @@ namespace GTI_MVC.Controllers {
                         Descricao = item.Descricao,
                         Selected = item.Selected
                     };
-                    ex = parcelamentoRepository.Incluir_Parcelamento_Web_Lista_Codigo(_cod);
-                    if (ex != null)
-                        throw ex;
+                    _listaCodigo.Add(_cod);
                 }
+                ex = parcelamentoRepository.Incluir_Parcelamento_Web_Lista_Codigo(_listaCodigo);
+                if (ex != null)
+                    throw ex;
+
             }
 
             return View(model);
@@ -268,7 +271,7 @@ namespace GTI_MVC.Controllers {
                 return View(model);
             } else {
                 Exception ex = parcelamentoRepository.Excluir_parcelamento_Web_Origem(model.Guid);
-
+                List<Parcelamento_web_origem> _listaWebOrigem = new List<Parcelamento_web_origem>();
                 foreach (SpParcelamentoOrigem item in Lista_Origem) {
                     Parcelamento_web_origem reg = new Parcelamento_web_origem() {
                         Guid=model.Guid,
@@ -290,11 +293,12 @@ namespace GTI_MVC.Controllers {
                         Perc_Penalidade=item.Perc_penalidade,
                         Qtde_Parcelamento=item.Qtde_parcelamento
                     };
-                    ex = parcelamentoRepository.Incluir_Parcelamento_Web_Origem(reg);
-                    if (ex != null)
-                        throw ex;
-
+                    _listaWebOrigem.Add(reg);
                 }
+                ex = parcelamentoRepository.Incluir_Parcelamento_Web_Origem(_listaWebOrigem);
+                if (ex != null)
+                    throw ex;
+
             }
 
             _header = sistemaRepository.Contribuinte_Header(_codigo);
@@ -533,6 +537,7 @@ namespace GTI_MVC.Controllers {
             Exception ex = parcelamentoRepository.Excluir_parcelamento_Web_Selected(model.Guid);
 
             decimal _somaP = 0, _somaJ = 0, _somaM = 0, _somaC = 0, _somaT = 0,_somaE=0;
+            List<Parcelamento_web_selected> _listaSelect = new List<Parcelamento_web_selected>();
             foreach (SelectDebitoParcelamentoEditorViewModel item in _listaOrigem) {
                 Parcelamento_web_selected reg = new Parcelamento_web_selected() {
                     Ajuizado = item.Ajuizado,
@@ -560,15 +565,19 @@ namespace GTI_MVC.Controllers {
                 _somaC += item.Valor_correcao;
                 _somaT += item.Valor_total;
                 _somaE += item.Valor_penalidade;
+                _listaSelect.Add(reg);
                 
-                ex = parcelamentoRepository.Incluir_Parcelamento_Web_Selected(reg);
                 t++;
             }
 
+            ex = parcelamentoRepository.Incluir_Parcelamento_Web_Selected(_listaSelect);
+
             //Grava os tributos
+            
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(model.Guid);
             List<Parcelamento_Web_Tributo> _listaTributo = new List<Parcelamento_Web_Tributo>();
+            decimal _total =0;
             foreach (SpParcelamentoOrigem item in _listaSelected) {
                 List<SpExtrato> _listaExtrato = tributarioRepository.Lista_Extrato_Tributo(model.Contribuinte.Codigo, item.Exercicio, item.Exercicio, item.Lancamento, item.Lancamento, item.Sequencia, item.Sequencia, item.Parcela, item.Parcela, item.Complemento, item.Complemento);
                 foreach (SpExtrato _ext in _listaExtrato) {
@@ -580,6 +589,7 @@ namespace GTI_MVC.Controllers {
                         }
                     }
                     if (!_find) {
+                        _total += _ext.Valortributo;
                         Parcelamento_Web_Tributo regT = new Parcelamento_Web_Tributo() {
                             Guid=model.Guid,
                             Tributo=_ext.Codtributo,
@@ -591,7 +601,10 @@ namespace GTI_MVC.Controllers {
                 }
             }
 
-
+            for (int i = 0; i < _listaTributo.Count; i++) {
+                _listaTributo[i].Perc = _listaTributo[i].Valor * 100 / _total;
+            }
+            ex = parcelamentoRepository.Incluir_Parcelamento_Web_Tributo(_listaTributo);
 
             //###################
 
@@ -725,6 +738,7 @@ namespace GTI_MVC.Controllers {
 
             decimal _valor1 = 0, _valorN = 0;
             List<Parc_Resumo> Lista_resumo = new List<Parc_Resumo>();
+            List<Parcelamento_Web_Simulado_Resumo> _lista_Web_Simulado_Resumo = new List<Parcelamento_Web_Simulado_Resumo>();
             foreach (int linha in _listaQtde) {
                 foreach (Parcelamento_Web_Simulado item in _listaSimulado) {
                     if(item.Qtde_Parcela==linha && item.Numero_Parcela==1) {
@@ -743,7 +757,7 @@ namespace GTI_MVC.Controllers {
                     Valor_N = _valorN,
                     Valor_Total = _valor1 + (_valorN * (linha - 1))
                 };
-                ex = parcelamentoRepository.Incluir_Parcelamento_Web_Simulado_Resumo(t);
+                _lista_Web_Simulado_Resumo.Add(t);
                 Parc_Resumo r = new Parc_Resumo() {
                     Qtde_Parcela = linha,
                     Valor_Entrada="R$" + _valor1.ToString("#0.00"),
@@ -754,6 +768,7 @@ namespace GTI_MVC.Controllers {
                     r.Selected = true;
                 Lista_resumo.Add(r);
             }
+            ex = parcelamentoRepository.Incluir_Parcelamento_Web_Simulado_Resumo(_lista_Web_Simulado_Resumo);
             model.Lista_Resumo = Lista_resumo;
 
             //################################################################
@@ -964,6 +979,7 @@ namespace GTI_MVC.Controllers {
             //Grava tabela web_destino com as parcelas do simulado
             model.Lista_Simulado = parcelamentoRepository.Retorna_Parcelamento_Web_Simulado(model.Guid, _master.Qtde_Parcela);
             ex = parcelamentoRepository.Excluir_parcelamento_Web_Destino(model.Guid);
+            List<Parcelamento_Web_Destino> _lista_Parcelamento_Web_Destino = new List<Parcelamento_Web_Destino>();
             foreach (Parcelamento_Web_Simulado _s in model.Lista_Simulado.Where(m=>m.Qtde_Parcela==_qtdeParc)) {
                 Parcelamento_Web_Destino _d = new Parcelamento_Web_Destino() {
                     Data_Vencimento=_s.Data_Vencimento,
@@ -981,8 +997,9 @@ namespace GTI_MVC.Controllers {
                     Valor_Principal=_s.Valor_Principal,
                     Valor_Total=_s.Valor_Total
                 };
-                ex = parcelamentoRepository.Incluir_Parcelamento_Web_Destino(_d);
+                _lista_Parcelamento_Web_Destino.Add(_d);
             }
+            ex = parcelamentoRepository.Incluir_Parcelamento_Web_Destino(_lista_Parcelamento_Web_Destino);
 
             //Apaga o simulado
             ex = parcelamentoRepository.Excluir_parcelamento_Web_Simulado(_guid);
@@ -1018,6 +1035,7 @@ namespace GTI_MVC.Controllers {
             ex = parcelamentoRepository.Incluir_ProcessoReparc(reg);
 
             //grava tabela origemreparc
+            List<Origemreparc> _listaOrigem = new List<Origemreparc>();
             foreach (SpParcelamentoOrigem item in _listaSelected) {
                 Origemreparc _o = new Origemreparc() {
                     Numprocesso=_numProc,
@@ -1034,13 +1052,16 @@ namespace GTI_MVC.Controllers {
                     Juros=item.Valor_juros,
                     Correcao=item.Valor_correcao
                 };
-                ex = parcelamentoRepository.Incluir_OrigemReparc(_o);
+                _listaOrigem.Add(_o);    
             }
+            ex = parcelamentoRepository.Incluir_OrigemReparc(_listaOrigem);
 
             //grava tabela origemreparc
             byte _lastSeq = parcelamentoRepository.Retorna_Seq_Disponivel(_codigoC);
 
             List<Parcelamento_Web_Destino> _listaDestino = parcelamentoRepository.Lista_Parcelamento_Web_Destino(_guid);
+            List<Destinoreparc> _listaDestinoReparc = new List<Destinoreparc>();
+            List<Debitoparcela> _listaDebitoParcela = new List<Debitoparcela>();
             foreach (Parcelamento_Web_Destino item in _listaDestino) {
                 Destinoreparc _d = new Destinoreparc() {
                     Numprocesso = _numProc,
@@ -1064,7 +1085,7 @@ namespace GTI_MVC.Controllers {
                     Saldo = item.Saldo,
                     Total = item.Valor_Total
                 };
-                ex = parcelamentoRepository.Incluir_DestinoReparc(_d);
+                _listaDestinoReparc.Add(_d);
 
                 byte _status;
                 if (item.Numero_Parcela == 1)
@@ -1083,11 +1104,30 @@ namespace GTI_MVC.Controllers {
                     Numprocesso=_numProc,
                     Statuslanc=_status
                 };
-                ex = parcelamentoRepository.Incluir_Debito_Parcela(dp);
+                _listaDebitoParcela.Add(dp);
+                
+                //Gravar os tributos
+                List<Debitotributo> _listaDebitoTributo = new List<Debitotributo>();
+
+                List<Parcelamento_Web_Tributo> _ListaTributo = parcelamentoRepository.Lista_Parcelamento_Tributo(model.Guid);
+                foreach (Parcelamento_Web_Tributo trib in _ListaTributo) {
+                    Debitotributo _dt = new Debitotributo() {
+                        Codreduzido=dp.Codreduzido,
+                        Anoexercicio=dp.Anoexercicio,
+                        Codlancamento=dp.Codlancamento,
+                        Seqlancamento=dp.Seqlancamento,
+                        Numparcela=dp.Numparcela,
+                        Codcomplemento=dp.Codcomplemento,
+                        Codtributo=(short)trib.Tributo,
+                        Valortributo=trib.Valor
+                    };
+                    _listaDebitoTributo.Add(_dt);
+                }
+
 
             }
-                       
-
+            ex = parcelamentoRepository.Incluir_DestinoReparc(_listaDestinoReparc);
+            ex = parcelamentoRepository.Incluir_Debito_Parcela(_listaDebitoParcela);
 
 
 
