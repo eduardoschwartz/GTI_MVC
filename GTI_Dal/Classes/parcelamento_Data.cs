@@ -988,6 +988,30 @@ namespace GTI_Dal.Classes {
                 return null;
             }
         }
+
+        public Exception Atualizar_Status_Origem(int Codigo,List<SpParcelamentoOrigem>Lista) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[6];
+
+                foreach (SpParcelamentoOrigem Reg in Lista) {
+                    Parametros[0] = new SqlParameter { ParameterName = "@codreduzido", SqlDbType = SqlDbType.Int, SqlValue = Codigo };
+                    Parametros[1] = new SqlParameter { ParameterName = "@anoexercicio", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Exercicio };
+                    Parametros[2] = new SqlParameter { ParameterName = "@codlancamento", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Lancamento };
+                    Parametros[3] = new SqlParameter { ParameterName = "@seqlancamento", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Sequencia };
+                    Parametros[4] = new SqlParameter { ParameterName = "@numparcela", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Parcela };
+                    Parametros[5] = new SqlParameter { ParameterName = "@codcomplemento", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Complemento };
+                    try {
+                        db.Database.ExecuteSqlCommand("UPDATE debitoparcela set statuslanc=4 WHERE codreduzido=@codreduzido and anoexercicio=@anoexercicio and codlancamento=@codlancamento and " +
+                            "seqlancamento=@seqlancamento and numparcela=@numparcela and codcomplemento=@codcomplemento", Parametros);
+                    } catch (Exception ex) {
+                        return ex;
+                    }
+                }
+
+                return null;
+            }
+        }
+
     }
 }
 

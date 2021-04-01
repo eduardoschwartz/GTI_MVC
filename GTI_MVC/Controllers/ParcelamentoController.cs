@@ -504,6 +504,16 @@ namespace GTI_MVC.Controllers {
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
 
+            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(model.Guid);
+            model.Sim_Correcao = _master.Sim_Correcao;
+            model.Sim_Honorario = _master.Sim_Honorario;
+            model.Sim_Juros = _master.Sim_Juros;
+            model.Sim_Juros_apl = _master.Sim_Juros_apl;
+            model.Sim_Liquido = _master.Sim_Liquido;
+            model.Sim_Multa = _master.Sim_Multa;
+            model.Sim_Principal = _master.Sim_Principal;
+            model.Sim_Total = _master.Sim_Total;
+
             var selectedIds = model.getSelectedIds();
             int t = 1;
             decimal _totalSel = 0;
@@ -589,11 +599,13 @@ namespace GTI_MVC.Controllers {
                 List<SpExtrato> _listaExtrato = tributarioRepository.Lista_Extrato_Tributo(model.Contribuinte.Codigo, item.Exercicio, item.Exercicio, item.Lancamento, item.Lancamento, item.Sequencia, item.Sequencia, item.Parcela, item.Parcela, item.Complemento, item.Complemento);
                 foreach (SpExtrato _ext in _listaExtrato) {
                     bool _find = false;
+                    int _pos = 0;
                     foreach (Parcelamento_Web_Tributo _trib in _listaTributo) {
                         if (_trib.Tributo == _ext.Codtributo) {
                             _find = true;
                             break;
                         }
+                        _pos++;
                     }
                     if (!_find) {
                         _total += _ext.Valortributo;
@@ -605,12 +617,57 @@ namespace GTI_MVC.Controllers {
                         };
                         _listaTributo.Add(regT);
                     }
+                    else{
+                        _listaTributo[_pos].Valor += _ext.Valortributo;
+                    }
                 }
             }
 
             for (int i = 0; i < _listaTributo.Count; i++) {
                 _listaTributo[i].Perc = _listaTributo[i].Valor * 100 / _total;
             }
+
+            //Grava Honorario(90), Juros(113), Multa(112), Correcao(26) e Juros Apl(585)
+            Parcelamento_Web_Tributo r = new Parcelamento_Web_Tributo() {
+                Guid = model.Guid,
+                Tributo = 90,
+                Valor = model.Sim_Honorario,
+                Perc = 0
+            };
+            _listaTributo.Add(r);
+
+            r = new Parcelamento_Web_Tributo() {
+                Guid = model.Guid,
+                Tributo = 113,
+                Valor = model.Sim_Juros,
+                Perc = 0
+            };
+            _listaTributo.Add(r);
+
+            r = new Parcelamento_Web_Tributo() {
+                Guid = model.Guid,
+                Tributo = 112,
+                Valor = model.Sim_Multa,
+                Perc = 0
+            };
+            _listaTributo.Add(r);
+
+            r = new Parcelamento_Web_Tributo() {
+                Guid = model.Guid,
+                Tributo = 26,
+                Valor = model.Sim_Correcao,
+                Perc = 0
+            };
+            _listaTributo.Add(r);
+
+            r = new Parcelamento_Web_Tributo() {
+                Guid = model.Guid,
+                Tributo = 585,
+                Valor = model.Sim_Juros,
+                Perc = 0
+            };
+            _listaTributo.Add(r);
+
             ex = parcelamentoRepository.Incluir_Parcelamento_Web_Tributo(_listaTributo);
 
             //###################
@@ -752,6 +809,8 @@ namespace GTI_MVC.Controllers {
                         _valor1 = item.Valor_Total;
                     } else {
                         if (item.Qtde_Parcela == linha && item.Numero_Parcela == 2) {
+                            if (item.Valor_Total  < model.Valor_Minimo)
+                                goto Fim;
                             _valorN = item.Valor_Total;
                             break;
                         }
@@ -776,6 +835,7 @@ namespace GTI_MVC.Controllers {
                 Lista_resumo.Add(r);
             }
             ex = parcelamentoRepository.Incluir_Parcelamento_Web_Simulado_Resumo(_lista_Web_Simulado_Resumo);
+        Fim:;
             model.Lista_Resumo = Lista_resumo;
 
             //################################################################
@@ -1130,12 +1190,12 @@ namespace GTI_MVC.Controllers {
                     };
                     _listaDebitoTributo.Add(_dt);
                 }
-
             }
+
             ex = parcelamentoRepository.Incluir_DestinoReparc(_listaDestinoReparc);
             ex = parcelamentoRepository.Incluir_Debito_Parcela(_listaDebitoParcela);
             ex = parcelamentoRepository.Incluir_Debito_Tributo(_listaDebitoTributo);
-
+            ex = parcelamentoRepository.Atualizar_Status_Origem(_codigoC, _listaSelected);
 
             return View(model);
         }
