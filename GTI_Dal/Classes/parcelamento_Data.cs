@@ -669,7 +669,7 @@ namespace GTI_Dal.Classes {
                 db.Database.CommandTimeout = 180;
 
                 foreach (Parcelamento_Web_Destino Reg in Lista) {
-                    object[] Parametros = new object[14];
+                    object[] Parametros = new object[15];
                     Parametros[0] = new SqlParameter { ParameterName = "@Guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
                     Parametros[1] = new SqlParameter { ParameterName = "@Numero_Parcela", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Numero_Parcela };
                     Parametros[2] = new SqlParameter { ParameterName = "@Data_Vencimento", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_Vencimento };
@@ -684,11 +684,12 @@ namespace GTI_Dal.Classes {
                     Parametros[11] = new SqlParameter { ParameterName = "@Juros_Apl", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Juros_Apl };
                     Parametros[12] = new SqlParameter { ParameterName = "@Valor_Honorario", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Honorario };
                     Parametros[13] = new SqlParameter { ParameterName = "@Valor_Total", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Total };
+                    Parametros[14] = new SqlParameter { ParameterName = "@Proporcao", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Proporcao };
 
                     try {
                         db.Database.ExecuteSqlCommand("INSERT INTO parcelamento_web_destino(Guid,Numero_Parcela,Data_Vencimento,Valor_Liquido,Valor_Juros,Valor_Multa,Valor_Correcao,Valor_Principal," +
-                            "Saldo,Juros_Perc,Juros_Mes,Juros_Apl,Valor_Honorario,Valor_Total) VALUES(@Guid,@Numero_Parcela,@Data_Vencimento,@Valor_Liquido,@Valor_Juros,@Valor_Multa,@Valor_Correcao," +
-                            "@Valor_Principal,@Saldo,@Juros_Perc,@Juros_Mes,@Juros_Apl,@Valor_Honorario,@Valor_Total)", Parametros);
+                            "Saldo,Juros_Perc,Juros_Mes,Juros_Apl,Valor_Honorario,Valor_Total,Proporcao) VALUES(@Guid,@Numero_Parcela,@Data_Vencimento,@Valor_Liquido,@Valor_Juros,@Valor_Multa,@Valor_Correcao," +
+                            "@Valor_Principal,@Saldo,@Juros_Perc,@Juros_Mes,@Juros_Apl,@Valor_Honorario,@Valor_Total,@Proporcao)", Parametros);
                     } catch (Exception ex) {
                         return ex;
                     }

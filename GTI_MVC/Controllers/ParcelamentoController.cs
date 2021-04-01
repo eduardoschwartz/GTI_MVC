@@ -1049,20 +1049,21 @@ namespace GTI_MVC.Controllers {
             List<Parcelamento_Web_Destino> _lista_Parcelamento_Web_Destino = new List<Parcelamento_Web_Destino>();
             foreach (Parcelamento_Web_Simulado _s in model.Lista_Simulado.Where(m=>m.Qtde_Parcela==_qtdeParc)) {
                 Parcelamento_Web_Destino _d = new Parcelamento_Web_Destino() {
-                    Data_Vencimento=_s.Data_Vencimento,
-                    Guid=_s.Guid,
-                    Numero_Parcela=_s.Numero_Parcela,
-                    Juros_Apl=_s.Juros_Apl,
-                    Juros_Mes=_s.Juros_Mes,
-                    Juros_Perc=_s.Juros_Perc,
-                    Saldo=_s.Saldo,
-                    Valor_Correcao=_s.Valor_Correcao,
-                    Valor_Honorario=_s.Valor_Honorario,
-                    Valor_Juros=_s.Valor_Juros,
-                    Valor_Liquido=_s.Valor_Liquido,
-                    Valor_Multa=_s.Valor_Multa,
-                    Valor_Principal=_s.Valor_Principal,
-                    Valor_Total=_s.Valor_Total
+                    Data_Vencimento = _s.Data_Vencimento,
+                    Guid = _s.Guid,
+                    Numero_Parcela = _s.Numero_Parcela,
+                    Juros_Apl = _s.Juros_Apl,
+                    Juros_Mes = _s.Juros_Mes,
+                    Juros_Perc = _s.Juros_Perc,
+                    Saldo = _s.Saldo,
+                    Valor_Correcao = _s.Valor_Correcao,
+                    Valor_Honorario = _s.Valor_Honorario,
+                    Valor_Juros = _s.Valor_Juros,
+                    Valor_Liquido = _s.Valor_Liquido,
+                    Valor_Multa = _s.Valor_Multa,
+                    Valor_Principal = _s.Valor_Principal,
+                    Valor_Total = _s.Valor_Total,
+                    Proporcao = _s.Valor_Liquido * 100 / _master.Sim_Liquido
                 };
                 _lista_Parcelamento_Web_Destino.Add(_d);
             }

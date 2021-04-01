@@ -22,6 +22,6 @@ namespace GTI_Models.Models {
         public decimal Juros_Apl { get; set; }
         public decimal Valor_Honorario { get; set; }
         public decimal Valor_Total { get; set; }
-
+        public decimal Proporcao { get; set; }
     }
 }
