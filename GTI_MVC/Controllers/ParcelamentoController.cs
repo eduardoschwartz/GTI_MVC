@@ -589,8 +589,40 @@ namespace GTI_MVC.Controllers {
 
             ex = parcelamentoRepository.Incluir_Parcelamento_Web_Selected(_listaSelect);
 
+            //Atualiza Totais
+            decimal _percP = 0, _percJ = 0, _percM = 0, _percC = 0;
+            decimal _valorAddP = 0, _valorAddJ = 0, _valorAddM = 0, _valorAddC = 0;
+            _percP = _somaP * 100 / _somaT;
+            _percJ = _somaJ * 100 / _somaT;
+            _percM = _somaM * 100 / _somaT;
+            _percC = _somaC * 100 / _somaT;
+
+            _valorAddP = _somaE * _percP / 100;
+            _valorAddJ = _somaE * _percJ / 100;
+            _valorAddM = _somaE * _percM / 100;
+            _valorAddC = _somaE * _percC / 100;
+
+            Parcelamento_web_master regP = new Parcelamento_web_master() {
+                Guid = model.Guid,
+                Soma_Principal = _somaP,
+                Soma_Juros = _somaJ,
+                Soma_Multa = _somaM,
+                Soma_Correcao = _somaC,
+                Soma_Total = _somaT,
+                Soma_Entrada = _somaE,
+                Perc_Principal = _percP,
+                Perc_Juros = _percJ,
+                Perc_Multa = _percM,
+                Perc_Correcao = _percC,
+                Valor_add_Principal = _valorAddP,
+                Valor_add_Juros = _valorAddJ,
+                Valor_add_Multa = _valorAddM,
+                Valor_add_Correcao = _valorAddC
+            };
+            ex = parcelamentoRepository.Atualizar_Totais_Master(regP);
+
             //Grava os tributos
-            
+
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(model.Guid);
             List<Parcelamento_Web_Tributo> _listaTributo = new List<Parcelamento_Web_Tributo>();
@@ -607,8 +639,8 @@ namespace GTI_MVC.Controllers {
                         }
                         _pos++;
                     }
+                    _total += _ext.Valortributo;
                     if (!_find) {
-                        _total += _ext.Valortributo;
                         Parcelamento_Web_Tributo regT = new Parcelamento_Web_Tributo() {
                             Guid=model.Guid,
                             Tributo=_ext.Codtributo,
@@ -631,77 +663,46 @@ namespace GTI_MVC.Controllers {
             Parcelamento_Web_Tributo r = new Parcelamento_Web_Tributo() {
                 Guid = model.Guid,
                 Tributo = 90,
-                Valor = model.Sim_Honorario,
-                Perc = 0
+                Valor = _somaT*10/100,
+                Perc = 100
             };
             _listaTributo.Add(r);
 
             r = new Parcelamento_Web_Tributo() {
                 Guid = model.Guid,
                 Tributo = 113,
-                Valor = model.Sim_Juros,
-                Perc = 0
+                Valor = _somaJ,
+                Perc = 100
             };
             _listaTributo.Add(r);
 
             r = new Parcelamento_Web_Tributo() {
                 Guid = model.Guid,
                 Tributo = 112,
-                Valor = model.Sim_Multa,
-                Perc = 0
+                Valor = _somaM,
+                Perc = 100
             };
             _listaTributo.Add(r);
 
             r = new Parcelamento_Web_Tributo() {
                 Guid = model.Guid,
                 Tributo = 26,
-                Valor = model.Sim_Correcao,
-                Perc = 0
+                Valor = _somaC,
+                Perc = 100
             };
             _listaTributo.Add(r);
 
             r = new Parcelamento_Web_Tributo() {
                 Guid = model.Guid,
                 Tributo = 585,
-                Valor = model.Sim_Juros,
-                Perc = 0
+                Valor = _somaE,
+                Perc = 100
             };
             _listaTributo.Add(r);
 
             ex = parcelamentoRepository.Incluir_Parcelamento_Web_Tributo(_listaTributo);
 
             //###################
-
-            decimal _percP = 0, _percJ = 0, _percM = 0, _percC = 0;
-            decimal _valorAddP = 0, _valorAddJ = 0, _valorAddM = 0, _valorAddC = 0;
-            _percP = _somaP * 100 / _somaT;
-            _percJ = _somaJ * 100 / _somaT;
-            _percM = _somaM * 100 / _somaT;
-            _percC = _somaC * 100 / _somaT;
-
-            _valorAddP = _somaE * _percP / 100;
-            _valorAddJ = _somaE * _percJ / 100;
-            _valorAddM = _somaE * _percM / 100;
-            _valorAddC = _somaE * _percC / 100;
-
-            Parcelamento_web_master regP = new Parcelamento_web_master() {
-                Guid=model.Guid,
-                Soma_Principal=_somaP,
-                Soma_Juros=_somaJ,
-                Soma_Multa=_somaM,
-                Soma_Correcao=_somaC,
-                Soma_Total=_somaT,
-                Soma_Entrada=_somaE,
-                Perc_Principal=_percP,
-                Perc_Juros=_percJ,
-                Perc_Multa=_percM,
-                Perc_Correcao=_percC,
-                Valor_add_Principal=_valorAddP,
-                Valor_add_Juros=_valorAddJ,
-                Valor_add_Multa=_valorAddM,
-                Valor_add_Correcao=_valorAddC
-            };
-            ex = parcelamentoRepository.Atualizar_Totais_Master(regP);
 
             return RedirectToAction("Parc_reqd", new { p = model.Guid });
 
@@ -1174,9 +1175,10 @@ namespace GTI_MVC.Controllers {
                     Statuslanc=_status
                 };
                 _listaDebitoParcela.Add(dp);
-                
-                //Gravar os tributos
 
+                //Gravar os tributos
+                decimal _Perc1 = _lista_Parcelamento_Web_Destino[0].Proporcao;
+                decimal _PercN = _lista_Parcelamento_Web_Destino[1].Proporcao;
                 List<Parcelamento_Web_Tributo> _ListaTributo = parcelamentoRepository.Lista_Parcelamento_Tributo(model.Guid);
                 foreach (Parcelamento_Web_Tributo trib in _ListaTributo) {
                     Debitotributo _dt = new Debitotributo() {
@@ -1186,9 +1188,14 @@ namespace GTI_MVC.Controllers {
                         Seqlancamento=dp.Seqlancamento,
                         Numparcela=dp.Numparcela,
                         Codcomplemento=dp.Codcomplemento,
-                        Codtributo=(short)trib.Tributo,
-                        Valortributo=trib.Valor
+                        Codtributo=(short)trib.Tributo
+                        
                     };
+                    if(_dt.Numparcela==1)
+                        _dt.Valortributo = trib.Valor*_Perc1/100;
+                    else
+                        _dt.Valortributo = trib.Valor*_PercN/100;
+
                     _listaDebitoTributo.Add(_dt);
                 }
             }
