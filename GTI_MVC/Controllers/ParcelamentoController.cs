@@ -552,10 +552,11 @@ namespace GTI_MVC.Controllers {
             }
             t = 1;
             Exception ex = parcelamentoRepository.Excluir_parcelamento_Web_Selected(model.Guid);
-
+            bool _ajuizado = false;
             decimal _somaP = 0, _somaJ = 0, _somaM = 0, _somaC = 0, _somaT = 0,_somaE=0;
             List<Parcelamento_web_selected> _listaSelect = new List<Parcelamento_web_selected>();
             foreach (SelectDebitoParcelamentoEditorViewModel item in _listaOrigem) {
+                _ajuizado = item.Ajuizado == "S" ? true : false;
                 Parcelamento_web_selected reg = new Parcelamento_web_selected() {
                     Ajuizado = item.Ajuizado,
                     Ano = item.Exercicio,
@@ -660,45 +661,47 @@ namespace GTI_MVC.Controllers {
             }
 
             //Grava Honorario(90), Juros(113), Multa(112), Correcao(26) e Juros Apl(585)
-            Parcelamento_Web_Tributo r = new Parcelamento_Web_Tributo() {
-                Guid = model.Guid,
-                Tributo = 90,
-                Valor = _somaT*10/100,
-                Perc = 100
-            };
-            _listaTributo.Add(r);
+            Parcelamento_Web_Tributo r = null;
+            if (_somaJ > 0) {
+                r = new Parcelamento_Web_Tributo() {
+                    Guid = model.Guid,
+                    Tributo = 113,
+                    Valor = _somaJ,
+                    Perc = 100
+                };
+                _listaTributo.Add(r);
+            }
 
-            r = new Parcelamento_Web_Tributo() {
-                Guid = model.Guid,
-                Tributo = 113,
-                Valor = _somaJ,
-                Perc = 100
-            };
-            _listaTributo.Add(r);
+            if (_ajuizado) {
+                 r = new Parcelamento_Web_Tributo() {
+                    Guid = model.Guid,
+                    Tributo = 90,
+                    Valor = _somaT * 10 / 100,
+                    Perc = 100
+                };
+                _listaTributo.Add(r);
+            }
 
-            r = new Parcelamento_Web_Tributo() {
-                Guid = model.Guid,
-                Tributo = 112,
-                Valor = _somaM,
-                Perc = 100
-            };
-            _listaTributo.Add(r);
+            if (_somaM > 0) {
+                r = new Parcelamento_Web_Tributo() {
+                    Guid = model.Guid,
+                    Tributo = 112,
+                    Valor = _somaM,
+                    Perc = 100
+                };
+                _listaTributo.Add(r);
+            }
 
-            r = new Parcelamento_Web_Tributo() {
-                Guid = model.Guid,
-                Tributo = 26,
-                Valor = _somaC,
-                Perc = 100
-            };
-            _listaTributo.Add(r);
+            if (_somaC > 0) {
+                r = new Parcelamento_Web_Tributo() {
+                    Guid = model.Guid,
+                    Tributo = 26,
+                    Valor = _somaC,
+                    Perc = 100
+                };
+                _listaTributo.Add(r);
+            }
 
-            r = new Parcelamento_Web_Tributo() {
-                Guid = model.Guid,
-                Tributo = 585,
-                Valor = _somaE,
-                Perc = 100
-            };
-            _listaTributo.Add(r);
 
             ex = parcelamentoRepository.Incluir_Parcelamento_Web_Tributo(_listaTributo);
 
@@ -1129,6 +1132,17 @@ namespace GTI_MVC.Controllers {
             byte _lastSeq = parcelamentoRepository.Retorna_Seq_Disponivel(_codigoC);
 
             List<Parcelamento_Web_Destino> _listaDestino = parcelamentoRepository.Lista_Parcelamento_Web_Destino(_guid);
+            //Adiiona o tributo 585 Juros.Apl lista de tributos
+            List<Parcelamento_Web_Tributo> _listaTributo = new List<Parcelamento_Web_Tributo>();
+            Parcelamento_Web_Tributo r = new Parcelamento_Web_Tributo() {
+                Guid = model.Guid,
+                Tributo = 585,
+                Valor = _lista_Parcelamento_Web_Destino[0].Juros_Apl,
+                Perc = 100
+            };
+            _listaTributo.Add(r);
+            ex = parcelamentoRepository.Incluir_Parcelamento_Web_Tributo(_listaTributo);
+
             List<Destinoreparc> _listaDestinoReparc = new List<Destinoreparc>();
             List<Debitoparcela> _listaDebitoParcela = new List<Debitoparcela>();
             List<Debitotributo> _listaDebitoTributo = new List<Debitotributo>();
@@ -1179,7 +1193,8 @@ namespace GTI_MVC.Controllers {
                 //Gravar os tributos
                 decimal _Perc1 = _lista_Parcelamento_Web_Destino[0].Proporcao;
                 decimal _PercN = _lista_Parcelamento_Web_Destino[1].Proporcao;
-                List<Parcelamento_Web_Tributo> _ListaTributo = parcelamentoRepository.Lista_Parcelamento_Tributo(model.Guid);
+
+            List<Parcelamento_Web_Tributo> _ListaTributo = parcelamentoRepository.Lista_Parcelamento_Tributo(model.Guid);
                 foreach (Parcelamento_Web_Tributo trib in _ListaTributo) {
                     Debitotributo _dt = new Debitotributo() {
                         Codreduzido=dp.Codreduzido,
@@ -1196,6 +1211,8 @@ namespace GTI_MVC.Controllers {
                     else
                         _dt.Valortributo = trib.Valor*_PercN/100;
 
+                    if(_dt.Codtributo==585)
+                        _dt.Valortributo = trib.Valor ;
                     _listaDebitoTributo.Add(_dt);
                 }
             }
