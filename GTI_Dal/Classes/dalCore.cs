@@ -52,6 +52,26 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public static int RetornaDvProcesso(int Numero) {
+            int soma = 0, index = 0, Mult = 6;
+            string sNumProc = Numero.ToString().PadLeft(5, '0');
+            while (index < 5) {
+                int nChar = Convert.ToInt32(sNumProc.Substring(index, 1));
+                soma += (Mult * nChar);
+                Mult--;
+                index++;
+            }
+
+            int DigAux = soma % 11;
+            int Digito = 11 - DigAux;
+            if (Digito == 10)
+                Digito = 0;
+            if (Digito == 11)
+                Digito = 1;
+
+            return Digito;
+        }
+
         public static Int32 RetornaDVDocumento(Int32 nNumDoc) {
             String sFromN = "";
             Int32 nDV = 0;

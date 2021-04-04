@@ -1222,23 +1222,158 @@ namespace GTI_MVC.Controllers {
             ex = parcelamentoRepository.Incluir_Debito_Tributo(_listaDebitoTributo);
             ex = parcelamentoRepository.Atualizar_Status_Origem(_codigoC, _listaSelected);
 
+            return RedirectToAction("Parc_reqf", new { p = model.Guid });
+        }
+
+
+        [Route("Parc_reqf")]
+        [HttpGet]
+        public ActionResult Parc_reqf(string p) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+            bool _existe = parcelamentoRepository.Existe_Parcelamento_Web_Master(p);
+            if (!_existe)
+                return RedirectToAction("Login_gti", "Home");
+
+            //Load Master
+            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
+            string _numProcesso = _master.Processo_Numero.ToString()+"-"+Functions.RetornaDvProcesso(_master.Processo_Numero)+"/"+_master.Processo_Ano.ToString();
+            ParcelamentoViewModel model = new ParcelamentoViewModel() {
+                Guid = p,
+                Plano_Nome = _master.Plano_Nome,
+                Data_Vencimento = Convert.ToDateTime(_master.Data_Vencimento).ToString("dd/MM/yyyy"),
+                Plano_Codigo = _master.Plano_Codigo,
+                Valor_Minimo = _master.Valor_minimo,
+                Perc_desconto = _master.Perc_Desconto,
+                Processo_ano=_master.Processo_Ano,
+                Processo_numero=_master.Processo_Numero,
+                NumeroProcesso=_numProcesso,
+                Sim_Correcao=_master.Sim_Correcao,
+                Sim_Honorario=_master.Sim_Honorario,
+                Sim_Juros=_master.Sim_Juros,
+                Sim_Juros_apl=_master.Sim_Juros_apl,
+                Sim_Liquido=_master.Sim_Liquido,
+                Sim_Multa=_master.Sim_Multa,
+                Sim_Principal=_master.Sim_Principal,
+                Sim_Total=_master.Sim_Total,
+                Soma_Correcao=_master.Soma_Correcao,
+                Soma_Juros=_master.Soma_Juros,
+                Soma_Multa=_master.Soma_Multa,
+                Soma_Penalidade=_master.Soma_Entrada,
+                Soma_Principal=_master.Soma_Principal,
+                Soma_Total=_master.Soma_Total
+            };
+            model.Requerente = new Parc_Requerente() {
+                Codigo = _master.Requerente_Codigo,
+                Nome = _master.Requerente_Nome,
+                Cpf_Cnpj = _master.Requerente_CpfCnpj,
+                Logradouro_Nome = _master.Requerente_Logradouro,
+                Numero = _master.Requerente_Numero,
+                Complemento = _master.Requerente_Complemento,
+                Bairro_Nome = _master.Requerente_Bairro,
+                Cidade_Nome = _master.Requerente_Cidade,
+                UF = _master.Requerente_Uf,
+                Telefone = _master.Requerente_Telefone,
+                Email = _master.Requerente_Email,
+                Cep = _master.Requerente_Cep.ToString("00000-000")
+            };
+
+            model.Contribuinte = new Parc_Contribuinte() {
+                Codigo = _master.Contribuinte_Codigo,
+                Nome = _master.Contribuinte_nome,
+                Cpf_Cnpj = Functions.FormatarCpfCnpj(_master.Contribuinte_cpfcnpj),
+                Logradouro_Nome = _master.Contribuinte_endereco,
+                Bairro_Nome = _master.Contribuinte_bairro + " - " + _master.Contribuinte_cidade + "/" + _master.Contribuinte_uf,
+                Cep = _master.Contribuinte_cep.ToString("00000-000")
+            };
+
+            //Load Origem
+            decimal _SomaP = 0, _SomaM = 0, _SomaJ = 0, _SomaC = 0, _SomaT = 0, _SomaE = 0;
+            List<SpParcelamentoOrigem> ListaOrigem = parcelamentoRepository.Lista_Parcelamento_Selected(p);
+            bool _bAjuizado = ListaOrigem[0].Ajuizado == "S";
+            List<SelectDebitoParcelamentoEditorViewModel> _listaP = new List<SelectDebitoParcelamentoEditorViewModel>();
+            foreach (SpParcelamentoOrigem item in ListaOrigem) {
+                SelectDebitoParcelamentoEditorViewModel d = new SelectDebitoParcelamentoEditorViewModel() {
+                    Ajuizado = item.Ajuizado,
+                    Complemento = item.Complemento,
+                    Data_vencimento = item.Data_vencimento,
+                    Exercicio = item.Exercicio,
+                    Idx = item.Idx,
+                    Lancamento = item.Lancamento,
+                    Nome_lancamento = item.Nome_lancamento,
+                    Parcela = item.Parcela,
+                    Perc_penalidade = item.Perc_penalidade,
+                    Qtde_parcelamento = item.Qtde_parcelamento,
+                    Selected = item.Selected,
+                    Sequencia = item.Sequencia,
+                    Valor_correcao = item.Valor_correcao,
+                    Valor_juros = item.Valor_juros,
+                    Valor_multa = item.Valor_multa,
+                    Valor_penalidade = item.Valor_penalidade,
+                    Valor_principal = item.Valor_principal,
+                    Valor_total = item.Valor_total
+                };
+                _listaP.Add(d);
+            }
+            model.Lista_Origem_Selected = _listaP;
+
+            //Carrega Destino
+            List<Parcelamento_Web_Destino> _listaD = parcelamentoRepository.Lista_Parcelamento_Web_Destino(model.Guid);
+            List<Parcelamento_Web_Simulado> _listaS = new List<Parcelamento_Web_Simulado>();
+            foreach (Parcelamento_Web_Destino item in _listaD) {
+                Parcelamento_Web_Simulado _s = new Parcelamento_Web_Simulado() {
+                    Data_Vencimento=item.Data_Vencimento,
+                    Guid=item.Guid,
+                    Juros_Apl=item.Juros_Apl,
+                    Juros_Mes=item.Juros_Mes,
+                    Juros_Perc=item.Juros_Perc,
+                    Numero_Parcela=item.Numero_Parcela ,
+                    Qtde_Parcela=_listaD.Count,
+                    Saldo=item.Saldo,
+                    Valor_Correcao=item.Valor_Correcao,
+                    Valor_Honorario=item.Valor_Honorario,
+                    Valor_Juros=item.Valor_Juros,
+                    Valor_Liquido=item.Valor_Liquido,
+                    Valor_Multa=item.Valor_Multa,
+                    Valor_Principal=item.Valor_Principal,
+                    Valor_Total=item.Valor_Total
+                };
+                _listaS.Add(_s);
+            }
+
+            model.Lista_Simulado = _listaS;
+
             return View(model);
         }
 
+        [Route("Parc_query")]
+        [HttpGet]
+        public ActionResult Parc_query() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
 
+            List<Parc_Processos> _listaProc = parcelamentoRepository.Lista_Parcelamento_Processos();
+            ParcelamentoViewModel model = new ParcelamentoViewModel();
+            model.Lista_Processo = _listaProc;
 
-            //[ChildActionOnly]
-            //public ActionResult Parc_simulado(string p) {
-
-            //    Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
-            //    //Load Master
-            //    Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
-            //    SelectDebitoParcelamentoEditorViewModel model = new SelectDebitoParcelamentoEditorViewModel() {
-
-            //    };
-
-            //    return PartialView("Parc_simulado", model);
-            //}
-
+            return View(model);
         }
+
+        //[ChildActionOnly]
+        //public ActionResult Parc_simulado(string p) {
+
+        //    Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+        //    //Load Master
+        //    Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
+        //    SelectDebitoParcelamentoEditorViewModel model = new SelectDebitoParcelamentoEditorViewModel() {
+
+        //    };
+
+        //    return PartialView("Parc_simulado", model);
+        //}
+
     }
+}

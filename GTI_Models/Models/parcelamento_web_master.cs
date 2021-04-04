@@ -65,5 +65,18 @@ namespace GTI_Models.Models {
         public decimal Sim_Perc_Correcao { get; set; }
         public decimal Sim_Perc_Juros_Apl { get; set; }
         public decimal Sim_Perc_Honorario { get; set; }
+        public short Processo_Ano { get; set; }
+        public int Processo_Numero { get; set; }
     }
+
+    public class Parc_Processos {
+        public string Guid { get; set; }
+        public string Numero_Processo { get; set; }
+        public int Codigo_Contribuinte { get; set; }
+        public string Nome_Contribuinte { get; set; }
+        public DateTime Data_Parcelamento { get; set; }
+        public string Situacao { get; set; }
+    }
+
+
 }

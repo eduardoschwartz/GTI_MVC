@@ -1013,6 +1013,26 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<Parc_Processos> Lista_Parcelamento_Processos() {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from t in db.Parcelamento_Web_Master orderby t.Data_Geracao select t).ToList();
+                List<Parc_Processos> Lista = new List<Parc_Processos>();
+                foreach (var item in reg) {
+                    Parc_Processos Linha = new Parc_Processos {
+                        Guid = item.Guid,
+                        Codigo_Contribuinte = item.Contribuinte_Codigo,
+                        Data_Parcelamento = item.Data_Geracao,
+                        Nome_Contribuinte = item.Contribuinte_nome,
+                        Numero_Processo = item.Processo_Numero.ToString() + "-" + dalCore.RetornaDvProcesso(item.Processo_Numero) + "/" + item.Processo_Ano.ToString(),
+                        Situacao = "ATIVO"
+                    };
+                    Lista.Add(Linha);
+                }
+                return Lista;
+            }
+        }
+
+
     }
 }
 

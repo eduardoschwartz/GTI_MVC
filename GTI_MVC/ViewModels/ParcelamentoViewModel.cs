@@ -1,6 +1,7 @@
 ﻿using GTI_Models.Models;
 using GTI_Mvc.Views.Parcelamento.EditorTemplates;
 using GTI_Mvc.Views.Tributario.EditorTemplates;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,8 +41,7 @@ namespace GTI_Mvc.ViewModels {
         public decimal Sim_Honorario { get; set; }
         public decimal Sim_Juros_apl { get; set; }
         public decimal Sim_Total { get; set; }
-
-
+        public List<Parc_Processos> Lista_Processo { get; set; }
 
         public ParcelamentoViewModel() {
             this.Lista_Origem = new List<SelectDebitoParcelamentoEditorViewModel>();
