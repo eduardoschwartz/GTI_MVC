@@ -1022,7 +1022,7 @@ namespace GTI_Dal.Classes {
                         Guid = item.Guid,
                         Codigo_Contribuinte = item.Contribuinte_Codigo,
                         Data_Parcelamento = item.Data_Geracao,
-                        Nome_Contribuinte = item.Contribuinte_nome,
+                        Nome_Contribuinte = dalCore.TruncateTo( item.Contribuinte_nome,37),
                         Numero_Processo = item.Processo_Numero.ToString() + "-" + dalCore.RetornaDvProcesso(item.Processo_Numero) + "/" + item.Processo_Ano.ToString(),
                         Situacao = "ATIVO"
                     };

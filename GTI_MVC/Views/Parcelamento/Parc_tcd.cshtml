@@ -66,6 +66,14 @@
 
         <div class="card">
             <div class="card-body">
+                <Label style="font-size:14px">Nº Processo:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.NumeroProcesso</span><Label style="padding-left:30px;font-size:14px">Data da Confissão de Dívida:&nbsp;</Label><span style="font-weight:bold">@Model.Data_Vencimento</span><Label style="padding-left:30px; font-size:14px">Código/Insc. do Lançamento:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Contribuinte.Codigo</span><br />
+                <Label style="font-size:14px">Nome/Razão Social:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Contribuinte.Nome</span><br />
+                @if (Model.Contribuinte.Logradouro_Nome != "") {
+                    <Label style="font-size:14px">Endereço:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Contribuinte.Logradouro_Nome</span><br />
+                }
+                <Label style="font-size:14px">Cpf/Cnpj:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Requerente.Cpf_Cnpj</span><Label style="padding-left:30px;font-size:14px">Qtde Parcelas:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Qtde_Parcela</span><Label style="padding-left:30px;font-size:14px">Valor Atualizado R$:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Soma_Total.ToString("#0.00")</span><br />
+                <br />
+
                 <article style="text-align:justify;font-family: Arial, Helvetica, sans-serif;font-size:14px">
                     Pelo presente ato, o (a) Contribuinte acima identificado(a), adiante chamado(a) DEVEDOR, formaliza CONFISSÃO DE DÍVIDA, tendo como credor o MUNICÍPIO DE JABOTICABAL, adiante chamado CREDOR, cuja importância segue declarada e discriminada no(s) nos anexos que deste instrumento passam a fazer parte integrante e inseparável, propondo-se a quitá-la mediante as seguintes cláusulas e condições, que prevalecerão não só para garantir a extinção do crédito, como também para facilitar sua cobrança, a saber:<br />
                     1ª) O DEVEDOR, renunciando expressamente a qualquer contestação, embargos ou impugnações quanto ao valor e procedência da dívida, assume integral responsabilidade pela exatidão do montante declarado e confessado, ficando, entretanto, expressamente reservado o direito do CREDOR de apurar, a qualquer tempo, a existência de outras importâncias devidas, não incluídas neste instrumento.<br />

@@ -1242,37 +1242,17 @@ namespace GTI_MVC.Controllers {
         [HttpPost]
         public ActionResult Parc_tan(ParcelamentoViewModel model, string action) {
 
-            return RedirectToAction("Parc_tcd", new { p = model.Guid });
-        }
-
-        [Route("Parc_tcd")]
-        [HttpGet]
-        public ActionResult Parc_tcd(string p) {
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
-            ParcelamentoViewModel model = new ParcelamentoViewModel();
-            model.Guid = p;
-            return View(model);
-        }
-
-        [Route("Parc_tcd")]
-        [HttpPost]
-        public ActionResult Parc_tcd(ParcelamentoViewModel model, string action) {
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
-
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+            string _guid = model.Guid;
             int _userId = Convert.ToInt32(Session["hashid"]);
             bool _userWeb = Session["hashfunc"].ToString() == "S" ? false : true;
-
-            string _guid = model.Guid;
-
-            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(_guid);
             List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(_guid);
             IEnumerable<short> _listaAnos = _listaSelected.Select(o => o.Exercicio).Distinct();
             int _codigoR = _master.Requerente_Codigo;
             int _codigoC = _master.Contribuinte_Codigo;
             int _qtdeParc = _master.Qtde_Parcela;
+
 
             //Criar Processo
             Processo_bll protocoloRepository = new Processo_bll(_connection);
@@ -1306,9 +1286,100 @@ namespace GTI_MVC.Controllers {
             Exception ex = protocoloRepository.Incluir_Processo(_p);
             ex = parcelamentoRepository.Atualizar_Processo_Master(_guid, _ano, _numero);
 
+
+            return RedirectToAction("Parc_tcd", new { p = model.Guid });
+        }
+
+        [Route("Parc_tcd")]
+        [HttpGet]
+        public ActionResult Parc_tcd(string p) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
+            string _guid = p;
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(_guid);
+
+            string _anos = "1999,2000";
+            string _endereco = _master.Contribuinte_endereco + " " + _master.Contribuinte_bairro;
+
+            ParcelamentoViewModel model = new ParcelamentoViewModel();
+            Parc_Contribuinte pc = new Parc_Contribuinte() {
+                Codigo = _master.Contribuinte_Codigo,
+                Nome = _master.Contribuinte_nome,
+                Logradouro_Nome=_master.Contribuinte_Codigo<50000?_endereco:""
+            };
+            Parc_Requerente pr = new Parc_Requerente() {
+                Nome = _master.Requerente_Nome,
+                Cpf_Cnpj = Functions.FormatarCpfCnpj(_master.Requerente_CpfCnpj)
+            };
+
+            model.Contribuinte = pc;
+            model.Requerente = pr;
+            model.Qtde_Parcela = _master.Qtde_Parcela;
+            model.Soma_Total = _master.Sim_Total;
+            model.NumeroProcesso = _master.Processo_Numero.ToString() + "-" + Functions.RetornaDvProcesso(_master.Processo_Numero) + "/" + _master.Processo_Ano.ToString();
+            model.Data_Vencimento = Convert.ToDateTime(_master.Data_Vencimento).ToString("dd/MM/yyyy");
+            model.Exercicios = _anos;
+            model.Guid = p;
+            return View(model);
+        }
+
+        [Route("Parc_tcd")]
+        [HttpPost]
+        public ActionResult Parc_tcd(ParcelamentoViewModel model, string action) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
+            int _userId = Convert.ToInt32(Session["hashid"]);
+            bool _userWeb = Session["hashfunc"].ToString() == "S" ? false : true;
+            string _guid = model.Guid;
+
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(_guid);
+            List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(_guid);
+            IEnumerable<short> _listaAnos = _listaSelected.Select(o => o.Exercicio).Distinct();
+            int _codigoR = _master.Requerente_Codigo;
+            int _codigoC = _master.Contribuinte_Codigo;
+            int _qtdeParc = _master.Qtde_Parcela;
+            short _ano = _master.Processo_Ano;
+            int _numero = _master.Processo_Numero;
+
+            ////Criar Processo
+            //Processo_bll protocoloRepository = new Processo_bll(_connection);
+            //short _ano = (short)DateTime.Now.Year;
+            //int _numero = protocoloRepository.Retorna_Numero_Disponivel(_ano);
+            //string _compl = "PARCELAMENTO DE DÉBITOS CÓD: " + _codigoC.ToString();
+            //string _obs = "Exercícios: ";
+            //foreach (short _anoP in _listaAnos) {
+            //    _obs += _anoP.ToString() + ", ";
+            //}
+            //_obs = _obs.Substring(0, _obs.Length - 1) + " parcelado em: " + _qtdeParc.ToString() + " vezes.";
+
+            //Processogti _p = new Processogti() {
+            //    Ano = _ano,
+            //    Numero = _numero,
+            //    Interno = false,
+            //    Fisico = false,
+            //    Hora = DateTime.Now.ToString("hh:mm"),
+            //    Userid = _userId,
+            //    Codassunto = 606,
+            //    Complemento = _compl,
+            //    Observacao = _obs,
+            //    Codcidadao = _codigoR,
+            //    Dataentrada = DateTime.Now,
+            //    Origem = 2,
+            //    Insc = _codigoC,
+            //    Tipoend = "R",
+            //    Etiqueta = false,
+            //    Userweb = _userWeb
+            //};
+            //Exception ex = protocoloRepository.Incluir_Processo(_p);
+            //ex = parcelamentoRepository.Atualizar_Processo_Master(_guid, _ano, _numero);
+
             //Grava tabela web_destino com as parcelas do simulado
             model.Lista_Simulado = parcelamentoRepository.Retorna_Parcelamento_Web_Simulado(model.Guid, _master.Qtde_Parcela);
-            ex = parcelamentoRepository.Excluir_parcelamento_Web_Destino(model.Guid);
+            Exception ex = parcelamentoRepository.Excluir_parcelamento_Web_Destino(model.Guid);
             List<Parcelamento_Web_Destino> _lista_Parcelamento_Web_Destino = new List<Parcelamento_Web_Destino>();
             foreach (Parcelamento_Web_Simulado _s in model.Lista_Simulado.Where(m => m.Qtde_Parcela == _qtdeParc)) {
                 Parcelamento_Web_Destino _d = new Parcelamento_Web_Destino() {
