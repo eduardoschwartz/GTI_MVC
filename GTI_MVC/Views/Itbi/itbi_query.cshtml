@@ -81,10 +81,14 @@
 
                     }
                     <Label style="padding-left:10px">Exibir:&nbsp;</Label>@Html.DropDownListFor(m => m[0].Status_Query, selectList, "(Exibir todos os ITBI's)", new { onchange = "this.form.submit()" })
-                    <label style="padding-left:20px">
-                        Exercício:&nbsp;
-                        @Html.DropDownListFor(m => m[0].Ano_Selected, selectListAno, null, new { @id = "AnoDropDown",@style="font-weight:normal", onchange = "this.form.submit()",@Value=Model[0].Ano_Selected })
-                    </label>  <br />
+                <label style="padding-left:20px">
+                    Exercício:&nbsp;
+                    @if (Model.Count > 0) {
+                        @Html.DropDownListFor(m => m[0].Ano_Selected, selectListAno, null, new { @id = "AnoDropDown", @style = "font-weight:normal", onchange = "this.form.submit()", @Value = Model[0].Ano_Selected })
+                    } else {
+                        @Html.DropDownListFor(m => m[0].Ano_Selected, selectListAno, null, new { @id = "AnoDropDown", @style = "font-weight:normal", onchange = "this.form.submit()" })
+                    }
+                </label>  <br />
 
 
                 </div>

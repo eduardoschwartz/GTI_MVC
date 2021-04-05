@@ -75,6 +75,7 @@ namespace GTI_Models.Models {
         public int Codigo_Contribuinte { get; set; }
         public string Nome_Contribuinte { get; set; }
         public DateTime Data_Parcelamento { get; set; }
+        public string Tipo { get; set; }
         public string Situacao { get; set; }
     }
 

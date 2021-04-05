@@ -1,0 +1,125 @@
+﻿@model GTI_Mvc.ViewModels.DebitoListViewModel
+@using System.Text.RegularExpressions
+@{
+    ViewBag.Title = "Gerar Boleto";
+}
+
+<style>
+    .center {
+        margin: auto;
+        width: 800px;
+        border: 1px solid rgba(0,0,0,0.24);
+        padding: 20px;
+        box-shadow: 0 .1em 0.5em #000;
+        border-radius: 13px;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+</style>
+
+<div class="center container" style="width:830px">
+
+    @using (@Html.BeginForm(null, null, FormMethod.Post, new { @action = "https://mpag.bb.com.br/site/mpag/" })) {
+        <div class="card">
+            <div class="card-header">
+                Emissão de Boleto<br />
+                Confirme os dados antes de imprimir
+            </div>
+            <div class="card-body">
+                @Html.Hidden("msgLoja", " RECEBER SOMENTE ATE O VENCIMENTO, APOS ATUALIZAR O BOLETO NO SITE www.jaboticabal.sp.gov.br")
+                @Html.Hidden("cep", Convert.ToInt64(Regex.Replace(@Model.Cep, " [^.0-9]", "")))
+                @Html.Hidden("uf", @Model.UF)
+                @Html.Hidden("cidade", @Model.Cidade)
+                @Html.Hidden("endereco", @Model.Endereco)
+                @Html.Hidden("nome", @Model.Nome)
+                @Html.Hidden("cidade", @Model.Cidade)
+                @Html.Hidden("urlInforma", "sistemas.jaboticabal.sp.gov.br/gti")
+                @Html.Hidden("urlRetorno", "sistemas.jaboticabal.sp.gov.br/gti")
+                @Html.Hidden("tpDuplicata", "DS")
+                @Html.Hidden("dataLimiteDesconto", 0)
+                @Html.Hidden("valorDesconto", 0)
+                @Html.Hidden("indicadorPessoa", @Model.CpfCnpjLabel.Length == 14 ? 2 : 1)
+                @Html.Hidden("cpfCnpj", Regex.Replace(@Model.CpfCnpjLabel, " [^0-9]", ""))
+                @Html.Hidden("tpPagamento", 2)
+                @Html.Hidden("dtVenc", @Model.Data_Vencimento_String)
+                @Html.Hidden("qtdPontos", 0)
+                @Html.Hidden("valor", Convert.ToInt64(Model.Valor_Boleto))
+                @Html.Hidden("refTran", String.IsNullOrEmpty(@Model.RefTran) ? 0 : Convert.ToInt64(@Model.RefTran))
+                @Html.Hidden("idConv", 317203)
+
+                <table id="tblHeader" style="font-size:13px">
+                    <tr>
+                        <td>Data de vencimento:</td>
+                        <td style="font-weight:bold">@Model.Data_Vencimento.ToString("dd/MM/yyyy")</td>
+                    </tr>
+                    <tr>
+                        <td>Inscrição Municipal:</td>
+                        <td style="font-weight:bold">@Model.Inscricao</td>
+                    </tr>
+                    <tr>
+                        <td>Nome/Razão Social:</td>
+                        <td style="font-weight:bold">@Model.Nome</td>
+                    </tr>
+                    <tr>
+                        <td>Nº do CPF/CNPJ:</td>
+                        <td style="font-weight:bold">@Model.CpfCnpjLabel</td>
+                    </tr>
+                    <tr>
+                        <td>Endereco:</td>
+                        <td style="font-weight:bold">@Model.Endereco</td>
+                    </tr>
+                    <tr>
+                        <td>Cidade/UF/Cep:</td>
+                        <td style="font-weight:bold">@Model.Cidade/@Model.UF Cep: @Model.Cep</td>
+                    </tr>
+                </table>
+
+
+                <br />
+                <button type="submit" id="enviar" title="Imprimir o boleto" class="btn btn-primary">Gerar Boleto</button>
+            </div>
+            <div class="card-footer">
+                @Html.ActionLink("Retornar ao menu de opções", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
+        </div>
+    }
+</div>

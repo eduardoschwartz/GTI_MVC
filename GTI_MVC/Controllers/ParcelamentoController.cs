@@ -997,7 +997,7 @@ namespace GTI_MVC.Controllers {
         }
 
         [HttpPost]
-        public ActionResult Parc_reqe(ParcelamentoViewModel model) {
+        public ActionResult Parc_reqe(ParcelamentoViewModel model,string action,string value) {
             if (Session["hashid"] == null) {
                 return RedirectToAction("Login", "Home");
             }
@@ -1290,7 +1290,6 @@ namespace GTI_MVC.Controllers {
             };
 
             //Load Origem
-            decimal _SomaP = 0, _SomaM = 0, _SomaJ = 0, _SomaC = 0, _SomaT = 0, _SomaE = 0;
             List<SpParcelamentoOrigem> ListaOrigem = parcelamentoRepository.Lista_Parcelamento_Selected(p);
             bool _bAjuizado = ListaOrigem[0].Ajuizado == "S";
             List<SelectDebitoParcelamentoEditorViewModel> _listaP = new List<SelectDebitoParcelamentoEditorViewModel>();
@@ -1348,19 +1347,53 @@ namespace GTI_MVC.Controllers {
             return View(model);
         }
 
+        [Route("Parc_reqf")]
+        [HttpPost]
+        public ActionResult Parc_reqf(ParcelamentoViewModel model, string action) {
+            if (Session["hashid"] == null) {
+                return RedirectToAction("Login", "Home");
+            }
+            if(action=="btnVoltar")
+                return RedirectToAction("Parc_query");
+            else {
+                if (action == "btnValida") {
+                    return RedirectToAction("Parc_bk", new { p = model.Guid });
+                }
+            }
+            return View(model);
+        }
+
         [Route("Parc_query")]
         [HttpGet]
         public ActionResult Parc_query() {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
+            int _userId = Convert.ToInt32(Session["hashid"]);
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
 
-            List<Parc_Processos> _listaProc = parcelamentoRepository.Lista_Parcelamento_Processos();
+            List<Parc_Processos> _listaProc = parcelamentoRepository.Lista_Parcelamento_Processos(_userId);
             ParcelamentoViewModel model = new ParcelamentoViewModel();
             model.Lista_Processo = _listaProc;
 
             return View(model);
         }
+
+        [Route("Parc_bk")]
+        [HttpGet]
+        public ActionResult Parc_bk(string p) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            int _userId = Convert.ToInt32(Session["hashid"]);
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+
+            List<Parc_Processos> _listaProc = parcelamentoRepository.Lista_Parcelamento_Processos(_userId);
+            DebitoListViewModel model = new DebitoListViewModel();
+            
+
+            return View(model);
+        }
+
+
 
         //[ChildActionOnly]
         //public ActionResult Parc_simulado(string p) {

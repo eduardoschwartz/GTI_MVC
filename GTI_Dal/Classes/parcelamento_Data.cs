@@ -1013,9 +1013,9 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public List<Parc_Processos> Lista_Parcelamento_Processos() {
+        public List<Parc_Processos> Lista_Parcelamento_Processos(int _userId) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var reg = (from t in db.Parcelamento_Web_Master orderby t.Data_Geracao select t).ToList();
+                var reg = (from t in db.Parcelamento_Web_Master where t.Processo_Numero>0 && t.User_id==_userId orderby t.Data_Geracao select t).ToList();
                 List<Parc_Processos> Lista = new List<Parc_Processos>();
                 foreach (var item in reg) {
                     Parc_Processos Linha = new Parc_Processos {
@@ -1026,6 +1026,7 @@ namespace GTI_Dal.Classes {
                         Numero_Processo = item.Processo_Numero.ToString() + "-" + dalCore.RetornaDvProcesso(item.Processo_Numero) + "/" + item.Processo_Ano.ToString(),
                         Situacao = "ATIVO"
                     };
+                    Linha.Tipo= item.Contribuinte_Codigo < 50000 ? "Imóvel" : item.Contribuinte_Codigo >= 500000 ? "Outros" : "Empresa";
                     Lista.Add(Linha);
                 }
                 return Lista;

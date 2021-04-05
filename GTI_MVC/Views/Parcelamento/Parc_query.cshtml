@@ -63,29 +63,32 @@
 <div class="center">
 
     @using (Html.BeginForm("Parc_query", "Parcelamento", FormMethod.Post, new { @id = "MainForm" })) {
-        <div class="container" style="width:830px">
+        <div class="container" style="width:700px">
             <div class="card">
                 <div class="card-header">
                     Consulta ao processos efetuados
                 </div>
                 <div class="card-body">
-
-                    <table id="tblMain"  class="topics" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;width:750px">
+                    <table id="tblMain"  class="topics" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;width:630px">
                         <thead style="background-color:brown;color:white;font-size:13px;font-weight:normal; white-space: nowrap;">
                             <tr>
-                                <td style="width:90px;font-weight:normal;text-align:right">Nº Processo</td>
-                                <td style="width:70px;font-weight:normal;text-align:center">Data</td>
-                                <td style="width:50px;font-weight:normal;text-align:right">Inscr.</td>
-                                <td style="width:250px;font-weight:normal;text-align:left">Nome do Contribuinte</td>
+                                <td style="width:90px;font-weight:normal;text-align:left">Nº Processo</td>
+                                <td style="width:80px;font-weight:normal;text-align:center">Data</td>
+                                <td style="width:70px;font-weight:normal;text-align:left">Tipo</td>
+                                <td style="width:60px;font-weight:normal;text-align:left">Inscr.</td>
+                                <td style="width:300px;font-weight:normal;text-align:left">Nome do Contribuinte</td>
+                                <td style="width:30px;text-align:center"></td>
                             </tr>
                         </thead>
                         <tbody id="tblProcesso" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
                             @foreach (var item in Model.Lista_Processo) {
                             <tr>
-                                <td style="width:90px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Numero_Processo)</td>
-                                <td style="width:70px;font-weight:normal;text-align:center">@item.Data_Parcelamento.ToString("dd/MM/yyyy")</td>
-                                <td style="width:50px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Codigo_Contribuinte)</td>
-                                <td style="width:250px;font-weight:normal;text-align:left">@Html.DisplayFor(modelItem => item.Nome_Contribuinte)</td>
+                                <td style="width:90px;font-weight:normal;text-align:left">@Html.DisplayFor(modelItem => item.Numero_Processo)</td>
+                                <td style="width:80px;font-weight:normal;text-align:center">@item.Data_Parcelamento.ToString("dd/MM/yyyy")</td>
+                                <td style="width:70px;font-weight:normal;text-align:left">@Html.DisplayFor(modelItem => item.Tipo)</td>
+                                <td style="width:60px;font-weight:normal;text-align:left">@Html.DisplayFor(modelItem => item.Codigo_Contribuinte)</td>
+                                <td style="width:300px;font-weight:normal;text-align:left">@Html.DisplayFor(modelItem => item.Nome_Contribuinte)</td>
+                                <td style="width:30px"><a href="@Url.Action("Parc_reqf", "Parcelamento", new { p = item.Guid })" title="Consultar processo cadastrado"> <img src="@Url.Content("~/images/Consultar.gif")"></a></td>
                             </tr>
                             }
                         </tbody>
@@ -97,8 +100,6 @@
                     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
                 </div>
             </div>
-
-
         </div>
     }
 
