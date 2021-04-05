@@ -1,0 +1,97 @@
+﻿@model GTI_Mvc.ViewModels.ParcelamentoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Parcelamento de débitos";
+}
+
+<style>
+    .center {
+        margin: auto;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #chkSel {
+        cursor: pointer;
+    }
+</style>
+
+<h5 style="text-align:center">TERMO DE CONFISSÃO DE DÍVIDA FISCAL</h5>
+
+<div class="center container" style="width:850px">
+
+    @using (Html.BeginForm("Parc_tcd", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+
+        @Html.HiddenFor(m => m.Guid)
+
+
+        <div class="card">
+            <div class="card-body">
+                <article style="text-align:justify;font-family: Arial, Helvetica, sans-serif;font-size:14px">
+                    Pelo presente ato, o (a) Contribuinte acima identificado(a), adiante chamado(a) DEVEDOR, formaliza CONFISSÃO DE DÍVIDA, tendo como credor o MUNICÍPIO DE JABOTICABAL, adiante chamado CREDOR, cuja importância segue declarada e discriminada no(s) nos anexos que deste instrumento passam a fazer parte integrante e inseparável, propondo-se a quitá-la mediante as seguintes cláusulas e condições, que prevalecerão não só para garantir a extinção do crédito, como também para facilitar sua cobrança, a saber:<br />
+                    1ª) O DEVEDOR, renunciando expressamente a qualquer contestação, embargos ou impugnações quanto ao valor e procedência da dívida, assume integral responsabilidade pela exatidão do montante declarado e confessado, ficando, entretanto, expressamente reservado o direito do CREDOR de apurar, a qualquer tempo, a existência de outras importâncias devidas, não incluídas neste instrumento.<br />
+                    2ª) O devedor obriga-se, independente do débito ora confessado, a efetuar, nos respectivos prazos, o recolhimento dos débitos que se vencerem após a presente data.<br />
+                    3ª) A confissão da dívida constante deste instrumento é definitiva, irrevogável e irretratável, configurando confissão extrajudicial nos termos dos artigos 348, 353 e 354 do Código de Processo Civil, não implicando de modo algum, em novação ou transação, e vigorará imediatamente, ressalvados  os privilégios assegurados ao CREDOR para cobrança da dívida, cujo andamento permanecerá suspenso enquanto estiverem sendo cumpridas pelo DEVEDOR todas as obrigações no ato assumidas.<br />
+                    4ª) O DEVEDOR reconhece para todos os fins de direito, que este instrumento constitui título executivo extrajudicial, para eventualmente, com base nele, ser efetivada a cobrança, no todo ou em parte, da dívida ora confessada e de seus acréscimos legais, de acordo com o disposto no Código Tributário Municipal (Lei Complementar 07, de 18 de dezembro de 1992).<br />
+                    5ª) As parcelas vincendas no(s) próximo(s) exercício(s) sofrerão atualização monetária anual, com base no IPCA ou outro índice calculado pelo governo federal que venha substituí-lo, sendo aplicada no mês de janeiro de cada ano, sobre o saldo devedor.<br />
+                    6ª) O atraso no pagamento de parcela, culminará a incidência de multa, juros e correção monetária, se houver, sobre o valor da parcela, nos termos estabelecidos em Lei. Para atualização da parcela, acessar o link <span style="font-weight:bold"> http://sistemas.jaboticabal.sp.gov.br/gti/Tributario/Dama </span>. <br />
+                    7ª) O atraso superior a 30 (trinta) dias no pagamento de 01 (uma) parcela, acarretará, de pleno direito, pelo simples decurso do prazo, o vencimento integral da dívida confessada, e o vencimento antecipado do débito, pelo decurso de prazo, o vencimento integral da dívida confessada e a rescisão do parcelamento, independente de qualquer aviso, notificação, interpelação judicial ou extrajudicial, perdendo o DEVEDOR o direito aos benefícios concedidos, sujeitando-se às penalidades previstas em LEI e ao prosseguimento do procedimento de cobrança.<br />
+                    8ª) O DEVEDOR obriga-se desde já a pagar, juntamente com a dívida, os honorários advocatícios, se houver, incidentes sobre os débitos já ajuizados ou o montante que tenha que ser cobrado judicialmente. As demais custas e despesas processuais que por ventura existirem, deverão ser recolhidas após apuração feita pelo Setor de Dívida, devendo o DEVEDOR solicitar as guias através do e-mail dividaativa@jaboticabal.sp.gov.br .<br />
+                    9ª) O DEVEDOR deverá imprimir o carnê de pagamento das parcelas vencíveis em cada exercício, acessando o link <span style="font-weight:bold"> http://sistemas.jaboticabal.sp.gov.br/gti/Tributario/SegundaVia_Parcelamento </span>para liberação destas, em tempo hábil ao pagamento, atento ao que dispõe a cláusula 6ª e 7ª deste Termo.<br />
+                    10ª) As obrigações neste ato assumidas transmitem-se aos herdeiros ou sucessores do DEVEDOR.<br />
+                    11ª) O DEVEDOR fica ciente de que dados ora fornecidos serão utilizados para atualização do Cadastro Fiscal do Município, inclusive para instruir a cobrança judicial e extrajudicial de débitos, facultando ao CREDOR a eventual inclusão no polo passivo de Execução Fiscal.<br />
+                    12ª) A opção pela presente CONFISSÃO DE DÍVIDA condiciona o DEVEDOR à aceitação plena e irrevogável de todas as condições ora estabelecidas.<br />
+                    Para fins de direito a que se destina, depois de lido e achado conforme, O DEVEDOR confirmou anuência da Confissão de Dívida, por meio deste instrumento eletrônico.
+                </article>
+
+            </div>
+
+            <br />
+        </div>
+        <br />
+        <div style="text-align:center">
+            <button type="submit" class="btn btn-success" name="action" value="btnValida" onclick="return confirm('Você deseja gerar este parcelamento?')">Gerar o Parcelamento</button>&nbsp;&nbsp;
+            <button type="button" class="btn btn-danger" onclick="javascript:history.back()">Eu não concordo</button>
+        </div>
+    }
+</div>
+

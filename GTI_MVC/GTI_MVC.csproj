@@ -919,6 +919,8 @@
     <Content Include="Views\Parcelamento\Parc_reqf.cshtml" />
     <Content Include="Views\Parcelamento\Parc_query.cshtml" />
     <Content Include="Views\Parcelamento\Parc_bk.cshtml" />
+    <Content Include="Views\Parcelamento\Parc_tan.cshtml" />
+    <Content Include="Views\Parcelamento\Parc_tcd.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

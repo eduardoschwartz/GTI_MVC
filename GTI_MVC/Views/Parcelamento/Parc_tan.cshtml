@@ -1,0 +1,95 @@
+﻿@model GTI_Mvc.ViewModels.ParcelamentoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Parcelamento de débitos";
+}
+
+<style>
+    .center {
+        margin: auto;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #chkSel {
+        cursor: pointer;
+    }
+</style>
+
+<h5 style="text-align:center">TERMO DE ANUÊNCIA</h5>
+
+<div class="center container" style="width:850px">
+
+    @using (Html.BeginForm("Parc_tan", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+
+        @Html.HiddenFor(m => m.Guid)
+
+
+        <div class="card">
+            <div class="card-body">
+                <article style="text-align:justify;font-family: Arial, Helvetica, sans-serif;font-size:14px">
+                    <span style="font-size:16px;color:red">ATENÇÃO:</span> A partir deste momento, leia atentamente todas as instruções e informações sobre parcelamento de débito, pois as decisões tomadas após a formalização do parcelamento são irreversíveis.
+                    A formalização do parcelamento implica na Confissão de Dívida e na renúncia a qualquer contestação, embargos ou impugnações quanto ao valor e procedência da dívida, bem como na desistência dos já interpostos. A Confissão da Dívida dos valores parcelados é definitiva, irrevogável e irretratável, configurando Confissão Extrajudicial nos termos dos artigos 348, 353 e 354 do Código de Processo Civil, não implicando de modo algum, em novação ou transação, e vigorará imediatamente, ressalvados  os privilégios assegurados ao credor para cobrança da dívida, cujo andamento permanecerá suspenso enquanto estiverem sendo cumpridas pelo devedor, todas as obrigações no ato assumidas.
+                    O devedor reconhece para todos os fins de direito, que a formalização do parcelamento constitui título executivo extrajudicial, para eventualmente, com base nele, ser efetivada a cobrança, no todo ou em parte, da dívida ora confessada e de seus acréscimos legais, de acordo com o disposto no Código Tributário Municipal (Lei Complementar 07, de 18 de dezembro de 1992).
+                    Os débitos a serem parcelados serão consolidados na data de formalização do parcelamento com inclusão do valor principal, atualização monetária, multa, juros de mora e honorários advocatícios, se houver.
+                    Sobre o débito consolidado incidirá:
+                    - juros de 1% ao mês calculados sobre os saldos devedores previstos, resultantes do cumprimento regular do parcelamento, e sua soma será dividida em partes iguais, de acordo com a quantidade de parcelas escolhidas, e a elas agregadas, compondo seu valor;
+                    - atualização monetária anual, com base no IPCA ou outro índice calculado pelo governo federal que venha substituí-lo, sendo aplicada no mês de janeiro de cada ano, sobre o saldo devedor.
+                    <span style="color:red"> A primeira parcela vence no dia da formalização do parcelamento e o vencimento das demais parcelas terão os dias pré-determinados a partir do dia da formalização do parcelamento</span>, sujeitando-se à incidência de multa e juros de mora e atualização monetária, se houver, caso o pagamento das prestações ocorreram posteriormente ao vencimento.
+                    O atraso superior a 30 (trinta) dias no pagamento de qualquer das prestações, determinará o vencimento antecipado do débito, pelo decurso de prazo, o vencimento integral da dívida confessada e o cancelamento do parcelamento, independente de qualquer aviso, notificação, interpelação judicial ou extrajudicial, perdendo o devedor o direito aos benefícios concedidos, sujeitando-se às penalidades previstas em lei e ao prosseguimento do procedimento de cobrança.
+                    Os lançamentos que não forem selecionados não farão parte do parcelamento, sendo cobrados de acordo com a legislação vigente.
+                    Os débitos que estejam vinculados a mesma Execução Fiscal, poderão ser selecionados individualmente para parcelar, porém, a Execução Fiscal não será suspensa junto ao Fórum se todos os débitos da execução não forem negociados.
+                    <span style="font-weight:bold">Caso os débitos estejam ajuizados, as custas e despesas processuais que porventura existirem, deverão ser solicitadas ao Setor de Dívida Ativa através do e-mail dividaativa@jaboticabal.sp.gov.br</span>
+                </article>
+
+            </div>
+
+            <br />
+        </div>
+        <br />
+        <div style="text-align:center">
+            <button type="submit" class="btn btn-success" name="action" value="btnYes">Eu concordo</button><span style="padding-left:10px"></span>
+            <button type="button" class="btn btn-danger" onclick="javascript:history.back()">Eu não concordo</button>
+        </div>
+    }
+</div>
+
