@@ -1,10 +1,13 @@
-﻿using GTI_Bll.Classes;
+﻿using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.Shared;
+using GTI_Bll.Classes;
 using GTI_Models.Models;
 using GTI_Mvc;
 using GTI_Mvc.ViewModels;
 using GTI_Mvc.Views.Parcelamento.EditorTemplates;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 //using System.Configuration;
@@ -1244,50 +1247,56 @@ namespace GTI_MVC.Controllers {
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             string _guid = model.Guid;
-            int _userId = Convert.ToInt32(Session["hashid"]);
-            bool _userWeb = Session["hashfunc"].ToString() == "S" ? false : true;
-            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(_guid);
-            List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(_guid);
-            IEnumerable<short> _listaAnos = _listaSelected.Select(o => o.Exercicio).Distinct();
-            int _codigoR = _master.Requerente_Codigo;
-            int _codigoC = _master.Contribuinte_Codigo;
-            int _qtdeParc = _master.Qtde_Parcela;
+
+            if (action == "btYes") {
+                int _userId = Convert.ToInt32(Session["hashid"]);
+                bool _userWeb = Session["hashfunc"].ToString() == "S" ? false : true;
+                Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(_guid);
+                List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(_guid);
+                IEnumerable<short> _listaAnos = _listaSelected.Select(o => o.Exercicio).Distinct();
+                int _codigoR = _master.Requerente_Codigo;
+                int _codigoC = _master.Contribuinte_Codigo;
+                int _qtdeParc = _master.Qtde_Parcela;
 
 
-            //Criar Processo
-            Processo_bll protocoloRepository = new Processo_bll(_connection);
-            short _ano = (short)DateTime.Now.Year;
-            int _numero = protocoloRepository.Retorna_Numero_Disponivel(_ano);
-            string _compl = "PARCELAMENTO DE DÉBITOS CÓD: " + _codigoC.ToString();
-            string _obs = "Exercícios: ";
-            foreach (short _anoP in _listaAnos) {
-                _obs += _anoP.ToString() + ", ";
+                //Criar Processo
+                Processo_bll protocoloRepository = new Processo_bll(_connection);
+                short _ano = (short)DateTime.Now.Year;
+                int _numero = protocoloRepository.Retorna_Numero_Disponivel(_ano);
+                string _compl = "PARCELAMENTO DE DÉBITOS CÓD: " + _codigoC.ToString();
+                string _obs = "Exercícios: ";
+                foreach (short _anoP in _listaAnos) {
+                    _obs += _anoP.ToString() + ", ";
+                }
+                _obs = _obs.Substring(0, _obs.Length - 1) + " parcelado em: " + _qtdeParc.ToString() + " vezes.";
+
+                Processogti _p = new Processogti() {
+                    Ano = _ano,
+                    Numero = _numero,
+                    Interno = false,
+                    Fisico = false,
+                    Hora = DateTime.Now.ToString("hh:mm"),
+                    Userid = _userId,
+                    Codassunto = 606,
+                    Complemento = _compl,
+                    Observacao = _obs,
+                    Codcidadao = _codigoR,
+                    Dataentrada = DateTime.Now,
+                    Origem = 2,
+                    Insc = _codigoC,
+                    Tipoend = "R",
+                    Etiqueta = false,
+                    Userweb = _userWeb
+                };
+                Exception ex = protocoloRepository.Incluir_Processo(_p);
+                ex = parcelamentoRepository.Atualizar_Processo_Master(_guid, _ano, _numero);
+                return RedirectToAction("Parc_tcd", new { p = model.Guid });
+            } else {
+                if (action == "btPrint") {
+                    return Termo_anuencia_print(model.Guid);
+                } 
             }
-            _obs = _obs.Substring(0, _obs.Length - 1) + " parcelado em: " + _qtdeParc.ToString() + " vezes.";
-
-            Processogti _p = new Processogti() {
-                Ano = _ano,
-                Numero = _numero,
-                Interno = false,
-                Fisico = false,
-                Hora = DateTime.Now.ToString("hh:mm"),
-                Userid = _userId,
-                Codassunto = 606,
-                Complemento = _compl,
-                Observacao = _obs,
-                Codcidadao = _codigoR,
-                Dataentrada = DateTime.Now,
-                Origem = 2,
-                Insc = _codigoC,
-                Tipoend = "R",
-                Etiqueta = false,
-                Userweb = _userWeb
-            };
-            Exception ex = protocoloRepository.Incluir_Processo(_p);
-            ex = parcelamentoRepository.Atualizar_Processo_Master(_guid, _ano, _numero);
-
-
-            return RedirectToAction("Parc_tcd", new { p = model.Guid });
+            return RedirectToAction("Login", "Home");
         }
 
         [Route("Parc_tcd")]
@@ -1552,7 +1561,6 @@ namespace GTI_MVC.Controllers {
             ex = parcelamentoRepository.Incluir_Debito_Tributo(_listaDebitoTributo);
             ex = parcelamentoRepository.Atualizar_Status_Origem(_codigoC, _listaSelected);
 
-            //return View(model);
             return RedirectToAction("Parc_reqf", new { p = model.Guid });
         }
 
@@ -1723,6 +1731,31 @@ namespace GTI_MVC.Controllers {
             return View(model);
         }
 
+        public ActionResult Termo_anuencia_print(string p) {
+            ReportDocument rd = new ReportDocument();
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Termo_Anuencia.rpt"));
+            TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+            TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+            ConnectionInfo crConnectionInfo = new ConnectionInfo();
+            Tables CrTables;
+            crConnectionInfo.ServerName = "DEUTSCH";
+            crConnectionInfo.DatabaseName = "Tributacao";
+            crConnectionInfo.UserID = "gtisys";
+            crConnectionInfo.Password = "everest";
+            CrTables = rd.Database.Tables;
+            foreach (Table CrTable in CrTables) {
+                crtableLogoninfo = CrTable.LogOnInfo;
+                crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                CrTable.ApplyLogOnInfo(crtableLogoninfo);
+            }
+
+            try {
+                Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                return File(stream, "application/pdf", "Termo_Anuencia.pdf");
+            } catch (Exception ex) {
+                throw;
+            }
+        }
 
         //[ChildActionOnly]
         //public ActionResult Parc_simulado(string p) {
