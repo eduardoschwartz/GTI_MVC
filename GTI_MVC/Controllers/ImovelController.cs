@@ -61,10 +61,6 @@ namespace GTI_Mvc.Controllers {
                     _existeCod = imovelRepository.Existe_Imovel(_codigo);
             }
 
-            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-            //    ViewBag.Result = "Código de verificação inválido.";
-            //    return View(certidaoViewModel);
-            //}
             var response = Request["g-recaptcha-response"];
             string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
             var client = new WebClient();
@@ -269,17 +265,12 @@ namespace GTI_Mvc.Controllers {
             if (_codigo < 100000)
                 _existeCod = imovelRepository.Existe_Imovel(_codigo);
 
-            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-            //    ViewBag.Result = "Código de verificação inválido.";
-            //    return View(certidaoViewModel);
-            //}
             var response = Request["g-recaptcha-response"];
             string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
             var client = new WebClient();
             var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
             var obj = JObject.Parse(result);
             var status = (bool)obj.SelectToken("success");
-          //  string msg = status ? "Sucesso" : "Falha";
             if (!status) {
                 model.ErrorMessage = "Código Recaptcha inválido.";
                 return View(model);
@@ -507,10 +498,6 @@ namespace GTI_Mvc.Controllers {
                     _existeCod = imovelRepository.Existe_Imovel(_codigo);
             }
 
-            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-            //    ViewBag.Result = "Código de verificação inválido.";
-            //    return View(certidaoViewModel);
-            //}
             var response = Request["g-recaptcha-response"];
             string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
             var client = new WebClient();
