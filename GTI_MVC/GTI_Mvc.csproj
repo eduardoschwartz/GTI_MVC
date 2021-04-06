@@ -344,6 +344,12 @@
       <DependentUpon>Certidao_Debito_Empresa_PN.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Termo_Anuencia.cs">
+      <DependentUpon>Termo_Anuencia.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Reports\Certidao_Debito_Imovel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -991,6 +997,10 @@
     <EmbeddedResource Include="Reports\Certidao_Debito_Empresa_PN.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Debito_Empresa_PN.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Termo_Anuencia.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Termo_Anuencia.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Certidao_Debito_Imovel.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
