@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Web.Hosting;
 using System.Web.Mvc;
 using GTI_Bll.Classes;
 using GTI_Models.Models;
@@ -18,12 +17,15 @@ using System.Drawing;
 using Microsoft.Reporting.WebForms;
 using System.Net;
 using Newtonsoft.Json.Linq;
+using System.Configuration;
+using System.Data.SqlClient;
+
 
 namespace GTI_Mvc.Controllers {
 
     [Route("Empresa")]
     public class EmpresaController : Controller {
-
+        private readonly string _connection = "GTIconnection";
         public EmpresaController( ) {
         }
 
@@ -38,7 +40,7 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Details(EmpresaDetailsViewModel model) {
         
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection"); 
+            Empresa_bll empresaRepository = new Empresa_bll(_connection); 
             int _codigo = 0;
             bool _existeCod = false;
             EmpresaDetailsViewModel empresaDetailsViewModel = new EmpresaDetailsViewModel();
@@ -161,7 +163,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Retorna_Codigos")]
         [Route("Certidao/Retorna_Codigos")]
         public ActionResult Retorna_Codigos(CertidaoViewModel model) {
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
             if (model.CpfValue!=null || model.CnpjValue != null) {
 
                 model.OptionList = new List<SelectListaItem> {
@@ -193,7 +195,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Validate_CI")]
         [Route("Certidao/Validate_CI")]
         public ActionResult Validate_CI(CertidaoViewModel model) {
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             int _codigo , _ano ,_numero;
             string _chave = model.Chave;
 
@@ -277,8 +279,8 @@ namespace GTI_Mvc.Controllers {
             int _codigo;
             bool _valida = false;
             int _numero;
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Debito);
             ViewBag.Result = "";
 
@@ -538,7 +540,7 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Certidao_Pagamento(CertidaoViewModel model) {
             int _codigo;
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
             ViewBag.Result = "";
 
             model.OptionList = new List<SelectListaItem> {
@@ -615,7 +617,7 @@ namespace GTI_Mvc.Controllers {
                 }
 
                 //se chegou até aqui então a empresa esta ok para verificar os débitos
-                Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+                Tributario_bll tributarioRepository = new Tributario_bll(_connection);
                 List<SpExtrato> ListaTributo = tributarioRepository.Lista_Extrato_Tributo(_codigo, (short)DateTime.Now.Year, (short)DateTime.Now.Year, 0, 99, 0, 99, 0, 999, 0, 99, 0, 99, DateTime.Now, "Web");
                 List<SpExtrato> ListaParcela = tributarioRepository.Lista_Extrato_Parcela(ListaTributo);
 
@@ -737,7 +739,7 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Alvara_Funcionamento(CertidaoViewModel model) {
 
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
             int _codigo = 0;
             bool _existeCod = false;
             CertidaoViewModel certidaoViewModel = new CertidaoViewModel();
@@ -783,11 +785,6 @@ namespace GTI_Mvc.Controllers {
                     }
                 }
             }
-
-            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-            //    certidaoViewModel.ErrorMessage = "Código de verificação inválido.";
-            //    return View(certidaoViewModel);
-            //}
 
             var response = Request["g-recaptcha-response"];
             var client = new WebClient();
@@ -879,7 +876,7 @@ namespace GTI_Mvc.Controllers {
                 }
                 //#######################################################################
 
-                Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+                Tributario_bll tributarioRepository = new Tributario_bll(_connection);
                 Exception ex = tributarioRepository.Insert_Alvara_Funcionamento(alvara);
                 if (ex != null){
                     certidaoViewModel.ErrorMessage = ex.InnerException.ToString();
@@ -892,10 +889,16 @@ namespace GTI_Mvc.Controllers {
                 TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
                 ConnectionInfo crConnectionInfo = new ConnectionInfo();
                 Tables CrTables;
-                crConnectionInfo.ServerName = "200.232.123.115";
+                string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+                string IPAddress = builder.DataSource;
+                string _userId = builder.UserID;
+                string _pwd = builder.Password;
+
+                crConnectionInfo.ServerName = IPAddress;
                 crConnectionInfo.DatabaseName = "Tributacao";
-                crConnectionInfo.UserID = "gtisys";
-                crConnectionInfo.Password = "everest";
+                crConnectionInfo.UserID = _userId;
+                crConnectionInfo.Password = _pwd;
                 CrTables = rd.Database.Tables;
                 foreach (Table CrTable in CrTables) {
                     crtableLogoninfo = CrTable.LogOnInfo;
@@ -920,7 +923,7 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         [Route("Validate_AF")]
         public ActionResult Validate_AF(CertidaoViewModel model) {
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             int _codigo, _ano, _numero;
             string _chave = model.Chave;
 
@@ -939,7 +942,7 @@ namespace GTI_Mvc.Controllers {
                     _numero = _chaveStruct.Numero;
                     _ano = _chaveStruct.Ano;
                     List<Certidao> certidao = new List<Certidao>();
-                    Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+                    Empresa_bll empresaRepository = new Empresa_bll(_connection);
                     Alvara_funcionamento _dados = empresaRepository.Alvara_Funcionamento_gravado(_chave);
                     if (_dados != null) {
                         Certidao reg = new Certidao() {
@@ -1009,7 +1012,7 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
             bool bFind = empresaRepository.Existe_Empresa(_codigo);
             if (bFind) {
                 EmpresaStruct _empresa = empresaRepository.Retorna_Empresa(_codigo);
@@ -1029,7 +1032,7 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
 
             Paramparcela _parametro_parcela = tributarioRepository.Retorna_Parametro_Parcela(_ano, (int)TipoCarne.Iss_Taxa);
             //int _qtde_parcela = (int)_parametro_parcela.Qtdeparcela;
@@ -1385,7 +1388,7 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
             bool bFind = empresaRepository.Existe_Empresa(_codigo);
             if (bFind) {
                 EmpresaStruct _empresa = empresaRepository.Retorna_Empresa(_codigo);
@@ -1405,7 +1408,7 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
 
             Paramparcela _parametro_parcela = tributarioRepository.Retorna_Parametro_Parcela(_ano, (int)TipoCarne.Vigilancia);
             int _qtde_parcela = (int)_parametro_parcela.Qtdeparcela;
@@ -1568,7 +1571,7 @@ namespace GTI_Mvc.Controllers {
             dt.Columns.Add("CNAE");
             dt.Columns.Add("VALOR");
 
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
             List<CnaeStruct> ListaVS = empresaRepository.Lista_Cnae_Empresa_VS(Codigo);
 
             foreach (CnaeStruct item in ListaVS) {
@@ -1591,7 +1594,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Alvara(AlvaraViewModel model) {
 
             int _codigo = Convert.ToInt32(model.Codigo);
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
             bool _existeCod = empresaRepository.Existe_Empresa(_codigo);
             if (!_existeCod) {
                 ViewBag.Result = "Empresa não cadastrada.";
@@ -1600,7 +1603,7 @@ namespace GTI_Mvc.Controllers {
 
             string _processoStr = model.Numero_Processo;
             ProcessoNumero _processo = Functions.Split_Processo_Numero(_processoStr);
-            Processo_bll processoRepository = new Processo_bll("GTIconnection");
+            Processo_bll processoRepository = new Processo_bll(_connection);
             Exception ex  = processoRepository.ValidaProcesso(_processoStr);
             if(ex!=null){
                 ViewBag.Result = "Nº de processo inválido.";
@@ -1616,7 +1619,7 @@ namespace GTI_Mvc.Controllers {
                 DateTime.TryParse(model.Data_Vre.ToString(), out DateTime _dataVre);
             }
 
-            Empresa_bll empresa_Bll = new Empresa_bll("GTIconnection");
+            Empresa_bll empresa_Bll = new Empresa_bll(_connection);
             EmpresaStruct _dados = empresaRepository.Retorna_Empresa(_codigo);
             if (_dados.Data_Encerramento!=null) {
                 ViewBag.Result = "Esta empresa esta encerrada.";
@@ -1684,7 +1687,7 @@ namespace GTI_Mvc.Controllers {
             }
             //#######################################################################
 
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
              ex = tributarioRepository.Insert_Alvara_Funcionamento_Def(_alvara);
             if (ex != null) {
                 ViewBag.Result = "Erro ao gravar!";
@@ -1700,10 +1703,17 @@ namespace GTI_Mvc.Controllers {
             TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
             ConnectionInfo crConnectionInfo = new ConnectionInfo();
             Tables CrTables;
-            crConnectionInfo.ServerName = "200.232.123.115";
+
+            string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+            string IPAddress = builder.DataSource;
+            string _userId = builder.UserID;
+            string _pwd = builder.Password;
+
+            crConnectionInfo.ServerName = IPAddress;
             crConnectionInfo.DatabaseName = "Tributacao";
-            crConnectionInfo.UserID = "gtisys";
-            crConnectionInfo.Password = "everest";
+            crConnectionInfo.UserID = _userId;
+            crConnectionInfo.Password = _pwd;
             CrTables = rd.Database.Tables;
             foreach (Table CrTable in CrTables) {
                 crtableLogoninfo = CrTable.LogOnInfo;

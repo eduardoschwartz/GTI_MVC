@@ -15,9 +15,12 @@ using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using static GTI_Models.modelCore;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace GTI_Mvc.Controllers {
     public class ItbiController : Controller {
+        private readonly string _connection = "GTIconnection";
         #region Emissão de Itbi
 
         [Route("Itbi_menu")]
@@ -41,10 +44,16 @@ namespace GTI_Mvc.Controllers {
             TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
             ConnectionInfo crConnectionInfo = new ConnectionInfo();
             Tables CrTables;
-            crConnectionInfo.ServerName = "200.232.123.115";
+            string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+            string IPAddress = builder.DataSource;
+            string _userId = builder.UserID;
+            string _pwd = builder.Password;
+
+            crConnectionInfo.ServerName = IPAddress;
             crConnectionInfo.DatabaseName = "Tributacao";
-            crConnectionInfo.UserID = "gtisys";
-            crConnectionInfo.Password = "everest";
+            crConnectionInfo.UserID = _userId;
+            crConnectionInfo.Password = _pwd;
             CrTables = rd.Database.Tables;
             foreach (Table CrTable in CrTables) {
                 crtableLogoninfo = CrTable.LogOnInfo;
@@ -73,7 +82,7 @@ namespace GTI_Mvc.Controllers {
                 model.Comprador = new Comprador_Itbi();
                 model.Lista_Erro = new List<string>();
             } else {
-                Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+                Imovel_bll imovelRepository = new Imovel_bll(_connection);
                 List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
                 ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
                 List<Itbi_financiamento> Lista_Financimento = imovelRepository.Lista_Itbi_Financiamento();
@@ -109,7 +118,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Itbi_urbano(ItbiViewModel model, HttpPostedFileBase file, string action, int seq = 0) {
             bool _bcpf = false, _bcnpj = false;
 
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             List<ListCompradorEditorViewModel> Lista_comprador = new List<ListCompradorEditorViewModel>();
             List<Itbi_comprador> listaC = imovelRepository.Retorna_Itbi_Comprador(model.Guid);
             foreach (Itbi_comprador item in listaC) {
@@ -135,7 +144,7 @@ namespace GTI_Mvc.Controllers {
             model.Lista_Vendedor = Lista_vendedor;
 
 
-            Endereco_bll enderecoRepository = new Endereco_bll("GTiconnection");
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
             string _guid = "";
             ModelState.Clear();
 
@@ -512,7 +521,7 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Itbi_urbano_e(ItbiViewModel model, HttpPostedFileBase file, string action, int seq = 0) {
             bool _bcpf = false, _bcnpj = false;
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
 
             List<ListCompradorEditorViewModel> Lista_comprador = new List<ListCompradorEditorViewModel>();
             List<Itbi_comprador> listaC = imovelRepository.Retorna_Itbi_Comprador(model.Guid);
@@ -649,7 +658,7 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-            Endereco_bll enderecoRepository = new Endereco_bll("GTiconnection");
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
             if (model.Comprador.Cep != null) {
                 int _ceptmp = Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep));
                 List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_ceptmp);
@@ -916,7 +925,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Itbi_query(string e = "") {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             int _userId = Convert.ToInt32(Session["hashid"]);
             bool _fiscal = Session["hashfiscalitbi"] != null && Session["hashfiscalitbi"].ToString() == "S" ? true : false;
             List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Query(_userId, _fiscal, 0, DateTime.Now.Year);
@@ -950,7 +959,7 @@ namespace GTI_Mvc.Controllers {
             string _ano = model[0].Ano_Selected ?? "";
             if (_ano == "")
                 _ano = DateTime.Now.Year.ToString();
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             int _userId = Convert.ToInt32(Session["hashid"]);
             bool _fiscal = Session["hashfiscalitbi"] != null && Session["hashfiscalitbi"].ToString() == "S" ? true : false;
             List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Query(_userId, _fiscal, Convert.ToInt32(model[0].Status_Query), Convert.ToInt32(_ano));
@@ -979,7 +988,7 @@ namespace GTI_Mvc.Controllers {
                 UserId = Convert.ToInt32(Session["hashid"])
                 //UserId = Functions.pUserId
             };
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             List<Itbi_natureza> Lista_Natureza = imovelRepository.Lista_Itbi_Natureza();
             ViewBag.Lista_Natureza = new SelectList(Lista_Natureza, "Codigo", "Descricao");
             List<Itbi_financiamento> Lista_Financimento = imovelRepository.Lista_Itbi_Financiamento();
@@ -1016,7 +1025,7 @@ namespace GTI_Mvc.Controllers {
             string _guid = "";
             ModelState.Clear();
 
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
 
             List<ListCompradorEditorViewModel> Lista_comprador = new List<ListCompradorEditorViewModel>();
             List<Itbi_comprador> listaC = imovelRepository.Retorna_Itbi_Comprador(model.Guid);
@@ -1213,7 +1222,7 @@ namespace GTI_Mvc.Controllers {
                         rua = rua.Substring(0, rua.IndexOf('-'));
                     }
 
-                    Endereco_bll enderecoRepository = new Endereco_bll("GTiconnection");
+                    Endereco_bll enderecoRepository = new Endereco_bll(_connection);
                     LogradouroStruct _log = enderecoRepository.Retorna_Logradouro_Cep(Convert.ToInt32(Functions.RetornaNumero(cepObj.CEP)));
                     if (_log.Endereco != null) {
                         model.Comprador.Logradouro_Codigo = (int)_log.CodLogradouro;
@@ -1369,7 +1378,7 @@ namespace GTI_Mvc.Controllers {
             string _guid = "";
             ModelState.Clear();
 
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
 
             List<ListCompradorEditorViewModel> Lista_comprador = new List<ListCompradorEditorViewModel>();
             List<Itbi_comprador> listaC = imovelRepository.Retorna_Itbi_Comprador(model.Guid);
@@ -1572,7 +1581,7 @@ namespace GTI_Mvc.Controllers {
                         rua = rua.Substring(0, rua.IndexOf('-'));
                     }
 
-                    Endereco_bll enderecoRepository = new Endereco_bll("GTiconnection");
+                    Endereco_bll enderecoRepository = new Endereco_bll(_connection);
                     LogradouroStruct _log = enderecoRepository.Retorna_Logradouro_Cep(_cep);
                     if (_log.Endereco != null) {
                         model.Comprador.Logradouro_Codigo = (int)_log.CodLogradouro;
@@ -1744,7 +1753,7 @@ namespace GTI_Mvc.Controllers {
                 return Itbi_print(model.Guid, true);
             else {
                 if (button == "excluir_guia") {
-                    Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+                    Imovel_bll imovelRepository = new Imovel_bll(_connection);
                     Exception ex = imovelRepository.Excluir_Itbi_Guia(model.Guid);
                     return RedirectToAction("Itbi_query");
                 } else {
@@ -1790,7 +1799,7 @@ namespace GTI_Mvc.Controllers {
                 return Itbi_print(model.Guid, true);
             else {
                 if (button == "excluir_guia") {
-                    Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+                    Imovel_bll imovelRepository = new Imovel_bll(_connection);
                     Exception ex = imovelRepository.Excluir_Itbi_Guia(model.Guid);
                     return RedirectToAction("Itbi_query");
                 } else {
@@ -1806,7 +1815,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Itbi_urbano_e(string p = "", string a = "", int s = 0) {
             if (Session["hashid"] == null || p=="")
                 return RedirectToAction("Login", "Home");
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             Itbi_status stat = imovelRepository.Retorna_Itbi_Situacao(p);
             if (stat.Codigo > 1) {
                 return RedirectToAction("Itbi_query", new { e = "A" });
@@ -1834,7 +1843,7 @@ namespace GTI_Mvc.Controllers {
                 model.Valor_Venal_Territorial = model.Valor_Venal;
 
             int _ceptmp = Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep));
-            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
             List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_ceptmp);
             List<Logradouro> Lista_Logradouro = new List<Logradouro>();
             int z = 1;
@@ -1857,7 +1866,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Itbi_rural_e(string p = "", string a = "", int s = 0) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             Itbi_status stat = imovelRepository.Retorna_Itbi_Situacao(p);
             if (stat.Codigo > 1) {
                 return RedirectToAction("Itbi_query", new { e = "A" });
@@ -1888,8 +1897,8 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Itbi_forum(string p = "") {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
-            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             ItbiViewModel gravado = Retorna_Itbi_Gravado(p);
             List<Itbi_forum> lista = imovelRepository.Retorna_Itbi_Forum(p);
             List<Itbi_Forum> model = new List<Itbi_Forum>();
@@ -1943,7 +1952,7 @@ namespace GTI_Mvc.Controllers {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             ModelState.Clear();
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             if (model[0].Action == "btnOkMsg") {
                 Itbi_forum reg = new Itbi_forum() {
                     Guid = model[0].Guid,
@@ -1962,8 +1971,8 @@ namespace GTI_Mvc.Controllers {
 
         public ItbiViewModel Itbi_Urbano_Load(ItbiViewModel model, bool _bcpf, bool _bcnpj) {
             int Codigo = Convert.ToInt32(model.Codigo);
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
-            Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
             ImovelStruct imovel = imovelRepository.Dados_Imovel(Codigo);
 
             if (imovel != null && imovel.Inscricao != null) {
@@ -1981,7 +1990,7 @@ namespace GTI_Mvc.Controllers {
 
                 string _cpfCnpj = model.Cpf_Cnpj;
 
-                Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+                Tributario_bll tributarioRepository = new Tributario_bll(_connection);
                 SpCalculo _calculo = tributarioRepository.Calculo_IPTU(Codigo, DateTime.Now.Year);
                 model.Valor_Venal = _calculo.Vvi;
                 model.Valor_Venal_Territorial = _calculo.Vvt;
@@ -2005,7 +2014,7 @@ namespace GTI_Mvc.Controllers {
                     if (_bcnpj)
                         _comprador.Cnpj = Functions.FormatarCpfCnpj(model.Cpf_Cnpj);
 
-                    Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+                    Endereco_bll enderecoRepository = new Endereco_bll(_connection);
 
                     if (_cidadao.EtiquetaR == "S") {
                         Bairro _bairro=null;
@@ -2059,7 +2068,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         public ItbiViewModel Itbi_Rural_Load(ItbiViewModel model, bool _bcpf, bool _bcnpj) {
-            Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
 
             if (model.Comprador == null)
                 model.Comprador = new Comprador_Itbi();
@@ -2122,7 +2131,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         private string Itbi_Save(ItbiViewModel model) {
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             string _guid;
             string oldpos = "";
             Exception ex = null;
@@ -2153,7 +2162,7 @@ namespace GTI_Mvc.Controllers {
                     if (a != "") {
                         int b = Convert.ToInt32(a);
                         if (b > 0) {
-                            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+                            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
                             int _ceptmp = Convert.ToInt32(Functions.RetornaNumero(model.Comprador.Cep));
                             List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_ceptmp);
                             List<Logradouro> Lista_Logradouro = new List<Logradouro>();
@@ -2305,7 +2314,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         private ItbiViewModel Retorna_Itbi_Gravado(string guid) {
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
 
             Itbi_main regMain = imovelRepository.Retorna_Itbi_Main(guid);
             ItbiViewModel itbi = new ItbiViewModel {
@@ -2487,7 +2496,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         public ActionResult Itbi_guia(string p) {
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             Itbi_status stat = imovelRepository.Retorna_Itbi_Situacao(p);
             if (stat.Codigo != 2) {
                 return RedirectToAction("Itbi_query", new { e = "P" });
@@ -2622,10 +2631,16 @@ namespace GTI_Mvc.Controllers {
             TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
             ConnectionInfo crConnectionInfo = new ConnectionInfo();
             Tables CrTables;
-            crConnectionInfo.ServerName = "200.232.123.115";
+            string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+            string IPAddress = builder.DataSource;
+            string _userId = builder.UserID;
+            string _pwd = builder.Password;
+
+            crConnectionInfo.ServerName = IPAddress;
             crConnectionInfo.DatabaseName = "Tributacao";
-            crConnectionInfo.UserID = "gtisys";
-            crConnectionInfo.Password = "everest";
+            crConnectionInfo.UserID = _userId;
+            crConnectionInfo.Password = _pwd;
             CrTables = rd.Database.Tables;
             foreach (Table CrTable in CrTables) {
                 crtableLogoninfo = CrTable.LogOnInfo;
@@ -2643,7 +2658,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         public ActionResult Itbi_cancel(string p, int s) {
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             Itbi_status stat = imovelRepository.Retorna_Itbi_Situacao(p);
             if (stat.Codigo > 1) {
                 return RedirectToAction("Itbi_query", new { e = "C" });
@@ -2671,9 +2686,9 @@ namespace GTI_Mvc.Controllers {
             string _fone = model.Comprador.Telefone;
             string _email = model.Comprador.Email;
 
-            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
-            Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
 
             if (_cidade_codigo == 0) {
                 _cidade_codigo = enderecoRepository.Retorna_Cidade(_uf, _cidade_nome);
@@ -2743,7 +2758,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         private void Itbi_gravar_guia(ItbiViewModel model) {
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             int _fiscal = Convert.ToInt32(Session["hashid"]);
             //int _fiscal = Functions.pUserId;
             int _codigo = Convert.ToInt32(model.Comprador.Codigo);
@@ -2843,7 +2858,7 @@ namespace GTI_Mvc.Controllers {
             ex = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
 
             //Alterar Itbi
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             ex = imovelRepository.Alterar_Itbi_Guia(model.Guid, _novo_documento, _dataVencto, _fiscal);
             ex = imovelRepository.Alterar_Itbi_Situacao(model.Guid, 2);
             return;
@@ -2855,12 +2870,12 @@ namespace GTI_Mvc.Controllers {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             ItbiViewModel model = new ItbiViewModel();
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             if (String.IsNullOrWhiteSpace(guid)) {
                 bool bFuncionario = Session["hashfunc"].ToString() == "S" ? true : false;
                 int nId = Convert.ToInt32(Session["hashid"]);
                 string usuario_Nome = "", usuario_Doc = "";
-                Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+                Sistema_bll sistemaRepository = new Sistema_bll(_connection);
                 if (bFuncionario) {
                     usuarioStruct _user = sistemaRepository.Retorna_Usuario(nId);
                     usuario_Nome = _user.Nome_completo;
@@ -2903,7 +2918,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_isencao")]
         [HttpPost]
         public ActionResult Itbi_isencao(ItbiViewModel model, string natureza, string action) {
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             if (action == "btnValida") {
                 Exception ex2 = imovelRepository.Alterar_Itbi_Isencao_Natureza(model.Guid, Convert.ToInt32(natureza));
                 goto ActionPos;
@@ -3008,7 +3023,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         private ItbiViewModel Retorna_Itbi_Isencao_Gravado(string guid) {
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
 
             Itbi_isencao_main_Struct regMain = imovelRepository.Retorna_Itbi_Isencao_Main(guid);
             ItbiViewModel itbi = new ItbiViewModel {
@@ -3038,7 +3053,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         private List<SelectListItem> Lista_Natureza_Isencao(string selectedValue) {
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             List<SelectListItem> Lista = new List<SelectListItem>();
             List<Itbi_natureza_isencao> lista_natureza_isencao = imovelRepository.Lista_itbi_natureza_isencao();
 
@@ -3079,7 +3094,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Itbi_query_isencao(string e = "") {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             int _userId = Convert.ToInt32(Session["hashid"]);
             bool _fiscal = Session["hashfiscalitbi"] != null && Session["hashfiscalitbi"].ToString() == "S" ? true : false;
             List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Isencao_Query(_userId, _fiscal, 0);
@@ -3118,13 +3133,13 @@ namespace GTI_Mvc.Controllers {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             ViewBag.Fiscal = Session["hashfiscalitbi"].ToString();
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             Exception ex = imovelRepository.Liberar_Itbi_Isencao(model.Guid, Convert.ToInt32(Session["hashid"]));
             return RedirectToAction("Itbi_query_isencao");
         }
 
         public ActionResult Itbi_isencao_cancel(string p, int s) {
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             Exception ex = imovelRepository.Alterar_Itbi_Isencao_Situacao(p, 4);
             return RedirectToAction("Itbi_query_isencao");
         }
@@ -3136,10 +3151,16 @@ namespace GTI_Mvc.Controllers {
             TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
             ConnectionInfo crConnectionInfo = new ConnectionInfo();
             Tables CrTables;
-            crConnectionInfo.ServerName = "200.232.123.115";
+            string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+            string IPAddress = builder.DataSource;
+            string _userId = builder.UserID;
+            string _pwd = builder.Password;
+
+            crConnectionInfo.ServerName = IPAddress;
             crConnectionInfo.DatabaseName = "Tributacao";
-            crConnectionInfo.UserID = "gtisys";
-            crConnectionInfo.Password = "everest";
+            crConnectionInfo.UserID = _userId;
+            crConnectionInfo.Password = _pwd;
             CrTables = rd.Database.Tables;
             foreach (Table CrTable in CrTables) {
                 crtableLogoninfo = CrTable.LogOnInfo;
@@ -3147,7 +3168,7 @@ namespace GTI_Mvc.Controllers {
                 CrTable.ApplyLogOnInfo(crtableLogoninfo);
             }
 
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             //##### QRCode ##########################################################
             string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkguid?c=" + p;
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
@@ -3161,7 +3182,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             Itbi_isencao_main_Struct reg = imovelRepository.Retorna_Itbi_Isencao_Main(p);
-            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             Assinatura assinatura = sistemaRepository.Retorna_Usuario_Assinatura(reg.Fiscal_id);
             usuarioStruct usuario = sistemaRepository.Retorna_Usuario(reg.Fiscal_id);
             rd.SetParameterValue("ANONUMERO", reg.Isencao_numero.ToString("00000") + "/" + reg.Isencao_ano.ToString("0000"));
@@ -3194,12 +3215,12 @@ namespace GTI_Mvc.Controllers {
                 return RedirectToAction("Login", "Home");
             ItbiViewModel model = Retorna_Itbi_Isencao_Gravado(guid);
             natureza = model.Natureza_Isencao_Codigo.ToString();
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             if (String.IsNullOrWhiteSpace(guid)) {
                 bool bFuncionario = Session["hashfunc"].ToString() == "S" ? true : false;
                 int nId = Convert.ToInt32(Session["hashid"]);
                 string usuario_Nome = "", usuario_Doc = "";
-                Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+                Sistema_bll sistemaRepository = new Sistema_bll(_connection);
                 if (bFuncionario) {
                     usuarioStruct _user = sistemaRepository.Retorna_Usuario(nId);
                     usuario_Nome = _user.Nome_completo;
@@ -3243,7 +3264,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_isencao_e")]
         [HttpPost]
         public ActionResult Itbi_isencao_e(ItbiViewModel model, string natureza, string action) {
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             if (action == "btnValida") {
                 Exception ex2 = imovelRepository.Alterar_Itbi_Isencao_Natureza(model.Guid, Convert.ToInt32(natureza));
                 goto ActionPos;

@@ -19,12 +19,14 @@ using static GTI_Models.modelCore;
 using static GTI_Mvc.Functions;
 using System.Net;
 using Newtonsoft.Json.Linq;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace GTI_Mvc.Controllers {
     [Route("Tributario")]
     public class TributarioController : Controller
     {
-
+        private readonly string _connection = "GTIconnection";
         [Route("Certidao/Certidao_Debito_Codigo")]
         [HttpGet]
         public ViewResult Certidao_Debito_Codigo() {
@@ -37,15 +39,15 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Certidao_Debito_Codigo(CertidaoViewModel model) {
             int _codigo = 0;
             short _ret =0;
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             int _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Debito);
             bool _existeCod = false;
             string _tipoCertidao = "",_nao="", _sufixo = "XX",_reportName="", _numProcesso = "9222-3/2012", _dataProcesso = "18/04/2012",_cpf,_cnpj; 
             TipoCadastro _tipoCadastro=new TipoCadastro();
             CertidaoViewModel certidaoViewModel = new CertidaoViewModel();
             ViewBag.Result = "";
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
             if (model.Inscricao != null) {
                 _codigo = Convert.ToInt32(model.Inscricao);
                 if (_codigo < 100000) {
@@ -149,7 +151,7 @@ namespace GTI_Mvc.Controllers {
                 reg.Nao = _nao;
                 reg.Tributo = _tributo;
 
-                Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+                Endereco_bll enderecoRepository = new Endereco_bll(_connection);
                 Bairro _bairro = enderecoRepository.RetornaLogradouroBairro((int)_dados.CodigoLogradouro, (short)_dados.Numero);
                 reg.Bairro = _bairro.Descbairro ?? "";
 
@@ -160,7 +162,7 @@ namespace GTI_Mvc.Controllers {
                 string Regime = empresaRepository.RegimeEmpresa(_codigo);
                 if (Regime == "V") {
                     //Verifica competência
-                    Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
+                    Tributario_bll tributario_Class = new Tributario_bll(_connection);
                     Eicon_bll eicon_Class = new Eicon_bll("GTIEicon");
                     int _holes = tributario_Class.Competencias_Nao_Encerradas(eicon_Class.Resumo_CompetenciaISS(_codigo, _dados.Data_Encerramento));
                     if (_holes == 0) {
@@ -280,10 +282,16 @@ namespace GTI_Mvc.Controllers {
             TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
             ConnectionInfo crConnectionInfo = new ConnectionInfo();
             Tables CrTables;
-            crConnectionInfo.ServerName = "200.232.123.115";
+            string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+            string IPAddress = builder.DataSource;
+            string _userId = builder.UserID;
+            string _pwd = builder.Password;
+
+            crConnectionInfo.ServerName = IPAddress;
             crConnectionInfo.DatabaseName = "Tributacao";
-            crConnectionInfo.UserID = "gtisys";
-            crConnectionInfo.Password = "everest";
+            crConnectionInfo.UserID = _userId;
+            crConnectionInfo.Password = _pwd;
             CrTables = rd.Database.Tables;
             foreach (Table CrTable in CrTables) {
                 crtableLogoninfo = CrTable.LogOnInfo;
@@ -317,9 +325,9 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Certidao_Debito_Doc(CertidaoViewModel model) {
             string sNome = "";
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
-            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             int _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Debito_Doc);
             ViewBag.Result = "";
 
@@ -373,7 +381,7 @@ namespace GTI_Mvc.Controllers {
             RetornoCertidaoDebito _tipo_Certidao;
 
             DateTime dDataProc = Convert.ToDateTime(sData);
-            Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
+            Tributario_bll tributario_Class = new Tributario_bll(_connection);
 
             bool bEmpresa = false, bCidadao = false, bImovel = false;
             List<int> _codigos = sistemaRepository.Lista_Codigos_Documento(!string.IsNullOrWhiteSpace( model.CpfValue)  ? model.CpfValue : model.CnpjValue, !string.IsNullOrWhiteSpace( model.CpfValue)  ? TipoDocumento.Cpf : TipoDocumento.Cnpj);
@@ -543,10 +551,16 @@ namespace GTI_Mvc.Controllers {
                 TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
                 ConnectionInfo crConnectionInfo = new ConnectionInfo();
                 Tables CrTables;
-                crConnectionInfo.ServerName = "200.232.123.115";
+                string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+                string IPAddress = builder.DataSource;
+                string _userId = builder.UserID;
+                string _pwd = builder.Password;
+
+                crConnectionInfo.ServerName = IPAddress;
                 crConnectionInfo.DatabaseName = "Tributacao";
-                crConnectionInfo.UserID = "gtisys";
-                crConnectionInfo.Password = "everest";
+                crConnectionInfo.UserID = _userId;
+                crConnectionInfo.Password = _pwd;
                 CrTables = rd.Database.Tables;
                 foreach (Table CrTable in CrTables) {
                     crtableLogoninfo = CrTable.LogOnInfo;
@@ -604,10 +618,10 @@ namespace GTI_Mvc.Controllers {
             }
 
             TipoCadastro _tipoCadastro = Tipo_Cadastro(_codigo);
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
-            Cidadao_bll requerenteRepository = new Cidadao_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
+            Cidadao_bll requerenteRepository = new Cidadao_bll(_connection);
             if (_tipoCadastro == TipoCadastro.Imovel) {
                 _existe = imovelRepository.Existe_Imovel(_codigo);
                 if (!_existe) {
@@ -778,9 +792,9 @@ namespace GTI_Mvc.Controllers {
             //    ViewBag.Result = "Código de verificação inválido.";
             //    return View(model);
             //}
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
-            Cidadao_bll requerenteRepository = new Cidadao_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
+            Cidadao_bll requerenteRepository = new Cidadao_bll(_connection);
             bool _existeCod;
             string _nome,_cpfcnpj;
             int _codigo = Convert.ToInt32(model.Inscricao);
@@ -876,7 +890,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Damc")]
         [HttpGet]
         public ActionResult Damc() {
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             var value = TempData["debito"];
 
             if (!(value is DebitoSelectionViewModel model)) {
@@ -1013,10 +1027,10 @@ namespace GTI_Mvc.Controllers {
 
         [HttpPost]
         public ActionResult SubmitSelected(DebitoSelectionViewModel model) {
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
-            Cidadao_bll requerenteRepository = new Cidadao_bll("GTIconnection");
-            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
+            Cidadao_bll requerenteRepository = new Cidadao_bll(_connection);
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
 
             int _codigo = model.Inscricao;
             string _endereco="",_complemento="",_cidade="",_uf="",_cep="";
@@ -1158,7 +1172,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         public ActionResult Damd() {
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             if(TempData["debito"]==null)
                 return RedirectToAction("Login_gti", "Home");
             DebitoListViewModel model =(DebitoListViewModel) TempData["debito"];
@@ -1316,7 +1330,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Validate_CDoc")]
         [Route("Certidao/Validate_CDoc")]
         public ActionResult Validate_CDoc(CertidaoViewModel model) {
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             int _codigo, _ano, _numero;
             string _chave = model.Chave;
 
@@ -1474,7 +1488,7 @@ namespace GTI_Mvc.Controllers {
                     ViewBag.Result = "Nº do processo antigo inválido.";
                     return View(model);
                 } else {
-                    Processo_bll processoRepository = new Processo_bll("GTIconnection");
+                    Processo_bll processoRepository = new Processo_bll(_connection);
                     string _novo = processoRepository.ValidaProcessoAntigo(_antigo);
                     if (_novo=="") {
                         ViewBag.Result = "Nº do processo antigo inválido.";
@@ -1511,7 +1525,7 @@ namespace GTI_Mvc.Controllers {
             string _processo = model.Numero_Processo;
 
             if (_codigo < 100000) {
-                Imovel_bll imovel_Class = new Imovel_bll("GTIconnection");
+                Imovel_bll imovel_Class = new Imovel_bll(_connection);
                 bool ExisteImovel = imovel_Class.Existe_Imovel(_codigo);
                 if (!ExisteImovel) {
                     ViewBag.Result = "Inscrição não cadastrada.";
@@ -1532,7 +1546,7 @@ namespace GTI_Mvc.Controllers {
                 }
             } else {
                 if (_codigo >= 100000 && _codigo < 500000) {
-                    Empresa_bll empresa_Class = new Empresa_bll("GTIconnection");
+                    Empresa_bll empresa_Class = new Empresa_bll(_connection);
                     bool ExisteEmpresa = empresa_Class.Existe_Empresa(_codigo);
                     if (!ExisteEmpresa) {
                         ViewBag.Result = "Inscrição não cadastrada.";
@@ -1551,7 +1565,7 @@ namespace GTI_Mvc.Controllers {
                         _cpfcnpj = _empresa.Cpf_cnpj;
                     }
                 } else {
-                    Cidadao_bll cidadao_Class = new Cidadao_bll("GTIconnection");
+                    Cidadao_bll cidadao_Class = new Cidadao_bll(_connection);
                     bool ExisteCidadao = cidadao_Class.ExisteCidadao(_codigo);
                     if (!ExisteCidadao) {
                         ViewBag.Result = "Inscrição não cadastrada.";
@@ -1587,7 +1601,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             _processo = _processo.Substring(0, _processo.LastIndexOf('-')) + _processo.Substring(_processo.Length - 5, 5);
-            Tributario_bll tributario_class = new Tributario_bll("GTIconnection");
+            Tributario_bll tributario_class = new Tributario_bll(_connection);
             List<Destinoreparc> Lista = tributario_class.Lista_Destino_Parcelamento(_processo);
             if (Lista.Count == 0) {
                 ViewBag.Result = "Processo não cadastrado.";
@@ -1760,7 +1774,7 @@ namespace GTI_Mvc.Controllers {
                             string encoding = string.Empty;
                             string extension = string.Empty;
                             Session["sid"] = "";
-                            Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
+                            Tributario_bll tributario_Class = new Tributario_bll(_connection);
                             if (ListaBoleto.Count > 0) {
                                 tributario_Class.Insert_Carne_Web(Convert.ToInt32(ListaBoleto[0].Codreduzido), DateTime.Now.Year);
                                 DataSet Ds = Functions.ToDataSet(ListaBoleto);
@@ -1832,7 +1846,7 @@ namespace GTI_Mvc.Controllers {
             else
                 _documento = Convert.ToInt32(model.Documento);
 
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             bool _existe = tributarioRepository.Existe_Documento(_documento);
             if (!_existe) {
                 ViewBag.Result = "Documento não cadastrado.";
@@ -1845,7 +1859,7 @@ namespace GTI_Mvc.Controllers {
             decimal nValorGuia = Convert.ToDecimal(DadosDoc.Valorguia);
 
             if (_codigo < 100000) {
-                Imovel_bll imovel_Class = new Imovel_bll("GTIconnection");
+                Imovel_bll imovel_Class = new Imovel_bll(_connection);
                 ImovelStruct reg = imovel_Class.Dados_Imovel(_codigo);
                 List<ProprietarioStruct> regProp = imovel_Class.Lista_Proprietario(_codigo, true);
                 if (_bCpf) {
@@ -1861,7 +1875,7 @@ namespace GTI_Mvc.Controllers {
                 }
             } else {
                 if (_codigo >= 100000 && _codigo < 500000) {
-                    Empresa_bll empresa_Class = new Empresa_bll("GTIconnection");
+                    Empresa_bll empresa_Class = new Empresa_bll(_connection);
                     EmpresaStruct reg = empresa_Class.Retorna_Empresa(_codigo);
                     if (_bCpf) {
                         if (Convert.ToInt64(Functions.RetornaNumero(reg.Cpf_cnpj)).ToString("00000000000") != _cpf) {
@@ -1875,7 +1889,7 @@ namespace GTI_Mvc.Controllers {
                         }
                     }
                 } else {
-                    Cidadao_bll cidadao_Class = new Cidadao_bll("GTIconnection");
+                    Cidadao_bll cidadao_Class = new Cidadao_bll(_connection);
                     CidadaoStruct reg = cidadao_Class.LoadReg(_codigo);
                     if (_bCpf) {
                         if (Convert.ToInt64(Functions.RetornaNumero(reg.Cpf)).ToString("00000000000") != _cpf) {
@@ -1912,7 +1926,7 @@ namespace GTI_Mvc.Controllers {
             List<DebitoStructure> ListaParcelas = Carregaparcelas(_documento, dDataDoc);
             int nSid = tributarioRepository.Insert_Boleto_DAM(ListaParcelas, _documento, dDataDoc);
             Session["sid"] = "";
-            Tributario_bll tributario_Repository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributario_Repository = new Tributario_bll(_connection);
             List<GTI_Models.Models.Boleto> ListaBoleto = tributarioRepository.Lista_Boleto_DAM(nSid);
             DataSet Ds = Functions.ToDataSet(ListaBoleto);
             ReportDataSource rdsAct = new ReportDataSource("dsDam", Ds.Tables[0]);
@@ -1934,7 +1948,7 @@ namespace GTI_Mvc.Controllers {
 
         private List<DebitoStructure> Carregaparcelas(int nNumDoc, DateTime dDataDoc) {
             int i = 0;
-            Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
+            Tributario_bll tributario_Class = new Tributario_bll(_connection);
             List<DebitoStructure> ListaParcelas = tributario_Class.Lista_Tabela_Parcela_Documento(nNumDoc);
 
             short _plano = tributario_Class.Retorna_Plano_Desconto(nNumDoc);
@@ -2034,7 +2048,7 @@ namespace GTI_Mvc.Controllers {
             }
             ViewBag.Lista_Ano = new SelectList(Lista_Ano);
 
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             List<Categconstr> Lista_Cat = new List<Categconstr>();
             switch (model.Uso_Construcao) {
                 case 1:
@@ -2111,14 +2125,14 @@ namespace GTI_Mvc.Controllers {
                 //    return View(model);
                 //}
 
-                Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
+                Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
                 bool _existe = cidadaoRepository.ExisteCidadao(model.Codigo_Cidadao);
                 if (!_existe) {
                     ViewBag.Result = "Código cidadão não cadastrado.";
                     return View(model);
                 }
 
-                Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+                Imovel_bll imovelRepository = new Imovel_bll(_connection);
                 _existe = imovelRepository.Existe_Imovel(model.Codigo_Imovel);
 
                 if (!_existe) {
@@ -2307,7 +2321,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             if (!string.IsNullOrEmpty(model.Numero_Processo)) {
-                Processo_bll processoRepository = new Processo_bll("GTIconnection");
+                Processo_bll processoRepository = new Processo_bll(_connection);
                 Exception ex = processoRepository.ValidaProcesso(model.Numero_Processo);
                 if (ex != null && !string.IsNullOrWhiteSpace(ex.Message)) {
                     ViewBag.Result = ex.Message;
@@ -2329,7 +2343,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Notificacao_query")]
         [HttpGet]
         public ViewResult Notificacao_query() {
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             int _ano = DateTime.Now.Year;
             StartQueryNotificacao:
             List<Notificacao_iss_web_Struct> Lista = tributarioRepository.Retorna_Notificacao_Iss_Web(_ano);
@@ -2363,7 +2377,7 @@ namespace GTI_Mvc.Controllers {
             if (model[0].Ano_Selected == 0)
                 _ano = DateTime.Now.Year;
 
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             List<Notificacao_iss_web_Struct> Lista = tributarioRepository.Retorna_Notificacao_Iss_Web(Convert.ToInt32(_ano));
             model = new List<NotificacaoIssViewModel>();
 
@@ -2387,11 +2401,11 @@ namespace GTI_Mvc.Controllers {
         }
 
         public ActionResult Notificacao_print(string p) {
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             Notificacao_iss_web_Struct _not = tributarioRepository.Retorna_Notificacao_Iss_Web(p);
             Notificacao_Iss_Tabela _tabela = tributarioRepository.Retorna_Notificacao_Iss_Tabela(_not.Ano_notificacao);
 
-            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
 
             if (_not.Fiscal == 0)
                 _not.Fiscal = 421;
@@ -2520,7 +2534,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Rod_menu() {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             int _userid = Convert.ToInt32(Session["hashid"]);
             bool _func = Session["hashfunc"].ToString() == "S";
 
@@ -2534,7 +2548,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Rod_menu")]
         [HttpPost]
         public ActionResult Rod_menu(RodoviariaViewModel model) {
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             
             List<Rodo_empresa> Lista = tributarioRepository.Lista_Rodo_empresa();
             ViewBag.Lista_Empresa = new SelectList(Lista, "Codigo", "Nome");
@@ -2554,9 +2568,9 @@ namespace GTI_Mvc.Controllers {
             } catch (Exception) {
                 return RedirectToAction("Login", "Home");
             }
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             List<Rodo_uso_plataforma_Struct> Lista = tributarioRepository.Lista_Rodo_uso_plataforma(_codigo,_ano);
-            Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
             string _nome = cidadaoRepository.Retorna_Nome_Cidadao(_codigo);
             RodoviariaViewModel model = new RodoviariaViewModel {
                 Codigo = _codigo,
@@ -2582,8 +2596,8 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Rod_plat_query(RodoviariaViewModel model,  string DataDe,string DataAte,string Codigo,string Qtde1,string Qtde2,string Qtde3) {
             //            FormCollection collection=new FormCollection
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
-            Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
             string _name = "";
             int _cod = model.Codigo;
             int _year = model.Ano;
@@ -2812,7 +2826,7 @@ namespace GTI_Mvc.Controllers {
             int _codigo = Convert.ToInt32(p4);
             p1 = ""; p2 = ""; p3 = ""; p4 = "";
 
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             Rodo_uso_plataforma_Struct reg = tributarioRepository.Retorna_Rodo_uso_plataforma(_codigo, _datade, _dataate, _seq);
 
             short _seqdebito = reg.SeqDebito;
@@ -2820,7 +2834,7 @@ namespace GTI_Mvc.Controllers {
             decimal _aliq2 = tributarioRepository.Retorna_Valor_Tributo(_ano, 155);
             decimal _aliq3 = tributarioRepository.Retorna_Valor_Tributo(_ano, 156);
 
-            Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
             CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(_codigo);
             string _bairro = "", _endereco = "", _compl = "", _cidade = "JABOTICABAL", _nome = "";
             string _cpf_cnpj = string.IsNullOrWhiteSpace(_cidadao.Cnpj) ? _cidadao.Cpf : _cidadao.Cnpj;
@@ -2962,7 +2976,7 @@ namespace GTI_Mvc.Controllers {
             int _codigo = Convert.ToInt32(p4);
             int _doc = Convert.ToInt32(p5);
 
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
 
             List<DebitoStructure> Lista = tributarioRepository.Lista_Tabela_Parcela_Documento(_doc);
             int _seqdebito = Lista[0].Sequencia_Lancamento;

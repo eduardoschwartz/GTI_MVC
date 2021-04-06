@@ -9,10 +9,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Web.Mvc;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace GTI_MVC.Controllers {
     public class SharedController : Controller {
-
+        private readonly string _connection = "GTIconnection";
         [Route("Checkgticd")]
         [HttpGet]
         public ActionResult Checkgticd(string c)
@@ -27,7 +29,7 @@ namespace GTI_MVC.Controllers {
             int _codigo, _ano, _numero;
             string _tipo, _chave = c,_pdfFileName="";
             if (c != null) {
-                Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+                Tributario_bll tributarioRepository = new Tributario_bll(_connection);
                 Certidao reg = new Certidao();
                 List<Certidao> certidao = new List<Certidao>();
                 chaveStruct _chaveStruct = tributarioRepository.Valida_Certidao(_chave);
@@ -88,7 +90,7 @@ namespace GTI_MVC.Controllers {
                             _codigo = _chaveStruct.Codigo;
                             _numero = _chaveStruct.Numero;
                             _ano = _chaveStruct.Ano;
-                            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+                            Empresa_bll empresaRepository = new Empresa_bll(_connection);
                             Alvara_funcionamento _dadosalvara = empresaRepository.Alvara_Funcionamento_gravado(_chave);
                             if (_dadosalvara != null) {
                                 Certidao regAlvara = new Certidao() {
@@ -176,7 +178,7 @@ namespace GTI_MVC.Controllers {
         [Route("Checkguid")]
         [HttpPost]
         public ActionResult Checkguid(CertidaoViewModel model, string c) {
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             Itbi_isencao_main_Struct _itbi = imovelRepository.Retorna_Itbi_Isencao_Main(c);
             List<Itbi_isencao_imovel> _Lista = imovelRepository.Retorna_Itbi_Isencao_Imovel(c);
 
@@ -186,10 +188,16 @@ namespace GTI_MVC.Controllers {
             TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
             ConnectionInfo crConnectionInfo = new ConnectionInfo();
             Tables CrTables;
-            crConnectionInfo.ServerName = "200.232.123.115";
+            string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+            string IPAddress = builder.DataSource;
+            string _userId = builder.UserID;
+            string _pwd = builder.Password;
+
+            crConnectionInfo.ServerName = IPAddress;
             crConnectionInfo.DatabaseName = "Tributacao";
-            crConnectionInfo.UserID = "gtisys";
-            crConnectionInfo.Password = "everest";
+            crConnectionInfo.UserID = _userId;
+            crConnectionInfo.Password = _pwd;
             CrTables = rd.Database.Tables;
             foreach (Table CrTable in CrTables) {
                 crtableLogoninfo = CrTable.LogOnInfo;
@@ -197,7 +205,7 @@ namespace GTI_MVC.Controllers {
                 CrTable.ApplyLogOnInfo(crtableLogoninfo);
             }
 
-            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             Assinatura assinatura = sistemaRepository.Retorna_Usuario_Assinatura(_itbi.Fiscal_id);
             usuarioStruct usuario = sistemaRepository.Retorna_Usuario(_itbi.Fiscal_id);
             rd.SetParameterValue("ANONUMERO", _itbi.Isencao_numero.ToString("00000") + "/" + _itbi.Isencao_ano.ToString("0000"));
@@ -251,7 +259,7 @@ namespace GTI_MVC.Controllers {
             //}
 
             int _cep = Convert.ToInt32(Functions.RetornaNumero(model.Cep));
-            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
 
 
             List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_cep);

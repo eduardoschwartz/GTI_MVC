@@ -17,12 +17,14 @@ using System.Web.Mvc;
 using static GTI_Models.modelCore;
 using System.Net;
 using Newtonsoft.Json.Linq;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace GTI_Mvc.Controllers {
 
     [Route("Imovel")]
     public class ImovelController : Controller {
-
+        private readonly string _connection = "GTIconnection";
         [Route("get-captcha-image")]
         public ActionResult GetCaptchaImage() {
             int width = 100;
@@ -46,8 +48,8 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Certidao_Endereco(CertidaoViewModel model) {
             int _codigo = 0;
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             int _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Endereco);
             bool _existeCod = false;
             CertidaoViewModel certidaoViewModel = new CertidaoViewModel();
@@ -97,7 +99,7 @@ namespace GTI_Mvc.Controllers {
                 Controle = _numero.ToString("00000") + DateTime.Now.Year.ToString("0000") + "/" + _codigo.ToString() + "-EA"
             };
 
-            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
             Bairro _bairro = enderecoRepository.RetornaLogradouroBairro((int)_dados.CodigoLogradouro, (short)_dados.Numero);
             reg.Bairro = _bairro.Descbairro ?? "";
 
@@ -161,10 +163,16 @@ namespace GTI_Mvc.Controllers {
             TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
             ConnectionInfo crConnectionInfo = new ConnectionInfo();
             Tables CrTables;
-            crConnectionInfo.ServerName = "200.232.123.115";
+            string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+            string IPAddress = builder.DataSource;
+            string _userId = builder.UserID;
+            string _pwd = builder.Password;
+
+            crConnectionInfo.ServerName = IPAddress;
             crConnectionInfo.DatabaseName = "Tributacao";
-            crConnectionInfo.UserID = "gtisys";
-            crConnectionInfo.Password = "everest";
+            crConnectionInfo.UserID = _userId;
+            crConnectionInfo.Password = _pwd;
             CrTables = rd.Database.Tables;
             foreach (Table CrTable in CrTables) {
                 crtableLogoninfo = CrTable.LogOnInfo;
@@ -190,7 +198,7 @@ namespace GTI_Mvc.Controllers {
             int _codigo, _ano, _numero;
             string _chave = model.Chave;
             if (model.Chave != null) {
-                Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+                Tributario_bll tributarioRepository = new Tributario_bll(_connection);
                 Certidao reg = new Certidao();
                 List<Certidao> certidao = new List<Certidao>();
                 chaveStruct _chaveStruct = tributarioRepository.Valida_Certidao(_chave);
@@ -251,12 +259,12 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Certidao_Valor_Venal(CertidaoViewModel model) {
             int _codigo;
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             int _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.ValorVenal);
             bool _existeCod = false;
             CertidaoViewModel certidaoViewModel = new CertidaoViewModel();
             ViewBag.Result = "";
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             _codigo = Convert.ToInt32(model.Inscricao);
             if (_codigo < 100000)
                 _existeCod = imovelRepository.Existe_Imovel(_codigo);
@@ -300,7 +308,7 @@ namespace GTI_Mvc.Controllers {
                 Data_Geracao = DateTime.Now
             };
 
-            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
             Bairro _bairro = enderecoRepository.RetornaLogradouroBairro((int)_dados.CodigoLogradouro, (short)_dados.Numero);
             reg.Bairro = _bairro.Descbairro ?? "";
 
@@ -386,10 +394,16 @@ namespace GTI_Mvc.Controllers {
             TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
             ConnectionInfo crConnectionInfo = new ConnectionInfo();
             Tables CrTables;
-            crConnectionInfo.ServerName = "200.232.123.115";
+            string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+            string _server = builder.DataSource;
+            string _userId = builder.UserID;
+            string _pwd = builder.Password;
+
+            crConnectionInfo.ServerName = _server;
             crConnectionInfo.DatabaseName = "Tributacao";
-            crConnectionInfo.UserID = "gtisys";
-            crConnectionInfo.Password = "everest";
+            crConnectionInfo.UserID = _userId;
+            crConnectionInfo.Password = _pwd;
             CrTables = rd.Database.Tables;
             foreach (Table CrTable in CrTables) {
                 crtableLogoninfo = CrTable.LogOnInfo;
@@ -411,7 +425,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Validate_VV")]
         [Route("Certidao/Validate_VV")]
         public ActionResult Validate_VV(CertidaoViewModel model) {
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             int _codigo, _ano, _numero;
             string _chave = model.Chave;
             if (model.Chave != null) {
@@ -479,8 +493,8 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult Certidao_Isencao(CertidaoViewModel model) {
             int _codigo = 0;
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             int _numero = tributarioRepository.Retorna_Codigo_Certidao(TipoCertidao.Isencao);
             bool _existeCod = false;
             string _numero_processo = "";
@@ -632,7 +646,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Validate_CS(CertidaoViewModel model) {
             int _codigo, _ano, _numero;
             string _chave = model.Chave;
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             if (model.Chave != null) {
                 Certidao reg = new Certidao();
                 List<Certidao> certidao = new List<Certidao>();
@@ -700,7 +714,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Dados_Imovel")]
         [HttpPost]
         public ActionResult Dados_Imovel(ImovelDetailsViewModel model) {
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             int _codigo = 0;
             bool _existeCod = false;
             ImovelDetailsViewModel imovelDetailsViewModel = new ImovelDetailsViewModel();
@@ -758,7 +772,7 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
-            Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
+            Tributario_bll tributario_Class = new Tributario_bll(_connection);
             int _numero_certidao = tributario_Class.Retorna_Codigo_Certidao(TipoCertidao.Ficha_Imovel);
             int _ano_certidao = DateTime.Now.Year;
             string _controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _codigo.ToString() + "-FI";
@@ -849,7 +863,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Carne_Iptu")]
         [HttpPost]
         public ActionResult Carne_Iptu(CertidaoViewModel model) {
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             int _codigo = 0;
             int _ano = 2021;
             bool _existeCod = false;
@@ -920,7 +934,7 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
-            Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
+            Tributario_bll tributario_Class = new Tributario_bll(_connection);
             List<AreaStruct> areas = imovelRepository.Lista_Area(_codigo);
 
             ImovelStruct _dados = imovelRepository.Dados_Imovel(_codigo);
@@ -1078,7 +1092,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Carne_Cip")]
         [HttpPost]
         public ActionResult Carne_Cip(CertidaoViewModel model) {
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             int _codigo = 0;
             bool _existeCod = false;
             ImovelDetailsViewModel imovelDetailsViewModel = new ImovelDetailsViewModel();
@@ -1133,7 +1147,7 @@ namespace GTI_Mvc.Controllers {
             //    return View(imovelDetailsViewModel);
             //}
 
-            Tributario_bll tributario_Class = new Tributario_bll("GTIconnection");
+            Tributario_bll tributario_Class = new Tributario_bll(_connection);
             List<AreaStruct> areas = imovelRepository.Lista_Area(_codigo);
 
             ImovelStruct _dados = imovelRepository.Dados_Imovel(_codigo);
@@ -1270,7 +1284,7 @@ namespace GTI_Mvc.Controllers {
 
         public ImovelDetailsViewModel HomeLoad(int Codigo) {
             ImovelDetailsViewModel model = new ImovelDetailsViewModel();
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             model.ImovelStruct = imovelRepository.Dados_Imovel(Codigo);
             model.Lista_Proprietario = imovelRepository.Lista_Proprietario(Codigo, false);
             model.Lista_Areas = imovelRepository.Lista_Area(Codigo);
@@ -1325,11 +1339,11 @@ namespace GTI_Mvc.Controllers {
                 Lista_Ano.Add(i);
             }
             ViewBag.Lista_Ano = new SelectList(Lista_Ano);
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
-            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
             if (action == "btnCodigoOK") {
                 ImovelStruct _imovel = imovelRepository.Dados_Imovel(_codigo);
-                Cidadao_bll cidadaoRepository = new Cidadao_bll("GTIconnection");
+                Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
                 List<ProprietarioStruct> Listaprop = imovelRepository.Lista_Proprietario(_codigo, false);
                 if (Listaprop.Count == 0) {
                     ViewBag.Result = "Não é possível emitir notificação para este imóvel.";
@@ -1377,7 +1391,7 @@ namespace GTI_Mvc.Controllers {
                 string _compl = _endLocal.Complemento == null ? "" : " " + _endLocal.Complemento;
                 model.Endereco_Local = _endLocal.Endereco + ", " +_endLocal.Numero.ToString()  + _compl +  " - " + _endLocal.NomeBairro.ToString() + " - " + _endLocal.NomeCidade + "/" + _endLocal.UF + " Cep:" + _endLocal.Cep;
 
-                Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+                Sistema_bll sistemaRepository = new Sistema_bll(_connection);
                 Contribuinte_Header_Struct _endProp = sistemaRepository.Contribuinte_Header(model.Codigo_cidadao);
                 _compl = _endProp.Complemento == null ? "" : " " + _endProp.Complemento;
                 model.Endereco_Prop = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _compl + " - " + _endProp.Nome_bairro.ToString() + " - " + _endProp.Nome_cidade + "/" + _endProp.Nome_uf + " Cep:" + _endProp.Cep ;
@@ -1448,7 +1462,7 @@ namespace GTI_Mvc.Controllers {
                 Rg=model.Rg,
                 Rg2=model.Rg2
             };
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             Exception ex = imovelRepository.Incluir_notificacao_terreno(reg);
             return null;
             
@@ -1464,7 +1478,7 @@ namespace GTI_Mvc.Controllers {
                 Lista_Ano.Add(i);
             }
             ViewBag.Lista_Ano = new SelectList(Lista_Ano);
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             List<NotificacaoTerViewModel> ListaNot = new List<NotificacaoTerViewModel>();
             List<Notificacao_Terreno_Struct> _listaNot = imovelRepository.Lista_Notificacao_Terreno(DateTime.Now.Year);
             foreach (Notificacao_Terreno_Struct item in _listaNot) {
@@ -1496,7 +1510,7 @@ namespace GTI_Mvc.Controllers {
                 Lista_Ano.Add(i);
             }
             ViewBag.Lista_Ano = new SelectList(Lista_Ano);
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             List<NotificacaoTerViewModel> ListaNot = new List<NotificacaoTerViewModel>();
             List<Notificacao_Terreno_Struct> _listaNot = imovelRepository.Lista_Notificacao_Terreno(_ano);
             foreach (Notificacao_Terreno_Struct item in _listaNot) {
@@ -1520,7 +1534,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         public ActionResult Notificacao_terreno_print(int a, int n) {
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             Notificacao_Terreno_Struct _not = imovelRepository.Retorna_Notificacao_Terreno(a, n);
 
             List<DtNotificacao> ListaNot = new List<DtNotificacao>();
@@ -1581,7 +1595,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult CadImovelqryC(ImovelDetailsViewModel model) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             model.Lista_Imovel = new List<ImovelLista>();
             int _codigo = Convert.ToInt32(model.Codigo);
             string _partialName = model.NomeProprietario ?? "";
@@ -1678,7 +1692,7 @@ namespace GTI_Mvc.Controllers {
             int _num = model.Numero_Notificacao;
             int _ano = model.Ano_Notificacao;
 
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             if (action == "btnCodigoOK") {
 
                 bool _existe = imovelRepository.Existe_Notificacao_Terreno(_ano, _num);
@@ -1744,7 +1758,7 @@ namespace GTI_Mvc.Controllers {
                 Data_notificacao = Convert.ToDateTime(model.Data_Notificacao),
                 Userid = _userid
             };
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             Exception ex = imovelRepository.Incluir_auto_infracao(reg);
             return null;
 
@@ -1760,7 +1774,7 @@ namespace GTI_Mvc.Controllers {
                 Lista_Ano.Add(i);
             }
             ViewBag.Lista_Ano = new SelectList(Lista_Ano);
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             List<NotificacaoTerViewModel> ListaNot = new List<NotificacaoTerViewModel>();
             List<Auto_Infracao_Struct> _listaNot = imovelRepository.Lista_Auto_Infracao(DateTime.Now.Year);
             foreach (Auto_Infracao_Struct item in _listaNot) {
@@ -1794,7 +1808,7 @@ namespace GTI_Mvc.Controllers {
                 Lista_Ano.Add(i);
             }
             ViewBag.Lista_Ano = new SelectList(Lista_Ano);
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             List<NotificacaoTerViewModel> ListaNot = new List<NotificacaoTerViewModel>();
             List<Notificacao_Terreno_Struct> _listaNot = imovelRepository.Lista_Notificacao_Terreno(_ano);
             foreach (Notificacao_Terreno_Struct item in _listaNot) {
@@ -1818,7 +1832,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         public ActionResult AutoInfracao_print(int a, int n) {
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             Auto_Infracao_Struct _not = imovelRepository.Retorna_Auto_Infracao(a, n);
 
             List<DtNotificacao> ListaNot = new List<DtNotificacao>();

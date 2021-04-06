@@ -12,7 +12,7 @@ using System.Globalization;
 
 namespace GTI_MVC.Controllers {
     public class RedeSimController : Controller {
-
+        private readonly string _connection = "GTIconnection";
         [Route("UploadFiles")]
         [HttpGet]
         public ActionResult UploadFiles() {
@@ -33,7 +33,7 @@ namespace GTI_MVC.Controllers {
             var fileName = "";
             if (model.ListaArquivo == null) model.ListaArquivo = new List<RedesimImportFilesViewModel>();
 
-            Redesim_bll redesimRepository = new Redesim_bll("GTIconnection");
+            Redesim_bll redesimRepository = new Redesim_bll(_connection);
             
 
             foreach (var file in model.Files) {
@@ -144,7 +144,7 @@ namespace GTI_MVC.Controllers {
 
         private List<Redesim_RegistroStruct> Read_Registro(string _path) {
             int _linha = 1;
-            Redesim_bll redesimRepository = new Redesim_bll("GTIconnection");
+            Redesim_bll redesimRepository = new Redesim_bll(_connection);
             List<Redesim_natureza_juridica> _listaNatJuridica = redesimRepository.Lista_Natureza_Juridica();
             List<Redesim_evento> _listaEvento = redesimRepository.Lista_Evento();
             List<Redesim_porte_empresa> _listaPorte = redesimRepository.Lista_Porte_Empresa();
@@ -325,7 +325,7 @@ namespace GTI_MVC.Controllers {
 
         private List<Redesim_ViabilidadeStuct> Read_Viabilidade(string _path) {
             int _linha = 1;
-            Redesim_bll redesimRepository = new Redesim_bll("GTIconnection");
+            Redesim_bll redesimRepository = new Redesim_bll(_connection);
             List<Redesim_ViabilidadeStuct> _listaViabilidade = new List<Redesim_ViabilidadeStuct>();
             List<Redesim_viabilidade_analise> _listaAnalise = redesimRepository.Lista_Viabilidade_Analise();
             StreamReader reader = new StreamReader(@_path, Encoding.Default);
@@ -390,7 +390,7 @@ namespace GTI_MVC.Controllers {
 
         private List<Redesim_licenciamentoStruct> Read_Licenciamento(string _path) {
             int _linha = 1;
-            Redesim_bll redesimRepository = new Redesim_bll("GTIconnection");
+            Redesim_bll redesimRepository = new Redesim_bll(_connection);
             List<Redesim_licenciamentoStruct> _listaLic = new List<Redesim_licenciamentoStruct>();
             StreamReader reader = new StreamReader(@_path, Encoding.Default);
             while (!reader.EndOfStream) {
@@ -441,8 +441,8 @@ namespace GTI_MVC.Controllers {
         }
 
         private List<Redesim_RegistroStruct> Insert_Registro(List<Redesim_RegistroStruct> _listaRegistro, string _guid) {
-            Redesim_bll redesimRepository = new Redesim_bll("GTIconnection");
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+            Redesim_bll redesimRepository = new Redesim_bll(_connection);
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
             int _pos = 0;
             foreach (Redesim_RegistroStruct item in _listaRegistro) {
                 bool _existe = redesimRepository.Existe_Registro(item.Protocolo);
@@ -487,8 +487,8 @@ namespace GTI_MVC.Controllers {
         }
 
         private List<Redesim_ViabilidadeStuct> Insert_Viabilidade(List<Redesim_ViabilidadeStuct> _listaViabilidade, string _guid) {
-            Redesim_bll redesimRepository = new Redesim_bll("GTIconnection");
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+            Redesim_bll redesimRepository = new Redesim_bll(_connection);
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
             int _pos = 0;
             foreach (Redesim_ViabilidadeStuct item in _listaViabilidade) {
                 Redesim_Viabilidade reg = new Redesim_Viabilidade() {
@@ -538,10 +538,10 @@ namespace GTI_MVC.Controllers {
         }
 
         private List<Redesim_licenciamentoStruct> Insert_Licenciamento(List<Redesim_licenciamentoStruct> _listaLicenciamento, string _guid) {
-            Redesim_bll redesimRepository = new Redesim_bll("GTIconnection");
-            Endereco_bll enderecoRepository = new Endereco_bll("GTIconnection");
-            Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
-            Imovel_bll imovelRepository = new Imovel_bll("GTIconnection");
+            Redesim_bll redesimRepository = new Redesim_bll(_connection);
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
             int _pos = 0;
             foreach (Redesim_licenciamentoStruct item in _listaLicenciamento) {
                 bool _existe = redesimRepository.Existe_Licenciamento(item.Protocolo,Convert.ToDateTime(item.DataSolicitacao));

@@ -13,7 +13,7 @@ using Newtonsoft.Json.Linq;
 
 namespace GTI_Mvc.Controllers {
     public class ProtocoloController : Controller {
-
+        private readonly string _connection = "GTIconnection";
         [Route("Tramite_Processo")]
         [HttpGet]
         public ViewResult Tramite_Processo() {
@@ -69,7 +69,7 @@ namespace GTI_Mvc.Controllers {
         }
                
         private ProcessoViewModel Exibe_Tramite(string Numero_Ano,int Seq=0) {
-            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
             ProcessoViewModel processoViewModel = new ProcessoViewModel();
             //int _userId = Functions.pUserId;
             int _userId = Convert.ToInt32(Session["hashid"]);
@@ -117,7 +117,7 @@ namespace GTI_Mvc.Controllers {
         }
      
         public ActionResult MoveUp(int Ano,int Numero,int Seq) {
-            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
             Exception ex = protocoloRepository.Move_Sequencia_Tramite_Acima(Numero, Ano, Seq);
             if (ex != null)
                 ViewBag.Result = "Ocorreu um erro ao mover o trâmite";
@@ -130,7 +130,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         public ActionResult MoveDown(int Ano, int Numero, int Seq) {
-            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
             Exception ex = protocoloRepository.Move_Sequencia_Tramite_Abaixo(Numero, Ano, Seq);
             if (ex != null)
                 ViewBag.Result = "Ocorreu um erro ao mover o trâmite";
@@ -142,7 +142,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         public ActionResult Inserir_Save(ProcessoViewModel model) {
-            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
             Exception ex = protocoloRepository.Inserir_Local(model.Numero, model.Ano, model.Seq, (int)model.CCusto_Codigo);
             model.Numero_Ano = model.Numero.ToString() + "-" + Functions.RetornaDvProcesso(model.Numero) + "/" + model.Ano.ToString();
             ProcessoViewModel processoViewModel = new ProcessoViewModel() {
@@ -152,7 +152,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         public ActionResult Alterar_Obs(ProcessoViewModel model) {
-            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
             Exception ex = protocoloRepository.Alterar_Obs(model.Ano, model.Numero, model.Seq, model.ObsGeral,model.ObsInterna);
             ProcessoViewModel processoViewModel = new ProcessoViewModel {
                 Numero_Ano = model.Numero.ToString() + "-" + Functions.RetornaDvProcesso(model.Numero) + "/" + model.Ano.ToString()
@@ -179,7 +179,7 @@ namespace GTI_Mvc.Controllers {
                 return View("../Home/Login",model);
             }
 
-            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
             string Numero_Ano = _numero.ToString() + "-" + Functions.RetornaDvProcesso(_numero) + "/" + _ano.ToString();
             ProcessoViewModel processoViewModel = Exibe_Tramite(Numero_Ano, _seq);
             processoViewModel.CCusto_Codigo = processoViewModel.Lista_Tramite[0].CentroCustoCodigo;
@@ -195,7 +195,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Receive/{Ano}/{Numero}/{Seq}")]
         [HttpPost]
         public ActionResult Receive(ProcessoViewModel model) {
-            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
 
             if (model.Despacho_Codigo == null) {
                 model.Despacho_Codigo = 0;
@@ -236,7 +236,7 @@ namespace GTI_Mvc.Controllers {
                 return View("../Home/Login", model);
             }
 
-            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
             string Numero_Ano = _numero.ToString() + "-" + Functions.RetornaDvProcesso(_numero) + "/" + _ano.ToString();
             ProcessoViewModel processoViewModel = Exibe_Tramite(Numero_Ano, _seq);
             processoViewModel.CCusto_Codigo = processoViewModel.Lista_Tramite[0].CentroCustoCodigo;
@@ -250,7 +250,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Send/{Ano}/{Numero}/{Seq}")]
         [HttpPost]
         public ActionResult Send(ProcessoViewModel model) {
-            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
 
             if (Session["hashid"] != null) {
 
@@ -277,7 +277,7 @@ namespace GTI_Mvc.Controllers {
         [Route("AddPlace/{Ano}/{Numero}/{Seq}/{CentroCustoCodigo}")]
         [HttpGet]
         public ViewResult AddPlace(int Ano = 0, int Numero = 0, int Seq = 0) {
-            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
 
             string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
             ProcessoViewModel processoViewModel = Exibe_Tramite(Numero_Ano, Seq);
@@ -289,7 +289,7 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ActionResult AddPlace(ProcessoViewModel model) {
             if (model.CCusto_Codigo != null) {
-                Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+                Processo_bll protocoloRepository = new Processo_bll(_connection);
                 Exception ex = protocoloRepository.Inserir_Local(model.Numero, model.Ano, model.Seq, (int)model.CCusto_Codigo);
                 if (ex != null)
                     ViewBag.Result = "Ocorreu um erro ao inserir um local";
@@ -299,7 +299,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         public ActionResult RemovePlace(int Ano,int Numero,int Seq) {
-            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
             Exception ex = protocoloRepository.Remover_Local(Numero, Ano, Seq);
             if (ex != null)
                 ViewBag.Result = "Ocorreu um erro ao remover o local";
@@ -324,7 +324,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Obs/{Ano}/{Numero}/{Seq}")]
         [HttpPost]
         public ActionResult Obs(ProcessoViewModel model) {
-            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
             if (Session["hashid"] == null)
                 return Json(Url.Action("Login_gti", "Home"));
 
@@ -406,7 +406,7 @@ namespace GTI_Mvc.Controllers {
         }
 
         private ProcessoViewModel Exibe_Tramite2(string Numero_Ano, int Seq = 0) {
-            Processo_bll protocoloRepository = new Processo_bll("GTIconnection");
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
             ProcessoViewModel processoViewModel = new ProcessoViewModel();
 
 
@@ -466,7 +466,7 @@ namespace GTI_Mvc.Controllers {
             int _ano = processoNumero.Ano;
 
             ProcessoViewModel modelt = Exibe_Tramite2(_numStr);
-            Processo_bll processoRepository = new Processo_bll("GTIconnection");
+            Processo_bll processoRepository = new Processo_bll(_connection);
             ProcessoStruct _dados = processoRepository.Dados_Processo(_ano, _numero);
             modelt.Observacao = _dados.Observacao ?? "";
             List<ProcessoEndStruct> ListaEnd = _dados.ListaProcessoEndereco;
@@ -501,7 +501,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult ProcessoqryC(ProcessoViewModel model) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
-            Processo_bll processoRepository = new Processo_bll("GTIconnection");
+            Processo_bll processoRepository = new Processo_bll(_connection);
 
             bool _filterN = false;
             if (!string.IsNullOrEmpty(model.Numero_Ano)) _filterN = true;

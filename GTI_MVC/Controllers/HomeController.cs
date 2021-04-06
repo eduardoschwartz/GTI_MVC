@@ -13,8 +13,8 @@ using Newtonsoft.Json.Linq;
 
 namespace GTI_Mvc.Controllers {
     public class HomeController : Controller {
-
-          public ViewResult Login_gti() {
+        private readonly string _connection = "GTIconnection";
+        public ViewResult Login_gti() {
             LoginViewModel model = new LoginViewModel();
             if (Session["hashid"] == null) {
                 Session.Remove("hashfname");
@@ -35,7 +35,7 @@ namespace GTI_Mvc.Controllers {
             if (Session["hashid"]!= null) {
                 int _userid = Convert.ToInt32(Session["hashid"]);
                 bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
-                Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+                Tributario_bll tributarioRepository = new Tributario_bll(_connection);
                 List<int> ListaUsoPlataforma = tributarioRepository.Lista_Rodo_Uso_Plataforma_UserEmpresa(_userid, _func);
                 if (ListaUsoPlataforma.Count == 0) {
                     ViewBag.UsoPlataforma = "N";
@@ -72,7 +72,7 @@ namespace GTI_Mvc.Controllers {
             } else {
                 int _userid = Convert.ToInt32(Session["hashid"]);
                 bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
-                Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+                Tributario_bll tributarioRepository = new Tributario_bll(_connection);
                 List<int> ListaUsoPlataforma = tributarioRepository.Lista_Rodo_Uso_Plataforma_UserEmpresa(_userid, _func);
                 if (ListaUsoPlataforma.Count == 0) {
                     ViewBag.UsoPlataforma = "N";
@@ -90,14 +90,14 @@ namespace GTI_Mvc.Controllers {
             string sLogin = model.Usuario, sNewPwd = model.Senha, sOldPwd, sOldPwd2, sName;
             LoginViewModel loginViewModel = new LoginViewModel();
 
-            Sistema_bll sistema_Class = new Sistema_bll("GTIconnection");
+            Sistema_bll sistema_Class = new Sistema_bll(_connection);
             TAcessoFunction tacesso_Class = new TAcessoFunction();
 
             bool bFuncionario = model.Usuario.LastIndexOf('@') > 1 ? false : true;
             Session["hashfunc"] = bFuncionario ? "S" : "N";
            // Functions.pUserGTI = bFuncionario;
-            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
-            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             if (bFuncionario) {
                 sOldPwd = sistema_Class.Retorna_User_Password(sLogin);
                 int UserId = sistema_Class.Retorna_User_LoginId(sLogin);
@@ -208,7 +208,7 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         public ViewResult Login_update(LoginViewModel model) {
             int _id=0;
-            Sistema_bll sistema_Class = new Sistema_bll("GTIconnection");
+            Sistema_bll sistema_Class = new Sistema_bll(_connection);
             string sLogin = Session["hashfname"].ToString();
             TAcessoFunction tacesso_Class = new TAcessoFunction();
             string _oldPwd = "";
@@ -263,7 +263,7 @@ namespace GTI_Mvc.Controllers {
             string cnpj = model.CnpjValue == null ? "" : Functions.RetornaNumero(model.CnpjValue);
             string name =  model.Nome==null?"":  model.Nome.Trim();
 
-            Sistema_bll sistemaClass = new Sistema_bll("GTIconnection");
+            Sistema_bll sistemaClass = new Sistema_bll(_connection);
             model.Lista_Header=sistemaClass.CodigoHeader(tipo, cpf, cnpj, name);
             if (model.Lista_Header.Count == 0)
                 ViewBag.Erro = "Nenhum contribuinte localizado.";
@@ -293,7 +293,7 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
-            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
 
             if (sistemaRepository.Existe_Usuario_Web(model.Email)) {
                 ViewBag.Result = "Este email já esta cadastrado.";
@@ -358,7 +358,7 @@ namespace GTI_Mvc.Controllers {
             }
             if (p.Substring(0, 4) == "#GTI") {
                 int Id =  Convert.ToInt32(Functions.StringRight(p, 7).Substring(1,6));
-                Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+                Sistema_bll sistemaRepository = new Sistema_bll(_connection);
                 Exception ex = sistemaRepository.Ativar_Usuario_Web(Id);
                 return View();
             } else {
@@ -398,7 +398,7 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
-            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             Usuario_web reg = sistemaRepository.Retorna_Usuario_Web(model.Email);
             if (reg == null) {
                 ViewBag.Result = "Erro, email não cadastrado.";
@@ -460,7 +460,7 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
-            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             Usuario_web reg = sistemaRepository.Retorna_Usuario_Web(model.Email);
             if (reg == null) {
                 ViewBag.Result = "Erro, email não cadastrado.";
@@ -510,7 +510,7 @@ namespace GTI_Mvc.Controllers {
                 return RedirectToAction("Login");
             }
             int Id = Convert.ToInt32(Functions.StringRight(p, 7).Substring(1, 6));
-            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             Usuario_web reg = sistemaRepository.Retorna_Usuario_Web(Id);
             LoginViewModel model = new LoginViewModel() {
                 Email = reg.Email
@@ -537,7 +537,7 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
-            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             Usuario_web reg = sistemaRepository.Retorna_Usuario_Web(model.Email);
             int Id = reg.Id;
             Exception ex = sistemaRepository.Alterar_Usuario_Web_Senha(Id, model.Senha);

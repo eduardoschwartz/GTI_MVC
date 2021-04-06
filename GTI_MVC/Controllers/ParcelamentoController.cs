@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 //using System.Configuration;
+//using System.Data.SqlClient;
 
 namespace GTI_MVC.Controllers {
     public class ParcelamentoController : Controller
@@ -23,6 +24,8 @@ namespace GTI_MVC.Controllers {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             //string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+            //SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+            //string IPAddress = builder.DataSource;
             return View();
         }
 
