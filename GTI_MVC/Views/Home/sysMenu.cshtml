@@ -64,11 +64,10 @@
             @Html.ActionLink("Inclusão de Cep não cadastrado", "Cep_inc", "Shared", null, new { @class = "actionlink" })<br />
             @Html.ActionLink("Imposto sobre Transmissão de Bens Imóveis (ITBI)", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })<br />
 
-            @if (Session["hashfunc"].ToString() != "S") {
-                if (Session["hashfiscal"].ToString() == "S") {
+                @if (Session["hashid"].ToString() == "456") {
                     @Html.ActionLink("Parcelamento de débitos", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<span style="padding-left:5px;color:red">(** Somente para testes **)</span><br />
                 }
-            }
+            
         </div>
         <div class="card-footer">
             @Html.ActionLink("Alterar a senha", "Login_update", "Home", null, new { @class = "actionlink" })<br />

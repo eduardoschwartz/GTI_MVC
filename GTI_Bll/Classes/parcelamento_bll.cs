@@ -248,5 +248,15 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Parcelamento_Processos(_userId);
         }
 
+        public List<Destinoreparc> Lista_Destino_Parcelamento(short AnoProcesso, int NumProcesso) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            return obj.Lista_Destino_Parcelamento(AnoProcesso,NumProcesso);
+        }
+
+        public List<Debitotributo> Lista_Debito_Tributo(int Codigo, short Ano, short Lanc, short Seq, short Parcela, short Compl) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            return obj.Lista_Debito_Tributo(Codigo, Ano, Lanc, Seq, Parcela, Compl);
+        }
+
     }
 }

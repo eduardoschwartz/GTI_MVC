@@ -1033,6 +1033,36 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<Destinoreparc> Lista_Destino_Parcelamento(short AnoProcesso,int NumProcesso) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 3 * 60;
+                List<Destinoreparc> Lista = (from d in db.Destinoreparc where d.Anoproc == AnoProcesso && d.Numproc==NumProcesso orderby d.Numparcela  select d).Distinct().ToList();
+                return Lista;
+            }
+        }
+
+        public List<Debitotributo> Lista_Debito_Tributo(int Codigo,short Ano,short Lanc,short Seq,short Parcela,short Compl) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from t in db.Debitotributo where t.Codreduzido==Codigo && t.Anoexercicio==Ano && t.Codlancamento==Lanc && t.Seqlancamento==Seq && t.Numparcela==Parcela && t.Codcomplemento==Compl orderby t.Codtributo select t).ToList();
+                List<Debitotributo> Lista = new List<Debitotributo>();
+                foreach (var item in reg) {
+                    Debitotributo t = new Debitotributo {
+                        Codreduzido=item.Codreduzido,
+                        Anoexercicio=item.Anoexercicio,
+                        Codlancamento=item.Codlancamento,
+                        Seqlancamento=item.Seqlancamento,
+                        Numparcela=item.Numparcela,
+                        Codcomplemento=item.Codcomplemento,
+                        Codtributo=item.Codtributo,
+                        Valortributo=item.Valortributo
+                    };
+                    Lista.Add(t);
+                }
+                return Lista;
+            }
+        }
+
+
 
     }
 }

@@ -21,6 +21,7 @@ namespace GTI_MVC.Controllers {
         {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
+
             return View();
         }
 
@@ -1706,10 +1707,47 @@ namespace GTI_MVC.Controllers {
             int _userId = Convert.ToInt32(Session["hashid"]);
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
 
-            List<Parc_Processos> _listaProc = parcelamentoRepository.Lista_Parcelamento_Processos(_userId);
+            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
+            
+            //Dados da 1º parcela do parcelamento
+            List<Destinoreparc> _listaD = parcelamentoRepository.Lista_Destino_Parcelamento(_master.Processo_Ano, _master.Processo_Numero);
+            int _codigo = _listaD[0].Codreduzido;
+            short _ano = _listaD[0].Anoexercicio;
+            short _lanc = 20;
+            short _seq = _listaD[0].Numsequencia;
+            byte _parcela = 1;
+            byte _compl = 0;
+            DateTime _dataVencto = (DateTime)_master.Data_Vencimento;
+
+            List<Debitotributo> _listaT = parcelamentoRepository.Lista_Debito_Tributo(_codigo, _ano, _lanc, _seq, _parcela, _compl);
+            decimal? _soma = _listaT.Sum(m => m.Valortributo);
+
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            //Criar o documento para ela
+            Numdocumento regDoc = new Numdocumento {
+                Valorguia = _soma,
+                Emissor = "Parc/Web",
+                Datadocumento = DateTime.Now,
+                Registrado = true,
+                Percisencao = 0
+            };
+            regDoc.Percisencao = 0;
+            int _novo_documento = tributarioRepository.Insert_Documento(regDoc);
+
+            Parceladocumento pd = new Parceladocumento() {
+                Codreduzido = _codigo,
+                Anoexercicio=_ano,
+                Codlancamento=_lanc,
+                Seqlancamento=_seq,
+                Numparcela=_parcela,
+                Codcomplemento=_compl,
+                Numdocumento=_novo_documento
+            };
+            Exception ex = tributarioRepository.Insert_Parcela_Documento(pd);
+
+
             DebitoListViewModel model = new DebitoListViewModel();
             
-
             return View(model);
         }
 
