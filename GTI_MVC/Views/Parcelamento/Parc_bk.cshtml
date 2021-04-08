@@ -64,7 +64,7 @@
                 Confirme os dados antes de imprimir
             </div>
             <div class="card-body">
-                @Html.Hidden("msgLoja", " RECEBER SOMENTE ATE O VENCIMENTO, APOS ATUALIZAR O BOLETO NO SITE www.jaboticabal.sp.gov.br")
+                @Html.Hidden("msgLoja", " RECEBER SOMENTE ATE O VENCIMENTO, APOS ATUALIZAR O BOLETO NO SITE www.jaboticabal.sp.gov.br, referenta ao parcelamento: " + Model.Numero_Processo )
                 @Html.Hidden("cep", Convert.ToInt64(Regex.Replace(@Model.Cep, " [^.0-9]", "")))
                 @Html.Hidden("uf", @Model.UF)
                 @Html.Hidden("cidade", @Model.Cidade)

@@ -28,6 +28,7 @@ namespace GTI_Mvc.ViewModels {
         public string RefTran { get; set; }
         public string Valor_Boleto { get; set; }
         public string Data_Vencimento_String { get; set; }
+        public string Numero_Processo { get; set; }
 
         public DebitoListViewModel() {
             this.Debito = new List<ListDebitoEditorViewModel>();

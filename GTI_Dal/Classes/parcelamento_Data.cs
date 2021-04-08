@@ -188,10 +188,10 @@ namespace GTI_Dal.Classes {
 
         private short Qtde_Parcelamento_Efetuados(int Codigo, short Ano, short Lancamento, short Sequencia, short Parcela) {
             using (GTI_Context db = new GTI_Context(_connection)) {
+                DateTime _data = Convert.ToDateTime("08/08/2017");
                 return (short)(from o in db.Origemreparc
                                join p in db.Processoreparc on o.Numprocesso equals p.Numprocesso into op from p in op.DefaultIfEmpty()
-                               where o.Codreduzido == Codigo && o.Anoexercicio == Ano && o.Codlancamento == Lancamento && o.Numsequencia == Sequencia && o.Numparcela == Parcela select o.Numprocesso).Distinct().Count();
-
+                               where o.Codreduzido == Codigo && o.Anoexercicio == Ano && o.Codlancamento == Lancamento && o.Numsequencia == Sequencia && o.Numparcela == Parcela && p.Dataprocesso>_data select o.Numprocesso).Distinct().Count();
             }
         }
 

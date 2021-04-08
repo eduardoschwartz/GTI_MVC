@@ -1708,10 +1708,17 @@ namespace GTI_MVC.Controllers {
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
 
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
-            
+            int _codigo = _master.Contribuinte_Codigo;
+            string _nome = _master.Contribuinte_nome;
+            string _cpfcnpj = _master.Contribuinte_cpfcnpj;
+            string _endereco = _master.Contribuinte_endereco + " " + _master.Contribuinte_bairro;
+            string _cidade = _master.Contribuinte_cidade;
+            string _uf = _master.Contribuinte_uf;
+            string _cep =  _master.Contribuinte_cep.ToString();
+            string _proc = _master.Processo_Numero.ToString() + "-" + Functions.RetornaDvProcesso(_master.Processo_Numero) + "/" + _master.Processo_Ano.ToString();
+
             //Dados da 1º parcela do parcelamento
             List<Destinoreparc> _listaD = parcelamentoRepository.Lista_Destino_Parcelamento(_master.Processo_Ano, _master.Processo_Numero);
-            int _codigo = _listaD[0].Codreduzido;
             short _ano = _listaD[0].Anoexercicio;
             short _lanc = 20;
             short _seq = _listaD[0].Numsequencia;
@@ -1723,6 +1730,7 @@ namespace GTI_MVC.Controllers {
             decimal? _soma = _listaT.Sum(m => m.Valortributo);
 
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            Tributario_bll tributarioRepositoryTmp = new Tributario_bll("GTIconnection");
             //Criar o documento para ela
             Numdocumento regDoc = new Numdocumento {
                 Valorguia = _soma,
@@ -1732,7 +1740,7 @@ namespace GTI_MVC.Controllers {
                 Percisencao = 0
             };
             regDoc.Percisencao = 0;
-            int _novo_documento = tributarioRepository.Insert_Documento(regDoc);
+            int _novo_documento = tributarioRepositoryTmp.Insert_Documento(regDoc);
 
             Parceladocumento pd = new Parceladocumento() {
                 Codreduzido = _codigo,
@@ -1745,8 +1753,22 @@ namespace GTI_MVC.Controllers {
             };
             Exception ex = tributarioRepository.Insert_Parcela_Documento(pd);
 
+            string _refTran = "287353200" + _novo_documento.ToString();
 
-            DebitoListViewModel model = new DebitoListViewModel();
+            DebitoListViewModel model = new DebitoListViewModel() {
+                Nome = _nome,
+                Inscricao = _codigo,
+                CpfCnpjLabel = _cpfcnpj,
+                Endereco = _endereco,
+                Cidade = _cidade,
+                UF = _uf,
+                Cep = _cep,
+                RefTran = _refTran,
+                Valor_Boleto = Functions.RetornaNumero(_soma.ToString()),
+                Data_Vencimento_String = Convert.ToDateTime(_dataVencto.ToString()).ToString("ddMMyyyy"),
+                Data_Vencimento = _dataVencto,
+                Numero_Processo = _proc
+            };
             
             return View(model);
         }
