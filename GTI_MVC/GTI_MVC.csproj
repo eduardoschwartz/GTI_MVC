@@ -695,6 +695,7 @@
     <Content Include="Datasets\dsUsoPlataforma.xss">
       <DependentUpon>dsUsoPlataforma.xsd</DependentUpon>
     </Content>
+    <Content Include="Files\Login Manual do Usuario.pdf" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -933,6 +934,9 @@
     <Content Include="Views\Parcelamento\Parc_bk.cshtml" />
     <Content Include="Views\Parcelamento\Parc_tan.cshtml" />
     <Content Include="Views\Parcelamento\Parc_tcd.cshtml" />
+    <Content Include="Views\Imovel\Notificacao_obra_menu.cshtml" />
+    <Content Include="Views\Imovel\Notificacao_obra_add.cshtml" />
+    <Content Include="Views\Imovel\Notificacao_obra_query.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

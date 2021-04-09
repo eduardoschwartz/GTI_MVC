@@ -896,6 +896,26 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Imovel_Cnpj(Cnpj);
         }
 
+        public Exception Incluir_notificacao_obra(Notificacao_Obra Reg) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Incluir_notificacao_obra(Reg);
+            return ex;
+        }
+
+        public bool Existe_Notificacao_Obra(int Ano, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Existe_Notificacao_Obra(Ano, Numero);
+        }
+
+        public List<Notificacao_Terreno_Struct> Lista_Notificacao_Obra(int Ano) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Lista_Notificacao_Obra(Ano);
+        }
+
+        public Notificacao_Terreno_Struct Retorna_Notificacao_Obra(int Ano, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Notificacao_Obra(Ano, Numero);
+        }
 
 
         #endregion

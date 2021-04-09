@@ -154,7 +154,7 @@ namespace GTI_MVC.Controllers {
 
             foreach (Cidadao cod in _listaCidadao) {
                 Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(cod.Codcidadao);
-                string _desc = cod.Codcidadao.ToString() + " - Inscrição localizada na(o): " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
+                string _desc ="Inscrição localizada na(o): " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
                 if (!string.IsNullOrEmpty(_header.Complemento))
                     _desc += " " + _header.Complemento;
                 _desc += ", " + _header.Nome_bairro;
@@ -1728,12 +1728,13 @@ namespace GTI_MVC.Controllers {
 
             List<Debitotributo> _listaT = parcelamentoRepository.Lista_Debito_Tributo(_codigo, _ano, _lanc, _seq, _parcela, _compl);
             decimal? _soma = _listaT.Sum(m => m.Valortributo);
+            decimal _somaT = Math.Round((decimal)_soma, 2);
 
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             Tributario_bll tributarioRepositoryTmp = new Tributario_bll("GTIconnection");
             //Criar o documento para ela
             Numdocumento regDoc = new Numdocumento {
-                Valorguia = _soma,
+                Valorguia = _somaT,
                 Emissor = "Parc/Web",
                 Datadocumento = DateTime.Now,
                 Registrado = true,
@@ -1764,7 +1765,7 @@ namespace GTI_MVC.Controllers {
                 UF = _uf,
                 Cep = _cep,
                 RefTran = _refTran,
-                Valor_Boleto = Functions.RetornaNumero(_soma.ToString()),
+                Valor_Boleto = Functions.RetornaNumero(_somaT.ToString()),
                 Data_Vencimento_String = Convert.ToDateTime(_dataVencto.ToString()).ToString("ddMMyyyy"),
                 Data_Vencimento = _dataVencto,
                 Numero_Processo = _proc
