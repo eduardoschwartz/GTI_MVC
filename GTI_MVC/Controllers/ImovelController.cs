@@ -1542,7 +1542,8 @@ namespace GTI_Mvc.Controllers {
                 Inscricao = _not.Inscricao,
                 PrazoText = Functions.Escrever_Valor_Extenso(_not.Prazo),
                 Cpf2 = _not.Cpf2 ?? "",
-                Rg2 = _not.Rg2 ?? ""
+                Rg2 = _not.Rg2 ?? "",
+                Data_Cadastro=_not.Data_Cadastro
             };
             if (_not.Codigo_cidadao2 > 0) {
                 reg.Nome2 = _not.Codigo_cidadao2.ToString() + "-" + _not.Nome_Proprietario2;
@@ -1556,6 +1557,248 @@ namespace GTI_Mvc.Controllers {
                 rd.SetDataSource(ListaNot);
                 Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
                 return File(stream, "application/pdf", "Notificacao_Terreno.pdf");
+            } catch {
+
+                throw;
+            }
+
+        }
+
+        [Route("Notificacao_obra_menu")]
+        [HttpGet]
+        public ActionResult Notificacao_obra_menu() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            return View();
+        }
+
+        [Route("Notificacao_obra_add")]
+        [HttpGet]
+        public ActionResult Notificacao_obra_add() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            NotificacaoTerViewModel model = new NotificacaoTerViewModel();
+            List<int> Lista_Ano = new List<int>();
+            for (int i = 2020; i <= DateTime.Now.Year; i++) {
+                Lista_Ano.Add(i);
+            }
+            ViewBag.Lista_Ano = new SelectList(Lista_Ano);
+            model.Ano_Notificacao = DateTime.Now.Year;
+            return View(model);
+        }
+
+        [Route("Notificacao_obra_add")]
+        [HttpPost]
+        public ActionResult Notificacao_obra_add(NotificacaoTerViewModel model, string action) {
+            if (model.Codigo_Imovel == 0) {
+                ViewBag.Result = "Código de imóvel inválido.";
+                return View(model);
+            }
+            int _codigo = model.Codigo_Imovel;
+            List<int> Lista_Ano = new List<int>();
+            for (int i = 2020; i <= DateTime.Now.Year; i++) {
+                Lista_Ano.Add(i);
+            }
+            ViewBag.Lista_Ano = new SelectList(Lista_Ano);
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+            if (action == "btnCodigoOK") {
+                ImovelStruct _imovel = imovelRepository.Dados_Imovel(_codigo);
+                Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+                List<ProprietarioStruct> Listaprop = imovelRepository.Lista_Proprietario(_codigo, false);
+                if (Listaprop.Count == 0) {
+                    ViewBag.Result = "Não é possível emitir notificação para este imóvel.";
+                    model = new NotificacaoTerViewModel();
+                    return View(model);
+                }
+                foreach (ProprietarioStruct prop in Listaprop) {
+                    if (prop.Tipo == "P" && prop.Principal) {
+                        model.Codigo_cidadao = prop.Codigo;
+                        model.Nome_Proprietario = prop.Nome;
+                        CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(prop.Codigo);
+                        model.Rg = _cidadao.Rg;
+                        model.Cpf = string.IsNullOrEmpty(_cidadao.Cnpj) ? _cidadao.Cpf : _cidadao.Cnpj;
+                        model.Cpf = Functions.FormatarCpfCnpj(model.Cpf);
+                        break;
+                    }
+                }
+                foreach (ProprietarioStruct prop in Listaprop) {
+                    if (prop.Tipo == "P" && !prop.Principal) {
+                        model.Codigo_cidadao2 = prop.Codigo;
+                        model.Nome_Proprietario2 = prop.Nome;
+                        CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(prop.Codigo);
+                        model.Rg2 = _cidadao.Rg;
+                        model.Cpf2 = string.IsNullOrEmpty(_cidadao.Cnpj) ? _cidadao.Cpf : _cidadao.Cnpj;
+                        model.Cpf2 = Functions.FormatarCpfCnpj(model.Cpf);
+                        break;
+                    }
+                }
+                if (string.IsNullOrEmpty(model.Nome_Proprietario2) && Listaprop.Count > 1) {
+                    foreach (ProprietarioStruct prop in Listaprop) {
+                        if (prop.Tipo != "P") {
+                            model.Codigo_cidadao2 = prop.Codigo;
+                            model.Nome_Proprietario2 = prop.Nome;
+                            CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(prop.Codigo);
+                            model.Rg2 = _cidadao.Rg;
+                            model.Cpf2 = string.IsNullOrEmpty(_cidadao.Cnpj) ? _cidadao.Cpf : _cidadao.Cnpj;
+                            model.Cpf2 = Functions.FormatarCpfCnpj(model.Cpf2);
+                            break;
+                        }
+                    }
+                }
+
+                model.Inscricao = _imovel.Inscricao;
+                EnderecoStruct _endLocal = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Local);
+                string _compl = _endLocal.Complemento == null ? "" : " " + _endLocal.Complemento;
+                model.Endereco_Local = _endLocal.Endereco + ", " + _endLocal.Numero.ToString() + _compl + " - " + _endLocal.NomeBairro.ToString() + " - " + _endLocal.NomeCidade + "/" + _endLocal.UF + " Cep:" + _endLocal.Cep;
+
+                Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+                Contribuinte_Header_Struct _endProp = sistemaRepository.Contribuinte_Header(model.Codigo_cidadao);
+                _compl = _endProp.Complemento == null ? "" : " " + _endProp.Complemento;
+                model.Endereco_Prop = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _compl + " - " + _endProp.Nome_bairro.ToString() + " - " + _endProp.Nome_cidade + "/" + _endProp.Nome_uf + " Cep:" + _endProp.Cep;
+
+                if (model.Codigo_cidadao2 > 0) {
+                    _endProp = sistemaRepository.Contribuinte_Header(model.Codigo_cidadao2);
+                    _compl = _endProp.Complemento == null ? "" : " " + _endProp.Complemento;
+                    model.Endereco_prop2 = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _compl + " - " + _endProp.Nome_bairro.ToString() + " - " + _endProp.Nome_cidade + "/" + _endProp.Nome_uf + " Cep:" + _endProp.Cep;
+                }
+
+                EnderecoStruct _endEntrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Entrega);
+                if (_endEntrega.Endereco != null) {
+                    _compl = _endEntrega.Complemento == null ? "" : " " + _endEntrega.Complemento;
+                    model.Endereco_Entrega = _endEntrega.Endereco + ", " + _endEntrega.Numero.ToString() + _compl + " - " + _endEntrega.NomeBairro.ToString() + " - " + _endEntrega.NomeCidade + "/" + _endEntrega.UF + " Cep:" + _endEntrega.Cep;
+                } else {
+                    if (_imovel.EE_TipoEndereco == 0)
+                        model.Endereco_Entrega = model.Endereco_Local;
+                    else {
+                        model.Endereco_Entrega = model.Endereco_Prop;
+                    }
+                }
+            }
+
+            if (action == "btnCodigoCancel") {
+                model = new NotificacaoTerViewModel();
+                return View(model);
+            }
+            if (action == "btnValida") {
+                bool _existe = imovelRepository.Existe_Notificacao_Obra(model.Ano_Notificacao, model.Numero_Notificacao);
+                if (_existe) {
+                    ViewBag.Result = "Nº de notificação já cadastrado.";
+                    return View(model);
+                } else {
+                    int _userid = Convert.ToInt32(Session["hashid"]);
+                    if (_userid == 0) {
+                        ViewBag.Result = "Sua sessão foi encerrada, favor fazer login novamente.";
+                        return View(model);
+                    }
+                    Save_Notificacao_Obra(model);
+                    return RedirectToAction("Notificacao_obra_query");
+                }
+            }
+
+            return View(model);
+        }
+
+        private ActionResult Save_Notificacao_Obra(NotificacaoTerViewModel model) {
+            Notificacao_Obra reg = new Notificacao_Obra() {
+                Ano_not = model.Ano_Notificacao,
+                Numero_not = model.Numero_Notificacao,
+                Codigo = model.Codigo_Imovel,
+                Inscricao = model.Inscricao,
+                Endereco_entrega = model.Endereco_Entrega,
+                Endereco_entrega2 = model.Endereco_entrega2,
+                Endereco_infracao = model.Endereco_Local,
+                Endereco_prop = model.Endereco_Prop,
+                Endereco_prop2 = model.Endereco_prop2,
+                Prazo = model.Prazo,
+                Nome = model.Nome_Proprietario,
+                Situacao = 3,//concluido
+                Userid = Convert.ToInt32(Session["hashid"]),
+                Data_cadastro = DateTime.Now,
+                Nome2 = model.Nome_Proprietario2,
+                Codigo_cidadao = model.Codigo_cidadao,
+                Codigo_cidadao2 = model.Codigo_cidadao2,
+                Cpf = model.Cpf,
+                Cpf2 = model.Cpf2,
+                Rg = model.Rg,
+                Rg2 = model.Rg2
+            };
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            Exception ex = imovelRepository.Incluir_notificacao_obra(reg);
+            return null;
+
+        }
+
+        [Route("Notificacao_obra_query")]
+        [HttpGet]
+        public ActionResult Notificacao_obra_query() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            List<int> Lista_Ano = new List<int>();
+            for (int i = 2020; i <= DateTime.Now.Year; i++) {
+                Lista_Ano.Add(i);
+            }
+            ViewBag.Lista_Ano = new SelectList(Lista_Ano);
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            List<NotificacaoTerViewModel> ListaNot = new List<NotificacaoTerViewModel>();
+            List<Notificacao_Obra_Struct> _listaNot = imovelRepository.Lista_Notificacao_Obra(DateTime.Now.Year);
+            foreach (Notificacao_Obra_Struct item in _listaNot) {
+                NotificacaoTerViewModel reg = new NotificacaoTerViewModel() {
+                    AnoNumero = item.AnoNumero,
+                    Ano_Notificacao = item.Ano_Notificacao,
+                    Numero_Notificacao = item.Numero_Notificacao,
+                    Codigo_Imovel = item.Codigo_Imovel,
+                    Data_Cadastro = item.Data_Cadastro,
+                    Prazo = item.Prazo,
+                    Nome_Proprietario = Functions.TruncateTo(item.Nome_Proprietario, 45),
+                    Situacao = item.Situacao
+                };
+                ListaNot.Add(reg);
+            }
+
+            NotificacaoTerQueryViewModel model = new NotificacaoTerQueryViewModel();
+            model.ListaNotificacao = ListaNot;
+            model.Ano_Selected = DateTime.Now.Year;
+            return View(model);
+        }
+
+        public ActionResult Notificacao_obra_print(int a, int n) {
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            Notificacao_Obra_Struct _not = imovelRepository.Retorna_Notificacao_Obra(a, n);
+
+            List<DtNotificacao> ListaNot = new List<DtNotificacao>();
+
+            DtNotificacao reg = new DtNotificacao() {
+                AnoNumero = _not.AnoNumero,
+                Codigo = _not.Codigo_Imovel.ToString("00000"),
+                Nome = _not.Codigo_cidadao.ToString() + "-" + _not.Nome_Proprietario,
+                Cpf = _not.Cpf ?? "",
+                Rg = _not.Rg ?? "",
+                Endereco_Entrega = _not.Endereco_Entrega,
+                Endereco_entrega2 = _not.Endereco_entrega2,
+                Endereco_Local = _not.Endereco_Local,
+                Endereco_Prop = _not.Endereco_Prop,
+                Endereco_prop2 = _not.Endereco_prop2,
+                Prazo = _not.Prazo,
+                Usuario = _not.UsuarioNome,
+                Inscricao = _not.Inscricao,
+                PrazoText = Functions.Escrever_Valor_Extenso(_not.Prazo),
+                Cpf2 = _not.Cpf2 ?? "",
+                Rg2 = _not.Rg2 ?? "",
+                Data_Cadastro = _not.Data_Cadastro
+            };
+            if (_not.Codigo_cidadao2 > 0) {
+                reg.Nome2 = _not.Codigo_cidadao2.ToString() + "-" + _not.Nome_Proprietario2;
+            }
+            ListaNot.Add(reg);
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Notificacao_Obra.rpt"));
+
+            try {
+                rd.SetDataSource(ListaNot);
+                Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                return File(stream, "application/pdf", "Notificacao_Obra.pdf");
             } catch {
 
                 throw;

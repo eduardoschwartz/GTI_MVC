@@ -344,6 +344,12 @@
       <DependentUpon>Certidao_Debito_Empresa_PN.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Notificacao_Obra.cs">
+      <DependentUpon>Notificacao_Obra.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Reports\Termo_ConfDivida.cs">
       <DependentUpon>Termo_ConfDivida.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1007,6 +1013,10 @@
     <EmbeddedResource Include="Reports\Certidao_Debito_Empresa_PN.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Debito_Empresa_PN.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Notificacao_Obra.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Notificacao_Obra.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Termo_ConfDivida.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

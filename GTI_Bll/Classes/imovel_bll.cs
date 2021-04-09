@@ -907,12 +907,12 @@ namespace GTI_Bll.Classes {
             return obj.Existe_Notificacao_Obra(Ano, Numero);
         }
 
-        public List<Notificacao_Terreno_Struct> Lista_Notificacao_Obra(int Ano) {
+        public List<Notificacao_Obra_Struct> Lista_Notificacao_Obra(int Ano) {
             Imovel_Data obj = new Imovel_Data(_connection);
             return obj.Lista_Notificacao_Obra(Ano);
         }
 
-        public Notificacao_Terreno_Struct Retorna_Notificacao_Obra(int Ano, int Numero) {
+        public Notificacao_Obra_Struct Retorna_Notificacao_Obra(int Ano, int Numero) {
             Imovel_Data obj = new Imovel_Data(_connection);
             return obj.Retorna_Notificacao_Obra(Ano, Numero);
         }

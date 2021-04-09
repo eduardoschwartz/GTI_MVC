@@ -89,7 +89,7 @@
                                 <td style="width:80px;font-weight:normal;text-align:center">@Html.DisplayFor(modelItem => item.Data_Cadastro)</td>
                                 <td style="width:105px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Prazo)@Html.Raw("&nbsp;Dias")</td>
                                 <td style="width:50px;text-align:right">
-                                    <a href="@Url.Action("Notificacao_terreno_print", "Imovel", new { a = item.Ano_Notificacao,n=item.Numero_Notificacao })" title="Imprimir a Notificação"> <img src="@Url.Content("~/images/print.png")"></a>
+                                    <a href="@Url.Action("Notificacao_obra_print", "Imovel", new { a = item.Ano_Notificacao,n=item.Numero_Notificacao })" title="Imprimir a Notificação"> <img src="@Url.Content("~/images/print.png")"></a>
                                 </td>
                             </tr>
                                 }
@@ -103,7 +103,7 @@
 
                 </div>
                 <div class="card-footer">
-                    @Html.ActionLink("Preencher outra notificação", "Notificacao_ter_add", "Imovel", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Preencher outra notificação", "Notificacao_obra_add", "Imovel", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
                 </div>
             </div>
