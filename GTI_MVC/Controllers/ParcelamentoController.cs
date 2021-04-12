@@ -223,13 +223,21 @@ namespace GTI_MVC.Controllers {
 
         [Route("Parc_req")]
         [HttpPost]
-        public ActionResult Parc_req(ParcelamentoViewModel model,string listacod) {
+        public ActionResult Parc_req(ParcelamentoViewModel model,string listacod,string action) {
+            if (action == "btnAtualiza") {
+                return RedirectToAction("Parc_cid", new { p = model.Guid });
+            }
+
             int _codigo = 0;
             for (int i = 0; i < model.Lista_Codigos.Count; i++) {
                 if (model.Lista_Codigos[i].Selected) {
                     _codigo = Convert.ToInt32(model.Lista_Codigos[i].Codigo);
                     break;
                 }
+            }
+            if (_codigo == 0) {
+                ViewBag.Result = "Nenhuma inscrição foi selecionada.";
+                return View(model);
             }
 
             List<Parc_Codigos> _listaCodigos = new List<Parc_Codigos>();
@@ -403,13 +411,6 @@ namespace GTI_MVC.Controllers {
         [HttpPost]
         public ActionResult Parc_reqb(ParcelamentoViewModel model) {
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
-            //Parcelamento_web_master regP = new Parcelamento_web_master() {
-            //    Guid = model.Guid,
-            //    Data_Vencimento=DateTime.Now
-            //};
-            //Exception ex = parcelamentoRepository.Atualizar_Criterio_Master(regP);
-            //if (ex != null)
-            //    throw ex;
 
             return RedirectToAction("Parc_reqc", new { p = model.Guid });
         }
@@ -1830,6 +1831,84 @@ namespace GTI_MVC.Controllers {
                 throw ex;
             }
         }
+
+
+        [Route("Parc_cid")]
+        [HttpGet]
+        public ActionResult Parc_cid(string p) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+            bool _existe = parcelamentoRepository.Existe_Parcelamento_Web_Master(p);
+            if (!_existe)
+                return RedirectToAction("Login_gti", "Home");
+
+            //Load Master
+            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
+            ParcelamentoViewModel model = new ParcelamentoViewModel() {
+                Guid = p,
+            };
+
+            int _codigo = _master.Requerente_Codigo;
+            model.Requerente = new Parc_Requerente() {
+                Codigo = _codigo,
+                Nome = _master.Requerente_Nome,
+                Cpf_Cnpj = Functions.FormatarCpfCnpj(_master.Requerente_CpfCnpj)
+            };
+
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+            CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(_codigo);
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+
+            if (_cidadao.EtiquetaR == "S") {
+                Bairro _bairro = null;
+                if (_cidadao.CodigoLogradouroR == null) {
+                    model.Requerente.Bairro_Nome = _cidadao.NomeBairroR;
+                } else {
+                    _bairro = enderecoRepository.RetornaLogradouroBairro((int)_cidadao.CodigoLogradouroR, (short)_cidadao.NumeroR);
+                    model.Requerente.Bairro_Nome = _bairro.Descbairro;
+                }
+                model.Requerente.Logradouro_Codigo = _cidadao.CodigoLogradouroR == null ? 0 : (int)_cidadao.CodigoLogradouroR;
+                model.Requerente.Logradouro_Nome = _cidadao.EnderecoR;
+                model.Requerente.Numero = (int)_cidadao.NumeroR;
+                model.Requerente.Complemento = _cidadao.ComplementoR;
+                model.Requerente.Bairro_Codigo = (int)_cidadao.CodigoBairroR;
+                model.Requerente.Cidade_Codigo = (int)_cidadao.CodigoCidadeR;
+                model.Requerente.Cidade_Nome = _cidadao.NomeCidadeR;
+                model.Requerente.UF = _cidadao.UfR;
+                model.Requerente.Cep = _cidadao.CepR == null ? "" : ((int)_cidadao.CepR).ToString("00000-000");
+                model.Requerente.Email = _cidadao.EmailR;
+                model.Requerente.Telefone = _cidadao.TelefoneR;
+            } else {
+                Bairro _bairro = null;
+                if (_cidadao.CodigoLogradouroC == null) {
+                    model.Requerente.Bairro_Nome = _cidadao.NomeBairroR;
+                } else {
+                    _bairro = enderecoRepository.RetornaLogradouroBairro((int)_cidadao.CodigoLogradouroC, (short)_cidadao.NumeroC);
+                    model.Requerente.Bairro_Nome = _bairro.Descbairro;
+                }
+                model.Requerente.Logradouro_Codigo = _cidadao.CodigoLogradouroC == null ? 0 : (int)_cidadao.CodigoLogradouroC;
+                model.Requerente.Logradouro_Nome = _cidadao.EnderecoC;
+                model.Requerente.Numero = (int)_cidadao.NumeroC;
+                model.Requerente.Complemento = _cidadao.ComplementoC;
+                model.Requerente.Bairro_Codigo = _bairro.Codbairro;
+                model.Requerente.Cidade_Codigo = (int)_cidadao.CodigoCidadeC;
+                model.Requerente.Cidade_Nome = _cidadao.NomeCidadeC;
+                model.Requerente.UF = _cidadao.UfC;
+                model.Requerente.Cep = _cidadao.CepC == null ? "" : ((int)_cidadao.CepC).ToString("00000-000");
+                model.Requerente.Email = _cidadao.EmailC;
+                model.Requerente.Telefone = _cidadao.TelefoneC;
+            }
+
+            return View(model);
+        }
+
+
+
+
+
+
 
         //[ChildActionOnly]
         //public ActionResult Parc_simulado(string p) {

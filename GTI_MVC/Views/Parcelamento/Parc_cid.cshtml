@@ -1,0 +1,244 @@
+﻿@model GTI_Mvc.ViewModels.ParcelamentoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Parcelamento de débitos";
+}
+
+
+<style>
+    .center {
+        margin: auto;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+</style>
+
+<h5 style="text-align:center">Parcelamento de Débitos</h5>
+
+<div class="center container" style="width:840px">
+
+    @using (Html.BeginForm("Parc_req", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+
+        @Html.HiddenFor(m => m.Guid)
+    <div class="card">
+        <div class="card-header">Atualização de Dados Cadastrais </div>
+        <div class="card-body">
+
+            <table style="font-size:14px;width:640px">
+                <tr style="height:30px">
+                    <td style="width:103px">
+                        <label style="font-weight:normal;">Nº Cpf/Cnpj:</label>
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Requerente.Cpf_Cnpj, new { @id = "cpfcnpjTxt", @style = "max-width:200px;height:25px;color:blue", @readonly = true })
+                    </td>
+                </tr>
+            </table>
+
+            <div style="padding-top:5px">
+                <table style="font-size:14px;width:640px">
+                    <tr style="height:30px">
+                        <td style="width:103px">
+                            <label style="font-weight:normal">Nome:&nbsp;&nbsp;</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Nome, new { style = "width:527px;height:25px;color:blue", @readonly = true })
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <table style="font-size:14px;width:640px">
+                <tr style="height:30px">
+                    <td style="width:103px">
+                        <label style="font-weight:normal;">Nº do Cep:</label>
+                    </td>
+                    <td>
+                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Cep, new { @class = "maskCep", @id = "txtCep", style = "width:90px;height:25px" })</label>
+                        <button type="submit" class="btn btn-info" name="action" value="btnCepCompradorOK" data-balloon-length="medium" aria-label="Digite um Cep válido e clique em pesquisar." data-balloon-pos="up">Pesquisar</button>
+                        <label style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank">aqui</a> para consultar o Cep</label><span style="color:red">&nbsp;*</span><br /><br />
+                    </td>
+                </tr>
+            </table>
+
+            <div style="padding-top:5px">
+                <table style="font-size:14px;width:640px">
+                    <tr style="height:30px">
+                        <td style="width:103px">
+                            <label style="font-weight:normal">Logradouro:</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Logradouro_Nome, new { style = "width:392px;height:25px;color:blue", @readonly = true })</label>
+                            <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal">
+                                @Html.TextBoxFor(m => m.Requerente.Numero, new { style = "width:60px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)" })
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <table style="font-size:14px;width:640px">
+                <tr style="height:30px">
+                    <td style="width:103px">
+                        <label style="font-weight:normal;">Complemento:</label>
+                    </td>
+                    <td>
+                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Requerente.Complemento, new { style = "width:230px;height:25px" })</label>
+
+                    </td>
+                    <td>
+                        <label style="font-weight:normal">&nbsp;&nbsp;Bairro:&nbsp;&nbsp;</label>
+                    </td>
+                    <td>
+                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Bairro_Nome, new { style = "width:230px;height:25px;color:blue", @readonly = true })</label>
+                    </td>
+                </tr>
+                <tr style="height:30px">
+                    <td>
+                        <label style="font-weight:normal">Cidade:</label>
+                    </td>
+                    <td>
+                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Cidade_Nome, new { style = "width:230px;height:25px;color:blue", @readonly = true })</label>
+
+                    </td>
+                    <td>
+                        <label style="font-weight:normal;padding-left:10px">UF:&nbsp;&nbsp;</label>
+                    </td>
+                    <td>
+                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.UF, new { style = "width:230px;height:25px;color:blue", @readonly = true })</label>
+                    </td>
+                </tr>
+                <tr style="height:30px">
+                    <td>
+                        <label style="font-weight:normal">Telefone:</label>
+                    </td>
+                    <td>
+                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Telefone, new { style = "width:230px;height:25px" })</label>
+
+                    </td>
+                    <td>
+                        <label style="font-weight:normal;padding-left:10px">Email:</label>
+                    </td>
+                    <td>
+                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Email, new { style = "width:230px;height:25px" })</label>
+                    </td>
+                </tr>
+            </table>
+            <span style="color:red;font-size:12px">*Caso o cep não retorne os dados do endereço, retorne ao menu de opções e faça o cadastro do mesmo. Mais informações no manual do usuário.</span>
+            <br />
+            <br />
+            <button type="submit" class="btn btn-success" name="action" value="btnValida" onclick="ClearError()">Gravar</button><span style="padding-left:10px"></span>
+            <button type="button" class="btn btn-danger" name="action" value="btnVoltar" onclick="javascript:history.back()">Cancelar</button>
+        </div>
+
+    </div>
+
+        <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+        <div class="card-footer">
+            @Html.ActionLink("Retornar ao menu de opções", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+        </div>
+
+    }
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#tblResumo tr:odd").css({
+                "background-color": "#E9FAFA"
+            });
+        });
+
+        function ClearError() {
+            document.getElementById('errorlabel').innerHTML = "";
+        }
+
+        function CheckOne(obj) {
+            var grid = obj.parentNode.parentNode.parentNode;
+            var inputs = grid.getElementsByTagName("input");
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].type == "checkbox") {
+                    if (obj.checked && inputs[i] != obj && inputs[i].checked) {
+                        inputs[i].checked = false;
+                    }
+                }
+            }
+        }
+
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                try {
+                    var grid = document.getElementById("tblResumo");
+                    var inputs = grid.getElementsByTagName("input");
+                    var _find = false;
+                    for (var i = 0; i < inputs.length; i++) {
+                        if (inputs[i].type == "checkbox") {
+                            if (inputs[i].checked) {
+                                _find = true;
+                            }
+                        }
+                    }
+                    if (!_find) {
+                        alert("Selecione uma inscrição!")
+                        return false;
+                    }
+
+                }
+                catch (e) {
+                    alert(e);
+                }
+                return true;
+            });
+        });
+
+
+
+
+
+
+    </script>
+}
+
+
+
