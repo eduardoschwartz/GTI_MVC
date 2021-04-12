@@ -702,6 +702,7 @@
       <DependentUpon>dsUsoPlataforma.xsd</DependentUpon>
     </Content>
     <Content Include="Files\Login Manual do Usuario.pdf" />
+    <Content Include="Files\Parcelamento Manual do Usuario.pdf" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
