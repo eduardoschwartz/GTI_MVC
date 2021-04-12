@@ -1861,26 +1861,7 @@ namespace GTI_MVC.Controllers {
             CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(_codigo);
             Endereco_bll enderecoRepository = new Endereco_bll(_connection);
 
-            if (_cidadao.EtiquetaR == "S") {
-                Bairro _bairro = null;
-                if (_cidadao.CodigoLogradouroR == null) {
-                    model.Requerente.Bairro_Nome = _cidadao.NomeBairroR;
-                } else {
-                    _bairro = enderecoRepository.RetornaLogradouroBairro((int)_cidadao.CodigoLogradouroR, (short)_cidadao.NumeroR);
-                    model.Requerente.Bairro_Nome = _bairro.Descbairro;
-                }
-                model.Requerente.Logradouro_Codigo = _cidadao.CodigoLogradouroR == null ? 0 : (int)_cidadao.CodigoLogradouroR;
-                model.Requerente.Logradouro_Nome = _cidadao.EnderecoR;
-                model.Requerente.Numero = (int)_cidadao.NumeroR;
-                model.Requerente.Complemento = _cidadao.ComplementoR;
-                model.Requerente.Bairro_Codigo = (int)_cidadao.CodigoBairroR;
-                model.Requerente.Cidade_Codigo = (int)_cidadao.CodigoCidadeR;
-                model.Requerente.Cidade_Nome = _cidadao.NomeCidadeR;
-                model.Requerente.UF = _cidadao.UfR;
-                model.Requerente.Cep = _cidadao.CepR == null ? "" : ((int)_cidadao.CepR).ToString("00000-000");
-                model.Requerente.Email = _cidadao.EmailR;
-                model.Requerente.Telefone = _cidadao.TelefoneR;
-            } else {
+            if (_cidadao.EtiquetaC == "S") {
                 Bairro _bairro = null;
                 if (_cidadao.CodigoLogradouroC == null) {
                     model.Requerente.Bairro_Nome = _cidadao.NomeBairroR;
@@ -1899,13 +1880,234 @@ namespace GTI_MVC.Controllers {
                 model.Requerente.Cep = _cidadao.CepC == null ? "" : ((int)_cidadao.CepC).ToString("00000-000");
                 model.Requerente.Email = _cidadao.EmailC;
                 model.Requerente.Telefone = _cidadao.TelefoneC;
+                model.Requerente.TipoEnd = "C";
+            } else {
+                Bairro _bairro = null;
+                if (_cidadao.CodigoLogradouroR == null) {
+                    model.Requerente.Bairro_Nome = _cidadao.NomeBairroR;
+                } else {
+                    _bairro = enderecoRepository.RetornaLogradouroBairro((int)_cidadao.CodigoLogradouroR, (short)_cidadao.NumeroR);
+                    model.Requerente.Bairro_Nome = _bairro.Descbairro;
+                }
+                model.Requerente.Logradouro_Codigo = _cidadao.CodigoLogradouroR == null ? 0 : (int)_cidadao.CodigoLogradouroR;
+                model.Requerente.Logradouro_Nome = _cidadao.EnderecoR;
+                model.Requerente.Numero = (int)_cidadao.NumeroR;
+                model.Requerente.Complemento = _cidadao.ComplementoR;
+                model.Requerente.Bairro_Codigo = (int)_cidadao.CodigoBairroR;
+                model.Requerente.Cidade_Codigo = (int)_cidadao.CodigoCidadeR;
+                model.Requerente.Cidade_Nome = _cidadao.NomeCidadeR;
+                model.Requerente.UF = _cidadao.UfR;
+                model.Requerente.Cep = _cidadao.CepR == null ? "" : ((int)_cidadao.CepR).ToString("00000-000");
+                model.Requerente.Email = _cidadao.EmailR;
+                model.Requerente.Telefone = _cidadao.TelefoneR;
+                model.Requerente.TipoEnd = "R";
             }
-
             return View(model);
         }
 
 
+        [Route("Parc_cid")]
+        [HttpPost]
+        public ActionResult Parc_cid(ParcelamentoViewModel model,string action) {
 
+            if (action == "btnCep") {
+                if (model.Requerente.Cep == null || model.Requerente.Cep.Length < 9) {
+                    ViewBag.Error = "* Cep do Requerente inválido, utilize o formato 00000-000.";
+                    if (model.Requerente != null)
+                        model.Requerente.Cep = Convert.ToInt32(model.Requerente.Cep).ToString("00000-000");
+                    return View(model);
+                }
+
+                var cepObj = GTI_Mvc.Classes.Cep.Busca_CepDB(Convert.ToInt32(Functions.RetornaNumero(model.Requerente.Cep)));
+                if (cepObj.Cidade != null) {
+                    string rua = cepObj.Endereco;
+                    if (rua.IndexOf('-') > 0) {
+                        rua = rua.Substring(0, rua.IndexOf('-'));
+                    }
+
+                    Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+                    LogradouroStruct _log = enderecoRepository.Retorna_Logradouro_Cep(Convert.ToInt32(Functions.RetornaNumero(cepObj.CEP)));
+                    if (_log.Endereco != null) {
+                        model.Requerente.Logradouro_Codigo = (int)_log.CodLogradouro;
+                        model.Requerente.Logradouro_Nome = _log.Endereco;
+                    } else {
+                        model.Requerente.Logradouro_Codigo = 0;
+                        model.Requerente.Logradouro_Nome = rua.ToUpper();
+                    }
+
+                    Bairro bairro = enderecoRepository.RetornaLogradouroBairro(model.Requerente.Logradouro_Codigo, (short)model.Requerente.Numero);
+                    if (bairro.Descbairro != null) {
+                        model.Requerente.Bairro_Codigo = bairro.Codbairro;
+                        model.Requerente.Bairro_Nome = bairro.Descbairro;
+                    } else {
+                        string _uf = cepObj.Estado;
+                        string _cidade = cepObj.Cidade;
+                        string _bairro = cepObj.Bairro;
+                        int _codcidade = enderecoRepository.Retorna_Cidade(_uf, _cidade);
+                        if (_codcidade > 0) {
+                            model.Requerente.Cidade_Codigo = _codcidade;
+                            if (_codcidade != 413) {
+                                //verifica se bairro existe nesta cidade
+                                bool _existeBairro = enderecoRepository.Existe_Bairro(_uf, _codcidade, _bairro);
+                                if (!_existeBairro) {
+                                    Bairro reg = new Bairro() {
+                                        Siglauf = _uf,
+                                        Codcidade = (short)_codcidade,
+                                        Descbairro = _bairro.ToUpper()
+                                    };
+                                    int _codBairro = enderecoRepository.Incluir_bairro(reg);
+                                    model.Requerente.Bairro_Codigo = _codBairro;
+                                }
+                            }
+                            model.Requerente.Bairro_Nome = cepObj.Bairro.ToUpper();
+                        } else {
+                            model.Requerente.Cidade_Codigo = 0;
+                        }
+                        
+                    }
+
+                    model.Requerente.Cidade_Nome = cepObj.Cidade.ToUpper();
+                    model.Requerente.UF = cepObj.Estado;
+                } else {
+                    model.Requerente.Logradouro_Codigo = 0;
+                    model.Requerente.Logradouro_Nome = "";
+                    model.Requerente.Bairro_Codigo = 0;
+                    model.Requerente.Bairro_Nome = "";
+                    model.Requerente.Cidade_Codigo = 0;
+                    model.Requerente.Cidade_Nome = "";
+                    model.Requerente.Numero = 0;
+                    model.Requerente.Complemento = "";
+                    model.Requerente.UF = "";
+
+                    ViewBag.Error = "* Cep do comprador não localizado.";
+                    return View(model);
+                }
+            } else {
+                if (action == "btnValida") {
+                    Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+                    bool _existe = parcelamentoRepository.Existe_Parcelamento_Web_Master(model.Guid);
+                    if (!_existe)
+                        return RedirectToAction("Login_gti", "Home");
+
+                    //Load Master
+                    Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(model.Guid);
+                    Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+                    CidadaoStruct _cidOriginal = cidadaoRepository.Dados_Cidadao(_master.Requerente_Codigo);
+
+
+                    Cidadao _cidadao = new Cidadao() {
+                        Codcidadao = _master.Requerente_Codigo,
+                        Nomecidadao = _cidOriginal.Nome,
+                        Data_nascimento = _cidOriginal.DataNascto,
+                        Codprofissao = _cidOriginal.CodigoProfissao,
+                        Cnh = _cidOriginal.Cnh,
+                        Rg = _cidOriginal.Rg,
+                        Orgao = _cidOriginal.Orgao,
+                        Orgaocnh = _cidOriginal.Orgaocnh
+                    };
+
+                    string _doc = Functions.RetornaNumero(model.Requerente.Cpf_Cnpj);
+                    if (_doc.Length == 14) {
+                        _cidadao.Cpf = null;
+                        _cidadao.Cnpj = _doc;
+                        _cidadao.Juridica = true;
+                    } else {
+                        _cidadao.Cpf = _doc;
+                        _cidadao.Cnpj = null;
+                        _cidadao.Juridica = false;
+                    }
+
+                    if (model.Requerente.TipoEnd == "R") {
+                        _cidadao.Cep = Convert.ToInt32( Functions.RetornaNumero( model.Requerente.Cep));
+                        _cidadao.Codbairro =(short) model.Requerente.Bairro_Codigo;
+                        _cidadao.Codcidade = (short)model.Requerente.Cidade_Codigo;
+                        _cidadao.Siglauf = model.Requerente.UF;
+                        _cidadao.Numimovel =(short) model.Requerente.Numero;
+                        _cidadao.Complemento = model.Requerente.Complemento;
+                        _cidadao.Telefone = model.Requerente.Telefone;
+                        _cidadao.Email = model.Requerente.Email;
+                        _cidadao.Etiqueta = "S";
+                        _cidadao.Codpais = 1;
+                        _cidadao.Temfone = string.IsNullOrEmpty(model.Requerente.Telefone)?true:false;
+                        _cidadao.Whatsapp = _cidOriginal.Whatsapp;
+                        if (model.Requerente.Logradouro_Codigo == 0) {
+                            _cidadao.Nomelogradouro = model.Requerente.Logradouro_Nome;
+                        }
+                    } else {
+                        _cidadao.Cep2 = Convert.ToInt32(Functions.RetornaNumero(model.Requerente.Cep));
+                        _cidadao.Codbairro2 = (short)model.Requerente.Bairro_Codigo;
+                        _cidadao.Codcidade2 = (short)model.Requerente.Cidade_Codigo;
+                        _cidadao.Siglauf2 = model.Requerente.UF;
+                        _cidadao.Numimovel2 = (short)model.Requerente.Numero;
+                        _cidadao.Complemento2 = model.Requerente.Complemento;
+                        _cidadao.Telefone2 = model.Requerente.Telefone;
+                        _cidadao.Email2 = model.Requerente.Email;
+                        _cidadao.Codpais2 = 1;
+                        _cidadao.Etiqueta2 = "S";
+                        _cidadao.Temfone2 = string.IsNullOrEmpty(model.Requerente.Telefone) ? true : false;
+                        _cidadao.Whatsapp2 = _cidOriginal.Whatsapp;
+                        if (model.Requerente.Logradouro_Codigo == 0) {
+                            _cidadao.Nomelogradouro2 = model.Requerente.Logradouro_Nome;
+                        }
+                    }
+                    Exception ex= cidadaoRepository.Alterar_cidadao(_cidadao);
+
+                    //Atualiza Master
+                  int _user_id = Convert.ToInt32(Session["hashid"]);
+                     Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+                    Usuario_web _user = sistemaRepository.Retorna_Usuario_Web(_user_id);
+
+                    CidadaoStruct _cid = cidadaoRepository.Dados_Cidadao(_master.Requerente_Codigo);
+                    Parc_Requerente _req = new Parc_Requerente {
+                        Codigo = _cid.Codigo,
+                        Nome = _cid.Nome,
+                        Email = _user.Email
+                    };
+                    _req.Cpf_Cnpj = Functions.FormatarCpfCnpj(model.Requerente.Cpf_Cnpj);
+                    string _tipoEnd = _cid.EnderecoC == "S" ? "C" : "R";
+                    _req.TipoEnd = _tipoEnd == "R" ? "RESIDENCIAL" : "COMERCIAL";
+                    if (_tipoEnd == "R") {
+                        _req.Bairro_Nome = _cid.NomeBairroR;
+                        _req.Cidade_Nome = _cid.NomeCidadeR;
+                        _req.UF = _cid.UfR;
+                        _req.Logradouro_Codigo = _cid.CodigoLogradouroR == null ? 0 : (int)_cid.CodigoLogradouroR;
+                        _req.Logradouro_Nome = _cid.EnderecoR;
+                        _req.Numero = (int)_cid.NumeroR;
+                        _req.Complemento = _cid.ComplementoR;
+                        _req.Telefone = _cid.TelefoneR;
+                        _req.Cep = _cid.CepR.ToString();
+                    } else {
+                        _req.Bairro_Nome = _cid.NomeBairroC;
+                        _req.Cidade_Nome = _cid.NomeCidadeC;
+                        _req.UF = _cid.UfC;
+                        _req.Logradouro_Codigo = _cid.CodigoLogradouroC == null ? 0 : (int)_cid.CodigoLogradouroC;
+                        _req.Logradouro_Nome = _cid.EnderecoC;
+                        _req.Numero = (int)_cid.NumeroC;
+                        _req.Complemento = _cid.ComplementoC;
+                        _req.Telefone = _cid.TelefoneC;
+                        _req.Cep = _cid.CepC.ToString();
+                    }
+                    model.Requerente = _req;
+
+                    Parcelamento_web_master _m = new Parcelamento_web_master() {
+                        Guid=_master.Guid,
+                        Requerente_Bairro=_req.Bairro_Nome,
+                        Requerente_Cep= Convert.ToInt32( Functions.RetornaNumero( _req.Cep)),
+                        Requerente_Complemento=_req.Complemento,
+                        Requerente_Cidade=_req.Cidade_Nome,
+                        Requerente_Email=_req.Email,
+                        Requerente_Telefone=_req.Telefone,
+                        Requerente_Uf=_req.UF,
+                        Requerente_Numero=_req.Numero,
+                        Requerente_Logradouro=_req.Logradouro_Nome
+                    };
+                    ex = parcelamentoRepository.Atualizar_Requerente_Master(_m);
+                }
+            }
+
+
+            return View(model);
+        }
 
 
 
@@ -1924,4 +2126,4 @@ namespace GTI_MVC.Controllers {
         //}
 
     }
-}
+    }

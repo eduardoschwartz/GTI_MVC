@@ -460,7 +460,10 @@ namespace GTI_Dal.Classes {
                     Parametros[35] = new SqlParameter { ParameterName = "@etiqueta2", SqlValue = DBNull.Value };
                 else
                     Parametros[35] = new SqlParameter { ParameterName = "@etiqueta2", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Etiqueta2 };
-                Parametros[36] = new SqlParameter { ParameterName = "@Data_nascimento", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_nascimento };
+                if(reg.Data_nascimento==null)
+                    Parametros[36] = new SqlParameter { ParameterName = "@Data_nascimento", SqlValue =DBNull.Value };
+                else
+                    Parametros[36] = new SqlParameter { ParameterName = "@Data_nascimento", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_nascimento };
                 if (string.IsNullOrWhiteSpace(reg.Profissao))
                     Parametros[37] = new SqlParameter { ParameterName = "@profissao", SqlValue = DBNull.Value };
                 else
@@ -494,15 +497,13 @@ namespace GTI_Dal.Classes {
                 else
                     Parametros[44] = new SqlParameter { ParameterName = "@orgaocnh", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Orgaocnh };
 
-                db.Database.ExecuteSqlCommand("UPDATE cidadao SET nomecidadao=@nomecidadao,cpf=@cpf,cnpj=@cnpj,codlogradouro=@codlogradouro,numimovel=@numimovel,complemento=@complemento,codbairro=@codbairro," +
-                    "codcidade=@codcidade,siglauf=@siglauf,cep=@cep,telefone=@telefone,email=@email,rg=@rg,orgao=@orgao,nomelogradouro=@nomelogradouro,nomecidade=@nomecidade,nomebairro=@nomebairro,nomeuf=@nomeuf," +
-                    "juridica=@juridica,codpais=@codpais,pais=@pais,codlogradouro2=@codlogradouro2,numimovel2=@numimovel2,complemento2=complemento2,codbairro2=codbairro2,codcidade2=@codcidade2,siglauf2=@siglauf2," +
-                    "cep2=@cep2,nomelogradouro2=@nomelogradouro2,etiqueta=@etiqueta,codpais2=@codpais2,pais2=@pais2,telefone2=@telefone2,email2=@email2,etiqueta2=@etiqueta2,Data_nascimento=@Data_nascimento," +
-                    "profissao=@profissao,codprofissao=@codprofissao,temfone=@temfone,temfone2=@temfone2,whatsapp=@whatsapp,whatsapp2=@whatsapp2,cnh=@cnh,orgaocnh=@orgaocnh WHERE codcidadao=@codcidadao", Parametros);
-                db.SaveChanges();
 
                 try {
-                    db.SaveChanges();
+                    db.Database.ExecuteSqlCommand("UPDATE cidadao SET nomecidadao=@nomecidadao,cpf=@cpf,cnpj=@cnpj,codlogradouro=@codlogradouro,numimovel=@numimovel,complemento=@complemento,codbairro=@codbairro," +
+                        "codcidade=@codcidade,siglauf=@siglauf,cep=@cep,telefone=@telefone,email=@email,rg=@rg,orgao=@orgao,nomelogradouro=@nomelogradouro,nomecidade=@nomecidade,nomebairro=@nomebairro,nomeuf=@nomeuf," +
+                        "juridica=@juridica,codpais=@codpais,pais=@pais,codlogradouro2=@codlogradouro2,numimovel2=@numimovel2,complemento2=complemento2,codbairro2=codbairro2,codcidade2=@codcidade2,siglauf2=@siglauf2," +
+                        "cep2=@cep2,nomelogradouro2=@nomelogradouro2,etiqueta=@etiqueta,codpais2=@codpais2,pais2=@pais2,telefone2=@telefone2,email2=@email2,etiqueta2=@etiqueta2,Data_nascimento=@Data_nascimento," +
+                        "profissao=@profissao,codprofissao=@codprofissao,temfone=@temfone,temfone2=@temfone2,whatsapp=@whatsapp,whatsapp2=@whatsapp2,cnh=@cnh,orgaocnh=@orgaocnh WHERE codcidadao=@codcidadao", Parametros);
                 } catch (Exception ex) {
                     return ex;
                 }

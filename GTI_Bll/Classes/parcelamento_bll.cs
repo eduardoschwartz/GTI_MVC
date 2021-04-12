@@ -258,5 +258,11 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Debito_Tributo(Codigo, Ano, Lanc, Seq, Parcela, Compl);
         }
 
+        public Exception Atualizar_Requerente_Master(Parcelamento_web_master reg) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Atualizar_Requerente_Master(reg);
+            return ex;
+        }
+
     }
 }

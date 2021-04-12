@@ -1062,6 +1062,29 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Atualizar_Requerente_Master(Parcelamento_web_master reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[10];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@Requerente_Logradouro", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Requerente_Logradouro };
+                Parametros[2] = new SqlParameter { ParameterName = "@Requerente_Numero", SqlDbType = SqlDbType.Int, SqlValue = reg.Requerente_Numero };
+                Parametros[3] = new SqlParameter { ParameterName = "@Requerente_Complemento", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Requerente_Complemento };
+                Parametros[4] = new SqlParameter { ParameterName = "@Requerente_Bairro", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Requerente_Bairro };
+                Parametros[5] = new SqlParameter { ParameterName = "@Requerente_Cep", SqlDbType = SqlDbType.Int, SqlValue = reg.Requerente_Cep };
+                Parametros[6] = new SqlParameter { ParameterName = "@Requerente_Cidade", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Requerente_Cidade };
+                Parametros[7] = new SqlParameter { ParameterName = "@Requerente_Uf", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Requerente_Uf };
+                Parametros[8] = new SqlParameter { ParameterName = "@Requerente_Email", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Requerente_Email };
+                Parametros[9] = new SqlParameter { ParameterName = "@Requerente_Telefone", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Requerente_Telefone };
+
+                try {
+                    db.Database.ExecuteSqlCommand("UPDATE parcelamento_web_master set Requerente_Logradouro=@Requerente_Logradouro,Requerente_Numero=@Requerente_Numero,Requerente_Complemento=@Requerente_Complemento," +
+                        "Requerente_Bairro=@Requerente_Bairro,Requerente_Cep=@Requerente_Cep,Requerente_Cidade=@Requerente_Cidade,Requerente_Uf=@Requerente_Uf,Requerente_Email=@Requerente_Email,Requerente_Telefone=@Requerente_Telefone WHERE guid=@guid", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
 
 
     }
