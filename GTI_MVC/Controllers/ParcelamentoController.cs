@@ -1488,7 +1488,7 @@ namespace GTI_MVC.Controllers {
                     _listaDestinoReparc.Add(_d);
 
                     byte _status;
-                    if (item.Numero_Parcela == 1)
+                    if (item.Data_Vencimento.Year == DateTime.Now.Year)
                         _status = 3;
                     else
                         _status = 18;
