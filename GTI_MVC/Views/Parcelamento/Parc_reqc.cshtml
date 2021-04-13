@@ -397,8 +397,39 @@
                 <button type="submit" class="btn btn-primary" name="action" value="btnValida">Carregar Simulado...</button>
                 <button type="button" class="btn btn-info" name="action" value="btnVoltar" onclick="javascript:history.back()">Voltar</button>
                 <br />
-                <label style="padding-top:10px" class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+
+
+
+                <div class="container">
+                    <div class="modal fade" tabindex="-1" id="loginModal"
+                         data-keyboard="false" data-backdrop="static">
+                        <div class="modal-dialog modal-lg" style="background-color:antiquewhite">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Observação Importante:</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <h4>Foram selecionados débitos ajuizados e/ou protestados.</h4><br /><br />
+                                    <p>- Se debito ajuizados solicitar as guias das custas e despesas processuais através do e-mail: <u style="color: blue">dividaativa@jaboticabal.sp.gov.br</u></p>
+
+                                    <p>- Se debito protestado informar o pagamento através do e-mail: <u style="color: blue">dividaativa@jaboticabal.sp.gov.br</u></p>
+                                    <p style="color: black;font-weight:bold">Tal procedimento é de extrema importância para providências junto ao Fórum e Tabelião de Notas e Protesto."</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" id="btnHideModal" name="action" value="btnOK" class="btn btn-danger" onclick="Send()" data-dismiss="modal">
+                                        Entendi
+                                    </button>
+                                </div>
+                            
+                        </div>
+                    </div>
+                </div>
             </div>
+
+
+
+            <label style="padding-top:10px" class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+        </div>
 
 
             <div class="card-footer">
@@ -462,6 +493,11 @@
                                 return false;
                             }
 
+                            if (_ajuizado) {
+                                $("#loginModal").modal('show');
+                                return false;
+                            }
+                            
                         }
                         catch (e) {
                             alert(e);
@@ -477,6 +513,11 @@
                             .attr('checked', $(this).is(':checked'));
                     });
                 });
+
+
+                function Send() {
+                    document.getElementById("MainForm").submit();
+                }
 
                 function ValidateForm() {
                     ClearError();

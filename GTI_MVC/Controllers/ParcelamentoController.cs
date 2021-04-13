@@ -920,6 +920,9 @@ namespace GTI_MVC.Controllers {
 
             //Load Master
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
+            if(_master.Processo_Numero>0)
+                return RedirectToAction("Parc_index");
+
             ParcelamentoViewModel model = new ParcelamentoViewModel() {
                 Guid = p,
                 Plano_Nome = _master.Plano_Nome,
@@ -1278,6 +1281,19 @@ namespace GTI_MVC.Controllers {
         public ActionResult Parc_tan(string p) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
+
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+            bool _existe = parcelamentoRepository.Existe_Parcelamento_Web_Master(p);
+            if (!_existe)
+                return RedirectToAction("Login_gti", "Home");
+
+            //Load Master
+            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
+            if (_master.Processo_Numero > 0)
+                return RedirectToAction("Parc_index");
+
+
+
             ParcelamentoViewModel model = new ParcelamentoViewModel();
             model.Guid = p;
             return View(model);
@@ -1841,6 +1857,7 @@ namespace GTI_MVC.Controllers {
             string _proc = _master.Processo_Numero.ToString() + "-" + Functions.RetornaDvProcesso(_master.Processo_Numero) + "/" + _master.Processo_Ano.ToString();
             string _data = _master.Data_Geracao.ToString("dd/MM/yyyy");
             string _end = "";
+            string _vct =Convert.ToDateTime(_master.Data_Vencimento).ToString("dd/MM/yyyy");
             if (_master.Contribuinte_Codigo < 50000) {
                 _end = _master.Contribuinte_endereco + " - " + _master.Contribuinte_bairro;
             }
@@ -1866,6 +1883,7 @@ namespace GTI_MVC.Controllers {
                 rd.SetParameterValue("VALOR", _valor);
                 rd.SetParameterValue("ENDERECO", _end);
                 rd.SetParameterValue("EXERCICIO", _ano);
+                rd.SetParameterValue("DATAVENCTO", _vct);
 
                 Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
                 return File(stream, "application/pdf", "Termo_ConfDivida.pdf");
@@ -1873,7 +1891,6 @@ namespace GTI_MVC.Controllers {
                 throw ex;
             }
         }
-
 
         [Route("Parc_cid")]
         [HttpGet]
