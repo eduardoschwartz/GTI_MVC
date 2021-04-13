@@ -187,14 +187,14 @@ namespace GTI_MVC.Controllers {
                     Requerente_Codigo = _req.Codigo,
                     Requerente_Bairro=_req.Bairro_Nome??"",
                     Requerente_Cep=Convert.ToInt32(Functions.RetornaNumero(_req.Cep)),
-                    Requerente_Cidade=_req.Cidade_Nome,
+                    Requerente_Cidade=_req.Cidade_Nome??"",
                     Requerente_Complemento=_req.Complemento??"",
                     Requerente_CpfCnpj=_req.Cpf_Cnpj,
-                    Requerente_Logradouro=_req.Logradouro_Nome,
+                    Requerente_Logradouro=_req.Logradouro_Nome??"",
                     Requerente_Nome=_req.Nome,
                     Requerente_Numero=_req.Numero,
                     Requerente_Telefone=_req.Telefone??"",
-                    Requerente_Uf=_req.UF,
+                    Requerente_Uf=_req.UF??"",
                     Requerente_Email=_req.Email??""
                 };
                 Exception ex = parcelamentoRepository.Incluir_Parcelamento_Web_Master(reg);
@@ -237,6 +237,11 @@ namespace GTI_MVC.Controllers {
             }
             if (_codigo == 0) {
                 ViewBag.Result = "Nenhuma inscrição foi selecionada.";
+                return View(model);
+            }
+
+            if (string.IsNullOrEmpty(model.Requerente.Logradouro_Nome) || string.IsNullOrEmpty(model.Requerente.Bairro_Nome)) {
+                ViewBag.Result = "Dados Cadastrais incompletos.";
                 return View(model);
             }
 
@@ -2030,6 +2035,7 @@ namespace GTI_MVC.Controllers {
                         _cidadao.Codpais = 1;
                         _cidadao.Temfone = string.IsNullOrEmpty(model.Requerente.Telefone)?true:false;
                         _cidadao.Whatsapp = _cidOriginal.Whatsapp;
+                        _cidadao.Codlogradouro = model.Requerente.Logradouro_Codigo;
                         if (model.Requerente.Logradouro_Codigo == 0) {
                             _cidadao.Nomelogradouro = model.Requerente.Logradouro_Nome;
                         }
@@ -2046,6 +2052,7 @@ namespace GTI_MVC.Controllers {
                         _cidadao.Etiqueta2 = "S";
                         _cidadao.Temfone2 = string.IsNullOrEmpty(model.Requerente.Telefone) ? true : false;
                         _cidadao.Whatsapp2 = _cidOriginal.Whatsapp;
+                        _cidadao.Codlogradouro2 = model.Requerente.Logradouro_Codigo;
                         if (model.Requerente.Logradouro_Codigo == 0) {
                             _cidadao.Nomelogradouro2 = model.Requerente.Logradouro_Nome;
                         }
@@ -2106,7 +2113,7 @@ namespace GTI_MVC.Controllers {
             }
 
 
-            return View(model);
+            return RedirectToAction("Parc_req", "Parcelamento");
         }
 
 
