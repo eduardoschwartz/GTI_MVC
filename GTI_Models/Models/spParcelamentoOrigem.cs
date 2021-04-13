@@ -24,5 +24,6 @@ namespace GTI_Models.Models {
         public decimal Perc_penalidade { get; set; }
         public decimal Valor_penalidade { get; set; }
         public bool Selected { get; set; }
+        public string Execucao_Fiscal { get; set; }
     }
 }

@@ -1,9 +1,9 @@
 ﻿@model GTI_Mvc.Views.Parcelamento.EditorTemplates.SelectDebitoParcelamentoEditorViewModel
 
 
-<tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+<tr style=" height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
     <td style="text-align:center">
-        @Html.CheckBoxFor(model => model.Selected, new { style = "cursor:pointer"})
+        @Html.CheckBoxFor(model => model.Selected, new { style = "cursor:pointer" })
     </td>
     <td style="display:none">
         @Html.HiddenFor(model => model.Idx)
@@ -72,6 +72,10 @@
     <td style="width:70px" align="right">
         @Html.DisplayFor(model => model.Valor_total)
         @Html.HiddenFor(model => model.Valor_total)
+    </td>
+    <td style="width:180px" align="center">
+        @Html.DisplayFor(model => model.Execucao_Fiscal)
+        @Html.HiddenFor(model => model.Execucao_Fiscal)
     </td>
 
 

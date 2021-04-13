@@ -7,6 +7,8 @@ using GTI_Mvc.ViewModels;
 using GTI_Mvc.Views.Parcelamento.EditorTemplates;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -306,7 +308,8 @@ namespace GTI_MVC.Controllers {
                         Valor_Total=Math.Round( item.Valor_principal,2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros,2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa, 2, MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao, 2, MidpointRounding.AwayFromZero),
                         Valor_Penalidade=item.Valor_penalidade,
                         Perc_Penalidade=item.Perc_penalidade,
-                        Qtde_Parcelamento=item.Qtde_parcelamento
+                        Qtde_Parcelamento=item.Qtde_parcelamento,
+                        Execucao_Fiscal=item.Execucao_Fiscal
                     };
                     _listaWebOrigem.Add(reg);
                 }
@@ -488,7 +491,8 @@ namespace GTI_MVC.Controllers {
                     Valor_multa=item.Valor_multa,
                     Valor_penalidade=item.Valor_penalidade,
                     Valor_principal=item.Valor_principal,
-                    Valor_total=item.Valor_total
+                    Valor_total=item.Valor_total,
+                    Execucao_Fiscal=item.Execucao_Fiscal
                 };
                 _listaP.Add(d);
                 _SomaP += item.Valor_principal;
@@ -846,8 +850,8 @@ namespace GTI_MVC.Controllers {
                     r.Selected = true;
                 Lista_resumo.Add(r);
             }
-            ex = parcelamentoRepository.Incluir_Parcelamento_Web_Simulado_Resumo(_lista_Web_Simulado_Resumo);
         Fim:;
+            ex = parcelamentoRepository.Incluir_Parcelamento_Web_Simulado_Resumo(_lista_Web_Simulado_Resumo);
             model.Lista_Resumo = Lista_resumo;
 
             //################################################################
@@ -857,17 +861,50 @@ namespace GTI_MVC.Controllers {
 
         [Route("Parc_reqd")]
         [HttpPost]
-        public ActionResult Parc_reqd(ParcelamentoViewModel model) {
+        public ActionResult Parc_reqd(ParcelamentoViewModel model,string action) {
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
-            foreach (Parc_Resumo item in model.Lista_Resumo) {
-                if (item.Selected) {
-                    Exception ex = parcelamentoRepository.Atualizar_QtdeParcela_Master(model.Guid, item.Qtde_Parcela);
-                    break;
-                }
-            }
 
-            return RedirectToAction("Parc_reqe", new { p = model.Guid });
-            
+            if (action == "btPrint") {
+                ReportDocument rd = new ReportDocument();
+                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Simulado_Parcelamento.rpt"));
+                TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+                TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+                ConnectionInfo crConnectionInfo = new ConnectionInfo();
+                Tables CrTables;
+                string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+                string IPAddress = builder.DataSource;
+                string _userId = builder.UserID;
+                string _pwd = builder.Password;
+
+                crConnectionInfo.ServerName = IPAddress;
+                crConnectionInfo.DatabaseName = "TributacaoTeste";
+                crConnectionInfo.UserID = _userId;
+                crConnectionInfo.Password = _pwd;
+                CrTables = rd.Database.Tables;
+                foreach (Table CrTable in CrTables) {
+                    crtableLogoninfo = CrTable.LogOnInfo;
+                    crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                    CrTable.ApplyLogOnInfo(crtableLogoninfo);
+                }
+
+                try {
+                    rd.RecordSelectionFormula = "{Parcelamento_Web_Master.Guid}='" + model.Guid + "'";
+                    Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                    return File(stream, "application/pdf", "Simulado_Parcelamento.pdf");
+                } catch {
+                    throw;
+                }
+            } else {
+                foreach (Parc_Resumo item in model.Lista_Resumo) {
+                    if (item.Selected) {
+                        Exception ex = parcelamentoRepository.Atualizar_QtdeParcela_Master(model.Guid, item.Qtde_Parcela);
+                        break;
+                    }
+                }
+                return RedirectToAction("Parc_reqe", new { p = model.Guid });
+            }
+                        
         }
 
         [Route("Parc_reqe")]
