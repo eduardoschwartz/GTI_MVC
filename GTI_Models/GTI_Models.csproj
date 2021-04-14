@@ -198,6 +198,7 @@
     <Compile Include="Models\parcelamento_web_master.cs" />
     <Compile Include="Models\parcelamento_web_selected.cs" />
     <Compile Include="Models\parcelamento_web_origem.cs" />
+    <Compile Include="Models\parcelamento_web_selected_name.cs" />
     <Compile Include="Models\parcelamento_web_simulado.cs" />
     <Compile Include="Models\parcelamento_web_simulado_resumo.cs" />
     <Compile Include="Models\parcelamento_web_tributo.cs" />

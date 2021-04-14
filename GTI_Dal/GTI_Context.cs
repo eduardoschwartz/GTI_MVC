@@ -201,5 +201,6 @@ namespace GTI_Dal {
         public DbSet<Parcelamento_Web_Simulado_Resumo> Parcelamento_Web_Simulado_Resumo { get; set; }
         public DbSet<Parcelamento_Web_Destino> Parcelamento_Web_Destino { get; set; }
         public DbSet<Parcelamento_Web_Tributo> Parcelamento_Web_Tributo { get; set; }
+        public DbSet<Parcelamento_Web_Selected_Name> Parcelamento_Web_Selected_Name { get; set; }
     }
 }

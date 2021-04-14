@@ -1091,6 +1091,62 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Incluir_Parcelamento_Web_Selected_Name(List<Parcelamento_Web_Selected_Name> Lista) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+
+                foreach (Parcelamento_Web_Selected_Name Reg in Lista) {
+                    object[] Parametros = new object[3];
+                    Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                    Parametros[1] = new SqlParameter { ParameterName = "@Ano", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Ano };
+                    Parametros[2] = new SqlParameter { ParameterName = "@Lancamento", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Lancamento };
+
+                    try {
+                        db.Database.ExecuteSqlCommand("INSERT INTO Parcelamento_Web_Selected_Name(guid,Ano,Lancamento) " +
+                                                      "VALUES(@guid,@Ano,@Lancamento)", Parametros);
+                    } catch (Exception ex) {
+                        return ex;
+                    }
+                }
+
+                return null;
+            }
+        }
+
+        public Exception Excluir_parcelamento_Web_Selected_Name(string Guid) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+
+                object[] Parametros = new object[1];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Guid };
+                try {
+                    db.Database.ExecuteSqlCommand("DELETE FROM parcelamento_web_selected_name WHERE guid=@guid", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+
+        }
+
+        public List<Parcelamento_Web_Selected_Name_Struct> Lista_Parcelamento_Web_Selected_Name(string guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from t in db.Parcelamento_Web_Selected_Name
+                           join l in db.Lancamento on t.Lancamento equals l.Codlancamento into tl from l in tl.DefaultIfEmpty()
+                           where t.Guid == guid orderby new { t.Ano,t.Lancamento } 
+                           select  new {t.Ano,t.Lancamento,l.Descreduz }).ToList();
+                List<Parcelamento_Web_Selected_Name_Struct> Lista = new List<Parcelamento_Web_Selected_Name_Struct>();
+                foreach (var item in reg) {
+                    Parcelamento_Web_Selected_Name_Struct Linha = new Parcelamento_Web_Selected_Name_Struct {
+                        Ano = item.Ano,
+                        Lancamento_Codigo = item.Lancamento,
+                        Lancamento_Nome=item.Descreduz
+                    };
+                    Lista.Add(Linha);
+                }
+                return Lista;
+            }
+        }
 
     }
 }

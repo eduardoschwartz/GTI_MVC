@@ -810,8 +810,29 @@ namespace GTI_MVC.Controllers {
             model.Soma_Total = _SomaT;
             model.Lista_Origem_Selected = _listaP;
 
+            //Grava parcelamento_web_selected_name
+            Exception ex = parcelamentoRepository.Excluir_parcelamento_Web_Selected_Name(p);
+            List<Parcelamento_Web_Selected_Name> _listaName = new List<Parcelamento_Web_Selected_Name>();
+            foreach (SpParcelamentoOrigem item in ListaOrigem) {
+                bool _find = false;
+                foreach (Parcelamento_Web_Selected_Name s in _listaName) {
+                    if(s.Ano==item.Exercicio && s.Lancamento == item.Lancamento) {
+                        _find = true;
+                        break;
+                    }
+                }
+                if (!_find) {
+                    Parcelamento_Web_Selected_Name reg = new Parcelamento_Web_Selected_Name() {
+                        Ano = item.Exercicio,
+                        Lancamento=item.Lancamento
+                    };
+                    _listaName.Add(reg);
+                }
+            }
+            ex = parcelamentoRepository.Incluir_Parcelamento_Web_Selected_Name(_listaName);
+
             //########### Carrega Simulado ###################################
-            Exception ex = parcelamentoRepository.Excluir_parcelamento_Web_Simulado(model.Guid);
+            ex = parcelamentoRepository.Excluir_parcelamento_Web_Simulado(model.Guid);
             ex = parcelamentoRepository.Excluir_parcelamento_Web_Simulado_Resumo(model.Guid);
             List<Parcelamento_Web_Simulado> _listaSimulado = parcelamentoRepository.Lista_Parcelamento_Destino(model.Guid, (short)model.Plano_Codigo,DateTime.Now, _bAjuizado, _bAjuizado, _SomaP, _SomaJ, _SomaM, _SomaC, _SomaT, _SomaE, model.Valor_Minimo);
             IEnumerable<int> _listaQtde = _listaSimulado.Select(o => o.Qtde_Parcela).Distinct();

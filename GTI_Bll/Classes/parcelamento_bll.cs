@@ -264,5 +264,22 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Incluir_Parcelamento_Web_Selected_Name(List<Parcelamento_Web_Selected_Name> Lista) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Incluir_Parcelamento_Web_Selected_Name(Lista);
+            return ex;
+        }
+
+        public Exception Excluir_parcelamento_Web_Selected_Name(string Guid) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Excluir_parcelamento_Web_Selected_Name(Guid);
+            return ex;
+        }
+
+        public List<Parcelamento_Web_Selected_Name_Struct> Lista_Parcelamento_Web_Selected_Name(string guid) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            return obj.Lista_Parcelamento_Web_Selected_Name(guid);
+        }
+
     }
 }
