@@ -67,6 +67,7 @@ namespace GTI_Models.Models {
         public decimal Sim_Perc_Honorario { get; set; }
         public short Processo_Ano { get; set; }
         public int Processo_Numero { get; set; }
+        public string Processo_Extenso { get; set; }
     }
 
     public class Parc_Processos {

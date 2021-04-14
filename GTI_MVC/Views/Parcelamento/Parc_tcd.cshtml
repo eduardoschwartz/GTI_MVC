@@ -71,7 +71,7 @@
                 @if (Model.Contribuinte.Logradouro_Nome != "") {
                     <Label style="font-size:14px">Endereço:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Contribuinte.Logradouro_Nome</span><br />
                 }
-                <Label style="font-size:14px">Cpf/Cnpj:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Requerente.Cpf_Cnpj</span><Label style="padding-left:30px;font-size:14px">Qtde Parcelas:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Qtde_Parcela</span><Label style="padding-left:30px;font-size:14px">Valor Atualizado R$:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Soma_Total.ToString("#0.00")</span><br />
+                <Label style="font-size:14px">Cpf/Cnpj:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Requerente.Cpf_Cnpj</span><Label style="padding-left:30px;font-size:14px">Qtde Parcelas:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Qtde_Parcela</span><Label style="padding-left:30px;font-size:14px">Valor Atualizado R$:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Soma_Total.ToString("#0.00")</span><Label style="padding-left:30px;font-size:14px">Data 1º Vencto.:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Data_Vencimento</span><br />
                 <Label style="font-size:14px">Exercício(s):&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Exercicios</span><br />
                 <br />
 

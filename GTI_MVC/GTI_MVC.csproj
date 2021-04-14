@@ -266,6 +266,18 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\Resumo_Parcelamento.cs">
+      <DependentUpon>Resumo_Parcelamento.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Resumo_Parcelamento_Previa.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resumo_Parcelamento_Previa.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\Simulado_Parcelamento.cs">
       <DependentUpon>Simulado_Parcelamento.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -961,6 +973,14 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reports\Resumo_Parcelamento.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Resumo_Parcelamento.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Resumo_Parcelamento_Previa.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Resumo_Parcelamento_Previa.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Simulado_Parcelamento.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Simulado_Parcelamento.cs</LastGenOutput>

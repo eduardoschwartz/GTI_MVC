@@ -653,13 +653,15 @@ namespace GTI_Dal.Classes {
         }
 
         public Exception Atualizar_Processo_Master(string Guid,short Ano ,int Numero) {
+            string _ext = Numero.ToString() + "-" + dalCore.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
             using (GTI_Context db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[3];
+                object[] Parametros = new object[4];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@processo_ano", SqlDbType = SqlDbType.SmallInt, SqlValue = Ano };
                 Parametros[2] = new SqlParameter { ParameterName = "@processo_numero", SqlDbType = SqlDbType.Int, SqlValue = Numero };
+                Parametros[3] = new SqlParameter { ParameterName = "@processo_extenso", SqlDbType = SqlDbType.VarChar, SqlValue = _ext };
                 try {
-                    db.Database.ExecuteSqlCommand("UPDATE parcelamento_web_master set processo_ano=@processo_ano,processo_numero=@processo_numero WHERE guid=@guid", Parametros);
+                    db.Database.ExecuteSqlCommand("UPDATE parcelamento_web_master set processo_ano=@processo_ano,processo_numero=@processo_numero,processo_extenso=@processo_extenso WHERE guid=@guid", Parametros);
                 } catch (Exception ex) {
                     return ex;
                 }
@@ -1026,7 +1028,7 @@ namespace GTI_Dal.Classes {
                         Codigo_Contribuinte = item.Contribuinte_Codigo,
                         Data_Parcelamento = item.Data_Geracao,
                         Nome_Contribuinte = dalCore.TruncateTo( item.Contribuinte_nome,37),
-                        Numero_Processo = item.Processo_Numero.ToString() + "-" + dalCore.RetornaDvProcesso(item.Processo_Numero) + "/" + item.Processo_Ano.ToString(),
+                        Numero_Processo = item.Processo_Extenso,
                         Situacao = "ATIVO"
                     };
                     Linha.Tipo= item.Contribuinte_Codigo < 50000 ? "Imóvel" : item.Contribuinte_Codigo >= 500000 ? "Outros" : "Empresa";

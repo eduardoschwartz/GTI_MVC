@@ -1052,227 +1052,38 @@ namespace GTI_MVC.Controllers {
                 return RedirectToAction("Login", "Home");
             }
 
-            //int _userId = Convert.ToInt32(Session["hashid"]);
-            //bool _userWeb = Session["hashfunc"].ToString() == "S" ? false : true;
+            if (action == "btnResumo") {
+                ReportDocument rd = new ReportDocument();
+                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Resumo_Parcelamento_previa.rpt"));
+                TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+                TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+                ConnectionInfo crConnectionInfo = new ConnectionInfo();
+                Tables CrTables;
+                string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+                string IPAddress = builder.DataSource;
+                string _userId = builder.UserID;
+                string _pwd = builder.Password;
 
-            //string _guid = model.Guid;
+                crConnectionInfo.ServerName = IPAddress;
+                crConnectionInfo.DatabaseName = "TributacaoTeste";
+                crConnectionInfo.UserID = _userId;
+                crConnectionInfo.Password = _pwd;
+                CrTables = rd.Database.Tables;
+                foreach (Table CrTable in CrTables) {
+                    crtableLogoninfo = CrTable.LogOnInfo;
+                    crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                    CrTable.ApplyLogOnInfo(crtableLogoninfo);
+                }
 
-            //Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
-            //Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(_guid);
-            //List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(_guid);
-            //IEnumerable<short> _listaAnos = _listaSelected.Select(o => o.Exercicio).Distinct();
-            //int _codigoR = _master.Requerente_Codigo;
-            //int _codigoC = _master.Contribuinte_Codigo;
-            //int _qtdeParc = _master.Qtde_Parcela;
-
-            ////Criar Processo
-            //Processo_bll protocoloRepository = new Processo_bll(_connection);
-            //short _ano =(short) DateTime.Now.Year;
-            //int _numero = protocoloRepository.Retorna_Numero_Disponivel(_ano);
-            //string _compl = "PARCELAMENTO DE DÉBITOS CÓD: " + _codigoC.ToString();
-            //string _obs = "Exercícios: ";
-            //foreach (short _anoP in _listaAnos) {
-            //    _obs += _anoP.ToString() + ", ";
-            //}
-            //_obs = _obs.Substring(0, _obs.Length - 1) + " parcelado em: " + _qtdeParc.ToString() + " vezes.";
-
-            //Processogti _p = new Processogti() {
-            //    Ano=_ano,
-            //    Numero=_numero,
-            //    Interno=false,
-            //    Fisico=false,
-            //    Hora=DateTime.Now.ToString("hh:mm"),
-            //    Userid=_userId,
-            //    Codassunto=606,
-            //    Complemento=_compl,
-            //    Observacao=_obs,
-            //    Codcidadao=_codigoR,
-            //    Dataentrada=DateTime.Now,
-            //    Origem=2,
-            //    Insc=_codigoC,
-            //    Tipoend="R",
-            //    Etiqueta=false,
-            //    Userweb=_userWeb
-            //};
-            //Exception ex = protocoloRepository.Incluir_Processo(_p);
-            //ex = parcelamentoRepository.Atualizar_Processo_Master(_guid, _ano, _numero);
-
-            ////Grava tabela web_destino com as parcelas do simulado
-            //model.Lista_Simulado = parcelamentoRepository.Retorna_Parcelamento_Web_Simulado(model.Guid, _master.Qtde_Parcela);
-            //ex = parcelamentoRepository.Excluir_parcelamento_Web_Destino(model.Guid);
-            //List<Parcelamento_Web_Destino> _lista_Parcelamento_Web_Destino = new List<Parcelamento_Web_Destino>();
-            //foreach (Parcelamento_Web_Simulado _s in model.Lista_Simulado.Where(m=>m.Qtde_Parcela==_qtdeParc)) {
-            //    Parcelamento_Web_Destino _d = new Parcelamento_Web_Destino() {
-            //        Data_Vencimento = _s.Data_Vencimento,
-            //        Guid = _s.Guid,
-            //        Numero_Parcela = _s.Numero_Parcela,
-            //        Juros_Apl = _s.Juros_Apl,
-            //        Juros_Mes = _s.Juros_Mes,
-            //        Juros_Perc = _s.Juros_Perc,
-            //        Saldo = _s.Saldo,
-            //        Valor_Correcao = _s.Valor_Correcao,
-            //        Valor_Honorario = _s.Valor_Honorario,
-            //        Valor_Juros = _s.Valor_Juros,
-            //        Valor_Liquido = _s.Valor_Liquido,
-            //        Valor_Multa = _s.Valor_Multa,
-            //        Valor_Principal = _s.Valor_Principal,
-            //        Valor_Total = _s.Valor_Total,
-            //        Proporcao = _s.Valor_Liquido * 100 / _master.Sim_Liquido
-            //    };
-            //    _lista_Parcelamento_Web_Destino.Add(_d);
-            //}
-            //ex = parcelamentoRepository.Incluir_Parcelamento_Web_Destino(_lista_Parcelamento_Web_Destino);
-
-            ////Apaga o simulado
-            //ex = parcelamentoRepository.Excluir_parcelamento_Web_Simulado(_guid);
-
-            ////Apaga a origem
-            //ex = parcelamentoRepository.Excluir_parcelamento_Web_Origem(_guid);
-
-            ////Apaga os códigos
-            //ex = parcelamentoRepository.Excluir_parcelamento_Web_Lista_Codigo(_guid);
-
-            ////grava tabela processoreparc
-            //string _numProc = _numero.ToString() + "/" + _ano.ToString();
-            //Processoreparc reg = new Processoreparc() {
-            //    Numprocesso = _numProc,
-            //    Anoproc = _ano,
-            //    Numproc = _numero,
-            //    Codigoresp = _codigoC,
-            //    Dataprocesso = DateTime.Now,
-            //    Datareparc = DateTime.Now,
-            //    Calculacorrecao = true,
-            //    Calculajuros = true,
-            //    Calculamulta = true,
-            //    Penhora = false,
-            //    Honorario = true,
-            //    Novo = true,
-            //    Userid = _userId,
-            //    Userweb = _userWeb,
-            //    Qtdeparcela = Convert.ToByte(_qtdeParc),
-            //    Plano = _master.Plano_Codigo.ToString(),
-            //    Valorentrada = 0,
-            //    Percentrada = 0
-            //};
-            //ex = parcelamentoRepository.Incluir_ProcessoReparc(reg);
-
-            ////grava tabela origemreparc
-            //List<Origemreparc> _listaOrigem = new List<Origemreparc>();
-            //foreach (SpParcelamentoOrigem item in _listaSelected) {
-            //    Origemreparc _o = new Origemreparc() {
-            //        Numprocesso=_numProc,
-            //        Anoproc=_ano,
-            //        Numproc=_numero,
-            //        Codreduzido=_codigoC,
-            //        Anoexercicio=item.Exercicio,
-            //        Codlancamento=item.Lancamento,
-            //        Numsequencia=(byte)item.Sequencia,
-            //        Numparcela=(byte)item.Parcela,
-            //        Codcomplemento=(byte)item.Complemento,
-            //        Principal=item.Valor_principal,
-            //        Multa=item.Valor_multa,
-            //        Juros=item.Valor_juros,
-            //        Correcao=item.Valor_correcao
-            //    };
-            //    _listaOrigem.Add(_o);    
-            //}
-            //ex = parcelamentoRepository.Incluir_OrigemReparc(_listaOrigem);
-
-            ////grava tabela origemreparc
-            //byte _lastSeq = parcelamentoRepository.Retorna_Seq_Disponivel(_codigoC);
-
-            //List<Parcelamento_Web_Destino> _listaDestino = parcelamentoRepository.Lista_Parcelamento_Web_Destino(_guid);
-            ////Adiiona o tributo 585 Juros.Apl lista de tributos
-            //List<Parcelamento_Web_Tributo> _listaTributo = new List<Parcelamento_Web_Tributo>();
-            //Parcelamento_Web_Tributo r = new Parcelamento_Web_Tributo() {
-            //    Guid = model.Guid,
-            //    Tributo = 585,
-            //    Valor = _lista_Parcelamento_Web_Destino[0].Juros_Apl,
-            //    Perc = 100
-            //};
-            //_listaTributo.Add(r);
-            //ex = parcelamentoRepository.Incluir_Parcelamento_Web_Tributo(_listaTributo);
-
-            //List<Destinoreparc> _listaDestinoReparc = new List<Destinoreparc>();
-            //List<Debitoparcela> _listaDebitoParcela = new List<Debitoparcela>();
-            //List<Debitotributo> _listaDebitoTributo = new List<Debitotributo>();
-            //foreach (Parcelamento_Web_Destino item in _listaDestino) {
-            //    Destinoreparc _d = new Destinoreparc() {
-            //        Numprocesso = _numProc,
-            //        Anoproc = _ano,
-            //        Numproc = _numero,
-            //        Codreduzido = _codigoC,
-            //        Anoexercicio = (short)item.Data_Vencimento.Year,
-            //        Codlancamento = 20,
-            //        Numsequencia = _lastSeq,
-            //        Numparcela = (byte)item.Numero_Parcela,
-            //        Codcomplemento = 0,
-            //        Valorliquido = item.Valor_Liquido,
-            //        Multa = item.Valor_Multa,
-            //        Juros = item.Valor_Juros,
-            //        Correcao = item.Valor_Correcao,
-            //        Valorprincipal = item.Valor_Principal,
-            //        Honorario = item.Valor_Honorario,
-            //        Jurosapl = item.Juros_Apl,
-            //        Jurosperc = item.Juros_Perc,
-            //        Jurosvalor = item.Juros_Mes,
-            //        Saldo = item.Saldo,
-            //        Total = item.Valor_Total
-            //    };
-            //    _listaDestinoReparc.Add(_d);
-
-            //    byte _status;
-            //    if (item.Numero_Parcela == 1)
-            //        _status = 3;
-            //    else
-            //        _status= 18;
-            //    Debitoparcela dp = new Debitoparcela() {
-            //        Codreduzido=_d.Codreduzido,
-            //        Anoexercicio=_d.Anoexercicio,
-            //        Codlancamento=_d.Codlancamento,
-            //        Seqlancamento=_d.Numsequencia,
-            //        Numparcela=_d.Numparcela,
-            //        Codcomplemento=_d.Codcomplemento,
-            //        Datadebase=DateTime.Now,
-            //        Datavencimento=item.Data_Vencimento,
-            //        Numprocesso=_numProc,
-            //        Statuslanc=_status
-            //    };
-            //    _listaDebitoParcela.Add(dp);
-
-            //    //Gravar os tributos
-            //    decimal _Perc1 = _lista_Parcelamento_Web_Destino[0].Proporcao;
-            //    decimal _PercN = _lista_Parcelamento_Web_Destino[1].Proporcao;
-
-            //List<Parcelamento_Web_Tributo> _ListaTributo = parcelamentoRepository.Lista_Parcelamento_Tributo(model.Guid);
-            //    foreach (Parcelamento_Web_Tributo trib in _ListaTributo) {
-            //        Debitotributo _dt = new Debitotributo() {
-            //            Codreduzido=dp.Codreduzido,
-            //            Anoexercicio=dp.Anoexercicio,
-            //            Codlancamento=dp.Codlancamento,
-            //            Seqlancamento=dp.Seqlancamento,
-            //            Numparcela=dp.Numparcela,
-            //            Codcomplemento=dp.Codcomplemento,
-            //            Codtributo=(short)trib.Tributo
-
-            //        };
-            //        if(_dt.Numparcela==1)
-            //            _dt.Valortributo = trib.Valor*_Perc1/100;
-            //        else
-            //            _dt.Valortributo = trib.Valor*_PercN/100;
-
-            //        if(_dt.Codtributo==585)
-            //            _dt.Valortributo = trib.Valor ;
-            //        _listaDebitoTributo.Add(_dt);
-            //    }
-            //}
-
-            //ex = parcelamentoRepository.Incluir_DestinoReparc(_listaDestinoReparc);
-            //ex = parcelamentoRepository.Incluir_Debito_Parcela(_listaDebitoParcela);
-            //ex = parcelamentoRepository.Incluir_Debito_Tributo(_listaDebitoTributo);
-            //ex = parcelamentoRepository.Atualizar_Status_Origem(_codigoC, _listaSelected);
-
-            //return RedirectToAction("Parc_reqf", new { p = model.Guid });
+                try {
+                    rd.RecordSelectionFormula = "{Parcelamento_Web_Master.Guid}='" + model.Guid + "'";
+                    Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                    return File(stream, "application/pdf", "Resumo_Parcelamento.pdf");
+                } catch {
+                    throw;
+                }
+            }
             return RedirectToAction("Parc_tan", new { p = model.Guid });
         }
 
@@ -1393,7 +1204,7 @@ namespace GTI_MVC.Controllers {
             model.Requerente = pr;
             model.Qtde_Parcela = _master.Qtde_Parcela;
             model.Soma_Total = _master.Sim_Total;
-            model.NumeroProcesso = _master.Processo_Numero.ToString() + "-" + Functions.RetornaDvProcesso(_master.Processo_Numero) + "/" + _master.Processo_Ano.ToString();
+            model.NumeroProcesso = _master.Processo_Extenso;
             model.Data_Vencimento = Convert.ToDateTime(_master.Data_Vencimento).ToString("dd/MM/yyyy");
             model.Exercicios = _ano;
             model.Guid = p;
@@ -1619,7 +1430,6 @@ namespace GTI_MVC.Controllers {
 
             //Load Master
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
-            string _numProcesso = _master.Processo_Numero.ToString()+"-"+Functions.RetornaDvProcesso(_master.Processo_Numero)+"/"+_master.Processo_Ano.ToString();
             ParcelamentoViewModel model = new ParcelamentoViewModel() {
                 Guid = p,
                 Plano_Nome = _master.Plano_Nome,
@@ -1629,7 +1439,7 @@ namespace GTI_MVC.Controllers {
                 Perc_desconto = _master.Perc_Desconto,
                 Processo_ano=_master.Processo_Ano,
                 Processo_numero=_master.Processo_Numero,
-                NumeroProcesso=_numProcesso,
+                NumeroProcesso=_master.Processo_Extenso,
                 Sim_Correcao=_master.Sim_Correcao,
                 Sim_Honorario=_master.Sim_Honorario,
                 Sim_Juros=_master.Sim_Juros,
@@ -1740,6 +1550,38 @@ namespace GTI_MVC.Controllers {
                     return RedirectToAction("Parc_bk", new { p = model.Guid });
                 }
             }
+            if (action == "btnResumo") {
+                ReportDocument rd = new ReportDocument();
+                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Resumo_Parcelamento.rpt"));
+                TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+                TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+                ConnectionInfo crConnectionInfo = new ConnectionInfo();
+                Tables CrTables;
+                string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+                string IPAddress = builder.DataSource;
+                string _userId = builder.UserID;
+                string _pwd = builder.Password;
+
+                crConnectionInfo.ServerName = IPAddress;
+                crConnectionInfo.DatabaseName = "TributacaoTeste";
+                crConnectionInfo.UserID = _userId;
+                crConnectionInfo.Password = _pwd;
+                CrTables = rd.Database.Tables;
+                foreach (Table CrTable in CrTables) {
+                    crtableLogoninfo = CrTable.LogOnInfo;
+                    crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                    CrTable.ApplyLogOnInfo(crtableLogoninfo);
+                }
+
+                try {
+                    rd.RecordSelectionFormula = "{Parcelamento_Web_Master.Guid}='" + model.Guid + "'";
+                    Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                    return File(stream, "application/pdf", "Resumo_Parcelamento.pdf");
+                } catch {
+                    throw;
+                }
+            }
             return View(model);
         }
 
@@ -1774,7 +1616,7 @@ namespace GTI_MVC.Controllers {
             string _cidade = _master.Contribuinte_cidade;
             string _uf = _master.Contribuinte_uf;
             string _cep =  _master.Contribuinte_cep.ToString();
-            string _proc = _master.Processo_Numero.ToString() + "-" + Functions.RetornaDvProcesso(_master.Processo_Numero) + "/" + _master.Processo_Ano.ToString();
+            string _proc = _master.Processo_Extenso;
 
             //Dados da 1º parcela do parcelamento
             List<Destinoreparc> _listaD = parcelamentoRepository.Lista_Destino_Parcelamento(_master.Processo_Ano, _master.Processo_Numero);
@@ -1854,7 +1696,7 @@ namespace GTI_MVC.Controllers {
             string _doc = Functions.FormatarCpfCnpj(_master.Requerente_CpfCnpj);
             string _qtdeParc = _master.Qtde_Parcela.ToString("00");
             string _valor = _master.Sim_Total.ToString("#0.00");
-            string _proc = _master.Processo_Numero.ToString() + "-" + Functions.RetornaDvProcesso(_master.Processo_Numero) + "/" + _master.Processo_Ano.ToString();
+            string _proc = _master.Processo_Extenso;
             string _data = _master.Data_Geracao.ToString("dd/MM/yyyy");
             string _end = "";
             string _vct =Convert.ToDateTime(_master.Data_Vencimento).ToString("dd/MM/yyyy");
