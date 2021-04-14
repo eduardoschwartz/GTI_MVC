@@ -823,6 +823,7 @@ namespace GTI_MVC.Controllers {
                 }
                 if (!_find) {
                     Parcelamento_Web_Selected_Name reg = new Parcelamento_Web_Selected_Name() {
+                        Guid=p,
                         Ano = item.Exercicio,
                         Lancamento=item.Lancamento
                     };
@@ -1154,11 +1155,22 @@ namespace GTI_MVC.Controllers {
                 short _ano = (short)DateTime.Now.Year;
                 int _numero = protocoloRepository.Retorna_Numero_Disponivel(_ano);
                 string _compl = "PARCELAMENTO DE DÉBITOS CÓD: " + _codigoC.ToString();
-                string _obs = "Exercícios: ";
-                foreach (short _anoP in _listaAnos) {
-                    _obs += _anoP.ToString() + ", ";
+                string _obs = "";
+
+                List<Parcelamento_Web_Selected_Name_Struct> _listaName = parcelamentoRepository.Lista_Parcelamento_Web_Selected_Name(_guid);
+                IEnumerable<string> _listaLanc = _listaName.Select(o => o.Lancamento_Nome).Distinct();
+                foreach (string _lanc in _listaLanc) {
+                    string _Exercicio = "";
+                    foreach (Parcelamento_Web_Selected_Name_Struct item in _listaName) {
+                        if (item.Lancamento_Nome == _lanc) {
+                            _Exercicio += item.Ano.ToString() + ", ";
+                        }
+                    }
+                    _Exercicio = _Exercicio.Substring(0, _Exercicio.Length - 2);
+                    _obs += _lanc + ": " + _Exercicio + " ";
                 }
-                _obs = _obs.Substring(0, _obs.Length - 1) + " parcelado em: " + _qtdeParc.ToString() + " vezes.";
+
+                _obs +=  "parcelado em: " + _qtdeParc.ToString() + " vezes.";
 
                 Processogti _p = new Processogti() {
                     Ano = _ano,
