@@ -562,6 +562,7 @@ namespace GTI_MVC.Controllers {
                 ViewBag.Result = "Valor mínimo da parcela deve ser de R$" + model.Valor_Minimo.ToString("#0.00");
                 return View(model);
             }
+
             t = 1;
             Exception ex = parcelamentoRepository.Excluir_parcelamento_Web_Selected(model.Guid);
             bool _ajuizado = false;
@@ -833,15 +834,38 @@ namespace GTI_MVC.Controllers {
             ex = parcelamentoRepository.Incluir_Parcelamento_Web_Selected_Name(_listaName);
 
             //########### Carrega Simulado ###################################
+
+
             ex = parcelamentoRepository.Excluir_parcelamento_Web_Simulado(model.Guid);
             ex = parcelamentoRepository.Excluir_parcelamento_Web_Simulado_Resumo(model.Guid);
             List<Parcelamento_Web_Simulado> _listaSimulado = parcelamentoRepository.Lista_Parcelamento_Destino(model.Guid, (short)model.Plano_Codigo,DateTime.Now, _bAjuizado, _bAjuizado, _SomaP, _SomaJ, _SomaM, _SomaC, _SomaT, _SomaE, model.Valor_Minimo);
+
+            bool _issCCivilAVencer = false;
+            foreach (SpParcelamentoOrigem _d in ListaOrigem) {
+                if (_d.Lancamento == 65) {
+                    if (_d.Data_vencimento > DateTime.Now) {
+                        _issCCivilAVencer = true;
+                        break;
+                    }
+                }
+            }
+
+            int _qtdeMaxParcela = 0;
+            if (_issCCivilAVencer) _qtdeMaxParcela = 12;
+
+
             IEnumerable<int> _listaQtde = _listaSimulado.Select(o => o.Qtde_Parcela).Distinct();
 
             decimal _valor1 = 0, _valorN = 0;
             List<Parc_Resumo> Lista_resumo = new List<Parc_Resumo>();
             List<Parcelamento_Web_Simulado_Resumo> _lista_Web_Simulado_Resumo = new List<Parcelamento_Web_Simulado_Resumo>();
             foreach (int linha in _listaQtde) {
+                if (_qtdeMaxParcela > 0) {
+                    if (linha > _qtdeMaxParcela) {
+                        goto Fim;
+                    }
+                }
+
                 foreach (Parcelamento_Web_Simulado item in _listaSimulado) {
                     if(item.Qtde_Parcela==linha && item.Numero_Parcela==1) {
                         _valor1 = item.Valor_Total;

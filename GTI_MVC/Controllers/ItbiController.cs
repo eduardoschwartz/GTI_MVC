@@ -2529,7 +2529,7 @@ namespace GTI_Mvc.Controllers {
                     Comprador_Cpf_Cnpj = _itbi.Comprador_cpf_cnpj,
                     Comprador_Logradouro = _itbi.Comprador_logradouro_nome,
                     Comprador_Numero = _itbi.Comprador_numero,
-                    Comprador_Complemento = _itbi.Imovel_complemento ?? "",
+                    Comprador_Complemento = _itbi.Comprador_complemento ?? "",
                     Comprador_Bairro = _itbi.Comprador_bairro_nome ?? "",
                     Comprador_Cep = _itbi.Comprador_cep,
                     Comprador_Cidade = _itbi.Comprador_cidade_nome,

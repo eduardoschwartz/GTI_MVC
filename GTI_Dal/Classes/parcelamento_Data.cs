@@ -27,7 +27,7 @@ namespace GTI_Dal.Classes {
                 DateTime _dataNow = Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy"));
                 foreach (SpExtrato_Parcelamento _row in _extrato) {
                     if (_row.Datavencimento >= _dataNow) {
-                        if (_row.Codlancamento != 65 && _row.Codlancamento != 62 && _row.Codlancamento != 16 && _row.Codlancamento != 38 && _row.Codlancamento != 76) {
+                        if (_row.Codlancamento != 65 && _row.Codlancamento != 62 && _row.Codlancamento != 16 && _row.Codlancamento != 38 && _row.Codlancamento != 76 && _row.Codlancamento != 27) {
                             goto NextReg;
                         }
                     }
