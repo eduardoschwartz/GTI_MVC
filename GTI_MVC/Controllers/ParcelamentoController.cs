@@ -1938,10 +1938,10 @@ namespace GTI_MVC.Controllers {
                     model.Requerente.UF = "";
 
                     ViewBag.Error = "* Cep do comprador não localizado.";
-                    return View(model);
                 }
+                return View(model);
             } else {
-                if (action == "btnValida") {
+                if (action == "btnValida" || action=="Parc_cid") {
                     Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
                     bool _existe = parcelamentoRepository.Existe_Parcelamento_Web_Master(model.Guid);
                     if (!_existe)

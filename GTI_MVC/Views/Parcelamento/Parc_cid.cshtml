@@ -114,7 +114,7 @@
                             <label style="font-weight:normal">Logradouro:</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Logradouro_Nome, new { style = "width:392px;height:25px;color:blue", @readonly = true, @Value = Model.Requerente.Logradouro_Nome })</label>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Logradouro_Nome, new {id="txtRua", style = "width:392px;height:25px;color:blue", @readonly = true, @Value = Model.Requerente.Logradouro_Nome })</label>
                             <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal">
                                 @Html.TextBoxFor(m => m.Requerente.Numero, new { style = "width:60px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)", @Value = Model.Requerente.Numero })
                             </label>
@@ -172,7 +172,7 @@
             <span style="color:forestgreen;font-size:12px">*Caso o cep não retorne os dados do endereço, retorne ao menu de opções e faça o cadastro do mesmo. Mais informações no manual do usuário.</span>
             <br />
             <br />
-            <button type="submit" class="btn btn-success" name="action" value="btnValida" onclick="ClearError()">Gravar</button><span style="padding-left:10px"></span>
+            <button type="button" class="btn btn-success" id="btnValida" name="action" value="btnValida" onclick="ValidateForm()">Gravar</button><span style="padding-left:10px"></span>
             <button type="button" class="btn btn-danger" name="action" value="btnVoltar" onclick="javascript:history.back()">Cancelar</button>
         </div>
         <label class="errorlabel" id="errorLabel">@ViewBag.Error</label>
@@ -195,13 +195,26 @@
             $("#tblResumo tr:odd").css({
                 "background-color": "#E9FAFA"
             });
+
+           
+
+           
+
         });
 
-        function ClearError() {
-            document.getElementById('errorlabel').innerHTML = "";
+
+        function ValidateForm() {
+
+            var rua = $("#txtRua").val();
+            if (rua.trim() == "" || rua == null) {
+                document.getElementById('errorLabel').innerHTML = "Logradouro não selecionado";
+                return false;
+            } else {
+                document.getElementById("MainForm").submit();
+            }
+           
+            return true;
         }
-
-
 
 
 
