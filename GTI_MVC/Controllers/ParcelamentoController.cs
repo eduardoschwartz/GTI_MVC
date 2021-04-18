@@ -1167,7 +1167,7 @@ namespace GTI_MVC.Controllers {
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             string _guid = model.Guid;
 
-            if (action == "btnYes") {
+            if (action == "Parc_tan") {
                 int _userId = Convert.ToInt32(Session["hashid"]);
                 bool _userWeb = Session["hashfunc"].ToString() == "S" ? false : true;
                 Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(_guid);
@@ -1220,83 +1220,11 @@ namespace GTI_MVC.Controllers {
                 };
                 Exception ex = protocoloRepository.Incluir_Processo(_p);
                 ex = parcelamentoRepository.Atualizar_Processo_Master(_guid, _ano, _numero);
-                return RedirectToAction("Parc_tcd", new { p = model.Guid });
-            } else {
-                if (action == "btPrint") {
-                    return Termo_anuencia_print(model.Guid);
-                } 
-            }
-            return RedirectToAction("Login", "Home");
-        }
 
-        [Route("Parc_tcd")]
-        [HttpGet]
-        public ActionResult Parc_tcd(string p) {
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
-
-            string _guid = p;
-            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
-            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(_guid);
-
-            string _endereco = _master.Contribuinte_endereco + " " + _master.Contribuinte_bairro;
-
-            ParcelamentoViewModel model = new ParcelamentoViewModel();
-            Parc_Contribuinte pc = new Parc_Contribuinte() {
-                Codigo = _master.Contribuinte_Codigo,
-                Nome = _master.Contribuinte_nome,
-                Logradouro_Nome=_master.Contribuinte_Codigo<50000?_endereco:""
-            };
-            Parc_Requerente pr = new Parc_Requerente() {
-                Nome = _master.Requerente_Nome,
-                Cpf_Cnpj = Functions.FormatarCpfCnpj(_master.Requerente_CpfCnpj)
-            };
-
-            List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(p);
-            IEnumerable<short> _listaAnos = _listaSelected.Select(o => o.Exercicio).Distinct();
-            string _ano = "";
-            foreach (short item in _listaAnos) {
-                _ano += item.ToString() + ", ";
-            }
-            _ano = _ano.Substring(0, _ano.Length - 2);
-
-
-            model.Contribuinte = pc;
-            model.Requerente = pr;
-            model.Qtde_Parcela = _master.Qtde_Parcela;
-            model.Soma_Total = _master.Sim_Total;
-            model.NumeroProcesso = _master.Processo_Extenso;
-            model.Data_Vencimento = Convert.ToDateTime(_master.Data_Vencimento).ToString("dd/MM/yyyy");
-            model.Exercicios = _ano;
-            model.Guid = p;
-            return View(model);
-        }
-
-        [Route("Parc_tcd")]
-        [HttpPost]
-        public ActionResult Parc_tcd(ParcelamentoViewModel model, string action) {
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
-            
-            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
-            int _userId = Convert.ToInt32(Session["hashid"]);
-            bool _userWeb = Session["hashfunc"].ToString() == "S" ? false : true;
-            string _guid = model.Guid;
-
-            if (action == "btnYes") {
-
-                Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(_guid);
-                List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(_guid);
-                IEnumerable<short> _listaAnos = _listaSelected.Select(o => o.Exercicio).Distinct();
-                int _codigoR = _master.Requerente_Codigo;
-                int _codigoC = _master.Contribuinte_Codigo;
-                int _qtdeParc = _master.Qtde_Parcela;
-                short _ano = _master.Processo_Ano;
-                int _numero = _master.Processo_Numero;
 
                 //Grava tabela web_destino com as parcelas do simulado
                 model.Lista_Simulado = parcelamentoRepository.Retorna_Parcelamento_Web_Simulado(model.Guid, _master.Qtde_Parcela);
-                Exception ex = parcelamentoRepository.Excluir_parcelamento_Web_Destino(model.Guid);
+                ex = parcelamentoRepository.Excluir_parcelamento_Web_Destino(model.Guid);
                 List<Parcelamento_Web_Destino> _lista_Parcelamento_Web_Destino = new List<Parcelamento_Web_Destino>();
                 foreach (Parcelamento_Web_Simulado _s in model.Lista_Simulado.Where(m => m.Qtde_Parcela == _qtdeParc)) {
                     Parcelamento_Web_Destino _d = new Parcelamento_Web_Destino() {
@@ -1469,12 +1397,108 @@ namespace GTI_MVC.Controllers {
                 ex = parcelamentoRepository.Incluir_Debito_Tributo(_listaDebitoTributo);
                 ex = parcelamentoRepository.Atualizar_Status_Origem(_codigoC, _listaSelected);
 
-                return RedirectToAction("Parc_reqf", new { p = model.Guid });
+
+                return RedirectToAction("Parc_tcd", new { p = model.Guid });
             } else {
                 if (action == "btPrint") {
-                    return Termo_confissao_divida(model.Guid);
-                }
+                    return Termo_anuencia_print(model.Guid);
+                } 
             }
+            return RedirectToAction("Login", "Home");
+        }
+
+        [Route("Parc_tcd")]
+        [HttpGet]
+        public ActionResult Parc_tcd(string p) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
+            string _guid = p;
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(_guid);
+
+            string _endereco = _master.Contribuinte_endereco + " " + _master.Contribuinte_bairro;
+
+            ParcelamentoViewModel model = new ParcelamentoViewModel();
+            Parc_Contribuinte pc = new Parc_Contribuinte() {
+                Codigo = _master.Contribuinte_Codigo,
+                Nome = _master.Contribuinte_nome,
+                Logradouro_Nome=_master.Contribuinte_Codigo<50000?_endereco:""
+            };
+            Parc_Requerente pr = new Parc_Requerente() {
+                Nome = _master.Requerente_Nome,
+                Cpf_Cnpj = Functions.FormatarCpfCnpj(_master.Requerente_CpfCnpj)
+            };
+
+            List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(p);
+            IEnumerable<short> _listaAnos = _listaSelected.Select(o => o.Exercicio).Distinct();
+            string _ano = "";
+            foreach (short item in _listaAnos) {
+                _ano += item.ToString() + ", ";
+            }
+            _ano = _ano.Substring(0, _ano.Length - 2);
+
+
+            model.Contribuinte = pc;
+            model.Requerente = pr;
+            model.Qtde_Parcela = _master.Qtde_Parcela;
+            model.Soma_Total = _master.Sim_Total;
+            model.NumeroProcesso = _master.Processo_Extenso;
+            model.Data_Vencimento = Convert.ToDateTime(_master.Data_Vencimento).ToString("dd/MM/yyyy");
+            model.Exercicios = _ano;
+            model.Guid = p;
+            return View(model);
+        }
+
+        [Route("Parc_tcd")]
+        [HttpPost]
+        public ActionResult Parc_tcd(ParcelamentoViewModel model, string action) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            
+            if (action == "btnPrintTermo") {
+                return Termo_confissao_divida(model.Guid);
+            }
+
+            if (action == "btnPrintResumo") {
+                ReportDocument rd = new ReportDocument();
+                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Resumo_Parcelamento.rpt"));
+                TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+                TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+                ConnectionInfo crConnectionInfo = new ConnectionInfo();
+                Tables CrTables;
+                string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+                string IPAddress = builder.DataSource;
+                string _userId = builder.UserID;
+                string _pwd = builder.Password;
+
+                crConnectionInfo.ServerName = IPAddress;
+                crConnectionInfo.DatabaseName = "TributacaoTeste";
+                crConnectionInfo.UserID = _userId;
+                crConnectionInfo.Password = _pwd;
+                CrTables = rd.Database.Tables;
+                foreach (Table CrTable in CrTables) {
+                    crtableLogoninfo = CrTable.LogOnInfo;
+                    crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                    CrTable.ApplyLogOnInfo(crtableLogoninfo);
+                }
+
+                try {
+                    rd.RecordSelectionFormula = "{Parcelamento_Web_Master.Guid}='" + model.Guid + "'";
+                    Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                    return File(stream, "application/pdf", "Resumo_Parcelamento.pdf");
+                } catch {
+                    throw;
+                }
+
+            }
+            if (action == "btnPrintBoleto") {
+                return RedirectToAction("Parc_bk", new { p = model.Guid });
+            }
+            if (action == "btnFinalizar")
+                return RedirectToAction("Parc_query");
+
             return RedirectToAction("Login", "Home");
         }
 
@@ -1606,43 +1630,11 @@ namespace GTI_MVC.Controllers {
             }
             if(action=="btnVoltar")
                 return RedirectToAction("Parc_query");
-            else {
-                if (action == "btnValida") {
-                    return RedirectToAction("Parc_bk", new { p = model.Guid });
-                }
-            }
-            if (action == "btnResumo") {
-                ReportDocument rd = new ReportDocument();
-                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Resumo_Parcelamento.rpt"));
-                TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
-                TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
-                ConnectionInfo crConnectionInfo = new ConnectionInfo();
-                Tables CrTables;
-                string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
-                string IPAddress = builder.DataSource;
-                string _userId = builder.UserID;
-                string _pwd = builder.Password;
-
-                crConnectionInfo.ServerName = IPAddress;
-                crConnectionInfo.DatabaseName = "TributacaoTeste";
-                crConnectionInfo.UserID = _userId;
-                crConnectionInfo.Password = _pwd;
-                CrTables = rd.Database.Tables;
-                foreach (Table CrTable in CrTables) {
-                    crtableLogoninfo = CrTable.LogOnInfo;
-                    crtableLogoninfo.ConnectionInfo = crConnectionInfo;
-                    CrTable.ApplyLogOnInfo(crtableLogoninfo);
-                }
-
-                try {
-                    rd.RecordSelectionFormula = "{Parcelamento_Web_Master.Guid}='" + model.Guid + "'";
-                    Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
-                    return File(stream, "application/pdf", "Resumo_Parcelamento.pdf");
-                } catch {
-                    throw;
-                }
-            }
+            //else {
+            //    if (action == "btnValida") {
+            //        return RedirectToAction("Parc_bk", new { p = model.Guid });
+            //    }
+            //}
             return View(model);
         }
 
