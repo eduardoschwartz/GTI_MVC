@@ -1150,6 +1150,10 @@ namespace GTI_MVC.Controllers {
                 return RedirectToAction("Parc_index");
 
 
+            //Carrega Origem
+            List<SpParcelamentoOrigem>_listaO= parcelamentoRepository.Lista_Parcelamento_Selected(p);
+            string _ajuizado = _listaO[0].Ajuizado;
+            ViewBag.ajuizado = _ajuizado;
 
             ParcelamentoViewModel model = new ParcelamentoViewModel();
             model.Guid = p;

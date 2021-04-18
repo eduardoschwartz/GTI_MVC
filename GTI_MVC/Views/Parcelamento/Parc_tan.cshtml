@@ -59,6 +59,11 @@
 
 <div class="center container" style="width:850px">
 
+    @{
+        var ajuizado = ViewBag.ajuizado;
+    }
+
+
     @using (Html.BeginForm("Parc_tan", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
         @Html.HiddenFor(m => m.Guid)
@@ -90,10 +95,64 @@
         </div>
         <br />
         <div style="text-align:center">
-            <button type="submit" class="btn btn-success" name="action" value="btnYes" onclick="return confirm('Você deseja gerar este parcelamento?')">Eu concordo</button><span style="padding-left:10px"></span>
+            @*<button type="submit" class="btn btn-success" name="action" value="btnYes" onclick="return confirm('Você deseja gerar este parcelamento?')">Eu concordo</button><span style="padding-left:10px"></span>*@
+            <button type="button" class="btn btn-success" name="action" value="btnYes" onclick="ValidateForm()">Eu concordo</button><span style="padding-left:10px"></span>
             <button type="button" class="btn btn-danger" onclick="javascript:history.back()">Eu não concordo</button><span style="padding-left:10px"></span>
             <button type="submit" class="btn btn-info" name="action" value="btPrint">Imprimir</button>
         </div>
+
+        <div class="container">
+            <div class="modal fade" tabindex="-1" id="loginModal"
+                 data-keyboard="false" data-backdrop="static">
+                <div class="modal-dialog modal-lg" style="background-color:antiquewhite">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Observação Importante:</h4>
+                        </div>
+                        <div class="modal-body">
+                            <h4>Foram selecionados débitos ajuizados e/ou protestados.</h4><br /><br />
+                            <p>- Se debito ajuizados solicitar as guias das custas e despesas processuais através do e-mail: <u style="color: blue">dividaativa@jaboticabal.sp.gov.br</u></p>
+
+                            <p>- Se debito protestado informar o pagamento através do e-mail: <u style="color: blue">dividaativa@jaboticabal.sp.gov.br</u></p>
+                            <p style="color: black;font-weight:bold">Tal procedimento é de extrema importância para providências junto ao Fórum e Tabelião de Notas e Protesto."</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" id="btnHideModal" name="action" value="btnOK" class="btn btn-danger" onclick="Send()" data-dismiss="modal">
+                                Entendi
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     }
 </div>
 
+@section scripts{
+
+    <script type="text/javascript">
+
+
+
+        function ValidateForm() {
+             var _ajuizado = '@ajuizado';
+            if (_ajuizado=="S") {
+                $("#loginModal").modal('show');
+                return false;
+            } else {
+                document.getElementById("MainForm").submit();
+            }
+
+        }
+
+        function Send() {
+            document.getElementById("MainForm").submit();
+        }
+
+
+
+    </script>
+}
