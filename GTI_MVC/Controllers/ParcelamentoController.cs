@@ -64,7 +64,9 @@ namespace GTI_MVC.Controllers {
             _req.TipoEnd = _tipoEnd == "R" ? "RESIDENCIAL" : "COMERCIAL";
             if (_tipoEnd == "R") {
                 _req.Bairro_Nome = _cidadao.NomeBairroR;
+                _req.Bairro_Codigo = (int)_cidadao.CodigoBairroR;
                 _req.Cidade_Nome = _cidadao.NomeCidadeR;
+                _req.Cidade_Codigo = (int)_cidadao.CodigoCidadeR;
                 _req.UF = _cidadao.UfR;
                 _req.Logradouro_Codigo = _cidadao.CodigoLogradouroR==null?0:(int)_cidadao.CodigoLogradouroR;
                 _req.Logradouro_Nome = _cidadao.EnderecoR;
@@ -74,7 +76,9 @@ namespace GTI_MVC.Controllers {
                 _req.Cep = _cidadao.CepR.ToString();
             } else {
                 _req.Bairro_Nome = _cidadao.NomeBairroC;
+                _req.Bairro_Codigo = (int)_cidadao.CodigoBairroC;
                 _req.Cidade_Nome = _cidadao.NomeCidadeC;
+                _req.Cidade_Codigo = (int)_cidadao.CodigoCidadeC;
                 _req.UF = _cidadao.UfC;
                 _req.Logradouro_Codigo = _cidadao.CodigoLogradouroC==null?0:(int)_cidadao.CodigoLogradouroC;
                 _req.Logradouro_Nome = _cidadao.EnderecoC;
@@ -87,6 +91,9 @@ namespace GTI_MVC.Controllers {
                 int nCep = enderecoRepository.RetornaCep(Convert.ToInt32(_req.Logradouro_Codigo), (short)_req.Numero);
                 _req.Cep = nCep.ToString("00000-000");
             }
+
+            if (_req.Bairro_Nome == null)
+                _req.Bairro_Nome = enderecoRepository.Retorna_Bairro(_req.UF, _req.Cidade_Codigo, _req.Bairro_Codigo);
 
             ParcelamentoViewModel model = new ParcelamentoViewModel {
                 Requerente = _req
@@ -480,7 +487,7 @@ namespace GTI_MVC.Controllers {
                     Exercicio=item.Exercicio,
                     Idx=item.Idx,
                     Lancamento=item.Lancamento,
-                    Nome_lancamento=item.Nome_lancamento,
+                    Nome_lancamento= Functions.TruncateTo( item.Nome_lancamento,20),
                     Parcela=item.Parcela,
                     Perc_penalidade=item.Perc_penalidade,
                     Qtde_parcelamento=item.Qtde_parcelamento,
@@ -1856,6 +1863,9 @@ namespace GTI_MVC.Controllers {
                 model.Requerente.Telefone = _cidadao.TelefoneR;
                 model.Requerente.TipoEnd = "R";
             }
+            if (model.Requerente.Bairro_Nome == null)
+                model.Requerente.Bairro_Nome = enderecoRepository.Retorna_Bairro(model.Requerente.UF, model.Requerente.Cidade_Codigo, model.Requerente.Bairro_Codigo);
+
             return View(model);
         }
 
@@ -1913,11 +1923,13 @@ namespace GTI_MVC.Controllers {
                                     model.Requerente.Bairro_Codigo = _codBairro;
                                 }
                             }
+                            model.Requerente.Bairro_Codigo = enderecoRepository.Retorna_Bairro(_uf, _codcidade, _bairro);
                             model.Requerente.Bairro_Nome = cepObj.Bairro.ToUpper();
                         } else {
                             model.Requerente.Cidade_Codigo = 0;
                         }
                         
+
                     }
 
                     model.Requerente.Cidade_Nome = cepObj.Cidade.ToUpper();

@@ -60,9 +60,9 @@
 
         @Html.HiddenFor(m => m.Guid)
         @Html.HiddenFor(m => m.Requerente.TipoEnd)
-        @Html.HiddenFor(m => m.Requerente.Bairro_Codigo)
-        @Html.HiddenFor(m => m.Requerente.Cidade_Codigo)
-        @Html.HiddenFor(m => m.Requerente.Logradouro_Codigo)
+        @Html.HiddenFor(m => m.Requerente.Bairro_Codigo, new { @Value = Model.Requerente.Bairro_Codigo })
+        @Html.HiddenFor(m => m.Requerente.Cidade_Codigo, new { @Value = Model.Requerente.Cidade_Codigo })
+        @Html.HiddenFor(m => m.Requerente.Logradouro_Codigo,new{@Value=Model.Requerente.Logradouro_Codigo })
     <div class="card">
         <div class="card-header">Atualização de Dados Cadastrais </div>
         <div class="card-body">
