@@ -207,7 +207,7 @@
             </div>
             <br />
 
-            <button type="submit" class="btn btn-primary" name="action" value="btnValida" onclick="ClearError()">Verificar débitos</button>
+            <button type="button" class="btn btn-primary" name="action" value="btnValida" onclick="ValidateForm()">Verificar débitos</button>
         </div>
 
         <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
@@ -244,34 +244,27 @@
             }
         }
 
-        //$(document).ready(function () {
-        //    $("#MainForm").submit(function () {
-        //        try {
-        //            var grid = document.getElementById("tblResumo");
-        //            var inputs = grid.getElementsByTagName("input");
-        //            var _find = false;
-        //            for (var i = 0; i < inputs.length; i++) {
-        //                if (inputs[i].type == "checkbox") {
-        //                    if (inputs[i].checked) {
-        //                        _find = true;
-        //                    }
-        //                }
-        //            }
-        //            if (!_find) {
-        //                alert("Selecione uma inscrição!")
-        //                return false;
-        //            }
+        function ValidateForm() {
+            var _chk = false;
+            var table = document.getElementById("tblResumo");
+            var rows = table.getElementsByTagName('tr');
 
-        //        }
-        //        catch (e) {
-        //            alert(e);
-        //        }
-        //        return true;
-        //    });
-        //});
+            for (var i = 0; i < rows.length; i++) {
+                var cols = rows[i].getElementsByTagName('td');
+                if (cols.length > 1) {
+                    if (cols[0].getElementsByTagName('input')[0].checked) {
+                        _chk = true;
+                        break;
+                    }
+                }
+            }
 
-
-
+            if (_chk) {
+                document.getElementById("MainForm").submit();
+            } else {
+                alert("Selecione uma inscrição!");
+            }
+        }
 
 
 

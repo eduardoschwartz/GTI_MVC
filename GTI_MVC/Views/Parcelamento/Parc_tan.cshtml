@@ -143,13 +143,18 @@
                 $("#loginModal").modal('show');
                 return false;
             } else {
-                document.getElementById("MainForm").submit();
+                if (confirm('Você deseja gerar este parcelamento?')) {
+                    document.getElementById("MainForm").submit();
+                }
             }
 
         }
 
         function Send() {
-            document.getElementById("MainForm").submit();
+            if (confirm('Você deseja gerar este parcelamento?')) {
+                document.getElementById("MainForm").submit();
+            }
+            
         }
 
 
