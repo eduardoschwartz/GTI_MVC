@@ -53,6 +53,28 @@
     #chkSel {
         cursor: pointer;
     }
+
+    #tblMain {
+        width: 100%;
+    }
+
+        #tblMain tbody {
+            display: block;
+        }
+
+        #tblMain thead tblMain {
+            height: 30px;
+        }
+
+        #tblMain tbody {
+            height: 120px;
+            overflow-y: auto;
+        }
+
+
+            #tblMain tbody td, #tblMain thead th {
+                float: left;
+            }
 </style>
 
 <h5 style="text-align:center">Parcelamento de Débitos</h5>
@@ -232,79 +254,84 @@
 
             </div>
         </div>
-        @*<div class="card-header">Débitos disponíveis para parcelamento</div>
-            <div class="card-body">*@
+
         <div class="card" style="overflow-x:auto">
             <div class="card-header" style="width:1020px">Selecione os débitos que desja parcelar</div>
-            <div id="DebitoTable" style="max-height: 350px; height: auto; overflow: auto; width:1020px; border-bottom-color: cadetblue; border-bottom-style: solid; border-bottom-width: 1px; border-top-color: cadetblue; border-top-style: solid; border-top-width: 1px; border-left-color: cadetblue; border-left-style: solid; border-left-width: 1px; border-right-color: cadetblue; border-right-style: solid; border-right-width: 1px">
-                <table id="tblMain" style="font-size:12px">
-                    <tr style="background-color:darkred;color:white;height:25px">
-                        <th style="text-align:center">
-                            <input type="checkbox" id="chkSel" />
-                        </th>
-                        <th style="display:none">
-                            Id
-                        </th>
-                        <th style="width:50px;text-align:center">
-                            Ano
-                        </th>
-                        <th style="display:none">
-                            Lanc
-                        </th>
-                        <th style="width:158px">
-                            Lancamento
-                        </th>
-                        <th style="display:none">
-                            Seq
-                        </th>
-                        <th style="display:none">
-                            Parc
-                        </th>
-                        <th style="display:none">
-                            Compl
-                        </th>
-                        <th style="width:60px;text-align:center">
-                            Dt.Vencto
-                        </th>
-                        <th style="width:26px;text-align:center">
-                            Aj
-                        </th>
-                        <th style="width:60px;text-align:right">
-                            Principal
-                        </th>
-                        <th style="width:60px;text-align:right">
-                            Juros
-                        </th>
-                        <th style="width:60px;text-align:right">
-                            Multa
-                        </th>
-                        <th style="width:60px;text-align:right">
-                            Correção
-                        </th>
-                        <th style="width:40px;text-align:right">
-                            Qtde
-                        </th>
-                        <th style="width:50px;text-align:right">
-                            %
-                        </th>
-                        <th style="width:60px;text-align:right">
-                            Entrada
-                        </th>
-                        <th style="width:70px;text-align:right">
-                            Total
-                        </th>
-                        <th style="width:220px;text-align:left">
-                            Execução Fiscal
-                        </th>
 
-                    </tr>
-                    <tbody class="item-model-number">
+
+
+            <div id="DebitoTable" style="overflow-x:scroll; max-height: 350px; height: auto; overflow: auto; width:1020px; border-bottom-color: cadetblue; border-bottom-style: solid; border-bottom-width: 1px; border-top-color: cadetblue; border-top-style: solid; border-top-width: 1px; border-left-color: cadetblue; border-left-style: solid; border-left-width: 1px; border-right-color: cadetblue; border-right-style: solid; border-right-width: 1px">
+                <table id="tblMain" style="font-size:12px">
+                    <thead>
+                        <tr style="background-color:darkred;color:white;height:25px">
+                            <th style="text-align:center;width:10px">
+                                <input type="checkbox" id="chkSel" />
+                            </th>
+                            <th style="display:none">
+                                Id
+                            </th>
+                            <th style="width:50px;text-align:center">
+                                Ano
+                            </th>
+                            <th style="display:none">
+                                Lanc
+                            </th>
+                            <th style="width:158px">
+                                Lancamento
+                            </th>
+                            <th style="display:none">
+                                Seq
+                            </th>
+                            <th style="display:none">
+                                Parc
+                            </th>
+                            <th style="display:none">
+                                Compl
+                            </th>
+                            <th style="width:70px;text-align:center">
+                                Dt.Vencto
+                            </th>
+                            <th style="width:26px;text-align:center">
+                                Aj
+                            </th>
+                            <th style="width:60px;text-align:right">
+                                Principal
+                            </th>
+                            <th style="width:60px;text-align:right">
+                                Juros
+                            </th>
+                            <th style="width:60px;text-align:right">
+                                Multa
+                            </th>
+                            <th style="width:60px;text-align:right">
+                                Correção
+                            </th>
+                            <th style="width:40px;text-align:right">
+                                Qtde
+                            </th>
+                            <th style="width:50px;text-align:right">
+                                %
+                            </th>
+                            <th style="width:60px;text-align:right">
+                                Entrada
+                            </th>
+                            <th style="width:70px;text-align:right">
+                                Total
+                            </th>
+                            <th style="width:220px;text-align:left">
+                                &nbsp;&nbsp; Execução Fiscal
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
                         @Html.EditorFor(model => model.Lista_Origem)
                     </tbody>
                 </table>
             </div>
 
         </div>
+
 
         <br />
         <div class="card" style="overflow-x:auto">
@@ -376,7 +403,7 @@
                                     %
                                 </td>
                                 <td style="font-size:small">
-                                    - % de penalidade por parcelamento efetuado
+                                    - % de adiantamento por parcelamento efetuado
                                 </td>
                             </tr>
                             <tr>
@@ -420,162 +447,162 @@
                                         Entendi
                                     </button>
                                 </div>
-                            
+
+                            </div>
                         </div>
                     </div>
                 </div>
+
+
+
+                <label style="padding-top:10px" class="errorlabel" id="errorLabel">@ViewBag.Result</label>
             </div>
-
-
-
-            <label style="padding-top:10px" class="errorlabel" id="errorLabel">@ViewBag.Result</label>
-        </div>
 
 
             <div class="card-footer">
                 @Html.ActionLink("Retornar ao menu de opções", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
             </div>
-            </div>
-
-            }
         </div>
 
-        @section scripts{
+    }
+</div>
 
-            <script type="text/javascript">
-                $(document).ready(function () {
-                    $("#tblMain tr:odd").css({
-                        "background-color": "#E9FAFA"
-                    });
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#tblMain tr:odd").css({
+                "background-color": "#E9FAFA"
+            });
 
 
-                    $('#tblMain').floatThead({
-                        top: $('.topbar').height(),
-                        autoReflow: true,
-                        zIndex: 1
-                    });
+            $('#tblMain').floatThead({
+                top: $('.topbar').height(),
+                autoReflow: true,
+                zIndex: 1
+            });
 
-                });
+        });
 
-                $(document).ready(function () {
-                    $("#MainForm").submit(function () {
-                        try {
-                            var table = document.getElementById("tblMain");
-                            var rows = table.getElementsByTagName('tr');
-                            var _ajuizado = false, _naoajuizado = false;
-                            var _count = 0, _datavencto = "", _parcela = 0;
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                try {
+                    var table = document.getElementById("tblMain");
+                    var rows = table.getElementsByTagName('tr');
+                    var _ajuizado = false, _naoajuizado = false;
+                    var _count = 0, _datavencto = "", _parcela = 0;
 
-                            for (var i = 0; i < rows.length; i++) {
-                                var cols = rows[i].getElementsByTagName('td');
-                                if (cols.length > 1) {
-                                    var value = cols[0].getElementsByTagName('input')[0].checked == true;
-                                    if (value) {
-                                        _count++;
-                                        var _aj = table.rows[i].cells[9].textContent.trim();
-                                        if (_aj == "S") {
-                                            _ajuizado = true;
-                                        }
-                                        if (_aj == "N") {
-                                            _naoajuizado = true;
-                                        }
-                                    }
+                    for (var i = 0; i < rows.length; i++) {
+                        var cols = rows[i].getElementsByTagName('td');
+                        if (cols.length > 1) {
+                            var value = cols[0].getElementsByTagName('input')[0].checked == true;
+                            if (value) {
+                                _count++;
+                                var _aj = table.rows[i].cells[9].textContent.trim();
+                                if (_aj == "S") {
+                                    _ajuizado = true;
+                                }
+                                if (_aj == "N") {
+                                    _naoajuizado = true;
                                 }
                             }
-
-                            if (_ajuizado && _naoajuizado) {
-                                document.getElementById('errorLabel').innerHTML = "Não é permitido parcelar débitos ajuizados e não ajuizados no mesmo parcelamento.";
-                                return false;
-                            }
-
-                            if (_count == 0) {
-                                document.getElementById('errorLabel').innerHTML = "Selecione o(s) débito(s) à parcelar.";
-                                return false;
-                            }
-
-                            if (_ajuizado) {
-                                $("#loginModal").modal('show');
-                                return false;
-                            }
-                            
                         }
-                        catch (e) {
-                            alert(e);
-                        }
-                        return true;
-                    });
-                });
+                    }
 
-                $(function () {
-                    $('th > :checkbox').click(function () {
-                        $(this).closest('table')
-                            .find('td > :checkbox')
-                            .attr('checked', $(this).is(':checked'));
-                    });
-                });
+                    if (_ajuizado && _naoajuizado) {
+                        document.getElementById('errorLabel').innerHTML = "Não é permitido parcelar débitos ajuizados e não ajuizados no mesmo parcelamento.";
+                        return false;
+                    }
 
+                    if (_count == 0) {
+                        document.getElementById('errorLabel').innerHTML = "Selecione o(s) débito(s) à parcelar.";
+                        return false;
+                    }
 
-                function Send() {
-                    document.getElementById("MainForm").submit();
+                    if (_ajuizado) {
+                        $("#loginModal").modal('show');
+                        return false;
+                    }
+
                 }
-
-                function ValidateForm() {
-                    ClearError();
-                    return true;
+                catch (e) {
+                    alert(e);
                 }
+                return true;
+            });
+        });
 
-                function ClearError() {
-                    document.getElementById('errorGuia').innerHTML = "";
-                }
-
-                var sumP = 0, sumJ = 0, sumM = 0, sumC = 0, sumE = 0, sumT = 0;
-                var valP = 0, valJ = 0, valM = 0, valC = 0, valE = 0, valT = 0;
-
-                $('table input[type="checkbox"]').on('change', function () {
-                    $('#ResumoTable').find(somaPrincipal).html("0,00");
-                    $('#ResumoTable').find(somaJuros).html("0,00");
-                    $('#ResumoTable').find(somaMulta).html("0,00");
-                    $('#ResumoTable').find(somaCorrecao).html("0,00");
-                    $('#ResumoTable').find(somaEntrada).html("0,00");
-                    $('#ResumoTable').find(somaTotal).html("0,00");
-
-                    var table = $(this).closest('table'),
-                        checked = table.find('input[type=checkbox]:checked'),
-                        valP = checked.closest('tr').find('td:nth-child(11)'),
-                        sumP = valP.map(function () { return parseFloat(this.textContent.replace(',', '.').trim()) || 0; }).get().reduce(function (a, b) {
-                            return a + b;
-                        });
-                    valJ = checked.closest('tr').find('td:nth-child(12)'),
-                        sumJ = valJ.map(function () { return parseFloat(this.textContent.replace(',', '.').trim()) || 0; }).get().reduce(function (a, b) {
-                            return a + b;
-                        });
-                    valM = checked.closest('tr').find('td:nth-child(13)'),
-                        sumM = valM.map(function () { return parseFloat(this.textContent.replace(',', '.').trim()) || 0; }).get().reduce(function (a, b) {
-                            return a + b;
-                        });
-                    valC = checked.closest('tr').find('td:nth-child(14)'),
-                        sumC = valC.map(function () { return parseFloat(this.textContent.replace(',', '.').trim()) || 0; }).get().reduce(function (a, b) {
-                            return a + b;
-                        });
-                    valE = checked.closest('tr').find('td:nth-child(17)'),
-                        sumE = valE.map(function () { return (parseFloat(this.textContent.replace(',', '.').trim())) || 0; }).get().reduce(function (a, b) {
-                            return a + b;
-                        });
-
-                    sumT = sumP + sumJ + sumM + sumC;
-
-                    $('#ResumoTable').find(somaPrincipal).html(sumP.toFixed(2).replace('.', ','));
-                    $('#ResumoTable').find(somaJuros).html(sumJ.toFixed(2).replace('.', ','));
-                    $('#ResumoTable').find(somaMulta).html(sumM.toFixed(2).replace('.', ','));
-                    $('#ResumoTable').find(somaCorrecao).html(sumC.toFixed(2).replace('.', ','));
-                    $('#ResumoTable').find(somaEntrada).html(sumE.toFixed(2).replace('.', ','));
-                    $('#ResumoTable').find(somaTotal).html(sumT.toFixed(2).replace('.', ','));
-                }).change();
+        $(function () {
+            $('th > :checkbox').click(function () {
+                $(this).closest('table')
+                    .find('td > :checkbox')
+                    .attr('checked', $(this).is(':checked'));
+            });
+        });
 
 
-
-            </script>
+        function Send() {
+            document.getElementById("MainForm").submit();
         }
+
+        function ValidateForm() {
+            ClearError();
+            return true;
+        }
+
+        function ClearError() {
+            document.getElementById('errorGuia').innerHTML = "";
+        }
+
+        var sumP = 0, sumJ = 0, sumM = 0, sumC = 0, sumE = 0, sumT = 0;
+        var valP = 0, valJ = 0, valM = 0, valC = 0, valE = 0, valT = 0;
+
+        $('table input[type="checkbox"]').on('change', function () {
+            $('#ResumoTable').find(somaPrincipal).html("0,00");
+            $('#ResumoTable').find(somaJuros).html("0,00");
+            $('#ResumoTable').find(somaMulta).html("0,00");
+            $('#ResumoTable').find(somaCorrecao).html("0,00");
+            $('#ResumoTable').find(somaEntrada).html("0,00");
+            $('#ResumoTable').find(somaTotal).html("0,00");
+
+            var table = $(this).closest('table'),
+                checked = table.find('input[type=checkbox]:checked'),
+                valP = checked.closest('tr').find('td:nth-child(11)'),
+                sumP = valP.map(function () { return parseFloat(this.textContent.replace(',', '.').trim()) || 0; }).get().reduce(function (a, b) {
+                    return a + b;
+                });
+            valJ = checked.closest('tr').find('td:nth-child(12)'),
+                sumJ = valJ.map(function () { return parseFloat(this.textContent.replace(',', '.').trim()) || 0; }).get().reduce(function (a, b) {
+                    return a + b;
+                });
+            valM = checked.closest('tr').find('td:nth-child(13)'),
+                sumM = valM.map(function () { return parseFloat(this.textContent.replace(',', '.').trim()) || 0; }).get().reduce(function (a, b) {
+                    return a + b;
+                });
+            valC = checked.closest('tr').find('td:nth-child(14)'),
+                sumC = valC.map(function () { return parseFloat(this.textContent.replace(',', '.').trim()) || 0; }).get().reduce(function (a, b) {
+                    return a + b;
+                });
+            valE = checked.closest('tr').find('td:nth-child(17)'),
+                sumE = valE.map(function () { return (parseFloat(this.textContent.replace(',', '.').trim())) || 0; }).get().reduce(function (a, b) {
+                    return a + b;
+                });
+
+            sumT = sumP + sumJ + sumM + sumC;
+
+            $('#ResumoTable').find(somaPrincipal).html(sumP.toFixed(2).replace('.', ','));
+            $('#ResumoTable').find(somaJuros).html(sumJ.toFixed(2).replace('.', ','));
+            $('#ResumoTable').find(somaMulta).html(sumM.toFixed(2).replace('.', ','));
+            $('#ResumoTable').find(somaCorrecao).html(sumC.toFixed(2).replace('.', ','));
+            $('#ResumoTable').find(somaEntrada).html(sumE.toFixed(2).replace('.', ','));
+            $('#ResumoTable').find(somaTotal).html(sumT.toFixed(2).replace('.', ','));
+        }).change();
+
+
+
+    </script>
+}
 
 
 

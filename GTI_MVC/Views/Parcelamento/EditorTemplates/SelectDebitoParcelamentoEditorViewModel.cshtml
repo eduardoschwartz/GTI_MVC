@@ -2,7 +2,7 @@
 
 
 <tr style=" height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-    <td style="text-align:center">
+    <td style="text-align:center;width:10px">
         @Html.CheckBoxFor(model => model.Selected, new { style = "cursor:pointer" })
     </td>
     <td style="display:none">
@@ -32,7 +32,7 @@
         @Html.DisplayFor(model => model.Complemento)
         @Html.HiddenFor(model => model.Complemento)
     </td>
-    <td style="width:60px" align="center">
+    <td style="width:70px" align="center">
         @Model.Data_vencimento.ToString("dd/MM/yyyy")
         @Html.HiddenFor(model => model.Data_vencimento)
     </td>
@@ -74,7 +74,7 @@
         @Html.HiddenFor(model => model.Valor_total)
     </td>
     <td style="width:220px" align="left">
-        @Html.DisplayFor(model => model.Execucao_Fiscal)
+        &nbsp;&nbsp; @Model.Execucao_Fiscal
         @Html.HiddenFor(model => model.Execucao_Fiscal)
     </td>
 
