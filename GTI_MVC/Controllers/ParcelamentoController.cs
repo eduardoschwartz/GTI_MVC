@@ -55,9 +55,7 @@ namespace GTI_MVC.Controllers {
             CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(_codigo);
             Parc_Requerente _req = new Parc_Requerente {
                 Codigo=_cidadao.Codigo,
-                Nome=_cidadao.Nome,
-
-                Email=_user.Email
+                Nome=_cidadao.Nome
             };
             _req.Cpf_Cnpj = Functions.FormatarCpfCnpj(_cpfcnpj);
             string _tipoEnd = _cidadao.EnderecoC == "S" ? "C" : "R";
@@ -74,6 +72,7 @@ namespace GTI_MVC.Controllers {
                 _req.Complemento = _cidadao.ComplementoR;
                 _req.Telefone = _cidadao.TelefoneR;
                 _req.Cep = _cidadao.CepR.ToString();
+                _req.Email = _cidadao.EmailR;
             } else {
                 _req.Bairro_Nome = _cidadao.NomeBairroC;
                 _req.Bairro_Codigo = (int)_cidadao.CodigoBairroC;
@@ -86,6 +85,7 @@ namespace GTI_MVC.Controllers {
                 _req.Complemento = _cidadao.ComplementoC;
                 _req.Telefone = _cidadao.TelefoneC;
                 _req.Cep = _cidadao.CepC.ToString();
+                _req.Email = _cidadao.EmailC;
             }
             if (_req.Logradouro_Codigo> 0) {
                 int nCep = enderecoRepository.RetornaCep(Convert.ToInt32(_req.Logradouro_Codigo), (short)_req.Numero);
@@ -2028,8 +2028,7 @@ namespace GTI_MVC.Controllers {
                     CidadaoStruct _cid = cidadaoRepository.Dados_Cidadao(_master.Requerente_Codigo);
                     Parc_Requerente _req = new Parc_Requerente {
                         Codigo = _cid.Codigo,
-                        Nome = _cid.Nome,
-                        Email = _user.Email
+                        Nome = _cid.Nome
                     };
                     _req.Cpf_Cnpj = Functions.FormatarCpfCnpj(model.Requerente.Cpf_Cnpj);
                     string _tipoEnd = _cid.EnderecoC == "S" ? "C" : "R";
@@ -2044,6 +2043,7 @@ namespace GTI_MVC.Controllers {
                         _req.Complemento = _cid.ComplementoR;
                         _req.Telefone = _cid.TelefoneR;
                         _req.Cep = _cid.CepR.ToString();
+                        _req.Email = _cid.EmailR;
                     } else {
                         _req.Bairro_Nome = _cid.NomeBairroC;
                         _req.Cidade_Nome = _cid.NomeCidadeC;
@@ -2054,6 +2054,7 @@ namespace GTI_MVC.Controllers {
                         _req.Complemento = _cid.ComplementoC;
                         _req.Telefone = _cid.TelefoneC;
                         _req.Cep = _cid.CepC.ToString();
+                        _req.Email = _cid.EmailC;
                     }
                     model.Requerente = _req;
 
