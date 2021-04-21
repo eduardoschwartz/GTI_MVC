@@ -53,6 +53,27 @@
     #chkSel {
         cursor: pointer;
     }
+
+    #tblResumo {
+        width: 100%;
+    }
+
+        #tblResumo tbody {
+            display: block;
+        }
+
+        #tblResumo thead tblResumo {
+            height: 30px;
+        }
+
+        #tblResumo tbody {
+            height: 306px;
+            overflow-y: auto;
+        }
+
+            #tblResumo tbody td, #tblResumo thead th {
+                float: left;
+            }
 </style>
 
 <h5 style="text-align:center">Parcelamento de Débitos</h5>
@@ -405,44 +426,46 @@
             </div>
             <div class="card-header">Simulador de Parcelamento</div>
             <div class="card-body">
-                <div id="DebitoTable" style="height:auto;max-height: 350px; overflow: auto;width:310px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;border-left-color:cadetblue;border-left-style:solid;border-left-width:1px;border-right-color:cadetblue;border-right-style:solid;border-right-width:1px">
-                    <table id="tblResumo" style="font-size:12px">
-                        <tr style="background-color:darkred;color:white;height:25px">
-                            <th style="text-align:center">
-                                #
-                            </th>
-                            <th style="width:40px;text-align:right">
-                                Qtde
-                            </th>
-                            <th style="width:90px;text-align:right">
-                                Vl. Entrada
-                            </th>
-                            <th style="width:90px;text-align:right">
-                                Vl. Parcelas
-                            </th>
-                            <th style="width:90px;text-align:right">
-                                Vl. Total
-                            </th>
-                        </tr>
+                <div id="DebitoTable" style="height:auto;max-height: 331px;width:340px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;border-left-color:cadetblue;border-left-style:solid;border-left-width:1px;border-right-color:cadetblue;border-right-style:solid;border-right-width:1px">
+                    <table id="tblResumo" style="font-size:12px;width:340px;height:306px">
+                        <thead>
+                            <tr style="background-color:darkred;color:white;height:18px">
 
+                                <th style="text-align:center;width:10px">
+                                    #
+                                </th>
+                                <th style="width:30px;text-align:right">
+                                    Qtd
+                                </th>
+                                <th style="width:90px;text-align:right">
+                                    Vl. Entrada
+                                </th>
+                                <th style="width:90px;text-align:right">
+                                    Vl. Parcelas
+                                </th>
+                                <th style="width:90px;text-align:right">
+                                    Vl. Total
+                                </th>
+                            </tr>
+                        </thead>
                         @for (int i = 0; i < Model.Lista_Resumo.Count; i++) {
-                            <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                                <td style="text-align:center">
+                            <tr style="height:17px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                <td style="text-align:center;width:10px">
                                     @Html.CheckBoxFor(model => model.Lista_Resumo[i].Selected, new { style = "cursor:pointer", @onclick = "CheckOne(this)" })
                                 </td>
-                                <td style="width:40px;text-align:right">
+                                <td style="width:30px;text-align:right">
                                     @Html.HiddenFor(model => model.Lista_Resumo[i].Qtde_Parcela)
                                     @Html.DisplayFor(model => model.Lista_Resumo[i].Qtde_Parcela)
                                 </td>
-                                <td style="width:80px;text-align:right">
+                                <td style="width:90px;text-align:right">
                                     @Html.DisplayFor(model => model.Lista_Resumo[i].Valor_Entrada)
                                     @Html.HiddenFor(model => model.Lista_Resumo[i].Valor_Entrada)
                                 </td>
-                                <td style="width:80px;text-align:right">
+                                <td style="width:90px;text-align:right">
                                     @Html.DisplayFor(model => model.Lista_Resumo[i].Valor_N)
                                     @Html.HiddenFor(model => model.Lista_Resumo[i].Valor_N)
                                 </td>
-                                <td style="width:80px;text-align:right">
+                                <td style="width:90px;text-align:right">
                                     @Html.DisplayFor(model => model.Lista_Resumo[i].Valor_Total)
                                     @Html.HiddenFor(model => model.Lista_Resumo[i].Valor_Total)
                                 </td>

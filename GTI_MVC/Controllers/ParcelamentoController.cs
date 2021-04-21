@@ -487,7 +487,7 @@ namespace GTI_MVC.Controllers {
                     Exercicio=item.Exercicio,
                     Idx=item.Idx,
                     Lancamento=item.Lancamento,
-                    Nome_lancamento= Functions.TruncateTo( item.Nome_lancamento,20),
+                    Nome_lancamento= Functions.TruncateTo( item.Nome_lancamento,16),
                     Parcela=item.Parcela,
                     Perc_penalidade=item.Perc_penalidade,
                     Qtde_parcelamento=item.Qtde_parcelamento,
@@ -916,10 +916,18 @@ namespace GTI_MVC.Controllers {
         [HttpPost]
         public ActionResult Parc_reqd(ParcelamentoViewModel model,string action) {
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
-
             if (action == "btPrint") {
+                List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(model.Guid);
+                string _anos = "";
+                IEnumerable<short> _listaAnos = _listaSelected.Select(o => o.Exercicio).Distinct();
+                foreach (short item in _listaAnos) {
+                    _anos += item.ToString() + ", ";
+                }
+                _anos = _anos.Substring(0, _anos.Length - 2);
+
                 ReportDocument rd = new ReportDocument();
                 rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Simulado_Parcelamento.rpt"));
+                
                 TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
                 TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
                 ConnectionInfo crConnectionInfo = new ConnectionInfo();
@@ -943,6 +951,7 @@ namespace GTI_MVC.Controllers {
 
                 try {
                     rd.RecordSelectionFormula = "{Parcelamento_Web_Master.Guid}='" + model.Guid + "'";
+                    rd.SetParameterValue("EXERCICIO", _anos);
                     Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
                     return File(stream, "application/pdf", "Simulado_Parcelamento.pdf");
                 } catch {
