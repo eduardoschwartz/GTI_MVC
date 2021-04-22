@@ -1647,11 +1647,45 @@ namespace GTI_MVC.Controllers {
             }
             if(action=="btnVoltar")
                 return RedirectToAction("Parc_query");
-            //else {
-            //    if (action == "btnValida") {
-            //        return RedirectToAction("Parc_bk", new { p = model.Guid });
-            //    }
-            //}
+
+            if (action == "btnPrintResumo") {
+                ReportDocument rd = new ReportDocument();
+                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Resumo_Parcelamento.rpt"));
+                TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+                TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+                ConnectionInfo crConnectionInfo = new ConnectionInfo();
+                Tables CrTables;
+                string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+                string IPAddress = builder.DataSource;
+                string _userId = builder.UserID;
+                string _pwd = builder.Password;
+
+                crConnectionInfo.ServerName = IPAddress;
+                crConnectionInfo.DatabaseName = "TributacaoTeste";
+                crConnectionInfo.UserID = _userId;
+                crConnectionInfo.Password = _pwd;
+                CrTables = rd.Database.Tables;
+                foreach (Table CrTable in CrTables) {
+                    crtableLogoninfo = CrTable.LogOnInfo;
+                    crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                    CrTable.ApplyLogOnInfo(crtableLogoninfo);
+                }
+
+                try {
+                    rd.RecordSelectionFormula = "{Parcelamento_Web_Master.Guid}='" + model.Guid + "'";
+                    Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                    return File(stream, "application/pdf", "Resumo_Parcelamento.pdf");
+                } catch {
+                    throw;
+                }
+
+            }
+            if (action == "btnPrintBoleto") {
+                return RedirectToAction("Parc_bk", new { p = model.Guid });
+            }
+
+
             return View(model);
         }
 
