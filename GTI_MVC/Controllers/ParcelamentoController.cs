@@ -2119,8 +2119,8 @@ namespace GTI_MVC.Controllers {
                 ViewBag.Result = "Data final inválida!";
                 return View(model);
             }
-            DateTime _data1 = DateTime.ParseExact(model.DataDe, "dd/MM/yyyy", new CultureInfo("en-US")); 
-            DateTime _data2 = DateTime.ParseExact(model.DataAte, "dd/MM/yyyy", new CultureInfo("en-US")); 
+            DateTime _data1 =  Convert.ToDateTime(model.DataDe); 
+            DateTime _data2 = Convert.ToDateTime(model.DataAte);
 
             if (_data1 > _data2) {
                 ViewBag.Result = "Data inicial maior que data final!";
@@ -2134,6 +2134,41 @@ namespace GTI_MVC.Controllers {
                 return View(model);
 
             }
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/ParcelamentoWeb.rpt"));
+
+            TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+            TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+            ConnectionInfo crConnectionInfo = new ConnectionInfo();
+            Tables CrTables;
+            string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+            string IPAddress = builder.DataSource;
+            string _userId = builder.UserID;
+            string _pwd = builder.Password;
+
+            crConnectionInfo.ServerName = IPAddress;
+            crConnectionInfo.DatabaseName = "TributacaoTeste";
+            crConnectionInfo.UserID = _userId;
+            crConnectionInfo.Password = _pwd;
+            CrTables = rd.Database.Tables;
+            foreach (Table CrTable in CrTables) {
+                crtableLogoninfo = CrTable.LogOnInfo;
+                crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                CrTable.ApplyLogOnInfo(crtableLogoninfo);
+            }
+
+            try {
+          //      rd.RecordSelectionFormula = "{Parcelamento_Web_Master.data_geracao}>=#" + _data1 + "# and {Parcelamento_Web_Master.data_geracao}<=#" + _data2 + "#";
+                rd.SetParameterValue("DATA1", _data1);
+                rd.SetParameterValue("DATA2", _data2);
+                Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                return File(stream, "application/pdf", "Lista_Parcelamento.pdf");
+            } catch {
+                throw;
+            }
+
 
 
             return View(model);

@@ -1150,9 +1150,14 @@ namespace GTI_Dal.Classes {
 
         public List<Parcelamento_web_master> Lista_Parcelamento_Web_Master(DateTime _dataInicio,DateTime _dataFim) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var reg = (from t in db.Parcelamento_Web_Master where t.Data_Geracao>=_dataInicio && t.Data_Geracao<=_dataInicio orderby t.Data_Geracao select t).ToList();
+
+                object[] Parametros = new object[2];
+                Parametros[0] = new SqlParameter { ParameterName = "@data1", SqlDbType = SqlDbType.SmallDateTime, SqlValue = _dataInicio };
+                Parametros[1] = new SqlParameter { ParameterName = "@data2", SqlDbType = SqlDbType.SmallDateTime, SqlValue = _dataFim };
+                var sql = db.Database.SqlQuery<Parcelamento_web_master>("SELECT * FROM parcelamento_web_master where processo_numero>0 and data_geracao between @data1 and @data2", Parametros).ToList();
+
                 List<Parcelamento_web_master> Lista = new List<Parcelamento_web_master>();
-                foreach (var item in reg) {
+                foreach (var item in sql) {
                     Parcelamento_web_master Linha = new Parcelamento_web_master {
                         Guid = item.Guid
                     };
