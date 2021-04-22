@@ -1148,6 +1148,20 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<Parcelamento_web_master> Lista_Parcelamento_Web_Master(DateTime _dataInicio,DateTime _dataFim) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from t in db.Parcelamento_Web_Master where t.Data_Geracao>=_dataInicio && t.Data_Geracao<=_dataInicio orderby t.Data_Geracao select t).ToList();
+                List<Parcelamento_web_master> Lista = new List<Parcelamento_web_master>();
+                foreach (var item in reg) {
+                    Parcelamento_web_master Linha = new Parcelamento_web_master {
+                        Guid = item.Guid
+                    };
+                    Lista.Add(Linha);
+                }
+                return Lista;
+            }
+        }
+
     }
 }
 

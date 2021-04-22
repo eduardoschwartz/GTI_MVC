@@ -1,0 +1,88 @@
+﻿@model GTI_Mvc.ViewModels.ParcelamentoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Parcelamento de débitos";
+}
+
+
+<style>
+    .center {
+        margin: auto;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+</style>
+
+<div class="center container" style="width:540px">
+
+    @using (Html.BeginForm("Parc_rel", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+
+        @Html.HiddenFor(m => m.Guid)
+    <div class="card">
+        <div class="card-header">Resumo dos Parcelamentos Efetuados</div>
+        <div class="card-body">
+            <table style="width:400px">
+                <tr>
+                    <td style="width:200px;font-size:13px">
+                        <label style="font-weight:normal">Data De:&nbsp;</label>
+                        @Html.TextBoxFor(x => x.DataDe, "{0:dd/MM/yyyy}", new { @id = "DataDe", @style = "width:90px;", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })
+                    </td>
+                    <td style="width:200px;font-size:13px">
+                        <label style="font-weight:normal">Data Até:&nbsp;</label>
+                        @Html.TextBoxFor(x => x.DataAte, "{0:dd/MM/yyyy}", new { @id = "DataAte", @style = "width:90px;", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <button type="submit" class="btn btn-primary" id="btnPrint">Imprimir</button>
+        </div>
+        <br />
+        
+        <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+        <div class="card-footer">
+            @Html.ActionLink("Retornar ao menu de opções", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+        </div>
+    </div>
+    }
+</div>
+

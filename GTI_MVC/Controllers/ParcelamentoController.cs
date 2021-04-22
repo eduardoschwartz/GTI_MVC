@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -1439,7 +1440,8 @@ namespace GTI_MVC.Controllers {
             Parc_Contribuinte pc = new Parc_Contribuinte() {
                 Codigo = _master.Contribuinte_Codigo,
                 Nome = _master.Contribuinte_nome,
-                Logradouro_Nome=_master.Contribuinte_Codigo<50000?_endereco:""
+                Logradouro_Nome=_master.Contribuinte_Codigo<50000?_endereco:"",
+                Cpf_Cnpj = Functions.FormatarCpfCnpj(_master.Contribuinte_cpfcnpj)
             };
             Parc_Requerente pr = new Parc_Requerente() {
                 Nome = _master.Requerente_Nome,
@@ -1453,7 +1455,6 @@ namespace GTI_MVC.Controllers {
                 _ano += item.ToString() + ", ";
             }
             _ano = _ano.Substring(0, _ano.Length - 2);
-
 
             model.Contribuinte = pc;
             model.Requerente = pr;
@@ -1761,8 +1762,10 @@ namespace GTI_MVC.Controllers {
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
 
             string _nome = _master.Contribuinte_nome;
+            string _nomeR = _master.Requerente_Nome;
             string _cod = _master.Contribuinte_Codigo.ToString("000000");
-            string _doc = Functions.FormatarCpfCnpj(_master.Requerente_CpfCnpj);
+            string _doc = Functions.FormatarCpfCnpj(_master.Contribuinte_cpfcnpj);
+            string _docR = Functions.FormatarCpfCnpj(_master.Requerente_CpfCnpj);
             string _qtdeParc = _master.Qtde_Parcela.ToString("00");
             string _valor = _master.Sim_Total.ToString("#0.00");
             string _proc = _master.Processo_Extenso;
@@ -1795,6 +1798,8 @@ namespace GTI_MVC.Controllers {
                 rd.SetParameterValue("ENDERECO", _end);
                 rd.SetParameterValue("EXERCICIO", _ano);
                 rd.SetParameterValue("DATAVENCTO", _vct);
+                rd.SetParameterValue("NOMER", _nomeR);
+                rd.SetParameterValue("DOCR", _docR);
 
                 Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
                 return File(stream, "application/pdf", "Termo_ConfDivida.pdf");
@@ -2087,6 +2092,52 @@ namespace GTI_MVC.Controllers {
             return RedirectToAction("Parc_req", "Parcelamento");
         }
 
+        [Route("Parc_rel")]
+        [HttpGet]
+        public ActionResult Parc_rel() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
+            ParcelamentoViewModel model = new ParcelamentoViewModel();
+            return View(model);
+        }
+
+        [Route("Parc_rel")]
+        [HttpPost]
+        public ActionResult Parc_rel(ParcelamentoViewModel model) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
+            bool _isDate1 = Functions.IsDate(model.DataDe);
+            bool _isDate2 = Functions.IsDate(model.DataAte);
+
+            if (!_isDate1) {
+                ViewBag.Result = "Data inicial inválida!";
+                return View(model);
+            }
+            if (!_isDate2) {
+                ViewBag.Result = "Data final inválida!";
+                return View(model);
+            }
+            DateTime _data1 = DateTime.ParseExact(model.DataDe, "dd/MM/yyyy", new CultureInfo("en-US")); 
+            DateTime _data2 = DateTime.ParseExact(model.DataAte, "dd/MM/yyyy", new CultureInfo("en-US")); 
+
+            if (_data1 > _data2) {
+                ViewBag.Result = "Data inicial maior que data final!";
+                return View(model);
+            }
+
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+            List<Parcelamento_web_master> _listaMaster = parcelamentoRepository.Lista_Parcelamento_Web_Master(_data1, _data2);
+            if (_listaMaster.Count== 0){
+                ViewBag.Result = "Nenhum parcelamento foi gerado no período informado!";
+                return View(model);
+
+            }
+
+
+            return View(model);
+        }
 
 
 
@@ -2104,4 +2155,4 @@ namespace GTI_MVC.Controllers {
         //}
 
     }
-    }
+}

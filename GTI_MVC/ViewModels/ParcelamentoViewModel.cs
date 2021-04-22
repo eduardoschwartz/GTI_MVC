@@ -44,6 +44,8 @@ namespace GTI_Mvc.ViewModels {
         public List<Parc_Processos> Lista_Processo { get; set; }
         public int Qtde_Parcela { get; set; }
         public string Exercicios { get; set; }
+        public string DataDe { get; set; }
+        public string DataAte { get; set; }
 
         public ParcelamentoViewModel() {
             this.Lista_Origem = new List<SelectDebitoParcelamentoEditorViewModel>();

@@ -59,11 +59,12 @@
             <div class="card-body">
                 @Html.ActionLink("Efetuar parcelamento", "parc_req", "Parcelamento", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Consultar parcelamentos efetuados", "Parc_query", "Parcelamento", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Relatório de parcelamentos efetuados", "Parc_rel", "Parcelamento", null, new { @class = "actionlink" })<br />
                 <a href="~/Files/Parcelamento Manual do Usuario.pdf" class="actionlink">Download do manual do usuário</a><br />
                 @*@if(ViewBag.DataBase!="") {
-                    <br />
-                    <h4 style="color:red">@ViewBag.DataBase</h4>
-                }*@
+            <br />
+            <h4 style="color:red">@ViewBag.DataBase</h4>
+        }*@
 
 
             </div>

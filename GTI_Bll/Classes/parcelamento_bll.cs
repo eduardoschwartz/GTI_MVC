@@ -281,5 +281,10 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Parcelamento_Web_Selected_Name(guid);
         }
 
+        public List<Parcelamento_web_master> Lista_Parcelamento_Web_Master(DateTime _dataInicio, DateTime _dataFim) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            return obj.Lista_Parcelamento_Web_Master(_dataInicio,_dataFim);
+        }
+
     }
 }
