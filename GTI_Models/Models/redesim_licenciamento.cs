@@ -57,4 +57,38 @@ namespace GTI_Models.Models {
         public string[] AtividadesAuxiliares { get; set; }
         public bool Duplicado { get; set; }
     }
+
+    public class Redesim_Licenciamento_Xml {
+        public string IDSolicitacao { get; set; }
+        public string SituacaoSolicitacao { get; set; }
+        public string Orgao { get; set; }
+        public string DataSolicitacaoLicenciamento { get; set; }
+        public string IdLicenca { get; set; }
+        public string ProtocoloOrgao { get; set; }
+        public string NumeroLicenca { get; set; }
+        public string DetalheLicenca { get; set; }
+        public string OrgaoLicenca { get; set; }
+        public string Risco { get; set; }
+        public string SituacaoLicenca { get; set; }
+        public string DataEmissaoLicenca { get; set; }
+        public string DataValidadeLicenca { get; set; }
+        public string DataProtocolo { get; set; }
+        public string Cnpj { get; set; }
+        public string RazaoSocial { get; set; }
+        public string TipoLogradouro { get; set; }
+        public string Logradouro { get; set; }
+        public string NumeroLogradouro { get; set; }
+        public string Bairro { get; set; }
+        public string Municipio { get; set; }
+        public string Complementos { get; set; }
+        public string Cep { get; set; }
+        public string TipoInscricaoImovel { get; set; }
+        public string NumeroInscricaoImovel { get; set; }
+        public string PorteEmpresaMEI { get; set; }
+        public string EmpresaTeraEstabelecimento { get; set; }
+        public string Cnae { get; set; }
+        public string AtividadesAuxiliares { get; set; }
+    }
+
+
 }

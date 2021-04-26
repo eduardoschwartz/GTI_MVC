@@ -379,7 +379,11 @@ namespace GTI_Dal.Classes {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 Endereco_Data enderecoRepository = new Endereco_Data("GTIconnection");
                 LogradouroStruct _log= enderecoRepository.Retorna_Logradour_Cep(Convert.ToInt32(reg.Cep));
-                int _logradouro = (int)_log.CodLogradouro;
+                int _logradouro = 0;
+                if (_log != null && _log.CodLogradouro != null)
+                    _logradouro = (int)_log.CodLogradouro;
+                else
+                    _logradouro = 0;
 
                 object[] Parametros = new object[9];
                 Parametros[0] = new SqlParameter { ParameterName = "@protocolo", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Protocolo };

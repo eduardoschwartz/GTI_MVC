@@ -8,7 +8,9 @@ using System.IO;
 using System.Text;
 using System.Web.Mvc;
 using GTI_Mvc;
-using System.Globalization;
+using System.Linq;
+using System.Xml.Linq;
+using System.Xml;
 
 namespace GTI_MVC.Controllers {
     public class RedeSimController : Controller {
@@ -115,6 +117,13 @@ namespace GTI_MVC.Controllers {
                             _msg = "Arquivo importado";
                         }
                         //#####FIM ARQUIVO DE REGISTRO  #######
+                    } else if (file.ContentType == "text/xml") {
+                        _guid = Guid.NewGuid().ToString("N");
+                        string _path = "~/Files/Redesim";
+                        var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path), _guid);
+                         file.SaveAs(path);
+                         _tipo = Read_Xml(Path.Combine(_path, _guid));
+
                     } else {
                         _ok = false;
                         _msg = "Arquivo inválido";
@@ -635,5 +644,48 @@ namespace GTI_MVC.Controllers {
             return _listaLicenciamento;
 
         }
+
+        private string Read_Xml(string _path) {
+            string _tipo = "";
+            
+            StreamReader reader = new StreamReader(Server.MapPath(_path));
+            while (!reader.EndOfStream) {
+                string line = reader.ReadLine();
+                if (!string.IsNullOrWhiteSpace(line)) {
+                    line = reader.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(line)) {
+                        if (line == "<Extracao>") {
+                            line = reader.ReadLine();
+                            if (!string.IsNullOrWhiteSpace(line)) {
+                                if (line == "<Licenciamento>") {
+                                    _tipo = "L";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return _tipo;
+        }
+
+
+        private List<Redesim_Licenciamento_Xml>Read_Licenciamento_Xml (string _path) {
+        //    string xmlData = System.Web.HttpContext.Current.Server.MapPath(@_path);
+
+            List<Redesim_Licenciamento_Xml> lista = new List<Redesim_Licenciamento_Xml>();
+            XmlDocument doc = new XmlDocument();
+            doc.Load(Server.MapPath(_path));
+            foreach (XmlNode node in doc.SelectNodes("/Extracao/Licenciamento")) {
+                Redesim_Licenciamento_Xml reg = new Redesim_Licenciamento_Xml() {
+                    IDSolicitacao = node["IDSolicitacao"].InnerText
+                };
+                lista.Add(reg);
+            }
+
+
+            return lista;
+        }
+
     }
 }
