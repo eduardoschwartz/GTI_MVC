@@ -74,11 +74,32 @@
             #tblResumo tbody td, #tblResumo thead th {
                 float: left;
             }
+
+    #tblMain {
+        width: 100%;
+    }
+
+        #tblMain tbody {
+            display: block;
+        }
+
+        #tblMain thead tblMain {
+            height: 30px;
+        }
+
+        #tblMain tbody {
+            height: 305px;
+            overflow-y: auto;
+        }
+
+            #tblMain tbody td, #tblMain thead th {
+                float: left;
+            }
 </style>
 
 <h5 style="text-align:center">Parcelamento de Débitos</h5>
 
-<div class="center container" style="width:850px">
+<div class="center container" style="width:930px">
 
     @using (Html.BeginForm("Parc_reqd", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
 
@@ -250,71 +271,73 @@
             </div>
             <div class="card-header">Débitos selecionados</div>
             <div class="card-body">
-                <div id="DebitoTable" style="height: auto;max-height:300px; overflow: auto;width:780px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;border-left-color:cadetblue;border-left-style:solid;border-left-width:1px;border-right-color:cadetblue;border-right-style:solid;border-right-width:1px">
+                <div id="DebitoTable" style="overflow-x:scroll;height:325px;  overflow: auto; width:860px; border-bottom-color: cadetblue; border-bottom-style: solid; border-bottom-width: 1px; border-top-color: cadetblue; border-top-style: solid; border-top-width: 1px; border-left-color: cadetblue; border-left-style: solid; border-left-width: 1px; border-right-color: cadetblue; border-right-style: solid; border-right-width: 1px">
                     <table id="tblMain" style="font-size:12px">
-                        <tr style="background-color:darkred;color:white;height:25px">
-                            <th style="display:none">
-                                Id
-                            </th>
-                            <th style="width:50px;text-align:center">
-                                Ano
-                            </th>
-                            <th style="display:none">
-                                Lanc
-                            </th>
-                            <th style="width:198px">
-                                Lancamento
-                            </th>
-                            <th style="display:none">
-                                Seq
-                            </th>
-                            <th style="display:none">
-                                Parc
-                            </th>
-                            <th style="display:none">
-                                Compl
-                            </th>
-                            <th style="width:60px;text-align:center">
-                                Dt.Vencto
-                            </th>
-                            <th style="width:26px;text-align:center">
-                                Aj
-                            </th>
-                            <th style="width:70px;text-align:right">
-                                Principal
-                            </th>
-                            <th style="width:70px;text-align:right">
-                                Juros
-                            </th>
-                            <th style="width:70px;text-align:right">
-                                Multa
-                            </th>
-                            <th style="width:70px;text-align:right">
-                                Correção
-                            </th>
-                            <th style="width:40px;text-align:right">
-                                Qtde
-                            </th>
-                            <th style="width:50px;text-align:right">
-                                %
-                            </th>
-                            <th style="width:60px;text-align:right">
-                                Entrada
-                            </th>
-                            <th style="width:70px;text-align:right">
-                                Total
-                            </th>
-                        </tr>
+                        <thead>
+                            <tr style="background-color:darkred;color:white;height:18px">
+                                <th style="display:none">
+                                    Id
+                                </th>
+                                <th style="width:50px;text-align:center">
+                                    Ano
+                                </th>
+                                <th style="display:none">
+                                    Lanc
+                                </th>
+                                <th style="width:178px">
+                                    Lancamento
+                                </th>
+                                <th style="display:none">
+                                    Seq
+                                </th>
+                                <th style="display:none">
+                                    Parc
+                                </th>
+                                <th style="display:none">
+                                    Compl
+                                </th>
+                                <th style="width:80px;text-align:center">
+                                    Dt.Vencto
+                                </th>
+                                <th style="width:26px;text-align:center">
+                                    Aj
+                                </th>
+                                <th style="width:70px;text-align:right">
+                                    Principal
+                                </th>
+                                <th style="width:70px;text-align:right">
+                                    Juros
+                                </th>
+                                <th style="width:70px;text-align:right">
+                                    Multa
+                                </th>
+                                <th style="width:70px;text-align:right">
+                                    Correção
+                                </th>
+                                <th style="width:40px;text-align:right">
+                                    Qtde
+                                </th>
+                                <th style="width:50px;text-align:right">
+                                    %
+                                </th>
+                                <th style="width:60px;text-align:right">
+                                    Vl.Adian.
+                                </th>
+                                <th style="width:70px;text-align:right">
+                                    Total
+                                </th>
+                            </tr>
+                        </thead>
                         <tbody class="item-model-number">
                             @foreach (var item in Model.Lista_Origem_Selected) {
                                 <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
                                     <td style="width:50px;text-align:center">
                                         @item.Exercicio
                                     </td>
-                                    <td style="width:198px">
+                                    <td style="width:178px">
                                         @item.Nome_lancamento
                                     </td>
-                                    <td style="width:60px" align="center">
+                                    <td style="width:80px" align="center">
                                         @item.Data_vencimento.ToString("dd/MM/yyyy")
                                     </td>
                                     <td style="width:26px" align="center">
@@ -413,10 +436,10 @@
                             </tr>
                             <tr>
                                 <td style="font-weight:bold;color:brown;font-size:small" width="25px">
-                                    Entrada
+                                    Vl.Adian.
                                 </td>
                                 <td style="font-size:small">
-                                    - Valor da penalidade aplicada ao valor de entrada
+                                    - Valor do adiantamento aplicado ao valor de entrada
                                 </td>
                             </tr>
                         </table>
@@ -475,7 +498,6 @@
 
                     </table>
                 </div>
-                <br />
                 <br />
                 <button type="submit" class="btn btn-primary" name="action" value="btnValida">Exibir o Resumo</button>&nbsp;&nbsp;
                 <button type="submit" class="btn btn-info" name="action" value="btPrint">Imprimir o Simulado</button>&nbsp;&nbsp;

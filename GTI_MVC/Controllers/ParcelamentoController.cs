@@ -1440,7 +1440,7 @@ namespace GTI_MVC.Controllers {
             Parc_Contribuinte pc = new Parc_Contribuinte() {
                 Codigo = _master.Contribuinte_Codigo,
                 Nome = _master.Contribuinte_nome,
-                Logradouro_Nome=_master.Contribuinte_Codigo<50000?_endereco:"",
+                Logradouro_Nome=_endereco,
                 Cpf_Cnpj = Functions.FormatarCpfCnpj(_master.Contribuinte_cpfcnpj)
             };
             Parc_Requerente pr = new Parc_Requerente() {
@@ -1806,9 +1806,7 @@ namespace GTI_MVC.Controllers {
             string _data = _master.Data_Geracao.ToString("dd/MM/yyyy");
             string _end = "";
             string _vct =Convert.ToDateTime(_master.Data_Vencimento).ToString("dd/MM/yyyy");
-            if (_master.Contribuinte_Codigo < 50000) {
-                _end = _master.Contribuinte_endereco + " - " + _master.Contribuinte_bairro;
-            }
+            _end = _master.Contribuinte_endereco + " - " + _master.Contribuinte_bairro;
 
             List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(p);
             IEnumerable<short> _listaAnos = _listaSelected.Select(o => o.Exercicio).Distinct();
