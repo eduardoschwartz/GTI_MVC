@@ -121,9 +121,30 @@ namespace GTI_MVC.Controllers {
                         _guid = Guid.NewGuid().ToString("N");
                         string _path = "~/Files/Redesim";
                         var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path), _guid);
-                         file.SaveAs(path);
-                         _tipo = Read_Xml(Path.Combine(_path, _guid));
-
+                        file.SaveAs(path);
+                        _tipo = Read_Xml(Path.Combine(_path, _guid));
+                        if (_tipo == "L") {
+                            _listaLicenciamento = Read_Licenciamento_Xml(Path.Combine(_path, _guid));
+                            _listaLicenciamento = Insert_Licenciamento(_listaLicenciamento, _guid);
+                            _ok = true;
+                            _tipoSigla = "L";
+                        } else if (_tipo == "R"){
+                            _listaRegistro = Read_Registro(Path.Combine(_path, _guid));
+                            //                            _listaRegistro = Insert_Registro(_listaRegistro, _guid);
+                            _ok = true;
+                            _tipoSigla = "R";
+                        } else  {
+                            _ok = false;
+                            _msg = "Arquivo inválido";
+                        }
+                        if (_ok) {
+                            Redesim_arquivo reg = new Redesim_arquivo() {
+                                Guid = _guid,
+                                Tipo = _tipoSigla
+                            };
+                           // Exception ex = redesimRepository.Incluir_Arquivo(reg);
+                            _msg = "Arquivo importado";
+                        }
                     } else {
                         _ok = false;
                         _msg = "Arquivo inválido";
@@ -657,8 +678,10 @@ namespace GTI_MVC.Controllers {
                         if (line == "<Extracao>") {
                             line = reader.ReadLine();
                             if (!string.IsNullOrWhiteSpace(line)) {
-                                if (line == "<Licenciamento>") {
+                                if (line.Trim() == "<Licenciamento>") {
                                     _tipo = "L";
+                                } else if (line.Trim() == "<Registro>") {
+                                    _tipo = "R";
                                 }
                             }
                         }
@@ -670,16 +693,44 @@ namespace GTI_MVC.Controllers {
         }
 
 
-        private List<Redesim_Licenciamento_Xml>Read_Licenciamento_Xml (string _path) {
-        //    string xmlData = System.Web.HttpContext.Current.Server.MapPath(@_path);
-
-            List<Redesim_Licenciamento_Xml> lista = new List<Redesim_Licenciamento_Xml>();
+        private List<Redesim_licenciamentoStruct>Read_Licenciamento_Xml (string _path) {
+//            string xmlData = System.Web.HttpContext.Current.Server.MapPath(@_path);
+            List<Redesim_licenciamentoStruct> lista = new List<Redesim_licenciamentoStruct>();
             XmlDocument doc = new XmlDocument();
             doc.Load(Server.MapPath(_path));
             foreach (XmlNode node in doc.SelectNodes("/Extracao/Licenciamento")) {
-                Redesim_Licenciamento_Xml reg = new Redesim_Licenciamento_Xml() {
-                    IDSolicitacao = node["IDSolicitacao"].InnerText
-                };
+                Redesim_licenciamentoStruct reg = new Redesim_licenciamentoStruct();
+                reg.Protocolo = node["ProtocoloLicenca"].InnerText;
+                reg.IdSolicitacao = node["IDSolicitacao"].InnerText;
+                reg.SituacaoSolicitacao = node["situacaoSolicitacao"].InnerText;
+                reg.Orgao = node["Orgao"].InnerText;
+                reg.DataSolicitacao = node["DataSolicitacaoLicenciamento"].InnerText;
+                reg.IdLicenca = node["idLicenca"].InnerText;
+                reg.ProtocoloOrgao = node["ProtocoloOrgao"].InnerText;
+                reg.NumeroLicenca = node["NumeroLicenca"].InnerText;
+                reg.DetalheLicenca = node["DetalheLicenca"].InnerText;
+                reg.OrgaoLicenca = node["OrgaoLicenca"].InnerText;
+                reg.Risco = node["Risco"].InnerText;
+                reg.SituacaoLicenca = node["SituacaoLicenca"].InnerText;
+                reg.DataEmissao = node["DataEmissaoLicenca"].InnerText;
+                reg.DataValidade = node["DataValidadeLicenca"].InnerText;
+                reg.DataProtocolo = node["DataProtocolo"].InnerText;
+                reg.Cnpj = node["Cnpj"].InnerText;
+                reg.RazaoSocial = node["RazaoSocial"].InnerText;
+                reg.TipoLogradouro = node["TipoLogradouro"].InnerText;
+                reg.Logradouro = node["Logradouro"].InnerText;
+                reg.Numero = node["NumeroLogradouro"].InnerText;
+                reg.Bairro = node["Bairro"].InnerText;
+                reg.Municipio = node["Municipio"].InnerText;
+                reg.Complemento = node["Complementos"].InnerText;
+                reg.Cep = node["Cep"].InnerText;
+                reg.TipoInscricao = node["TipoInscricaoImovel"].InnerText;
+                reg.NumeroInscricao = node["NumeroInscricaoImovel"].InnerText;
+                reg.PorteEmpresaMei = node["PorteEmpresaMEI"].InnerText;
+                reg.EmpresaTeraEstabelecimento = node["EmpresaTeraEstabelecimento"].InnerText;
+                reg.Cnae = node["Cnae"].InnerText.Split(',');
+                reg.AtividadesAuxiliares = node["AtividadesAuxiliares"].InnerText.Split(',');
+
                 lista.Add(reg);
             }
 
