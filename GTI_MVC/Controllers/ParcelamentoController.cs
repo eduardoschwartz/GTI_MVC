@@ -1915,7 +1915,6 @@ namespace GTI_MVC.Controllers {
             return View(model);
         }
 
-
         [Route("Parc_cid")]
         [HttpPost]
         public ActionResult Parc_cid(ParcelamentoViewModel model,string action) {
@@ -2151,8 +2150,12 @@ namespace GTI_MVC.Controllers {
                 ViewBag.Result = "Data final inválida!";
                 return View(model);
             }
-            DateTime _data1 =  Convert.ToDateTime(model.DataDe); 
-            DateTime _data2 = Convert.ToDateTime(model.DataAte);
+
+            string _sData1= DateTime.ParseExact(model.DataDe, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+            string _sData2 = DateTime.ParseExact(model.DataAte, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+
+            DateTime _data1 = DateTime.Parse(_sData1,CultureInfo.InvariantCulture);
+            DateTime _data2 = DateTime.Parse(_sData2,CultureInfo.InvariantCulture);
 
             if (_data1 > _data2) {
                 ViewBag.Result = "Data inicial maior que data final!";
@@ -2160,11 +2163,10 @@ namespace GTI_MVC.Controllers {
             }
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
-            List<Parcelamento_web_master> _listaMaster = parcelamentoRepository.Lista_Parcelamento_Web_Master(_data1, _data2);
-            if (_listaMaster.Count== 0){
+            List<Parcelamento_web_master> _listaMaster = parcelamentoRepository.Lista_Parcelamento_Web_Master(_sData1, _sData2);
+            if (_listaMaster.Count == 0) {
                 ViewBag.Result = "Nenhum parcelamento foi gerado no período informado!";
                 return View(model);
-
             }
 
             ReportDocument rd = new ReportDocument();
@@ -2205,6 +2207,7 @@ namespace GTI_MVC.Controllers {
 
             return View(model);
         }
+
 
 
 
