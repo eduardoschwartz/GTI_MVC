@@ -68,7 +68,6 @@
             <div class="card-body">
                 <Label style="font-size:14px">Nº Processo:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.NumeroProcesso</span><Label style="padding-left:30px;font-size:14px">Data da Confissão de Dívida:&nbsp;</Label><span style="font-weight:bold">@Model.Data_Vencimento</span><Label style="padding-left:30px; font-size:14px">Código/Insc. do Lançamento:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Contribuinte.Codigo</span><br />
                 <Label style="font-size:14px">Nome/Razão Social:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Contribuinte.Nome</span><br />
-                <Label style="font-size:14px">Endereço:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Contribuinte.Logradouro_Nome,&nbsp; @Model.Contribuinte.Numero&nbsp;-&nbsp;@Model.Contribuinte.Bairro_Nome</span><br />
                 @if (Model.Contribuinte.Logradouro_Nome != "") {
                     <Label style="font-size:14px">Endereço:&nbsp;</Label><span style="font-weight:bold;font-size:14px">@Model.Contribuinte.Logradouro_Nome</span><br />
                 }

@@ -341,7 +341,6 @@ namespace GTI_MVC.Controllers {
             string _end = _header.Endereco + ", " + _header.Numero.ToString();
             if (!string.IsNullOrEmpty(_header.Complemento))
                 _end += " " + _header.Complemento;
-            _end += ", " + _header.Nome_bairro;
             if (!string.IsNullOrEmpty(_header.Quadra_original))
                 _end += " Quadra:" + _header.Quadra_original;
             if (!string.IsNullOrEmpty(_header.Lote_original))
@@ -356,7 +355,8 @@ namespace GTI_MVC.Controllers {
                 Contribuinte_cep = Convert.ToInt32(Functions.RetornaNumero(_header.Cep)),
                 Contribuinte_cidade = _header.Nome_cidade,
                 Contribuinte_uf = _header.Nome_uf,
-                Contribuinte_tipo=_tipoDoc
+                Contribuinte_tipo=_tipoDoc,
+                
             };
 
             short _plano_codigo = 4; //(4=sem plano)
@@ -1973,8 +1973,6 @@ namespace GTI_MVC.Controllers {
                         } else {
                             model.Requerente.Cidade_Codigo = 0;
                         }
-                        
-
                     }
 
                     model.Requerente.Cidade_Nome = cepObj.Cidade.ToUpper();
