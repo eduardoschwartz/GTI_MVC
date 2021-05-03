@@ -134,6 +134,7 @@
             this.Dv2Option = new System.Windows.Forms.RadioButton();
             this.Dv1Option = new System.Windows.Forms.RadioButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.localEmQueUmProcessoSeEncontraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BarStatus.SuspendLayout();
             this.MenuBarStrip.SuspendLayout();
             this.TopBarToolStrip.SuspendLayout();
@@ -649,7 +650,8 @@
             // RelatorioProtocoloMenu
             // 
             this.RelatorioProtocoloMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ProcessoAtrasoMenu});
+            this.ProcessoAtrasoMenu,
+            this.localEmQueUmProcessoSeEncontraToolStripMenuItem});
             this.RelatorioProtocoloMenu.Name = "RelatorioProtocoloMenu";
             this.RelatorioProtocoloMenu.Size = new System.Drawing.Size(191, 22);
             this.RelatorioProtocoloMenu.Text = "Relatórios";
@@ -657,7 +659,7 @@
             // ProcessoAtrasoMenu
             // 
             this.ProcessoAtrasoMenu.Name = "ProcessoAtrasoMenu";
-            this.ProcessoAtrasoMenu.Size = new System.Drawing.Size(181, 22);
+            this.ProcessoAtrasoMenu.Size = new System.Drawing.Size(280, 22);
             this.ProcessoAtrasoMenu.Text = "Processos em atraso";
             this.ProcessoAtrasoMenu.Click += new System.EventHandler(this.ProcessoAtrasoMenu_Click);
             // 
@@ -1068,6 +1070,13 @@
             this.Dv1Option.UseVisualStyleBackColor = false;
             this.Dv1Option.CheckedChanged += new System.EventHandler(this.OptDv1_CheckedChanged);
             // 
+            // localEmQueUmProcessoSeEncontraToolStripMenuItem
+            // 
+            this.localEmQueUmProcessoSeEncontraToolStripMenuItem.Name = "localEmQueUmProcessoSeEncontraToolStripMenuItem";
+            this.localEmQueUmProcessoSeEncontraToolStripMenuItem.Size = new System.Drawing.Size(280, 22);
+            this.localEmQueUmProcessoSeEncontraToolStripMenuItem.Text = "Local em que um processo se encontra";
+            this.localEmQueUmProcessoSeEncontraToolStripMenuItem.Click += new System.EventHandler(this.localEmQueUmProcessoSeEncontraToolStripMenuItem_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1205,6 +1214,7 @@
         private System.Windows.Forms.ToolStripMenuItem ComunicadoIsencaoMenu;
         private System.Windows.Forms.ToolStripMenuItem TabelaCnaeMenu;
         private System.Windows.Forms.ToolStripMenuItem EmissaoGuiaMenu;
+        private System.Windows.Forms.ToolStripMenuItem localEmQueUmProcessoSeEncontraToolStripMenuItem;
     }
 }
 

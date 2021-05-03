@@ -1196,6 +1196,14 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public int Retorna_Processo_Assunto(short Ano, int Numero) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                int Sql = (from t in db.Processogti where t.Ano == Ano && t.Numero == Numero  select t.Codassunto).FirstOrDefault();
+                return Sql;
+            }
+        }
+
+
         public Exception Enviar_Processo(Tramitacao reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 Tramitacao t = db.Tramitacao.First(i => i.Ano == reg.Ano && i.Numero == reg.Numero && i.Seq == reg.Seq);

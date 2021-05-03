@@ -967,6 +967,21 @@ namespace GTI_Desktop.Forms
                 MessageBox.Show("Acesso não permitido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
+        private void localEmQueUmProcessoSeEncontraToolStripMenuItem_Click(object sender, EventArgs e) {
+            gtiCore.Ocupado(this);
+            var formToShow = Application.OpenForms.Cast<Form>().FirstOrDefault(c => c is Forms.Situacao_Tramite);
+            if (formToShow != null) {
+                formToShow.Show();
+            } else {
+                Situacao_Tramite f1 = new Situacao_Tramite {
+                    Tag = "Menu",
+                    MdiParent = this
+                };
+                f1.Show();
+            }
+            gtiCore.Liberado(this);
+        }
+
         //private void FillBackgroundImage(bool bTeste) {
         //    Bitmap img = bTeste ? Properties.Resources.rosa : Properties.Resources.bege;
         //    Color cor = bTeste ? Color.FromArgb(250, 218, 226) : Color.OldLace;

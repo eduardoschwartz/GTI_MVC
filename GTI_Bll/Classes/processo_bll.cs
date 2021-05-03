@@ -557,6 +557,11 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_CCusto_TramiteCC(Ano, Numero, Seq);
         }
 
+        public int Retorna_Processo_Assunto(short Ano, int Numero) {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Retorna_Processo_Assunto(Ano, Numero);
+        }
+
         public Exception Enviar_Processo(Tramitacao reg) {
             Processo_Data obj = new Processo_Data(_connection);
             Exception ex = obj.Enviar_Processo(reg);
