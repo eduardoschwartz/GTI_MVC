@@ -1203,6 +1203,21 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Processogti Retorna_ProcessoGti(short Ano, int Numero) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Processogti _reg = new Processogti();
+                var sql = (from t in db.Processogti where t.Ano == Ano && t.Numero == Numero select t).First();
+                if (sql != null) {
+                    _reg.Codassunto = sql.Codassunto;
+                    _reg.Dataarquiva = sql.Dataarquiva;
+                    _reg.Datasuspenso = sql.Datasuspenso;
+                    _reg.Datacancel = sql.Datacancel;
+                    _reg.Dataentrada = sql.Dataentrada;
+                }
+                return _reg;
+            }
+        }
+
 
         public Exception Enviar_Processo(Tramitacao reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {

@@ -22,12 +22,12 @@ namespace GTI_Desktop.Forms {
             Limpa();
             int Numero = Convert.ToInt32(NumeroText.Text);
             short Ano = Convert.ToInt16(AnoText.Text);
-            int Assunto = processoRepository.Retorna_Processo_Assunto(Ano, Numero);
+            Processogti _proc = processoRepository.Retorna_ProcessoGti(Ano, Numero);
 
             lvMain.Items.Clear();
             gtiCore.Ocupado(this);
             
-            List<TramiteStruct> Lista = processoRepository.DadosTramite(Ano, Numero,Assunto );
+            List<TramiteStruct> Lista = processoRepository.DadosTramite(Ano, Numero,_proc.Codassunto );
 
             foreach (TramiteStruct Reg in Lista) {
                 ListViewItem lvi = new ListViewItem();
@@ -47,9 +47,22 @@ namespace GTI_Desktop.Forms {
                 lvMain.Items.Add(lvi);
             }
 
-            Verificar_Processo(Ano,Numero);
+            Local_Tramite lt= Verificar_Processo(Ano,Numero);
+            LocalCodigoText.Text = lt.Local_Codigo.ToString();
+            DataText.Text = lt.Data_Evento==DateTime.MinValue?_proc.Dataentrada.ToString("dd/MM/yyyy"):   lt.Data_Evento.ToString("dd/MM/yyyy");
+            ArquivadoText.Text = lt.Arquivado ? "Sim" : "Não";
+            SuspensoText.Text = lt.Suspenso ? "Sim" : "Não";
+            if(lt.Arquivado)
+                LocalNomeText.Text = "PROCESSO ARQUIVADO";
+            else {
+                if (lt.Suspenso) {
+                    LocalNomeText.Text = "PROCESSO SUSPENSO/CANCELADO";
+                } else {
+                    LocalNomeText.Text = lt.Local_Nome;
+                }
+            }
+            
             gtiCore.Liberado(this);
-
 
         }
 
@@ -70,8 +83,34 @@ namespace GTI_Desktop.Forms {
 
             List<Lista_Tramitacao> _listaTramitacao = new List<Lista_Tramitacao>();
             Processo_bll processoRepository = new Processo_bll(_connection);
-            int Assunto = processoRepository.Retorna_Processo_Assunto(Ano, Numero);
-            List<TramiteStruct> ListaTramite = processoRepository.DadosTramite(Ano, Numero, Assunto);
+            Processogti _proc = processoRepository.Retorna_ProcessoGti(Ano, Numero);
+
+            if (_proc.Dataarquiva != null) {
+                lt.Local_Codigo = 0;
+                lt.Local_Nome = "";
+                lt.Arquivado = true;
+                lt.Suspenso = false;
+                lt.Data_Evento = Convert.ToDateTime(_proc.Dataarquiva);
+                return lt;
+            } 
+            if (_proc.Datasuspenso != null ) {
+                lt.Local_Codigo = 0;
+                lt.Local_Nome = "";
+                lt.Arquivado = false;
+                lt.Suspenso = true;
+                lt.Data_Evento = Convert.ToDateTime(_proc.Datasuspenso);
+                return lt;
+            }
+            if (_proc.Datacancel != null) {
+                lt.Local_Codigo = 0;
+                lt.Local_Nome = "";
+                lt.Arquivado = false;
+                lt.Suspenso = true;
+                lt.Data_Evento = Convert.ToDateTime(_proc.Datacancel);
+                return lt;
+            }
+
+            List<TramiteStruct> ListaTramite = processoRepository.DadosTramite(Ano, Numero, _proc.Codassunto);
 
             foreach (TramiteStruct Reg in ListaTramite) {
                 Lista_Tramitacao _reg = new Lista_Tramitacao(){ 
@@ -90,7 +129,30 @@ namespace GTI_Desktop.Forms {
                 _listaTramitacao.Add(_reg);
             }
 
+            int _rows = _listaTramitacao.Count;
+            //1º caso, a tabela possui apenas 1 linha, neste caso o processo estara neste local
+            if (_rows == 1) {
+                lt.Local_Codigo = _listaTramitacao[0].CentroCusto_Codigo;
+                lt.Local_Nome = _listaTramitacao[0].CentroCusto_Nome;
+                lt.Arquivado = false;
+                lt.Suspenso = false;
+                if(_listaTramitacao[0].Data_Envio==null)
+                    lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[0].Data_Entrada);
+                else
+                    lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[0].Data_Envio);
+                return lt;
+            }
 
+            for (int _row = 0; _row < _rows; _row++) {
+                string _data1 =  _listaTramitacao[_row].Data_Entrada==null ? "": _listaTramitacao[_row].Data_Entrada.ToString();
+                string _data2 = _listaTramitacao[_row].Data_Envio == null ? "" : _listaTramitacao[_row].Data_Envio.ToString();
+
+
+
+
+
+
+            }
 
             return lt;
         

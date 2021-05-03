@@ -623,6 +623,10 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Processos( Ano,Numero,  PartialName,PartialEndereco,EnderecoNumero);
         }
 
+        public Processogti Retorna_ProcessoGti(short Ano, int Numero) {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Retorna_ProcessoGti(Ano, Numero);
+        }
 
     }
 }
