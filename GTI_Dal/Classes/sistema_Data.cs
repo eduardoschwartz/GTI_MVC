@@ -228,7 +228,7 @@ namespace GTI_Dal.Classes {
                         }
                         _numero =  _cidadao.NumeroR==null?0: (int)_cidadao.NumeroR;
                         _complemento = _cidadao.ComplementoR;
-                        if (_cidadao.NomeCidadeR.ToUpper() == "JABOTICABAL") {
+                        if (_cidadao.NomeCidadeR==null || _cidadao.NomeCidadeR == "JABOTICABAL" ) {
                             int _logR = _cidadao.CodigoLogradouroR == null ? 0 : (int)_cidadao.CodigoLogradouroR;
                             Bairro b = endereco_Class.RetornaLogradouroBairro(_logR, (short)_numero);
                             _bairro = b.Descbairro??"";
