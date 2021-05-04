@@ -558,7 +558,8 @@ namespace GTI_MVC.Controllers {
                         Valor_multa = item.Valor_multa,
                         Valor_penalidade = item.Valor_penalidade,
                         Valor_principal = item.Valor_principal,
-                        Valor_total = item.Valor_total
+                        Valor_total = item.Valor_total,
+                        Execucao_Fiscal=item.Execucao_Fiscal
                     };
                     _totalSel += item.Valor_total;
                     _listaOrigem.Add(_r);
@@ -596,7 +597,8 @@ namespace GTI_MVC.Controllers {
                     Valor_Penalidade = item.Valor_penalidade,
                     Valor_Total = item.Valor_total,
                     Valor_Tributo = item.Valor_principal,
-                    Sequencia = item.Sequencia
+                    Sequencia = item.Sequencia,
+                    Execucao_Fiscal=item.Execucao_Fiscal
                 };
                 _somaP += item.Valor_principal;
                 _somaJ += item.Valor_juros;
@@ -790,7 +792,7 @@ namespace GTI_MVC.Controllers {
                     Exercicio = item.Exercicio,
                     Idx = item.Idx,
                     Lancamento = item.Lancamento,
-                    Nome_lancamento = item.Nome_lancamento,
+                    Nome_lancamento = Functions.TruncateTo(item.Nome_lancamento, 16),
                     Parcela = item.Parcela,
                     Perc_penalidade = item.Perc_penalidade,
                     Qtde_parcelamento = item.Qtde_parcelamento,
@@ -801,7 +803,8 @@ namespace GTI_MVC.Controllers {
                     Valor_multa = item.Valor_multa,
                     Valor_penalidade = item.Valor_penalidade,
                     Valor_principal = item.Valor_principal,
-                    Valor_total = item.Valor_total
+                    Valor_total = item.Valor_total,
+                    Execucao_Fiscal=item.Execucao_Fiscal
                 };
                 _listaP.Add(d);
                 _SomaP += item.Valor_principal;
@@ -1031,7 +1034,7 @@ namespace GTI_MVC.Controllers {
                     Exercicio = item.Exercicio,
                     Idx = item.Idx,
                     Lancamento = item.Lancamento,
-                    Nome_lancamento = item.Nome_lancamento,
+                    Nome_lancamento = Functions.TruncateTo(item.Nome_lancamento, 16),
                     Parcela = item.Parcela,
                     Perc_penalidade = item.Perc_penalidade,
                     Qtde_parcelamento = item.Qtde_parcelamento,
@@ -1042,7 +1045,8 @@ namespace GTI_MVC.Controllers {
                     Valor_multa = item.Valor_multa,
                     Valor_penalidade = item.Valor_penalidade,
                     Valor_principal = item.Valor_principal,
-                    Valor_total = item.Valor_total
+                    Valor_total = item.Valor_total,
+                    Execucao_Fiscal=item.Execucao_Fiscal
                 };
                 _listaP.Add(d);
                 _SomaP += item.Valor_principal;
@@ -1593,7 +1597,7 @@ namespace GTI_MVC.Controllers {
                     Exercicio = item.Exercicio,
                     Idx = item.Idx,
                     Lancamento = item.Lancamento,
-                    Nome_lancamento = item.Nome_lancamento,
+                    Nome_lancamento = Functions.TruncateTo(item.Nome_lancamento, 16),
                     Parcela = item.Parcela,
                     Perc_penalidade = item.Perc_penalidade,
                     Qtde_parcelamento = item.Qtde_parcelamento,
@@ -1604,7 +1608,8 @@ namespace GTI_MVC.Controllers {
                     Valor_multa = item.Valor_multa,
                     Valor_penalidade = item.Valor_penalidade,
                     Valor_principal = item.Valor_principal,
-                    Valor_total = item.Valor_total
+                    Valor_total = item.Valor_total,
+                    Execucao_Fiscal=item.Execucao_Fiscal
                 };
                 _listaP.Add(d);
             }
