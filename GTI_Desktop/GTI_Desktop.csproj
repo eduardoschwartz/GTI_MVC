@@ -425,6 +425,12 @@
     <Compile Include="Forms\Processo.designer.cs">
       <DependentUpon>Processo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ProcessoEmCCusto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProcessoEmCCusto.Designer.cs">
+      <DependentUpon>ProcessoEmCCusto.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Processo_Assunto.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -762,6 +768,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Processo.resx">
       <DependentUpon>Processo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProcessoEmCCusto.resx">
+      <DependentUpon>ProcessoEmCCusto.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Processo_Assunto.resx">
       <DependentUpon>Processo_Assunto.cs</DependentUpon>

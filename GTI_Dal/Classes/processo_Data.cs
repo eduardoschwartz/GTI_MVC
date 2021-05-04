@@ -1206,14 +1206,21 @@ namespace GTI_Dal.Classes {
         public Processogti Retorna_ProcessoGti(short Ano, int Numero) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 Processogti _reg = new Processogti();
-                var sql = (from t in db.Processogti where t.Ano == Ano && t.Numero == Numero select t).First();
-                if (sql != null) {
-                    _reg.Codassunto = sql.Codassunto;
-                    _reg.Dataarquiva = sql.Dataarquiva;
-                    _reg.Datasuspenso = sql.Datasuspenso;
-                    _reg.Datacancel = sql.Datacancel;
-                    _reg.Dataentrada = sql.Dataentrada;
+                try {
+                    var sql = (from t in db.Processogti where t.Ano == Ano && t.Numero == Numero select t).First();
+                    if (sql != null) {
+                        _reg.Codassunto = sql.Codassunto;
+                        _reg.Dataarquiva = sql.Dataarquiva;
+                        _reg.Datasuspenso = sql.Datasuspenso;
+                        _reg.Datacancel = sql.Datacancel;
+                        _reg.Dataentrada = sql.Dataentrada;
+                    }
+                } catch (Exception) {
+
                 }
+                if (_reg.Dataentrada == null) {
+                    _reg.Datacancel = DateTime.Now;
+                }                
                 return _reg;
             }
         }
@@ -1473,6 +1480,173 @@ namespace GTI_Dal.Classes {
 
                 Sql = Sql.OrderBy(m => m.Ano).ThenBy(n => n.Numero);
                 return Sql.ToList();
+            }
+        }
+
+
+        public Local_Tramite Verificar_Processo(short Ano, int Numero) {
+            Local_Tramite lt = new Local_Tramite() {
+                Ano = Ano,
+                Numero = Numero
+            };
+
+            List<Lista_Tramitacao> _listaTramitacao = new List<Lista_Tramitacao>();
+            Processogti _proc = Retorna_ProcessoGti(Ano, Numero);
+
+            if (_proc.Dataarquiva != null) {
+                lt.Local_Codigo = 0;
+                lt.Local_Nome = "";
+                lt.Arquivado = true;
+                lt.Suspenso = false;
+                lt.Data_Evento = Convert.ToDateTime(_proc.Dataarquiva);
+                return lt;
+            }
+            if (_proc.Datasuspenso != null) {
+                lt.Local_Codigo = 0;
+                lt.Local_Nome = "";
+                lt.Arquivado = false;
+                lt.Suspenso = true;
+                lt.Data_Evento = Convert.ToDateTime(_proc.Datasuspenso);
+                return lt;
+            }
+            if (_proc.Datacancel != null) {
+                lt.Local_Codigo = 0;
+                lt.Local_Nome = "";
+                lt.Arquivado = false;
+                lt.Suspenso = true;
+                lt.Data_Evento = Convert.ToDateTime(_proc.Datacancel);
+                return lt;
+            }
+
+            List<TramiteStruct> ListaTramite = DadosTramite(Ano, Numero, _proc.Codassunto);
+
+            foreach (TramiteStruct Reg in ListaTramite) {
+                Lista_Tramitacao _reg = new Lista_Tramitacao() {
+                    Seq = Reg.Seq,
+                    CentroCusto_Codigo = Reg.CentroCustoCodigo,
+                    CentroCusto_Nome = Reg.CentroCustoNome,
+                    Usuario1 = Reg.Usuario1,
+                    Usuario2 = Reg.Usuario2
+                };
+                if (!string.IsNullOrEmpty(Reg.DataEntrada)) {
+                    _reg.Data_Entrada = Convert.ToDateTime(Reg.DataEntrada);
+                }
+                if (!string.IsNullOrEmpty(Reg.DataEnvio)) {
+                    _reg.Data_Envio = Convert.ToDateTime(Reg.DataEnvio);
+                }
+                _listaTramitacao.Add(_reg);
+            }
+
+            int _rows = _listaTramitacao.Count;
+
+            //1º caso, a tabela possui apenas 1 linha, neste caso o processo estará neste local
+            if (_rows == 1) {
+                lt.Local_Codigo = _listaTramitacao[0].CentroCusto_Codigo;
+                lt.Local_Nome = _listaTramitacao[0].CentroCusto_Nome;
+                lt.Arquivado = false;
+                lt.Suspenso = false;
+                if (_listaTramitacao[0].Data_Envio == null)
+                    lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[0].Data_Entrada);
+                else
+                    lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[0].Data_Envio);
+                return lt;
+            }
+
+            for (int _row = 0; _row < _rows; _row++) {
+                string _data1 = _listaTramitacao[_row].Data_Entrada == null ? "" : _listaTramitacao[_row].Data_Entrada.ToString();
+                string _data2 = _listaTramitacao[_row].Data_Envio == null ? "" : _listaTramitacao[_row].Data_Envio.ToString();
+
+                if (_row == 0 && _data1 == "") {
+                    //2º caso, o processo possui mais de uma linha mas nenhuma foi tramitada, neste caso o processo estará na 1ª linha
+                    lt.Local_Codigo = _listaTramitacao[0].CentroCusto_Codigo;
+                    lt.Local_Nome = _listaTramitacao[0].CentroCusto_Nome;
+                    lt.Arquivado = false;
+                    lt.Suspenso = false;
+                    lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[0].Data_Entrada);
+                    return lt;
+                }
+
+                if (_data2 == "" && _data1 != "") {
+                    if (_row == _rows - 1) {
+                        //3º caso, o processo foi recebido mas não enviado e esta na última linha, neste caso o processo estará na 1ª linha
+                        lt.Local_Codigo = _listaTramitacao[_row].CentroCusto_Codigo;
+                        lt.Local_Nome = _listaTramitacao[_row].CentroCusto_Nome;
+                        lt.Arquivado = false;
+                        lt.Suspenso = false;
+                        lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[_row].Data_Entrada);
+                        return lt;
+                    } else {
+                        //4º caso, o processo foi recebido mas não enviado e não esta na última linha
+                        string _data3 = _listaTramitacao[_row + 1].Data_Entrada == null ? "" : _listaTramitacao[_row + 1].Data_Entrada.ToString();
+                        //Verificamos se houve entrada na proxima linha
+                        if (_data3 == "") {
+                            //Se não houve entrada na próxima linha, então o processo estará nesta linha
+                            lt.Local_Codigo = _listaTramitacao[_row].CentroCusto_Codigo;
+                            lt.Local_Nome = _listaTramitacao[_row].CentroCusto_Nome;
+                            lt.Arquivado = false;
+                            lt.Suspenso = false;
+                            lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[_row].Data_Entrada);
+                            return lt;
+                        } else {
+                            //Iremos verificar as outras linhas até aonde não houver mais recebimento
+                            for (int t = _row; t < _rows; t++) {
+                                _data3 = _listaTramitacao[t].Data_Entrada == null ? "" : _listaTramitacao[t].Data_Entrada.ToString();
+                                if (_row + 1 == _rows) {
+                                    //Se a última linha estiver recebida, então o processo estará nesta linha
+                                    lt.Local_Codigo = _listaTramitacao[t].CentroCusto_Codigo;
+                                    lt.Local_Nome = _listaTramitacao[t].CentroCusto_Nome;
+                                    lt.Arquivado = false;
+                                    lt.Suspenso = false;
+                                    lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[t].Data_Entrada);
+                                    return lt;
+                                } else {
+                                    if (t == _rows - 1) {
+                                        lt.Local_Codigo = _listaTramitacao[t].CentroCusto_Codigo;
+                                        lt.Local_Nome = _listaTramitacao[t].CentroCusto_Nome;
+                                        lt.Arquivado = false;
+                                        lt.Suspenso = false;
+                                        lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[t].Data_Entrada);
+                                        return lt;
+                                    } else {
+                                        string _data4 = _listaTramitacao[t + 1].Data_Entrada == null ? "" : _listaTramitacao[t + 1].Data_Entrada.ToString();
+                                        if (_data4 == "") {
+                                            //Se a linha seguinte não estiver recebida, então o processo estará nesta linha
+                                            lt.Local_Codigo = _listaTramitacao[t].CentroCusto_Codigo;
+                                            lt.Local_Nome = _listaTramitacao[t].CentroCusto_Nome;
+                                            lt.Arquivado = false;
+                                            lt.Suspenso = false;
+                                            lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[t].Data_Entrada);
+                                            return lt;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if(_data1=="" && _data2 == "") {
+                        lt.Local_Codigo = _listaTramitacao[_row-1].CentroCusto_Codigo;
+                        lt.Local_Nome = _listaTramitacao[_row-1].CentroCusto_Nome;
+                        lt.Arquivado = false;
+                        lt.Suspenso = false;
+                        lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[_row-1].Data_Entrada);
+                        return lt;
+                    }
+                }
+            }
+
+            return lt;
+
+        }
+
+        public List<Processogti> Lista_Processos_CCusto(int Local) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+
+                var Sql = (from p in db.Processogti
+                           join t in db.Tramitacao on new { p1 = p.Ano, p2 = p.Numero } equals new {p1=t.Ano,p2=t.Numero } into tp from t in tp.DefaultIfEmpty()
+                           where p.Dataarquiva==null && p.Datacancel==null && t.Ccusto==Local  orderby new { p.Ano ,p.Numero} select p).ToList();
+                return Sql;
             }
         }
 

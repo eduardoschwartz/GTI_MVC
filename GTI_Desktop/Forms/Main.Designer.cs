@@ -92,6 +92,7 @@
             this.ControleProcessoMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.RelatorioProtocoloMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.ProcessoAtrasoMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.localEmQueUmProcessoSeEncontraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OutrosMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.ConfigMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.SecurityMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -134,7 +135,7 @@
             this.Dv2Option = new System.Windows.Forms.RadioButton();
             this.Dv1Option = new System.Windows.Forms.RadioButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.localEmQueUmProcessoSeEncontraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.processosQueEstãoUmCentroDeCustosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BarStatus.SuspendLayout();
             this.MenuBarStrip.SuspendLayout();
             this.TopBarToolStrip.SuspendLayout();
@@ -651,7 +652,8 @@
             // 
             this.RelatorioProtocoloMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ProcessoAtrasoMenu,
-            this.localEmQueUmProcessoSeEncontraToolStripMenuItem});
+            this.localEmQueUmProcessoSeEncontraToolStripMenuItem,
+            this.processosQueEstãoUmCentroDeCustosToolStripMenuItem});
             this.RelatorioProtocoloMenu.Name = "RelatorioProtocoloMenu";
             this.RelatorioProtocoloMenu.Size = new System.Drawing.Size(191, 22);
             this.RelatorioProtocoloMenu.Text = "Relatórios";
@@ -659,9 +661,16 @@
             // ProcessoAtrasoMenu
             // 
             this.ProcessoAtrasoMenu.Name = "ProcessoAtrasoMenu";
-            this.ProcessoAtrasoMenu.Size = new System.Drawing.Size(280, 22);
+            this.ProcessoAtrasoMenu.Size = new System.Drawing.Size(295, 22);
             this.ProcessoAtrasoMenu.Text = "Processos em atraso";
             this.ProcessoAtrasoMenu.Click += new System.EventHandler(this.ProcessoAtrasoMenu_Click);
+            // 
+            // localEmQueUmProcessoSeEncontraToolStripMenuItem
+            // 
+            this.localEmQueUmProcessoSeEncontraToolStripMenuItem.Name = "localEmQueUmProcessoSeEncontraToolStripMenuItem";
+            this.localEmQueUmProcessoSeEncontraToolStripMenuItem.Size = new System.Drawing.Size(295, 22);
+            this.localEmQueUmProcessoSeEncontraToolStripMenuItem.Text = "Local em que um processo se encontra";
+            this.localEmQueUmProcessoSeEncontraToolStripMenuItem.Click += new System.EventHandler(this.localEmQueUmProcessoSeEncontraToolStripMenuItem_Click);
             // 
             // OutrosMenu
             // 
@@ -1070,12 +1079,12 @@
             this.Dv1Option.UseVisualStyleBackColor = false;
             this.Dv1Option.CheckedChanged += new System.EventHandler(this.OptDv1_CheckedChanged);
             // 
-            // localEmQueUmProcessoSeEncontraToolStripMenuItem
+            // processosQueEstãoUmCentroDeCustosToolStripMenuItem
             // 
-            this.localEmQueUmProcessoSeEncontraToolStripMenuItem.Name = "localEmQueUmProcessoSeEncontraToolStripMenuItem";
-            this.localEmQueUmProcessoSeEncontraToolStripMenuItem.Size = new System.Drawing.Size(280, 22);
-            this.localEmQueUmProcessoSeEncontraToolStripMenuItem.Text = "Local em que um processo se encontra";
-            this.localEmQueUmProcessoSeEncontraToolStripMenuItem.Click += new System.EventHandler(this.localEmQueUmProcessoSeEncontraToolStripMenuItem_Click);
+            this.processosQueEstãoUmCentroDeCustosToolStripMenuItem.Name = "processosQueEstãoUmCentroDeCustosToolStripMenuItem";
+            this.processosQueEstãoUmCentroDeCustosToolStripMenuItem.Size = new System.Drawing.Size(295, 22);
+            this.processosQueEstãoUmCentroDeCustosToolStripMenuItem.Text = "Processos que estão um Centro de Custos";
+            this.processosQueEstãoUmCentroDeCustosToolStripMenuItem.Click += new System.EventHandler(this.processosQueEstãoUmCentroDeCustosToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -1215,6 +1224,7 @@
         private System.Windows.Forms.ToolStripMenuItem TabelaCnaeMenu;
         private System.Windows.Forms.ToolStripMenuItem EmissaoGuiaMenu;
         private System.Windows.Forms.ToolStripMenuItem localEmQueUmProcessoSeEncontraToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem processosQueEstãoUmCentroDeCustosToolStripMenuItem;
     }
 }
 

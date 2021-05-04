@@ -628,5 +628,16 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_ProcessoGti(Ano, Numero);
         }
 
+        public Local_Tramite Verificar_Processo(short Ano, int Numero) {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Verificar_Processo(Ano, Numero);
+        }
+
+        public List<Processogti> Lista_Processos_CCusto(int Local) {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Lista_Processos_CCusto(Local);
+        }
+
+
     }
 }

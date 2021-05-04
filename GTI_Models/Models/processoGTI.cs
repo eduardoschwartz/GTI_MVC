@@ -190,5 +190,26 @@ namespace GTI_Models.Models {
         public string Assunto { get; set; }
     }
 
+    public class Lista_Tramitacao {
+        public int Seq { get; set; }
+        public int CentroCusto_Codigo { get; set; }
+        public string CentroCusto_Nome { get; set; }
+        public DateTime? Data_Entrada { get; set; }
+        public string Usuario1 { get; set; }
+        public DateTime? Data_Envio { get; set; }
+        public string Usuario2 { get; set; }
+    }
+
+
+    public class Local_Tramite {
+        public short Ano { get; set; }
+        public int Numero { get; set; }
+        public int Local_Codigo { get; set; }
+        public string Local_Nome { get; set; }
+        public bool Arquivado { get; set; }
+        public bool Suspenso { get; set; }
+        public DateTime Data_Evento { get; set; }
+    }
+
 
 }
