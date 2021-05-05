@@ -317,7 +317,8 @@ namespace GTI_MVC.Controllers {
                         Valor_Penalidade=item.Valor_penalidade,
                         Perc_Penalidade=item.Perc_penalidade,
                         Qtde_Parcelamento=item.Qtde_parcelamento,
-                        Execucao_Fiscal=item.Execucao_Fiscal
+                        Execucao_Fiscal=item.Execucao_Fiscal,
+                        Protesto=item.Protesto
                     };
                     _listaWebOrigem.Add(reg);
                 }
@@ -335,6 +336,10 @@ namespace GTI_MVC.Controllers {
                 if(_codigo>100000 && _codigo<300000) {
                     if (!_ativo)
                         _tipoDoc = "F"; //Empresas inativas são tratadas como Físicas
+                    Empresa_bll empresaRepository = new Empresa_bll(_connection);
+                    if (empresaRepository.EmpresaSuspensa(_codigo))
+                        _tipoDoc = "F"; //Empresas suspensas são tratadas como Físicas
+
                 }
             }
 
@@ -500,7 +505,8 @@ namespace GTI_MVC.Controllers {
                     Valor_penalidade=item.Valor_penalidade,
                     Valor_principal=item.Valor_principal,
                     Valor_total=item.Valor_total,
-                    Execucao_Fiscal=item.Execucao_Fiscal
+                    Execucao_Fiscal=item.Execucao_Fiscal,
+                    Protesto=item.Protesto
                 };
                 _listaP.Add(d);
                 _SomaP += item.Valor_principal;
@@ -559,7 +565,8 @@ namespace GTI_MVC.Controllers {
                         Valor_penalidade = item.Valor_penalidade,
                         Valor_principal = item.Valor_principal,
                         Valor_total = item.Valor_total,
-                        Execucao_Fiscal=item.Execucao_Fiscal
+                        Execucao_Fiscal=item.Execucao_Fiscal,
+                        Protesto=item.Protesto
                     };
                     _totalSel += item.Valor_total;
                     _listaOrigem.Add(_r);
@@ -598,7 +605,8 @@ namespace GTI_MVC.Controllers {
                     Valor_Total = item.Valor_total,
                     Valor_Tributo = item.Valor_principal,
                     Sequencia = item.Sequencia,
-                    Execucao_Fiscal=item.Execucao_Fiscal
+                    Execucao_Fiscal=item.Execucao_Fiscal,
+                    Protesto=item.Protesto
                 };
                 _somaP += item.Valor_principal;
                 _somaJ += item.Valor_juros;
@@ -804,7 +812,8 @@ namespace GTI_MVC.Controllers {
                     Valor_penalidade = item.Valor_penalidade,
                     Valor_principal = item.Valor_principal,
                     Valor_total = item.Valor_total,
-                    Execucao_Fiscal=item.Execucao_Fiscal
+                    Execucao_Fiscal=item.Execucao_Fiscal,
+                    Protesto=item.Protesto
                 };
                 _listaP.Add(d);
                 _SomaP += item.Valor_principal;
@@ -1046,7 +1055,8 @@ namespace GTI_MVC.Controllers {
                     Valor_penalidade = item.Valor_penalidade,
                     Valor_principal = item.Valor_principal,
                     Valor_total = item.Valor_total,
-                    Execucao_Fiscal=item.Execucao_Fiscal
+                    Execucao_Fiscal=item.Execucao_Fiscal,
+                    Protesto=item.Protesto
                 };
                 _listaP.Add(d);
                 _SomaP += item.Valor_principal;
@@ -1174,8 +1184,15 @@ namespace GTI_MVC.Controllers {
             //Carrega Origem
             List<SpParcelamentoOrigem>_listaO= parcelamentoRepository.Lista_Parcelamento_Selected(p);
             string _ajuizado = _listaO[0].Ajuizado;
+            if (_ajuizado=="N") {
+                foreach (SpParcelamentoOrigem item in _listaO) {
+                    if (item.Protesto == "S") {
+                        _ajuizado = "S";
+                        break;
+                    }
+                }
+            }
             ViewBag.ajuizado = _ajuizado;
-
             ParcelamentoViewModel model = new ParcelamentoViewModel();
             model.Guid = p;
             return View(model);
@@ -1609,7 +1626,8 @@ namespace GTI_MVC.Controllers {
                     Valor_penalidade = item.Valor_penalidade,
                     Valor_principal = item.Valor_principal,
                     Valor_total = item.Valor_total,
-                    Execucao_Fiscal=item.Execucao_Fiscal
+                    Execucao_Fiscal=item.Execucao_Fiscal,
+                    Protesto=item.Protesto
                 };
                 _listaP.Add(d);
             }

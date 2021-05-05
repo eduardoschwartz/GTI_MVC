@@ -27,5 +27,6 @@ namespace GTI_Models.Models {
         public string Lancamento_Nome { get; set; }
         public string Ajuizado { get; set; }
         public string Execucao_Fiscal { get; set; }
+        public string Protesto { get; set; }
     }
 }

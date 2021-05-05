@@ -25,5 +25,6 @@ namespace GTI_Models.Models {
         public decimal Valor_penalidade { get; set; }
         public bool Selected { get; set; }
         public string Execucao_Fiscal { get; set; }
+        public string Protesto { get; set; }
     }
 }

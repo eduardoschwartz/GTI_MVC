@@ -321,7 +321,9 @@
                             <th style="width:240px;text-align:left">
                                 &nbsp;&nbsp; Execução Fiscal
                             </th>
-
+                            <th style="display:none">
+                                Pt
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -490,7 +492,7 @@
                 try {
                     var table = document.getElementById("tblMain");
                     var rows = table.getElementsByTagName('tr');
-                    var _ajuizado = false, _naoajuizado = false;
+                    var _ajuizado = false, _naoajuizado = false,_protestado=false;
                     var _count = 0, _datavencto = "", _parcela = 0;
 
                     for (var i = 0; i < rows.length; i++) {
@@ -500,11 +502,15 @@
                             if (value) {
                                 _count++;
                                 var _aj = table.rows[i].cells[9].textContent.trim();
+                                var _pt = table.rows[i].cells[19].textContent.trim();
                                 if (_aj == "S") {
                                     _ajuizado = true;
                                 }
                                 if (_aj == "N") {
                                     _naoajuizado = true;
+                                }
+                                if (_pt == "S") {
+                                    _protestado = true;
                                 }
                             }
                         }
@@ -520,7 +526,7 @@
                         return false;
                     }
 
-                    if (_ajuizado) {
+                    if (_ajuizado || _protestado) {
                         $("#loginModal").modal('show');
                         return false;
                     }
