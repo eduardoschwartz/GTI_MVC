@@ -91,11 +91,11 @@ namespace GTI_Dal.Classes {
             string _nome = "";
 
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from c in db.Cidadao where c.Cnpj == cnpj select c.Nomecidadao).FirstOrDefault();
+                var Sql = (from m in db.Mobiliario where m.Cnpj == cnpj select m.Razaosocial).FirstOrDefault();
                 if (Sql != null) {
                     _nome = Sql.ToString();
                 } else {
-                    var Sql2 = (from m in db.Mobiliario where m.Cnpj == cnpj select m.Razaosocial).FirstOrDefault();
+                    var Sql2 = (from c in db.Cidadao where c.Cnpj == cnpj select c.Nomecidadao).FirstOrDefault();
                     if (Sql2 != null)
                         _nome = Sql2.ToString();
                 }
