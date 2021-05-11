@@ -16,7 +16,7 @@ namespace GTI_Mvc {
             StringBuilder sb = new StringBuilder();
 
             for (int i = 0; i < 4; i++) {
-                int index = rand.Next(maxRand);
+                int index = rand.Next(maxRand) ;
                 sb.Append(Letters[index]);
             }
 
