@@ -2212,7 +2212,7 @@ namespace GTI_Mvc.Controllers {
                     Valorguia = model.Valor_Total,
                     Emissor = "Gti.Web/NotificaoIss",
                     Datadocumento = DateTime.Now,
-
+                    Userid=_fiscal,
                     Registrado = true,
                     Percisencao = 0
                 };
@@ -2236,7 +2236,7 @@ namespace GTI_Mvc.Controllers {
                 };
                 tributarioRepository.Insert_Parcela_Documento(regParc);
 
-                string sHist = "Iss construção civil lançado no código " + _codigo + " processo nº " + model.Numero_Processo + " notificação nº " + model.Numero_Notificacao.ToString("0000") + "/" + model.Ano_Notificacao.ToString() + " Área notificada: " + model.Area_Notificada.ToString("#0.00") + " m²";
+                string sHist = "Iss construção civil lançado no código " + _codigo + " processo nº " + model.Numero_Processo + " notificação nº " + model.Numero_Notificacao.ToString("0000") + "/" + model.Ano_Notificacao.ToString() + " Área notificada: " + model.Area_Notificada.ToString("#0.00") + " m². Código do imóvel: " + model.Codigo_Imovel.ToString() ;
                 //Incluir a observação da parcela
                 Obsparcela ObsReg = new Obsparcela() {
                     Codreduzido = _codigo,
@@ -2253,9 +2253,10 @@ namespace GTI_Mvc.Controllers {
 
                 //Gravar histórico no imóvel
                 //Incluir a observação da parcela
+                _seq = imovelRepository.Retorna_Proxima_Seq_Historico(model.Codigo_Imovel);
                 Historico ObsImovel = new Historico() {
                     Codreduzido = model.Codigo_Imovel,
-                    Seq=0,
+                    Seq=_seq,
                     Datahist2=DateTime.Now,
                     Deschist=sHist,
                     Userid = _fiscal,

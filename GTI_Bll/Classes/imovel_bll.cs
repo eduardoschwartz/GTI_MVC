@@ -912,9 +912,15 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Notificacao_Obra(Ano);
         }
 
-        public Notificacao_Obra_Struct Retorna_Notificacao_Obra(int Ano, int Numero) {
+        public Notificacao_Obra_Struct Retorna_Notificacao_Obra(int Ano,int Numero) {
             Imovel_Data obj = new Imovel_Data(_connection);
-            return obj.Retorna_Notificacao_Obra(Ano, Numero);
+            return obj.Retorna_Notificacao_Obra(Ano,Numero);
+        }
+
+
+        public short Retorna_Proxima_Seq_Historico(int Codigo) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Proxima_Seq_Historico(Codigo);
         }
 
 
