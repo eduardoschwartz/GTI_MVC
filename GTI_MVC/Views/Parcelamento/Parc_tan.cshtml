@@ -53,8 +53,13 @@
     #chkSel {
         cursor: pointer;
     }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
 </style>
 
+@{var res = ViewBag.Result;}
 <h5 style="text-align:center">TERMO DE ANUÊNCIA</h5>
 
 <div class="center container" style="width:850px">
@@ -64,7 +69,7 @@
     }
 
 
-    @using (Html.BeginForm("Parc_tan", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @using(Html.BeginForm("Parc_tan","Parcelamento",FormMethod.Post,new { @id = "MainForm",enctype = "multipart/form-data" })) {
 
         @Html.HiddenFor(m => m.Guid)
 
@@ -137,11 +142,50 @@
     }
 </div>
 
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+
+
 @section scripts{
 
     <script type="text/javascript">
 
+         $(document).ready(function () {
+            $("#tblMain tr:odd").css({
+                "background-color": "#E9FAFA"
+            });
 
+            $("#tblResumo tr:odd").css({
+                "background-color": "#E9FAFA"
+            });
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $('#MainForm').submit();
+                    },
+                    Cancel: function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+
+        });
 
         function ValidateForm() {
              var _ajuizado = '@ajuizado';
@@ -149,18 +193,22 @@
                 $("#loginModal").modal('show');
                 return false;
             } else {
-                if (confirm('Você deseja gerar este parcelamento?')) {
-                    document.getElementById("MainForm").submit();
-                }
+                document.getElementById('lblMsg').innerHTML = "Você deseja gerar este parcelamento?";
+                $('#msgBox1').dialog('open');
+
+
+
+//                if (confirm('Você deseja gerar este parcelamento?')) {
+ //                   document.getElementById("MainForm").submit();
+ //               }
             }
 
         }
 
         function Send() {
-            if (confirm('Você deseja gerar este parcelamento?')) {
-                document.getElementById("MainForm").submit();
-            }
-            
+            document.getElementById('lblMsg').innerHTML = "Você deseja gerar este parcelamento?";
+            $('#msgBox1').dialog('open');
+
         }
 
 
