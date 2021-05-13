@@ -743,7 +743,7 @@ namespace GTI_Mvc.Controllers {
             int _codigo = 0;
             bool _existeCod = false;
             CertidaoViewModel certidaoViewModel = new CertidaoViewModel();
-
+            ViewBag.Result = "";
             if (model.Inscricao != null) {
                 _codigo = Convert.ToInt32(model.Inscricao);
                 if (_codigo == 125256 || _codigo == 122881 || _codigo == 122555 || _codigo == 124682 || _codigo == 114560 || _codigo == 116919 || _codigo == 121114 || _codigo == 120576 || 
@@ -752,39 +752,41 @@ namespace GTI_Mvc.Controllers {
                     certidaoViewModel.ErrorMessage = "Esta empresa não pode emitir renovação de alvará.";
                     return View(certidaoViewModel);
                 }
+
                 if (_codigo >= 100000 && _codigo < 210000) //Se estiver fora deste intervalo nem precisa checar se a empresa existe
                     _existeCod = empresaRepository.Existe_Empresa(_codigo);
-            } else {
-                if (model.CnpjValue != null) {
-                    string _cnpj = model.CnpjValue;
-                    bool _valida = Functions.ValidaCNPJ(_cnpj); //CNPJ válido?
-                    if (_valida) {
-                        _codigo = empresaRepository.ExisteEmpresaCnpj(_cnpj);
-                        if (_codigo > 0)
-                            _existeCod = true;
-                        else {
 
-                        }
-                    } else {
-                        certidaoViewModel.ErrorMessage = "Cnpj inválido.";
+            }
+            if(model.CnpjValue != null) {
+                string _cnpj = model.CnpjValue;
+                bool _valida = Functions.ValidaCNPJ(_cnpj); //CNPJ válido?
+                if(_valida) {
+                    int _codigo2 = empresaRepository.ExisteEmpresaCnpj(_cnpj);
+                    if(_codigo2 != _codigo) {
+                        ViewBag.Result = "Cnpj não pertence a esta inscrição.";
                         return View(certidaoViewModel);
-                    }
+                    } 
                 } else {
-                    if (model.CpfValue != null) {
-                        string _cpf = model.CpfValue;
-                        bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
-                        if (_valida) {
-                            _codigo = empresaRepository.ExisteEmpresaCpf(_cpf);
-                            if (_codigo > 0)
-                                _existeCod = true;
-
-                        } else {
-                            certidaoViewModel.ErrorMessage = "Cpf inválido.";
+                    ViewBag.Result = "Cnpj inválido.";
+                    return View(certidaoViewModel);
+                }
+            } else {
+                if(model.CpfValue != null) {
+                    string _cpf = model.CpfValue;
+                    bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
+                    if(_valida) {
+                        int _codigo2 = empresaRepository.ExisteEmpresaCpf(_cpf);
+                        if(_codigo2 != _codigo) {
+                            ViewBag.Result = "Cpf não pertence a esta inscrição.";
                             return View(certidaoViewModel);
                         }
+                    } else {
+                        ViewBag.Result = "Cpf inválido.";
+                        return View(certidaoViewModel);
                     }
                 }
             }
+
 
             var response = Request["g-recaptcha-response"];
             var client = new WebClient();
@@ -794,7 +796,7 @@ namespace GTI_Mvc.Controllers {
             var status = (bool)obj.SelectToken("success");
             string msg = status ? "Sucesso" : "Falha";
             if (!status) {
-                certidaoViewModel.ErrorMessage = "Código Recaptcha inválido.";
+                ViewBag.Result = "Código Recaptcha inválido.";
                 return View(model);
             }
 
@@ -806,21 +808,21 @@ namespace GTI_Mvc.Controllers {
                 EmpresaStruct empresa = empresaRepository.Retorna_Empresa(_codigo);
 
                 if (empresaRepository.EmpresaSuspensa(_codigo)) {
-                    certidaoViewModel.ErrorMessage = "A empresa encontra-se suspensa.";
+                    ViewBag.Result = "A empresa encontra-se suspensa.";
                     return View(certidaoViewModel);
                 }
                 if (empresa.Data_Encerramento!=null) {
-                    certidaoViewModel.ErrorMessage = "A empresa encontra-se encerrada.";
+                    ViewBag.Result = "A empresa encontra-se encerrada.";
                     return View(certidaoViewModel);
                 }
                 if (Convert.ToDateTime(empresa.Data_abertura).Year == DateTime.Now.Year) {
-                    certidaoViewModel.ErrorMessage = "Empresa aberta este ano não pode renovar o alvará.";
+                    ViewBag.Result = "Empresa aberta este ano não pode renovar o alvará.";
                     return View(certidaoViewModel);
                 }
                 int _atividade_codigo = (int)empresa.Atividade_codigo;
                 bool bAtividadeAlvara = empresaRepository.Atividade_tem_Alvara(_atividade_codigo);
                 if (!bAtividadeAlvara) {
-                    certidaoViewModel.ErrorMessage = "Atividade da empresa não permite renovar o alvará .";
+                    ViewBag.Result = "Atividade da empresa não permite renovar o alvará .";
                     return View(certidaoViewModel);
                 }
                 bool bIsentoTaxa;
@@ -832,7 +834,7 @@ namespace GTI_Mvc.Controllers {
                 if (!bIsentoTaxa) {
                     int _qtde = empresaRepository.Qtde_Parcelas_TLL_Vencidas(_codigo);
                     if (_qtde > 0) {
-                        certidaoViewModel.ErrorMessage = "A taxa de licença não esta paga, favor dirigir-se à Prefeitura para regularizar.";
+                        ViewBag.Result = "A taxa de licença não esta paga, favor dirigir-se à Prefeitura para regularizar.";
                         return View(certidaoViewModel);
                     } else {
                         if (empresa.Endereco_codigo == 123 && empresa.Numero == 146) {

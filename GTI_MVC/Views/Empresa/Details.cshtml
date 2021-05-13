@@ -59,8 +59,14 @@
         font-size: 13px;
         font-family: Arial, Helvetica, sans-serif;
     }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
 </style>
 
+
+@{var res = @Model.ErrorMessage;}
 <div class="center container" style="width:450px">
 
     <form asp-controller="Empresa" enctype="multipart/form-data" method="post" onsubmit="return ValidateForm()" asp-action="Details">
@@ -70,8 +76,8 @@
 
                 <table width="500px">
                     <tr>
-                        <td style="width:150px">@Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })</td>
-                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)", @onchange = "ClearError()" })</td>
+                        <td style="width:150px">@Html.LabelFor(m => m.Inscricao,new { @style = "font-weight:normal" })</td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao,new { @id = "codigo",@class = "textBoxBlue",@style = "max-width:100px",@onKeyPress = "return formata(this, '§§§§§§', event)",@onchange = "ClearError()" })</td>
                     </tr>
                     <tr style="height:40px">
                         <td style="width:150px">
@@ -79,18 +85,18 @@
                             &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
                         </td>
                         <td style="width:300px">
-                            @Html.TextBoxFor(m => m.CpfValue, new { @id = "cpfTxt", @class = "textBoxBlue", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CPF" })
-                            @Html.TextBoxFor(m => m.CnpjValue, new { @id = "cnpjTxt", @class = "textBoxBlue", @style = "max-width:200px;display:none", @onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CNPJ" })
+                            @Html.TextBoxFor(m => m.CpfValue,new { @id = "cpfTxt",@class = "textBoxBlue",@style = "max-width:200px",@onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)",@onchange = "ClearError()",@placeholder = "Digite o nº do CPF" })
+                            @Html.TextBoxFor(m => m.CnpjValue,new { @id = "cnpjTxt",@class = "textBoxBlue",@style = "max-width:200px;display:none",@onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)",@onchange = "ClearError()",@placeholder = "Digite o nº do CNPJ" })
                         </td>
                     </tr>
                     @*<tr>
-                        <td style="width:150px" valign="middle">
-                            <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                        </td>
-                        <td style="width:150px" valign="middle">
-                            @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:110px;" })
-                        </td>
-                    </tr>*@
+                            <td style="width:150px" valign="middle">
+                                <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+                            </td>
+                            <td style="width:150px" valign="middle">
+                                @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:110px;" })
+                            </td>
+                        </tr>*@
                 </table>
                 <br />
                 <div class="g-recaptcha" data-sitekey="6LfRjG0aAAAAAOEd4ksnWZYw3oX4cUsimIy7yOqD"></div>
@@ -98,22 +104,29 @@
                 <button type="submit" class="btn btn-primary"> Consultar</button>
             </div>
             <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
-            @if (Model != null) {
-                if (Model.EmpresaStruct == null) {
+            @*@if(Model != null) {
+                if(Model.EmpresaStruct == null) {
                     <div class="form-group row">
                         <label class="errorlabel" id="errorLabel">@Model.ErrorMessage</label>
                     </div>
                 }
-            }
+            }*@
             <div class="card-footer">
-                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
             </div>
         </div>
     </form>
 
 </div>
 
-
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@Model.ErrorMessage</p>
+</div>
 
 
 @section scripts{
@@ -124,6 +137,50 @@
             $("#MainForm").submit(function () {
                 return ValidateForm();
             });
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+
         });
 
         function radioCheck() {
@@ -150,20 +207,26 @@
             var _cnpj = document.getElementById('cnpjTxt').value;
 
             if ((_cod == "" || parseInt(_cod) == 0) && _cpf == "" && _cnpj == "") {
-                document.getElementById('errorLabel').innerHTML = "Digite ao menos um dos campos!";
+                document.getElementById('lblMsg').innerHTML = "Digite ao menos um dos campos";
+                $('#msgBox1').dialog('open');
+
+                //document.getElementById('errorLabel').innerHTML = "Digite ao menos um dos campos!";
                 return false;
             }
             else {
                 if (parseInt(_cod) > 0 && (_cpf != "" || _cnpj != "")) {
-                    document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal ou o Cpf ou o CNPJ!";
+                    document.getElementById('lblMsg').innerHTML = "Digite a inscrição municipal ou o Cpf ou o CNPJ";
+                    $('#msgBox1').dialog('open');
+
+             //       document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal ou o Cpf ou o CNPJ!";
                     return false;
-                } 
+                }
             }
             return true;
         }
 
         function ClearError() {
-            document.getElementById('errorLabel').innerHTML = "";
+//            document.getElementById('errorLabel').innerHTML = "";
         }
 
 

@@ -59,8 +59,13 @@
         font-size: 13px;
         font-family: Arial, Helvetica, sans-serif;
     }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
 </style>
 
+@{var res = @ViewBag.Result;}
 <div class="center container" style="width:450px">
     <form asp-controller="Empresa" enctype="multipart/form-data" method="post" onsubmit="return ValidateForm()" asp-action="Details" style="margin-left:18px">
         <div class="card">
@@ -69,8 +74,8 @@
 
                 <table width="500px">
                     <tr>
-                        <td style="width:150px">@Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })</td>
-                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)", @onchange = "ClearError()" })</td>
+                        <td style="width:150px">@Html.LabelFor(m => m.Inscricao,new { @id = "inscricao",@style = "font-weight:normal" })</td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao,new { @id = "codigo",@class = "textBoxBlue",@style = "max-width:100px",@onKeyPress = "return formata(this, '§§§§§§', event)",@onchange = "ClearError()" })</td>
                     </tr>
                     <tr style="height:40px">
                         <td style="width:150px">
@@ -78,18 +83,18 @@
                             &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
                         </td>
                         <td style="width:300px">
-                            @Html.TextBoxFor(m => m.CpfValue, new { @id = "cpfTxt", @class = "textBoxBlue", @style = "max-width:200px", @onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CPF" })
-                            @Html.TextBoxFor(m => m.CnpjValue, new { @id = "cnpjTxt", @class = "textBoxBlue", @style = "max-width:200px;display:none", @onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)", @onchange = "ClearError()", @placeholder = "Digite o nº do CNPJ" })
+                            @Html.TextBoxFor(m => m.CpfValue,new { @id = "cpfTxt",@class = "textBoxBlue",@style = "max-width:200px",@onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)",@onchange = "ClearError()",@placeholder = "Digite o nº do CPF" })
+                            @Html.TextBoxFor(m => m.CnpjValue,new { @id = "cnpjTxt",@class = "textBoxBlue",@style = "max-width:200px;display:none",@onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)",@onchange = "ClearError()",@placeholder = "Digite o nº do CNPJ" })
                         </td>
                     </tr>
                     @*<tr>
-                <td style="width:150px" valign="middle">
-                    <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                </td>
-                <td style="width:150px" valign="middle">
-                    @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:110px;" })
-                </td>
-            </tr>*@
+                            <td style="width:150px" valign="middle">
+                                <img id="img-captcha" src="~/Empresa/GetCaptcha" />
+                            </td>
+                            <td style="width:150px" valign="middle">
+                                @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:110px;" })
+                            </td>
+                        </tr>*@
                 </table>
                 <br />
                 <div class="g-recaptcha" data-sitekey="6LfRjG0aAAAAAOEd4ksnWZYw3oX4cUsimIy7yOqD"></div>
@@ -97,13 +102,22 @@
 
                 <button type="submit" class="btn btn-primary"> Consultar</button>
             </div>
-            <label class="errorlabel">@Model.ErrorMessage</label>
+            @*<label class="errorlabel">@Model.ErrorMessage</label>*@
             <div class="card-footer">
-                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
             </div>
         </div>
     </form>
 </div>
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
+
 
 @section scripts{
 
@@ -113,6 +127,48 @@
             $("#MainForm").submit(function () {
                 return ValidateForm();
             });
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
         });
 
         function radioCheck() {
@@ -133,15 +189,13 @@
         }
 
         function ValidateForm() {
-            ClearError();
+
             var _cpf = document.getElementById('cpfTxt').value;
             var _cnpj = document.getElementById('cnpjTxt').value;
-            var _chave = document.getElementById('chave').value;
-            var _inscricao = document.getElementById('Inscricao').value;
+            var _inscricao = document.getElementById('codigo').value;
 
             var _buscar_codigos = false;
             var _consultar = false;
-            var _autenticar = false;
 
             if ((_cpf != "" || _cnpj != "") && _inscricao == "")
                 _buscar_codigos = true;
@@ -149,36 +203,23 @@
             if ((_cpf != "" || _cnpj != "") && _inscricao != "")
                 _consultar = true;
 
-            if (_chave != "")
-                _autenticar = true;
-
-            if (_buscar_codigos == false && _consultar == false && _autenticar == false) {
-                document.getElementById('errorLabel').innerHTML = "Informe o nº de CPF ou CNPJ.";
+            if ((_inscricao == "" )) {
+                document.getElementById('lblMsg').innerHTML = "Digite a inscrição municipal";
+                $('#msgBox1').dialog('open');
                 return false;
             }
 
-            if (_autenticar == true && _chave == "") {
-                document.getElementById('errorLabel').innerHTML = "Digite a chave de autenticação.";
+            if (_buscar_codigos == false && _consultar == false ) {
+                document.getElementById('lblMsg').innerHTML = "Informe o nº de CPF ou CNPJ.";
+                $('#msgBox1').dialog('open');
                 return false;
             }
 
-            if (_chave.length > 8) {
-                var _sufixo = _chave.substring(_chave.length - 3, _chave.length);
-                if (_sufixo != "-AF" || _sufixo != "-AN") {
-                    document.getElementById('errorLabel').innerHTML = "Chave de autenticação inválida!";
-                    return false;
-                }
-            } else {
-                if (_chave.length != "") {
-                    document.getElementById('errorLabel').innerHTML = "Chave de autenticação inválida!";
-                    return false;
-                }
-            }
             return true;
         }
 
         function ClearError() {
-            document.getElementById('errorLabel').innerHTML = "";
+       //     document.getElementById('errorLabel').innerHTML = "";
         }
 
 
