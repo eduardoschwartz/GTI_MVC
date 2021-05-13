@@ -19,7 +19,7 @@
         margin: auto;
     }
 
- 
+
     .actionlink:hover {
         color: darkgreen;
     }
@@ -59,24 +59,32 @@
         font-size: 13px;
         font-family: Arial, Helvetica, sans-serif;
     }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
 </style>
 
-    <div class="center container" style="width:360px">
-        @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @id = "MainForm" })) {
+@{
+    var res = ViewBag.Result;
+}
+
+<div class="center container" style="width:360px">
+    @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @id = "MainForm" })) {
         <div class="card">
             <div class="card-header">Acesso ao Sistema</div>
             <div class="card-body ">
                 @Html.TextBoxFor(m => m.Usuario, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:300px;width:320px", placeholder = "Nome de usuário ou Email" })<br /><br />
                 @Html.TextBoxFor(m => m.Senha, new { @type = "password", @id = "senha", @class = "textBoxBlue", @style = "max-width:200px", placeholder = "Digite a senha" })<br />
                 <br />
-                <button type="submit" title="Acessar o sistema" class="btn btn-primary"> Entrar</button>
+                <button type="submit" title="Acessar o sistema" id="btOk" class="btn btn-primary"> Entrar</button>
                 <span style="padding-left:5px"></span>
                 @Html.ActionLink("Criar conta", "Login_create", "Home", null, new { @class = "btn btn-info", title = "Criar uma nova conta no sistema" })
-            <span style="padding-left:5px"></span>
+                <span style="padding-left:5px"></span>
                 <a href="~/Files/Login Manual do Usuario.pdf" class="btn btn-secondary" target="_blank">Ajuda</a><br />
             </div>
 
-            <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+            @*<label class="errorlabel" id="errorLabel">@ViewBag.Result</label>*@
             <div class="card-footer">
                 @Html.ActionLink("Esqueci minha senha", "Login_resend_pwd", "Home", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Reenviar email para ativação da conta", "Login_resend", "Home", null, new { @class = "actionlink" })<br />
@@ -84,20 +92,84 @@
             </div>
 
         </div>
-            
+
         }
 
-    </div>
+</div>
 
 
+<div id="msgBox1" title="Atenção" style='display: none;' >
+    <br />
+    <p>Digite o Nome de usuário ou e-mail e a senha.</p>
+</div>
 
+<div id="msgBox2" title="Atenção" style='display: none;' >
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
 
 
 @section scripts{
 
     <script type="text/javascript">
+
         $(document).ready(function () {
-            $("#MainForm").submit(function () {
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBox2').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            $('#btOk').click(function () {
+                var _cod = document.getElementById('codigo').value;
+                var _senha = document.getElementById('senha').value;
+                if (_cod == "" || _senha == "") {
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
+            });
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBox2').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+
+
+
+        });
+
+        /**
+         *    $("#MainForm").submit(function () {
                 return ValidateForm();
             });
         });
@@ -114,6 +186,12 @@
 
             return true;
         }
+         */
+
+
+
+
+
 
         function ClearError() {
             document.getElementById('errorLabel').innerHTML = "";

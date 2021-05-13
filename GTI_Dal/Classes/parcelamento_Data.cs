@@ -88,7 +88,7 @@ namespace GTI_Dal.Classes {
                 Parametros[1] = new SqlParameter { ParameterName = "@Requerente_Codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Requerente_Codigo };
                 Parametros[2] = new SqlParameter { ParameterName = "@user_id", SqlDbType = SqlDbType.Int, SqlValue = Reg.User_id };
                 Parametros[3] = new SqlParameter { ParameterName = "@Requerente_Nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Requerente_Nome };
-                Parametros[4] = new SqlParameter { ParameterName = "@Requerente_CpfCnpj", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Requerente_CpfCnpj };
+                Parametros[4] = new SqlParameter { ParameterName = "@Requerente_CpfCnpj", SqlDbType = SqlDbType.VarChar, SqlValue =   dalCore.RetornaNumero(  Reg.Requerente_CpfCnpj )};
                 Parametros[5] = new SqlParameter { ParameterName = "@Requerente_Bairro", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Requerente_Bairro };
                 Parametros[6] = new SqlParameter { ParameterName = "@Requerente_Cidade", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Requerente_Cidade };
                 Parametros[7] = new SqlParameter { ParameterName = "@Requerente_Uf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Requerente_Uf };
