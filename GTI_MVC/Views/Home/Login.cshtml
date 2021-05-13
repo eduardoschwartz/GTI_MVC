@@ -100,10 +100,10 @@
 
 <div id="msgBox1" title="Atenção" style='display: none;' >
     <br />
-    <p>Digite o Nome de usuário ou e-mail e a senha.</p>
+    <label id="lblMsg"></label>
 </div>
 
-<div id="msgBox2" title="Atenção" style='display: none;' >
+<div id="msgBoxBag" title="Atenção" style='display: none;' >
     <br />
     <p>@ViewBag.Result</p>
 </div>
@@ -129,7 +129,7 @@
                 }
             });
 
-            $('#msgBox2').dialog({
+            $('#msgBoxBag').dialog({
                 autoOpen: false,
                 resizable: false,
                 draggable: false,
@@ -151,6 +151,7 @@
                 var _cod = document.getElementById('codigo').value;
                 var _senha = document.getElementById('senha').value;
                 if (_cod == "" || _senha == "") {
+                    document.getElementById('lblMsg').innerHTML = "Digite o Nome de usuário ou e-mail e a senha.";
                     $('#msgBox1').dialog('open');
                     return false;
                 }
@@ -158,7 +159,7 @@
 
             var _res = '@res';
             if (_res != "") {
-                $('#msgBox2').dialog('open');
+                $('#msgBoxBag').dialog('open');
                 return false;
             } else {
                 return true;

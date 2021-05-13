@@ -75,13 +75,18 @@
             #tblMain tbody td, #tblMain thead th {
                 float: left;
             }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
 </style>
 
+@{var res = ViewBag.Result;}
 <h5 style="text-align:center">Parcelamento de Débitos</h5>
 
 <div class="center container" style="width:870px">
 
-    @using (Html.BeginForm("Parc_reqc", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @using(Html.BeginForm("Parc_reqc","Parcelamento",FormMethod.Post,new { @id = "MainForm",enctype = "multipart/form-data" })) {
 
         @Html.HiddenFor(m => m.Guid)
 
@@ -97,7 +102,7 @@
                             <label style="font-weight:normal;padding-top:7px">Nº Cpf/Cnpj:</label>
                         </td>
                         <td>
-                            @Html.TextBoxFor(m => m.Requerente.Cpf_Cnpj, new { @style = "max-width:200px;height:25px", @readonly = true })
+                            @Html.TextBoxFor(m => m.Requerente.Cpf_Cnpj,new { @style = "max-width:200px;height:25px",@readonly = true })
                         </td>
                     </tr>
 
@@ -110,7 +115,7 @@
                             </td>
                             <td>
                                 <label style="font-weight:normal;color:blue">
-                                    @Html.TextBoxFor(m => m.Requerente.Nome, new { style = "width:527px;height:25px", @readonly = true })
+                                    @Html.TextBoxFor(m => m.Requerente.Nome,new { style = "width:527px;height:25px",@readonly = true })
                                 </label>
                             </td>
                         </tr>
@@ -123,9 +128,9 @@
                             <label style="font-weight:normal">Logradouro:</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Logradouro_Nome, new { style = "width:392px;height:25px", @readonly = true })</label>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Logradouro_Nome,new { style = "width:392px;height:25px",@readonly = true })</label>
                             <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal">
-                                @Html.TextBoxFor(m => m.Requerente.Numero, new { style = "width:60px;height:25px", @readonly = true })
+                                @Html.TextBoxFor(m => m.Requerente.Numero,new { style = "width:60px;height:25px",@readonly = true })
                             </label>
                         </td>
                     </tr>
@@ -137,13 +142,13 @@
                             <label style="font-weight:normal;">Complemento:</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal">@Html.TextBoxFor(m => m.Requerente.Complemento, new { style = "width:230px;height:25px", @readonly = true })</label>
+                            <label style="font-weight:normal">@Html.TextBoxFor(m => m.Requerente.Complemento,new { style = "width:230px;height:25px",@readonly = true })</label>
                         </td>
                         <td>
                             <label style="font-weight:normal">&nbsp;&nbsp;Bairro:&nbsp;&nbsp;</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Bairro_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Bairro_Nome,new { style = "width:230px;height:25px",@readonly = true })</label>
                         </td>
                     </tr>
                     <tr style="height:30px">
@@ -151,14 +156,14 @@
                             <label style="font-weight:normal">Cidade/UF:</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Cidade_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Cidade_Nome,new { style = "width:230px;height:25px",@readonly = true })</label>
 
                         </td>
                         <td>
                             <label style="font-weight:normal;padding-left:10px">Cep:&nbsp;&nbsp;</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Cep, new { style = "width:230px;height:25px", @readonly = true })</label>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Cep,new { style = "width:230px;height:25px",@readonly = true })</label>
                         </td>
                     </tr>
                     <tr style="height:30px">
@@ -166,14 +171,14 @@
                             <label style="font-weight:normal">Telefone:</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Telefone, new { style = "width:230px;height:25px", @readonly = true })</label>
+                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Telefone,new { style = "width:230px;height:25px",@readonly = true })</label>
 
                         </td>
                         <td>
                             <label style="font-weight:normal;padding-left:10px">Email:</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Email, new { style = "width:230px;height:25px", @readonly = true })</label>
+                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Email,new { style = "width:230px;height:25px",@readonly = true })</label>
                         </td>
                     </tr>
                 </table>
@@ -188,14 +193,14 @@
                             <label style="font-weight:normal;padding-top:7px">Nº da Inscrição:</label>
                         </td>
                         <td>
-                            @Html.TextBoxFor(m => m.Contribuinte.Codigo, new { @style = "max-width:100px;height:25px", @readonly = true })
+                            @Html.TextBoxFor(m => m.Contribuinte.Codigo,new { @style = "max-width:100px;height:25px",@readonly = true })
                         </td>
                         <td style="width:144px"></td>
                         <td style="width:98px">
                             <label style="font-weight:normal;padding-top:7px;text-align:right">Nº Cpf/Cnpj:</label>
                         </td>
                         <td>
-                            @Html.TextBoxFor(m => m.Contribuinte.Cpf_Cnpj, new { @style = "max-width:200px;height:25px", @readonly = true })
+                            @Html.TextBoxFor(m => m.Contribuinte.Cpf_Cnpj,new { @style = "max-width:200px;height:25px",@readonly = true })
                         </td>
                     </tr>
 
@@ -208,7 +213,7 @@
                             </td>
                             <td>
                                 <label style="font-weight:normal;color:blue">
-                                    @Html.TextBoxFor(m => m.Contribuinte.Nome, new { style = "width:527px;height:25px", @readonly = true })
+                                    @Html.TextBoxFor(m => m.Contribuinte.Nome,new { style = "width:527px;height:25px",@readonly = true })
                                 </label>
                             </td>
                         </tr>
@@ -221,7 +226,7 @@
                             <label style="font-weight:normal">Endereco:</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Contribuinte.Logradouro_Nome, new { style = "width:527px;height:25px", @readonly = true })</label>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Contribuinte.Logradouro_Nome,new { style = "width:527px;height:25px",@readonly = true })</label>
                         </td>
                     </tr>
                 </table>
@@ -232,11 +237,11 @@
                             <label style="font-weight:normal">Bairro/Cidade:</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Contribuinte.Bairro_Nome, new { style = "width:385px;height:25px", @readonly = true })</label>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Contribuinte.Bairro_Nome,new { style = "width:385px;height:25px",@readonly = true })</label>
 
                         </td>
                         <td>
-                            <label style="font-weight:normal;color:blue"><span style="color:black">Cep:</span>&nbsp;&nbsp;@Html.TextBoxFor(m => m.Contribuinte.Cep, new { style = "width:80px;height:25px", @readonly = true })</label>
+                            <label style="font-weight:normal;color:blue"><span style="color:black">Cep:</span>&nbsp;&nbsp;@Html.TextBoxFor(m => m.Contribuinte.Cep,new { style = "width:80px;height:25px",@readonly = true })</label>
                         </td>
                     </tr>
                 </table>
@@ -335,7 +340,7 @@
         </div>
 
 
-    
+
         <div class="card" style="overflow-x:auto">
             <div class="card-body">
 
@@ -425,7 +430,7 @@
                 <br />
                 <button type="submit" class="btn btn-primary" name="action" value="btnValida">Carregar Simulado...</button>
                 <button type="button" class="btn btn-info" name="action" value="btnVoltar" onclick="javascript:history.back()">Voltar</button>
-                <br />
+                @*<br />*@
 
 
 
@@ -435,10 +440,10 @@
                         <div class="modal-dialog modal-lg" style="background-color:antiquewhite">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Observação Importante:</h4>
+                                    <h5 class="modal-title">Observação Importante:</h5>
                                 </div>
                                 <div class="modal-body">
-                                    <h4>Foram selecionados débitos ajuizados e/ou protestados.</h4><br /><br />
+                                    <h5>Foram selecionados débitos ajuizados e/ou protestados.</h5><br /><br />
                                     <p>- Se debito ajuizados solicitar as guias das custas e despesas processuais através do e-mail: <u style="color: blue">dividaativa@jaboticabal.sp.gov.br</u></p>
 
                                     <p>- Se debito protestado informar o pagamento através do e-mail: <u style="color: blue">dividaativa@jaboticabal.sp.gov.br</u></p>
@@ -457,17 +462,26 @@
 
 
 
-                <label style="padding-top:10px" class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+                @*<label style="padding-top:10px" class="errorlabel" id="errorLabel">@ViewBag.Result</label>*@
             </div>
 
 
             <div class="card-footer">
-                @Html.ActionLink("Retornar ao menu de opções", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<br />
-                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                @Html.ActionLink("Retornar ao menu de opções","Parc_index","Parcelamento",null,new { @class = "actionlink" })<br />
+                @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
             </div>
         </div>
 
     }
+</div>
+
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
 </div>
 
 @section scripts{
@@ -492,7 +506,7 @@
                 try {
                     var table = document.getElementById("tblMain");
                     var rows = table.getElementsByTagName('tr');
-                    var _ajuizado = false, _naoajuizado = false,_protestado=false;
+                    var _ajuizado = false, _naoajuizado = false, _protestado = false;
                     var _count = 0, _datavencto = "", _parcela = 0;
 
                     for (var i = 0; i < rows.length; i++) {
@@ -517,12 +531,18 @@
                     }
 
                     if (_ajuizado && _naoajuizado) {
-                        document.getElementById('errorLabel').innerHTML = "Não é permitido parcelar débitos ajuizados e não ajuizados no mesmo parcelamento.";
+                        document.getElementById('lblMsg').innerHTML = "Não é permitido parcelar débitos ajuizados e não ajuizados no mesmo parcelamento.";
+                        $('#msgBox1').dialog('open');
+
+                        //document.getElementById('errorLabel').innerHTML = "Não é permitido parcelar débitos ajuizados e não ajuizados no mesmo parcelamento.";
                         return false;
                     }
 
                     if (_count == 0) {
-                        document.getElementById('errorLabel').innerHTML = "Selecione o(s) débito(s) à parcelar.";
+                        document.getElementById('lblMsg').innerHTML = "Selecione o(s) débito(s) à parcelar.";
+                        $('#msgBox1').dialog('open');
+
+                        //document.getElementById('errorLabel').innerHTML = "Selecione o(s) débito(s) à parcelar.";
                         return false;
                     }
 
@@ -537,6 +557,51 @@
                 }
                 return true;
             });
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+
+
         });
 
         $(function () {
