@@ -1378,21 +1378,8 @@ namespace GTI_Mvc.Controllers {
             string _cnpj = model.CnpjValue == null ? "" : Functions.RetornaNumero(model.CnpjValue);
             int _ano = 2021;
 
-            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-            //    ViewBag.Result = "Código de verificação inválido.";
-            //    return View(model);
-            //}
-            var response = Request["g-recaptcha-response"];
-            var client = new WebClient();
-            string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
-            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
-            var obj = JObject.Parse(result);
-            var status = (bool)obj.SelectToken("success");
-            string msg = status ? "Sucesso" : "Falha";
-            if (!status) {
-                ViewBag.Result = "Código Recaptcha inválido.";
-                return View(model);
-            }
+            ViewBag.Result = "";
+
 
             Empresa_bll empresaRepository = new Empresa_bll(_connection);
             bool bFind = empresaRepository.Existe_Empresa(_codigo);
@@ -1413,6 +1400,19 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.Result = "Inscrição Municipal não cadastrada!";
                 return View(model);
             }
+
+            var response = Request["g-recaptcha-response"];
+            var client = new WebClient();
+            string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}",secretKey,response));
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+            string msg = status ? "Sucesso" : "Falha";
+            if(!status) {
+                ViewBag.Result = "Código Recaptcha inválido.";
+                return View(model);
+            }
+
 
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
 
