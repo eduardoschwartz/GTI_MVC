@@ -2908,10 +2908,13 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<int> Lista_Imovel_Socio(int Codigo_Socio) {
+            using(GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from p in db.Proprietario where p.Codcidadao == Codigo_Socio && p.Principal==true orderby p.Codreduzido select p.Codreduzido).ToList();
 
-        //        var reg = (from p in db.Proprietario
-        //                   join c in db.Cidadao on p.Codcidadao equals c.Codcidadao into pc from c in pc.DefaultIfEmpty()
-
+                return Sql;
+            }
+        }
 
 
 

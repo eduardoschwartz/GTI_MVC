@@ -928,6 +928,12 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Imovel_Cnpj(Cnpj,Principal);
         }
 
+        public List<int> Lista_Imovel_Socio(int Codigo_Socio) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Lista_Imovel_Socio(Codigo_Socio);
+        }
+
+
         #endregion
 
     }//end class

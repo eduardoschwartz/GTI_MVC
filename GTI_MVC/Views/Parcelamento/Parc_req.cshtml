@@ -51,6 +51,28 @@
         font-family: Arial, Helvetica, sans-serif;
     }
 
+    #tblMain {
+        width: 100%;
+    }
+
+        #tblMain tbody {
+            display: block;
+        }
+
+        #tblMain thead tblMain {
+            height: 30px;
+        }
+
+        #tblMain tbody {
+            height: 375px;
+            overflow-y: auto;
+        }
+
+
+            #tblMain tbody td, #tblMain thead th {
+                float: left;
+            }
+
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
@@ -61,7 +83,7 @@
 
 <h5 style="text-align:center">Parcelamento de Débitos</h5>
 
-<div class="center container" style="width:840px">
+<div class="center container" style="width:860px">
 
     @using(Html.BeginForm("Parc_req","Parcelamento",FormMethod.Post,new { @id = "MainForm",enctype = "multipart/form-data" })) {
 
@@ -165,32 +187,33 @@
             <div class="card-body">
 
 
-                <div id="DebitoTable" style="height: auto; overflow: auto;width:766px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;border-left-color:cadetblue;border-left-style:solid;border-left-width:1px;border-right-color:cadetblue;border-right-style:solid;border-right-width:1px">
-                    <table id="tblResumo" style="font-size:12px">
-                        <tr style="background-color:darkred;color:white;height:25px">
-                            <th style="text-align:center;width:25px">
-                                #
-                            </th>
-                            <th style="width:50px;text-align:left">
-                                Tipo
-                            </th>
-                            <th style="width:58px;text-align:center">
-                                Código
-                            </th>
-                            <th style="width:120px;text-align:left">
-                                Cpf/Cnpj
-                            </th>
-                            <th style="width:510px;text-align:left">
-                                Descrição
-                            </th>
-                        </tr>
-
+                <div id="MainTable" style="overflow-x:scroll; max-height: 430px; height: auto; overflow: auto; width:800px; border-bottom-color: cadetblue; border-bottom-style: solid; border-bottom-width: 1px; border-top-color: cadetblue; border-top-style: solid; border-top-width: 1px; border-left-color: cadetblue; border-left-style: solid; border-left-width: 1px; border-right-color: cadetblue; border-right-style: solid; border-right-width: 1px">
+                    <table id="tblMain" style="font-size:12px">
+                        <thead>
+                            <tr style="background-color:darkred;color:white;height:25px">
+                                <th style="text-align:center;width:25px">
+                                    #
+                                </th>
+                                <th style="width:60px;text-align:left">
+                                    Tipo
+                                </th>
+                                <th style="width:58px;text-align:center">
+                                    Código
+                                </th>
+                                <th style="width:120px;text-align:left">
+                                    Cpf/Cnpj
+                                </th>
+                                <th style="width:510px;text-align:left">
+                                    Descrição
+                                </th>
+                            </tr>
+                        </thead>
                         @for(int i = 0;i < Model.Lista_Codigos.Count;i++) {
                             <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
                                 <td style="text-align:center;width:25px">
                                     @Html.CheckBoxFor(model => model.Lista_Codigos[i].Selected,new { style = "cursor:pointer",@onclick = "CheckOne(this)" })
                                 </td>
-                                <td style="width:50px;text-align:left">
+                                <td style="width:60px;text-align:left">
                                     @Html.HiddenFor(model => model.Lista_Codigos[i].Tipo)
                                     @Html.DisplayFor(model => model.Lista_Codigos[i].Tipo)
                                 </td>
@@ -241,7 +264,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#tblResumo tr:odd").css({
+            $("#tblMain tr:odd").css({
                 "background-color": "#E9FAFA"
             });
 
@@ -308,7 +331,7 @@
 
         function ValidateForm() {
             var _chk = false;
-            var table = document.getElementById("tblResumo");
+            var table = document.getElementById("tblMain");
             var rows = table.getElementsByTagName('tr');
 
             for (var i = 0; i < rows.length; i++) {

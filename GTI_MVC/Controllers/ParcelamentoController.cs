@@ -110,7 +110,7 @@ namespace GTI_MVC.Controllers {
 
             foreach (int cod in _listaImovel) {
                 Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(cod);
-                string _desc = "Imóvel localizado na(o) " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
+                string _desc = "Imóvel localizada na " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
                 if (!string.IsNullOrEmpty(_header.Complemento))
                     _desc += " " + _header.Complemento;
                 _desc += ", " + _header.Nome_bairro;
@@ -188,39 +188,30 @@ namespace GTI_MVC.Controllers {
                 List<CidadaoHeader> _listaSocio = cidadaoRepository.Lista_Cidadao_Socio(cod.Codcidadao);
                 foreach(CidadaoHeader head in _listaSocio) {
                     string _cnpj = head.Cnpj;
-                    List<CidadaoHeader> _lista_imovel_socio = imovelRepository.Lista_Imovel_Cnpj(_cnpj,false);
-                    if(_lista_imovel_socio.Count > 0) {
-                        y++;
+                    List<int> _lista_imovel_socio = imovelRepository.Lista_Imovel_Socio(head.Codigo);
+                    foreach(int imovel in _lista_imovel_socio) {
+                        if(_lista_imovel_socio.Count > 0) {
+                            Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(imovel);
+                            string _desc = "Imóvel localizado na: " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
+                            if(!string.IsNullOrEmpty(_header.Complemento))
+                                _desc += " " + _header.Complemento;
+                            _desc += ", " + _header.Nome_bairro;
+                            if(!string.IsNullOrEmpty(_header.Quadra_original))
+                                _desc += " Quadra:" + _header.Quadra_original;
+                            if(!string.IsNullOrEmpty(_header.Lote_original))
+                                _desc += ", Lote:" + _header.Lote_original;
+
+                            Parc_Codigos item = new Parc_Codigos() {
+                                Codigo = _header.Codigo,
+                                Tipo = "Imóvel",
+                                Cpf_Cnpj = Functions.FormatarCpfCnpj(_header.Cpf_cnpj),
+                                Descricao = _desc
+                            };
+                            _listaCodigos.Add(item);
+                        }
                     }
                 }
-
-
-
-                
-                //Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(cod.Codcidadao);
-                //string _desc = "Inscrição localizada na(o): " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
-                //if(!string.IsNullOrEmpty(_header.Complemento))
-                //    _desc += " " + _header.Complemento;
-                //_desc += ", " + _header.Nome_bairro;
-                //if(!string.IsNullOrEmpty(_header.Quadra_original))
-                //    _desc += " Quadra:" + _header.Quadra_original;
-                //if(!string.IsNullOrEmpty(_header.Lote_original))
-                //    _desc += ", Lote:" + _header.Lote_original;
-
-                //Parc_Codigos item = new Parc_Codigos() {
-                //    Codigo = _header.Codigo,
-                //    Tipo = "Outros",
-                //    Cpf_Cnpj = Functions.FormatarCpfCnpj(_header.Cpf_cnpj),
-                //    Descricao = _desc
-                //};
-                //_listaCodigos.Add(item);
             }
-
-
-
-
-
-
 
 
             model.Lista_Codigos = _listaCodigos;
@@ -1031,7 +1022,8 @@ namespace GTI_MVC.Controllers {
                         break;
                     }
                 }
-                return RedirectToAction("Parc_reqe", new { p = model.Guid });
+                //return RedirectToAction("Parc_reqe", new { p = model.Guid });
+                return RedirectToAction("Parc_tan",new { p = model.Guid });
             }
                         
         }
