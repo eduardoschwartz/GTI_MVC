@@ -101,6 +101,7 @@
     <Compile Include="Models\cepdb.cs" />
     <Compile Include="Models\certidao_impressao.cs" />
     <Compile Include="Models\chaveStruct.cs" />
+    <Compile Include="Models\cidadao_socio.cs" />
     <Compile Include="Models\dados_imovel_web.cs" />
     <Compile Include="Models\encargo_cvd.cs" />
     <Compile Include="Models\itbi_guia.cs" />

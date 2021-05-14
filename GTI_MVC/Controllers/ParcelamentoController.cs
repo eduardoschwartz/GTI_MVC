@@ -180,8 +180,48 @@ namespace GTI_MVC.Controllers {
                     Descricao = _desc
                 };
                 _listaCodigos.Add(item);
-
             }
+
+            //Lista de sócios de empresa de fora
+            int y = 0;
+            foreach(Cidadao cod in _listaCidadao) {
+                List<CidadaoHeader> _listaSocio = cidadaoRepository.Lista_Cidadao_Socio(cod.Codcidadao);
+                foreach(CidadaoHeader head in _listaSocio) {
+                    string _cnpj = head.Cnpj;
+                    List<CidadaoHeader> _lista_imovel_socio = imovelRepository.Lista_Imovel_Cnpj(_cnpj,false);
+                    if(_lista_imovel_socio.Count > 0) {
+                        y++;
+                    }
+                }
+
+
+
+                
+                //Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(cod.Codcidadao);
+                //string _desc = "Inscrição localizada na(o): " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
+                //if(!string.IsNullOrEmpty(_header.Complemento))
+                //    _desc += " " + _header.Complemento;
+                //_desc += ", " + _header.Nome_bairro;
+                //if(!string.IsNullOrEmpty(_header.Quadra_original))
+                //    _desc += " Quadra:" + _header.Quadra_original;
+                //if(!string.IsNullOrEmpty(_header.Lote_original))
+                //    _desc += ", Lote:" + _header.Lote_original;
+
+                //Parc_Codigos item = new Parc_Codigos() {
+                //    Codigo = _header.Codigo,
+                //    Tipo = "Outros",
+                //    Cpf_Cnpj = Functions.FormatarCpfCnpj(_header.Cpf_cnpj),
+                //    Descricao = _desc
+                //};
+                //_listaCodigos.Add(item);
+            }
+
+
+
+
+
+
+
 
             model.Lista_Codigos = _listaCodigos;
 

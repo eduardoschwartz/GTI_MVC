@@ -843,5 +843,22 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<CidadaoHeader> Lista_Cidadao_Socio(int Codigo_Socio) {
+            using(GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from s in db.Cidadao_Socio
+                           join c in db.Cidadao on s.Codigo_Empresa equals c.Codcidadao into sc from c in sc.DefaultIfEmpty()
+                           where s.Codigo_Socio == Codigo_Socio orderby s.Codigo_Socio select new CidadaoHeader { Codigo = s.Codigo_Empresa,Nome = c.Nomecidadao,Cpf = c.Cpf,Cnpj = c.Cnpj }).ToList();
+                return Sql;
+            }
+        }
+
+
+
+
+
+        //        var reg = (from p in db.Proprietario
+        //                   join c in db.Cidadao on p.Codcidadao equals c.Codcidadao into pc from c in pc.DefaultIfEmpty()
+
+
     }
 }

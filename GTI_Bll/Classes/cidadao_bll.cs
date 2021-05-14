@@ -192,5 +192,11 @@ namespace GTI_Bll.Classes {
             return obj.Novo_Codigo_Cidadao(OldCod);
         }
 
+        public List<CidadaoHeader> Lista_Cidadao_Socio(int Codigo_Empresa) {
+            Cidadao_Data obj = new Cidadao_Data(_connection);
+            return obj.Lista_Cidadao_Socio(Codigo_Empresa);
+        }
+
+
     }
 }

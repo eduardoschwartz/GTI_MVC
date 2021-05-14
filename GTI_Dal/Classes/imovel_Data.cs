@@ -2891,13 +2891,30 @@ namespace GTI_Dal.Classes {
             }
         }
 
-
         public short Retorna_Proxima_Seq_Historico(int Codigo) {
             using(GTI_Context db = new GTI_Context(_connection)) {
                 var Sql = (from c in db.Historico where c.Codreduzido == Codigo orderby c.Seq descending select c.Seq).FirstOrDefault();
                 return (short)(Sql + 1);
             }
         }
+
+        public List<CidadaoHeader> Lista_Imovel_Cnpj(string Cnpj,bool Principal = false) {
+            using(GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from s in db.Cidadao_Socio
+                           join c in db.Cidadao on s.Codigo_Socio equals c.Codcidadao into sc from c in sc.DefaultIfEmpty()
+                           where c.Cnpj == Cnpj orderby s.Codigo_Socio select new CidadaoHeader { Codigo = s.Codigo_Empresa,Nome=c.Nomecidadao,Cpf=c.Cpf,Cnpj=c.Cnpj }).ToList();
+
+                return Sql;
+            }
+        }
+
+
+        //        var reg = (from p in db.Proprietario
+        //                   join c in db.Cidadao on p.Codcidadao equals c.Codcidadao into pc from c in pc.DefaultIfEmpty()
+
+
+
+
     }//end class
 }
 

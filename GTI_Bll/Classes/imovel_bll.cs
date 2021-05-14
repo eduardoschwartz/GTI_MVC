@@ -923,6 +923,10 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Proxima_Seq_Historico(Codigo);
         }
 
+        public List<CidadaoHeader> Lista_Imovel_Cnpj(string Cnpj,bool Principal = false) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Lista_Imovel_Cnpj(Cnpj,Principal);
+        }
 
         #endregion
 

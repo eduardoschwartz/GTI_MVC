@@ -124,4 +124,11 @@ namespace GTI_Models.Models {
         public string Orgaocnh { get; set; }
     }
 
+    public class CidadaoHeader {
+        public int Codigo { get; set; }
+        public string Nome { get; set; }
+        public string Cpf { get; set; }
+        public string Cnpj { get; set; }
+    }
+
 }
