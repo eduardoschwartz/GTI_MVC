@@ -60,10 +60,15 @@
         font-size: 13px;
         font-family: Arial, Helvetica, sans-serif;
     }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
 </style>
 
+@{var res = @ViewBag.Result;}
 <div class="center container" style="width:600px">
-    @using (Html.BeginForm("SegundaVia_Parcelamento", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
+    @using(Html.BeginForm("SegundaVia_Parcelamento","Tributario",FormMethod.Post,new { @id = "MainForm" })) {
         <div class="card">
             <div class="card-header">Emissão de 2ª via de parcelamento</div>
             <div class="card-body">
@@ -73,13 +78,13 @@
                 <table width="500px">
                     <tr style="height:40px">
                         <td style="  padding-top:15px;width:150px">
-                            @Html.LabelFor(m => m.Inscricao, new { @style = "font-weight:normal" })
+                            @Html.LabelFor(m => m.Inscricao,new { @style = "font-weight:normal" })
                         </td>
-                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao, new { @id = "Codigo", @class = "textBoxBlue", @style = "max-width:100px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao,new { @id = "Codigo",@class = "textBoxBlue",@style = "max-width:100px",@onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
                     </tr>
                     <tr style="height:40px">
                         <td style="width:150px"><label style="font-weight:normal">Nº do Processo: </label></td>
-                        <td style="width:300px">@Html.TextBoxFor(m => m.Numero_Processo, new { @id = "numprocesso", @class = "textBoxBlue", @style = "max-width:150px" })</td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Numero_Processo,new { @id = "numprocesso",@class = "textBoxBlue",@style = "max-width:150px" })</td>
                     </tr>
 
                     @*<tr style="height:40px">
@@ -108,7 +113,7 @@
                         </td>
                         <td style="width:575px">
 
-                            @Html.TextBoxFor(m => m.ProcessoAntigo, new { @id = "codigo", @class = "textBoxBlue", @style = "width:100px;height:25px" })
+                            @Html.TextBoxFor(m => m.ProcessoAntigo,new { @id = "codigo",@class = "textBoxBlue",@style = "width:100px;height:25px" })
                             <label>&nbsp;&nbsp;</label>
                             <button id="btnDigito" type="submit" class="btn btn-success" name="action" value="btnDigito">Verificar</button>
                             <span style="padding-left:10px">Nº Processo Novo:&nbsp;</span><span style="color:brown">@Model.ProcessoNovo</span>
@@ -117,14 +122,21 @@
                 </table>
 
             </div>
-            <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+            @*<label class="errorlabel" id="errorLabel">@ViewBag.Result</label>*@
             <div class="card-footer">
-                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
             </div>
         </div>
     }
 </div>
-
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
 
 @section scripts{
 
@@ -134,6 +146,50 @@
             $("#btnOK").click(function () {
                 return ValidateForm();
             });
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+
         });
 
         function ValidateForm() {
@@ -142,13 +198,19 @@
             var _cod = document.getElementById('Codigo').value;
 
             if ((_cod == "" || parseInt(_cod) == 0)) {
-                document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal!";
+                document.getElementById('lblMsg').innerHTML = "Digite a inscrição municipal";
+                $('#msgBox1').dialog('open');
+
+                //document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal!";
                 return false;
             }
 
             var _error = Valida_Numero_Processo(_numero);
             if (_error != "") {
-                document.getElementById('errorLabel').innerHTML = _error;
+                document.getElementById('lblMsg').innerHTML = _error;
+                $('#msgBox1').dialog('open');
+
+//                document.getElementById('errorLabel').innerHTML = _error;
                 return false;
             }
 
@@ -157,7 +219,7 @@
         }
 
         function ClearError() {
-            document.getElementById('errorLabel').innerHTML = "";
+          //  document.getElementById('errorLabel').innerHTML = "";
         }
 
     </script>

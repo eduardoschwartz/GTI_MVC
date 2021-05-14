@@ -60,11 +60,16 @@
         font-size: 13px;
         font-family: Arial, Helvetica, sans-serif;
     }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
 </style>
 
+@{var res = @ViewBag.Result;}
 <div class="center container" style="width:400px">
 
-    @using (Html.BeginForm("Detalhe_Boleto", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
+    @using(Html.BeginForm("Detalhe_Boleto","Tributario",FormMethod.Post,new { @id = "MainForm" })) {
         <div class="card">
             <div class="card-header">Detalhe de um boleto</div>
             <div class="card-body">
@@ -72,11 +77,11 @@
                 <table width="500px">
                     <tr style="height:40px">
                         <td style="width:150px">Cpf/Cnpj:</td>
-                        <td style="width:300px">@Html.TextBoxFor(m => m.CpfCnpjLabel, new { @id = "cpfcnpjTxt", @onpaste = "return false", @class = "textBoxBlue", @style = "max-width:250px", @onKeyPress = "return formata(this, '§§§§§§§§§§§§§§', event)" })</td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.CpfCnpjLabel,new { @id = "cpfcnpjTxt",@onpaste = "return false",@class = "textBoxBlue",@style = "max-width:250px",@onKeyPress = "return formata(this, '§§§§§§§§§§§§§§', event)" })</td>
                     </tr>
                     <tr style="height:40px">
                         <td style="width:150px">Nº do Documento:</td>
-                        <td style="width:300px">@Html.TextBoxFor(m => m.Documento, new { @id = "documento", @class = "textBoxBlue", @style = "max-width:250px", @onKeyPress = "return formata(this, '§§§§§§§§§§§§§§§§§', event)" })</td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Documento,new { @id = "documento",@class = "textBoxBlue",@style = "max-width:250px",@onKeyPress = "return formata(this, '§§§§§§§§§§§§§§§§§', event)" })</td>
                     </tr>
 
                     @*<tr style="height:40px">
@@ -93,13 +98,23 @@
                 <br />
                 <button type="submit" class="btn btn-primary"> Consultar</button>
             </div>
-            <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+            @*<label class="errorlabel" id="errorLabel">@ViewBag.Result</label>*@
             <div class="card-footer">
-                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
             </div>
         </div>
     }
 </div>
+
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
+
 @section scripts{
 
     <script type="text/javascript">
@@ -107,6 +122,49 @@
             $("#MainForm").submit(function () {
                 return ValidateForm();
             });
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
         });
 
         function ValidateForm() {
@@ -121,12 +179,18 @@
                 _consultar = true;
 
             if (_consultar == false && _autenticar == false) {
-                document.getElementById('errorLabel').innerHTML = "Informe o nº de CPF ou CNPJ.";
+                document.getElementById('lblMsg').innerHTML = "Informe o nº de CPF ou CNPJ.";
+                $('#msgBox1').dialog('open');
+
+//                document.getElementById('errorLabel').innerHTML = "Informe o nº de CPF ou CNPJ.";
                 return false;
             }
 
             if (_doc == "" || parseInt(_doc) == 0) {
-                document.getElementById('errorLabel').innerHTML = "Digite o nº do documento confome consta no boleto";
+                document.getElementById('lblMsg').innerHTML = "Digite o nº do documento confome consta no boleto.";
+                $('#msgBox1').dialog('open');
+
+//                document.getElementById('errorLabel').innerHTML = "Digite o nº do documento confome consta no boleto";
                 return false;
             }
 
@@ -136,7 +200,9 @@
             var cpfcnpj = "";
             if (_cpfcnpj.length > 11) {
                 if (!valida_Cnpj(cnpjtmp)) {
-                    document.getElementById('errorLabel').innerHTML = "Nº de Cnpj inválido.";
+                    document.getElementById('lblMsg').innerHTML = "Nº de Cnpj inválido.";
+                    $('#msgBox1').dialog('open');
+//                    document.getElementById('errorLabel').innerHTML = "Nº de Cnpj inválido.";
                     return false;
                 } else {
                     cpfcnpj = cnpjtmp;
@@ -146,7 +212,9 @@
                     cpfcnpj = cnpjtmp;
                 } else {
                     if (!valida_Cpf(cpftmp)) {
-                        document.getElementById('errorLabel').innerHTML = "Nº de Cpf inválido.";
+                        document.getElementById('lblMsg').innerHTML = "Nº de Cpf inválido.";
+                        $('#msgBox1').dialog('open');
+//                        document.getElementById('errorLabel').innerHTML = "Nº de Cpf inválido.";
                         return false;
                     } else {
                         cpfcnpj = cpftmp;
@@ -154,7 +222,9 @@
                 }
             }
             if (cpfcnpj == "") {
-                document.getElementById('errorLabel').innerHTML = "Nº de Cpf/Cnpj inválido.";
+                document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido.";
+                $('#msgBox1').dialog('open');
+//                document.getElementById('errorLabel').innerHTML = "Nº de Cpf/Cnpj inválido.";
                 return false;
             }
 
@@ -165,7 +235,7 @@
 
 
         function ClearError() {
-            document.getElementById('errorLabel').innerHTML = "";
+          //  document.getElementById('errorLabel').innerHTML = "";
         }
 
         function valida_Cpf(cpf) {

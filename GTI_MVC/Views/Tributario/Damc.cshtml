@@ -16,6 +16,7 @@
     .actionlink {
         color: darkslateblue;
     }
+
     .card-header {
         background-color: mistyrose;
         color: brown;
@@ -48,11 +49,16 @@
         font-size: 13px;
         font-family: Arial, Helvetica, sans-serif;
     }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
 </style>
 
+@{var res = @ViewBag.Result;}
 <div class="center container" style="width:830px">
 
-    @using (Html.BeginForm("SubmitSelected", "Tributario", FormMethod.Post, new { id = "formField", encType = "multipart/form-data", name = "frmExtrato", @Class = "mt-3" })) {
+    @using(Html.BeginForm("SubmitSelected","Tributario",FormMethod.Post,new { id = "formField",encType = "multipart/form-data",name = "frmExtrato",@Class = "mt-3" })) {
         <div class="card">
             <div class="card-header">
                 Consulta e atualização de débitos não pagos<br />
@@ -265,15 +271,23 @@
                     </div>
                 </div>
             </div>
-            <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+            @*<label class="errorlabel" id="errorLabel">@ViewBag.Result</label>*@
             <div class="card-footer">
-                @Html.ActionLink("Consultar outra inscrição", "Dama", "Tributario", null, new { @class = "actionlink" })   <br />
-                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                @Html.ActionLink("Consultar outra inscrição","Dama","Tributario",null,new { @class = "actionlink" })   <br />
+                @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
             </div>
         </div>
     }
 
+</div>
 
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
 </div>
 
 <script>
@@ -282,6 +296,49 @@
         $("#MainForm").submit(function () {
             return Verifica_Ajuizado();
         });
+
+        $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
     });
 
     function Verifica_Ajuizado() {
@@ -331,7 +388,10 @@
 
 
                 if (_count == 0) {
-                    document.getElementById('errorLabel').innerHTML = "Selecione o(s) débito(s) à pagar.";
+                    document.getElementById('lblMsg').innerHTML = "Selecione o(s) débito(s) à pagar.";
+                    $('#msgBox1').dialog('open');
+
+//                    document.getElementById('errorLabel').innerHTML = "Selecione o(s) débito(s) à pagar.";
                     return false;
                 }
 
@@ -341,7 +401,9 @@
                 //}
 
                 if (_parc_unica && _parc_normal) {
-                    document.getElementById('errorLabel').innerHTML = "Parcela única não pode ser paga junto com outras parcelas.";
+                    document.getElementById('lblMsg').innerHTML = "Parcela única não pode ser paga junto com outras parcelas.";
+                    $('#msgBox1').dialog('open');
+//                    document.getElementById('errorLabel').innerHTML = "Parcela única não pode ser paga junto com outras parcelas.";
                     return false;
                 }
                 if (_ajuizado) {
@@ -403,7 +465,7 @@
 
 
      function ClearError() {
-            document.getElementById('errorLabel').innerHTML = "";
+          //  document.getElementById('errorLabel').innerHTML = "";
      }
 
 </script>
