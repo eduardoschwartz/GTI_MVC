@@ -28,5 +28,6 @@ namespace GTI_Models.Models {
         public string Ajuizado { get; set; }
         public string Execucao_Fiscal { get; set; }
         public string Protesto { get; set; }
+        public decimal Valor_Honorario { get; set; }
     }
 }

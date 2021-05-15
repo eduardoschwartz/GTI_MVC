@@ -627,7 +627,7 @@ namespace GTI_MVC.Controllers {
             t = 1;
             Exception ex = parcelamentoRepository.Excluir_parcelamento_Web_Selected(model.Guid);
             bool _ajuizado = false;
-            decimal _somaP = 0, _somaJ = 0, _somaM = 0, _somaC = 0, _somaT = 0,_somaE=0;
+            decimal _somaP = 0, _somaJ = 0, _somaM = 0, _somaC = 0, _somaT = 0,_somaE=0, _somaH=0;
             List<Parcelamento_web_selected> _listaSelect = new List<Parcelamento_web_selected>();
             foreach (SelectDebitoParcelamentoEditorViewModel item in _listaOrigem) {
                 _ajuizado = item.Ajuizado == "S" ? true : false;
@@ -653,12 +653,18 @@ namespace GTI_MVC.Controllers {
                     Execucao_Fiscal=item.Execucao_Fiscal,
                     Protesto=item.Protesto
                 };
+                if(item.Ajuizado == "S")
+                    reg.Valor_Honorario += item.Valor_total * (decimal)0.1;
+
                 _somaP += item.Valor_principal;
                 _somaJ += item.Valor_juros;
                 _somaM += item.Valor_multa;
                 _somaC += item.Valor_correcao;
                 _somaT += item.Valor_total;
                 _somaE += item.Valor_penalidade;
+                if(item.Ajuizado=="S")
+                    _somaH += item.Valor_total;
+
                 _listaSelect.Add(reg);
                 
                 t++;
@@ -748,11 +754,11 @@ namespace GTI_MVC.Controllers {
                 _listaTributo.Add(r);
             }
 
-            if (_ajuizado) {
+            if (_somaH>0) {
                  r = new Parcelamento_Web_Tributo() {
                     Guid = model.Guid,
                     Tributo = 90,
-                    Valor = _somaT * 10 / 100,
+                    Valor = _somaH * 10 / 100,
                     Perc = 100
                 };
                 _listaTributo.Add(r);
@@ -833,7 +839,7 @@ namespace GTI_MVC.Controllers {
             };
 
             //Load Origem
-            decimal _SomaP = 0, _SomaM = 0, _SomaJ = 0, _SomaC = 0, _SomaT = 0,_SomaE =0;
+            decimal _SomaP = 0, _SomaM = 0, _SomaJ = 0, _SomaC = 0, _SomaT = 0,_SomaE =0,_SomaH =0;
             List<SpParcelamentoOrigem> ListaOrigem = parcelamentoRepository.Lista_Parcelamento_Selected(p);
             bool _bAjuizado = ListaOrigem[0].Ajuizado=="S";
             List<SelectDebitoParcelamentoEditorViewModel> _listaP = new List<SelectDebitoParcelamentoEditorViewModel>();
@@ -867,6 +873,8 @@ namespace GTI_MVC.Controllers {
                 _SomaC += item.Valor_correcao;
                 _SomaE += item.Valor_penalidade;
                 _SomaT += Math.Round(item.Valor_principal, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa, 2, MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao, 2, MidpointRounding.AwayFromZero);
+                if(item.Ajuizado == "S")
+                    _SomaH += (Math.Round(item.Valor_principal,2,MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros,2,MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa,2,MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao,2,MidpointRounding.AwayFromZero)) * ((decimal)0.1);
             }
             model.Soma_Principal = _SomaP;
             model.Soma_Multa = _SomaM;
@@ -903,7 +911,7 @@ namespace GTI_MVC.Controllers {
 
             ex = parcelamentoRepository.Excluir_parcelamento_Web_Simulado(model.Guid);
             ex = parcelamentoRepository.Excluir_parcelamento_Web_Simulado_Resumo(model.Guid);
-            List<Parcelamento_Web_Simulado> _listaSimulado = parcelamentoRepository.Lista_Parcelamento_Destino(model.Guid, (short)model.Plano_Codigo,DateTime.Now, _bAjuizado, _bAjuizado, _SomaP, _SomaJ, _SomaM, _SomaC, _SomaT, _SomaE, model.Valor_Minimo);
+            List<Parcelamento_Web_Simulado> _listaSimulado = parcelamentoRepository.Lista_Parcelamento_Destino(model.Guid, (short)model.Plano_Codigo,DateTime.Now, _bAjuizado, _bAjuizado, _SomaP, _SomaJ, _SomaM, _SomaC, _SomaT, _SomaE, model.Valor_Minimo,_SomaH);
 
             bool _issCCivilAVencer = false;
             foreach (SpParcelamentoOrigem _d in ListaOrigem) {
@@ -1023,6 +1031,7 @@ namespace GTI_MVC.Controllers {
                     }
                 }
                 //return RedirectToAction("Parc_reqe", new { p = model.Guid });
+                Parc_reqe_old(model.Guid); //Executa o antigo get do parc_reqE
                 return RedirectToAction("Parc_tan",new { p = model.Guid });
             }
                         
@@ -2274,6 +2283,108 @@ namespace GTI_MVC.Controllers {
 
             return View(model);
         }
+
+
+        public void Parc_reqe_old(string p) {
+
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+
+            //Load Master
+            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
+
+            ParcelamentoViewModel model = new ParcelamentoViewModel() {
+                Guid = p,
+                Plano_Nome = _master.Plano_Nome,
+                Data_Vencimento = Convert.ToDateTime(_master.Data_Vencimento).ToString("dd/MM/yyyy"),
+                Plano_Codigo = _master.Plano_Codigo,
+                Valor_Minimo = _master.Valor_minimo,
+                Perc_desconto = _master.Perc_Desconto
+            };
+           
+
+            //Load Origem
+            decimal _SomaP = 0, _SomaM = 0, _SomaJ = 0, _SomaC = 0, _SomaT = 0, _SomaE = 0;
+            List<SpParcelamentoOrigem> ListaOrigem = parcelamentoRepository.Lista_Parcelamento_Selected(p);
+            bool _bAjuizado = ListaOrigem[0].Ajuizado == "S";
+            List<SelectDebitoParcelamentoEditorViewModel> _listaP = new List<SelectDebitoParcelamentoEditorViewModel>();
+            foreach(SpParcelamentoOrigem item in ListaOrigem) {
+                SelectDebitoParcelamentoEditorViewModel d = new SelectDebitoParcelamentoEditorViewModel() {
+                    Ajuizado = item.Ajuizado,
+                    Complemento = item.Complemento,
+                    Data_vencimento = item.Data_vencimento,
+                    Exercicio = item.Exercicio,
+                    Idx = item.Idx,
+                    Lancamento = item.Lancamento,
+                    Nome_lancamento = Functions.TruncateTo(item.Nome_lancamento,16),
+                    Parcela = item.Parcela,
+                    Perc_penalidade = item.Perc_penalidade,
+                    Qtde_parcelamento = item.Qtde_parcelamento,
+                    Selected = item.Selected,
+                    Sequencia = item.Sequencia,
+                    Valor_correcao = item.Valor_correcao,
+                    Valor_juros = item.Valor_juros,
+                    Valor_multa = item.Valor_multa,
+                    Valor_penalidade = item.Valor_penalidade,
+                    Valor_principal = item.Valor_principal,
+                    Valor_total = item.Valor_total,
+                    Execucao_Fiscal = item.Execucao_Fiscal,
+                    Protesto = item.Protesto
+                };
+                _listaP.Add(d);
+                _SomaP += item.Valor_principal;
+                _SomaM += item.Valor_multa;
+                _SomaJ += item.Valor_juros;
+                _SomaC += item.Valor_correcao;
+                _SomaE += item.Valor_penalidade;
+                _SomaT += Math.Round(item.Valor_principal,2,MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros,2,MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa,2,MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao,2,MidpointRounding.AwayFromZero);
+            }
+            model.Soma_Principal = _SomaP;
+            model.Soma_Multa = _SomaM;
+            model.Soma_Juros = _SomaJ;
+            model.Soma_Correcao = _SomaC;
+            model.Soma_Penalidade = _SomaE;
+            model.Soma_Total = _SomaT;
+            model.Lista_Origem_Selected = _listaP;
+
+            //Carrega Simulado
+            model.Lista_Simulado = parcelamentoRepository.Retorna_Parcelamento_Web_Simulado(model.Guid,_master.Qtde_Parcela);
+
+            //Atualiza Totais
+            decimal _SomaH = 0, _SomaJapl = 0, _SomaL = 0;
+            _SomaP = 0; _SomaC = 0; _SomaJ = 0; _SomaM = 0; _SomaT = 0;
+
+            foreach(Parcelamento_Web_Simulado item in model.Lista_Simulado) {
+                _SomaL += item.Valor_Liquido;
+                _SomaJ += item.Valor_Juros;
+                _SomaM += item.Valor_Multa;
+                _SomaC += item.Valor_Correcao;
+                _SomaP += item.Valor_Principal;
+                _SomaT += item.Valor_Total;
+                _SomaH += item.Valor_Honorario;
+                _SomaJapl += item.Juros_Apl;
+            }
+
+            Parcelamento_web_master reg = new Parcelamento_web_master() {
+                Guid = model.Guid,
+                Sim_Correcao = _SomaC,
+                Sim_Honorario = _SomaH,
+                Sim_Juros = _SomaJ,
+                Sim_Juros_apl = _SomaJapl,
+                Sim_Liquido = _SomaL,
+                Sim_Multa = _SomaM,
+                Sim_Perc_Correcao = _SomaC * 100 / _SomaT,
+                Sim_Perc_Honorario = _SomaH * 100 / _SomaT,
+                Sim_Perc_Juros = _SomaJ * 100 / _SomaT,
+                Sim_Perc_Juros_Apl = _SomaJapl * 100 / _SomaT,
+                Sim_Perc_Liquido = _SomaL * 100 / _SomaT,
+                Sim_Perc_Multa = _SomaM * 100 / _SomaT,
+                Sim_Principal = _SomaP,
+                Sim_Total = _SomaT
+            };
+            Exception ex = parcelamentoRepository.Atualizar_Simulado_Master(reg);
+  
+        }
+
 
 
 

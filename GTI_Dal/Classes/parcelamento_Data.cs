@@ -398,7 +398,7 @@ namespace GTI_Dal.Classes {
             using (var db = new GTI_Context(_connection)) {
                 db.Database.CommandTimeout = 180;
 
-                object[] Parametros = new object[20];
+                object[] Parametros = new object[21];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@idx", SqlDbType = SqlDbType.Int, SqlValue = Reg.Idx };
                 Parametros[2] = new SqlParameter { ParameterName = "@ano", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Ano };
@@ -423,10 +423,11 @@ namespace GTI_Dal.Classes {
                     Parametros[18] = new SqlParameter { ParameterName = "@Execucao_Fiscal", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Execucao_Fiscal };
 
                 Parametros[19] = new SqlParameter { ParameterName = "@Protesto", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Protesto };
+                Parametros[20] = new SqlParameter { ParameterName = "@valor_honorario",SqlDbType = SqlDbType.Decimal,SqlValue = Reg.Valor_Honorario };
 
                 db.Database.ExecuteSqlCommand("INSERT INTO parcelamento_web_selected(guid,idx,ano,lancamento,sequencia,parcela,complemento,data_vencimento,valor_tributo,valor_multa,valor_juros,valor_correcao," +
-                    "valor_total,qtde_parcelamento,perc_penalidade,valor_penalidade,lancamento_nome,ajuizado,Execucao_Fiscal,Protesto) VALUES(@guid,@idx,@ano,@lancamento,@sequencia,@parcela,@complemento,@data_vencimento,@valor_tributo," +
-                    "@valor_multa,@valor_juros,@valor_correcao,@valor_total,@qtde_parcelamento,@perc_penalidade,@valor_penalidade,@lancamento_nome,@ajuizado,@Execucao_Fiscal,@Protesto)", Parametros);
+                    "valor_total,qtde_parcelamento,perc_penalidade,valor_penalidade,lancamento_nome,ajuizado,Execucao_Fiscal,Protesto,valor_honorario) VALUES(@guid,@idx,@ano,@lancamento,@sequencia,@parcela,@complemento,@data_vencimento,@valor_tributo," +
+                    "@valor_multa,@valor_juros,@valor_correcao,@valor_total,@qtde_parcelamento,@perc_penalidade,@valor_penalidade,@lancamento_nome,@ajuizado,@Execucao_Fiscal,@Protesto,@valor_honorario)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -441,7 +442,7 @@ namespace GTI_Dal.Classes {
                 db.Database.CommandTimeout = 180;
 
                 foreach (Parcelamento_web_selected Reg in Lista) {
-                    object[] Parametros = new object[20];
+                    object[] Parametros = new object[21];
                     Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
                     Parametros[1] = new SqlParameter { ParameterName = "@idx", SqlDbType = SqlDbType.Int, SqlValue = Reg.Idx };
                     Parametros[2] = new SqlParameter { ParameterName = "@ano", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Ano };
@@ -465,10 +466,11 @@ namespace GTI_Dal.Classes {
                     else
                         Parametros[18] = new SqlParameter { ParameterName = "@Execucao_Fiscal", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Execucao_Fiscal };
                     Parametros[19] = new SqlParameter { ParameterName = "@Protesto", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Protesto };
+                    Parametros[20] = new SqlParameter { ParameterName = "@valor_honorario",SqlDbType = SqlDbType.Decimal,SqlValue = Reg.Valor_Honorario };
 
                     db.Database.ExecuteSqlCommand("INSERT INTO parcelamento_web_selected(guid,idx,ano,lancamento,sequencia,parcela,complemento,data_vencimento,valor_tributo,valor_multa,valor_juros,valor_correcao," +
-                        "valor_total,qtde_parcelamento,perc_penalidade,valor_penalidade,lancamento_nome,ajuizado,Execucao_Fiscal,Protesto) VALUES(@guid,@idx,@ano,@lancamento,@sequencia,@parcela,@complemento,@data_vencimento,@valor_tributo," +
-                        "@valor_multa,@valor_juros,@valor_correcao,@valor_total,@qtde_parcelamento,@perc_penalidade,@valor_penalidade,@lancamento_nome,@ajuizado,@Execucao_Fiscal,@Protesto)", Parametros);
+                        "valor_total,qtde_parcelamento,perc_penalidade,valor_penalidade,lancamento_nome,ajuizado,Execucao_Fiscal,Protesto,valor_honorario) VALUES(@guid,@idx,@ano,@lancamento,@sequencia,@parcela,@complemento,@data_vencimento,@valor_tributo," +
+                        "@valor_multa,@valor_juros,@valor_correcao,@valor_total,@qtde_parcelamento,@perc_penalidade,@valor_penalidade,@lancamento_nome,@ajuizado,@Execucao_Fiscal,@Protesto,@valor_honorario)", Parametros);
                     try {
                         db.SaveChanges();
                     } catch (Exception ex) {
@@ -567,12 +569,12 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public List<Parcelamento_Web_Simulado> Lista_Parcelamento_Destino(string Guid,short Plano, DateTime Data_Vencimento,bool Ajuizado,bool Honorario,decimal Principal,decimal Juros,decimal Multa, decimal Correcao,decimal Total,decimal Adicional,decimal Valor_Minimo) {
+        public List<Parcelamento_Web_Simulado> Lista_Parcelamento_Destino(string Guid,short Plano, DateTime Data_Vencimento,bool Ajuizado,bool Honorario,decimal Principal,decimal Juros,decimal Multa, decimal Correcao,decimal Total,decimal Adicional,decimal Valor_Minimo,decimal Soma_Honorario) {
             
             Tributario_Data tributarioRepository = new Tributario_Data(_connection);
             using (GTI_Context db = new GTI_Context(_connection)) {
                 db.Database.CommandTimeout = 600;
-                object[] Parametros = new object[12];
+                object[] Parametros = new object[13];
                 Parametros[0] = new SqlParameter { ParameterName = "@Guid", SqlDbType = SqlDbType.VarChar, SqlValue = Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@Plano", SqlDbType = SqlDbType.SmallInt, SqlValue = Plano };
                 Parametros[2] = new SqlParameter { ParameterName = "@Data_Vencimento", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Data_Vencimento };
@@ -585,8 +587,9 @@ namespace GTI_Dal.Classes {
                 Parametros[9] = new SqlParameter { ParameterName = "@Total", SqlDbType = SqlDbType.Decimal, SqlValue = Total };
                 Parametros[10] = new SqlParameter { ParameterName = "@Adicional", SqlDbType = SqlDbType.Decimal, SqlValue = Adicional };
                 Parametros[11] = new SqlParameter { ParameterName = "@Valor_Minimo", SqlDbType = SqlDbType.Decimal, SqlValue = Valor_Minimo };
+                Parametros[12] = new SqlParameter { ParameterName = "@Soma_Honorario",SqlDbType = SqlDbType.Decimal,SqlValue = Soma_Honorario };
                 var result = db.spParcelamentoDestinoWeb.SqlQuery("EXEC spPARCELAMENTODESTINOWEB @Guid,@Plano,@Data_Vencimento, @Ajuizado, @Honorario, " +
-                    "@Principal ,@Juros ,@Multa, @Correcao ,@Total, @Adicional, @Valor_Minimo ", Parametros).ToList();
+                    "@Principal ,@Juros ,@Multa, @Correcao ,@Total, @Adicional, @Valor_Minimo,@Soma_Honorario ", Parametros).ToList();
 
 
                 List<Parcelamento_Web_Simulado> Lista = new List<Parcelamento_Web_Simulado>();

@@ -530,13 +530,11 @@
                         }
                     }
 
-                    if (_ajuizado && _naoajuizado) {
-                        document.getElementById('lblMsg').innerHTML = "Não é permitido parcelar débitos ajuizados e não ajuizados no mesmo parcelamento.";
-                        $('#msgBox1').dialog('open');
-
-                        //document.getElementById('errorLabel').innerHTML = "Não é permitido parcelar débitos ajuizados e não ajuizados no mesmo parcelamento.";
-                        return false;
-                    }
+                    //if (_ajuizado && _naoajuizado) {
+                    //    document.getElementById('lblMsg').innerHTML = "Não é permitido parcelar débitos ajuizados e não ajuizados no mesmo parcelamento.";
+                    //    $('#msgBox1').dialog('open');
+                    //    return false;
+                    //}
 
                     if (_count == 0) {
                         document.getElementById('lblMsg').innerHTML = "Selecione o(s) débito(s) à parcelar.";

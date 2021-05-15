@@ -115,9 +115,9 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Parcelamento_Web_Simulado(guid, qtde_parcela);
         }
 
-        public List<Parcelamento_Web_Simulado> Lista_Parcelamento_Destino(string Guid, short Plano, DateTime Data_Vencimento, bool Ajuizado, bool Honorario, decimal Principal, decimal Juros, decimal Multa, decimal Correcao, decimal Total, decimal Adicional, decimal Valor_Minimo) {
+        public List<Parcelamento_Web_Simulado> Lista_Parcelamento_Destino(string Guid, short Plano, DateTime Data_Vencimento, bool Ajuizado, bool Honorario, decimal Principal, decimal Juros, decimal Multa, decimal Correcao, decimal Total, decimal Adicional, decimal Valor_Minimo,decimal Soma_Honorario) {
             Parcelamento_Data obj = new Parcelamento_Data(_connection);
-            return obj.Lista_Parcelamento_Destino(Guid, Plano, Data_Vencimento, Ajuizado, Honorario, Principal, Juros, Multa, Correcao, Total, Adicional, Valor_Minimo);
+            return obj.Lista_Parcelamento_Destino(Guid, Plano, Data_Vencimento, Ajuizado, Honorario, Principal, Juros, Multa, Correcao, Total, Adicional, Valor_Minimo,Soma_Honorario);
         }
 
         public Exception Incluir_Parcelamento_Web_Simulado_Resumo(List<Parcelamento_Web_Simulado_Resumo> Lista) {
