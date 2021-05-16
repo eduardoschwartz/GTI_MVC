@@ -95,519 +95,534 @@
             #tblMain tbody td, #tblMain thead th {
                 float: left;
             }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
 </style>
 
+@{
+    var res = ViewBag.Result;
+    var guid = Model.Guid;
+    }
 <h5 style="text-align:center">Parcelamento de Débitos - Processo nº&nbsp;<span style="color:brown">@Model.NumeroProcesso</span>  </h5>
-
 <div class="center container" style="width:940px">
 
-    @using (Html.BeginForm("Parc_reqf", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @using(Html.BeginForm("Parc_reqf","Parcelamento",FormMethod.Post,new { @id = "MainForm",enctype = "multipart/form-data" })) {
 
         @Html.HiddenFor(m => m.Guid)
 
 
-    <div class="card">
-        <div class="card-header">Dados do Requerente</div>
-        <div class="card-body">
+        <div class="card">
+            <div class="card-header">Dados do Requerente</div>
+            <div class="card-body">
 
 
-            <table style="font-size:14px;width:640px">
-                <tr style="height:30px">
-                    <td style="width:103px">
-                        <label style="font-weight:normal;padding-top:7px">Nº Cpf/Cnpj:</label>
-                    </td>
-                    <td>
-                        @Html.TextBoxFor(m => m.Requerente.Cpf_Cnpj, new { @style = "max-width:200px;height:25px", @readonly = true })
-                    </td>
-                </tr>
-
-            </table>
-            <div style="padding-top:5px">
                 <table style="font-size:14px;width:640px">
                     <tr style="height:30px">
                         <td style="width:103px">
-                            <label style="font-weight:normal">Nome:&nbsp;&nbsp;</label>
+                            <label style="font-weight:normal;padding-top:7px">Nº Cpf/Cnpj:</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;color:blue">
-                                @Html.TextBoxFor(m => m.Requerente.Nome, new { style = "width:527px;height:25px", @readonly = true })
+                            @Html.TextBoxFor(m => m.Requerente.Cpf_Cnpj,new { @style = "max-width:200px;height:25px",@readonly = true })
+                        </td>
+                    </tr>
+
+                </table>
+                <div style="padding-top:5px">
+                    <table style="font-size:14px;width:640px">
+                        <tr style="height:30px">
+                            <td style="width:103px">
+                                <label style="font-weight:normal">Nome:&nbsp;&nbsp;</label>
+                            </td>
+                            <td>
+                                <label style="font-weight:normal;color:blue">
+                                    @Html.TextBoxFor(m => m.Requerente.Nome,new { style = "width:527px;height:25px",@readonly = true })
+                                </label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <table style="font-size:14px;width:640px">
+                    <tr style="height:30px">
+                        <td style="width:103px">
+                            <label style="font-weight:normal">Logradouro:</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Logradouro_Nome,new { style = "width:392px;height:25px",@readonly = true })</label>
+                            <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal">
+                                @Html.TextBoxFor(m => m.Requerente.Numero,new { style = "width:60px;height:25px",@readonly = true })
                             </label>
                         </td>
                     </tr>
                 </table>
-            </div>
 
-            <table style="font-size:14px;width:640px">
-                <tr style="height:30px">
-                    <td style="width:103px">
-                        <label style="font-weight:normal">Logradouro:</label>
-                    </td>
-                    <td>
-                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Logradouro_Nome, new { style = "width:392px;height:25px", @readonly = true })</label>
-                        <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal">
-                            @Html.TextBoxFor(m => m.Requerente.Numero, new { style = "width:60px;height:25px", @readonly = true })
-                        </label>
-                    </td>
-                </tr>
-            </table>
-
-            <table style="font-size:14px;width:640px">
-                <tr style="height:30px">
-                    <td style="width:103px">
-                        <label style="font-weight:normal;">Complemento:</label>
-                    </td>
-                    <td>
-                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Requerente.Complemento, new { style = "width:230px;height:25px", @readonly = true })</label>
-                    </td>
-                    <td>
-                        <label style="font-weight:normal">&nbsp;&nbsp;Bairro:&nbsp;&nbsp;</label>
-                    </td>
-                    <td>
-                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Bairro_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
-                    </td>
-                </tr>
-                <tr style="height:30px">
-                    <td>
-                        <label style="font-weight:normal">Cidade/UF:</label>
-                    </td>
-                    <td>
-                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Cidade_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
-
-                    </td>
-                    <td>
-                        <label style="font-weight:normal;padding-left:10px">Cep:&nbsp;&nbsp;</label>
-                    </td>
-                    <td>
-                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Cep, new { style = "width:230px;height:25px", @readonly = true })</label>
-                    </td>
-                </tr>
-                <tr style="height:30px">
-                    <td>
-                        <label style="font-weight:normal">Telefone:</label>
-                    </td>
-                    <td>
-                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Telefone, new { style = "width:230px;height:25px", @readonly = true })</label>
-
-                    </td>
-                    <td>
-                        <label style="font-weight:normal;padding-left:10px">Email:</label>
-                    </td>
-                    <td>
-                        <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Email, new { style = "width:230px;height:25px", @readonly = true })</label>
-                    </td>
-                </tr>
-            </table>
-
-        </div>
-        <div class="card-header">Dados do contribuinte selecionado</div>
-        <div class="card-body">
-
-            <table style="font-size:14px;width:640px">
-                <tr style="height:30px">
-                    <td style="width:103px">
-                        <label style="font-weight:normal;padding-top:7px">Nº da Inscrição:</label>
-                    </td>
-                    <td>
-                        @Html.TextBoxFor(m => m.Contribuinte.Codigo, new { @style = "max-width:100px;height:25px", @readonly = true })
-                    </td>
-                    <td style="width:144px"></td>
-                    <td style="width:98px">
-                        <label style="font-weight:normal;padding-top:7px;text-align:right">Nº Cpf/Cnpj:</label>
-                    </td>
-                    <td>
-                        @Html.TextBoxFor(m => m.Contribuinte.Cpf_Cnpj, new { @style = "max-width:200px;height:25px", @readonly = true })
-                    </td>
-                </tr>
-
-            </table>
-            <div style="padding-top:5px">
                 <table style="font-size:14px;width:640px">
                     <tr style="height:30px">
                         <td style="width:103px">
-                            <label style="font-weight:normal">Nome:&nbsp;&nbsp;</label>
+                            <label style="font-weight:normal;">Complemento:</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;color:blue">
-                                @Html.TextBoxFor(m => m.Contribuinte.Nome, new { style = "width:527px;height:25px", @readonly = true })
-                            </label>
+                            <label style="font-weight:normal">@Html.TextBoxFor(m => m.Requerente.Complemento,new { style = "width:230px;height:25px",@readonly = true })</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal">&nbsp;&nbsp;Bairro:&nbsp;&nbsp;</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Bairro_Nome,new { style = "width:230px;height:25px",@readonly = true })</label>
+                        </td>
+                    </tr>
+                    <tr style="height:30px">
+                        <td>
+                            <label style="font-weight:normal">Cidade/UF:</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Cidade_Nome,new { style = "width:230px;height:25px",@readonly = true })</label>
+
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;padding-left:10px">Cep:&nbsp;&nbsp;</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Cep,new { style = "width:230px;height:25px",@readonly = true })</label>
+                        </td>
+                    </tr>
+                    <tr style="height:30px">
+                        <td>
+                            <label style="font-weight:normal">Telefone:</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Telefone,new { style = "width:230px;height:25px",@readonly = true })</label>
+
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;padding-left:10px">Email:</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Email,new { style = "width:230px;height:25px",@readonly = true })</label>
                         </td>
                     </tr>
                 </table>
+
             </div>
+            <div class="card-header">Dados do contribuinte selecionado</div>
+            <div class="card-body">
 
-            <table style="font-size:14px;width:640px">
-                <tr style="height:30px">
-                    <td style="width:103px">
-                        <label style="font-weight:normal">Endereco:</label>
-                    </td>
-                    <td>
-                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Contribuinte.Logradouro_Nome, new { style = "width:527px;height:25px", @readonly = true })</label>
-                    </td>
-                </tr>
-            </table>
+                <table style="font-size:14px;width:640px">
+                    <tr style="height:30px">
+                        <td style="width:103px">
+                            <label style="font-weight:normal;padding-top:7px">Nº da Inscrição:</label>
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.Contribuinte.Codigo,new { @style = "max-width:100px;height:25px",@readonly = true })
+                        </td>
+                        <td style="width:144px"></td>
+                        <td style="width:98px">
+                            <label style="font-weight:normal;padding-top:7px;text-align:right">Nº Cpf/Cnpj:</label>
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.Contribuinte.Cpf_Cnpj,new { @style = "max-width:200px;height:25px",@readonly = true })
+                        </td>
+                    </tr>
 
-            <table style="font-size:14px;width:640px">
-                <tr style="height:30px">
-                    <td style="width:103px">
-                        <label style="font-weight:normal">Bairro/Cidade:</label>
-                    </td>
-                    <td>
-                        <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Contribuinte.Bairro_Nome, new { style = "width:385px;height:25px", @readonly = true })</label>
+                </table>
+                <div style="padding-top:5px">
+                    <table style="font-size:14px;width:640px">
+                        <tr style="height:30px">
+                            <td style="width:103px">
+                                <label style="font-weight:normal">Nome:&nbsp;&nbsp;</label>
+                            </td>
+                            <td>
+                                <label style="font-weight:normal;color:blue">
+                                    @Html.TextBoxFor(m => m.Contribuinte.Nome,new { style = "width:527px;height:25px",@readonly = true })
+                                </label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
 
-                    </td>
-                    <td>
-                        <label style="font-weight:normal;color:blue"><span style="color:black">Cep:</span>&nbsp;&nbsp;@Html.TextBoxFor(m => m.Contribuinte.Cep, new { style = "width:80px;height:25px", @readonly = true })</label>
-                    </td>
-                </tr>
-            </table>
+                <table style="font-size:14px;width:640px">
+                    <tr style="height:30px">
+                        <td style="width:103px">
+                            <label style="font-weight:normal">Endereco:</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Contribuinte.Logradouro_Nome,new { style = "width:527px;height:25px",@readonly = true })</label>
+                        </td>
+                    </tr>
+                </table>
+
+                <table style="font-size:14px;width:640px">
+                    <tr style="height:30px">
+                        <td style="width:103px">
+                            <label style="font-weight:normal">Bairro/Cidade:</label>
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Contribuinte.Bairro_Nome,new { style = "width:385px;height:25px",@readonly = true })</label>
+
+                        </td>
+                        <td>
+                            <label style="font-weight:normal;color:blue"><span style="color:black">Cep:</span>&nbsp;&nbsp;@Html.TextBoxFor(m => m.Contribuinte.Cep,new { style = "width:80px;height:25px",@readonly = true })</label>
+                        </td>
+                    </tr>
+                </table>
 
 
-        </div>
-        <div class="card-header">Parâmetros do parcelamento</div>
-        <div class="card-body" style="font-size:14px">
-            Plano de desconto:&nbsp;<span style="color:blue">@Model.Plano_Nome</span><br />
-            Data de Vencimento:&nbsp;<span style="color:blue">@Model.Data_Vencimento</span><br />
-            Desconto:&nbsp;<span style="color:blue">@Model.Perc_desconto%</span><span style="padding-left:15px;color:black">Valor mínimo da parcela:&nbsp;</span><span style="color:blue">R$@Model.Valor_Minimo</span>
-        </div>
-        <div class="card-header">Débitos selecionados</div>
-        <div class="card-body">
-            <div style="overflow-x:auto">
-                <div id="DebitoTable" style="height:335px;  overflow: auto; width:1040px; border-bottom-color: cadetblue; border-bottom-style: solid; border-bottom-width: 1px; border-top-color: cadetblue; border-top-style: solid; border-top-width: 1px; border-left-color: cadetblue; border-left-style: solid; border-left-width: 1px; border-right-color: cadetblue; border-right-style: solid; border-right-width: 1px">
-                    <table id="tblMain" style="font-size:12px;width:1030px">
+            </div>
+            <div class="card-header">Parâmetros do parcelamento</div>
+            <div class="card-body" style="font-size:14px">
+                Plano de desconto:&nbsp;<span style="color:blue">@Model.Plano_Nome</span><br />
+                Data de Vencimento:&nbsp;<span style="color:blue">@Model.Data_Vencimento</span><br />
+                Desconto:&nbsp;<span style="color:blue">@Model.Perc_desconto%</span><span style="padding-left:15px;color:black">Valor mínimo da parcela:&nbsp;</span><span style="color:blue">R$@Model.Valor_Minimo</span>
+            </div>
+            <div class="card-header">Débitos selecionados</div>
+            <div class="card-body">
+                <div style="overflow-x:auto">
+                    <div id="DebitoTable" style="height:335px;  overflow: auto; width:1040px; border-bottom-color: cadetblue; border-bottom-style: solid; border-bottom-width: 1px; border-top-color: cadetblue; border-top-style: solid; border-top-width: 1px; border-left-color: cadetblue; border-left-style: solid; border-left-width: 1px; border-right-color: cadetblue; border-right-style: solid; border-right-width: 1px">
+                        <table id="tblMain" style="font-size:12px;width:1030px">
+                            <thead>
+                                <tr style="background-color:darkred;color:white;height:25px">
+                                    <th style="display:none">
+                                        Id
+                                    </th>
+                                    <th style="width:50px;text-align:center">
+                                        Ano
+                                    </th>
+                                    <th style="display:none">
+                                        Lanc
+                                    </th>
+                                    <th style="width:158px">
+                                        Lancamento
+                                    </th>
+                                    <th style="display:none">
+                                        Seq
+                                    </th>
+                                    <th style="display:none">
+                                        Parc
+                                    </th>
+                                    <th style="display:none">
+                                        Compl
+                                    </th>
+                                    <th style="width:80px;text-align:center">
+                                        Dt.Vencto
+                                    </th>
+                                    <th style="width:26px;text-align:center">
+                                        Aj
+                                    </th>
+                                    <th style="width:70px;text-align:right">
+                                        Principal
+                                    </th>
+                                    <th style="width:70px;text-align:right">
+                                        Juros
+                                    </th>
+                                    <th style="width:70px;text-align:right">
+                                        Multa
+                                    </th>
+                                    <th style="width:70px;text-align:right">
+                                        Correção
+                                    </th>
+                                    <th style="width:40px;text-align:right">
+                                        Qtde
+                                    </th>
+                                    <th style="width:50px;text-align:right">
+                                        %
+                                    </th>
+                                    <th style="width:60px;text-align:right">
+                                        Vl.Adian.
+                                    </th>
+                                    <th style="width:70px;text-align:right">
+                                        Total
+                                    </th>
+                                    <th style="width:190px;text-align:left">
+                                        &nbsp;&nbsp; Execução Fiscal
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="item-model-number">
+                                @foreach(var item in Model.Lista_Origem_Selected) {
+                                    <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                        <td style="width:50px;text-align:center">
+                                            @item.Exercicio
+                                        </td>
+                                        <td style="width:158px">
+                                            @item.Nome_lancamento
+                                        </td>
+                                        <td style="width:80px" align="center">
+                                            @item.Data_vencimento.ToString("dd/MM/yyyy")
+                                        </td>
+                                        <td style="width:26px" align="center">
+                                            @item.Ajuizado
+                                        </td>
+                                        <td style="width:70px" align="right">
+                                            @item.Valor_principal
+                                        </td>
+                                        <td style="width:70px" align="right">
+                                            @item.Valor_juros
+                                        </td>
+                                        <td style="width:70px" align="right">
+                                            @item.Valor_multa
+                                        </td>
+                                        <td style="width:70px" align="right">
+                                            @item.Valor_correcao
+                                        </td>
+                                        <td style="width:40px" align="right">
+                                            @item.Qtde_parcelamento
+                                        </td>
+                                        <td style="width:50px" align="right">
+                                            @item.Perc_penalidade
+                                        </td>
+                                        <td style="width:60px" align="right">
+                                            @item.Valor_penalidade
+                                        </td>
+                                        <td style="width:70px" align="right">
+                                            @item.Valor_total
+                                        </td>
+                                        <td style="width:190px" align="left">
+                                            &nbsp;&nbsp;@item.Execucao_Fiscal
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br />
+                <div style="width: 100%; overflow: hidden;">
+                    <div style="width: 400px; float: left;">
+                        <table id="ResumoTable" style="font-size:14px;border:solid;border-width:thin;border-color:brown">
+                            <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;background-color:darkred;color:white">
+                                <td></td>
+                                <td style="width:100px;color:white;" align="right">Valor R%</td>
+                            </tr>
+                            <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                <td>Total Principal:</td>
+                                <td style="width:100px;color:red" align="right">@Model.Soma_Principal.ToString("#0.00")</td>
+                            </tr>
+                            <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                <td>Total Juros:</td>
+                                <td style="width:100px;color:red" align="right">@Model.Soma_Juros.ToString("#0.00")</td>
+                            </tr>
+                            <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                <td>Total Multa:</td>
+                                <td style="width:100px;color:red" align="right">@Model.Soma_Multa.ToString("#0.00")</td>
+                            </tr>
+                            <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                <td>Total Correção:</td>
+                                <td style="width:100px;color:red" align="right">@Model.Soma_Correcao.ToString("#0.00")</td>
+                            </tr>
+                            <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                <td>Total Entrada:</td>
+                                <td style="width:100px;color:red" align="right">@Model.Soma_Penalidade.ToString("#0.00")</td>
+                            </tr>
+                            <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                <td>Total Geral:</td>
+                                <td style="width:100px;color:red" align="right">@Model.Soma_Total.ToString("#0.00")</td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <div style="margin-left: 380px;">
+                        <table style="border: 1px">
+                            <tr>
+                                <td style="font-weight:bold;color:brown;font-size:small" width="25px">
+                                    Aj
+                                </td>
+                                <td style="font-size:small">
+                                    - Débito Ajuizado (S-Sim, N-Não)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;color:brown;font-size:small" width="25px">
+                                    Qtde
+                                </td>
+
+                                <td style="font-size:small">
+                                    - Qtde de vezes que o débito foi parcelado
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;color:brown;font-size:small" width="25px">
+                                    %
+                                </td>
+                                <td style="font-size:small">
+                                    - % de adiantamento por parcelamento efetuado
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;color:brown;font-size:small" width="25px">
+                                    Vl.Adian.
+                                </td>
+                                <td style="font-size:small">
+                                    - Valor do adiantamento aplicado ao valor de entrada
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-header">Resumo das Parcelas geradas</div>
+            <div class="card-body">
+                <div id="DebitoTable" style="max-height: 350px; height:auto;overflow: auto;width:870px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;border-left-color:cadetblue;border-left-style:solid;border-left-width:1px;border-right-color:cadetblue;border-right-style:solid;border-right-width:1px">
+                    <table id="tblResumo" style="font-size:12px">
                         <thead>
                             <tr style="background-color:darkred;color:white;height:25px">
-                                <th style="display:none">
-                                    Id
-                                </th>
-                                <th style="width:50px;text-align:center">
-                                    Ano
-                                </th>
-                                <th style="display:none">
-                                    Lanc
-                                </th>
-                                <th style="width:158px">
-                                    Lancamento
-                                </th>
-                                <th style="display:none">
-                                    Seq
-                                </th>
-                                <th style="display:none">
-                                    Parc
-                                </th>
-                                <th style="display:none">
-                                    Compl
+                                <th style="width:20px;text-align:right">
+                                    Pc
                                 </th>
                                 <th style="width:80px;text-align:center">
                                     Dt.Vencto
                                 </th>
-                                <th style="width:26px;text-align:center">
-                                    Aj
+                                <th style="width:70px;text-align:right">
+                                    Vl.Líq.
                                 </th>
                                 <th style="width:70px;text-align:right">
-                                    Principal
+                                    Vl.Juros
                                 </th>
                                 <th style="width:70px;text-align:right">
-                                    Juros
+                                    Vl.Multa
                                 </th>
                                 <th style="width:70px;text-align:right">
-                                    Multa
+                                    Vl.Corr.
                                 </th>
                                 <th style="width:70px;text-align:right">
-                                    Correção
+                                    Vl.Princ.
                                 </th>
-                                <th style="width:40px;text-align:right">
-                                    Qtde
+                                <th style="width:70px;text-align:right">
+                                    Saldo
                                 </th>
                                 <th style="width:50px;text-align:right">
-                                    %
+                                    Jr%
                                 </th>
-                                <th style="width:60px;text-align:right">
-                                    Vl.Adian.
+                                <th style="width:70px;text-align:right">
+                                    Jur/Mês
+                                </th>
+                                <th style="width:70px;text-align:right">
+                                    Jur.Apl.
+                                </th>
+                                <th style="width:70px;text-align:right">
+                                    Honor.
                                 </th>
                                 <th style="width:70px;text-align:right">
                                     Total
                                 </th>
-                                <th style="width:190px;text-align:left">
-                                    &nbsp;&nbsp; Execução Fiscal
-                                </th>
                             </tr>
                         </thead>
-                        <tbody class="item-model-number">
-                            @foreach (var item in Model.Lista_Origem_Selected) {
+                        @for(int i = 0;i < Model.Lista_Simulado.Count;i++) {
                             <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                                <td style="width:50px;text-align:center">
-                                    @item.Exercicio
+                                <td style="width:20px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Numero_Parcela)
                                 </td>
-                                <td style="width:158px">
-                                    @item.Nome_lancamento
+                                <td style="width:80px;text-align:center">
+                                    @Model.Lista_Simulado[i].Data_Vencimento.ToString("dd/MM/yyyy")
                                 </td>
-                                <td style="width:80px" align="center">
-                                    @item.Data_vencimento.ToString("dd/MM/yyyy")
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Liquido)
                                 </td>
-                                <td style="width:26px" align="center">
-                                    @item.Ajuizado
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Juros)
                                 </td>
-                                <td style="width:70px" align="right">
-                                    @item.Valor_principal
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Multa)
                                 </td>
-                                <td style="width:70px" align="right">
-                                    @item.Valor_juros
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Correcao)
                                 </td>
-                                <td style="width:70px" align="right">
-                                    @item.Valor_multa
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Principal)
                                 </td>
-                                <td style="width:70px" align="right">
-                                    @item.Valor_correcao
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Saldo)
                                 </td>
-                                <td style="width:40px" align="right">
-                                    @item.Qtde_parcelamento
+                                <td style="width:50px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Juros_Perc)
                                 </td>
-                                <td style="width:50px" align="right">
-                                    @item.Perc_penalidade
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Juros_Mes)
                                 </td>
-                                <td style="width:60px" align="right">
-                                    @item.Valor_penalidade
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Juros_Apl)
                                 </td>
-                                <td style="width:70px" align="right">
-                                    @item.Valor_total
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Honorario)
                                 </td>
-                                <td style="width:190px" align="left">
-                                    &nbsp;&nbsp;@item.Execucao_Fiscal
+                                <td style="width:70px;text-align:right">
+                                    @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Total)
                                 </td>
                             </tr>
-                            }
-                        </tbody>
+                        }
+
+
                     </table>
                 </div>
-            </div>
-            <br />
-            <div style="width: 100%; overflow: hidden;">
-                <div style="width: 400px; float: left;">
+                <br />
+                <div style="width: 400px; ">
                     <table id="ResumoTable" style="font-size:14px;border:solid;border-width:thin;border-color:brown">
                         <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;background-color:darkred;color:white">
                             <td></td>
-                            <td style="width:100px;color:white;" align="right">Valor R%</td>
+                            <td style="width:100px;color:white;" align="right">Valor R$</td>
                         </tr>
                         <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                            <td>Total Principal:</td>
-                            <td style="width:100px;color:red" align="right">@Model.Soma_Principal.ToString("#0.00")</td>
+                            <td>Total Líquido:</td>
+                            <td style="width:100px;color:red" align="right">@Model.Sim_Liquido.ToString("#0.00")</td>
                         </tr>
                         <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
                             <td>Total Juros:</td>
-                            <td style="width:100px;color:red" align="right">@Model.Soma_Juros.ToString("#0.00")</td>
+                            <td style="width:100px;color:red" align="right">@Model.Sim_Juros.ToString("#0.00")</td>
                         </tr>
                         <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
                             <td>Total Multa:</td>
-                            <td style="width:100px;color:red" align="right">@Model.Soma_Multa.ToString("#0.00")</td>
+                            <td style="width:100px;color:red" align="right">@Model.Sim_Multa.ToString("#0.00")</td>
                         </tr>
                         <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
                             <td>Total Correção:</td>
-                            <td style="width:100px;color:red" align="right">@Model.Soma_Correcao.ToString("#0.00")</td>
+                            <td style="width:100px;color:red" align="right">@Model.Sim_Correcao.ToString("#0.00")</td>
                         </tr>
                         <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                            <td>Total Entrada:</td>
-                            <td style="width:100px;color:red" align="right">@Model.Soma_Penalidade.ToString("#0.00")</td>
+                            <td>Total Principal:</td>
+                            <td style="width:100px;color:red" align="right">@Model.Sim_Principal.ToString("#0.00")</td>
+                        </tr>
+                        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                            <td>Total Juros Apl:</td>
+                            <td style="width:100px;color:red" align="right">@Model.Sim_Juros_apl.ToString("#0.00")</td>
+                        </tr>
+                        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                            <td>Total Honorários.:</td>
+                            <td style="width:100px;color:red" align="right">@Model.Sim_Honorario.ToString("#0.00")</td>
                         </tr>
                         <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
                             <td>Total Geral:</td>
-                            <td style="width:100px;color:red" align="right">@Model.Soma_Total.ToString("#0.00")</td>
+                            <td style="width:100px;color:red" align="right">@Model.Sim_Total.ToString("#0.00")</td>
                         </tr>
 
                     </table>
                 </div>
-                <div style="margin-left: 380px;">
-                    <table style="border: 1px">
-                        <tr>
-                            <td style="font-weight:bold;color:brown;font-size:small" width="25px">
-                                Aj
-                            </td>
-                            <td style="font-size:small">
-                                - Débito Ajuizado (S-Sim, N-Não)
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight:bold;color:brown;font-size:small" width="25px">
-                                Qtde
-                            </td>
 
-                            <td style="font-size:small">
-                                - Qtde de vezes que o débito foi parcelado
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight:bold;color:brown;font-size:small" width="25px">
-                                %
-                            </td>
-                            <td style="font-size:small">
-                                - % de adiantamento por parcelamento efetuado
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight:bold;color:brown;font-size:small" width="25px">
-                                Vl.Adian.
-                            </td>
-                            <td style="font-size:small">
-                                - Valor do adiantamento aplicado ao valor de entrada
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+
+                <br />
+                <article style="color:red;text-align:justify;font-size:13px">Clique no botão abaixo para emitir o boleto da primeira parcela, o restante do carnê estará disponível para download apenas após a confirmação de pagamento desta parcela.</article><br />
+                @*<button type="submit" class="btn btn-success" name="action" value="btnPrintBoleto">Imprimir Boleto</button><span style="padding-left:5px"></span>*@
+                <button type="button" class="btn btn-success" id="btnPrintBoleto" data-prop=@Model.Guid>Imprimir as parcelas do exercício atual</button><span style="padding-left:5px"></span>
+                <button type="submit" class="btn btn-info" name="action" value="btnPrintResumo" >Imprimir Resumo do Parcelamento</button><span style="padding-left:5px"></span>
+                <button type="submit" class="btn btn-secondary" name="action" value="btnVoltar">Consultar Processos</button>&nbsp;&nbsp;
             </div>
 
-        </div>
-        <div class="card-header">Resumo das Parcelas geradas</div>
-        <div class="card-body">
-            <div id="DebitoTable" style="max-height: 350px; height:auto;overflow: auto;width:870px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;border-left-color:cadetblue;border-left-style:solid;border-left-width:1px;border-right-color:cadetblue;border-right-style:solid;border-right-width:1px">
-                <table id="tblResumo" style="font-size:12px">
-                    <thead>
-                        <tr style="background-color:darkred;color:white;height:25px">
-                            <th style="width:20px;text-align:right">
-                                Pc
-                            </th>
-                            <th style="width:80px;text-align:center">
-                                Dt.Vencto
-                            </th>
-                            <th style="width:70px;text-align:right">
-                                Vl.Líq.
-                            </th>
-                            <th style="width:70px;text-align:right">
-                                Vl.Juros
-                            </th>
-                            <th style="width:70px;text-align:right">
-                                Vl.Multa
-                            </th>
-                            <th style="width:70px;text-align:right">
-                                Vl.Corr.
-                            </th>
-                            <th style="width:70px;text-align:right">
-                                Vl.Princ.
-                            </th>
-                            <th style="width:70px;text-align:right">
-                                Saldo
-                            </th>
-                            <th style="width:50px;text-align:right">
-                                Jr%
-                            </th>
-                            <th style="width:70px;text-align:right">
-                                Jur/Mês
-                            </th>
-                            <th style="width:70px;text-align:right">
-                                Jur.Apl.
-                            </th>
-                            <th style="width:70px;text-align:right">
-                                Honor.
-                            </th>
-                            <th style="width:70px;text-align:right">
-                                Total
-                            </th>
-                        </tr>
-                    </thead>
-                    @for (int i = 0; i < Model.Lista_Simulado.Count; i++) {
-                        <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                            <td style="width:20px;text-align:right">
-                                @Html.DisplayFor(model => model.Lista_Simulado[i].Numero_Parcela)
-                            </td>
-                            <td style="width:80px;text-align:center">
-                                @Model.Lista_Simulado[i].Data_Vencimento.ToString("dd/MM/yyyy")
-                            </td>
-                            <td style="width:70px;text-align:right">
-                                @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Liquido)
-                            </td>
-                            <td style="width:70px;text-align:right">
-                                @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Juros)
-                            </td>
-                            <td style="width:70px;text-align:right">
-                                @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Multa)
-                            </td>
-                            <td style="width:70px;text-align:right">
-                                @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Correcao)
-                            </td>
-                            <td style="width:70px;text-align:right">
-                                @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Principal)
-                            </td>
-                            <td style="width:70px;text-align:right">
-                                @Html.DisplayFor(model => model.Lista_Simulado[i].Saldo)
-                            </td>
-                            <td style="width:50px;text-align:right">
-                                @Html.DisplayFor(model => model.Lista_Simulado[i].Juros_Perc)
-                            </td>
-                            <td style="width:70px;text-align:right">
-                                @Html.DisplayFor(model => model.Lista_Simulado[i].Juros_Mes)
-                            </td>
-                            <td style="width:70px;text-align:right">
-                                @Html.DisplayFor(model => model.Lista_Simulado[i].Juros_Apl)
-                            </td>
-                            <td style="width:70px;text-align:right">
-                                @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Honorario)
-                            </td>
-                            <td style="width:70px;text-align:right">
-                                @Html.DisplayFor(model => model.Lista_Simulado[i].Valor_Total)
-                            </td>
-                        </tr>
-                    }
-
-
-                </table>
+            <div class="card-footer">
+                @Html.ActionLink("Retornar ao menu de opções","Parc_index","Parcelamento",null,new { @class = "actionlink" })<br />
+                @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
             </div>
-            <br />
-            <div style="width: 400px; ">
-                <table id="ResumoTable" style="font-size:14px;border:solid;border-width:thin;border-color:brown">
-                    <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px;background-color:darkred;color:white">
-                        <td></td>
-                        <td style="width:100px;color:white;" align="right">Valor R$</td>
-                    </tr>
-                    <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                        <td>Total Líquido:</td>
-                        <td style="width:100px;color:red" align="right">@Model.Sim_Liquido.ToString("#0.00")</td>
-                    </tr>
-                    <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                        <td>Total Juros:</td>
-                        <td style="width:100px;color:red" align="right">@Model.Sim_Juros.ToString("#0.00")</td>
-                    </tr>
-                    <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                        <td>Total Multa:</td>
-                        <td style="width:100px;color:red" align="right">@Model.Sim_Multa.ToString("#0.00")</td>
-                    </tr>
-                    <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                        <td>Total Correção:</td>
-                        <td style="width:100px;color:red" align="right">@Model.Sim_Correcao.ToString("#0.00")</td>
-                    </tr>
-                    <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                        <td>Total Principal:</td>
-                        <td style="width:100px;color:red" align="right">@Model.Sim_Principal.ToString("#0.00")</td>
-                    </tr>
-                    <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                        <td>Total Juros Apl:</td>
-                        <td style="width:100px;color:red" align="right">@Model.Sim_Juros_apl.ToString("#0.00")</td>
-                    </tr>
-                    <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                        <td>Total Honorários.:</td>
-                        <td style="width:100px;color:red" align="right">@Model.Sim_Honorario.ToString("#0.00")</td>
-                    </tr>
-                    <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                        <td>Total Geral:</td>
-                        <td style="width:100px;color:red" align="right">@Model.Sim_Total.ToString("#0.00")</td>
-                    </tr>
-
-                </table>
-            </div>
-
-
-            <br />
-            <article style="color:red;text-align:justify;font-size:13px">Clique no botão abaixo para emitir o boleto da primeira parcela, o restante do carnê estará disponível para download apenas após a confirmação de pagamento desta parcela.</article><br />
-            @*<button type="submit" class="btn btn-success" name="action" value="btnValida" onclick="return confirm('Você deseja emitir o boleto?')">Imprimir Boleto</button>&nbsp;&nbsp;
-            <button type="submit" class="btn btn-secondary" name="action" value="btnResumo">Imprimir o Resumo</button>&nbsp;&nbsp;*@
-            <button type="submit" class="btn btn-success" name="action" value="btnPrintBoleto">Imprimir Boleto</button><span style="padding-left:5px"></span>
-            <button type="submit" class="btn btn-info" name="action" value="btnPrintResumo">Imprimir Resumo do Parcelamento</button><span style="padding-left:5px"></span>
-            <button type="submit" class="btn btn-secondary" name="action" value="btnVoltar">Consultar Processos</button>&nbsp;&nbsp;
         </div>
-        <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
-        <div class="card-footer">
-            @Html.ActionLink("Retornar ao menu de opções", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<br />
-            @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
-        </div>
-    </div>
     }
+</div>
+
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
 </div>
 
 @section scripts{
@@ -622,6 +637,49 @@
                 "background-color": "#E9FAFA"
             });
 
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+
         });
 
 
@@ -631,13 +689,23 @@
         }
 
         function ClearError() {
-            document.getElementById('errorGuia').innerHTML = "";
+//            document.getElementById('errorGuia').innerHTML = "";
         }
 
-
-        $(document).ready(function () {
-            $("#MainForm").submit(function () {
-               
+        $('#btnPrintBoleto').click(function () {
+            var _guid = '@guid';
+            $.ajax({
+                type: 'GET',
+                cache: false,
+                url: '/Parcelamento/bank_Method',
+                dataType: 'json',
+                data: { p :_guid },
+                error: function () {
+                    document.getElementById('lblMsg').innerHTML = response.dados;
+                    $('#msgBox1').dialog('open');
+                },
+                success: function (response) {
+                }
             });
         });
 

@@ -286,5 +286,12 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Parcelamento_Web_Master(_dataInicio,_dataFim);
         }
 
+        public List<DebitoStructure> Lista_Parcelas_Parcelamento_Ano_Web(int nCodigo,int nAno,int nSeq) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            List<DebitoStructure> Lista = obj.Lista_Parcelas_Parcelamento_Ano_Web(nCodigo,nAno,nSeq);
+            return Lista;
+        }
+
+
     }
 }

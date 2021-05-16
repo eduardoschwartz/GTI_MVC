@@ -1190,6 +1190,54 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<DebitoStructure> Lista_Parcelas_Parcelamento_Ano_Web(int nCodigo,int nAno,int nSeq) {
+            DateTime dDataBase = DateTime.Now;
+            using(GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from dp in db.Debitoparcela
+                           join dt in db.Debitotributo on new { p1 = dp.Codreduzido,p2 = dp.Anoexercicio,p3 = dp.Codlancamento,p4 = dp.Seqlancamento,p5 = dp.Numparcela,p6 = dp.Codcomplemento }
+                                                   equals new { p1 = dt.Codreduzido,p2 = dt.Anoexercicio,p3 = dt.Codlancamento,p4 = dt.Seqlancamento,p5 = dt.Numparcela,p6 = dt.Codcomplemento } into dpdt from dt in dpdt.DefaultIfEmpty()
+                           where dp.Codreduzido == nCodigo && dp.Anoexercicio == nAno && dp.Codlancamento == 20 && dp.Seqlancamento == nSeq
+                           orderby new { dp.Numparcela }
+                           select new { dp.Codreduzido,dp.Anoexercicio,dp.Codlancamento,dp.Seqlancamento,dp.Numparcela,dp.Codcomplemento,dp.Datavencimento,dt.Valortributo,dp.Statuslanc }).ToList();
+
+                List<DebitoStructure> Lista = new List<DebitoStructure>();
+                int _pos = 0;
+                foreach(var query in reg) {
+                    bool _find = false;
+                    _pos = 0;
+                    foreach(DebitoStructure item in Lista) {
+                        if(item.Numero_Parcela == query.Numparcela && item.Complemento == query.Codcomplemento) {
+                            _find = true;
+                            goto Proximo;
+                        }
+                        _pos++;
+                    }
+
+Proximo:;
+                    if(_find)
+                        Lista[_pos].Soma_Principal += Convert.ToDecimal(query.Valortributo);
+                    else {
+                        DebitoStructure Linha = new DebitoStructure {
+                            Codigo_Reduzido = query.Codreduzido,
+                            Ano_Exercicio = query.Anoexercicio,
+                            Codigo_Lancamento = query.Codlancamento,
+                            Sequencia_Lancamento = query.Seqlancamento,
+                            Numero_Parcela = query.Numparcela,
+                            Complemento = query.Codcomplemento,
+                            Soma_Principal = Convert.ToDecimal(query.Valortributo),
+                            Data_Vencimento = query.Datavencimento,
+                            Codigo_Situacao = query.Statuslanc,
+                            Data_Base = dDataBase
+                        };
+                        Lista.Add(Linha);
+
+                    }
+
+                }
+                return Lista;
+            }
+        }
+
     }
 }
 
