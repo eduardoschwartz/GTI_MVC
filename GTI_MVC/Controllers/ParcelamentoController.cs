@@ -5,6 +5,7 @@ using GTI_Models.Models;
 using GTI_Mvc;
 using GTI_Mvc.ViewModels;
 using GTI_Mvc.Views.Parcelamento.EditorTemplates;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -12,6 +13,11 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 
 namespace GTI_MVC.Controllers {
@@ -1853,7 +1859,65 @@ namespace GTI_MVC.Controllers {
                 Data_Vencimento = _dataVencto,
                 Numero_Processo = _proc
             };
-            
+
+
+
+            using(var client = new HttpClient()) {
+                var values = new {
+                    msgLoja = " RECEBER SOMENTE ATE O VENCIMENTO, APOS ATUALIZAR O BOLETO NO SITE www.jaboticabal.sp.gov.br, referente ao parcelamento: " + model.Numero_Processo,
+                    cep = Convert.ToInt64(Regex.Replace(model.Cep," [^.0-9]","")),
+                    uf = model.UF,
+                    cidade = model.Cidade,
+                    endereco = model.Endereco,
+                    nome = model.Nome,
+                    urlInforma = "sistemas.jaboticabal.sp.gov.br/gti",
+                    urlRetorno = "sistemas.jaboticabal.sp.gov.br/gti",
+                    tpDuplicata = "DS",
+                    dataLimiteDesconto = 0,
+                    valorDesconto = 0,
+                    indicadorPessoa = model.CpfCnpjLabel.Length == 14 ? 2 : 1,
+                    cpfCnpj = Regex.Replace(model.CpfCnpjLabel," [^0-9]",""),
+                    tpPagamento = 2,
+                    dtVenc = model.Data_Vencimento_String,
+                    qtdPontos = 0,
+                    valor = Convert.ToInt64(model.Valor_Boleto),
+                    refTran = string.IsNullOrEmpty(model.RefTran) ? 0 : Convert.ToInt64(model.RefTran),
+                    idConv = 317203
+                };
+
+
+                string URLAuth = "https://mpag.bb.com.br/site/mpag/";
+                string postString = string.Format("msgLoja={0}&cep={1}&uf={2}&cidade={3}&endereco={4}&nome={5}&urlInforma={6}&urlRetorno={7}&tpDuplicata={8}&dataLimiteDesconto={9}&valorDesconto={10}" +
+                    "&indicadorPessoa={11}&cpfCnpj={12}&tpPagamento={13}&dtVenc={14}&qtdPontos={15}&valor={16}&refTran={17}&idConv={18}",values.msgLoja,values.cep,values.uf,values.cidade,values.endereco,
+                    values.nome,values.urlInforma,values.urlRetorno,values.tpDuplicata,values.dataLimiteDesconto,values.valorDesconto,values.indicadorPessoa,values.cpfCnpj,values.tpPagamento,values.dtVenc,
+                    values.qtdPontos,values.valor,values.refTran,values.idConv);
+
+                const string contentType = "application/x-www-form-urlencoded";
+                ServicePointManager.Expect100Continue = false;
+
+                CookieContainer cookies = new CookieContainer();
+                HttpWebRequest webRequest = WebRequest.Create(URLAuth) as HttpWebRequest;
+                webRequest.Method = "POST";
+                webRequest.ContentType = contentType;
+                webRequest.CookieContainer = cookies;
+                webRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.1) Gecko/2008070208 Firefox/3.0.1";
+                webRequest.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+                webRequest.Referer = "https://mpag.bb.com.br/site/mpag/";
+
+                StreamWriter requestWriter = new StreamWriter(webRequest.GetRequestStream());
+                requestWriter.Write(postString);
+                requestWriter.Close();
+
+                StreamReader responseReader = new StreamReader(webRequest.GetResponse().GetResponseStream());
+                string responseData = responseReader.ReadToEnd();
+                responseReader.Close();
+                webRequest.GetResponse().Close();
+                             
+
+            }
+
+
+
             return View(model);
         }
 
@@ -2386,7 +2450,19 @@ namespace GTI_MVC.Controllers {
         }
 
 
+        /*
+         
+var values = new Dictionary<string, string>
+{
+    { "thing1", "hello" },
+    { "thing2", "world" }
+};
 
+var content = new FormUrlEncodedContent(values);
+
+var response = await client.PostAsync("http://www.example.com/recepticle.aspx", content);
+
+var responseString = await response.Content.ReadAsStringAsync();*/
 
 
         //[ChildActionOnly]
