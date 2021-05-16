@@ -1766,7 +1766,11 @@ Fim:;
 
             }
 
-            return View(model);
+            if(action == "btnPrintBoleto") {
+                return RedirectToAction("Parc_bk",new { p = model.Guid });
+            }
+
+                return View(model);
         }
 
         [Route("Parc_query")]
@@ -1855,162 +1859,6 @@ Fim:;
                 Data_Vencimento = _dataVencto,
                 Numero_Processo = _proc
             };
-
-            //***Enviar para registro ***
-            using(var client = new HttpClient()) {
-                var values = new {
-                    msgLoja = " RECEBER SOMENTE ATE O VENCIMENTO, APOS ATUALIZAR O BOLETO NO SITE www.jaboticabal.sp.gov.br, referente ao parcelamento: " + model.Numero_Processo,
-                    cep = Convert.ToInt64(Regex.Replace(model.Cep," [^.0-9]","")),
-                    uf = model.UF,
-                    cidade = model.Cidade,
-                    endereco = model.Endereco,
-                    nome = model.Nome,
-                    urlInforma = "sistemas.jaboticabal.sp.gov.br/gti",
-                    urlRetorno = "sistemas.jaboticabal.sp.gov.br/gti",
-                    tpDuplicata = "DS",
-                    dataLimiteDesconto = 0,
-                    valorDesconto = 0,
-                    indicadorPessoa = model.CpfCnpjLabel.Length == 14 ? 2 : 1,
-                    cpfCnpj = Regex.Replace(model.CpfCnpjLabel," [^0-9]",""),
-                    tpPagamento = 2,
-                    dtVenc = model.Data_Vencimento_String,
-                    qtdPontos = 0,
-                    valor = Convert.ToInt64(model.Valor_Boleto),
-                    refTran = string.IsNullOrEmpty(model.RefTran) ? 0 : Convert.ToInt64(model.RefTran),
-                    idConv = 317203
-                };
-
-
-                string URLAuth = "https://mpag.bb.com.br/site/mpag/";
-                string postString = string.Format("msgLoja={0}&cep={1}&uf={2}&cidade={3}&endereco={4}&nome={5}&urlInforma={6}&urlRetorno={7}&tpDuplicata={8}&dataLimiteDesconto={9}&valorDesconto={10}" +
-                    "&indicadorPessoa={11}&cpfCnpj={12}&tpPagamento={13}&dtVenc={14}&qtdPontos={15}&valor={16}&refTran={17}&idConv={18}",values.msgLoja,values.cep,values.uf,values.cidade,values.endereco,
-                    values.nome,values.urlInforma,values.urlRetorno,values.tpDuplicata,values.dataLimiteDesconto,values.valorDesconto,values.indicadorPessoa,values.cpfCnpj,values.tpPagamento,values.dtVenc,
-                    values.qtdPontos,values.valor,values.refTran,values.idConv);
-
-                const string contentType = "application/x-www-form-urlencoded";
-                ServicePointManager.Expect100Continue = false;
-
-                CookieContainer cookies = new CookieContainer();
-                HttpWebRequest webRequest = WebRequest.Create(URLAuth) as HttpWebRequest;
-                webRequest.Method = "POST";
-                webRequest.ContentType = contentType;
-                webRequest.CookieContainer = cookies;
-                webRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.1) Gecko/2008070208 Firefox/3.0.1";
-                webRequest.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-                webRequest.Referer = "https://mpag.bb.com.br/site/mpag/";
-
-                StreamWriter requestWriter = new StreamWriter(webRequest.GetRequestStream());
-                requestWriter.Write(postString);
-                requestWriter.Close();
-
-                StreamReader responseReader = new StreamReader(webRequest.GetResponse().GetResponseStream());
-                string responseData = responseReader.ReadToEnd();
-                responseReader.Close();
-                webRequest.GetResponse().Close();
-
-
-
-            }
-
-
-            //*** Gerar o carnê de parcelamento *****
-            Processoreparc pr = tributarioRepository.Retorna_Processo_Parcelamento(_proc);
-            short _totParcela = (short)pr.Qtdeparcela;
-
-            List<DebitoStructure> ListaDebito = tributarioRepository.Lista_Parcelas_Parcelamento_Ano(_codigo,DateTime.Now.Year,_seq);
-            short _index = 0;
-            string _convenio = "2873532";
-            List<Boletoguia> ListaBoleto = new List<Boletoguia>();
-            foreach(DebitoStructure item in ListaDebito) {
-                Boletoguia reg = new Boletoguia {
-                    Usuario = "Gti.Web/Parcelamento",
-                    Computer = "web",
-                    Seq = _index,
-                    Codreduzido = _codigo.ToString("000000"),
-                    Nome = _nome,
-                    Cpf = _cpfcnpj,
-                    Endereco = _endereco,
-                    Cidade = _cidade,
-                    Uf = _uf,
-                    Cep = _cep,
-                    Desclanc = "PARCELAMENTO DE DÉBITOS",
-                    Fulllanc = "PARCELAMENTO DE DÉBITOS",
-                    Numdoc = item.Numero_Documento.ToString(),
-                    Numparcela = (short)item.Numero_Parcela,
-                    Datadoc = DateTime.Now,
-                    Datavencto = item.Data_Vencimento,
-                    Numdoc2 = item.Numero_Documento.ToString(),
-                    Valorguia = item.Soma_Principal,
-                    Totparcela = _totParcela,
-                    Obs = "Referente ao parcelamento de débitos: processo nº " + _proc,
-                    Numproc = _proc
-                };
-
-                //***** GERA CÓDIGO DE BARRAS BOLETO REGISTRADO*****
-                DateTime _data_base = Convert.ToDateTime("07/10/1997");
-                TimeSpan ts = Convert.ToDateTime(item.Data_Vencimento) - _data_base;
-                int _fator_vencto = ts.Days;
-                string _quinto_grupo = String.Format("{0:D4}",_fator_vencto);
-                string _valor_boleto_str = string.Format("{0:0.00}",reg.Valorguia);
-                _quinto_grupo += string.Format("{0:D10}",Convert.ToInt64(Functions.RetornaNumero(_valor_boleto_str)));
-                string _barra = "0019" + _quinto_grupo + String.Format("{0:D13}",Convert.ToInt32(_convenio));
-                _barra += String.Format("{0:D10}",Convert.ToInt64(reg.Numdoc)) + "17";
-                string _campo1 = "0019" + _barra.Substring(19,5);
-                string _digitavel = _campo1 + Functions.Calculo_DV10(_campo1).ToString();
-                string _campo2 = _barra.Substring(23,10);
-                _digitavel += _campo2 + Functions.Calculo_DV10(_campo2).ToString();
-                string _campo3 = _barra.Substring(33,10);
-                _digitavel += _campo3 + Functions.Calculo_DV10(_campo3).ToString();
-                string _campo5 = _quinto_grupo;
-                string _campo4 = Functions.Calculo_DV11(_barra).ToString();
-                _digitavel += _campo4 + _campo5;
-                _barra = _barra.Substring(0,4) + _campo4 + _barra.Substring(4,_barra.Length - 4);
-                //**Resultado final**
-                string _linha_digitavel = _digitavel.Substring(0,5) + "." + _digitavel.Substring(5,5) + " " + _digitavel.Substring(10,5) + "." + _digitavel.Substring(15,6) + " ";
-                _linha_digitavel += _digitavel.Substring(21,5) + "." + _digitavel.Substring(26,6) + " " + _digitavel.Substring(32,1) + " " + Functions.StringRight(_digitavel,14);
-                string _codigo_barra = Functions.Gera2of5Str(_barra);
-                //**************************************************
-                reg.Totparcela = (short)ListaDebito.Count;
-                if(item.Numero_Parcela == 0) {
-                    reg.Parcela = "Única";
-                } else
-                    reg.Parcela = reg.Numparcela.ToString("00") + "/" + _totParcela.ToString("00");
-
-                reg.Digitavel = _linha_digitavel;
-                reg.Codbarra = _codigo_barra;
-                reg.Nossonumero = _convenio + String.Format("{0:D10}",Convert.ToInt64(reg.Numdoc));
-                ListaBoleto.Add(reg);
-                _index++;
-
-            }
-            string mimeType = string.Empty;
-            string encoding = string.Empty;
-            string extension = string.Empty;
-            Session["sid"] = "";
-            Tributario_bll tributario_Class = new Tributario_bll(_connection);
-            if(ListaBoleto.Count > 0) {
-                tributario_Class.Insert_Carne_Web(Convert.ToInt32(ListaBoleto[0].Codreduzido),DateTime.Now.Year);
-                DataSet Ds = Functions.ToDataSet(ListaBoleto);
-                ReportDataSource rdsAct = new ReportDataSource("dsBoletoGuia",Ds.Tables[0]);
-                ReportViewer viewer = new ReportViewer();
-                viewer.LocalReport.Refresh();
-                viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Carne_Parcelamento.rdlc"); ;
-                viewer.LocalReport.DataSources.Add(rdsAct);
-                byte[] bytes = viewer.LocalReport.Render("PDF",null,out mimeType,out encoding,out extension,out string[] streamIds,out Warning[] warnings);
-
-                Response.Buffer = true;
-                Response.Clear();
-                Response.ContentType = mimeType;
-                Response.AddHeader("content-disposition","attachment; filename= guia_pmj" + "." + extension);
-                Response.OutputStream.Write(bytes,0,bytes.Length);
-                Response.Flush();
-                Response.End();
-            }
-
-
-
-
-            //***************************************
 
 
             return View(model);
@@ -2593,7 +2441,7 @@ Fim:;
                     Percisencao = 0
                 };
                 regDoc.Percisencao = 0;
-                int _novo_documento = tributarioRepositoryTmp.Insert_Documento(regDoc);
+                int _novo_documento = tributarioRepository.Insert_Documento(regDoc);
 
                 Parceladocumento pd = new Parceladocumento() {
                     Codreduzido = _codigo,
