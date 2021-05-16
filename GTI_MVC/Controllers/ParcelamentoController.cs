@@ -1765,135 +1765,6 @@ Fim:;
                 }
 
             }
-            //  if (action == "btnPrintBoleto") {
-            //           return RedirectToAction("Parc_bk", new { p = model.Guid });
-            //int _userId = Convert.ToInt32(Session["hashid"]);
-            //Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
-
-            //Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(model.Guid);
-            //int _codigo = _master.Contribuinte_Codigo;
-            //string _nome = _master.Contribuinte_nome;
-            //string _cpfcnpj = _master.Contribuinte_cpfcnpj;
-            //string _endereco = _master.Contribuinte_endereco + " " + _master.Contribuinte_bairro;
-            //string _cidade = _master.Contribuinte_cidade;
-            //string _uf = _master.Contribuinte_uf;
-            //string _cep = _master.Contribuinte_cep.ToString();
-            //string _proc = _master.Processo_Extenso;
-
-            ////Dados da 1º parcela do parcelamento
-            //List<Destinoreparc> _listaD = parcelamentoRepository.Lista_Destino_Parcelamento(_master.Processo_Ano,_master.Processo_Numero);
-            //short _ano = _listaD[0].Anoexercicio;
-            //short _lanc = 20;
-            //short _seq = _listaD[0].Numsequencia;
-            //byte _parcela = 1;
-            //byte _compl = 0;
-            //DateTime _dataVencto = (DateTime)_master.Data_Vencimento;
-
-            //List<Debitotributo> _listaT = parcelamentoRepository.Lista_Debito_Tributo(_codigo,_ano,_lanc,_seq,_parcela,_compl);
-            //decimal? _soma = _listaT.Sum(m => m.Valortributo);
-            //decimal _somaT = Math.Round((decimal)_soma,2);
-
-            //Tributario_bll tributarioRepository = new Tributario_bll(_connection);
-            //Tributario_bll tributarioRepositoryTmp = new Tributario_bll("GTIconnection");
-            ////Criar o documento para ela
-            //Numdocumento regDoc = new Numdocumento {
-            //    Valorguia = _somaT,
-            //    Emissor = "Parc/Web",
-            //    Datadocumento = DateTime.Now,
-            //    Registrado = true,
-            //    Percisencao = 0
-            //};
-            //regDoc.Percisencao = 0;
-            //int _novo_documento = tributarioRepositoryTmp.Insert_Documento(regDoc);
-
-            //Parceladocumento pd = new Parceladocumento() {
-            //    Codreduzido = _codigo,
-            //    Anoexercicio = _ano,
-            //    Codlancamento = _lanc,
-            //    Seqlancamento = _seq,
-            //    Numparcela = _parcela,
-            //    Codcomplemento = _compl,
-            //    Numdocumento = _novo_documento
-            //};
-            //Exception ex = tributarioRepository.Insert_Parcela_Documento(pd);
-
-            //string _refTran = "287353200" + _novo_documento.ToString();
-
-            //DebitoListViewModel model2 = new DebitoListViewModel() {
-            //    Nome = _nome,
-            //    Inscricao = _codigo,
-            //    CpfCnpjLabel = _cpfcnpj,
-            //    Endereco = _endereco,
-            //    Cidade = _cidade,
-            //    UF = _uf,
-            //    Cep = _cep,
-            //    RefTran = _refTran,
-            //    Valor_Boleto = Functions.RetornaNumero(_somaT.ToString()),
-            //    Data_Vencimento_String = Convert.ToDateTime(_dataVencto.ToString()).ToString("ddMMyyyy"),
-            //    Data_Vencimento = _dataVencto,
-            //    Numero_Processo = _proc
-            //};
-
-            ////***Enviar para registro ***
-            //using(var client = new HttpClient()) {
-            //    var values = new {
-            //        msgLoja = " RECEBER SOMENTE ATE O VENCIMENTO, APOS ATUALIZAR O BOLETO NO SITE www.jaboticabal.sp.gov.br, referente ao parcelamento: " + model2.Numero_Processo,
-            //        cep = Convert.ToInt64(Regex.Replace(model2.Cep," [^.0-9]","")),
-            //        uf = model2.UF,
-            //        cidade = model2.Cidade,
-            //        endereco = model2.Endereco,
-            //        nome = model2.Nome,
-            //        urlInforma = "sistemas.jaboticabal.sp.gov.br/gti",
-            //        urlRetorno = "sistemas.jaboticabal.sp.gov.br/gti",
-            //        tpDuplicata = "DS",
-            //        dataLimiteDesconto = 0,
-            //        valorDesconto = 0,
-            //        indicadorPessoa = model2.CpfCnpjLabel.Length == 14 ? 2 : 1,
-            //        cpfCnpj = Regex.Replace(model2.CpfCnpjLabel," [^0-9]",""),
-            //        tpPagamento = 2,
-            //        dtVenc = model2.Data_Vencimento_String,
-            //        qtdPontos = 0,
-            //        valor = Convert.ToInt64(model2.Valor_Boleto),
-            //        refTran = string.IsNullOrEmpty(model2.RefTran) ? 0 : Convert.ToInt64(model2.RefTran),
-            //        idConv = 317203
-            //    };
-
-
-            //    string URLAuth = "https://mpag.bb.com.br/site/mpag/";
-            //    string postString = string.Format("msgLoja={0}&cep={1}&uf={2}&cidade={3}&endereco={4}&nome={5}&urlInforma={6}&urlRetorno={7}&tpDuplicata={8}&dataLimiteDesconto={9}&valorDesconto={10}" +
-            //        "&indicadorPessoa={11}&cpfCnpj={12}&tpPagamento={13}&dtVenc={14}&qtdPontos={15}&valor={16}&refTran={17}&idConv={18}",values.msgLoja,values.cep,values.uf,values.cidade,values.endereco,
-            //        values.nome,values.urlInforma,values.urlRetorno,values.tpDuplicata,values.dataLimiteDesconto,values.valorDesconto,values.indicadorPessoa,values.cpfCnpj,values.tpPagamento,values.dtVenc,
-            //        values.qtdPontos,values.valor,values.refTran,values.idConv);
-
-            //    const string contentType = "application/x-www-form-urlencoded";
-            //    ServicePointManager.Expect100Continue = false;
-
-            //    CookieContainer cookies = new CookieContainer();
-            //    HttpWebRequest webRequest = WebRequest.Create(URLAuth) as HttpWebRequest;
-            //    webRequest.Method = "POST";
-            //    webRequest.ContentType = contentType;
-            //    webRequest.CookieContainer = cookies;
-            //    webRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.1) Gecko/2008070208 Firefox/3.0.1";
-            //    webRequest.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-            //    webRequest.Referer = "https://mpag.bb.com.br/site/mpag/";
-
-            //    StreamWriter requestWriter = new StreamWriter(webRequest.GetRequestStream());
-            //    requestWriter.Write(postString);
-            //    requestWriter.Close();
-
-            //    StreamReader responseReader = new StreamReader(webRequest.GetResponse().GetResponseStream());
-            //    string responseData = responseReader.ReadToEnd();
-            //    responseReader.Close();
-            //    webRequest.GetResponse().Close();
-
-            //    if(responseData.Contains("seguintes problemas")) {
-            //    }
-
-            //}
-
-
-            // }
-
 
             return View(model);
         }
@@ -2847,11 +2718,11 @@ Fim:;
                     Cep = _cep,
                     Desclanc = "PARCELAMENTO",
                     Fulllanc = "PARCELAMENTO",
-                    Numdoc = _parc.Numero_Documento.ToString(),
+                    Numdoc = _novo_documento.ToString(),
                     Numparcela = (short)_parc.Numero_Parcela,
                     Datadoc = DateTime.Now,
                     Datavencto = _parc.Data_Vencimento,
-                    Numdoc2 = _parc.Numero_Documento.ToString(),
+                    Numdoc2 = _novo_documento.ToString(),
                     Valorguia = _parc.Soma_Principal,
                     Valor_ISS = 0,
                     Valor_Taxa = 0,
@@ -2905,22 +2776,35 @@ Fim:;
                 viewer.LocalReport.Refresh();
                 viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Carne_Parcelamento.rdlc"); ;
                 viewer.LocalReport.DataSources.Add(rdsAct);
-                byte[] bytes = viewer.LocalReport.Render("PDF",null,out mimeType,out encoding,out extension,out string[] streamIds,out Warning[] warnings);
 
-                Response.Buffer = true;
-                Response.Clear();
-                Response.ContentType = mimeType;
-                Response.AddHeader("content-disposition","attachment; filename= guia_pmj" + "." + extension);
-                Response.OutputStream.Write(bytes,0,bytes.Length);
-                Response.Flush();
-                Response.End();
+                string strAttachment = Server.MapPath(@"/Reports/haha.pdf");
+                byte[] renderdByte = viewer.LocalReport.Render("Pdf","",out mimeType,out encoding,out extension,out string[] streamIds,out Warning[] warnings);
+                string base64EncodedPDF = Convert.ToBase64String(renderdByte);
+                return Json(base64EncodedPDF,JsonRequestBehavior.AllowGet);
 
+
+                //                byte[] bytes = viewer.LocalReport.Render("PDF",null,out mimeType,out encoding,out extension,out string[] streamIds,out Warning[] warnings);
+                //                FileStream fs = new FileStream(@System.Web.HttpContext.Current.Server.MapPath("~/Files/tmp/"+ p + ".pdf"),FileMode.Create);
+                //                fs.Write(bytes,0,bytes.Length);
+                //                fs.Close();
+
+                //                Response.Buffer = true;
+                //                Response.Clear();
+                //                Response.ContentType = mimeType;
+                //                Response.AddHeader("content-disposition","attachment; filename= guia_pmj" + "." + extension);
+                ////                Response.OutputStream.Write(bytes,0,bytes.Length);
+                //                return Json(new { success = true,msg = "Sucesso",url = System.Web.HttpContext.Current.Server.MapPath("~/Files/tmp/" + p + ".pdf") },JsonRequestBehavior.AllowGet);
+                //Response.Flush();
+                //Response.End();
+
+            } else {
+                return Json(new { success = true,msg = "Sucesso" },JsonRequestBehavior.AllowGet);
             }
+                        
 
-
-            return Json(new { success = true },JsonRequestBehavior.AllowGet);
 
         }
+
         // }
 
 
