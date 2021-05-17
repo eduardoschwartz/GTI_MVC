@@ -1769,8 +1769,11 @@ Fim:;
             if(action == "btnPrintBoleto") {
                 return RedirectToAction("Parc_bk",new { p = model.Guid });
             }
+            if(action == "btnPrintBoleto2") {
+                return RedirectToAction("bank_Method",new { p = model.Guid });
+            }
 
-                return View(model);
+            return View(model);
         }
 
         [Route("Parc_query")]
@@ -2392,7 +2395,189 @@ Fim:;
 
         }
 
-        public JsonResult bank_Method(string p) {
+        public ActionResult bank_Method(string p) {
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            Tributario_bll tributarioRepositoryTmp = new Tributario_bll("GTIconnection");
+
+            string _ret;
+            int _userId = Convert.ToInt32(Session["hashid"]);
+            int nSid = Functions.GetRandomNumber();
+            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+
+            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
+            int _codigo = _master.Contribuinte_Codigo;
+            string _nome = _master.Contribuinte_nome;
+            string _cpfcnpj = _master.Contribuinte_cpfcnpj;
+            string _endereco = _master.Contribuinte_endereco + " " + _master.Contribuinte_bairro;
+            string _bairro = _master.Contribuinte_bairro ?? "";
+            string _cidade = _master.Contribuinte_cidade;
+            string _uf = _master.Contribuinte_uf;
+            string _cep = _master.Contribuinte_cep.ToString();
+            string _proc = _master.Processo_Extenso;
+
+
+            //Dados das parcelas do parcelamento do exercício
+            List<Destinoreparc> _listaD = parcelamentoRepository.Lista_Destino_Parcelamento(_master.Processo_Ano,_master.Processo_Numero);
+            List<DebitoStructure> ListaDebito = parcelamentoRepository.Lista_Parcelas_Parcelamento_Ano_Web(_codigo,2021,_listaD[0].Numsequencia);
+            short _index = 0;
+            string _convenio = "2873532";
+            List<Boletoguia> ListaBoleto = new List<Boletoguia>();
+
+            foreach(DebitoStructure _parc in ListaDebito) {
+                short _ano = (short)_parc.Ano_Exercicio;
+                short _lanc = 20;
+                short _seq = (short)_parc.Sequencia_Lancamento;
+                byte _parcela = (byte)_parc.Numero_Parcela;
+                byte _compl = (byte)_parc.Complemento;
+                DateTime _dataVencto = (DateTime)_parc.Data_Vencimento;
+
+                List<Debitotributo> _listaT = parcelamentoRepository.Lista_Debito_Tributo(_codigo,_ano,_lanc,_seq,_parcela,_compl);
+                decimal? _soma = _listaT.Sum(m => m.Valortributo);
+                decimal _somaT = Math.Round((decimal)_soma,2);
+
+                //Criar o documento para ela
+                Numdocumento regDoc = new Numdocumento {
+                    Valorguia = _somaT,
+                    Emissor = "Parc/Web",
+                    Datadocumento = DateTime.Now,
+                    Registrado = true,
+                    Percisencao = 0
+                };
+                regDoc.Percisencao = 0;
+                int _novo_documento = tributarioRepository.Insert_Documento(regDoc);
+
+                Parceladocumento pd = new Parceladocumento() {
+                    Codreduzido = _codigo,
+                    Anoexercicio = _ano,
+                    Codlancamento = _lanc,
+                    Seqlancamento = _seq,
+                    Numparcela = _parcela,
+                    Codcomplemento = _compl,
+                    Numdocumento = _novo_documento
+                };
+                Exception ex = tributarioRepository.Insert_Parcela_Documento(pd);
+
+                string _refTran = "287353200" + _novo_documento.ToString();
+                if(_parcela > 1) {
+                    //Demais parcelas enviar para registrar por arquivo
+                    Ficha_compensacao_documento ficha = new Ficha_compensacao_documento {
+                        Nome = _nome.Length > 40 ? _nome.Substring(0,40) : _nome,
+                        Endereco = _endereco.Length > 40 ? _endereco.Substring(0,40) : _endereco,
+                        Bairro = _bairro.Length > 15 ? _bairro.Substring(0,15) : _bairro,
+                        Cidade = _cidade.Length > 30 ? _cidade.Substring(0,30) : _cidade,
+                        Cep = _cep ?? "14870000",
+                        Cpf = _cpfcnpj,
+                        Numero_documento = _novo_documento,
+                        Data_vencimento = _dataVencto,
+                        Valor_documento = Convert.ToDecimal(_somaT),
+                        Uf = _uf
+                    };
+                    ex = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
+                    if(ex == null)
+                        ex = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
+
+
+                    //Gera Boletos para impressão
+                    Boletoguia reg = new Boletoguia {
+                        Usuario = "Gti.Web/LibParc",
+                        Computer = "web",
+                        Sid = nSid,
+                        Seq = _index,
+                        Codreduzido = _codigo.ToString("000000"),
+                        Nome = _nome,
+                        Cpf = _cpfcnpj,
+                        Numimovel = 0,
+                        Endereco = _endereco,
+                        Complemento = "",
+                        Bairro = _bairro,
+                        Cidade = _cidade,
+                        Uf = _uf,
+                        Cep = _cep,
+                        Desclanc = "PARCELAMENTO",
+                        Fulllanc = "PARCELAMENTO",
+                        Numdoc = _novo_documento.ToString(),
+                        Numparcela = (short)_parc.Numero_Parcela,
+                        Datadoc = DateTime.Now,
+                        Datavencto = _parc.Data_Vencimento,
+                        Numdoc2 = _novo_documento.ToString(),
+                        Valorguia = _parc.Soma_Principal,
+                        Valor_ISS = 0,
+                        Valor_Taxa = 0,
+                        Totparcela = (short)_master.Qtde_Parcela,
+                        Obs = "Referente ao parcelamento de débitos: processo nº " + _master.Processo_Extenso,
+                        Numproc = _master.Processo_Extenso
+                    };
+
+                    //***** GERA CÓDIGO DE BARRAS BOLETO REGISTRADO*****
+                    DateTime _data_base = Convert.ToDateTime("07/10/1997");
+                    TimeSpan ts = Convert.ToDateTime(_parc.Data_Vencimento) - _data_base;
+                    int _fator_vencto = ts.Days;
+                    string _quinto_grupo = String.Format("{0:D4}",_fator_vencto);
+                    string _valor_boleto_str = string.Format("{0:0.00}",reg.Valorguia);
+                    _quinto_grupo += string.Format("{0:D10}",Convert.ToInt64(Functions.RetornaNumero(_valor_boleto_str)));
+                    string _barra = "0019" + _quinto_grupo + String.Format("{0:D13}",Convert.ToInt32(_convenio));
+                    _barra += String.Format("{0:D10}",Convert.ToInt64(reg.Numdoc)) + "17";
+                    string _campo1 = "0019" + _barra.Substring(19,5);
+                    string _digitavel = _campo1 + Functions.Calculo_DV10(_campo1).ToString();
+                    string _campo2 = _barra.Substring(23,10);
+                    _digitavel += _campo2 + Functions.Calculo_DV10(_campo2).ToString();
+                    string _campo3 = _barra.Substring(33,10);
+                    _digitavel += _campo3 + Functions.Calculo_DV10(_campo3).ToString();
+                    string _campo5 = _quinto_grupo;
+                    string _campo4 = Functions.Calculo_DV11(_barra).ToString();
+                    _digitavel += _campo4 + _campo5;
+                    _barra = _barra.Substring(0,4) + _campo4 + _barra.Substring(4,_barra.Length - 4);
+                    //**Resultado final**
+                    string _linha_digitavel = _digitavel.Substring(0,5) + "." + _digitavel.Substring(5,5) + " " + _digitavel.Substring(10,5) + "." + _digitavel.Substring(15,6) + " ";
+                    _linha_digitavel += _digitavel.Substring(21,5) + "." + _digitavel.Substring(26,6) + " " + _digitavel.Substring(32,1) + " " + Functions.StringRight(_digitavel,14);
+                    string _codigo_barra = Functions.Gera2of5Str(_barra);
+                    //**************************************************
+                    reg.Totparcela = (short)_master.Qtde_Parcela;
+                    reg.Parcela = reg.Numparcela.ToString("00") + "/" + _master.Qtde_Parcela.ToString("00");
+
+                    reg.Digitavel = _linha_digitavel;
+                    reg.Codbarra = _codigo_barra;
+                    reg.Nossonumero = _convenio + String.Format("{0:D10}",Convert.ToInt64(reg.Numdoc));
+                    ListaBoleto.Add(reg);
+
+                }
+            }
+            string mimeType = string.Empty;
+            string encoding = string.Empty;
+            string extension = string.Empty;
+
+            if(ListaBoleto.Count > 0) {
+                Exception ex = tributarioRepository.Insert_Carne_Web(Convert.ToInt32(ListaBoleto[0].Codreduzido),DateTime.Now.Year);
+                DataSet Ds = Functions.ToDataSet(ListaBoleto);
+                ReportDataSource rdsAct = new ReportDataSource("dsBoletoGuia",Ds.Tables[0]);
+                ReportViewer viewer = new ReportViewer();
+                viewer.LocalReport.Refresh();
+                viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Carne_Parcelamento.rdlc"); ;
+                viewer.LocalReport.DataSources.Add(rdsAct);
+
+                //string strAttachment = Server.MapPath(@"/Reports/parc.pdf");
+                //byte[] renderdByte = viewer.LocalReport.Render("Pdf","",out mimeType,out encoding,out extension,out string[] streamIds,out Warning[] warnings);
+                //string base64EncodedPDF = Convert.ToBase64String(renderdByte);
+                //return Json(base64EncodedPDF,JsonRequestBehavior.AllowGet);
+
+                byte[] bytes = viewer.LocalReport.Render("PDF",null,out mimeType,out encoding,out extension,out string[] streamIds,out Warning[] warnings);
+
+                Response.Buffer = true;
+                Response.Clear();
+                Response.ContentType = mimeType;
+                Response.AddHeader("content-disposition","attachment; filename= guia_pmj" + "." + extension);
+                Response.OutputStream.Write(bytes,0,bytes.Length);
+                Response.Flush();
+                Response.End();
+
+
+            }
+            return null;
+
+        }
+
+
+        public JsonResult bank_Method_Old(string p) {
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             Tributario_bll tributarioRepositoryTmp = new Tributario_bll("GTIconnection");
 
@@ -2485,16 +2670,16 @@ Fim:;
                             urlInforma = "sistemas.jaboticabal.sp.gov.br/gti",
                             urlRetorno = "sistemas.jaboticabal.sp.gov.br/gti",
                             tpDuplicata = "DS",
-                            dataLimiteDesconto = 0,
-                            valorDesconto = 0,
-                            indicadorPessoa = model.CpfCnpjLabel.Length == 14 ? 2 : 1,
+                            dataLimiteDesconto = "0",
+                            valorDesconto = "0",
+                            indicadorPessoa = model.CpfCnpjLabel.Length == 14 ? "2" : "1",
                             cpfCnpj = Regex.Replace(model.CpfCnpjLabel," [^0-9]",""),
-                            tpPagamento = 2,
+                            tpPagamento = "2",
                             dtVenc = model.Data_Vencimento_String,
-                            qtdPontos = 0,
-                            valor = Convert.ToInt64(model.Valor_Boleto),
-                            refTran = string.IsNullOrEmpty(model.RefTran) ? 0 : Convert.ToInt64(model.RefTran),
-                            idConv = 317203
+                            qtdPontos = "0",
+                            valor = Convert.ToInt64(model.Valor_Boleto).ToString(),
+                            refTran = string.IsNullOrEmpty(model.RefTran) ? "0" : Convert.ToInt64(model.RefTran).ToString(),
+                            idConv = "317203"
                         };
 
                         string URLAuth = "https://mpag.bb.com.br/site/mpag/";
@@ -2629,31 +2814,15 @@ Fim:;
                 byte[] renderdByte = viewer.LocalReport.Render("Pdf","",out mimeType,out encoding,out extension,out string[] streamIds,out Warning[] warnings);
                 string base64EncodedPDF = Convert.ToBase64String(renderdByte);
                 return Json(base64EncodedPDF,JsonRequestBehavior.AllowGet);
-
-
-                //                byte[] bytes = viewer.LocalReport.Render("PDF",null,out mimeType,out encoding,out extension,out string[] streamIds,out Warning[] warnings);
-                //                FileStream fs = new FileStream(@System.Web.HttpContext.Current.Server.MapPath("~/Files/tmp/"+ p + ".pdf"),FileMode.Create);
-                //                fs.Write(bytes,0,bytes.Length);
-                //                fs.Close();
-
-                //                Response.Buffer = true;
-                //                Response.Clear();
-                //                Response.ContentType = mimeType;
-                //                Response.AddHeader("content-disposition","attachment; filename= guia_pmj" + "." + extension);
-                ////                Response.OutputStream.Write(bytes,0,bytes.Length);
-                //                return Json(new { success = true,msg = "Sucesso",url = System.Web.HttpContext.Current.Server.MapPath("~/Files/tmp/" + p + ".pdf") },JsonRequestBehavior.AllowGet);
-                //Response.Flush();
-                //Response.End();
-
             } else {
                 return Json(new { success = true,msg = "Sucesso" },JsonRequestBehavior.AllowGet);
             }
-                        
+
 
 
         }
 
-        // }
+  
 
 
 
