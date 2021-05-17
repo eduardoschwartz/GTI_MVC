@@ -53,14 +53,7 @@
         border-radius: 4px;
     }
 
-    .errorlabel {
-        font-weight: normal;
-        color: red;
-        padding-left: 13px;
-        font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
+   
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
@@ -78,15 +71,6 @@
                         <td style="width:150px">@Html.LabelFor(m => m.Inscricao,new { @style = "font-weight:normal" })</td>
                         <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao,new { @id = "codigo",@class = "textBoxBlue",@style = "max-width:100px",@onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
                     </tr>
-
-                    @*<tr style="height:40px">
-                            <td style="width:150px" valign="middle">
-                                <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                            </td>
-                            <td style="width:150px" valign="middle">
-                                @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
-                            </td>
-                        </tr>*@
                 </table>
                 <br />
                 <div class="g-recaptcha" data-sitekey="6LfRjG0aAAAAAOEd4ksnWZYw3oX4cUsimIy7yOqD"></div>
@@ -94,7 +78,6 @@
 
                 <button type="submit" class="btn btn-primary"> Consultar</button>
             </div>
-            @*<label class="errorlabel" id="errorLabel">@ViewBag.Result</label>*@
             <div class="card-footer">
                 @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
             </div>
@@ -167,22 +150,14 @@
         });
 
         function ValidateForm() {
-            ClearError();
             var _cod = document.getElementById('codigo').value;
 
             if ((_cod == "" || parseInt(_cod) == 0)) {
                 document.getElementById('lblMsg').innerHTML = "Digite o código do imóvel";
                 $('#msgBox1').dialog('open');
-//                document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal";
                 return false;
             }
-
-
             return true;
-        }
-
-        function ClearError() {
-           // document.getElementById('errorLabel').innerHTML = "";
         }
 
 

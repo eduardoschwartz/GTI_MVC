@@ -43,14 +43,6 @@
         border-radius: 4px;
     }
 
-    .errorlabel {
-        font-weight: normal;
-        color: red;
-        padding-left: 13px;
-        font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
     #tblMain {
         width: 100%;
     }
@@ -180,7 +172,7 @@
                     </tr>
                 </table>
                 <br />
-                <button type="submit" class="btn btn-info" name="action" value="btnAtualiza" onclick="ClearError()">Atualizar Dados Cadastrais</button>
+                <button type="submit" class="btn btn-info" name="action" value="btnAtualiza">Atualizar Dados Cadastrais</button>
             </div>
 
             <div class="card-header">Selecione o imóvel, empresa ou a inscrição que deseja parcelar</div>
@@ -240,7 +232,6 @@
                 <button type="button" class="btn btn-primary" name="action" value="btnValida" onclick="ValidateForm()">Verificar débitos</button>
             </div>
 
-            @*<label class="errorlabel" id="errorLabel">@ViewBag.Result</label>*@
             <div class="card-footer">
                 @Html.ActionLink("Retornar ao menu de opções","Parc_index","Parcelamento",null,new { @class = "actionlink" })<br />
                 @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
@@ -313,10 +304,6 @@
 
         });
 
-        function ClearError() {
-            document.getElementById('errorlabel').innerHTML = "";
-        }
-
         function CheckOne(obj) {
             var grid = obj.parentNode.parentNode.parentNode;
             var inputs = grid.getElementsByTagName("input");
@@ -349,12 +336,8 @@
             } else {
                 document.getElementById('lblMsg').innerHTML = "Selecione uma inscrição!";
                 $('#msgBox1').dialog('open');
-
-                //alert("Selecione uma inscrição!");
             }
         }
-
-
 
 
     </script>

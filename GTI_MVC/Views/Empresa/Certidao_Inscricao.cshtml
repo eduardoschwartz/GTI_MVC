@@ -52,14 +52,6 @@
         border-radius: 4px;
     }
 
-    .errorlabel {
-        font-weight: normal;
-        color: red;
-        padding-left: 13px;
-        font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
@@ -78,8 +70,8 @@
                             &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
                         </td>
                         <td style="width:300px">
-                            @Html.TextBoxFor(m => m.CpfValue,new { @id = "cpfTxt",@class = "textBoxBlue",@style = "max-width:200px",@onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)",@onchange = "ClearError()",@placeholder = "Digite o nº do CPF" })
-                            @Html.TextBoxFor(m => m.CnpjValue,new { @id = "cnpjTxt",@class = "textBoxBlue",@style = "max-width:200px;display:none",@onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)",@onchange = "ClearError()",@placeholder = "Digite o nº do CNPJ" })
+                            @Html.TextBoxFor(m => m.CpfValue,new { @id = "cpfTxt",@class = "textBoxBlue",@style = "max-width:200px",@onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)",@placeholder = "Digite o nº do CPF" })
+                            @Html.TextBoxFor(m => m.CnpjValue,new { @id = "cnpjTxt",@class = "textBoxBlue",@style = "max-width:200px;display:none",@onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)",@placeholder = "Digite o nº do CNPJ" })
                         </td>
                     </tr>
                     <tr style="height:40px">
@@ -95,14 +87,6 @@
                             @Html.DropDownListFor(m => m.Inscricao,new SelectList(_lista_codigos),new { @id = "inscricao",@class = "textBoxBlue",style = "width:100px;height:25px" })  <input type="submit" value="Verificar" title="Retorna as incrições municipais atreladas ao CPF/CNPJ informado." style="margin-left:1px" class="btn btn-primary" formaction="Retorna_Codigos" />
                         </td>
                     </tr>
-                    @*<tr>
-                            <td style="width:150px" valign="middle">
-                                <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                            </td>
-                            <td style="width:150px" valign="middle">
-                                @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:110px;" })
-                            </td>
-                        </tr>*@
                 </table>
                 <br />
                 <div class="g-recaptcha" data-sitekey="6LfRjG0aAAAAAOEd4ksnWZYw3oX4cUsimIy7yOqD"></div>
@@ -114,7 +98,6 @@
 
                 <button type="submit" title="Imprimir a certidão" class="btn btn-primary" formaction="Certidao_Inscricao" formmethod="post"> Consultar</button>
             </div>
-            @*<label class="errorlabel" id="errorLabel">@ViewBag.Result</label>*@
             <div class="card-footer">
                 @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
             </div>
@@ -205,10 +188,8 @@
         }
 
         function ValidateForm() {
-            ClearError();
             var _cpf = document.getElementById('cpfTxt').value;
             var _cnpj = document.getElementById('cnpjTxt').value;
-          //  var _chave = document.getElementById('chave').value;
             var _inscricao = document.getElementById('inscricao').value;
             var _buscar_codigos = false;
             var _consultar = false;
@@ -220,52 +201,14 @@
             if ((_cpf != "" || _cnpj != "") && _inscricao != "")
                 _consultar = true;
 
-            //if (_chave != "")
-            //    _autenticar = true;
-
             if (_buscar_codigos == false && _consultar == false && _autenticar == false) {
                 document.getElementById('lblMsg').innerHTML = "Informe o nº de CPF ou CNPJ.";
                 $('#msgBox1').dialog('open');
-
-//                document.getElementById('errorLabel').innerHTML = "Informe o nº de CPF ou CNPJ.";
                 return false;
             }
-
-
-
-//            if (_autenticar == true ) {
-//                document.getElementById('lblMsg').innerHTML = "Digite a chave de autenticação.";
-//                $('#msgBox1').dialog('open');
-
-////                document.getElementById('errorLabel').innerHTML = "Digite a chave de autenticação.";
-//                return false;
-//            }
-
-//            if (_chave.length > 8) {
-//                var _sufixo = _chave.substring(_chave.length - 3, _chave.length);
-//                if (_sufixo != "-XA" && _sufixo != "-XE" && _sufixo != "-IE") {
-//                    document.getElementById('lblMsg').innerHTML = "Chave de autenticação inválida!";
-//                    $('#msgBox1').dialog('open');
-
-////                    document.getElementById('errorLabel').innerHTML = "Chave de autenticação inválida!";
-//                    return false;
-//                }
-//            } else {
-//                if (_chave.length != "") {
-//                    document.getElementById('lblMsg').innerHTML = "Chave de autenticação inválida!";
-//                    $('#msgBox1').dialog('open');
-
-////                    document.getElementById('errorLabel').innerHTML = "Chave de autenticação inválida!";
-//                    return false;
-//                }
-//            }
             return true;
         }
 
-        function ClearError() {
-//            document.getElementById('Inscricao').options.length = 0;
- //           document.getElementById('errorLabel').innerHTML = "";
-        }
 
     </script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>

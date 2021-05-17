@@ -42,14 +42,6 @@
         border-radius: 4px;
     }
 
-    .errorlabel {
-        font-weight: normal;
-        color: red;
-        padding-left: 13px;
-        font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
     #chkSel {
         cursor: pointer;
     }
@@ -625,28 +617,6 @@
             });
 
         });
-
-
-        function ValidateForm() {
-            ClearError();
-            return true;
-        }
-
-        function ClearError() {
-            document.getElementById('errorGuia').innerHTML = "";
-        }
-
-
-        $(document).ready(function () {
-            $("#MainForm").submit(function () {
-
-            });
-        });
-
-
-
-
-
 
     </script>
 }

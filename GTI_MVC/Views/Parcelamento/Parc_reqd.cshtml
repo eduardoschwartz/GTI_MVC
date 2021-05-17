@@ -42,14 +42,6 @@
         border-radius: 4px;
     }
 
-    .errorlabel {
-        font-weight: normal;
-        color: red;
-        padding-left: 13px;
-        font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
     #chkSel {
         cursor: pointer;
     }
@@ -518,7 +510,7 @@
                 <button type="submit" class="btn btn-primary" name="action" value="btnValida">Continuar</button>&nbsp;&nbsp;
                 <button type="button" class="btn btn-secondary" name="action" value="btnVoltar" onclick="javascript:history.back()">Voltar</button>
             </div>
-            <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+
             <div class="card-footer">
                 @Html.ActionLink("Retornar ao menu de opções","Parc_index","Parcelamento",null,new { @class = "actionlink" })<br />
                 @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
@@ -593,16 +585,6 @@
 
         });
 
-
-        function ValidateForm() {
-            ClearError();
-            return true;
-        }
-
-        function ClearError() {
-            document.getElementById('errorGuia').innerHTML = "";
-        }
-
         function CheckOne(obj) {
             var grid = obj.parentNode.parentNode.parentNode;
             var inputs = grid.getElementsByTagName("input");
@@ -629,7 +611,6 @@
                         }
                     }
                     if (!_find) {
-                        //alert("Selecione uma das opções de parcelamento!")
                         document.getElementById('lblMsg').innerHTML = "Selecione uma das opções de parcelamento!";
                         $('#msgBox1').dialog('open');
 
@@ -643,11 +624,6 @@
                 return true;
             });
         });
-
-
-
-
-
 
     </script>
 }

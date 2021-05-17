@@ -42,14 +42,6 @@
         border-radius: 4px;
     }
 
-    .errorlabel {
-        font-weight: normal;
-        color: red;
-        padding-left: 13px;
-        font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
@@ -271,7 +263,6 @@
                     </div>
                 </div>
             </div>
-            @*<label class="errorlabel" id="errorLabel">@ViewBag.Result</label>*@
             <div class="card-footer">
                 @Html.ActionLink("Consultar outra inscrição","Dama","Tributario",null,new { @class = "actionlink" })   <br />
                 @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
@@ -342,7 +333,6 @@
     });
 
     function Verifica_Ajuizado() {
-            ClearError();
             try {
                 var table = document.getElementById("tblMain");
                 var rows = table.getElementsByTagName('tr');
@@ -390,20 +380,12 @@
                 if (_count == 0) {
                     document.getElementById('lblMsg').innerHTML = "Selecione o(s) débito(s) à pagar.";
                     $('#msgBox1').dialog('open');
-
-//                    document.getElementById('errorLabel').innerHTML = "Selecione o(s) débito(s) à pagar.";
                     return false;
                 }
-
-                //if (_ano_anterior && _ano_atual) {
-                //    document.getElementById('errorLabel').innerHTML = "Não é possível pagar débitos anteriores a 30/06/2019 com débitos posteriores durante Refis.";
-                //    return false;
-                //}
 
                 if (_parc_unica && _parc_normal) {
                     document.getElementById('lblMsg').innerHTML = "Parcela única não pode ser paga junto com outras parcelas.";
                     $('#msgBox1').dialog('open');
-//                    document.getElementById('errorLabel').innerHTML = "Parcela única não pode ser paga junto com outras parcelas.";
                     return false;
                 }
                 if (_ajuizado) {
@@ -463,9 +445,5 @@
             $('#ResumoTable').find(somaTotal).html(sumT.toFixed(2).replace('.', ','));
         }).change();
 
-
-     function ClearError() {
-          //  document.getElementById('errorLabel').innerHTML = "";
-     }
 
 </script>

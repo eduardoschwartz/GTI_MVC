@@ -53,14 +53,6 @@
         border-radius: 4px;
     }
 
-    .errorlabel {
-        font-weight: normal;
-        color: red;
-        padding-left: 13px;
-        font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
@@ -83,22 +75,12 @@
                         <td style="width:150px">Nº do Documento:</td>
                         <td style="width:300px">@Html.TextBoxFor(m => m.Documento,new { @id = "documento",@class = "textBoxBlue",@style = "max-width:250px",@onKeyPress = "return formata(this, '§§§§§§§§§§§§§§§§§', event)" })</td>
                     </tr>
-
-                    @*<tr style="height:40px">
-                            <td style="width:150px" valign="middle">
-                                <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                            </td>
-                            <td style="width:150px" valign="middle">
-                                @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
-                            </td>
-                        </tr>*@
                 </table>
                 <br />
                 <div class="g-recaptcha" data-sitekey="6LfRjG0aAAAAAOEd4ksnWZYw3oX4cUsimIy7yOqD"></div>
                 <br />
                 <button type="submit" class="btn btn-primary"> Consultar</button>
             </div>
-            @*<label class="errorlabel" id="errorLabel">@ViewBag.Result</label>*@
             <div class="card-footer">
                 @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
             </div>
@@ -168,7 +150,6 @@
         });
 
         function ValidateForm() {
-            ClearError();
             var _cpfcnpj = document.getElementById('cpfcnpjTxt').value;
             var _doc = document.getElementById('documento').value;
 
@@ -181,16 +162,12 @@
             if (_consultar == false && _autenticar == false) {
                 document.getElementById('lblMsg').innerHTML = "Informe o nº de CPF ou CNPJ.";
                 $('#msgBox1').dialog('open');
-
-//                document.getElementById('errorLabel').innerHTML = "Informe o nº de CPF ou CNPJ.";
                 return false;
             }
 
             if (_doc == "" || parseInt(_doc) == 0) {
                 document.getElementById('lblMsg').innerHTML = "Digite o nº do documento confome consta no boleto.";
                 $('#msgBox1').dialog('open');
-
-//                document.getElementById('errorLabel').innerHTML = "Digite o nº do documento confome consta no boleto";
                 return false;
             }
 
@@ -202,7 +179,6 @@
                 if (!valida_Cnpj(cnpjtmp)) {
                     document.getElementById('lblMsg').innerHTML = "Nº de Cnpj inválido.";
                     $('#msgBox1').dialog('open');
-//                    document.getElementById('errorLabel').innerHTML = "Nº de Cnpj inválido.";
                     return false;
                 } else {
                     cpfcnpj = cnpjtmp;
@@ -214,7 +190,6 @@
                     if (!valida_Cpf(cpftmp)) {
                         document.getElementById('lblMsg').innerHTML = "Nº de Cpf inválido.";
                         $('#msgBox1').dialog('open');
-//                        document.getElementById('errorLabel').innerHTML = "Nº de Cpf inválido.";
                         return false;
                     } else {
                         cpfcnpj = cpftmp;
@@ -224,18 +199,10 @@
             if (cpfcnpj == "") {
                 document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido.";
                 $('#msgBox1').dialog('open');
-//                document.getElementById('errorLabel').innerHTML = "Nº de Cpf/Cnpj inválido.";
                 return false;
             }
 
-
             return true;
-        }
-
-
-
-        function ClearError() {
-          //  document.getElementById('errorLabel').innerHTML = "";
         }
 
         function valida_Cpf(cpf) {

@@ -79,14 +79,6 @@
                         <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao,new { @id = "codigo",@class = "textBoxBlue",@style = "max-width:100px",@onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
                     </tr>
 
-                    @*<tr style="height:40px">
-                            <td style="width:150px" valign="middle">
-                                <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                            </td>
-                            <td style="width:150px" valign="middle">
-                                @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
-                            </td>
-                        </tr>*@
                 </table>
                 <br />
                 <div class="g-recaptcha" data-sitekey="6LfRjG0aAAAAAOEd4ksnWZYw3oX4cUsimIy7yOqD"></div>
@@ -94,8 +86,6 @@
 
                 <button type="submit" class="btn btn-primary"> Consultar</button>
             </div>
-           @*<label class="errorlabel" id="errorLabel">@ViewBag.Result</label>*@
-
 
             <div class="card-footer">
                 @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
@@ -103,21 +93,6 @@
 
         </div>
 
-
-        @*<div style="border:1px solid black;width:400px;margin-left:1px">
-                <br />
-                <label style="color:brown;font-size:16px;font-style:italic;padding-left:10px">Autenticar a Certidão</label>
-                <br />
-                <div class="form-group row align-items-lg-baseline">
-                    <div class="input-group">
-                        <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chave</label>
-                        &nbsp;&nbsp;@Html.TextBoxFor(m => m.Chave, new { @id = "chave", @class = "textBoxBlue", @style = "max-width:110px;" })
-                        &nbsp;&nbsp;<button class="btn btn-primary" type="submit" title="Validar a certidão." formaction="Validate_VV" formmethod="post">Validar</button>
-                    </div>
-                    <br />
-                    <article style="color:darkred;font-size:small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Obs: A partir de 27/05/2020 a validação será feita através do <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;QRCode presente na certidão.</article>
-                </div>
-            </div>*@
 
     }
 </div>
@@ -184,24 +159,15 @@
         });
 
         function ValidateForm() {
-            ClearError();
             var _cod = document.getElementById('codigo').value;
-
             if ((_cod == "" || parseInt(_cod) == 0)) {
                 document.getElementById('lblMsg').innerHTML = "Digite o código do imóvel";
                 $('#msgBox1').dialog('open');
-
-               // document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal ";
                 return false;
             }
 
             return true;
         }
-
-        function ClearError() {
-        //    document.getElementById('errorLabel').innerHTML = "";
-        }
-
 
 
     </script>

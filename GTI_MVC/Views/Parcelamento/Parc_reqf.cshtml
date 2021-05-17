@@ -42,14 +42,6 @@
         border-radius: 4px;
     }
 
-    .errorlabel {
-        font-weight: normal;
-        color: red;
-        padding-left: 13px;
-        font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
     #chkSel {
         cursor: pointer;
     }
@@ -601,7 +593,6 @@
 
 
                 <br />
-                @*<article style="color:red;text-align:justify;font-size:13px"><span style="font-weight:bold">***IMPORTANTE***</span> Para imprimir o carnê é necessário habilitar a janela de Pop-Up no navegador.</article><br />*@
                 <button type="submit" class="btn btn-success" name="action" value="btnPrintBoleto">Imprimir 1ª parcela</button><span style="padding-left:5px"></span>
                 <button type="submit" class="btn btn-secondary" name="action" value="btnPrintBoleto2">Imprimir restante do exercício</button><span style="padding-left:5px"></span>
                 @*<button type="button" class="btn btn-success" id="btnPrintBoleto" data-prop=@Model.Guid>Imprimir as parcelas do exercício atual</button><span style="padding-left:5px"></span>*@
@@ -684,15 +675,6 @@
         });
 
 
-        function ValidateForm() {
-            ClearError();
-            return true;
-        }
-
-        function ClearError() {
-//            document.getElementById('errorGuia').innerHTML = "";
-        }
-
         @*$('#btnPrintBoleto').click(function () {
         
                 var _guid = '@guid';
@@ -713,11 +695,6 @@
                 });
            
         });*@
-
-
-
-
-
 
     </script>
 }

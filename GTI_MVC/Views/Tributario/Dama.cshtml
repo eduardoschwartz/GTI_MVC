@@ -53,14 +53,6 @@
         border-radius: 4px;
     }
 
-    .errorlabel {
-        font-weight: normal;
-        color: red;
-        padding-left: 13px;
-        font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
@@ -81,13 +73,9 @@
                 </table>
                 <span style="color:red;font-weight:normal;font-size:12px">Digite a data que deseja efetuar o pagamento do boleto.</span>
                 <br />
-                @*<br />
-                    <img src="~/Images/AvisoRefis.png" style="text-align: center" />
-                    <br />*@
                 <br />
                 <button type="submit" class="btn btn-primary"> Consultar</button>
             </div>
-            @*<label class="errorlabel" id="errorLabel">@ViewBag.Result</label>*@
             <div class="card-footer">
                 @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
             </div>
@@ -156,22 +144,15 @@
         });
 
         function ValidateForm() {
-            ClearError();
             var _data = document.getElementById('vencto').value;
 
             if (_data.length < 10) {
                 document.getElementById('lblMsg').innerHTML = "Data de vencimento inválida";
                 $('#msgBox1').dialog('open');
-
-                //document.getElementById('errorLabel').innerHTML = "Data de vencimento inválida";
                 return false;
             }
 
             return true;
-        }
-
-        function ClearError() {
-           // document.getElementById('errorLabel').innerHTML = "";
         }
 
     </script>

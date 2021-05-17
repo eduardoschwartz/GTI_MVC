@@ -54,14 +54,6 @@
         border-radius: 4px;
     }
 
-    .errorlabel {
-        font-weight: normal;
-        color: red;
-        padding-left: 13px;
-        font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
@@ -98,19 +90,11 @@
                             &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
                         </td>
                         <td style="width:300px">
-                            @Html.TextBoxFor(m => m.CpfValue,new { @id = "cpfTxt",@class = "textBoxBlue",@style = "max-width:200px",@onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)",@onchange = "ClearError()",@placeholder = "Digite o nº do CPF" })
-                            @Html.TextBoxFor(m => m.CnpjValue,new { @id = "cnpjTxt",@class = "textBoxBlue",@style = "max-width:200px;display:none",@onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)",@onchange = "ClearError()",@placeholder = "Digite o nº do CNPJ" })
+                            @Html.TextBoxFor(m => m.CpfValue,new { @id = "cpfTxt",@class = "textBoxBlue",@style = "max-width:200px",@onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)",@placeholder = "Digite o nº do CPF" })
+                            @Html.TextBoxFor(m => m.CnpjValue,new { @id = "cnpjTxt",@class = "textBoxBlue",@style = "max-width:200px;display:none",@onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)",@placeholder = "Digite o nº do CNPJ" })
                         </td>
                     </tr>
 
-                    @*<tr>
-                            <td style="style=" padding-top:15px;width:150px" valign="middle">
-                                <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                            </td>
-                            <td style="width:150px;" valign="middle">
-                                @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:110px;" })
-                            </td>
-                        </tr>*@
                 </table>
 
                 <br />
@@ -118,7 +102,6 @@
                 <br />
                 <button type="submit" class="btn btn-primary" id="print" formaction="Damb" formmethod="post">Consultar</button>
             </div>
-            @*<label class="errorlabel" id="errorLabel">@ViewBag.Result</label>*@
             <div class="card-footer">
                 @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
             </div>
@@ -189,8 +172,6 @@
         });
 
         function ValidateForm() {
-            ClearError();
-
             var _cod = document.getElementById('Codigo').value;
             var _cpf = document.getElementById('cpfTxt').value;
             var _cnpj = document.getElementById('cnpjTxt').value;
@@ -198,15 +179,12 @@
             if ((_cod == "" || parseInt(_cod) == 0)) {
                 document.getElementById('lblMsg').innerHTML = "Digite a inscrição municipal!";
                 $('#msgBox1').dialog('open');
-
-                //document.getElementById('errorLabel').innerHTML = "Digite a inscrição municipal!";
                 return false;
             }
             else {
                 if ((_cpf == "" && _cnpj == "")) {
                     document.getElementById('lblMsg').innerHTML = "Digite o Cpf ou o CNPJ!";
                     $('#msgBox1').dialog('open');
-//                    document.getElementById('errorLabel').innerHTML = "Digite o Cpf ou o CNPJ!";
                     return false;
                 }
             }
@@ -229,11 +207,6 @@
                 document.getElementById('cnpjTxt').style.display = 'none';
             }
         }
-
-        function ClearError() {
-        //    document.getElementById('errorLabel').innerHTML = "";
-        }
-
 
 
     </script>
