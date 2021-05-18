@@ -250,15 +250,25 @@ namespace GTI_MVC.Controllers {
                     throw ex;
                 List<Parcelamento_web_lista_codigo> _listaCodigo = new List<Parcelamento_web_lista_codigo>();
                 foreach(Parc_Codigos item in _listaCodigos.OrderBy(m => m.Codigo)) {
-                    Parcelamento_web_lista_codigo _cod = new Parcelamento_web_lista_codigo() {
-                        Guid = model.Guid,
-                        Codigo = item.Codigo,
-                        Tipo = item.Tipo,
-                        Documento = item.Cpf_Cnpj,
-                        Descricao = item.Descricao,
-                        Selected = item.Selected
-                    };
-                    _listaCodigo.Add(_cod);
+                    bool _find = false;
+                    foreach(Parcelamento_web_lista_codigo tmp in _listaCodigo) {
+                        if(tmp.Codigo == item.Codigo) {
+                            _find = true;
+                            break;
+                        }
+                    }
+
+                    if(!_find) {
+                        Parcelamento_web_lista_codigo _cod = new Parcelamento_web_lista_codigo() {
+                            Guid = model.Guid,
+                            Codigo = item.Codigo,
+                            Tipo = item.Tipo,
+                            Documento = item.Cpf_Cnpj,
+                            Descricao = item.Descricao,
+                            Selected = item.Selected
+                        };
+                        _listaCodigo.Add(_cod);
+                    }
                 }
 
                 ex = parcelamentoRepository.Incluir_Parcelamento_Web_Lista_Codigo(_listaCodigo);
