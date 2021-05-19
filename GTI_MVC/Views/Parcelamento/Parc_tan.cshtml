@@ -185,19 +185,22 @@
                 $("#loginModal").modal('show');
                 return false;
             } else {
-                document.getElementById('lblMsg').innerHTML = "Você deseja gerar este parcelamento?";
-                $('#msgBox1').dialog('open');
+//                document.getElementById('lblMsg').innerHTML = "Você deseja gerar este parcelamento?";
+//                $('#msgBox1').dialog('open');
 
-//                if (confirm('Você deseja gerar este parcelamento?')) {
- //                   document.getElementById("MainForm").submit();
- //               }
+                if (confirm('Você deseja gerar este parcelamento?')) {
+                   document.getElementById("MainForm").submit();
+               }
             }
 
         }
 
         function Send() {
-            document.getElementById('lblMsg').innerHTML = "Você deseja gerar este parcelamento?";
-            $('#msgBox1').dialog('open');
+            if (confirm('Você deseja gerar este parcelamento?')) {
+                document.getElementById("MainForm").submit();
+            }
+//            document.getElementById('lblMsg').innerHTML = "Você deseja gerar este parcelamento?";
+//            $('#msgBox1').dialog('open');
 
         }
 

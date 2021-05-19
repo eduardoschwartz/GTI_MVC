@@ -1242,6 +1242,11 @@ Fim:;
                 return RedirectToAction("Login","Home");
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+            //List <Parcelamento_Web_Simulado>_listaS = parcelamentoRepository.Retorna_Parcelamento_Web_Simulado(p,2);
+            //if(_listaS.Count == 0) {
+            //    return RedirectToAction("Parc_index");
+            //}
+            
             bool _existe = parcelamentoRepository.Existe_Parcelamento_Web_Master(p);
             if(!_existe)
                 return RedirectToAction("Login_gti","Home");
@@ -1605,6 +1610,10 @@ Fim:;
             if(action == "btnPrintBoleto") {
                 return RedirectToAction("Parc_bk",new { p = model.Guid });
             }
+            if(action == "btnPrintBoleto2") {
+                return RedirectToAction("bank_Method",new { p = model.Guid });
+            }
+
             if(action == "btnFinalizar")
                 return RedirectToAction("Parc_query");
 
