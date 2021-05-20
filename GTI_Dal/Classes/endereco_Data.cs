@@ -61,7 +61,7 @@ namespace GTI_Dal.Classes {
                 db.Bairro.Add(reg);
                 try {
                     db.SaveChanges();
-                } catch (Exception ex) {
+                } catch  {
                     maxCod = 0;
                 }
                 return maxCod;

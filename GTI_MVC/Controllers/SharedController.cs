@@ -223,7 +223,7 @@ namespace GTI_MVC.Controllers {
                 rd.RecordSelectionFormula = "{itbi_isencao_main.guid}='" + c + "'";
                 Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
                 return File(stream, "application/pdf", "Certidao_Isencao_Itbi_Valida.pdf");
-            } catch (Exception ex) {
+            } catch {
                 throw;
             }
 

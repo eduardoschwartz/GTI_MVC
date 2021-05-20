@@ -3,7 +3,7 @@ using System.Text;
 
 namespace GTI_Mvc {
     public class TAcessoFunction {
-        private  string pwdText;
+        //private  string pwdText;
         private double[] cle = new double[17];
         private double[] x1a0 = new double[9];
         private double inter, res, ax, bx, cx, dx, si, tmpx;

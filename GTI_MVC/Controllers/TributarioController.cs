@@ -375,7 +375,7 @@ namespace GTI_Mvc.Controllers {
 
             //####################################
 
-            string sData = "18/04/2012", sTributo = "", sNao = "", sCertifica = "",_reportName="",_tipo_certidao="";
+            string sData = "18/04/2012", sTributo = "", sCertifica = "", _reportName = "", _tipo_certidao = "";
             short nRet = 0;
             List < Certidao_debito_documento> _lista_certidao = new List<Certidao_debito_documento>();
             RetornoCertidaoDebito _tipo_Certidao;
@@ -425,29 +425,31 @@ namespace GTI_Mvc.Controllers {
                     break;
                 }
             }
-            if (!_find) {
+
+            string sNao;
+            if(!_find) {
                 _tipo_Certidao = RetornoCertidaoDebito.Negativa;
                 sNao = " não";
                 _reportName = "CertidaoDebitoDocumentoN.rpt";
             } else {
                 _find = false;
-                foreach (Certidao_debito_documento reg in _lista_certidao) {
-                    if (reg._Ret == 4) {
+                foreach(Certidao_debito_documento reg in _lista_certidao) {
+                    if(reg._Ret == 4) {
                         _find = true;
                         break;
                     }
                 }
-                if (_find) {
+                if(_find) {
                     _tipo_Certidao = RetornoCertidaoDebito.Positiva;
                     nRet = 4;
-                    if (!bEmpresa && !bCidadao && !bImovel) {
+                    if(!bEmpresa && !bCidadao && !bImovel) {
                         //Se a certidão positiva for apenas de imóvel, verifica se esta no prazo das parcelas únicas em aberto.
                         bool bUnicaNaoPago = false;
-                        foreach (int _codigo in _codigos) {
-                            bUnicaNaoPago = tributario_Class.Parcela_Unica_IPTU_NaoPago(_codigo, DateTime.Now.Year);
-                            if (bUnicaNaoPago) break;
+                        foreach(int _codigo in _codigos) {
+                            bUnicaNaoPago = tributario_Class.Parcela_Unica_IPTU_NaoPago(_codigo,DateTime.Now.Year);
+                            if(bUnicaNaoPago) break;
                         }
-                        if (bUnicaNaoPago) {
+                        if(bUnicaNaoPago) {
                             sCertifica = " embora conste parcela(s) não paga(s) do IPTU de " + DateTime.Now.Year.ToString() + ", em razão da possibilidade do pagamento integral deste imposto em data futura, ";
                             sNao = " não";
                             nRet = 3;

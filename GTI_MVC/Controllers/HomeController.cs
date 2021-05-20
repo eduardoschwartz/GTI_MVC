@@ -7,7 +7,6 @@ using System.Net;
 using System.Net.Mail;
 using System.Web.Mvc;
 using static GTI_Models.modelCore;
-using System.Net;
 using Newtonsoft.Json.Linq;
 
 

@@ -2652,7 +2652,7 @@ namespace GTI_Mvc.Controllers {
                 rd.RecordSelectionFormula = "{itbi_main.guid}='" + p + "'";
                 Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
                 return File(stream, "application/pdf", "Resumo_Itbi.pdf");
-            } catch (Exception ex) {
+            } catch  {
                 throw;
             }
         }

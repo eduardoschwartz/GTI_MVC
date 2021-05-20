@@ -1697,7 +1697,7 @@ namespace GTI_Dal.Classes {
                     var days = difference.TotalDays;
                     if ((item.Statuslanc == 3 | item.Statuslanc == 18 | item.Statuslanc == 42 | item.Statuslanc == 43 | item.Statuslanc == 38 | item.Statuslanc == 39) && days > 1) {
                         if (item.Anoexercicio == DateTime.Now.Year  && item.Codlancamento == 1 && item.Numparcela < 4 && DateTime.Now < new DateTime(DateTime.Now.Year, 03, 20)) {
-                            int hr = 1;
+                            //int hr = 1;
                         } else { 
                             bNaoPagoVencido = true;
                             for (int i = 0; i < alArrayNaoPagoVencido.Count; i++) {

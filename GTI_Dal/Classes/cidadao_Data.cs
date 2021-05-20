@@ -836,7 +836,7 @@ namespace GTI_Dal.Classes {
                         new SqlParameter("@codcidadao", OldCod), new SqlParameter("@newcod", _codigo));
                     db.SaveChanges();
 
-                } catch (Exception ex) {
+                } catch  {
                     return 0;
                 }
                 return _codigo;
