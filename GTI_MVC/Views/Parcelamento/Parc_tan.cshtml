@@ -49,6 +49,9 @@
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
+    .no-titlebar .ui-dialog-titlebar {
+        display: none;
+    }
 </style>
 
 @{var res = ViewBag.Result;}
@@ -134,6 +137,10 @@
     }
 </div>
 
+<div id="msgBoxWait" style='display: none;text-align:center'>
+    <img src="~/Images/ajax-loader.gif"><br />
+    <p>Processando, aguarde . . . </p>
+</div>
 <div id="msgBox1" title="Atenção" style='display: none;'>
     <br />
     <label id="lblMsg"></label>
@@ -172,6 +179,16 @@
                 }
             });
 
+             $('#msgBoxWait').dialog({
+                 autoOpen: false,
+                 resizable: false,
+                 draggable: false,
+                 position: { my: 'top', at: 'top+300' },
+                 height: "auto",
+                 width: 340,
+                 modal: true,
+                 dialogClass: "no-titlebar"
+             });
 
             $(".foo .ui-dialog-title").css("font-size", "13px");
             $(".foo .ui-widget-content").css("font-size", "13px");
@@ -187,7 +204,7 @@
             } else {
 //                document.getElementById('lblMsg').innerHTML = "Você deseja gerar este parcelamento?";
 //                $('#msgBox1').dialog('open');
-
+                $("#loginModal").modal('hide');
                 if (confirm('Você deseja gerar este parcelamento?')) {
                    document.getElementById("MainForm").submit();
                }
@@ -196,7 +213,9 @@
         }
 
         function Send() {
+            $("#loginModal").modal('hide');
             if (confirm('Você deseja gerar este parcelamento?')) {
+                $('#msgBoxWait').dialog('open');
                 document.getElementById("MainForm").submit();
             }
 //            document.getElementById('lblMsg').innerHTML = "Você deseja gerar este parcelamento?";

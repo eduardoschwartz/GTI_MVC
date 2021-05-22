@@ -1281,7 +1281,7 @@ Fim:;
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             string _guid = model.Guid;
 
-            if(action == "Parc_tan") {
+            if(action == "Parc_tan" || action=="btnOK") {
                 int _userId = Convert.ToInt32(Session["hashid"]);
                 bool _userWeb = Session["hashfunc"].ToString() == "S" ? false : true;
                 Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(_guid);

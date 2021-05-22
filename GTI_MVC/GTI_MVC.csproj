@@ -622,6 +622,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Images\abaixo.gif" />
     <Content Include="Images\acima.gif" />
+    <Content Include="Images\ajax-loader.gif" />
     <Content Include="Images\alterar.gif" />
     <Content Include="Images\AvisoRefis.png" />
     <Content Include="Images\barcode.gif" />

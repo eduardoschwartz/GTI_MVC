@@ -91,6 +91,9 @@
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
+    .no-titlebar .ui-dialog-titlebar {
+        display: none;
+    }
 </style>
 
 @{var res = ViewBag.Result;}
@@ -507,7 +510,7 @@
                 
                 <span style="color:red;font-size:14px">Selecione a quantidade de parcelas para gerar o parcelamento e clique em continuar</span><br /><br />
                 <button type="submit" class="btn btn-info" name="action" value="btPrint">Imprimir o Simulado</button>&nbsp;&nbsp;
-                <button type="submit" class="btn btn-primary" name="action" value="btnValida">Continuar</button>&nbsp;&nbsp;
+                <button type="submit" class="btn btn-primary" name="action" value="btnValida"  onclick="ShowWait()">Continuar</button>&nbsp;&nbsp;
                 <button type="button" class="btn btn-secondary" name="action" value="btnVoltar" onclick="javascript:history.back()">Voltar</button>
             </div>
 
@@ -519,6 +522,10 @@
     }
 </div>
 
+<div id="msgBoxWait" style='display: none;text-align:center'>
+    <img src="~/Images/ajax-loader.gif"><br />
+    <p>Processando, aguarde . . . </p>
+</div>
 <div id="msgBox1" title="Atenção" style='display: none;'>
     <br />
     <label id="lblMsg"></label>
@@ -572,6 +579,17 @@
                 }
             });
 
+            $('#msgBoxWait').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "no-titlebar"
+            });
+
             $(".foo .ui-dialog-title").css("font-size", "13px");
             $(".foo .ui-widget-content").css("font-size", "13px");
 
@@ -583,6 +601,7 @@
                 return true;
             }
 
+           
         });
 
         function CheckOne(obj) {
@@ -597,8 +616,13 @@
             }
         }
 
+        function ShowWait() {
+            $('#msgBoxWait').dialog('open');
+        }
+
         $(document).ready(function () {
             $("#MainForm").submit(function () {
+            
                 try {
                     var grid = document.getElementById("tblResumo");
                     var inputs = grid.getElementsByTagName("input");
@@ -611,6 +635,7 @@
                         }
                     }
                     if (!_find) {
+                        $('#msgBoxWait').dialog('close');
                         document.getElementById('lblMsg').innerHTML = "Selecione uma das opções de parcelamento!";
                         $('#msgBox1').dialog('open');
 

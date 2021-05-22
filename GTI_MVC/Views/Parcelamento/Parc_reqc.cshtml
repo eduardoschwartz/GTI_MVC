@@ -71,6 +71,10 @@
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
+
+    .no-titlebar .ui-dialog-titlebar {
+        display: none;
+    }
 </style>
 
 @{var res = ViewBag.Result;}
@@ -463,6 +467,10 @@
     }
 </div>
 
+<div id="msgBoxWait" style='display: none;text-align:center'>
+    <img src="~/Images/ajax-loader.gif"><br />
+    <p>Processando, aguarde . . . </p>
+</div>
 <div id="msgBox1" title="Atenção" style='display: none;'>
     <br />
     <label id="lblMsg"></label>
@@ -491,6 +499,7 @@
 
         $(document).ready(function () {
             $("#MainForm").submit(function () {
+                $('#msgBoxWait').dialog('open');
                 try {
                     var table = document.getElementById("tblMain");
                     var rows = table.getElementsByTagName('tr');
@@ -525,6 +534,7 @@
                     //}
 
                     if (_count == 0) {
+                        $('#msgBoxWait').dialog('close');
                         document.getElementById('lblMsg').innerHTML = "Selecione o(s) débito(s) à parcelar.";
                         $('#msgBox1').dialog('open');
                         return false;
@@ -574,6 +584,17 @@
                 }
             });
 
+            $('#msgBoxWait').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "no-titlebar"
+            });
+
             $(".foo .ui-dialog-title").css("font-size", "13px");
             $(".foo .ui-widget-content").css("font-size", "13px");
 
@@ -598,6 +619,7 @@
 
 
         function Send() {
+            $('#msgBoxWait').dialog('open');
             document.getElementById("MainForm").submit();
         }
 
