@@ -56,6 +56,10 @@
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
+
+    .no-titlebar .ui-dialog-titlebar {
+        display: none;
+    }
 </style>
 
 @{var res = @ViewBag.Result;}
@@ -90,6 +94,7 @@
     <br />
     <p>@ViewBag.Result</p>
 </div>
+
 
 @section scripts{
 
@@ -131,6 +136,8 @@
                 }
             });
 
+           
+
             $(".foo .ui-dialog-title").css("font-size", "13px");
             $(".foo .ui-widget-content").css("font-size", "13px");
 
@@ -145,7 +152,6 @@
 
         function ValidateForm() {
             var _data = document.getElementById('vencto').value;
-
             if (_data.length < 10) {
                 document.getElementById('lblMsg').innerHTML = "Data de vencimento inválida";
                 $('#msgBox1').dialog('open');

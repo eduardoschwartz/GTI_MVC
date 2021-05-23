@@ -57,6 +57,10 @@
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
+
+    .no-titlebar .ui-dialog-titlebar {
+        display: none;
+    }
 </style>
 
 @{var res = @ViewBag.Result;}
@@ -116,7 +120,10 @@
     <br />
     <p>@ViewBag.Result</p>
 </div>
-
+<div id="msgBoxWait" style='display: none;text-align:center'>
+    <img src="~/Images/ajax-loader.gif"><br />
+    <p>Processando, aguarde . . . </p>
+</div>
 
 @section scripts{
 
@@ -158,11 +165,23 @@
                 }
             });
 
+            $('#msgBoxWait').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "no-titlebar"
+            });
+
             $(".foo .ui-dialog-title").css("font-size", "13px");
             $(".foo .ui-widget-content").css("font-size", "13px");
 
             var _res = '@res';
             if (_res != "") {
+                $('#msgBoxWait').dialog('close');
                 $('#msgBoxBag').dialog('open');
                 return false;
             } else {
@@ -177,17 +196,20 @@
             var _cnpj = document.getElementById('cnpjTxt').value;
 
             if ((_cod == "" || parseInt(_cod) == 0)) {
+                $('#msgBoxWait').dialog('close');
                 document.getElementById('lblMsg').innerHTML = "Digite a inscrição municipal!";
                 $('#msgBox1').dialog('open');
                 return false;
             }
             else {
                 if ((_cpf == "" && _cnpj == "")) {
+                    $('#msgBoxWait').dialog('close');
                     document.getElementById('lblMsg').innerHTML = "Digite o Cpf ou o CNPJ!";
                     $('#msgBox1').dialog('open');
                     return false;
                 }
             }
+            $('#msgBoxWait').dialog('open');
             return true;
         }
 

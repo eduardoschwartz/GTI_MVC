@@ -42,12 +42,13 @@
         border-radius: 4px;
     }
 
-    .errorlabel {
-        font-weight: normal;
-        color: red;
-        padding-left: 13px;
-        font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
+
+    .no-titlebar .ui-dialog-titlebar {
+        display: none;
     }
 </style>
 <br />
@@ -57,21 +58,54 @@
         <div class="card">
             <div class="card-header">Parcelamento de débitos</div>
             <div class="card-body">
-                @Html.ActionLink("Efetuar parcelamento", "parc_req", "Parcelamento", null, new { @class = "actionlink" })<br />
-                @Html.ActionLink("Consultar parcelamentos efetuados on-line", "Parc_query", "Parcelamento", null, new { @class = "actionlink" })<br />
-                @Html.ActionLink("Relatório de parcelamentos efetuados", "Parc_rel", "Parcelamento", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Efetuar parcelamento","parc_req","Parcelamento",null,new { @class = "actionlink" ,onclick = "Send();" })<br />
+                @Html.ActionLink("Consultar parcelamentos efetuados on-line","Parc_query","Parcelamento",null,new { @class = "actionlink" })<br />
+                @Html.ActionLink("Relatório de parcelamentos efetuados","Parc_rel","Parcelamento",null,new { @class = "actionlink" })<br />
                 <a href="~/Files/Parcelamento Manual do Usuario.pdf" class="actionlink">Download do manual do usuário</a><br />
                 @*@if(ViewBag.DataBase!="") {
-            <br />
-            <h4 style="color:red">@ViewBag.DataBase</h4>
-        }*@
+                        <br />
+                        <h4 style="color:red">@ViewBag.DataBase</h4>
+                    }*@
 
 
             </div>
             <div class="card-footer">
-                @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
-                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                @Html.ActionLink("Retornar ao menu de opções","sysMenu","Home",null,new { @class = "actionlink" })<br />
+                @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
             </div>
         </div>
     </div>
 </div>
+
+<div id="msgBoxWait" style='display: none;text-align:center'>
+    <img src="~/Images/ajax-loader.gif"><br />
+    <p>Processando, aguarde . . . </p>
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+          
+            $('#msgBoxWait').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "no-titlebar"
+            });
+
+
+        });
+
+        function Send() {
+            $('#msgBoxWait').dialog('open');
+        }
+
+
+    </script>
+}
