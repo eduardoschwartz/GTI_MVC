@@ -1566,8 +1566,8 @@ namespace GTI_Dal.Classes {
                     return lt;
                 }
 
-                if (_data2 == "" && _data1 != "") {
-                    if (_row == _rows - 1) {
+                if(_data2 == "" && _data1 != "") {
+                    if(_row == _rows - 1) {
                         //3º caso, o processo foi recebido mas não enviado e esta na última linha, neste caso o processo estará na 1ª linha
                         lt.Local_Codigo = _listaTramitacao[_row].CentroCusto_Codigo;
                         lt.Local_Nome = _listaTramitacao[_row].CentroCusto_Nome;
@@ -1579,7 +1579,7 @@ namespace GTI_Dal.Classes {
                         //4º caso, o processo foi recebido mas não enviado e não esta na última linha
                         string _data3 = _listaTramitacao[_row + 1].Data_Entrada == null ? "" : _listaTramitacao[_row + 1].Data_Entrada.ToString();
                         //Verificamos se houve entrada na proxima linha
-                        if (_data3 == "") {
+                        if(_data3 == "") {
                             //Se não houve entrada na próxima linha, então o processo estará nesta linha
                             lt.Local_Codigo = _listaTramitacao[_row].CentroCusto_Codigo;
                             lt.Local_Nome = _listaTramitacao[_row].CentroCusto_Nome;
@@ -1589,9 +1589,9 @@ namespace GTI_Dal.Classes {
                             return lt;
                         } else {
                             //Iremos verificar as outras linhas até aonde não houver mais recebimento
-                            for (int t = _row; t < _rows; t++) {
+                            for(int t = _row;t < _rows;t++) {
                                 _data3 = _listaTramitacao[t].Data_Entrada == null ? "" : _listaTramitacao[t].Data_Entrada.ToString();
-                                if (_row + 1 == _rows) {
+                                if(_row + 1 == _rows) {
                                     //Se a última linha estiver recebida, então o processo estará nesta linha
                                     lt.Local_Codigo = _listaTramitacao[t].CentroCusto_Codigo;
                                     lt.Local_Nome = _listaTramitacao[t].CentroCusto_Nome;
@@ -1600,7 +1600,7 @@ namespace GTI_Dal.Classes {
                                     lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[t].Data_Entrada);
                                     return lt;
                                 } else {
-                                    if (t == _rows - 1) {
+                                    if(t == _rows - 1) {
                                         lt.Local_Codigo = _listaTramitacao[t].CentroCusto_Codigo;
                                         lt.Local_Nome = _listaTramitacao[t].CentroCusto_Nome;
                                         lt.Arquivado = false;
@@ -1609,10 +1609,10 @@ namespace GTI_Dal.Classes {
                                         return lt;
                                     } else {
                                         string _data4 = _listaTramitacao[t + 1].Data_Entrada == null ? "" : _listaTramitacao[t + 1].Data_Entrada.ToString();
-                                        if (_data4 == "") {
+                                        if(_data4 == "") {
                                             //Se a linha seguinte não estiver recebida, então o processo estará nesta linha
-                                            lt.Local_Codigo = _listaTramitacao[t].CentroCusto_Codigo;
-                                            lt.Local_Nome = _listaTramitacao[t].CentroCusto_Nome;
+                                            lt.Local_Codigo = _listaTramitacao[t + 1].CentroCusto_Codigo;
+                                            lt.Local_Nome = _listaTramitacao[t + 1].CentroCusto_Nome;
                                             lt.Arquivado = false;
                                             lt.Suspenso = false;
                                             lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[t].Data_Entrada);
@@ -1624,15 +1624,34 @@ namespace GTI_Dal.Classes {
                         }
                     }
                 } else {
-                    if(_data1=="" && _data2 == "") {
-                        lt.Local_Codigo = _listaTramitacao[_row-1].CentroCusto_Codigo;
-                        lt.Local_Nome = _listaTramitacao[_row-1].CentroCusto_Nome;
+                    if(_data1 == "" && _data2 == "") {
+                        lt.Local_Codigo = _listaTramitacao[_row - 1].CentroCusto_Codigo;
+                        lt.Local_Nome = _listaTramitacao[_row - 1].CentroCusto_Nome;
                         lt.Arquivado = false;
                         lt.Suspenso = false;
-                        lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[_row-1].Data_Entrada);
+                        lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[_row - 1].Data_Entrada);
                         return lt;
-                    }
+                    } else {
+                        if(_data1 != "" && _data2 != "") {
+                            if(_row == _rows - 1) {
+                                lt.Local_Codigo = _listaTramitacao[_row].CentroCusto_Codigo;
+                                lt.Local_Nome = _listaTramitacao[_row].CentroCusto_Nome;
+                                lt.Arquivado = false;
+                                lt.Suspenso = false;
+                                lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[_row].Data_Entrada);
+                                return lt;
+                            } else {
+                                lt.Local_Codigo = _listaTramitacao[_row + 1].CentroCusto_Codigo;
+                                lt.Local_Nome = _listaTramitacao[_row + 1].CentroCusto_Nome;
+                                lt.Arquivado = false;
+                                lt.Suspenso = false;
+                                lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[_row + 1].Data_Entrada);
+                                return lt;
+                            }
+                        }
+                    } 
                 }
+
             }
 
             return lt;
