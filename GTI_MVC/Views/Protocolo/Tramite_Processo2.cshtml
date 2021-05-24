@@ -1,6 +1,5 @@
 ﻿@model GTI_Mvc.ViewModels.ProcessoViewModel
 
-@*@inject IJsonHelper Json;*@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -23,10 +22,11 @@
             white-space: nowrap;
             text-align: left;
         }
+
     .center {
         margin: auto;
-      
     }
+
     .actionlink:hover {
         color: darkgreen;
     }
@@ -34,6 +34,7 @@
     .actionlink {
         color: darkslateblue;
     }
+
     .card-header {
         background-color: mistyrose;
         color: brown;
@@ -58,14 +59,17 @@
         border-radius: 4px;
     }
 
-    .errorlabel {
-        font-weight: normal;
-        color: red;
-        padding-left: 13px;
-        font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
+
+    .no-titlebar .ui-dialog-titlebar {
+        display: none;
     }
 </style>
+
+@{var res = ViewBag.Result;}
 <div class="center container" style="width:900px">
     <form asp-controller="Protocolo" enctype="multipart/form-data" method="post" class="mt-3">
         <div class="card">
@@ -142,7 +146,7 @@
                             </tr>
                         </thead>
                         <tbody style="color: #333333">
-                            @foreach (var item in Model.Lista_Tramite) {
+                            @foreach(var item in Model.Lista_Tramite) {
                                 <tr style="height: 15px; border-bottom-color: cadetblue; border-bottom-style: solid; border-bottom-width: 1px; border-top-color: cadetblue; border-top-style: solid; border-top-width: 1px">
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Seq)
@@ -185,15 +189,27 @@
 
                 </div>
             </div>
-            <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
             <div class="card-footer">
 
-                @Html.ActionLink("Consultar outro processo", "Tramite_Processo", "Protocolo", null, new { @class = "actionlink" })    <br />
-                @Html.ActionLink("Retornar ao menu de opções", "SysMenu", "Home", null, new { @class = "actionlink" })    <br />
-                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                @Html.ActionLink("Consultar outro processo","Tramite_Processo","Protocolo",null,new { @class = "actionlink" })    <br />
+                @Html.ActionLink("Retornar ao menu de opções","SysMenu","Home",null,new { @class = "actionlink" })    <br />
+                @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
             </div>
         </div>
     </form>
+</div>
+<div id="msgBoxWait" style='display: none;text-align:center'>
+    <img src="~/Images/ajax-loader.gif"><br />
+    <p>Processando, aguarde . . . </p>
+</div>
+
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
 </div>
 
 <!--##########################-->
@@ -215,7 +231,7 @@
                         @Html.HiddenFor(m => m.Numero)
                         @Html.HiddenFor(m => m.User_Id)
                         @Html.HiddenFor(m => m.Seq)
-                        @Html.DropDownListFor(m => m.CCusto_Codigo, ViewBag.Lista_CentroCusto as SelectList, "-Selecione um Local-", new { @id = "InserirDropDown", style = "width:330px;height:25px", rows = 10 })
+                        @Html.DropDownListFor(m => m.CCusto_Codigo,ViewBag.Lista_CentroCusto as SelectList,"-Selecione um Local-",new { @id = "InserirDropDown",style = "width:330px;height:25px",rows = 10 })
                         <label class="text-danger" id="errorMsgInserir"></label>
                     </fieldset>
                     <div class="modal-footer">
@@ -233,6 +249,68 @@
 
     <script>
 
+        $(document).ready(function () {
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxWait').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "no-titlebar"
+            });
+
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+
+        });
+
+
+
+
     //*************************************
     //Scripts para recebimento de processo
     //*************************************
@@ -240,13 +318,17 @@
         var tbl = document.getElementById("tblMain");
         var _texto = tbl.rows[Seq].cells[2].innerHTML;
         if (elementIsEmpty(_texto) == false) {
-            document.getElementById('errorLabel').innerHTML = "O processo já foi recebido neste local.";
+            $('#msgBoxWait').dialog('close');
+            document.getElementById('lblMsg').innerHTML = "O processo já foi recebido neste local.";
+            $('#msgBox1').dialog('open');
             return false;
         } else {
             var _anterior = Seq - 1;
             _texto = tbl.rows[_anterior].cells[6].innerHTML;
             if (elementIsEmpty(_texto) == true) {
-                document.getElementById('errorLabel').innerHTML = "O local anterior ainda não enviou o processo.";
+                $('#msgBoxWait').dialog('close');
+                document.getElementById('lblMsg').innerHTML = "O local anterior ainda não enviou o processo.";
+                $('#msgBox1').dialog('open');
                 return false;
             }
         }
@@ -276,7 +358,9 @@
                     }
                 });
         }   else {
-            document.getElementById('errorLabel').innerHTML ="Você não tem permissão para tramitar neste local.";
+            $('#msgBoxWait').dialog('close');
+            document.getElementById('lblMsg').innerHTML = "Você não tem permissão para tramitar neste local.";
+            $('#msgBox1').dialog('open');
             return false;
         }
         return true;
@@ -290,12 +374,16 @@
         var tbl = document.getElementById("tblMain");
         var _texto = tbl.rows[Seq].cells[2].innerHTML;
         if (elementIsEmpty(_texto) == true) {
-            document.getElementById('errorLabel').innerHTML = "O processo ainda não foi recebido neste local.";
+            $('#msgBoxWait').dialog('close');
+            document.getElementById('lblMsg').innerHTML = "O processo ainda não foi recebido neste local.";
+            $('#msgBox1').dialog('open');
             return false;
         } else {
             _texto = tbl.rows[Seq].cells[6].innerHTML;
             if (elementIsEmpty(_texto) == false) {
-                document.getElementById('errorLabel').innerHTML = "O processo já foi enviado.";
+                $('#msgBoxWait').dialog('close');
+                document.getElementById('lblMsg').innerHTML = "O processo já foi enviado.";
+                $('#msgBox1').dialog('open');
                 return false;
             }
         }
@@ -325,7 +413,9 @@
                     }
                 });
         }   else {
-            document.getElementById('errorLabel').innerHTML ="Você não tem permissão para tramitar neste local.";
+            $('#msgBoxWait').dialog('close');
+            document.getElementById('lblMsg').innerHTML = "Você não tem permissão para tramitar neste local.";
+            $('#msgBox1').dialog('open');
             return false;
         }
         return true;
@@ -339,12 +429,16 @@
         var tbl = document.getElementById("tblMain");
         var _texto = tbl.rows[Seq-1].cells[2].innerHTML;
         if (Seq == 1) {
-            alert( "Não é possível mover para cima o primeiro local.");
+            $('#msgBoxWait').dialog('close');
+            document.getElementById('lblMsg').innerHTML = "Não é possível mover para cima o primeiro local.";
+            $('#msgBox1').dialog('open');
         }
         else {
             ClearError();
             if (elementIsEmpty(_texto) == false) {
-                alert( "O local acima já foi tramitado.");
+                $('#msgBoxWait').dialog('close');
+                document.getElementById('lblMsg').innerHTML = "O local acima já foi tramitado.";
+                $('#msgBox1').dialog('open');
             } else {
                 $.ajax({
                     type: "Post",
@@ -368,12 +462,16 @@
           var tbl = document.getElementById("tblMain");
           var _texto = tbl.rows[Seq].cells[2].innerHTML;
           var rows = document.getElementById("tblMain").getElementsByTagName("tr").length;
-          if (Seq == rows-1) {
-              alert( "Não é possível mover para baixo o último local.");
+          if (Seq == rows - 1) {
+              $('#msgBoxWait').dialog('close');
+              document.getElementById('lblMsg').innerHTML = "Não é possível mover para baixo o último local.";
+              $('#msgBox1').dialog('open');
           } else {
               ClearError();
               if (elementIsEmpty(_texto) == false) {
-                  alert("Este local já foi tramitado.");
+                  $('#msgBoxWait').dialog('close');
+                  document.getElementById('lblMsg').innerHTML = "Este local já foi tramitado.";
+                  $('#msgBox1').dialog('open');
               } else {
                   $.ajax({
                       type: "Post",
@@ -400,7 +498,9 @@
         var tbl = document.getElementById("tblMain");
         var _texto = tbl.rows[SeqId + 1].cells[2].innerHTML;
         if (elementIsEmpty(_texto) == false) {
-            document.getElementById('errorLabel').innerHTML = "O local abaixo já foi tramitado.";
+            $('#msgBoxWait').dialog('close');
+            document.getElementById('lblMsg').innerHTML = "O local abaixo já foi tramitado.";
+            $('#msgBox1').dialog('open');
             return false;
         }
          $.ajax({
@@ -419,7 +519,7 @@
         return true;
     }
 
-   
+
     function Usuario_CC_Remover(Prm ,Seq, CCusto) {
         var _find = false;
         var _lista = Prm.split(",");
@@ -434,7 +534,9 @@
             if (_find) {
                 return true;
             } else {
-                alert("Você não tem permissão para remover este local.");
+                $('#msgBoxWait').dialog('close');
+                document.getElementById('lblMsg').innerHTML = "Você não tem permissão para remover este local.";
+                $('#msgBox1').dialog('open');
                 return false;
             }
         }
@@ -448,7 +550,9 @@
         var tbl = document.getElementById("tblMain");
         var _texto = tbl.rows[Seq].cells[2].innerHTML;
         if (elementIsEmpty(_texto) == true) {
-            document.getElementById('errorLabel').innerHTML = "O processo ainda não foi recebido neste local.";
+            $('#msgBoxWait').dialog('close');
+            document.getElementById('lblMsg').innerHTML = "O processo ainda não foi recebido neste local.";
+            $('#msgBox1').dialog('open');
             return false;
         }
 
@@ -478,7 +582,9 @@
                     }
                 });
         }   else {
-            document.getElementById('errorLabel').innerHTML ="Você não tem permissão para comentar neste local.";
+            $('#msgBoxWait').dialog('close');
+            document.getElementById('lblMsg').innerHTML = "Você não tem permissão para comentar neste local.";
+            $('#msgBox1').dialog('open');
             return false;
         }
         return true;
@@ -493,7 +599,6 @@
     }
 
     function ClearError() {
-       document.getElementById('errorLabel').innerHTML = "";
     }
 
     function htmlEncode(value){

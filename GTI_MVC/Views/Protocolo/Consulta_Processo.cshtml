@@ -53,35 +53,26 @@
         border-radius: 4px;
     }
 
-    .errorlabel {
-        font-weight: normal;
-        color: red;
-        padding-left: 13px;
-        font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
+
+    .no-titlebar .ui-dialog-titlebar {
+        display: none;
     }
 </style>
 
-
+@{var res = ViewBag.Result;}
 <div class="center container" style="width:400px">
-    @using (Html.BeginForm("Consulta_Processo", "Protocolo", FormMethod.Post, new { @id = "MainForm" })) {
+    @using(Html.BeginForm("Consulta_Processo","Protocolo",FormMethod.Post,new { @id = "MainForm" })) {
         <div class="card">
             <div class="card-header">Consulta de Processo</div>
             <div class="card-body">
                 <table>
                     <tr style="height:40px">
                         <td style="width:170px"><label style="font-weight:normal">Nº do Processo: </label></td>
-                        <td style="width:230px">@Html.TextBoxFor(m => m.Numero_Ano, new { @id = "numprocesso", @class = "textBoxBlue", @style = "max-width:150px" })</td>
+                        <td style="width:230px">@Html.TextBoxFor(m => m.Numero_Ano,new { @id = "numprocesso",@class = "textBoxBlue",@style = "max-width:150px" })</td>
                     </tr>
-
-                    @*<tr style="height:40px">
-                <td style="width:150px" valign="middle">
-                    <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                </td>
-                <td style="width:150px" valign="middle">
-                    @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
-                </td>
-            </tr>*@
                 </table>
 
                 <br />
@@ -89,13 +80,26 @@
                 <br />
                 <button type="submit" class="btn btn-primary"> Consultar</button>
             </div>
-            <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
             <div class="card-footer">
-                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
             </div>
         </div>
     }
 </div>
+<div id="msgBoxWait" style='display: none;text-align:center'>
+    <img src="~/Images/ajax-loader.gif"><br />
+    <p>Processando, aguarde . . . </p>
+</div>
+
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
+
 
 @section scripts{
 
@@ -105,24 +109,78 @@
             $("#MainForm").submit(function () {
                 return ValidateForm();
             });
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxWait').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "no-titlebar"
+            });
+
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+
         });
 
         function ValidateForm() {
-            ClearError();
             var _numero = document.getElementById('numprocesso').value.trim();
 
             var _error = Valida_Numero_Processo(_numero);
             if (_error != "") {
-                document.getElementById('errorLabel').innerHTML = _error;
+                $('#msgBoxWait').dialog('close');
+                document.getElementById('lblMsg').innerHTML = _error;
+                $('#msgBox1').dialog('open');
                 return false;
             }
-
+            $('#msgBoxWait').dialog('open');
             return true;
         }
 
-        function ClearError() {
-            document.getElementById('errorLabel').innerHTML = "";
-        }
 
     </script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>

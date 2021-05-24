@@ -259,7 +259,7 @@ namespace GTI_Mvc.Controllers {
                     Ano = (short)model.Ano,
                     Numero = model.Numero,
                     Seq = (byte)model.Seq,
-                    Despacho = (short)model.Despacho_Codigo,
+                    Despacho = model.Despacho_Codigo==null?(short)999:    (short)model.Despacho_Codigo,
                     Userid = _regOld[0].Userid1,
                     Datahora = Convert.ToDateTime(_regOld[0].DataEntrada + " " + _regOld[0].HoraEntrada),
                     Ccusto = _regOld[0].CentroCustoCodigo,
