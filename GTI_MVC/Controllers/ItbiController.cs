@@ -226,7 +226,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             if (_find) {
-                ViewBag.Error = "* Cpf/Cnpj já cadastrado.";
+                ViewBag.Error = "Cpf/Cnpj já cadastrado.";
             } else {
                 var editorViewModel = new ListCompradorEditorViewModel();
                 editorViewModel.Seq = model.Lista_Comprador.Count;
@@ -264,7 +264,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             if (_find) {
-                ViewBag.Error = "* Cpf/Cnpj já cadastrado.";
+                ViewBag.Error = "Cpf/Cnpj já cadastrado.";
             } else {
                 var editorViewModel = new ListVendedorEditorViewModel();
                 editorViewModel.Seq = model.Lista_Vendedor.Count;
@@ -304,7 +304,7 @@ namespace GTI_Mvc.Controllers {
                     if (_cpfCnpj.Length > 11) {
                         _cpfCnpj = _cpfCnpj.PadLeft(14, '0');
                         if (!Functions.ValidaCNPJ(_cpfCnpj)) {
-                            ViewBag.Error = "* Cpf/Cnpj do comprador inválido.";
+                            ViewBag.Error = "Cpf/Cnpj do comprador inválido.";
                             model.Cpf_Cnpj = "";
                             return View(model);
                         } else {
@@ -331,12 +331,12 @@ namespace GTI_Mvc.Controllers {
                     if (_bcpf || _bcnpj) {
                         model.Cpf_Cnpj = _cpfCnpj;
                     } else {
-                        ViewBag.Error = "* Cpf/Cnpj do comprador inválido.";
+                        ViewBag.Error = "Cpf/Cnpj do comprador inválido.";
                         model.Cpf_Cnpj = "";
                         return View(model);
                     }
                 } else {
-                    ViewBag.Error = "* Digite o Cpf/Cnpj do comprador.";
+                    ViewBag.Error = "Digite o Cpf/Cnpj do comprador.";
                     return View(model);
                 }
             }
@@ -348,7 +348,7 @@ namespace GTI_Mvc.Controllers {
 
             if (action == "btnCepCompradorOK") {
                 if (model.Comprador.Cep == null || model.Comprador.Cep.Length < 9) {
-                    ViewBag.Error = "* Cep do comprador inválido.";
+                    ViewBag.Error = "Cep do comprador inválido.";
                     return View(model);
                 }
 
@@ -393,7 +393,7 @@ namespace GTI_Mvc.Controllers {
                     model.Comprador.Complemento = "";
                     model.Comprador.UF = "";
 
-                    ViewBag.Error = "* Cep do comprador não localizado.";
+                    ViewBag.Error = "Cep do comprador não localizado.";
                     return View(model);
                 }
             }
@@ -426,11 +426,11 @@ namespace GTI_Mvc.Controllers {
             if (action == "btnAnexoAdd") {
                 if (file != null) {
                     if (string.IsNullOrWhiteSpace(model.Anexo_Desc_tmp)) {
-                        ViewBag.Error = "* Digite uma descrição para o anexo (é necessário selecionar novamente o anexo).";
+                        ViewBag.Error = "Digite uma descrição para o anexo (é necessário selecionar novamente o anexo).";
                         return View(model);
                     } else {
                         if (file.ContentType != "application/pdf") {
-                            ViewBag.Error = "* Este tipo de arquivo não pode ser enviado como anexo.";
+                            ViewBag.Error = "Este tipo de arquivo não pode ser enviado como anexo.";
                             return View(model);
                         } else {
                             string _ano = model.Itbi_Ano == 0 ? DateTime.Now.Year.ToString() : model.Itbi_Ano.ToString();
@@ -460,7 +460,7 @@ namespace GTI_Mvc.Controllers {
                         }
                     }
                 } else {
-                    ViewBag.Error = "* Nenhum arquivo selecionado.";
+                    ViewBag.Error = "Nenhum arquivo selecionado.";
                     return View(model);
                 }
             }
@@ -504,14 +504,14 @@ namespace GTI_Mvc.Controllers {
             }
 
             if (model.Inscricao == null && Convert.ToInt32(model.Codigo) > 0) {
-                ViewBag.Error = "* Imóvel não cadastrado.";
+                ViewBag.Error = "Imóvel não cadastrado.";
                 return View(model);
             }
 
             _guid = Itbi_Save(model);
             model.Guid = _guid;
             if (_guid == "") {
-                ViewBag.Error = "* Ocorreu um erro ao gravar.";
+                ViewBag.Error = "Ocorreu um erro ao gravar.";
             }
             ViewBag.Fiscal = Session["hashfiscalitbi"].ToString();
             return View(model);
@@ -597,7 +597,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             if (_find) {
-                ViewBag.Error = "* Cpf/Cnpj já cadastrado.";
+                ViewBag.Error = "Cpf/Cnpj já cadastrado.";
             } else {
                 var editorViewModel = new ListCompradorEditorViewModel();
                 editorViewModel.Seq = model.Lista_Comprador.Count;
@@ -634,7 +634,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             if (_find) {
-                ViewBag.Error = "* Cpf/Cnpj já cadastrado.";
+                ViewBag.Error = "Cpf/Cnpj já cadastrado.";
             } else {
                 var editorViewModel = new ListVendedorEditorViewModel();
                 editorViewModel.Seq = model.Lista_Vendedor.Count;
@@ -709,7 +709,7 @@ namespace GTI_Mvc.Controllers {
                     if (_cpfCnpj.Length > 11) {
                         _cpfCnpj = _cpfCnpj.PadLeft(14, '0');
                         if (!Functions.ValidaCNPJ(_cpfCnpj)) {
-                            ViewBag.Error = "* Cpf/Cnpj do comprador inválido.";
+                            ViewBag.Error = "Cpf/Cnpj do comprador inválido.";
                             model.Cpf_Cnpj = "";
                             return View(model);
                         } else {
@@ -736,12 +736,12 @@ namespace GTI_Mvc.Controllers {
                     if (_bcpf || _bcnpj) {
                         model.Cpf_Cnpj = _cpfCnpj;
                     } else {
-                        ViewBag.Error = "* Cpf/Cnpj do comprador inválido.";
+                        ViewBag.Error = "Cpf/Cnpj do comprador inválido.";
                         model.Cpf_Cnpj = "";
                         return View(model);
                     }
                 } else {
-                    ViewBag.Error = "* Digite o Cpf/Cnpj do comprador.";
+                    ViewBag.Error = "Digite o Cpf/Cnpj do comprador.";
                     return View(model);
                 }
             }
@@ -753,7 +753,7 @@ namespace GTI_Mvc.Controllers {
 
             if (action == "btnCepCompradorOK") {
                 if (model.Comprador.Cep == null || model.Comprador.Cep.Length < 9) {
-                    ViewBag.Error = "* Cep do comprador inválido.";
+                    ViewBag.Error = "Cep do comprador inválido.";
                     return View(model);
                 }
 
@@ -798,7 +798,7 @@ namespace GTI_Mvc.Controllers {
                     model.Comprador.Complemento = "";
                     model.Comprador.UF = "";
 
-                    ViewBag.Error = "* Cep do comprador não localizado.";
+                    ViewBag.Error = "Cep do comprador não localizado.";
                     return View(model);
                 }
 
@@ -832,11 +832,11 @@ namespace GTI_Mvc.Controllers {
             if (action == "btnAnexoAdd") {
                 if (file != null) {
                     if (string.IsNullOrWhiteSpace(model.Anexo_Desc_tmp)) {
-                        ViewBag.Error = "* Digite uma descrição para o anexo (é necessário selecionar novamente o anexo).";
+                        ViewBag.Error = "Digite uma descrição para o anexo (é necessário selecionar novamente o anexo).";
                         return View(model);
                     } else {
                         if (file.ContentType != "application/pdf") {
-                            ViewBag.Error = "* Este tipo de arquivo não pode ser enviado como anexo.";
+                            ViewBag.Error = "Este tipo de arquivo não pode ser enviado como anexo.";
                             return View(model);
                         } else {
                             string _ano = model.Itbi_Ano == 0 ? DateTime.Now.Year.ToString() : model.Itbi_Ano.ToString();
@@ -866,7 +866,7 @@ namespace GTI_Mvc.Controllers {
                         }
                     }
                 } else {
-                    ViewBag.Error = "* Nenhum arquivo selecionado.";
+                    ViewBag.Error = "Nenhum arquivo selecionado.";
                     return View(model);
                 }
             }
@@ -888,14 +888,14 @@ namespace GTI_Mvc.Controllers {
             model.Matricula = _matricula > 0 ? _matricula : model.Matricula;
 
             if (model.Inscricao == null && Convert.ToInt32(model.Codigo) > 0) {
-                ViewBag.Error = "* Imóvel não cadastrado.";
+                ViewBag.Error = "Imóvel não cadastrado.";
                 return View(model);
             }
 
             _guid = Itbi_Save(model);
             model.Guid = _guid;
             if (_guid == "") {
-                ViewBag.Error = "* Ocorreu um erro ao gravar.";
+                ViewBag.Error = "Ocorreu um erro ao gravar.";
             }
 
             if (model.Itbi_Ano > 0)
