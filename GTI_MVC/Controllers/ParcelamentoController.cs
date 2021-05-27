@@ -26,12 +26,12 @@ using System.Web.Mvc;
 namespace GTI_MVC.Controllers {
     public class ParcelamentoController:Controller {
         private readonly string _connection = "GTIconnectionTeste";
-        private readonly string _dataBaseName = "TributacaoTeste";
         [Route("Parc_index")]
         [HttpGet]
         public ActionResult Parc_index() {
             if(Session["hashid"] == null)
                 return RedirectToAction("Login","Home");
+
             return View();
         }
 
@@ -296,13 +296,6 @@ namespace GTI_MVC.Controllers {
         [Route("Parc_req")]
         [HttpPost]
         public ActionResult Parc_req(ParcelamentoViewModel model,string listacod,string action) {
-
-            bool bFuncionario = Session["hashfunc"].ToString() == "S" ? true:false;
-            if(bFuncionario) {
-                ViewBag.Result = "Acesso negado. Não é permitido gerar parcelamento on-line utilizando login do GTI.";
-                return View(model);
-            }
-
             if(action == "btnAtualiza") {
                 return RedirectToAction("Parc_cid",new { p = model.Guid });
             }
@@ -1028,7 +1021,7 @@ Fim:;
                 string _pwd = builder.Password;
 
                 crConnectionInfo.ServerName = IPAddress;
-                crConnectionInfo.DatabaseName = _dataBaseName;
+                crConnectionInfo.DatabaseName = "TributacaoTeste";
                 crConnectionInfo.UserID = _userId;
                 crConnectionInfo.Password = _pwd;
                 CrTables = rd.Database.Tables;
@@ -1221,7 +1214,7 @@ Fim:;
                 string _pwd = builder.Password;
 
                 crConnectionInfo.ServerName = IPAddress;
-                crConnectionInfo.DatabaseName = _dataBaseName;
+                crConnectionInfo.DatabaseName = "TributacaoTeste";
                 crConnectionInfo.UserID = _userId;
                 crConnectionInfo.Password = _pwd;
                 CrTables = rd.Database.Tables;
@@ -1595,7 +1588,7 @@ Fim:;
                 string _pwd = builder.Password;
 
                 crConnectionInfo.ServerName = IPAddress;
-                crConnectionInfo.DatabaseName = _dataBaseName;
+                crConnectionInfo.DatabaseName = "TributacaoTeste";
                 crConnectionInfo.UserID = _userId;
                 crConnectionInfo.Password = _pwd;
                 CrTables = rd.Database.Tables;
@@ -1772,7 +1765,7 @@ Fim:;
                 string _pwd = builder.Password;
 
                 crConnectionInfo.ServerName = IPAddress;
-                crConnectionInfo.DatabaseName = _dataBaseName;
+                crConnectionInfo.DatabaseName = "TributacaoTeste";
                 crConnectionInfo.UserID = _userId;
                 crConnectionInfo.Password = _pwd;
                 CrTables = rd.Database.Tables;
@@ -2295,7 +2288,7 @@ Fim:;
             string _pwd = builder.Password;
 
             crConnectionInfo.ServerName = IPAddress;
-            crConnectionInfo.DatabaseName = _dataBaseName;
+            crConnectionInfo.DatabaseName = "TributacaoTeste";
             crConnectionInfo.UserID = _userId;
             crConnectionInfo.Password = _pwd;
             CrTables = rd.Database.Tables;

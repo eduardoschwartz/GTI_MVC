@@ -23,47 +23,25 @@
     .actionlink {
         color: darkslateblue;
     }
-
-    .card-header {
-        background-color: mistyrose;
-        color: brown;
-        font-size: 14px
-    }
-
-    .card {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 14px;
-    }
-
-    .card-footer {
-        background-color: whitesmoke;
-        font-size: 14px
-    }
 </style>
 
-<div class="container" style="width:500px">
-    <div class="card">
-        <div class="card-header">Gravação do ITBI efetuado com sucesso </div>
-        <div class="card-body">
+<div class="center">
+    <br />
+    <label style="color: brown;font-size: 16px;font-style: italic">Gravação do ITBI efetuado com sucesso</label>
+    <br />
 
-            @*<br />
-            <label style="color: brown;font-size: 16px;font-style: italic">Gravação do ITBI efetuado com sucesso</label>*@
-            @*<br />
+    <br />
+    @using (Html.BeginForm("Login_welcome", "Home", FormMethod.Post, new { @id = "MainForm" })) {
+        <label style="font-weight:normal;color:brown">O ITBI gravado foi enviado para análise. <br />Utilize a tela de consulta de ITBI´s para acompanhar o processo e emitir a guia para pagamento.</label>
 
-            <br />*@
-            @using(Html.BeginForm("Login_welcome","Home",FormMethod.Post,new { @id = "MainForm" })) {
-                <label style="font-weight:normal;color:brown;text-align:justify;padding-left:10px;padding-right:10px">O ITBI gravado foi enviado para análise. Utilize a tela de consulta de ITBI´s para acompanhar o processo e emitir a guia para pagamento.</label>
-
-                         
-                @*<div class="form-group row">
-                    <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
-                </div>*@
-            }
+        <br />
+        <br />
+        <div class="form-group row">
+            <label style="font-weight:normal;color:red;padding-left:10px" id="errorLabel">@ViewBag.Result</label>
         </div>
-        <div class="card-footer">
-            @Html.ActionLink("Ir para tela de consulta de ITBI","Itbi_query","Itbi",null,new { @class = "actionlink" })<br />
-            @Html.ActionLink("Preencher outro ITBI","Itbi_Menu","Itbi",null,new { @class = "actionlink" })<br />
-            @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
-        </div>
-       </div>
+    }
+
+    @Html.ActionLink("Ir para tela de consulta de ITBI", "Itbi_query", "Itbi", null, new { @class = "actionlink" })<br />
+    @Html.ActionLink("Preencher outro ITBI", "Itbi_Menu", "Itbi", null, new { @class = "actionlink" })<br />
+    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
 </div>
