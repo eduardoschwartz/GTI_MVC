@@ -55,6 +55,7 @@
 <div class="center">
 
     @using (Html.BeginForm("Notificacao_ter_query", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
         <div class="container" style="width:800px">
             <div class="card">
                 <div class="card-header">

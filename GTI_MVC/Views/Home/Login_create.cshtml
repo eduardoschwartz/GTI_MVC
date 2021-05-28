@@ -62,7 +62,7 @@
 
 <div class="center container" style="width:530px">
     @using (Html.BeginForm("Login_create", "Home", FormMethod.Post, new { @id = "MainForm" })) {
-
+        @Html.AntiForgeryToken()
         <div class="card">
             <div class="card-header">Por favor faça o seu cadastro</div>
             <div class="card-body">

@@ -59,7 +59,7 @@
 <div class="center">
 
     @using (Html.BeginForm("Itbi_query", "Itbi", FormMethod.Post, new { @id = "MainForm" })) {
-       
+        @Html.AntiForgeryToken()
         <div class="container" style="width:860px">
             <div class="card">
                 <div class="card-header">

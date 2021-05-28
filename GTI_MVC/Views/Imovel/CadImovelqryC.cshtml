@@ -98,6 +98,7 @@
 <div class="center">
 
     @using (Html.BeginForm("CadImovelqryC", "Imovel", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+        @Html.AntiForgeryToken()
         <div class="container" style="width:800px">
             <div class="card">
                 <div class="card-header">Consulta de imóveis</div>

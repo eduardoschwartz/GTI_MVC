@@ -56,6 +56,7 @@
 <div class="center">
 
     @using (Html.BeginForm("Cep_inc", "Shared", FormMethod.Post, new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
         <div class="center container" style="width:580px">
             <div class="card panel-danger">
                 <div class="card-header">Inclusão de Cep não cadastrado</div>

@@ -27,6 +27,7 @@ namespace GTI_MVC.Controllers {
 
         [Route("UploadFiles")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult UploadFiles(RedesimImportViewModel model) {
             List<RedesimImportFilesViewModel> Lista_Files = new List<RedesimImportFilesViewModel>();
             int _id = 0;

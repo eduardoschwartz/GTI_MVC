@@ -60,6 +60,7 @@
 @{var res = @ViewBag.Result;}
 <div class="center container" style="width:450px">
     @using(Html.BeginForm("Certidao_Inscricao","Empresa",FormMethod.Post,new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
         <div class="card">
             <div class="card-header">Certidão de Inscrição</div>
             <div class="card-body">

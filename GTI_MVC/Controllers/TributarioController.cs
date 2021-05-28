@@ -36,6 +36,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Certidao/Certidao_Debito_Codigo")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Certidao_Debito_Codigo(CertidaoViewModel model) {
             int _codigo = 0;
             short _ret =0;
@@ -323,6 +324,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Certidao/Certidao_Debito_Doc")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Certidao_Debito_Doc(CertidaoViewModel model) {
             string sNome = "";
             Empresa_bll empresaRepository = new Empresa_bll(_connection);
@@ -590,6 +592,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Comprovante_Pagamento")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Comprovante_Pagamento(CertidaoViewModel model) {
             int _codigo = Convert.ToInt32(model.Inscricao);
             int _documento;
@@ -714,6 +717,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Dama")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Dama(CertidaoViewModel model) {
             bool _isdate = IsDate(model.DataVencimento);
             if (!_isdate) {
@@ -760,6 +764,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Damb")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Damb(CertidaoViewModel model,int Codigo=0) {
             if (model.CpfValue != null) {
                 if (!ValidaCpf(model.CpfValue)) {
@@ -1482,6 +1487,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("SegundaVia_Parcelamento")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult SegundaVia_Parcelamento(DebitoViewModel model,string action) {
 
             if(action== "btnDigito") {
@@ -1821,6 +1827,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Detalhe_Boleto")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Detalhe_Boleto(CertidaoViewModel model) {
             string _cpfMask = model.CpfCnpjLabel;
             if (Functions.ValidaCNPJ(_cpfMask.PadLeft(14, '0'))) {
@@ -2036,6 +2043,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Notificacao_iss")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Notificacao_iss(NotificacaoIssViewModel model,string action) {
             List<Usoconstr> Lista_Uso = new List<Usoconstr> {
                 new Usoconstr() { Codusoconstr = 1, Descusoconstr = "Residencial" },
@@ -2375,6 +2383,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Notificacao_query")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ViewResult Notificacao_query(List<NotificacaoIssViewModel> model) {
             int _ano = model[0].Ano_Selected ;
             if (model[0].Ano_Selected == 0)
@@ -2550,6 +2559,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Rod_menu")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Rod_menu(RodoviariaViewModel model) {
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             
@@ -2597,6 +2607,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Rod_plat_query")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Rod_plat_query(RodoviariaViewModel model,  string DataDe,string DataAte,string Codigo,string Qtde1,string Qtde2,string Qtde3) {
             //            FormCollection collection=new FormCollection
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);

@@ -26,6 +26,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Tramite_Processo")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Tramite_Processo(ProcessoViewModel model) {
             if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
                 ViewBag.Result = "Código de verificação inválido.";
@@ -194,6 +195,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Receive/{Ano}/{Numero}/{Seq}")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Receive(ProcessoViewModel model) {
             Processo_bll protocoloRepository = new Processo_bll(_connection);
 
@@ -249,6 +251,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Send/{Ano}/{Numero}/{Seq}")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Send(ProcessoViewModel model) {
             Processo_bll protocoloRepository = new Processo_bll(_connection);
 
@@ -287,6 +290,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("AddPlace/{Ano}/{Numero}/{Seq}/{CentroCustoCodigo}")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult AddPlace(ProcessoViewModel model) {
             if (model.CCusto_Codigo != null) {
                 Processo_bll protocoloRepository = new Processo_bll(_connection);
@@ -323,6 +327,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Obs/{Ano}/{Numero}/{Seq}")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Obs(ProcessoViewModel model) {
             Processo_bll protocoloRepository = new Processo_bll(_connection);
             if (Session["hashid"] == null)
@@ -352,6 +357,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Consulta_Processo")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Consulta_Processo(ProcessoViewModel model) {
             //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
             //    ViewBag.Result = "Código de verificação inválido.";
@@ -498,6 +504,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("ProcessoqryC")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult ProcessoqryC(ProcessoViewModel model) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");

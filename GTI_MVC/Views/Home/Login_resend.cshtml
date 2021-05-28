@@ -63,7 +63,7 @@
 <div class="center container" style="width:520px">
 
     @using (Html.BeginForm("Login_resend", "Home", FormMethod.Post, new { @id = "MainForm" })) {
-
+        @Html.AntiForgeryToken()
         <div class="card">
             <div class="card-header">Reenviar email de confirmação da conta</div>
             <div class="card-body">

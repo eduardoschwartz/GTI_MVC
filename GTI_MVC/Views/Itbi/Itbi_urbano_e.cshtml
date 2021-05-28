@@ -69,7 +69,7 @@
 <div class="center">
 
     @using (Html.BeginForm("Itbi_urbano_e", "Itbi", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
-
+        @Html.AntiForgeryToken()
         <div class="container" style="width:700px">
             <div class="card">
                 <div class="card-header">Alteração de ITBI - Nº @Model.Itbi_NumeroAno </div>

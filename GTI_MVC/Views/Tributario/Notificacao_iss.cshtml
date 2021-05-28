@@ -67,7 +67,7 @@
 <div class="center" style="width:620px">
 
     @using (Html.BeginForm("Notificacao_iss", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
-
+    @Html.AntiForgeryToken()
     <div class="container" style="width:580px">
         <div class="card">
             <div class="card-header">Notificação de ISS Construção Civil</div>

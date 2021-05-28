@@ -295,6 +295,7 @@ namespace GTI_MVC.Controllers {
 
         [Route("Parc_req")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Parc_req(ParcelamentoViewModel model,string listacod,string action) {
             if(action == "btnAtualiza") {
                 return RedirectToAction("Parc_cid",new { p = model.Guid });
@@ -492,6 +493,7 @@ namespace GTI_MVC.Controllers {
 
         [Route("Parc_reqb")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Parc_reqb(ParcelamentoViewModel model) {
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
 
@@ -588,6 +590,7 @@ namespace GTI_MVC.Controllers {
 
         [Route("Parc_reqc")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Parc_reqc(ParcelamentoViewModel model) {
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
@@ -996,6 +999,7 @@ Fim:;
 
         [Route("Parc_reqd")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Parc_reqd(ParcelamentoViewModel model,string action) {
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             if(action == "btPrint") {
@@ -1195,6 +1199,7 @@ Fim:;
 
         [Route("Parc_reqe")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Parc_reqe(ParcelamentoViewModel model,string action,string value) {
             if(Session["hashid"] == null) {
                 return RedirectToAction("Login","Home");
@@ -1276,6 +1281,7 @@ Fim:;
 
         [Route("Parc_tan")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Parc_tan(ParcelamentoViewModel model,string action) {
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
@@ -1566,6 +1572,7 @@ Fim:;
 
         [Route("Parc_tcd")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Parc_tcd(ParcelamentoViewModel model,string action) {
             if(Session["hashid"] == null)
                 return RedirectToAction("Login","Home");
@@ -1744,6 +1751,7 @@ Fim:;
 
         [Route("Parc_reqf")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Parc_reqf(ParcelamentoViewModel model,string action) {
             if(Session["hashid"] == null) {
                 return RedirectToAction("Login","Home");
@@ -2024,6 +2032,7 @@ Fim:;
 
         [Route("Parc_cid")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Parc_cid(ParcelamentoViewModel model,string action) {
 
             if(action == "btnCep") {
@@ -2240,6 +2249,7 @@ Fim:;
 
         [Route("Parc_rel")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Parc_rel(ParcelamentoViewModel model) {
             if(Session["hashid"] == null)
                 return RedirectToAction("Login","Home");

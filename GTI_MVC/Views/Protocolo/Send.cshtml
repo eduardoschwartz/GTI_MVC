@@ -38,6 +38,7 @@
     <!--          HEADER           -->
     <!--###########################-->
     @using (Html.BeginForm("Send", "Protocolo", FormMethod.Post, new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
         <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:700px; ">
             <tr>
                 <td style="width:200px;padding: 1px 1px 1px 5px;font-weight:normal">

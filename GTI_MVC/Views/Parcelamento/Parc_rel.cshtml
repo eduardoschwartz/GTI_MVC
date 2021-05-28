@@ -55,7 +55,7 @@
 <div class="center container" style="width:540px">
 
     @using (Html.BeginForm("Parc_rel", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
-
+        @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.Guid)
     <div class="card">
         <div class="card-header">Resumo dos Parcelamentos Efetuados</div>

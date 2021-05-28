@@ -63,6 +63,7 @@
 
 <div class="center container" style="width:450px">
     @using (Html.BeginForm("Alvara", "Empresa", FormMethod.Post, new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
         <div class="card">
             <div class="card-header">Alvará de funcionamento</div>
             <div class="card-body">

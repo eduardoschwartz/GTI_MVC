@@ -25,6 +25,7 @@ namespace GTI_MVC.Controllers {
 
         [Route("Checkgticd")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Checkgticd(CertidaoViewModel model, string c) {
             int _codigo, _ano, _numero;
             string _tipo, _chave = c,_pdfFileName="";
@@ -177,6 +178,7 @@ namespace GTI_MVC.Controllers {
 
         [Route("Checkguid")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Checkguid(CertidaoViewModel model, string c) {
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             Itbi_isencao_main_Struct _itbi = imovelRepository.Retorna_Itbi_Isencao_Main(c);
@@ -240,6 +242,7 @@ namespace GTI_MVC.Controllers {
 
         [Route("Cep_inc")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Cep_inc(CepViewModel model, string action) {
             ViewBag.Error = "";
             if (action == "btnCepOK") {

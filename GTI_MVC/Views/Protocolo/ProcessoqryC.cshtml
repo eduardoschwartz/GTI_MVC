@@ -97,7 +97,7 @@
 <div class="center">
 
     @using (Html.BeginForm("ProcessoQryC", "Protocolo", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
-
+        @Html.AntiForgeryToken()
     <div class="container" style="width:950px">
         <div class="card">
             <div class="card-header">Consulta de Processos</div>

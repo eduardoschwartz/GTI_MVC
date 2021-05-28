@@ -67,7 +67,7 @@
 <div class="center container" style="width:700px">
 
     @using (Html.BeginForm("Itbi_isencao", "Itbi", FormMethod.Post, new { @id = "MainForm" })) {
-
+    @Html.AntiForgeryToken()
 
     <div class="card">
         <div class="card-header">Certidão de não incidência de ITBI (Imóvel Urbano) </div>

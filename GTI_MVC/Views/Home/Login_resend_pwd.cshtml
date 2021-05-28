@@ -62,6 +62,7 @@
 
 <div class="center container" style="width:520px">
     @using (Html.BeginForm("Login_resend_pwd", "Home", FormMethod.Post, new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
         <div class="card">
             <div class="card-header">Reenviar email de redefinição de senha</div>
             <div class="card-body">

@@ -65,6 +65,7 @@
 
     <br />
     @using (Html.BeginForm("Login_welcome", "Home", FormMethod.Post, new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
         <label style="font-weight:normal;color:brown;font-size:14px">Agora você já pode utilizar os serviços exclusivos para usuários cadastrados. <br /> <br />Por favor faça login para começar a utilizar.</label>
         <br />
         <br />

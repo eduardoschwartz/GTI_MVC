@@ -66,6 +66,7 @@
 @{var res = @ViewBag.Result;}
 <div class="center container" style="width:450px">
     @using(Html.BeginForm("Damb","Tributario",FormMethod.Post,new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
         <div class="card">
             <div class="card-header">Consulta e atualização de débitos vencidos</div>
             <div class="card-body">

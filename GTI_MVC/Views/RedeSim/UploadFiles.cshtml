@@ -66,11 +66,22 @@
         font-size: 13px;
         font-family: Arial, Helvetica, sans-serif;
     }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
+
+    .no-titlebar .ui-dialog-titlebar {
+        display: none;
+    }
 </style>
+
+@{var res = ViewBag.Result;}
 
 <div class="center">
 
-    @using (Html.BeginForm("UploadFiles", "RedeSim", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @using(Html.BeginForm("UploadFiles","RedeSim",FormMethod.Post,new { @id = "MainForm",enctype = "multipart/form-data" })) {
+        @Html.AntiForgeryToken()
         <div class="container" style="width:800px">
             <div class="card">
                 <div class="card-header">RedeSim - Importação de arquivos</div>
@@ -78,8 +89,8 @@
                     <input type="file" name="files" id="files" multiple="multiple" accept="text/xml" /><br /><br />
                     @*<input type="file" name="files" id="files" multiple="multiple" accept=".csv,text/xml" /><br /><br />*@
                     <div><button type="submit" class="btn btn-info">Enviar</button><br /><br /></div>
-                    @if (Model.ListaArquivo.Count > 0) {
-                        foreach (GTI_Mvc.ViewModels.RedesimImportFilesViewModel arq in Model.ListaArquivo) {
+                    @if(Model.ListaArquivo.Count > 0) {
+                        foreach(GTI_Mvc.ViewModels.RedesimImportFilesViewModel arq in Model.ListaArquivo) {
                             <table style="font-size:13px;width:710px">
                                 <thead style="background-color:darkred;color:whitesmoke">
                                     <tr style="height:10px">
@@ -94,7 +105,7 @@
                                 @arq.Guid
                                 @Html.Raw("</td>")
                                 @Html.Raw(" <td style=" + "width:200px;text-align:left" + " >")
-                                @Functions.TruncateTo(arq.NomeArquivo, 30)
+                                @Functions.TruncateTo(arq.NomeArquivo,30)
                                 @Html.Raw("</td>")
                                 @Html.Raw(" <td style=" + "width:120px;text-align:left" + " >")
                                 @arq.Tipo
@@ -106,7 +117,7 @@
                             </table>
                             <br />
 
-                            if (arq.ListaRegistro.Count > 0) {
+                            if(arq.ListaRegistro.Count > 0) {
 
                                 <table style="font-size:13px;width:710px">
                                     <thead style="background-color:darkcyan;color:whitesmoke">
@@ -117,18 +128,18 @@
                                             <td style="width:120px;text-align:left">Status</td>
                                         </tr>
                                     </thead>
-                                    @foreach (GTI_Models.Models.Redesim_RegistroStruct reg in arq.ListaRegistro) {
+                                    @foreach(GTI_Models.Models.Redesim_RegistroStruct reg in arq.ListaRegistro) {
                                         @Html.Raw(" <tr>")
                                         @Html.Raw("<td style=" + "width:120px;text-align:left" + " >")
                                         @reg.Protocolo
                                         @Html.Raw("</td>")
                                         @Html.Raw(" <td style=" + "width:300px;text-align:left" + " >")
-                                        @Functions.TruncateTo(reg.NomeEmpresarial, 35)
+                                        @Functions.TruncateTo(reg.NomeEmpresarial,35)
                                         @Html.Raw("</td>")
                                         @Html.Raw(" <td style=" + "width:120px;text-align:left" + " >")
                                         @Functions.FormatarCpfCnpj(reg.Cnpj)
                                         @Html.Raw("</td>")
-                                        if (reg.Duplicado) {
+                                        if(reg.Duplicado) {
                                             @Html.Raw(" <td style=" + "width:120px;text-align:left;color:red" + " >")
                                             @Html.Raw("Duplicado")
                                             @Html.Raw("</td>")
@@ -142,7 +153,7 @@
                                 </table>
                             }
 
-                            if (arq.ListaViabilidade.Count > 0) {
+                            if(arq.ListaViabilidade.Count > 0) {
                                 <table style="font-size:13px;width:710px">
                                     <thead style="background-color:darkcyan;color:whitesmoke">
                                         <tr style="height:10px">
@@ -152,18 +163,18 @@
                                             <td style="width:120px;text-align:left">Status</td>
                                         </tr>
                                     </thead>
-                                    @foreach (GTI_Models.Models.Redesim_ViabilidadeStuct reg in arq.ListaViabilidade) {
+                                    @foreach(GTI_Models.Models.Redesim_ViabilidadeStuct reg in arq.ListaViabilidade) {
                                         @Html.Raw(" <tr>")
                                         @Html.Raw("<td style=" + "width:120px;text-align:left" + " >")
                                         @reg.Protocolo
                                         @Html.Raw("</td>")
                                         @Html.Raw(" <td style=" + "width:300px;text-align:left" + " >")
-                                        @Functions.TruncateTo(reg.RazaoSocial, 35)
+                                        @Functions.TruncateTo(reg.RazaoSocial,35)
                                         @Html.Raw("</td>")
                                         @Html.Raw(" <td style=" + "width:120px;text-align:left" + " >")
                                         @Functions.FormatarCpfCnpj(reg.Cnpj)
                                         @Html.Raw("</td>")
-                                        if (reg.Duplicado) {
+                                        if(reg.Duplicado) {
                                             @Html.Raw(" <td style=" + "width:120px;text-align:left;color:red" + " >")
                                             @Html.Raw("Duplicado")
                                             @Html.Raw("</td>")
@@ -177,7 +188,7 @@
                                 </table>
                             }
 
-                            if (arq.ListaLicenciamento.Count > 0) {
+                            if(arq.ListaLicenciamento.Count > 0) {
                                 <table style="font-size:13px;width:680px">
                                     <thead style="background-color:darkcyan;color:whitesmoke">
                                         <tr style="height:10px">
@@ -187,18 +198,18 @@
                                             <td style="width:100px;text-align:left">Status</td>
                                         </tr>
                                     </thead>
-                                    @foreach (GTI_Models.Models.Redesim_licenciamentoStruct reg in arq.ListaLicenciamento) {
+                                    @foreach(GTI_Models.Models.Redesim_licenciamentoStruct reg in arq.ListaLicenciamento) {
                                         @Html.Raw(" <tr>")
                                         @Html.Raw("<td style=" + "width:120px;text-align:left" + " >")
                                         @reg.Protocolo
                                         @Html.Raw("</td>")
                                         @Html.Raw(" <td style=" + "width:300px;text-align:left" + " >")
-                                        @Functions.TruncateTo(reg.RazaoSocial, 35)
+                                        @Functions.TruncateTo(reg.RazaoSocial,35)
                                         @Html.Raw("</td>")
                                         @Html.Raw(" <td style=" + "width:160px;text-align:center" + " >")
                                         @reg.DataSolicitacao
                                         @Html.Raw("</td>")
-                                        if (reg.Duplicado) {
+                                        if(reg.Duplicado) {
                                             @Html.Raw(" <td style=" + "width:100px;text-align:left;color:red" + " >")
                                             @Html.Raw("Duplicado")
                                             @Html.Raw("</td>")
@@ -218,7 +229,7 @@
                     }
                 </div>
                 <div class="card-footer">
-                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                    @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
                 </div>
 
             </div>
@@ -228,11 +239,36 @@
 
 </div>
 
+<div id="msgBoxWait" style='display: none;text-align:center'>
+    <img src="~/Images/ajax-loader.gif"><br />
+    <p>Processando, aguarde . . . </p>
+</div>
+
 @section scripts{
 
     <script type="text/javascript">
         $(document).ready(function () {
 
+            $('#msgBoxWait').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "no-titlebar"
+            });
+
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
         });
+
+        $("#MainForm").submit(function () {
+            $('#msgBoxWait').dialog('open');
+        });
+
     </script>
 }

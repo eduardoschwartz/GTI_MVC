@@ -60,6 +60,7 @@
 @{var res = @ViewBag.Result;}
 <div class="center container" style="width:450px">
     <form asp-controller="Empresa" enctype="multipart/form-data" method="post" onsubmit="return ValidateForm()" asp-action="Details" style="margin-left:18px">
+        @Html.AntiForgeryToken()
         <div class="card">
             <div class="card-header">Renovação de alvará de funcionamento</div>
             <div class="card-body">

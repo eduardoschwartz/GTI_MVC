@@ -65,7 +65,7 @@
 
 
     @using(Html.BeginForm("Parc_tan","Parcelamento",FormMethod.Post,new { @id = "MainForm",enctype = "multipart/form-data" })) {
-
+        @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.Guid)
 
 

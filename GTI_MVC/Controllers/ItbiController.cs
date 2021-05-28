@@ -115,6 +115,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_urbano")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Itbi_urbano(ItbiViewModel model, HttpPostedFileBase file, string action, int seq = 0) {
             bool _bcpf = false, _bcnpj = false;
 
@@ -519,6 +520,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_urbano_e")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Itbi_urbano_e(ItbiViewModel model, HttpPostedFileBase file, string action, int seq = 0) {
             bool _bcpf = false, _bcnpj = false;
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
@@ -955,6 +957,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_query")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ViewResult Itbi_query(List<ItbiViewModel> model) {
             string _ano = model[0].Ano_Selected ?? "";
             if (_ano == "")
@@ -1019,6 +1022,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_rural")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Itbi_rural(ItbiViewModel model, HttpPostedFileBase file, string action, int seq = 0) {
             bool _bcpf = false, _bcnpj = false;
 
@@ -1372,6 +1376,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_rural_e")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Itbi_rural_e(ItbiViewModel model, HttpPostedFileBase file, string action, int seq = 0) {
             bool _bcpf = false, _bcnpj = false;
 
@@ -1744,6 +1749,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_urbano_q")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Itbi_urbano_q(ItbiViewModel model, string button) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
@@ -1790,6 +1796,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_rural_q")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Itbi_rural_q(ItbiViewModel model, string button) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
@@ -1948,6 +1955,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_forum")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Itbi_forum(List<Itbi_Forum> model) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
@@ -2917,6 +2925,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_isencao")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Itbi_isencao(ItbiViewModel model, string natureza, string action) {
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             if (action == "btnValida") {
@@ -3129,6 +3138,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_isencao_q")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Itbi_isencao_q(ItbiViewModel model, string button) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
@@ -3263,6 +3273,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_isencao_e")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Itbi_isencao_e(ItbiViewModel model, string natureza, string action) {
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             if (action == "btnValida") {

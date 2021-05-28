@@ -60,6 +60,7 @@
 @{var res = @ViewBag.Result;}
 <div class="center container" style="width:400px">
     @using(Html.BeginForm("Certidao_Isencao","Imovel",FormMethod.Post,new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
         <div class="card">
             <div class="card-header">Certidão de Isenção de IPTU</div>
             <div class="card-body">

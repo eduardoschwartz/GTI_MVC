@@ -54,7 +54,8 @@
 
 <div class="center">
 
-    @using (Html.BeginForm("AutoInfracao_ter_query", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+    @using(Html.BeginForm("AutoInfracao_ter_query","Imovel",FormMethod.Post,new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
         <div class="container" style="width:800px">
             <div class="card">
                 <div class="card-header">
@@ -62,7 +63,7 @@
 
                     <label style="padding-left:20px">
                         Exercício:&nbsp;
-                        @Html.DropDownListFor(m => Model.Ano_Selected, ViewBag.Lista_Ano as SelectList, null, new { @id = "AnoDropDown", @style = "font-weight:normal", onchange = "this.form.submit()" })
+                        @Html.DropDownListFor(m => Model.Ano_Selected,ViewBag.Lista_Ano as SelectList,null,new { @id = "AnoDropDown",@style = "font-weight:normal",onchange = "this.form.submit()" })
                     </label>  <br />
 
 
@@ -82,31 +83,31 @@
                             </tr>
                         </thead>
                         <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
-                            @foreach (var item in Model.ListaNotificacao) {
-                                if (item.Ano_Notificacao == Model.Ano_Selected) {
-                            <tr style="height:20px;">
-                                <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
-                                <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumeroAuto)</td>
-                                <td style="width:465px;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome_Proprietario)</td>
-                                <td style="width:80px;font-weight:normal;text-align:center">@Html.DisplayFor(modelItem => item.Data_Cadastro)</td>
+                            @foreach(var item in Model.ListaNotificacao) {
+                                if(item.Ano_Notificacao == Model.Ano_Selected) {
+                                    <tr style="height:20px;">
+                                        <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
+                                        <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumeroAuto)</td>
+                                        <td style="width:465px;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome_Proprietario)</td>
+                                        <td style="width:80px;font-weight:normal;text-align:center">@Html.DisplayFor(modelItem => item.Data_Cadastro)</td>
 
-                                <td style="width:50px;text-align:right">
-                                    <a href="@Url.Action("AutoInfracao_print", "Imovel", new { a = item.Ano_Auto,n=item.Numero_Auto })" title="Imprimir o Auto de Infração"> <img src="@Url.Content("~/images/print.png")"></a>
-                                </td>
-                            </tr>
+                                        <td style="width:50px;text-align:right">
+                                            <a href="@Url.Action("AutoInfracao_print", "Imovel", new { a = item.Ano_Auto,n=item.Numero_Auto })" title="Imprimir o Auto de Infração"> <img src="@Url.Content("~/images/print.png")"></a>
+                                        </td>
+                                    </tr>
                                 }
                             }
                         </tbody>
                     </table>
-               
+
                     <div class="form-group row">
                         <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
                     </div>
 
                 </div>
                 <div class="card-footer">
-                    @Html.ActionLink("Preencher outro auto de infração", "AutoInfracao_ter_add", "Imovel", null, new { @class = "actionlink" })<br />
-                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                    @Html.ActionLink("Preencher outro auto de infração","AutoInfracao_ter_add","Imovel",null,new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
                 </div>
             </div>
         </div>

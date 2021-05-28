@@ -77,6 +77,7 @@
     <!--          HEADER           -->
     <!--###########################-->
     <form asp-controller="Protocolo" enctype="multipart/form-data" method="post" onsubmit="return ValidateForm()" class="mt-3">
+        @Html.AntiForgeryToken()
         <table title="Dados do Processo" style="font-size:12px;border-style:solid;border-width:1px;border-color:Highlight;width:800px; ">
             <tr>
                 <td style="width:200px;padding: 1px 1px 1px 5px;">

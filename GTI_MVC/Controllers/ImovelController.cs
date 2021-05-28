@@ -46,6 +46,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Certidao/Certidao_Endereco")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Certidao_Endereco(CertidaoViewModel model) {
             int _codigo = 0;
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
@@ -69,7 +70,7 @@ namespace GTI_Mvc.Controllers {
             var status = (bool)obj.SelectToken("success");
             string msg = status ? "Sucesso" : "Falha";
             if (!status) {
-                model.ErrorMessage = "Código Recaptcha inválido.";
+                ViewBag.Result = "Código Recaptcha inválido.";
                 return View(model);
             }
 
@@ -253,6 +254,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Certidao/Certidao_Valor_Venal")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Certidao_Valor_Venal(CertidaoViewModel model) {
             int _codigo;
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
@@ -272,7 +274,7 @@ namespace GTI_Mvc.Controllers {
             var obj = JObject.Parse(result);
             var status = (bool)obj.SelectToken("success");
             if (!status) {
-                model.ErrorMessage = "Código Recaptcha inválido.";
+                ViewBag.Result = "Código Recaptcha inválido.";
                 return View(model);
             }
 
@@ -482,6 +484,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Certidao/Certidao_Isencao")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Certidao_Isencao(CertidaoViewModel model) {
             int _codigo = 0;
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
@@ -506,7 +509,7 @@ namespace GTI_Mvc.Controllers {
             var status = (bool)obj.SelectToken("success");
             string msg = status ? "Sucesso" : "Falha";
             if (!status) {
-                model.ErrorMessage = "Código Recaptcha inválido.";
+                ViewBag.Result = "Código Recaptcha inválido.";
                 return View(model);
             }
 
@@ -700,6 +703,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Dados_Imovel")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Dados_Imovel(ImovelDetailsViewModel model) {
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             int _codigo = 0;
@@ -849,6 +853,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Carne_Iptu")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Carne_Iptu(CertidaoViewModel model) {
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             int _codigo = 0;
@@ -1078,6 +1083,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Carne_Cip")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Carne_Cip(CertidaoViewModel model) {
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             int _codigo = 0;
@@ -1315,6 +1321,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Notificacao_ter_add")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Notificacao_ter_add(NotificacaoTerViewModel model, string action) {
             if (model.Codigo_Imovel == 0) {
                 ViewBag.Result = "Código de imóvel inválido.";
@@ -1490,6 +1497,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Notificacao_ter_query")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Notificacao_ter_query(NotificacaoTerQueryViewModel model2) {
             int _ano = model2.Ano_Selected;
             List<int> Lista_Ano = new List<int>();
@@ -1589,6 +1597,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Notificacao_obra_add")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Notificacao_obra_add(NotificacaoTerViewModel model, string action) {
             if (model.Codigo_Imovel == 0) {
                 ViewBag.Result = "Código de imóvel inválido.";
@@ -1822,6 +1831,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("CadImovelqryC")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult CadImovelqryC(ImovelDetailsViewModel model) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
@@ -1907,6 +1917,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("AutoInfracao_ter_add")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult AutoInfracao_ter_add(NotificacaoTerViewModel model, string action) {
             List<int> Lista_Ano = new List<int>();
             for (int i = 2020; i <= DateTime.Now.Year; i++) {
@@ -2031,6 +2042,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("AutoInfracao_ter_query")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult AutoInfracao_ter_query(NotificacaoTerQueryViewModel model2) {
             int _ano = model2.Ano_Selected;
             List<int> Lista_Ano = new List<int>();

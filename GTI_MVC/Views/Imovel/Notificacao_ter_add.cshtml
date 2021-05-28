@@ -71,7 +71,7 @@
 <div class="center" style="width:700px">
 
     @using (Html.BeginForm("Notificacao_ter_add", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
-
+        @Html.AntiForgeryToken()
         <div class="container" style="width:700px">
             <div class="card">
                 <div class="card-header">Notificação de Limpeza de Terreno</div>

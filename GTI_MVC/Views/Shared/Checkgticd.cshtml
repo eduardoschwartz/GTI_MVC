@@ -23,6 +23,7 @@
     <br />
 
     @using (Html.BeginForm("Checkgticd", "Shared", FormMethod.Post, new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
         <input type="hidden" name="c" value="@ViewBag.c" />
         <br />
         <button type="submit" class="btn btn-primary"> Clique para Validar</button>

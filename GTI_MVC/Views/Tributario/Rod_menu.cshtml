@@ -58,6 +58,7 @@
 <br />
 
 @using (Html.BeginForm("Rod_menu", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
+    @Html.AntiForgeryToken()
     <div class="center">
         <div class="container" style="width:460px">
             <div class="card">

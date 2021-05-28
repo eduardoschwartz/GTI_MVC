@@ -38,6 +38,7 @@ namespace GTI_Mvc.Controllers {
                
         [Route("Details")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Details(EmpresaDetailsViewModel model) {
         
             Empresa_bll empresaRepository = new Empresa_bll(_connection); 
@@ -275,6 +276,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao_Inscricao")]
         [Route("Certidao/Certidao_Inscricao")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Certidao_Inscricao(CertidaoViewModel model) {
             int _codigo;
             bool _valida = false;
@@ -538,6 +540,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Certidao_Pagamento")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Certidao_Pagamento(CertidaoViewModel model) {
             int _codigo;
             Empresa_bll empresaRepository = new Empresa_bll(_connection);
@@ -737,6 +740,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Alvara_Funcionamento")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Alvara_Funcionamento(CertidaoViewModel model) {
 
             Empresa_bll empresaRepository = new Empresa_bll(_connection);
@@ -992,6 +996,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Carne_tl")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Carne_tl(CertidaoViewModel model) {
             int _codigo = Convert.ToInt32(model.Inscricao);
             string _cpf =   model.CpfValue==null?"":Functions.RetornaNumero(model.CpfValue);
@@ -1374,6 +1379,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Carne_vs")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Carne_vs(CertidaoViewModel model) {
             int _codigo = Convert.ToInt32(model.Inscricao);
             string _cpf = model.CpfValue == null ? "" : Functions.RetornaNumero(model.CpfValue);
@@ -1599,6 +1605,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Alvara")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Alvara(AlvaraViewModel model) {
 
             int _codigo = Convert.ToInt32(model.Codigo);

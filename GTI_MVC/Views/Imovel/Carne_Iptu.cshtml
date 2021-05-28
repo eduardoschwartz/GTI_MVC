@@ -61,6 +61,7 @@
 @{var res = Model.ErrorMessage;}
 <div class="center container" style="width:400px">
     @using(Html.BeginForm("Carne_Iptu","Imovel",FormMethod.Post,new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
         <div class="card">
             <div class="card-header">Emissão de 2ª via de IPTU</div>
             <div class="card-body">

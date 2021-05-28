@@ -57,7 +57,7 @@
 <div class="center container" style="width:840px">
 
     @using (Html.BeginForm("Parc_cid", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
-
+        @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.Guid)
         @Html.HiddenFor(m => m.Requerente.TipoEnd)
         @Html.HiddenFor(m => m.Requerente.Bairro_Codigo, new { @Value = Model.Requerente.Bairro_Codigo })

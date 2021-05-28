@@ -85,6 +85,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Login")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ViewResult Login(LoginViewModel model) {
             string sLogin = model.Usuario, sNewPwd = model.Senha, sOldPwd, sOldPwd2, sName;
             LoginViewModel loginViewModel = new LoginViewModel();
@@ -205,6 +206,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Login_update")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ViewResult Login_update(LoginViewModel model) {
             int _id=0;
             Sistema_bll sistema_Class = new Sistema_bll(_connection);
@@ -278,6 +280,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Login_create")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Login_create(LoginViewModel model) {
 
             var response = Request["g-recaptcha-response"];
@@ -341,6 +344,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Login_create2")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Login_create2() {
             return RedirectToAction("Login");
         }
@@ -367,6 +371,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Login_welcome")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Login_welcome() {
             return RedirectToAction("Login");
         }
@@ -380,6 +385,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Login_resend")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ViewResult Login_resend(LoginViewModel model) {
             //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
             //    ViewBag.Result = "Código de verificação inválido.";
@@ -446,6 +452,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Login_resend_pwd")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ViewResult Login_resend_pwd(LoginViewModel model) {
             var response = Request["g-recaptcha-response"];
             var client = new WebClient();
@@ -519,6 +526,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Login_reset")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Login_reset(LoginViewModel model) {
             //if (Session["hashid"] == null) {
             //    Functions.pUserFullName = "Visitante";

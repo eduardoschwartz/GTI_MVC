@@ -71,6 +71,7 @@
 <div class="center">
 
     @using (Html.BeginForm("Rod_plat_query", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
         <div class="container" style="width:700px">
             <div class="card">
                 <div class="card-header">

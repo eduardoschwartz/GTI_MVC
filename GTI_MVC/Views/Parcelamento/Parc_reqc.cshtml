@@ -83,7 +83,7 @@
 <div class="center container" style="width:870px">
 
     @using(Html.BeginForm("Parc_reqc","Parcelamento",FormMethod.Post,new { @id = "MainForm",enctype = "multipart/form-data" })) {
-
+        @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.Guid)
 
 

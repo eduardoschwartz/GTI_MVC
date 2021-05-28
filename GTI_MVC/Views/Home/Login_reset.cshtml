@@ -73,6 +73,7 @@
 
     <br />
     @using (Html.BeginForm("Login_reset", "Home", FormMethod.Post, new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.Email)
         <table width="400px">
             <tr style="height:40px">
