@@ -5,15 +5,7 @@
     ViewData["Title"] = "Criar nova conta";
 }
 <style>
-    .textBoxBlue {
-        height: 25px;
-        position: relative;
-        border: 1px solid #0094ff;
-        border-color: rgba(0, 0, 0, .14);
-        background-color: white;
-        font-size: 14px;
-        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
-    }
+
 
     .center {
         margin: auto;
@@ -51,76 +43,72 @@
         border-radius: 4px;
     }
 
-    .errorlabel {
-        font-weight: normal;
-        color: red;
-        padding-left: 13px;
-        font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
     }
 </style>
 
-<div class="center container" style="width:530px">
-    @using (Html.BeginForm("Login_create", "Home", FormMethod.Post, new { @id = "MainForm" })) {
+@{var res = ViewBag.Result;}
+<div class="center container" style="width:540px">
+    @using(Html.BeginForm("Login_create","Home",FormMethod.Post,new { @id = "MainForm" })) {
         @Html.AntiForgeryToken()
         <div class="card">
             <div class="card-header">Por favor faça o seu cadastro</div>
             <div class="card-body">
-                @*<a href="@Url.Action("Edit", "Story", new { id = Model.Email })" class="btn btn-primary">
-                    <i class="fas fa-user-circle"></i>
-                    Edit Story
-                </a>*@
                 <table width="500px">
-                    <tr style="height:40px">
-                        <td style="width:150px"><label style="font-weight:normal">Nome completo:</label></td>
-                        <td style="width:300px">@Html.TextBoxFor(m => m.Usuario,new { @id = "nome",@class = "textBoxBlue",@style = "max-width:400px;width:300px",@maxlength = "200" })</td>
+                    <tr style="height:30px">
+                        <td style="width:150px;font-size:14px">Nome Completo:</td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Usuario,new { @id = "nome",@style = "max-width:400px;width:300px;font-size:14px",@maxlength = "200" })</td>
                     </tr>
-                    <tr style="height:40px">
-                        <td>
-                            CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
-                            &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
-                        </td>
-                        <td>
-                            @Html.TextBoxFor(m => m.CpfValue,new { @id = "cpfTxt",@class = "textBoxBlue",@style = "max-width:200px",@onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)",@onchange = "ClearError()",@placeholder = "Digite o nº do CPF" })
-                            @Html.TextBoxFor(m => m.CnpjValue,new { @id = "cnpjTxt",@class = "textBoxBlue",@style = "max-width:200px;display:none",@onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)",@onchange = "ClearError()",@placeholder = "Digite o nº do CNPJ" })
+                    <tr style="height:30px">
+                        <td style="width:150px;font-size:14px">Cpf/Cnpj:</td>
+                        <td style="width:300px">
+                            @Html.TextBoxFor(m => m.CpfValue,new { @id = "cpfTxt",@name = "cpfTxt",@style = "Width:200px;font-size:14px" })
                         </td>
                     </tr>
-                    <tr style="height:40px">
-                        <td><label style="font-weight:normal">Nº de Telefone:</label></td>
-                        <td>@Html.TextBoxFor(m => m.Telefone,new { @id = "telefone",@class = "textBoxBlue",@style = "max-width:400px;width:300px",@maxlength = "50" })</td>
+                    <tr style="height:30px">
+                        <td style="width:150px;font-size:14px">Nº de Telefone:</td>
+                        <td>@Html.TextBoxFor(m => m.Telefone,new { @id = "telefone",@style = "max-width:400px;width:300px;font-size:14px",@maxlength = "50" })</td>
                     </tr>
-                    <tr style="height:40px">
-                        <td><label style="font-weight:normal">Endereço de Email:</label></td>
-                        <td>@Html.TextBoxFor(m => m.Email,new { @id = "email",@class = "textBoxBlue",@style = "max-width:400px;width:300px",@maxlength = "250" })</td>
+                    <tr style="height:30px">
+                        <td style="width:150px;font-size:14px">Endereço de Email:</td>
+                        <td>@Html.TextBoxFor(m => m.Email,new { @id = "email",@style = "max-width:400px;width:300px;font-size:14px",@maxlength = "250" })</td>
                     </tr>
-                    <tr style="height:40px">
-                        <td><label style="font-weight:normal">Digite a Senha:</label></td>
-                        <td>@Html.TextBoxFor(m => m.Senha2,new { @type = "password",@id = "senha2",@class = "textBoxBlue",@style = "max-width:400px",@maxlength = "50" })</td>
+                    <tr style="height:30px">
+                        <td style="width:150px;font-size:14px">Digite a Senha:</td>
+                        <td>@Html.TextBoxFor(m => m.Senha2,new { @type = "password",@id = "senha2",@style = "max-width:400px;font-size:14px",@maxlength = "50" })</td>
                     </tr>
-                    <tr style="height:40px">
-                        <td><label style="font-weight:normal">Confirme a Senha:</label></td>
-                        <td>@Html.TextBoxFor(m => m.Senha3,new { @type = "password",@id = "senha3",@class = "textBoxBlue",@style = "max-width:400px" })</td>
+                    <tr style="height:30px">
+                        <td style="width:150px;font-size:14px">Confirme a Senha:</td>
+                        <td>@Html.TextBoxFor(m => m.Senha3,new { @type = "password",@id = "senha3",@style = "max-width:400px;font-size:14px" })</td>
                     </tr>
                 </table>
                 <br />
-                <div style="text-align:justify; display:block;color:maroon">
+                <div style="text-align:justify; display:block;color:maroon;font-size:14px">
                     <input type="checkbox" id="chkAceite" name="chkAceite" value="0"><span>
                         Declaro que os dados preenchidos expressam a verdade e são de minha inteira responsabilidade. Estou ciente que a declaração de informações falsas para acesso a lançamentos e negociação de débitos fiscais, constituem crime, sujeito às penalidades legais.
                     </span>
-                </div><br>
+                </div>
                 <br />
                 <div class="g-recaptcha" data-sitekey="6LfRjG0aAAAAAOEd4ksnWZYw3oX4cUsimIy7yOqD"></div>
                 <br />
-                <button type="submit" title="Finalizar o cadastro" class="btn btn-primary"> Finalizar</button>
+                <button type="submit" title="Finalizar o cadastro" class="btn btn-primary"><i class="fas fa-save"></i>&nbsp; Gravar os dados</button>
             </div>
-            <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+
             <div class="card-footer">
-                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
             </div>
         </div>
     }
 
-
+</div>
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
 </div>
 
 
@@ -129,93 +117,129 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#MainForm").submit(function () {
-
-
                 return ValidateForm();
             });
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                },
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            //Máscara Cpf/Cnpj
+            $("#cpfTxt").keydown(function () {
+                try {
+                    $("#cpfTxt").unmask();
+                } catch (e) { }
+                var tamanho = $("#cpfTxt").val().length;
+                if (tamanho < 11) {
+                    $("#cpfTxt").mask("999.999.999-99");
+                } else {
+                    $("#cpfTxt").mask("99.999.999/9999-99");
+                }
+                var elem = this;
+                setTimeout(function () {
+                    elem.selectionStart = elem.selectionEnd = 10000;
+                }, 0);
+                var currentValue = $(this).val();
+                $(this).val('');
+                $(this).val(currentValue);
+            });
+
         });
 
         function ValidateForm() {
-            ClearError();
             var _nome = document.getElementById('nome').value;
             var _cpf = document.getElementById('cpfTxt').value;
-            var _cnpj = document.getElementById('cnpjTxt').value;
             var _email = document.getElementById('email').value;
             var _fone = document.getElementById('telefone').value;
             var _senha2 = document.getElementById('senha2').value;
             var _senha3 = document.getElementById('senha3').value;
 
             if (_nome == "") {
-                document.getElementById('errorLabel').innerHTML = "Informe o nome completo";
+                document.getElementById('lblMsg').innerHTML = "Informe o nome completo";
+                $('#msgBox1').dialog('open');
                 return false;
             }
 
-            if (_cpf == "" && _cnpj == "") {
-                document.getElementById('errorLabel').innerHTML = "Informe o cpf ou o cnpj";
+            if (_cpf == "") {
+                document.getElementById('lblMsg').innerHTML = "Informe o Cpf/Cnpj";
+                $('#msgBox1').dialog('open');
                 return false;
             }
 
             if (_cpf != "" && !valida_Cpf(_cpf)) {
-                document.getElementById('errorLabel').innerHTML = "CPF inválido";
-                return false;
-            }
-
-            if (_cnpj != "" && !valida_Cnpj(_cnpj)) {
-                document.getElementById('errorLabel').innerHTML = "CNPJ inválido";
-                return false;
+                if (!valida_Cnpj(_cpf)) {
+                    document.getElementById('lblMsg').innerHTML = "Cpf/Cnpj inválido";
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
             }
 
             if (_fone == "") {
-                document.getElementById('errorLabel').innerHTML = "Informe o nº de telefone";
+                document.getElementById('lblMsg').innerHTML = "Informe o nº de telefone";
+                $('#msgBox1').dialog('open');
                 return false;
             }
 
             var mailformat = /^[a-z0-9\.\_%+-]+@@[a-z0-9\.\-]+\.[a-z]{2,4}$/i;
             if (!mailformat.test(_email)) {
-                document.getElementById('errorLabel').innerHTML = "Endereço de email inválido";
+                document.getElementById('lblMsg').innerHTML =  "Endereço de email inválido";
+                $('#msgBox1').dialog('open');
                 document.getElementById('email').focus();
                 return false;
             }
 
             if (_senha2.length < 6) {
-                document.getElementById('errorLabel').innerHTML = "Senha muito curta";
+                document.getElementById('lblMsg').innerHTML = "Senha muito curta";
+                $('#msgBox1').dialog('open');
                 return false;
             }
 
             if (_senha2 != _senha3) {
-                document.getElementById('errorLabel').innerHTML = "Senhas não conferem";
+                document.getElementById('lblMsg').innerHTML = "Senhas não conferem";
+                $('#msgBox1').dialog('open');
                 return false;
             }
 
 
-            if (document.getElementById('chkAceite').checked==false) {
-                document.getElementById('errorLabel').innerHTML = "Clique em concordar com os termos da declaração.";
+            if (document.getElementById('chkAceite').checked == false) {
+                document.getElementById('lblMsg').innerHTML = "Clique em concordar com os termos da declaração.";
+                $('#msgBox1').dialog('open');
                 return false;
             }
 
             return true;
         }
 
-        function radioCheck() {
-            document.getElementById('cnpjTxt').value = "";
-            document.getElementById('cpfTxt').value = "";
-            if (document.getElementById('cpfCheck').checked) {
-                document.getElementById('cpfTxt').style.display = 'block';
-            }
-            else {
-                document.getElementById('cpfTxt').style.display = 'none';
-            }
-            if (document.getElementById('cnpjCheck').checked) {
-                document.getElementById('cnpjTxt').style.display = 'block';
-            }
-            else {
-                document.getElementById('cnpjTxt').style.display = 'none';
-            }
-        }
-
-        function ClearError() {
-            document.getElementById('errorLabel').innerHTML = "";
-        }
+   
 
         function valida_Cpf(cpf) {
             cpf = cpf.split("").filter(n => (Number(n) || n == 0)).join("");

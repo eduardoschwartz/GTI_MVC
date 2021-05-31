@@ -63,23 +63,19 @@
         <div class="card">
             <div class="card-header">Dados de um imóvel</div>
             <div class="card-body">
-
-                <table width="500px">
-                    <tr>
-                        <td style="width:150px">@Html.LabelFor(m => m.Inscricao,new { @style = "font-weight:normal" })</td>
-                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao,new { @id = "codigo",@class = "textBoxBlue",@style = "max-width:100px",@onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
+                <table width="410px">
+                    <tr style="height:30px">
+                        <td style="width:130px"><label style="font-weight:normal;font-size:14px;padding-top:10px">Código do imóvel:</label></td>
+                        <td style="width:280px">@Html.TextBoxFor(m => m.Inscricao,new { @id = "codigo",@style = "Width:80px;font-size:14px",@onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
                     </tr>
-                    <tr style="height:40px">
-                        <td style="width:150px">
-                            CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
-                            &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
-                        </td>
-                        <td style="width:300px">
-                            @Html.TextBoxFor(m => m.CpfValue,new { @id = "cpfTxt",@class = "textBoxBlue",@style = "max-width:200px",@onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)",@placeholder = "Digite o nº do CPF" })
-                            @Html.TextBoxFor(m => m.CnpjValue,new { @id = "cnpjTxt",@class = "textBoxBlue",@style = "max-width:200px;display:none",@onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)",@placeholder = "Digite o nº do CNPJ" })
+                    <tr style="height:30px">
+                        <td style="width:130px;font-size:14px">Cpf/Cnpj:</td>
+                        <td style="width:280px">
+                            @Html.TextBoxFor(m => m.CpfValue,new { @id = "cpfTxt",@name = "cpfTxt",@style = "Width:160px;font-size:14px" })
                         </td>
                     </tr>
                 </table>
+
                 <br />
                 <div class="g-recaptcha" data-sitekey="6LfRjG0aAAAAAOEd4ksnWZYw3oX4cUsimIy7yOqD"></div>
                 <br />
@@ -113,6 +109,28 @@
             $("#MainForm").submit(function () {
                 return ValidateForm();
             });
+
+            //Máscara Cpf/Cnpj
+            $("#cpfTxt").keydown(function () {
+                try {
+                    $("#cpfTxt").unmask();
+                } catch (e) { }
+                var tamanho = $("#cpfTxt").val().length;
+                if (tamanho < 11) {
+                    $("#cpfTxt").mask("999.999.999-99");
+                } else {
+                    $("#cpfTxt").mask("99.999.999/9999-99");
+                }
+                var elem = this;
+                setTimeout(function () {
+                    elem.selectionStart = elem.selectionEnd = 10000;
+                }, 0);
+                var currentValue = $(this).val();
+                $(this).val('');
+                $(this).val(currentValue);
+            });
+
+
             $('#msgBox1').dialog({
                 autoOpen: false,
                 resizable: false,
@@ -155,29 +173,14 @@
             } else {
                 return true;
             }
-        });
 
-        function radioCheck() {
-            document.getElementById('cnpjTxt').value = "";
-            document.getElementById('cpfTxt').value = "";
-            if (document.getElementById('cpfCheck').checked) {
-                document.getElementById('cpfTxt').style.display = 'block';
-            }
-            else {
-                document.getElementById('cpfTxt').style.display = 'none';
-            }
-            if (document.getElementById('cnpjCheck').checked) {
-                document.getElementById('cnpjTxt').style.display = 'block';
-            }
-            else {
-                document.getElementById('cnpjTxt').style.display = 'none';
-            }
-        }
+            
+
+        });
 
         function ValidateForm() {
             var _cod = document.getElementById('codigo').value;
             var _cpf = document.getElementById('cpfTxt').value;
-            var _cnpj = document.getElementById('cnpjTxt').value;
 
             if (_cod == "" || parseInt(_cod) == 0) {
                 document.getElementById('lblMsg').innerHTML = "Digite o código do imóvel";
@@ -185,14 +188,111 @@
                 return false;
             }
             else {
-                if (parseInt(_cod) > 0 && _cpf == "" && _cnpj == "") {
-                    document.getElementById('lblMsg').innerHTML = "Digite o Cpf ou o CNPJ!";
+                if (parseInt(_cod) > 0 && _cpf == "") {
+                    document.getElementById('lblMsg').innerHTML = "Digite o Cpf/Cnpj!";
                     $('#msgBox1').dialog('open');
                     return false;
+                } else {
+                    if (_cpf != "" && !valida_Cpf(_cpf)) {
+                        if (!valida_Cnpj(_cpf)) {
+                            document.getElementById('lblMsg').innerHTML = "Cpf/Cnpj inválido";
+                            $('#msgBox1').dialog('open');
+                            return false;
+                        }
+                    }
                 }
             }
             return true;
         }
+
+        function valida_Cpf(cpf) {
+            cpf = cpf.split("").filter(n => (Number(n) || n == 0)).join("");
+            var numeros, digitos, soma, i, resultado, digitos_iguais;
+            digitos_iguais = 1;
+            if (cpf.length < 11)
+                return false;
+            for (i = 0; i < cpf.length - 1; i++)
+                if (cpf.charAt(i) != cpf.charAt(i + 1)) {
+                    digitos_iguais = 0;
+                    break;
+                }
+            if (!digitos_iguais) {
+                numeros = cpf.substring(0, 9);
+                digitos = cpf.substring(9);
+                soma = 0;
+                for (i = 10; i > 1; i--)
+                    soma += numeros.charAt(10 - i) * i;
+                resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+                if (resultado != digitos.charAt(0))
+                    return false;
+                numeros = cpf.substring(0, 10);
+                soma = 0;
+                for (i = 11; i > 1; i--)
+                    soma += numeros.charAt(11 - i) * i;
+                resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+                if (resultado != digitos.charAt(1))
+                    return false;
+                return true;
+            }
+            else
+                return false;
+        }
+
+        function valida_Cnpj(cnpj) {
+
+            cnpj = cnpj.replace(/[^\d]+/g, '');
+
+            if (cnpj == '') return false;
+
+            if (cnpj.length != 14)
+                return false;
+
+            // Elimina CNPJs invalidos conhecidos
+            if (cnpj == "00000000000000" ||
+                cnpj == "11111111111111" ||
+                cnpj == "22222222222222" ||
+                cnpj == "33333333333333" ||
+                cnpj == "44444444444444" ||
+                cnpj == "55555555555555" ||
+                cnpj == "66666666666666" ||
+                cnpj == "77777777777777" ||
+                cnpj == "88888888888888" ||
+                cnpj == "99999999999999")
+                return false;
+
+            // Valida DVs
+            tamanho = cnpj.length - 2
+            numeros = cnpj.substring(0, tamanho);
+            digitos = cnpj.substring(tamanho);
+            soma = 0;
+            pos = tamanho - 7;
+            for (i = tamanho; i >= 1; i--) {
+                soma += numeros.charAt(tamanho - i) * pos--;
+                if (pos < 2)
+                    pos = 9;
+            }
+            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+            if (resultado != digitos.charAt(0))
+                return false;
+
+            tamanho = tamanho + 1;
+            numeros = cnpj.substring(0, tamanho);
+            soma = 0;
+            pos = tamanho - 7;
+            for (i = tamanho; i >= 1; i--) {
+                soma += numeros.charAt(tamanho - i) * pos--;
+                if (pos < 2)
+                    pos = 9;
+            }
+            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+            if (resultado != digitos.charAt(1))
+                return false;
+
+            return true;
+
+        }
+
+
 
     </script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>

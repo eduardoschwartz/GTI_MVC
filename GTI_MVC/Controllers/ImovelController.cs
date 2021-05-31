@@ -710,7 +710,19 @@ namespace GTI_Mvc.Controllers {
             bool _existeCod = false;
             ImovelDetailsViewModel imovelDetailsViewModel = new ImovelDetailsViewModel();
 
-            if (model.Inscricao != null) {
+            var response = Request["g-recaptcha-response"];
+            string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
+            var client = new WebClient();
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}",secretKey,response));
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+            string msg = status ? "Sucesso" : "Falha";
+            if(!status) {
+                ViewBag.Result = "Código Recaptcha inválido.";
+                return View(model);
+            }
+
+            if(model.Inscricao != null) {
                 _codigo = Convert.ToInt32(model.Inscricao);
                 if (_codigo < 50000) {
                     _existeCod = imovelRepository.Existe_Imovel(_codigo);
@@ -751,17 +763,6 @@ namespace GTI_Mvc.Controllers {
                 return View(imovelDetailsViewModel);
             }
 
-            var response = Request["g-recaptcha-response"];
-            string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
-            var client = new WebClient();
-            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
-            var obj = JObject.Parse(result);
-            var status = (bool)obj.SelectToken("success");
-            string msg = status ? "Sucesso" : "Falha";
-            if (!status) {
-                ViewBag.Result = "Código Recaptcha inválido.";
-                return View(model);
-            }
 
             Tributario_bll tributario_Class = new Tributario_bll(_connection);
             int _numero_certidao = tributario_Class.Retorna_Codigo_Certidao(TipoCertidao.Ficha_Imovel);
