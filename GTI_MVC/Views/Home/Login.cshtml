@@ -5,15 +5,7 @@
     ViewData["Title"] = "Login do Sistema";
 }
 <style>
-    .textBoxBlue {
-        height: 25px;
-        position: relative;
-        border: 1px solid #0094ff;
-        border-color: rgba(0, 0, 0, .14);
-        background-color: white;
-        font-size: 14px;
-        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
-    }
+
 
     .center {
         margin: auto;
@@ -52,14 +44,7 @@
         border-radius: 4px;
     }
 
-    .errorlabel {
-        font-weight: normal;
-        color: red;
-        padding-left: 13px;
-        font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
+  
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
@@ -101,7 +86,6 @@
                 <a href="~/Files/Login Manual do Usuario.pdf" class="btn btn-success" target="_blank"> <i class="fas fa-question-circle"></i>&nbsp; Ajuda</a><br />
             </div>
 
-            @*<label class="errorlabel" id="errorLabel">@ViewBag.Result</label>*@
             <div class="card-footer">
                 @Html.ActionLink("Esqueci minha senha", "Login_resend_pwd", "Home", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Reenviar email para ativação da conta", "Login_resend", "Home", null, new { @class = "actionlink" })<br />
@@ -186,35 +170,7 @@
 
         });
 
-        /**
-         *    $("#MainForm").submit(function () {
-                return ValidateForm();
-            });
-        });
-
-        function ValidateForm() {
-            ClearError();
-            var _cod = document.getElementById('codigo').value;
-            var _senha = document.getElementById('senha').value;
-
-            if (_cod == "" || _senha == "") {
-                document.getElementById('errorLabel').innerHTML = "Digite o Usuário/Email e a senha";
-                return false;
-            }
-
-            return true;
-        }
-         */
-
-
-
-
-
-
-        function ClearError() {
-            document.getElementById('errorLabel').innerHTML = "";
-        }
-
+   
 
     </script>
 }

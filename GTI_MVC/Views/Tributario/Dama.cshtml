@@ -72,14 +72,14 @@
                 <table>
                     <tr>
                         <td style="padding-top:7px; width:170px"><label style="font-weight:normal">Data de pagamento:&nbsp;</label></td>
-                        <td style="width:200px">@Html.TextBoxFor(m => m.DataVencimento,new { @id = "vencto",@class = "textBoxBlue",@style = "max-width:100px",@onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })</td>
+                        <td style="width:200px">@Html.TextBoxFor(m => m.DataVencimento,new { @id = "vencto",@class = "maskData",@style = "max-width:90px;font-size:14px",@onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })</td>
                     </tr>
 
                 </table>
-                <span style="color:red;font-weight:normal;font-size:12px">Digite a data que deseja efetuar o pagamento do boleto.</span>
+                <span style="color:maroon;font-weight:normal;font-size:12px">Digite a data que deseja efetuar o pagamento do boleto.</span>
                 <br />
                 <br />
-                <button type="submit" class="btn btn-primary"> Consultar</button>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i>&nbsp; Consultar</button>
             </div>
             <div class="card-footer">
                 @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
@@ -102,6 +102,8 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
+            $(".maskData").inputmask("99/99/9999");
+
             $("#MainForm").submit(function () {
                 return ValidateForm();
             });
