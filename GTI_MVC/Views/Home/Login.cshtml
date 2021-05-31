@@ -69,20 +69,36 @@
     var res = ViewBag.Result;
 }
 
-<div class="center container" style="width:360px">
+<div class="center container" style="width:420px">
     @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @id = "MainForm" })) {
         @Html.AntiForgeryToken()
         <div class="card">
             <div class="card-header">Acesso ao Sistema</div>
             <div class="card-body ">
-                @Html.TextBoxFor(m => m.Usuario, new { @id = "codigo", @class = "textBoxBlue", @style = "max-width:300px;width:320px", placeholder = "Nome de usuário ou Email" })<br /><br />
-                @Html.TextBoxFor(m => m.Senha, new { @type = "password", @id = "senha", @class = "textBoxBlue", @style = "max-width:200px", placeholder = "Digite a senha" })<br />
+                <div class="input-group">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            <i class="input-group-text fa fa-user-circle" style="height:30px"></i>
+                            @Html.TextBoxFor(m => m.Usuario,new { @id = "codigo",@style = "width:320px;height:30px",placeholder = "Nome de usuário ou Email" })<br /><br />
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            <i class="input-group-text fa fa-key" style="height:30px"></i>
+                            @Html.TextBoxFor(m => m.Senha,new { @type = "password",@id = "senha",@style = "width:320px;height:30px",placeholder = "Digite a senha" })<br />
+                        </div>
+                    </div>
+                </div>
+
+                
                 <br />
-                <button type="submit" title="Acessar o sistema" id="btOk" class="btn btn-primary"> Entrar</button>
+                <button type="submit" title="Acessar o sistema" id="btOk" class="btn btn-primary"><i class="fas fa-arrow-circle-right"></i>&nbsp; Entrar</button>
                 <span style="padding-left:5px"></span>
-                @Html.ActionLink("Criar conta", "Login_create", "Home", null, new { @class = "btn btn-info", title = "Criar uma nova conta no sistema" })
+                @Html.ActionLink(" Criar conta","Login_create","Home",null,new { @class = "btn btn-info fas fa-user-plus",title = "Criar uma nova conta no sistema" })
                 <span style="padding-left:5px"></span>
-                <a href="~/Files/Login Manual do Usuario.pdf" class="btn btn-secondary" target="_blank">Ajuda</a><br />
+                <a href="~/Files/Login Manual do Usuario.pdf" class="btn btn-success" target="_blank"> <i class="fas fa-question-circle"></i>&nbsp; Ajuda</a><br />
             </div>
 
             @*<label class="errorlabel" id="errorLabel">@ViewBag.Result</label>*@
