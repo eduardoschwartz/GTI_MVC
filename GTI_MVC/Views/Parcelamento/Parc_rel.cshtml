@@ -43,46 +43,108 @@
         border-radius: 4px;
     }
 
-    .errorlabel {
-        font-weight: normal;
-        color: red;
-        padding-left: 13px;
-        font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
     }
 </style>
 
+@{var res = ViewBag.Result;}
 <div class="center container" style="width:540px">
 
-    @using (Html.BeginForm("Parc_rel", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @using(Html.BeginForm("Parc_rel","Parcelamento",FormMethod.Post,new { @id = "MainForm",enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.Guid)
-    <div class="card">
-        <div class="card-header">Resumo dos Parcelamentos Efetuados</div>
-        <div class="card-body">
-            <table style="width:400px">
-                <tr>
-                    <td style="width:200px;font-size:13px">
-                        <label style="font-weight:normal">Data De:&nbsp;</label>
-                        @Html.TextBoxFor(x => x.DataDe, "{0:dd/MM/yyyy}", new { @id = "DataDe", @style = "width:90px;", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })
-                    </td>
-                    <td style="width:200px;font-size:13px">
-                        <label style="font-weight:normal">Data Até:&nbsp;</label>
-                        @Html.TextBoxFor(x => x.DataAte, "{0:dd/MM/yyyy}", new { @id = "DataAte", @style = "width:90px;", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })
-                    </td>
-                </tr>
-            </table>
+        <div class="card">
+            <div class="card-header">Resumo dos Parcelamentos Efetuados</div>
+            <div class="card-body">
+                <table style="width:400px">
+                    <tr>
+                        <td style="width:200px;font-size:13px">
+                            <label style="font-weight:normal">Data De:&nbsp;</label>
+                            @Html.TextBoxFor(x => x.DataDe,"{0:dd/MM/yyyy}",new { @id = "DataDe",@style = "width:90px;",@onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })
+                        </td>
+                        <td style="width:200px;font-size:13px">
+                            <label style="font-weight:normal">Data Até:&nbsp;</label>
+                            @Html.TextBoxFor(x => x.DataAte,"{0:dd/MM/yyyy}",new { @id = "DataAte",@style = "width:90px;",@onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })
+                        </td>
+                    </tr>
+                </table>
+                <br />
+                <button type="submit" class="btn btn-primary" id="btnPrint"><i class="fas fa-print"></i>&nbsp;Imprimir</button>
+            </div>
             <br />
-            <button type="submit" class="btn btn-primary" id="btnPrint">Imprimir</button>
+
+            <div class="card-footer">
+                @Html.ActionLink("Retornar ao menu de opções","Parc_index","Parcelamento",null,new { @class = "actionlink" })<br />
+                @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
+            </div>
         </div>
-        <br />
-        
-        <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
-        <div class="card-footer">
-            @Html.ActionLink("Retornar ao menu de opções", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<br />
-            @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
-        </div>
-    </div>
     }
 </div>
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
 
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+
+        });
+
+
+        
+
+
+    </script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+}
