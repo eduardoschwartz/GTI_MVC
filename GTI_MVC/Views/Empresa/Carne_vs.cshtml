@@ -7,15 +7,6 @@
 
 
 <style>
-    .textBoxBlue {
-        height: 25px;
-        position: relative;
-        border: 1px solid #0094ff;
-        border-color: rgba(0, 0, 0, .14);
-        background-color: white;
-        font-size: 14px;
-        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
-    }
 
     .center {
         margin: auto;
@@ -65,30 +56,15 @@
         <div class="card">
             <div class="card-header">Carnê de Vigilânica Sanitária</div>
             <div class="card-body">
-
-                <table width="500px">
-                    <tr>
-                        <td style="width:150px">@Html.LabelFor(m => m.Inscricao,new { @style = "font-weight:normal" })</td>
-                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao,new { @id = "codigo",@class = "textBoxBlue",@style = "max-width:100px",@onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
+                <table width="410px">
+                    <tr style="height:30px">
+                        <td style="width:130px"><label style="font-weight:normal;font-size:14px;padding-top:10px">Inscrição:</label></td>
+                        <td style="width:280px">@Html.TextBoxFor(m => m.Inscricao,new { @id = "codigo",@style = "Width:80px;font-size:14px",@onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
                     </tr>
-                    <tr style="height:40px">
-                        <td style="width:150px">
-                            @if(Model.CnpjValue == null) {
-                                @: CPF: &nbsp;<input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
-                                @:&nbsp; CNPJ: &nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
-                            } else {
-                                @: CPF: &nbsp;<input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" onclick="radioCheck()" />
-                                @:&nbsp; CNPJ: &nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" checked="checked" onclick="radioCheck()" />
-                            }
-                        </td>
-                        <td style="width:300px">
-                            @if(Model.CnpjValue == null) {
-                                @Html.TextBoxFor(m => m.CpfValue,new { @id = "cpfTxt",@class = "textBoxBlue",@style = "max-width:200px",@onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)",@placeholder = "Digite o nº do CPF" })
-                                @Html.TextBoxFor(m => m.CnpjValue,new { @id = "cnpjTxt",@class = "textBoxBlue",@style = "max-width:200px;display:none",@onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)",@placeholder = "Digite o nº do CNPJ" })
-                            } else {
-                                @Html.TextBoxFor(m => m.CpfValue,new { @id = "cpfTxt",@class = "textBoxBlue",@style = "max-width:200px;display:none",@onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)",@placeholder = "Digite o nº do CPF" })
-                                @Html.TextBoxFor(m => m.CnpjValue,new { @id = "cnpjTxt",@class = "textBoxBlue",@style = "max-width:200px",@onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)",@placeholder = "Digite o nº do CNPJ" })
-                            }
+                    <tr style="height:30px">
+                        <td style="width:130px;font-size:14px">Cpf/Cnpj:</td>
+                        <td style="width:280px">
+                            @Html.TextBoxFor(m => m.CpfValue,new { @id = "cpfcnpj",@name = "cpfcnpj",@style = "Width:160px;font-size:14px" })
                         </td>
                     </tr>
                 </table>
@@ -119,6 +95,27 @@
             $("#MainForm").submit(function () {
                 return ValidateForm();
             });
+
+            //Máscara Cpf/Cnpj
+            $("#cpfcnpj").keydown(function () {
+                try {
+                    $("#cpfcnpj").unmask();
+                } catch (e) { }
+                var tamanho = $("#cpfcnpj").val().length;
+                if (tamanho < 11) {
+                    $("#cpfcnpj").mask("999.999.999-99");
+                } else {
+                    $("#cpfcnpj").mask("99.999.999/9999-99");
+                }
+                var elem = this;
+                setTimeout(function () {
+                    elem.selectionStart = elem.selectionEnd = 10000;
+                }, 0);
+                var currentValue = $(this).val();
+                $(this).val('');
+                $(this).val(currentValue);
+            });
+
              $('#msgBox1').dialog({
                 autoOpen: false,
                 resizable: false,
@@ -165,50 +162,23 @@
             }
         });
 
-        function radioCheck() {
-            document.getElementById('cnpjTxt').value = "";
-            document.getElementById('cpfTxt').value = "";
-            if (document.getElementById('cpfCheck').checked) {
-                document.getElementById('cpfTxt').style.display = 'block';
-            }
-            else {
-                document.getElementById('cpfTxt').style.display = 'none';
-            }
-            if (document.getElementById('cnpjCheck').checked) {
-                document.getElementById('cnpjTxt').style.display = 'block';
-            }
-            else {
-                document.getElementById('cnpjTxt').style.display = 'none';
-            }
-        }
-
         function ValidateForm() {
             var _cod = document.getElementById('codigo').value;
-            var _cpf = document.getElementById('cpfTxt').value;
-            var _cnpj = document.getElementById('cnpjTxt').value;
+            var _cpf = document.getElementById('cpfcnpj').value;
 
             if (_cod == "" || parseInt(_cod) == 0) {
                 document.getElementById('lblMsg').innerHTML = "Digite a inscrição municipal";
                 $('#msgBox1').dialog('open');
                 return false;
             }
-            else {
-                if (parseInt(_cod) > 0 && _cpf == "" && _cnpj == "") {
-                    document.getElementById('lblMsg').innerHTML = "Digite o Cpf ou o CNPJ!";
-                    $('#msgBox1').dialog('open');
-                    return false;
-                }
+            if (parseInt(_cod) > 0 && _cpf == "") {
+                document.getElementById('lblMsg').innerHTML = "Digite o Cpf/CNPJ!";
+                $('#msgBox1').dialog('open');
+                return false;
             }
-            if (_cpf != "") {
-                if (!valida_Cpf(_cpf)) {
-                    document.getElementById('lblMsg').innerHTML = "Nº de CPF inválido!";
-                    $('#msgBox1').dialog('open');
-                    return false;
-                }
-            }
-            if (_cnpj != "") {
-                if (!valida_Cnpj(_cnpj)) {
-                    document.getElementById('lblMsg').innerHTML = "Nº de CNPJ inválido!";
+            if (_cpf != "" && !valida_Cpf(_cpf)) {
+                if (!valida_Cnpj(_cpf)) {
+                    document.getElementById('lblMsg').innerHTML = "Cpf/Cnpj inválido";
                     $('#msgBox1').dialog('open');
                     return false;
                 }

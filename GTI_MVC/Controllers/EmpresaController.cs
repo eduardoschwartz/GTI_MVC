@@ -44,18 +44,32 @@ namespace GTI_Mvc.Controllers {
             Empresa_bll empresaRepository = new Empresa_bll(_connection); 
             int _codigo = 0;
             bool _existeCod = false;
+            bool _bCpf = model.CpfValue.Length == 14 ? true : false;
+            string _cpf = Functions.RetornaNumero(model.CpfValue);
             EmpresaDetailsViewModel empresaDetailsViewModel = new EmpresaDetailsViewModel();
+
+            var response = Request["g-recaptcha-response"];
+            string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
+            var client = new WebClient();
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}",secretKey,response));
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+            string msg = status ? "Sucesso" : "Falha";
+            if(!status) {
+                empresaDetailsViewModel.ErrorMessage = "Recaptcha inválido.";
+                return View(empresaDetailsViewModel);
+            }
+                       
 
             if (model.Inscricao != null) {
                 _codigo = Convert.ToInt32(model.Inscricao);
                 if (_codigo >= 100000 && _codigo < 210000) //Se estiver fora deste intervalo nem precisa checar se a empresa existe
                     _existeCod = empresaRepository.Existe_Empresa(_codigo);
             } else {
-                if (model.CnpjValue != null) {
-                    string _cnpj = model.CnpjValue;
-                    bool _valida = Functions.ValidaCNPJ(_cnpj); //CNPJ válido?
+                if (!_bCpf) {
+                    bool _valida = Functions.ValidaCNPJ(_cpf); //CNPJ válido?
                     if (_valida) {
-                        _codigo = empresaRepository.ExisteEmpresaCnpj(_cnpj);
+                        _codigo = empresaRepository.ExisteEmpresaCnpj(_cpf);
                         if (_codigo > 0)
                             _existeCod = true;
                     } else {
@@ -64,7 +78,6 @@ namespace GTI_Mvc.Controllers {
                     }
                 } else {
                     if (model.CpfValue != null) {
-                        string _cpf = model.CpfValue;
                         bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
                         if (_valida) {
                             _codigo = empresaRepository.ExisteEmpresaCpf(_cpf);
@@ -77,23 +90,6 @@ namespace GTI_Mvc.Controllers {
                         }
                     }
                 }
-            }
-
-            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-            //    empresaDetailsViewModel.ErrorMessage = "Código de verificação inválido.";
-            //    return View(empresaDetailsViewModel);
-            //}
-
-            var response = Request["g-recaptcha-response"];
-            string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
-            var client = new WebClient();
-            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}",secretKey,response));
-            var obj = JObject.Parse(result);
-            var status = (bool)obj.SelectToken("success");
-            string msg = status ? "Sucesso" : "Falha";
-            if (!status) {
-                empresaDetailsViewModel.ErrorMessage = "Recaptcha inválido.";
-                return View(empresaDetailsViewModel);
             }
 
             if (_existeCod) {
@@ -999,37 +995,11 @@ namespace GTI_Mvc.Controllers {
         [ValidateAntiForgeryToken]
         public ActionResult Carne_tl(CertidaoViewModel model) {
             int _codigo = Convert.ToInt32(model.Inscricao);
-            string _cpf =   model.CpfValue==null?"":Functions.RetornaNumero(model.CpfValue);
-            string _cnpj = model.CnpjValue == null ? "" : Functions.RetornaNumero(model.CnpjValue);
             int _ano = 2021;
-
+            bool _bCpf = model.CpfValue.Length == 14 ? true : false;
+            string _cpf = Functions.RetornaNumero(model.CpfValue);
             ViewBag.Result = "";
-            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-            //    ViewBag.Result = "Código de verificação inválido.";
-            //    return View(model);
-            //}
-
-            Empresa_bll empresaRepository = new Empresa_bll(_connection);
-            bool bFind = empresaRepository.Existe_Empresa(_codigo);
-            if (bFind) {
-                EmpresaStruct _empresa = empresaRepository.Retorna_Empresa(_codigo);
-                if (_cpf!="") {
-                    if (Convert.ToInt64(Functions.RetornaNumero(_empresa.Cpf_cnpj)).ToString("00000000000") !=  _cpf) {
-                        ViewBag.Result = "CPF não pertence ao proprietário desta empresa!";
-                        return View(model);
-                    }
-                } else {
-                    if (Convert.ToInt64(Functions.RetornaNumero(_empresa.Cpf_cnpj)).ToString("00000000000000") != _cnpj) {
-                       ViewBag.Result = "CNPJ não pertence ao proprietário desta empresa!";
-                        return View(model);
-                    }
-                }
-            } else {
-                ViewBag.Result = "Inscrição Municipal não cadastrada!";
-                return View(model);
-            }
-
-
+   
             var response = Request["g-recaptcha-response"];
             var client = new WebClient();
             string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
@@ -1042,6 +1012,25 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
+            bool bFind = empresaRepository.Existe_Empresa(_codigo);
+            if (bFind) {
+                EmpresaStruct _empresa = empresaRepository.Retorna_Empresa(_codigo);
+                if (_bCpf) {
+                    if (Convert.ToInt64(Functions.RetornaNumero(_empresa.Cpf_cnpj)).ToString("00000000000") !=   _cpf) {
+                        ViewBag.Result = "CPF não pertence ao proprietário desta empresa!";
+                        return View(model);
+                    }
+                } else {
+                    if (Convert.ToInt64(Functions.RetornaNumero(_empresa.Cpf_cnpj)).ToString("00000000000000") != _cpf) {
+                       ViewBag.Result = "CNPJ não pertence ao proprietário desta empresa!";
+                        return View(model);
+                    }
+                }
+            } else {
+                ViewBag.Result = "Inscrição Municipal não cadastrada!";
+                return View(model);
+            }
 
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
 
@@ -1382,33 +1371,11 @@ namespace GTI_Mvc.Controllers {
         [ValidateAntiForgeryToken]
         public ActionResult Carne_vs(CertidaoViewModel model) {
             int _codigo = Convert.ToInt32(model.Inscricao);
-            string _cpf = model.CpfValue == null ? "" : Functions.RetornaNumero(model.CpfValue);
-            string _cnpj = model.CnpjValue == null ? "" : Functions.RetornaNumero(model.CnpjValue);
             int _ano = 2021;
+            bool _bCpf = model.CpfValue.Length == 14 ? true : false;
+            string _cpf = Functions.RetornaNumero(model.CpfValue);
 
             ViewBag.Result = "";
-
-
-            Empresa_bll empresaRepository = new Empresa_bll(_connection);
-            bool bFind = empresaRepository.Existe_Empresa(_codigo);
-            if (bFind) {
-                EmpresaStruct _empresa = empresaRepository.Retorna_Empresa(_codigo);
-                if (_cpf != "") {
-                    if (Convert.ToInt64(Functions.RetornaNumero(_empresa.Cpf_cnpj)).ToString("00000000000") != _cpf) {
-                        ViewBag.Result = "CPF não pertence ao proprietário desta empresa!";
-                        return View(model);
-                    }
-                } else {
-                    if (Convert.ToInt64(Functions.RetornaNumero(_empresa.Cpf_cnpj)).ToString("00000000000000") != _cnpj) {
-                        ViewBag.Result = "CNPJ não pertence ao proprietário desta empresa!";
-                        return View(model);
-                    }
-                }
-            } else {
-                ViewBag.Result = "Inscrição Municipal não cadastrada!";
-                return View(model);
-            }
-
             var response = Request["g-recaptcha-response"];
             var client = new WebClient();
             string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
@@ -1421,9 +1388,27 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
+            bool bFind = empresaRepository.Existe_Empresa(_codigo);
+            if (bFind) {
+                EmpresaStruct _empresa = empresaRepository.Retorna_Empresa(_codigo);
+                if (_bCpf ) {
+                    if (Convert.ToInt64(Functions.RetornaNumero(_empresa.Cpf_cnpj)).ToString("00000000000") != _cpf) {
+                        ViewBag.Result = "CPF não pertence ao proprietário desta empresa!";
+                        return View(model);
+                    }
+                } else {
+                    if (Convert.ToInt64(Functions.RetornaNumero(_empresa.Cpf_cnpj)).ToString("00000000000000") != _cpf) {
+                        ViewBag.Result = "CNPJ não pertence ao proprietário desta empresa!";
+                        return View(model);
+                    }
+                }
+            } else {
+                ViewBag.Result = "Inscrição Municipal não cadastrada!";
+                return View(model);
+            }
 
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
-
             Paramparcela _parametro_parcela = tributarioRepository.Retorna_Parametro_Parcela(_ano, (int)TipoCarne.Vigilancia);
             int _qtde_parcela = (int)_parametro_parcela.Qtdeparcela;
 

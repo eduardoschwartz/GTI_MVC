@@ -141,7 +141,7 @@
                                 Data de Encerramento
                             </td>
                             <td>
-                                @if (Model.EmpresaStruct.Data_Encerramento.HasValue) {
+                                @if(Model.EmpresaStruct.Data_Encerramento.HasValue) {
                                     @Convert.ToDateTime(Model.EmpresaStruct.Data_Encerramento).ToString("dd/MM/yyyy");
                                     @Html.HiddenFor(modelItem => Model.EmpresaStruct.Data_Encerramento)
                                 }
@@ -223,7 +223,7 @@
                 </table>
                 <br />
 
-                <input type="submit" value="Imprimir" title="Imprimir ficha cadastral." style="margin-left:1px" class="btn btn-primary" />
+                <button type="submit" class="btn btn-primary" title="Imprimir ficha cadastral."><i class="fas fa-print"></i>&nbsp; Imprimir</button>
             </div>
             <div class="card-footer">
                 @Html.ActionLink("Consultar outra empresa", "Details", "Empresa", null, new { @class = "actionlink" })<br />
