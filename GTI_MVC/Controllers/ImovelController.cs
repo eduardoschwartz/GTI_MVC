@@ -881,11 +881,11 @@ namespace GTI_Mvc.Controllers {
                 }
 
                 bool _bCpf = model.CpfValue.Length == 14 ? true : false;
+                string _cpf = Functions.RetornaNumero(model.CpfValue);
                 if(!_bCpf) {
-                    string _cnpj = Functions.RetornaNumero(model.CnpjValue);
-                    bool _valida = Functions.ValidaCNPJ(_cnpj); //CNPJ válido?
+                    bool _valida = Functions.ValidaCNPJ(_cpf); //CNPJ válido?
                     if(_valida) {
-                        _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo,Functions.RetornaNumero(_cnpj));
+                        _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo,_cpf);
                     } else {
                         model.ErrorMessage = "Cnpj inválido.";
                         return View(model);
@@ -895,10 +895,9 @@ namespace GTI_Mvc.Controllers {
                         return View(model);
                     }
                 } else {
-                    string _cpf = Functions.RetornaNumero(model.CpfValue);
                     bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
                     if(_valida) {
-                        _existeCod = imovelRepository.Existe_Imovel_Cpf(_codigo,Functions.RetornaNumero(_cpf));
+                        _existeCod = imovelRepository.Existe_Imovel_Cpf(_codigo,_cpf);
                     } else {
                         model.ErrorMessage = "Cpf inválido.";
                         return View(model);
