@@ -232,6 +232,7 @@
     <Compile Include="Controllers\ItbiController.cs" />
     <Compile Include="Controllers\MiscController.cs" />
     <Compile Include="Controllers\ParcelamentoController.cs" />
+    <Compile Include="Controllers\PlataformaController.cs" />
     <Compile Include="Controllers\ProtocoloController.cs" />
     <Compile Include="Controllers\RedeSimController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
@@ -960,8 +961,8 @@
     <Content Include="Views\Tributario\Notificacao_iss.cshtml" />
     <Content Include="Views\Tributario\Notificacao_menu.cshtml" />
     <Content Include="Views\Tributario\Notificacao_query.cshtml" />
-    <Content Include="Views\Tributario\Rod_menu.cshtml" />
-    <Content Include="Views\Tributario\Rod_plat_query.cshtml" />
+    <Content Include="Views\Plataforma\Rod_menu.cshtml" />
+    <Content Include="Views\Plataforma\Rod_plat_query.cshtml" />
     <Content Include="Views\Empresa\Carne_tl.cshtml" />
     <Content Include="Views\Empresa\Carne_vs.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
