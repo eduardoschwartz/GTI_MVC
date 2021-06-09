@@ -1,0 +1,155 @@
+﻿@model GTI_Mvc.ViewModels.RodoviariaViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Menu de Opções";
+}
+<link href="~/css/gti.css" rel="stylesheet" />
+<style>
+    .center {
+        margin: auto;
+        width: 450px;
+        /*        border: 1px solid rgba(0,0,0,0.24);*/
+        /*        padding: 20px;
+            box-shadow: 0 .1em 0.5em #000;
+            border-radius: 13px;*/
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
+</style>
+<br />
+
+@{var res = @ViewBag.Result;}
+@using(Html.BeginForm("Rod_menu","Plataforma",FormMethod.Post,new { @id = "MainForm" })) {
+    @Html.AntiForgeryToken()
+    <div class="center">
+        <div class="container" style="width:460px">
+            <div class="card">
+                <div class="card-header">
+                    Uso de Plataforma (Terminal Rodoviário)
+                </div>
+                <div class="card-body">
+                    <label style="font-weight:normal">Selecione a empresa:</label><br />
+                    @Html.DropDownListFor(m => m.Codigo,ViewBag.Lista_Empresa as SelectList,null,new { @id = "EmpresaDropDown",style = "width:390px;height:25px",rows = 10 })
+             
+                    <br /><br />
+                    <div style="text-align:center">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i>&nbsp;Selecionar</button>
+                    </div>
+
+
+                    @Html.HiddenFor(m => m.Nome,new { @id = "Nome_tmp" })
+                </div>
+                <div class="card-footer">
+                    @Html.ActionLink("Retornar ao menu de opções","sysMenu","Home",null,new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
+
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            document.getElementById('Nome_tmp').value = $('#EmpresaDropDown :selected').text();;
+            $("#EmpresaDropDown").change(function () {
+                document.getElementById('Nome_tmp').value = $('#EmpresaDropDown :selected').text();;
+            });
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+
+        });
+
+
+
+    </script>
+}

@@ -87,7 +87,6 @@
                 <div class="card-header">RedeSim - Importação de arquivos</div>
                 <div class="card-body">
                     <input type="file" name="files" id="files" multiple="multiple" accept="text/xml" /><br /><br />
-                    @*<input type="file" name="files" id="files" multiple="multiple" accept=".csv,text/xml" /><br /><br />*@
                     <div><button type="submit" class="btn btn-info">Enviar</button><br /><br /></div>
                     @if(Model.ListaArquivo.Count > 0) {
                         foreach(GTI_Mvc.ViewModels.RedesimImportFilesViewModel arq in Model.ListaArquivo) {

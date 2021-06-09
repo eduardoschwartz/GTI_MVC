@@ -33,6 +33,7 @@
         width: 450px;
         margin: 200px, auto;
     }
+
     .card-header {
         background-color: mistyrose;
         color: brown;
@@ -58,31 +59,27 @@
         border-radius: 4px;
     }
 
-    .errorlabel {
-        font-weight: normal;
-        color: red;
-        padding-left: 13px;
-        font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
     }
-    
+
+
 </style>
 
+@{var res = @ViewBag.Error;}
 <div class="center">
-
-    @using (Html.BeginForm("Rod_plat_query", "Tributario", FormMethod.Post, new { @id = "MainForm" })) {
+    @using(Html.BeginForm("Rod_plat_query","Plataforma",FormMethod.Post,new { @id = "MainForm",enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
         <div class="container" style="width:700px">
             <div class="card">
                 <div class="card-header">
-                    @*@Html.HiddenFor(m => m.DataDeTmp, new { @id = "DataDeTmp" })*@
 
                     Consulta ao uso da plataforma
                     <label style="font-weight:normal;color:black;padding-left:200px">
                         Exercício:&nbsp;
-                        @Html.DropDownListFor(m => m.Ano, ViewBag.ListaAno as SelectList, null, new { @id = "AnoDropDown" })
+                        @Html.DropDownListFor(m => m.Ano,ViewBag.ListaAno as SelectList,null,new { @id = "AnoDropDown" })
                     </label>  <br />
-                    @Html.HiddenFor(m=>m.Codigo,new { id="Codigo"})
+                    @Html.HiddenFor(m => m.Codigo,new { id = "Codigo" })
                     <Label>Empresa:&nbsp;@Model.Codigo.ToString()&nbsp;-&nbsp;@Model.Nome</Label>
 
                 </div>
@@ -104,7 +101,7 @@
                             </tr>
                         </thead>
                         <tbody id="tblComprador" class="topics" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
-                            @foreach (var item in Model.Lista_uso_plataforma) {
+                            @foreach(var item in Model.Lista_uso_plataforma) {
                                 <tr>
                                     <td style="width:85px;font-weight:normal;text-align:center"> @Convert.ToDateTime(item.Datade).ToString("dd/MM/yyyy")</td>
                                     <td style="width:85px;font-weight:normal;text-align:center"> @Convert.ToDateTime(item.Dataate).ToString("dd/MM/yyyy")</td>
@@ -115,9 +112,9 @@
                                     <td style="width:100px;font-weight:normal;text-align:center">@Html.DisplayFor(modelItem => item.Numero_Guia)</td>
                                     <td style="width:100px;font-weight:normal;text-align:left">@Html.DisplayFor(modelItem => item.Situacao_Nome)</td>
                                     <td style="width:80px">
-                                        @if (item.Situacao == 7) {
-                                            <a href="@Url.Action("Rod_uso_plataforma_print", "Tributario", new { p1 = item.Datade, p2 = item.Dataate, p3 = item.Seq, p4 = item.Codigo })" title="Imprimir a Guia" onclick="return confirm('Boletos liberados até as 16:30h podem ser quitados a partir do dia seguinte de sua liberação, após às 16:30h será necessário mais um dia útil para o registro. Você deseja emitir o boleto?')"> <img src="@Url.Content("~/images/print.png")"></a>
-                                            <a href="@Url.Action("Rod_uso_plataforma_cancel", "Tributario", new { p1 = item.Datade, p2 = item.Dataate, p3 = item.Seq, p4 = item.Codigo ,p5=item.Numero_Guia })" onclick="return confirm('Cancelar esta apuração?')"  title="Cancelar Apuração"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
+                                        @if(item.Situacao == 7) {
+                                            <a href="@Url.Action("Rod_uso_plataforma_print", "Plataforma", new { p1 = item.Datade, p2 = item.Dataate, p3 = item.Seq, p4 = item.Codigo })" title="Imprimir a Guia" onclick="return confirm('Boletos liberados até as 16:30h podem ser quitados a partir do dia seguinte de sua liberação, após às 16:30h será necessário mais um dia útil para o registro. Você deseja emitir o boleto?')"> <img src="@Url.Content("~/images/print.png")"></a>
+                                            <a href="@Url.Action("Rod_uso_plataforma_cancel", "Plataforma", new { p1 = item.Datade, p2 = item.Dataate, p3 = item.Seq, p4 = item.Codigo ,p5=item.Numero_Guia })" onclick="return confirm('Cancelar esta apuração?')" title="Cancelar Apuração"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
                                         }
                                     </td>
                                 </tr>
@@ -133,18 +130,18 @@
                 </div>
                 <div class="card-footer">
                     <a style="cursor:pointer" onclick="NewData()">Adicionar período de utilização da plataforma</a><br />
-                    @Html.ActionLink("Retornar ao menu de opções", "Rod_menu", "Tributario", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu de opções","Rod_menu","Plataforma",null,new { @class = "actionlink" })<br />
 
                 </div>
             </div>
-      
+
 
         </div>
-    }
 
+  
 
     <!-- Modal -->
-    <div  class="modal fade" id="GuiaModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="GuiaModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-ku" role="document">
             <div class="modal-content" style="font-family: Arial, Helvetica, sans-serif;">
                 <div class="modal-header">
@@ -155,11 +152,11 @@
                         <tr>
                             <td style="width:200px;font-size:13px">
                                 <label style="font-weight:normal">Data De:&nbsp;</label>
-                                @Html.TextBoxFor(x => x.DataDe, "{0:dd/MM/yyyy}", new { @id="DataDe", @style = "width:90px;", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)", @data_picker = "date-picker", @Value = DateTime.Now.ToShortDateString() })
+                                @Html.TextBoxFor(x => x.DataDe,"{0:dd/MM/yyyy}",new { @id = "DataDe",@style = "width:90px;",@onKeyPress = "return formata(this, '§§/§§/§§§§', event)",@data_picker = "date-picker",@Value = DateTime.Now.ToShortDateString() })
                             </td>
                             <td style="width:200px;font-size:13px">
                                 <label style="font-weight:normal">Data Até:&nbsp;</label>
-                                @Html.TextBoxFor(x => x.DataAte, "{0:dd/MM/yyyy}", new { @id = "DataAte", @style = "width:90px;", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)", @data_picker = "date-picker", @Value = DateTime.Now.ToShortDateString() })
+                                @Html.TextBoxFor(x => x.DataAte,"{0:dd/MM/yyyy}",new { @id = "DataAte",@style = "width:90px;",@onKeyPress = "return formata(this, '§§/§§/§§§§', event)",@data_picker = "date-picker",@Value = DateTime.Now.ToShortDateString() })
                             </td>
                         </tr>
                     </table>
@@ -172,7 +169,7 @@
                                 <label style="font-weight:normal">Qtde até 39km:</label>
                             </td>
                             <td style="width:80px">
-                                @Html.TextBoxFor(x => x.Qtde1, null, new {@id="Qtde1", @style = "width:50px;", @onKeyPress = "return formata(this, '§§§§', event)" ,@Value="" })
+                                @Html.TextBoxFor(x => x.Qtde1,null,new { @id = "Qtde1",@style = "width:50px;",@onKeyPress = "return formata(this, '§§§§', event)",@Value = "" })
                             </td>
                         </tr>
                         <tr>
@@ -180,7 +177,7 @@
                                 <label style="font-weight:normal">Qtde de 40km até 79,9km:</label>
                             </td>
                             <td style="width:80px">
-                                @Html.TextBoxFor(x => x.Qtde2, null, new { @id = "Qtde2", @style = "width:50px;", @onKeyPress = "return formata(this, '§§§§', event)", @Value = "" })
+                                @Html.TextBoxFor(x => x.Qtde2,null,new { @id = "Qtde2",@style = "width:50px;",@onKeyPress = "return formata(this, '§§§§', event)",@Value = "" })
                             </td>
                         </tr>
                         <tr>
@@ -188,23 +185,41 @@
                                 <label style="font-weight:normal">Qtde acima de 79,9km:</label>
                             </td>
                             <td style="width:80px">
-                                @Html.TextBoxFor(x => x.Qtde3, null, new { @id = "Qtde3", @style = "width:50px;", @onKeyPress = "return formata(this, '§§§§', event)", @Value = "" })
+                                @Html.TextBoxFor(x => x.Qtde3,null,new { @id = "Qtde3",@style = "width:50px;",@onKeyPress = "return formata(this, '§§§§', event)",@Value = "" })
                             </td>
                         </tr>
                     </table>
+                    <br />
+                    <label style="font-size:14px;color:brown;padding-left:3px">Anexar arquivo</label>
 
-                    <label style="font-weight:normal;color:red;padding-left:7px" id="errorGuia">@ViewBag.Error</label>
+                    <input style="width:610px;font-size:12px" type="file" name="files" id="files" accept="application/pdf" /><br /><br />
+                    @*<div><button type="submit" class="btn btn-info">Enviar</button><br /><br /></div>*@
+
+
+                    <article style="text-align:justify;font-weight:bold;font-size:13px">
+                        Código Penal - Art.299:&nbsp;<span style="font-weight:normal"> Omitir, em documento público ou particular, declaração que dele devia constar, ou nele inserir ou fazer inserir declaração falsa ou diversa da que devia ser escrita, com o fim de prejudicar direito, criar obrigação ou alterar a verdade sobre fato juridicamente relevante.</span>
+                    </article>
+
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="btnGuiaOk" onclick="return ValidateForm()">Incluir</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success" id="btnGuiaOk" onclick="return ValidateForm()"><i class="fas fa-save"></i>&nbsp;Gravar</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-ban"></i>&nbsp;Cancelar</button>
                 </div>
             </div>
         </div>
     </div>
-
+    }
 
 </div>
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Error</p>
+</div>
+
 
 @section scripts{
 
@@ -227,18 +242,65 @@
                 }
             });
 
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".ui-dialog").css({
+                zIndex: '1060'
+            });
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+
         });
 
         function NewData() {
             $('#GuiaModal').modal();
-            document.getElementById('errorGuia').innerHTML = "";
+
+        //    document.getElementById('errorGuia').innerHTML = "";
         }
 
         function ValidateForm() {
-            ClearError();
             var _data1 = document.getElementById('DataDe').value;
             if (!Valida_Data(_data1)) {
-                document.getElementById('errorGuia').innerHTML = "Data inicial inválida";
+                document.getElementById('lblMsg').innerHTML = "Data inicial inválida";
+                $('#msgBox1').dialog('open');
                 return false;
             }
             var _data2 = document.getElementById('DataAte').value;
@@ -247,7 +309,8 @@
                 return false;
             }
             if (DataMaior(_data1, _data2)) {
-                document.getElementById('errorGuia').innerHTML = "Data inicial maior que data final";
+                document.getElementById('lblMsg').innerHTML = "Data inicial maior que data final";
+                $('#msgBox1').dialog('open');
                 return false;
             }
 
@@ -256,7 +319,8 @@
             var d1 = RetornaAno(_data1);
             var d2 = RetornaAno(_data2);
             if (d1 != d || d2 != d) {
-                document.getElementById('errorGuia').innerHTML = "Intervalo de datas fora do ano selecionado";
+                document.getElementById('lblMsg').innerHTML = "Intervalo de datas fora do ano selecionado";
+                $('#msgBox1').dialog('open');
                 return false;
             }
 
@@ -276,17 +340,18 @@
                             status = row.cells[7].innerHTML;
                             if (status != "Cancelado") {
                                 if (DataIntervalo(_data1, data1, data2)) {
-                                    document.getElementById('errorGuia').innerHTML = "Intervalo de datas já cadastrado";
+                                    document.getElementById('lblMsg').innerHTML = "Intervalo de datas já cadastrado";
+                                    $('#msgBox1').dialog('open');
                                     return false;
                                 }
                                 if (DataIntervalo(_data2, data1, data2)) {
-                                    document.getElementById('errorGuia').innerHTML = "Intervalo de datas já cadastrado";
+                                    document.getElementById('lblMsg').innerHTML = "Intervalo de datas já cadastrado";
+                                    $('#msgBox1').dialog('open');
                                     return false;
                                 }
                             }
                         }
                     }
-
                 }
             }
 
@@ -311,46 +376,48 @@
                 _bqtde3 = false;
             }
             if (!_bqtde1 && !_bqtde2 && !_bqtde3) {
-                document.getElementById('errorGuia').innerHTML = "Nenhuma quantidade informada";
+                document.getElementById('lblMsg').innerHTML = "Nenhuma quantidade informada";
+                $('#msgBox1').dialog('open');
                 return false;
             }
 
             $('#GuiaModal').modal('hide');
-            sendForm(_data1, _data2,_qtde1,_qtde2,_qtde3,_codigo);
+            $("#MainForm").submit();
+          //  sendForm(_data1, _data2, _qtde1, _qtde2, _qtde3, _codigo);
             return true;
         }
 
-        function sendForm(_dataDe, _dataAte, _qtde1, _qtde2, _qtde3, _codigo) {
-            var _origem = location.origin;
-            var _newurl = "/Tributario/Rod_plat_query"; 
-            if (_origem.indexOf("sistemas") > -1) {    
-                 _newurl = "/gti/Tributario/Rod_plat_query";
-            }
-            $.ajax({
-                type: "Post",
-                url: _newurl,
-                dataType: 'json',
-                data: {
-                    DataDe: _dataDe,
-                    DataAte: _dataAte,
-                    Qtde1: _qtde1,
-                    Qtde2: _qtde2,
-                    Qtde3: _qtde3,
-                    Codigo: _codigo
-                },
-                success: function (response,data) {
-                    alert(response.responseText);
-                    window.location.reload();
-                },
-                error: function (response) {
-                    alert("Ocorreu um erro!");   
-                }
-            });
-        };
+        //function sendForm(_dataDe, _dataAte, _qtde1, _qtde2, _qtde3, _codigo) {
+        //    var _origem = location.origin;
+        //    var _newurl = "/Plataforma/Rod_plat_query";
+        //    if (_origem.indexOf("sistemas") > -1) {
+        //        _newurl = "/gti/Plataforma/Rod_plat_query";
+        //    }
+        //    $.ajax({
+        //        type: "Post",
+        //        url: _newurl,
+        //        dataType: 'json',
+        //        data: {
+        //            DataDe: _dataDe,
+        //            DataAte: _dataAte,
+        //            Qtde1: _qtde1,
+        //            Qtde2: _qtde2,
+        //            Qtde3: _qtde3,
+        //            Codigo: _codigo
+        //        },
+        //        success: function (response, data) {
+        //            alert(response.responseText);
+        //            window.location.reload();
+        //        },
+        //        error: function (response) {
+        //            alert("Ocorreu um erro!");
+        //        }
+        //    });
 
-        function ClearError() {
-            document.getElementById('errorGuia').innerHTML = "";
-        }
+
+    
+
+       // };
 
         function Valida_Data(data) {
             if (data == "") {

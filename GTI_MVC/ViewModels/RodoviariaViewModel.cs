@@ -15,5 +15,6 @@ namespace GTI_Mvc.ViewModels {
         public int Qtde1 { get; set; }
         public int Qtde2 { get; set; }
         public int Qtde3 { get; set; }
+        public IEnumerable<HttpPostedFileBase> Files { get; set; }
     }
 }
