@@ -727,23 +727,25 @@ namespace GTI_Mvc.Controllers {
                 if (_codigo < 50000) {
                     _existeCod = imovelRepository.Existe_Imovel(_codigo);
                 }
-                if (model.CpfValue == null && model.CnpjValue == null) {
+                if (model.CpfValue == null ) {
                     ViewBag.Result = "Cpf/Cnpj não informado.";
                     return View(imovelDetailsViewModel);
                 }
-                
-                if (model.CnpjValue != null) {
-                    string _cnpj = Functions.RetornaNumero( model.CnpjValue);
-                    bool _valida = Functions.ValidaCNPJ(_cnpj); //CNPJ válido?
+                bool _bCpf = model.CpfValue.Length == 14 ? true : false;
+                string _cpf = Functions.RetornaNumero(model.CpfValue);
+
+                if(!_bCpf) {
+
+                    bool _valida = Functions.ValidaCNPJ(_cpf); //CNPJ válido?
                     if (_valida) {
-                        _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo, _cnpj);
+                        _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo, _cpf);
                     } else {
                         ViewBag.Result = "Cnpj inválido.";
                         return View(imovelDetailsViewModel);
                     }
                 } else {
                     if (model.CpfValue != null) {
-                        string _cpf = Functions.RetornaNumero( model.CpfValue);
+
                         bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
                         if (_valida) {
                             _existeCod = imovelRepository.Existe_Imovel_Cpf(_codigo, _cpf);
