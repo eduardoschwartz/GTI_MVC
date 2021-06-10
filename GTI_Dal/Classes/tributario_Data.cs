@@ -3014,7 +3014,7 @@ Proximo:;
                            join c in db.Itbi_Status on t.Situacao equals c.Codigo into lc from c in lc.DefaultIfEmpty()
                            where t.Codigo==Codigo && t.Datade.Year==Ano
                            orderby new { t.Datade,t.Seq } select new {Codigo= t.Codigo,DataDe=t.Datade,DataAte=t.Dataate,Seq=t.Seq,Qtde1=t.Qtde1,Qtde2=t.Qtde2,Qtde3=t.Qtde3,
-                           Numero_Guia=t.Numero_Guia,Valor_Guia=t.Valor_Guia,Situacao=t.Situacao,SituacaoNome=c.Descricao}).ToList();
+                           Numero_Guia=t.Numero_Guia,Valor_Guia=t.Valor_Guia,Situacao=t.Situacao,SituacaoNome=c.Descricao,AnexoNome=t.Anexo}).ToList();
                 List<Rodo_uso_plataforma_Struct> Lista = new List<Rodo_uso_plataforma_Struct>(); 
                 foreach (var item in Sql) {
                     Rodo_uso_plataforma_Struct reg = new Rodo_uso_plataforma_Struct() {
@@ -3028,7 +3028,8 @@ Proximo:;
                         Numero_Guia=item.Numero_Guia,
                         Valor_Guia=item.Valor_Guia,
                         Situacao=item.Situacao,
-                        Situacao_Nome=item.SituacaoNome
+                        Situacao_Nome=item.SituacaoNome,
+                        Anexo=item.AnexoNome
                     };
                     Lista.Add(reg);
                 }
@@ -3061,7 +3062,7 @@ Proximo:;
 
         public Exception Insert_Rodo_Uso_Plataforma(Rodo_uso_plataforma Reg) {
             using (var db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[11];
+                object[] Parametros = new object[12];
                 Parametros[0] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
                 Parametros[1] = new SqlParameter { ParameterName = "@datade", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Datade };
                 Parametros[2] = new SqlParameter { ParameterName = "@dataate", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Dataate };
@@ -3073,9 +3074,13 @@ Proximo:;
                 Parametros[8] = new SqlParameter { ParameterName = "@numero_guia", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_Guia };
                 Parametros[9] = new SqlParameter { ParameterName = "@valor_guia", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Valor_Guia };
                 Parametros[10] = new SqlParameter { ParameterName = "@situacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Situacao };
+                if(string.IsNullOrEmpty(Reg.Anexo))
+                    Parametros[11] = new SqlParameter { ParameterName = "@anexo",SqlValue = DBNull.Value };
+                else
+                    Parametros[11] = new SqlParameter { ParameterName = "@anexo",SqlDbType = SqlDbType.VarChar,SqlValue = Reg.Anexo };
 
-                db.Database.ExecuteSqlCommand("INSERT INTO rodo_uso_plataforma(codigo,datade,dataate,seq,seqdebito,qtde1,qtde2,qtde3,numero_guia,valor_guia,situacao) " +
-                                              "VALUES(@codigo,@datade,@dataate,@seq,@seqdebito,@qtde1,@qtde2,@qtde3,@numero_guia,@valor_guia,@situacao)", Parametros);
+                db.Database.ExecuteSqlCommand("INSERT INTO rodo_uso_plataforma(codigo,datade,dataate,seq,seqdebito,qtde1,qtde2,qtde3,numero_guia,valor_guia,situacao,anexo) " +
+                                              "VALUES(@codigo,@datade,@dataate,@seq,@seqdebito,@qtde1,@qtde2,@qtde3,@numero_guia,@valor_guia,@situacao,@anexo)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {

@@ -270,6 +270,18 @@ namespace GTI_MVC.Controllers
             };
             ex2 = tributarioRepository.Insert_Observacao_Parcela(ObsReg);
 
+            //Anexo
+            string fileName = "";
+            foreach(var file in model.Files) {
+                if(file.ContentLength > 0) {
+                    string _guid = Guid.NewGuid().ToString("N");
+                    string _path = "~/Files/Plataforma/" + _ano + "/";
+                    fileName = _guid + ".pdf";
+                    var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path),fileName);
+                    file.SaveAs(path);
+                }
+            }
+
             //Incluir rodo_uso_plataforma
             short _seq2 = tributarioRepository.Retorna_Ultima_Seq_Uso_Plataforma(_codigo,_data1,_data2);
             // _seq2++;
@@ -285,7 +297,8 @@ namespace GTI_MVC.Controllers
                 Qtde3 = _qtde3,
                 Numero_Guia = _novo_documento,
                 Valor_Guia = _valorGuia,
-                Situacao = 7 //não pago
+                Situacao = 7, //não pago
+                Anexo=fileName
             };
             ex2 = tributarioRepository.Insert_Rodo_Uso_Plataforma(regR);
 
@@ -320,16 +333,6 @@ namespace GTI_MVC.Controllers
             ex2 = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
             ex2 = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
 
-            //Anexo
-            foreach(var file in model.Files) {
-                if(file.ContentLength > 0) {
-                    string _guid = Guid.NewGuid().ToString("N");
-                    string _path = "~/Files/Plataforma/" + _ano + "/";
-                    var fileName = _guid + ".pdf";
-                    var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path),fileName);
-                    file.SaveAs(path);
-                }
-            }
 
             for(int i = 2020;i <= DateTime.Now.Year;i++) {
                 AnoList _reg = new AnoList() {
@@ -523,5 +526,31 @@ namespace GTI_MVC.Controllers
             return RedirectToAction("Rod_plat_query","Tributario",new { a = Encrypt(p4),c = Encrypt(_ano.ToString()) });
 
         }
+
+        public FileResult Rod_uso_plataforma_anexo(string p1,string p2) {
+
+            string _anexo = p2;
+            string _ano =(Convert.ToDateTime(p1)).Year.ToString();
+            string fullName = Server.MapPath("~");
+            fullName = Path.Combine(fullName,"Files");
+            fullName = Path.Combine(fullName,"Plataforma");
+            fullName = Path.Combine(fullName,_ano);
+            fullName = Path.Combine(fullName,_anexo);
+
+            byte[] fileBytes = GetFile(fullName);
+            return File(
+                fileBytes,System.Net.Mime.MediaTypeNames.Application.Octet,_anexo);
+
+        }
+
+        byte[] GetFile(string s) {
+            System.IO.FileStream fs = System.IO.File.OpenRead(s);
+            byte[] data = new byte[fs.Length];
+            int br = fs.Read(data,0,data.Length);
+            if(br != fs.Length)
+                throw new System.IO.IOException(s);
+            return data;
+        }
+
     }
 }

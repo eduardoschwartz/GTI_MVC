@@ -23,6 +23,7 @@ namespace GTI_Models.Models {
         public int Numero_Guia { get; set; }
         public decimal Valor_Guia { get; set; }
         public int Situacao { get; set; }
+        public string Anexo { get; set; }
     }
 
     public class Rodo_uso_plataforma_Struct {
@@ -38,6 +39,7 @@ namespace GTI_Models.Models {
         public decimal Valor_Guia { get; set; }
         public int Situacao { get; set; }
         public string Situacao_Nome { get; set; }
+        public string Anexo { get; set; }
     }
 
     
