@@ -622,6 +622,11 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Images\cancel2.png" />
+    <Content Include="Images\help.png" />
+    <Content Include="Images\OK.gif" />
+    <Content Include="Images\ok.png" />
+    <Content Include="Images\save.png" />
     <Content Include="webfonts\fa-brands-400.svg" />
     <Content Include="webfonts\fa-regular-400.svg" />
     <Content Include="webfonts\fa-solid-900.svg" />

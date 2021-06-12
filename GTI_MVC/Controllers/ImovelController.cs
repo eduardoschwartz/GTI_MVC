@@ -735,24 +735,22 @@ namespace GTI_Mvc.Controllers {
                 string _cpf = Functions.RetornaNumero(model.CpfValue);
 
                 if(!_bCpf) {
-
-                    bool _valida = Functions.ValidaCNPJ(_cpf); //CNPJ válido?
-                    if (_valida) {
+//                    bool _valida = Functions.ValidaCNPJ(_cpf); //CNPJ válido?
+//                    if (_valida) {
                         _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo, _cpf);
-                    } else {
-                        ViewBag.Result = "Cnpj inválido.";
-                        return View(imovelDetailsViewModel);
-                    }
+//                    } else {
+//                        ViewBag.Result = "Cnpj inválido.";
+//                        return View(imovelDetailsViewModel);
+//                    }
                 } else {
                     if (model.CpfValue != null) {
-
-                        bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
-                        if (_valida) {
+//                        bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
+//                        if (_valida) {
                             _existeCod = imovelRepository.Existe_Imovel_Cpf(_codigo, _cpf);
-                        } else {
-                            ViewBag.Result = "Cpf inválido.";
-                            return View(imovelDetailsViewModel);
-                        }
+ //                       } else {
+ //                           ViewBag.Result = "Cpf inválido.";
+ //                           return View(imovelDetailsViewModel);
+ //                       }
                     }
                 }
                 if (!_existeCod) {
@@ -885,25 +883,25 @@ namespace GTI_Mvc.Controllers {
                 bool _bCpf = model.CpfValue.Length == 14 ? true : false;
                 string _cpf = Functions.RetornaNumero(model.CpfValue);
                 if(!_bCpf) {
-                    bool _valida = Functions.ValidaCNPJ(_cpf); //CNPJ válido?
-                    if(_valida) {
+//                    bool _valida = Functions.ValidaCNPJ(_cpf); //CNPJ válido?
+//                    if(_valida) {
                         _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo,_cpf);
-                    } else {
-                        model.ErrorMessage = "Cnpj inválido.";
-                        return View(model);
-                    }
+//                    } else {
+//                        model.ErrorMessage = "Cnpj inválido.";
+//                        return View(model);
+//                    }
                     if(!_existeCod) {
                         model.ErrorMessage = "Este Cnpj não pertence ao imóvel.";
                         return View(model);
                     }
                 } else {
-                    bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
-                    if(_valida) {
+//                    bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
+//                    if(_valida) {
                         _existeCod = imovelRepository.Existe_Imovel_Cpf(_codigo,_cpf);
-                    } else {
-                        model.ErrorMessage = "Cpf inválido.";
-                        return View(model);
-                    }
+//                    } else {
+//                        model.ErrorMessage = "Cpf inválido.";
+//                        return View(model);
+//                    }
                     if(!_existeCod) {
                         model.ErrorMessage = "Este Cpf não pertence ao imóvel.";
                         return View(model);

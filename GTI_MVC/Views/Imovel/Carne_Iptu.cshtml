@@ -73,7 +73,8 @@
                 <br />
                 <div class="g-recaptcha" data-sitekey="6LfRjG0aAAAAAOEd4ksnWZYw3oX4cUsimIy7yOqD"></div>
                 <br />
-                <button type="submit" class="btn btn-primary"><i class="fas fa-print"></i>&nbsp; Imprimir</button>
+                <button type="submit" class="btn btn-primary"> <img src="~/Images/print.png" /> &nbsp; Imprimir
+                </button>
 
             </div>
 
@@ -179,14 +180,36 @@
                 document.getElementById('lblMsg').innerHTML = "Digite o código do imóvel";
                 $('#msgBox1').dialog('open');
                 return false;
-            }
-            else {
+            } else {
                 if (parseInt(_cod) > 0 && _cpf == "") {
                     document.getElementById('lblMsg').innerHTML = "Digite o Cpf ou o CNPJ!";
                     $('#msgBox1').dialog('open');
                     return false;
                 }
             }
+
+            //*** Valida CpfCnpj ***
+            if (_cpf.length == 14) {
+                if (!valida_Cpf(_cpf)) {
+                    document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido!";
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
+            } else {
+                if (_cpf.length == 18) {
+                    if (!valida_Cnpj(_cpf)) {
+                        document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido!";
+                        $('#msgBox1').dialog('open');
+                        return false;
+                    }
+                } else {
+                    document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido!";
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
+            }
+            //*********************
+
             return true;
         }
 
