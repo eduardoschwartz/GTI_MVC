@@ -18,6 +18,7 @@
 
     .actionlink {
         color: darkslateblue;
+        text-decoration:underline;
     }
 
     .card-header {
@@ -50,7 +51,7 @@
 </style>
 
 @{var res = Model.ErrorMessage;}
-<div class="center container" style="width:380px">
+<div class="center container" style="width:390px">
     @using(Html.BeginForm("Carne_Iptu","Imovel",FormMethod.Post,new { @id = "MainForm" })) {
         @Html.AntiForgeryToken()
         <div class="card">
@@ -73,6 +74,14 @@
                 <br />
                 <div class="g-recaptcha" data-sitekey="6LfRjG0aAAAAAOEd4ksnWZYw3oX4cUsimIy7yOqD"></div>
                 <br />
+                <span style="font-size:12px;font-weight:bold;color:brown;text-align:justify">Conforme <a href="~/Files/Decreto7408.pdf" style="font-weight:normal" class="actionlink">DECRETO Nº 7.408, DE 31 DE MAIO DE 2021</a><br />  </span><br />
+                <article style="text-align:justify;font-size:12px">
+                    <span style="font-weight:bold">Art. 2º</span>  Prorroga-se o prazo para cobrança de juros e multas do Imposto Predial e Territorial Urbano – IPTU das parcelas referentes aos meses de junho e julho:<br /><br />
+                    <span style="font-weight:bold">I –</span> A parcela com vencimento original em 15 de junho de 2021, poderá ser paga até o dia 15 de setembro de 2021;<br />
+                    <span style="font-weight:bold">II –</span> A parcela com vencimento original em 15 de julho de 2021, poderá ser paga até o dia 15 de outubro de 2021;<br />
+                    <br /><span style="font-size:12px;color:red">Por conta disso, as parcelas mencionadas terão suas datas de vencimento alteradas.</span>
+
+                </article><br />
                 <button type="submit" class="btn btn-primary"> <img src="~/Images/print.png" /> &nbsp; Imprimir
                 </button>
 
