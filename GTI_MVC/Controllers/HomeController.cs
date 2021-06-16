@@ -306,7 +306,7 @@ namespace GTI_Mvc.Controllers {
                 Nome = model.Usuario,
                 Email = model.Email,
                 Telefone = model.Telefone,
-                Cpf_Cnpj = model.CpfValue.Length > 14 ? Functions.RetornaNumero(model.CnpjValue) : Functions.RetornaNumero(model.CpfValue),
+                Cpf_Cnpj =  Functions.RetornaNumero(model.CpfValue),
                 Senha =Functions.Encrypt(model.Senha2),
                 Data_Cadastro=DateTime.Now,
                 Ativo=false,

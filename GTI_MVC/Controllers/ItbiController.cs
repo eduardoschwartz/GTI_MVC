@@ -17,6 +17,7 @@ using System.Web.Mvc;
 using static GTI_Models.modelCore;
 using System.Configuration;
 using System.Data.SqlClient;
+using MMLib.Extensions;
 
 namespace GTI_Mvc.Controllers {
     public class ItbiController : Controller {
@@ -202,7 +203,7 @@ namespace GTI_Mvc.Controllers {
                     ListAnexoEditorViewModel regA = new ListAnexoEditorViewModel() {
                         Seq = itemA.Seq,
                         Nome = itemA.Descricao,
-                        Arquivo = itemA.Arquivo
+                        Arquivo = itemA.Arquivo.RemoveDiacritics()
                     };
                     model.Lista_Anexo.Add(regA);
                 }
@@ -437,6 +438,7 @@ namespace GTI_Mvc.Controllers {
                             string _ano = model.Itbi_Ano == 0 ? DateTime.Now.Year.ToString() : model.Itbi_Ano.ToString();
                             string _path = "~/Files/Itbi/" + _ano + "/";
                             var fileName = Path.GetFileName(file.FileName);
+                            fileName = fileName.RemoveDiacritics();
                             Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath(_path) + model.Guid);
                             var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path + model.Guid), fileName);
                             file.SaveAs(path);
@@ -844,6 +846,7 @@ namespace GTI_Mvc.Controllers {
                             string _ano = model.Itbi_Ano == 0 ? DateTime.Now.Year.ToString() : model.Itbi_Ano.ToString();
                             string _path = "~/Files/Itbi/" + _ano + "/";
                             var fileName = Path.GetFileName(file.FileName);
+                            fileName = fileName.RemoveDiacritics();
                             Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath(_path) + model.Guid);
                             var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path + model.Guid), fileName);
                             file.SaveAs(path);
@@ -1321,6 +1324,7 @@ namespace GTI_Mvc.Controllers {
                             string _ano = model.Itbi_Ano == 0 ? DateTime.Now.Year.ToString() : model.Itbi_Ano.ToString();
                             string _path = "~/Files/Itbi/" + _ano + "/";
                             var fileName = Path.GetFileName(file.FileName);
+                            fileName = fileName.RemoveDiacritics();
                             Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath(_path) + model.Guid);
                             var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path + model.Guid), fileName);
                             file.SaveAs(path);
@@ -1682,6 +1686,7 @@ namespace GTI_Mvc.Controllers {
                             string _ano = model.Itbi_Ano == 0 ? DateTime.Now.Year.ToString() : model.Itbi_Ano.ToString();
                             string _path = "~/Files/Itbi/" + _ano + "/";
                             var fileName = Path.GetFileName(file.FileName);
+                            fileName = fileName.RemoveDiacritics();
                             Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath(_path) + model.Guid);
                             var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path + model.Guid), fileName);
                             file.SaveAs(path);
