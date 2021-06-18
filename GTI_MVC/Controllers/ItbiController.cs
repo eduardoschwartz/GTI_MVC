@@ -2930,7 +2930,6 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_isencao")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Itbi_isencao(ItbiViewModel model, string natureza, string action) {
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             if (action == "btnValida") {

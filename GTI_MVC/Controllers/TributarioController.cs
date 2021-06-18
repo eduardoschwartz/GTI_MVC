@@ -1084,7 +1084,7 @@ namespace GTI_Mvc.Controllers {
             };
             decimal _somaP = 0,_somaJ=0,_somaM=0,_somaC=0,_somaT=0,_somaH=0;
 
-            bool IsRefis = false, DebitoAnoAtual = false, DebitoNoRefis=false;
+            bool IsRefis = true, DebitoAnoAtual = false, DebitoNoRefis=false;
             int nPlano = 0;
             decimal nPerc = 0;
 

@@ -82,6 +82,7 @@ namespace GTI_Models.Models {
         public int? Ano_execucao { get; set; }
         public string Processo_CNJ { get; set; }
         public bool? Registrado { get; set; }
+        public short Numero_Parcela_Old { get; set; }
     }
 
     public class DebitoStructureWeb {

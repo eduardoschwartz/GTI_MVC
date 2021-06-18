@@ -66,25 +66,34 @@
 <div class="center container" style="width:440px">
     @using(Html.BeginForm("Dama","Tributario",FormMethod.Post,new { @id = "MainForm" })) {
         @Html.AntiForgeryToken()
-        <div class="card">
-            <div class="card-header">Consulta e atualização de débitos vencidos</div>
-            <div class="card-body">
-                <table>
-                    <tr>
-                        <td style="padding-top:7px; width:170px"><label style="font-weight:normal">Data de pagamento:&nbsp;</label></td>
-                        <td style="width:200px">@Html.TextBoxFor(m => m.DataVencimento,new { @id = "vencto",@class = "maskData",@style = "max-width:90px;font-size:14px",@onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })</td>
-                    </tr>
+    <div class="card">
+        <div class="card-header">Consulta e atualização de débitos vencidos</div>
+        <div class="card-body">
+            <table>
+                <tr>
+                    <td style="padding-top:7px; width:170px"><label style="font-weight:normal">Data de pagamento:&nbsp;</label></td>
+                    <td style="width:200px">@Html.TextBoxFor(m => m.DataVencimento,new { @id = "vencto",@class = "maskData",@style = "max-width:90px;font-size:14px",@onKeyPress = "return formata(this, '§§/§§/§§§§', event)" })</td>
+                </tr>
 
-                </table>
-                <span style="color:maroon;font-weight:normal;font-size:12px">Digite a data que deseja efetuar o pagamento do boleto.</span>
-                <br />
-                <br />
-                <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i>&nbsp; Consultar</button>
-            </div>
-            <div class="card-footer">
-                @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
-            </div>
+            </table>
+            <span style="color:maroon;font-weight:normal;font-size:12px">Digite a data que deseja efetuar o pagamento do boleto.</span>
+            <br />
+            <br />
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i>&nbsp; Consultar</button>
         </div>
+        <br />
+        <span style="font-size:12px;font-weight:bold;color:brown;text-align:justify;margin-left:10px">Conforme <a href="~/Files/Decreto7408.pdf" style="font-weight:normal" class="actionlink">DECRETO Nº 7.408, DE 31 DE MAIO DE 2021</a><br />  </span><br />
+        <article style="text-align:justify;font-size:12px;margin-left:10px;margin-right:10px">
+            <span style="font-weight:bold">Art. 2º</span>  Prorroga-se o prazo para cobrança de juros e multas do Imposto Predial e Territorial Urbano – IPTU das parcelas referentes aos meses de junho e julho:<br /><br />
+            <span style="font-weight:bold">I –</span> A parcela com vencimento original em 15 de junho de 2021, poderá ser paga até o dia 15 de setembro de 2021;<br />
+            <span style="font-weight:bold">II –</span> A parcela com vencimento original em 15 de julho de 2021, poderá ser paga até o dia 15 de outubro de 2021;<br />
+            <br /><span style="font-size:12px;color:red">Por conta disso, as parcelas mencionadas terão suas datas de vencimento alteradas.</span>
+
+        </article><br />
+        <div class="card-footer">
+            @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
+        </div>
+    </div>
     }
 </div>
 <div id="msgBox1" title="Atenção" style='display: none;'>

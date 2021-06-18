@@ -19,6 +19,7 @@ using System.Net;
 using Newtonsoft.Json.Linq;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace GTI_Mvc.Controllers {
 
@@ -941,11 +942,104 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
-            string _msg="" ;
+            //*** Renumera parcelas de 2021 ***
+            if(DateTime.Now.Year == 2021) {
+                foreach(DebitoStructure item in Extrato_Lista) {
+                    Extrato_Lista[(int)item.Numero_Parcela - 1].Numero_Parcela_Old = (short)item.Numero_Parcela ;
+                    if(item.Numero_Parcela == 6) {
+                        Extrato_Lista[(int)item.Numero_Parcela - 1].Numero_Parcela = 96;
+                    } else {
+                        if(item.Numero_Parcela == 7) {
+                            Extrato_Lista[(int)item.Numero_Parcela - 1].Numero_Parcela = 97;
+                        } else {
+                            if(item.Numero_Parcela == 8) {
+                                Extrato_Lista[(int)item.Numero_Parcela - 1].Numero_Parcela = 98;
+                            } else {
+                                if(item.Numero_Parcela == 9) {
+                                    Extrato_Lista[(int)item.Numero_Parcela - 1].Numero_Parcela = 99;
+                                }
+                            }
+                        }
+                    }
+                }
+                int _idx = 0;
+                foreach(DebitoStructure item in Extrato_Lista) {
+                    
+                    if(item.Numero_Parcela == 96) {
+                        Extrato_Lista[_idx].Numero_Parcela = 8;
+                    } else {
+                        if(item.Numero_Parcela == 97) {
+                            Extrato_Lista[_idx].Numero_Parcela = 9;
+                        } else {
+                            if(item.Numero_Parcela == 98) {
+                                Extrato_Lista[_idx].Numero_Parcela =6;
+                            } else {
+                                if(item.Numero_Parcela == 99) {
+                                    Extrato_Lista[_idx].Numero_Parcela = 7;
+                                }
+                            }
+                        }
+                    }
+                    _idx++;
+                }
+                Extrato_Lista = Extrato_Lista.OrderBy(o => o.Data_Vencimento).ThenBy(o => o.Numero_Parcela).ToList();
+            }
+            //**************************************************
+
+            //***  Novos Documento ******
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            int _idx2 = 0;
+            foreach(DebitoStructure item in Extrato_Lista) {
+
+                //grava o documento
+                Numdocumento docReg = new Numdocumento() {
+                    Datadocumento = Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy")),
+                    Emissor = "WebDam",
+                    Registrado = true,
+                    Valorguia = item.Soma_Total
+                };
+                int _documento = tributarioRepository.Insert_Documento(docReg);
+
+                //parcela x documento
+                Parceladocumento parcReg = new Parceladocumento() {
+                    Codreduzido = item.Codigo_Reduzido,
+                    Anoexercicio = (short)item.Ano_Exercicio,
+                    Codlancamento = (short)item.Codigo_Lancamento,
+                    Seqlancamento = (short)item.Sequencia_Lancamento,
+                    Numparcela = (byte)item.Numero_Parcela_Old,
+                    Codcomplemento = (byte)item.Complemento,
+                    Plano = 0,
+                    Numdocumento = _documento
+                };
+                Exception ex = tributarioRepository.Insert_Parcela_Documento(parcReg);
+
+                Extrato_Lista[_idx2].Numero_Documento = _documento;
+
+                _idx2++;
+            }
+
+            //**************************************************
+
+
+            string _msg ="" ;
             List<Boletoguia> ListaBoleto = new List<Boletoguia>();
             foreach (DebitoStructure item in Extrato_Lista) {
-                if (item.Numero_Parcela > 0)
+                if (item.Numero_Parcela > 0) {
                     _msg = "Após o vencimento tirar 2ª via no site da prefeitura www.jaboticabal.sp.gov.br";
+                    if(DateTime.Now.Year == 2021 && item.Numero_Parcela == 6) {
+                        _msg += Environment.NewLine + "Referente a parcela original 8/12";
+                    }
+                    if(DateTime.Now.Year == 2021 && item.Numero_Parcela == 7) {
+                        _msg += Environment.NewLine + "Referente a parcela original 9/12";
+                    }
+                    if(DateTime.Now.Year == 2021 && item.Numero_Parcela == 8) {
+                        _msg += Environment.NewLine + "Referente a parcela original 6/12";
+                    }
+                    if(DateTime.Now.Year == 2021 && item.Numero_Parcela == 9) {
+                        _msg += Environment.NewLine + "Referente a parcela original 7/12";
+                    }
+
+                }
 
                 Boletoguia reg = new Boletoguia() {
                     Codreduzido = _codigo.ToString("000000"),
@@ -1010,6 +1104,27 @@ namespace GTI_Mvc.Controllers {
 
                 if (Convert.ToDateTime(Convert.ToDateTime(reg.Datavencto).ToString("dd/MM/yyyy")) >= Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy")))
                     ListaBoleto.Add(reg);
+
+
+                //Registrar os novos documentos
+                Ficha_compensacao_documento ficha = new Ficha_compensacao_documento {
+                    Nome = reg.Nome.Length > 40 ? reg.Nome.Substring(0,40) : reg.Nome,
+                    Endereco = reg.Endereco.Length > 40 ? reg.Endereco.Substring(0,40) : reg.Endereco,
+                    Bairro = reg.Bairro.Length > 15 ? reg.Bairro.Substring(0,15) : reg.Bairro,
+                    Cidade = reg.Cidade.Length > 30 ? reg.Cidade.Substring(0,30) : reg.Cidade,
+                    Cep = reg.Cep ?? "14870000",
+                    Cpf = reg.Cpf,
+                    Numero_documento = Convert.ToInt32( item.Numero_Documento),
+                    Data_vencimento = Convert.ToDateTime(item.Data_Vencimento),
+                    Valor_documento = Convert.ToDecimal(item.Soma_Principal),
+                    Uf = reg.Uf??"SP"
+                };
+                if(item.Data_Vencimento >= Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy"))) {
+                    Exception ex = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
+                    if(ex == null)
+                        ex = tributarioRepository.Marcar_Documento_Registrado(Convert.ToInt32( item.Numero_Documento));
+                }
+
             }
 
             Warning[] warnings;
