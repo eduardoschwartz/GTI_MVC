@@ -152,7 +152,17 @@ namespace GTI_Mvc.Controllers {
                     } else {
                         ViewBag.UsoPlataforma = "S";
                     }
-                    return View("../Home/SysMenu");
+                    if(Session["hashform"] == null) {
+                        return View("../Home/SysMenu");
+                    } else {
+                        if(Session["hashform"].ToString() == "mobreq") {
+                            Session["hashform"] = "";
+                            return View("../MobReq/Mobreq_menu");
+                        } else {
+                            return View("../Home/SysMenu");
+                        }
+                    }
+
                 }
             } else {
                 Usuario_web user_web = sistemaRepository.Retorna_Usuario_Web(model.Usuario);

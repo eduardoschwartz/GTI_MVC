@@ -103,6 +103,7 @@
     <Compile Include="Classes\imovel_Data.cs" />
     <Compile Include="Classes\integrativa_Data.cs" />
     <Compile Include="Classes\misc_Data.cs" />
+    <Compile Include="Classes\mobreq_Data.cs" />
     <Compile Include="Classes\parcelamento_Data.cs" />
     <Compile Include="Classes\redesim_Data.cs" />
     <Compile Include="Integrativa_Context.cs" />

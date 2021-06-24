@@ -112,6 +112,7 @@
 
         $(document).ready(function () {
             $("#MainForm").submit(function () {
+                ShowMsg();
                 return ValidateForm();
             });
 
@@ -222,6 +223,10 @@
             return true;
         }
 
+
+        function ShowMsg() {
+           alert( "Boletos liberados até as 16:30h podem ser quitados a partir do dia seguinte de sua liberação, após às 16:30h será necessário mais um dia útil para o registro, caso queira pagar alguma parcela hoje, selecione a opção (Consulta e atualização de boletos) para emitir uma guia para pagamento à vista.");
+        }
 
     </script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>

@@ -237,6 +237,7 @@
     <Compile Include="Controllers\ImovelController.cs" />
     <Compile Include="Controllers\ItbiController.cs" />
     <Compile Include="Controllers\MiscController.cs" />
+    <Compile Include="Controllers\MobReqController.cs" />
     <Compile Include="Controllers\ParcelamentoController.cs" />
     <Compile Include="Controllers\PlataformaController.cs" />
     <Compile Include="Controllers\ProtocoloController.cs" />
@@ -562,6 +563,7 @@
     <Compile Include="ViewModels\ItbiViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MemoryViewModel.cs" />
+    <Compile Include="ViewModels\MobReqViewModel.cs" />
     <Compile Include="ViewModels\NotificacaoIssViewModel.cs" />
     <Compile Include="ViewModels\NotificacaoTerViewModel.cs" />
     <Compile Include="ViewModels\ParcelamentoViewModel.cs" />
@@ -1021,6 +1023,8 @@
     <Content Include="Views\Parcelamento\Parc_rel.cshtml" />
     <Content Include="Scripts\jquery-3.6.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.6.0.min.map" />
+    <Content Include="Views\MobReq\Mobreq_menu.cshtml" />
+    <Content Include="Views\MobReq\Mobreq_sol.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

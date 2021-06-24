@@ -82,6 +82,7 @@
     <Compile Include="Classes\imovel_bll.cs" />
     <Compile Include="Classes\integrativa_bll.cs" />
     <Compile Include="Classes\misc_bll.cs" />
+    <Compile Include="Classes\mobreq_bll.cs" />
     <Compile Include="Classes\parcelamento_bll.cs" />
     <Compile Include="Classes\processo_bll.cs" />
     <Compile Include="Classes\redesim_bll.cs" />

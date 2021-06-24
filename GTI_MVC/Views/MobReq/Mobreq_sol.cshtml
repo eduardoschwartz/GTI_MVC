@@ -1,0 +1,186 @@
+﻿@model GTI_Mvc.ViewModels.MobReqViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Requerimento";
+}
+
+<style>
+
+    .center {
+        margin: auto;
+        width: 800px;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .topics tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .topics tr {
+        height: 20px;
+        font-size: 14px;
+    }
+
+    .modal-ku {
+        width: 450px;
+        margin: 200px, auto;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
+
+
+</style>
+
+@{var res = @ViewBag.Error;}
+<div class="center">
+    @using(Html.BeginForm("Mobreq_sol","MobReq",FormMethod.Post,new { @id = "MainForm",enctype = "multipart/form-data" })) {
+        @Html.AntiForgeryToken()
+        <div class="container" style="width:700px">
+            <div class="card">
+                <div class="card-header">
+
+                    Consulta ao uso da plataforma
+
+
+                </div>
+                <div class="card-body">
+                    <label style="font-weight:normal;color:black">Tipo de Requerimento:&nbsp;</label>  
+                    @Html.DropDownListFor(m => m.Evento_Codigo,ViewBag.ListaEvento as SelectList,null,new { @id = "EventoDropDown" })
+                    <br />
+                    @*@Html.HiddenFor(m => m.Codigo,new { id = "Codigo" })*@
+
+                </div>
+                <div class="card-footer">
+                    @Html.ActionLink("Retornar ao menu de opções","mobreq_menu","MobReq",null,new { @class = "actionlink" })<br />
+                </div>
+            </div>
+
+
+        </div>
+
+    }
+
+
+</div>
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Error</p>
+</div>
+
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".ui-dialog").css({
+                zIndex: '1060'
+            });
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+
+        });
+
+        function ValidateForm() {
+            var _data1 = document.getElementById('DataTxt').value;
+            if (!Valida_Data(_data1)) {
+                document.getElementById('lblMsg').innerHTML = "Data inválida";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+            return true;
+        }
+
+
+        function Valida_Data(data) {
+            if (data == "") {
+                return false;
+            }
+            var patternValidaData = /^(((0[1-9]|[12][0-9]|3[01])([-.\/])(0[13578]|10|12)([-.\/])(\d{4}))|(([0][1-9]|[12][0-9]|30)([-.\/])(0[469]|11)([-.\/])(\d{4}))|((0[1-9]|1[0-9]|2[0-8])([-.\/])(02)([-.\/])(\d{4}))|((29)(\.|-|\/)(02)([-.\/])([02468][048]00))|((29)([-.\/])(02)([-.\/])([13579][26]00))|((29)([-.\/])(02)([-.\/])([0-9][0-9][0][48]))|((29)([-.\/])(02)([-.\/])([0-9][0-9][2468][048]))|((29)([-.\/])(02)([-.\/])([0-9][0-9][13579][26])))$/;
+            if (!patternValidaData.test(data)) {
+                return false;
+            }
+            return true;
+        }
+
+
+    </script>
+}
