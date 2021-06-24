@@ -157,6 +157,7 @@ namespace GTI_Mvc.Controllers {
                     } else {
                         if(Session["hashform"].ToString() == "mobreq") {
                             Session["hashform"] = "";
+                            ViewBag.Fiscal = Session["hashfiscalmov"] == null ? "N" : Session["hashfiscalmov"].ToString();
                             return View("../MobReq/Mobreq_menu");
                         } else {
                             return View("../Home/SysMenu");
@@ -197,7 +198,18 @@ namespace GTI_Mvc.Controllers {
                                 } else {
                                     ViewBag.UsoPlataforma = "S";
                                 }
-                                return View("../Home/SysMenu");
+                                if(Session["hashform"] == null) {
+                                    return View("../Home/SysMenu");
+                                } else {
+                                    if(Session["hashform"].ToString() == "mobreq") {
+                                        Session["hashform"] = "";
+                                        ViewBag.Fiscal = Session["hashfiscalmov"] == null ? "N" : Session["hashfiscalmov"].ToString();
+                                        return View("../MobReq/Mobreq_menu");
+                                    } else {
+                                        return View("../Home/SysMenu");
+                                    }
+                                }
+
                             }
                         }
                     }

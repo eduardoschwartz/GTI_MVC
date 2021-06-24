@@ -71,17 +71,29 @@
         @Html.AntiForgeryToken()
         <div class="container" style="width:700px">
             <div class="card">
-                <div class="card-header">
-
-                    Consulta ao uso da plataforma
-
-
-                </div>
+                <div class="card-header">Requerimentos</div>
                 <div class="card-body">
-                    <label style="font-weight:normal;color:black">Tipo de Requerimento:&nbsp;</label>  
-                    @Html.DropDownListFor(m => m.Evento_Codigo,ViewBag.ListaEvento as SelectList,null,new { @id = "EventoDropDown" })
+                    <table width="440px">
+                        <tr style="height:30px">
+                            <td style="width:160px;font-size:14px">Tipo de Requerimento:</td>
+                            <td style="width:280px">
+                                @Html.DropDownListFor(m => m.Evento_Codigo,ViewBag.ListaEvento as SelectList,null,new { @id = "EventoDropDown",@style = "font-size:14px" })
+                            </td>
+                        </tr>
+                        <tr style="height:30px">
+                            <td style="width:160px;font-size:14px">Cpf/Cnpj:</td>
+                            <td style="width:280px">
+                                @Html.TextBoxFor(m => m.CpfValue,new { @id = "cpfcnpj",@name = "cpfcnpj",@style = "Width:160px;font-size:14px" })
+                            </td>
+                        </tr>
+                    </table>
                     <br />
-                    @*@Html.HiddenFor(m => m.Codigo,new { id = "Codigo" })*@
+
+
+                    <button type="submit" class="btn btn-primary">
+                        <img src="~/Images/Consultar.gif" /> &nbsp; Consultar
+                    </button>
+
 
                 </div>
                 <div class="card-footer">
@@ -110,6 +122,25 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            //Máscara Cpf/Cnpj
+            $("#cpfcnpj").keydown(function () {
+                try {
+                    $("#cpfcnpj").unmask();
+                } catch (e) { }
+                var tamanho = $("#cpfcnpj").val().length;
+                if (tamanho < 11) {
+                    $("#cpfcnpj").mask("999.999.999-99");
+                } else {
+                    $("#cpfcnpj").mask("99.999.999/9999-99");
+                }
+                var elem = this;
+                setTimeout(function () {
+                    elem.selectionStart = elem.selectionEnd = 10000;
+                }, 0);
+                var currentValue = $(this).val();
+                $(this).val('');
+                $(this).val(currentValue);
+            });
 
             $('#msgBox1').dialog({
                 autoOpen: false,
