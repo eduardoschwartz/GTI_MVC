@@ -39,6 +39,38 @@ namespace GTI_Mvc.Controllers
             return View(model);
         }
 
+        [Route("Mobreq_sol")]
+        [HttpPost]
+        public ActionResult Mobreq_sol(MobReqViewModel model) {
+
+            Mobreq_bll mobreqRepository = new Mobreq_bll(_connection);
+            List<Mobreq_evento> Lista = mobreqRepository.Lista_vento();
+            ViewBag.ListaEvento = new SelectList(Lista,"Codigo","Descricao",1);
+
+
+            TempData["cpfcnpj"] = model.CpfValue;
+            TempData["evento"] = model.Evento_Codigo;
+            return RedirectToAction("Mobreq_solb");
+        }
+
+        [Route("Mobreq_solb")]
+        [HttpGet]
+        public ActionResult Mobreq_solb() {
+            if(Session["hashid"] == null)
+                return RedirectToAction("Login","Home");
+
+            string _cpfcnpj = TempData["cpfcnpj"].ToString();
+            int _evento = Convert.ToInt32(TempData["evento"]);
+
+            MobReqViewModel model = new MobReqViewModel();
+            Mobreq_bll mobreqRepository = new Mobreq_bll(_connection);
+            List<Mobreq_evento> Lista = mobreqRepository.Lista_vento();
+            ViewBag.ListaEvento = new SelectList(Lista,"Codigo","Descricao",1);
+
+            model.Evento_Codigo = _evento;
+            model.CpfValue = _cpfcnpj;
+            return View(model);
+        }
 
     }
 }

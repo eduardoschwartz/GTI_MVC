@@ -77,13 +77,13 @@
                         <tr style="height:30px">
                             <td style="width:160px;font-size:14px">Tipo de Requerimento:</td>
                             <td style="width:280px">
-                                @Html.DropDownListFor(m => m.Evento_Codigo,ViewBag.ListaEvento as SelectList,null,new { @id = "EventoDropDown",@style = "font-size:14px" })
+                                @Model.Evento_Codigo
                             </td>
                         </tr>
                         <tr style="height:30px">
                             <td style="width:160px;font-size:14px">Cpf/Cnpj:</td>
                             <td style="width:280px">
-                                @Html.TextBoxFor(m => m.CpfValue,new { @id = "cpfcnpj",@name = "cpfcnpj",@style = "Width:160px;font-size:14px" })
+                                @Model.CpfValue
                             </td>
                         </tr>
                     </table>
