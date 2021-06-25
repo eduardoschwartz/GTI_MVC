@@ -67,24 +67,44 @@
 
 @{var res = @ViewBag.Error;}
 <div class="center">
-    @using(Html.BeginForm("Mobreq_sol","MobReq",FormMethod.Post,new { @id = "MainForm",enctype = "multipart/form-data" })) {
+    @using(Html.BeginForm("Mobreq_sola","MobReq",FormMethod.Post,new { @id = "MainForm",enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
+        @Html.HiddenFor(m=>m.Codigo)
+        @Html.HiddenFor(m=>m.Razao_Social)
+        @Html.HiddenFor(m=>m.Atividade)
+        @Html.HiddenFor(m=>m.CpfValue)
+        @Html.HiddenFor(m=>m.Rg_IE)
+
         <div class="container" style="width:700px">
             <div class="card">
                 <div class="card-header">Requerimentos</div>
                 <div class="card-body">
-                    <table width="440px">
-                        <tr style="height:30px">
+                    <table width="640px">
+                        <tr style="height:25px">
                             <td style="width:160px;font-size:14px">Tipo de Requerimento:</td>
-                            <td style="width:280px">
-                                @Model.Evento_Codigo
+                            <td style="width:480px">
+                                <span style="color:brown;font-size:14px">Alteração de dados cadastrais</span>
                             </td>
                         </tr>
-                        <tr style="height:30px">
+                        <tr style="height:25px">
+                            <td style="width:160px;font-size:14px">Razão Social:</td>
+                            <td style="width:480px;color:brown;font-size:14px;text-align:justify"> @Model.Razao_Social </td>
+                        </tr>
+                        <tr style="height:25px">
                             <td style="width:160px;font-size:14px">Cpf/Cnpj:</td>
-                            <td style="width:280px">
-                                @Model.CpfValue
-                            </td>
+                            <td style="width:480px;font-size:14px;color:brown">@Model.CpfValue </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:160px;font-size:14px">Rg/Insc.Estadual:</td>
+                            <td style="width:480px;font-size:14px;color:brown">@Model.Rg_IE </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:160px;font-size:14px">Atividade:</td>
+                            <td style="width:480px;font-size:14px;color:brown;text-align:justify">@Model.Atividade </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:160px;font-size:14px">Data da alteração:</td>
+                            <td style="width:480px;font-size:14px;color:brown"> @Html.TextBoxFor(x => x.Data_Evento,"{0:dd/MM/yyyy}",new { @id = "DataTxt",@style = "width:90px;",@class = "maskData" })</td>
                         </tr>
                     </table>
                     <br />
@@ -122,6 +142,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            $(".maskData").inputmask("99/99/9999");
             $("#MainForm").submit(function () {
                 return ValidateForm();
             });
@@ -195,12 +216,12 @@
         });
 
         function ValidateForm() {
-            //var _data1 = document.getElementById('DataTxt').value;
-            //if (!Valida_Data(_data1)) {
-            //    document.getElementById('lblMsg').innerHTML = "Data inválida";
-            //    $('#msgBox1').dialog('open');
-            //    return false;
-            //}
+            var _data1 = document.getElementById('DataTxt').value;
+            if (!Valida_Data(_data1)) {
+                document.getElementById('lblMsg').innerHTML = "Data inválida";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
 
             //*** Valida CpfCnpj ***
             var _cpf = document.getElementById('cpfcnpj').value;
