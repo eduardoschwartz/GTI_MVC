@@ -65,7 +65,7 @@
 
 </style>
 
-@{var res = @ViewBag.Error;}
+@{var res = @ViewBag.Result;}
 <div class="center">
     @using(Html.BeginForm("Mobreq_sol","MobReq",FormMethod.Post,new { @id = "MainForm",enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
@@ -114,7 +114,7 @@
 </div>
 <div id="msgBoxBag" title="Atenção" style='display: none;'>
     <br />
-    <p>@ViewBag.Error</p>
+    <p>@ViewBag.Result</p>
 </div>
 
 

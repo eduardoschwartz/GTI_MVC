@@ -192,7 +192,7 @@ namespace GTI_Dal.Classes {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var existingReg = db.Mobiliario.Count(a => a.Cnpj == sCNPJ);
                 if (existingReg != 0) {
-                    int reg = (from m in db.Mobiliario where m.Cnpj == sCNPJ select m.Codigomob).FirstOrDefault();
+                    int reg = (from m in db.Mobiliario where m.Cnpj == sCNPJ && m.Dataencerramento==null select m.Codigomob).FirstOrDefault();
                     nCodigo = reg;
                 }
             }
@@ -205,7 +205,7 @@ namespace GTI_Dal.Classes {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var existingReg = db.Mobiliario.Count(a => a.Cpf == sCPF);
                 if (existingReg != 0) {
-                    int reg = (from m in db.Mobiliario where m.Cpf == sCPF select m.Codigomob).FirstOrDefault();
+                    int reg = (from m in db.Mobiliario where m.Cpf == sCPF && m.Dataencerramento==null select m.Codigomob).FirstOrDefault();
                     nCodigo = reg;
                 }
             }

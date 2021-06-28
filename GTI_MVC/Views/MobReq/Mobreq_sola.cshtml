@@ -65,7 +65,11 @@
 
 </style>
 
-@{var res = @ViewBag.Error;}
+@{
+    var res = @ViewBag.Error;
+    var msg = ViewBag.Msg;    
+}
+
 <div class="center">
     @using(Html.BeginForm("Mobreq_sola","MobReq",FormMethod.Post,new { @id = "MainForm",enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
@@ -74,6 +78,7 @@
         @Html.HiddenFor(m=>m.Atividade)
         @Html.HiddenFor(m=>m.CpfValue)
         @Html.HiddenFor(m=>m.Rg_IE)
+        @Html.HiddenFor(m=>m.Evento_Codigo)
 
         <div class="container" style="width:700px">
             <div class="card">
@@ -108,10 +113,12 @@
                         </tr>
                     </table>
                     <br />
-
+                    <label style="color:brown;text-decoration:underline">Especifique as alterações</label><br />
+                    @Html.TextAreaFor(m=>m.Obs,new { @id = "ObsTxt",@style = "width:640px;height:120px",@maxlength = "5000" })
+                    <br /><br />
 
                     <button type="submit" class="btn btn-primary">
-                        <img src="~/Images/Consultar.gif" /> &nbsp; Consultar
+                       Enviar
                     </button>
 
 
@@ -143,28 +150,13 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $(".maskData").inputmask("99/99/9999");
+
+            if ('@msg'!= null && '@msg'!= '') {
+                alert('@msg');
+            }
+
             $("#MainForm").submit(function () {
                 return ValidateForm();
-            });
-
-            //Máscara Cpf/Cnpj
-            $("#cpfcnpj").keydown(function () {
-                try {
-                    $("#cpfcnpj").unmask();
-                } catch (e) { }
-                var tamanho = $("#cpfcnpj").val().length;
-                if (tamanho < 11) {
-                    $("#cpfcnpj").mask("999.999.999-99");
-                } else {
-                    $("#cpfcnpj").mask("99.999.999/9999-99");
-                }
-                var elem = this;
-                setTimeout(function () {
-                    elem.selectionStart = elem.selectionEnd = 10000;
-                }, 0);
-                var currentValue = $(this).val();
-                $(this).val('');
-                $(this).val(currentValue);
             });
 
             $('#msgBox1').dialog({
@@ -216,48 +208,22 @@
         });
 
         function ValidateForm() {
-            var _data1 = document.getElementById('DataTxt').value;
-            if (!Valida_Data(_data1)) {
+            var _data = document.getElementById('DataTxt').value;
+            var _obs = document.getElementById('ObsTxt').value.trim();
+            if (!Valida_Data(_data)) {
                 document.getElementById('lblMsg').innerHTML = "Data inválida";
                 $('#msgBox1').dialog('open');
                 return false;
             }
-
-            //*** Valida CpfCnpj ***
-            var _cpf = document.getElementById('cpfcnpj').value;
-            if (_cpf.length == 14) {
-                if (!valida_Cpf(_cpf)) {
-                    document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido!";
-                    $('#msgBox1').dialog('open');
-                    return false;
-                }
-            } else {
-                if (_cpf.length == 18) {
-                    if (!valida_Cnpj(_cpf)) {
-                        document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido!";
-                        $('#msgBox1').dialog('open');
-                        return false;
-                    }
-                } else {
-                    document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido!";
-                    $('#msgBox1').dialog('open');
-                    return false;
-                }
-            }
-            return true;
-        }
-
-
-        function Valida_Data(data) {
-            if (data == "") {
-                return false;
-            }
-            var patternValidaData = /^(((0[1-9]|[12][0-9]|3[01])([-.\/])(0[13578]|10|12)([-.\/])(\d{4}))|(([0][1-9]|[12][0-9]|30)([-.\/])(0[469]|11)([-.\/])(\d{4}))|((0[1-9]|1[0-9]|2[0-8])([-.\/])(02)([-.\/])(\d{4}))|((29)(\.|-|\/)(02)([-.\/])([02468][048]00))|((29)([-.\/])(02)([-.\/])([13579][26]00))|((29)([-.\/])(02)([-.\/])([0-9][0-9][0][48]))|((29)([-.\/])(02)([-.\/])([0-9][0-9][2468][048]))|((29)([-.\/])(02)([-.\/])([0-9][0-9][13579][26])))$/;
-            if (!patternValidaData.test(data)) {
+         
+            if (_obs=='') {
+                document.getElementById('lblMsg').innerHTML = "Especifique as alterações!";
+                $('#msgBox1').dialog('open');
                 return false;
             }
             return true;
         }
+
 
 
     </script>

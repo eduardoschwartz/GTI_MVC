@@ -204,5 +204,6 @@ namespace GTI_Dal {
         public DbSet<Parcelamento_Web_Selected_Name> Parcelamento_Web_Selected_Name { get; set; }
         public DbSet<Cidadao_socio> Cidadao_Socio { get; set; }
         public DbSet<Mobreq_evento> Mobreq_Evento { get; set; }
+        public DbSet<Mobreq_main> Mobreq_Main { get; set; }
     }
 }

@@ -163,7 +163,6 @@ namespace GTI_Mvc.Controllers {
                             return View("../Home/SysMenu");
                         }
                     }
-
                 }
             } else {
                 Usuario_web user_web = sistemaRepository.Retorna_Usuario_Web(model.Usuario);
