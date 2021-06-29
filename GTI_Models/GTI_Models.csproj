@@ -182,6 +182,7 @@
     <Compile Include="Models\mobreq_evento.cs" />
     <Compile Include="Models\mobiliariovs.cs" />
     <Compile Include="Models\mobreq_main.cs" />
+    <Compile Include="Models\mobreq_situacao.cs" />
     <Compile Include="Models\Notificacao_Iss_Tabela.cs" />
     <Compile Include="Models\notificacao_iss_web.cs" />
     <Compile Include="Models\notificacao_obra.cs" />

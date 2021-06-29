@@ -120,7 +120,8 @@ namespace GTI_Mvc.Controllers {
                 Data_Evento= Convert.ToDateTime( model.Data_Evento),
                 UserId=_userId,
                 UserPrf=_func,
-                Obs=model.Obs
+                Obs=model.Obs,
+                Situacao=1
             };
 
             Exception ex = mobreqRepository.Incluir_Mobreq_Main(reg);

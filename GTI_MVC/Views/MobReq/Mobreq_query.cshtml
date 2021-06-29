@@ -56,7 +56,7 @@
 
     @using (Html.BeginForm("Mobreq_query", "MobReq", FormMethod.Post, new { @id = "MainForm" })) {
         @Html.AntiForgeryToken()
-        <div class="container" style="width:800px">
+        <div class="container" style="width:900px">
             <div class="card">
                 <div class="card-header">
                     Lista de requerimentos
@@ -73,35 +73,41 @@
                         <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal; white-space: nowrap;">
                             <tr style="height:14px;">
                                 <td style="display:none">Guid</td>
-                                <td style="width:100px;font-weight:normal">Nº Notif.</td>
-                                <td style="width:330px;font-weight:normal">Nome do Contribuinte</td>
-                                <td style="width:210px;font-weight:normal">Data Emissão</td>
-                                <td style="width:170px;font-weight:normal">Situação</td>
-                                <td style="width:100px">
-                                </td>
+                                <td style="width:90px;font-weight:normal">Data</td>
+                                <td style="width:310px;font-weight:normal">Razão Social</td>
+                                <td style="width:180px;font-weight:normal">Cpf/Cnpj</td>
+                                <td style="width:240px;font-weight:normal">Tipo de requiremento</td>
+                                <td style="width:100px">Situação</td>
+                                <td style="width:100px"></td>
                             </tr>
                         </thead>
                         <tbody id="tblEvento" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
                             @foreach (var item in Model.Lista_req) {
                                 if (item.Data_Inclusao.Year ==Model.Ano_Selected) {
-                                <tr style="height:20px;">
-                                    <td style="display:none">@Html.DisplayFor(modelItem => item.Guid)</td>
-                                    <td style="width:100px;font-weight:normal">@DateTime.Parse(Html.DisplayFor(modelItem => item.Data_Inclusao).ToString()).ToString("dd/MM/yyyy")</td>
-                                    <td style="width:330px;font-weight:normal">@Html.DisplayFor(modelItem => item.Razao_Social)</td>
-                                    <td style="width:210px;font-weight:normal">@Html.DisplayFor(modelItem => item.CpfCnpj)</td>
-                                    <td style="width:170px;font-weight:normal">@Html.DisplayFor(modelItem => item.Tipo_Nome)</td>
-                                    <td style="width:100px">
-                                        <a href="@Url.Action("MobReq_print", "Tributario", new { p = item.Guid })" title="Imprimir a Notificação"> <img src="@Url.Content("~/images/print.png")"></a>
-                                    </td>
-                                </tr>
+                            <tr style="height:20px;">
+                                <td style="display:none">@Html.DisplayFor(modelItem => item.Guid)</td>
+                                <td style="width:90px;font-weight:normal">@DateTime.Parse(Html.DisplayFor(modelItem => item.Data_Inclusao).ToString()).ToString("dd/MM/yyyy")</td>
+                                <td style="width:310px;font-weight:normal;font-size:13px">@Html.DisplayFor(modelItem => item.Razao_Social)</td>
+                                <td style="width:180px;font-weight:normal">@Functions.FormatarCpfCnpj(Html.DisplayFor(modelItem => item.CpfCnpj).ToString())</td>
+                                <td style="width:240px;font-weight:normal">@Html.DisplayFor(modelItem => item.Tipo_Nome)</td>
+                                @if(item.Situacao_Codigo == 1) {
+                                    <td style="width:100px;color:red">@Html.DisplayFor(modelItem => item.Situacao_Nome)</td>
+                                } else if(item.Situacao_Codigo == 2) {
+                                    <td style="width:100px;color:green">@Html.DisplayFor(modelItem => item.Situacao_Nome)</td>
+                                } else {
+                                    <td style="width:100px;color:blue">@Html.DisplayFor(modelItem => item.Situacao_Nome)</td>
+                                }
+                            <td style="width:100px">
+                                <a href="@Url.Action("MobReq_query", "MobReq", new { p = item.Guid })" title="Analisar"> <img src="@Url.Content("~/images/alterar.gif")"></a>
+                                <a href="@Url.Action("MobReq_print", "MobReq", new { p = item.Guid })" title="Imprimir"> <img src="@Url.Content("~/images/print.png")"></a>
+                                <a href="@Url.Action("MobReq_query", "Mobreq", new { p = item.Guid })" onclick="return confirm('Cancelar este Requerimento?')" })" title="Cancelar"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
+                            </td>
+                            </tr>
                                 }
                             }
                         </tbody>
                     </table>
                
-                    <div class="form-group row">
-                        <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
-                    </div>
 
                 </div>
                 <div class="card-footer">
