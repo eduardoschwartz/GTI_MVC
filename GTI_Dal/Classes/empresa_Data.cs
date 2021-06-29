@@ -212,6 +212,34 @@ namespace GTI_Dal.Classes {
             return nCodigo;
         }
 
+        public int Existe_EmpresaCnpj_Todas(string sCNPJ) {
+            sCNPJ = dalCore.RetornaNumero(sCNPJ);
+            int nCodigo = 0;
+            using(GTI_Context db = new GTI_Context(_connection)) {
+                var existingReg = db.Mobiliario.Count(a => a.Cnpj == sCNPJ);
+                if(existingReg != 0) {
+                    int reg = (from m in db.Mobiliario where m.Cnpj == sCNPJ  select m.Codigomob).FirstOrDefault();
+                    nCodigo = reg;
+                }
+            }
+            return nCodigo;
+        }
+
+        public int Existe_EmpresaCpf_Todas(string sCPF) {
+            sCPF = dalCore.RetornaNumero(sCPF);
+            int nCodigo = 0;
+            using(GTI_Context db = new GTI_Context(_connection)) {
+                var existingReg = db.Mobiliario.Count(a => a.Cpf == sCPF);
+                if(existingReg != 0) {
+                    int reg = (from m in db.Mobiliario where m.Cpf == sCPF  select m.Codigomob).FirstOrDefault();
+                    nCodigo = reg;
+                }
+            }
+            return nCodigo;
+        }
+
+
+
         public bool Empresa_tem_VS(int nCodigo) {
             bool bRet = false;
             using (GTI_Context db = new GTI_Context(_connection)) {

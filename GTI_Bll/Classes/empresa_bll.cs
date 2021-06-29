@@ -60,6 +60,11 @@ namespace GTI_Bll.Classes {
             return obj.Existe_EmpresaCnpj(sCNPJ);
         }
 
+        public int ExisteEmpresaCnpj_Todas(string sCNPJ) {
+            Empresa_Data obj = new Empresa_Data(_connection);
+            return obj.Existe_EmpresaCnpj_Todas(sCNPJ);
+        }
+
         /// <summary>
         /// Verifica se tem alguma empresa com o CPF informado
         /// </summary>
@@ -68,6 +73,11 @@ namespace GTI_Bll.Classes {
         public int ExisteEmpresaCpf(string sCPF) {
             Empresa_Data obj = new Empresa_Data(_connection);
             return obj.Existe_EmpresaCpf(sCPF);
+        }
+
+        public int ExisteEmpresaCpf_Todas(string sCPF) {
+            Empresa_Data obj = new Empresa_Data(_connection);
+            return obj.Existe_EmpresaCpf_Todas(sCPF);
         }
 
         /// <summary>

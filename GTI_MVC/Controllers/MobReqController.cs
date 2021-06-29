@@ -3,12 +3,9 @@ using GTI_Models.Models;
 using GTI_Mvc.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
-namespace GTI_Mvc.Controllers
-{
+namespace GTI_Mvc.Controllers {
     public class MobReqController : Controller
     {
         private readonly string _connection = "GTIconnection";
@@ -52,9 +49,9 @@ namespace GTI_Mvc.Controllers
             string _cpfcnpj = Functions.RetornaNumero(model.CpfValue);
             bool _bCpf = _cpfcnpj.Length == 11 ? true : false;
             if(_bCpf)
-                _codigo = empresaRepository.ExisteEmpresaCpf(_cpfcnpj);
+                _codigo = empresaRepository.ExisteEmpresaCpf_Todas(_cpfcnpj);
             else
-                _codigo = empresaRepository.ExisteEmpresaCnpj(_cpfcnpj);
+                _codigo = empresaRepository.ExisteEmpresaCnpj_Todas(_cpfcnpj);
 
             if(_codigo == 0) {
                 ViewBag.Result = "Não existe empresa com este Cpf/Cnpj";
@@ -84,7 +81,6 @@ namespace GTI_Mvc.Controllers
             bool _bCpf = _cpfcnpj.Length == 11 ? true : false;
 
             Empresa_bll empresaRepository = new Empresa_bll(_connection);
-
             EmpresaStruct _dados = empresaRepository.Retorna_Empresa(_codigo);
 
             string _rgie = "N/D";
@@ -128,10 +124,34 @@ namespace GTI_Mvc.Controllers
             };
 
             Exception ex = mobreqRepository.Incluir_Mobreq_Main(reg);
-            ViewBag.msg = "ok";
-            return View(model);
+            ViewBag.Result = "Dados enviados com sucesso.";
+            return RedirectToAction("Mobreq_menu");
         }
 
+        [Route("Mobreq_query")]
+        [HttpGet]
+        public ActionResult Mobreq_query() {
+            Session["hashform"] = "mobreq";
+            if(Session["hashid"] == null)
+                return RedirectToAction("Login","Home");
+
+            List<int> Lista_Ano = new List<int>();
+            for(int i = 2021;i <= DateTime.Now.Year;i++) {
+                Lista_Ano.Add(i);
+            }
+            ViewBag.ListaAno = new SelectList(Lista_Ano);
+
+            Mobreq_bll mobreqRepository = new Mobreq_bll(_connection);
+            List<Mobreq_main_Struct> Lista_Req = mobreqRepository.Lista_Requerimentos(DateTime.Now.Year);
+
+            MobReqQueryViewModel model = new MobReqQueryViewModel() {
+                Ano_Selected = DateTime.Now.Year,
+                Lista_req=Lista_Req
+            };
+
+
+            return View(model);
+        }
 
     }
 }

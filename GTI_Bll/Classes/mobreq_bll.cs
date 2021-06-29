@@ -23,6 +23,12 @@ namespace GTI_Bll.Classes {
 
         }
 
+        public List<Mobreq_main_Struct> Lista_Requerimentos(int AnoInclusao) {
+            Mobreq_Data obj = new Mobreq_Data(_connection);
+            return obj.Lista_Requerimentos(AnoInclusao);
+        }
+
+
     }
 
 

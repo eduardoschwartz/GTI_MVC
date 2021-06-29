@@ -39,12 +39,25 @@ namespace GTI_Dal.Classes {
                 } catch(Exception ex) {
                     return ex;
                 }
-
-
                 return null;
             }
         }
 
+        public List<Mobreq_main_Struct> Lista_Requerimentos(int AnoInclusao) {
+            using(GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from c in db.Mobreq_Main
+                           join m in db.Mobiliario on c.Codigo equals m.Codigomob into cm from m in cm.DefaultIfEmpty()
+                           join t in db.Mobreq_Evento on c.Tipo equals t.Codigo into ct from t in ct.DefaultIfEmpty()
+                           where c.Data_Inclusao.Year==AnoInclusao
+                           orderby c.Data_Inclusao 
+                           select new Mobreq_main_Struct {
+                                Codigo=c.Codigo,Data_Evento=c.Data_Evento,Data_Inclusao=c.Data_Inclusao,CpfCnpj=m.Cnpj==null?m.Cpf:m.Cnpj,
+                                Guid=c.Guid,Obs=c.Obs,Razao_Social=m.Razaosocial,Tipo_Codigo=c.Tipo,
+                                Tipo_Nome=t.Descricao,UserId=c.UserId,UserPrf=c.UserPrf
+                           });
+                return Sql.ToList();
+            }
+        }
 
     }
 }
