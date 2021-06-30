@@ -11,7 +11,7 @@ namespace GTI_Bll.Classes {
         }
 
 
-        public List<Mobreq_evento> Lista_vento() {
+        public List<Mobreq_evento> Lista_Evento() {
             Mobreq_Data obj = new Mobreq_Data(_connection);
             return obj.Lista_Evento();
         }
@@ -28,8 +28,16 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Requerimentos(AnoInclusao);
         }
 
+        public string Retorna_Evento(int Codigo) {
+            Mobreq_Data obj = new Mobreq_Data(_connection);
+            return obj.Retorna_Evento(Codigo);
+        }
+
+        public Mobreq_main_Struct Retorna_Requerimento(string Guid) {
+            Mobreq_Data obj = new Mobreq_Data(_connection);
+            return obj.Retorna_Requerimento(Guid);
+        }
+
 
     }
-
-
 }

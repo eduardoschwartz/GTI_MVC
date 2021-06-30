@@ -98,7 +98,7 @@
                                     <td style="width:100px;color:blue">@Html.DisplayFor(modelItem => item.Situacao_Nome)</td>
                                 }
                             <td style="width:100px">
-                                <a href="@Url.Action("MobReq_query", "MobReq", new { p = item.Guid })" title="Analisar"> <img src="@Url.Content("~/images/alterar.gif")"></a>
+                                <a href="@Url.Action("MobReq_sole", "MobReq", new { p = item.Guid })" title="Analisar"> <img src="@Url.Content("~/images/alterar.gif")"></a>
                                 <a href="@Url.Action("MobReq_print", "MobReq", new { p = item.Guid })" title="Imprimir"> <img src="@Url.Content("~/images/print.png")"></a>
                                 <a href="@Url.Action("MobReq_query", "Mobreq", new { p = item.Guid })" onclick="return confirm('Cancelar este Requerimento?')" })" title="Cancelar"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
                             </td>

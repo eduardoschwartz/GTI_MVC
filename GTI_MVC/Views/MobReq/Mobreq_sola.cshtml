@@ -89,7 +89,7 @@
                     <tr style="height:25px">
                         <td style="width:160px;font-size:14px">Tipo de Requerimento:</td>
                         <td style="width:480px">
-                            <span style="color:brown;font-size:14px">Alteração de dados cadastrais</span>
+                            <span style="color:brown;font-size:14px">@Model.Evento_Nome</span>
                         </td>
                     </tr>
                     <tr style="height:25px">
@@ -109,13 +109,15 @@
                         <td style="width:480px;font-size:14px;color:brown;text-align:justify">@Model.Atividade </td>
                     </tr>
                     <tr style="height:25px">
-                        <td style="width:160px;font-size:14px">Data da alteração:</td>
+                        <td style="width:160px;font-size:14px">Data da ocorrência:</td>
                         <td style="width:480px;font-size:14px;color:brown"> @Html.TextBoxFor(x => x.Data_Evento,"{0:dd/MM/yyyy}",new { @id = "DataTxt",@style = "width:90px;",@class = "maskData" })</td>
                     </tr>
                 </table>
-                <br />
-                <label style="text-decoration:underline">Especifique as alterações</label> <span style="text-decoration:none;">(Razão Social, Endereço, Atividade, etc... )</span><br />
-                @Html.TextAreaFor(m => m.Obs,new { @id = "ObsTxt",@style = "width:640px;height:120px",@maxlength = "5000" })
+                @if(Model.Evento_Codigo == 3 || Model.Evento_Codigo == 4) {
+                    <br />
+                    <label style="text-decoration:underline">Especifique as alterações</label> <span style="text-decoration:none;">(Razão Social, Endereço, Atividade, etc... )</span><br />
+                    @Html.TextAreaFor(m => m.Obs,new { @id = "ObsTxt",@style = "width:640px;height:120px",@maxlength = "5000" })
+                }
                 <br /><br />
 
                 <button type="submit" class="btn btn-primary">

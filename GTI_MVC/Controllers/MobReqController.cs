@@ -22,17 +22,21 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Mobreq_sol")]
         [HttpGet]
-        public ActionResult Mobreq_sol() {
+        public ActionResult Mobreq_sol(string t) {
             if(Session["hashid"] == null)
                 return RedirectToAction("Login","Home");
 
             MobReqViewModel model = new MobReqViewModel();
 
             Mobreq_bll mobreqRepository = new Mobreq_bll(_connection);
-            List<Mobreq_evento> Lista = mobreqRepository.Lista_vento();
-            ViewBag.ListaEvento = new SelectList(Lista,"Codigo","Descricao",1);
+            //List<Mobreq_evento> Lista = mobreqRepository.Lista_Evento();
+            //ViewBag.ListaEvento = new SelectList(Lista,"Codigo","Descricao",1);
 
-            model.Evento_Codigo = 1;
+            int _evento_codigo = Convert.ToInt32(t);
+            if(string.IsNullOrEmpty(t)) t = "1";
+            if(_evento_codigo < 1 ||  _evento_codigo > 4) _evento_codigo = 1;
+            model.Evento_Codigo = _evento_codigo;
+            model.Evento_Nome = mobreqRepository.Retorna_Evento(_evento_codigo);
             return View(model);
         }
 
@@ -41,7 +45,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Mobreq_sol(MobReqViewModel model) {
 
             Mobreq_bll mobreqRepository = new Mobreq_bll(_connection);
-            List<Mobreq_evento> Lista = mobreqRepository.Lista_vento();
+            List<Mobreq_evento> Lista = mobreqRepository.Lista_Evento();
             ViewBag.ListaEvento = new SelectList(Lista,"Codigo","Descricao",1);
 
             Empresa_bll empresaRepository = new Empresa_bll(_connection);
@@ -61,11 +65,7 @@ namespace GTI_Mvc.Controllers {
             TempData["cpfcnpj"] = model.CpfValue;
             TempData["evento"] = model.Evento_Codigo;
             TempData["codigo"] = _codigo;
-            if(model.Evento_Codigo==3)
-                return RedirectToAction("Mobreq_sola");
-            else {
-                return View(model);
-            }
+            return RedirectToAction("Mobreq_sola");
         }
 
         [Route("Mobreq_sola")]
@@ -74,10 +74,11 @@ namespace GTI_Mvc.Controllers {
             if(Session["hashid"] == null)
                 return RedirectToAction("Login","Home");
 
+            Mobreq_bll mobreqRepository = new Mobreq_bll(_connection);
             string _cpfcnpj = Functions.RetornaNumero( TempData["cpfcnpj"].ToString());
             int _evento = Convert.ToInt32(TempData["evento"]);
             int _codigo = Convert.ToInt32(TempData["codigo"]);
-
+            string _evento_nome = mobreqRepository.Retorna_Evento(_evento);
             bool _bCpf = _cpfcnpj.Length == 11 ? true : false;
 
             Empresa_bll empresaRepository = new Empresa_bll(_connection);
@@ -90,8 +91,8 @@ namespace GTI_Mvc.Controllers {
                 _rgie = string.IsNullOrEmpty(_dados.Inscricao_estadual) ? _rgie : _dados.Inscricao_estadual;
 
             MobReqViewModel model = new MobReqViewModel();
-            Mobreq_bll mobreqRepository = new Mobreq_bll(_connection);
-            List<Mobreq_evento> Lista = mobreqRepository.Lista_vento();
+            
+            List<Mobreq_evento> Lista = mobreqRepository.Lista_Evento();
             ViewBag.ListaEvento = new SelectList(Lista,"Codigo","Descricao",1);
 
             model.Razao_Social = _dados.Razao_social;
@@ -99,6 +100,7 @@ namespace GTI_Mvc.Controllers {
             model.Rg_IE = _rgie;
             model.Atividade = _dados.Atividade_extenso;
             model.Evento_Codigo = _evento;
+            model.Evento_Nome = _evento_nome;
             model.CpfValue = Functions.FormatarCpfCnpj( _cpfcnpj);
             return View(model);
         }
@@ -153,6 +155,48 @@ namespace GTI_Mvc.Controllers {
 
             return View(model);
         }
+
+        [Route("Mobreq_sole")]
+        [HttpGet]
+        public ActionResult Mobreq_sole(string p) {
+            if(Session["hashid"] == null)
+                return RedirectToAction("Login","Home");
+
+            Mobreq_bll mobreqRepository = new Mobreq_bll(_connection);
+            MobReqViewModel model = new MobReqViewModel();
+
+            Mobreq_main_Struct _req = mobreqRepository.Retorna_Requerimento(p);
+
+            bool _bCpf = _req.CpfCnpj.Length == 11 ? true : false;
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
+            EmpresaStruct _dados = empresaRepository.Retorna_Empresa(_req.Codigo);
+
+            string _rgie = "N/D";
+            if(_bCpf)
+                _rgie = string.IsNullOrEmpty(_dados.Rg) ? _rgie : _dados.Rg;
+            else
+                _rgie = string.IsNullOrEmpty(_dados.Inscricao_estadual) ? _rgie : _dados.Inscricao_estadual;
+
+
+            model.Razao_Social = _dados.Razao_social;
+            model.Codigo = _req.Codigo;
+            model.Obs = _req.Obs;
+            model.Data_Evento = _req.Data_Evento.ToString("dd/MM/yyyy");
+            model.Rg_IE = _rgie;
+            model.Atividade = _dados.Atividade_extenso;
+            model.Evento_Codigo = _req.Tipo_Codigo;
+            model.Evento_Nome = _req.Tipo_Nome;
+            model.CpfValue = Functions.FormatarCpfCnpj(_req.CpfCnpj);
+            model.Guid = p;
+            model.Data_Evento2 = _req.Data_Evento2==null?"": Convert.ToDateTime(_req.Data_Evento2).ToString("dd/MM/yyyy");
+            model.Funcionario = _req.UserId2_Nome??"";
+            model.Situacao_Codigo = _req.Situacao_Codigo;
+            model.Situacao_Nome = _req.Situacao_Nome;
+            return View(model);
+        }
+
+
+
 
     }
 }

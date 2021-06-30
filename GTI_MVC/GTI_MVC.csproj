@@ -1027,6 +1027,7 @@
     <Content Include="Views\MobReq\Mobreq_sol.cshtml" />
     <Content Include="Views\MobReq\Mobreq_sola.cshtml" />
     <Content Include="Views\MobReq\Mobreq_query.cshtml" />
+    <Content Include="Views\MobReq\Mobreq_sole.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,248 @@
+﻿@model GTI_Mvc.ViewModels.MobReqViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Requerimento";
+}
+
+<style>
+
+    .center {
+        margin: auto;
+        width: 800px;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .topics tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .topics tr {
+        height: 20px;
+        font-size: 14px;
+    }
+
+    .modal-ku {
+        width: 450px;
+        margin: 200px, auto;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
+
+    .table td {
+        position: relative;
+    }
+</style>
+
+@{
+    var res = @ViewBag.Result;
+}
+
+<div class="center">
+    @using(Html.BeginForm("Mobreq_sole","MobReq",FormMethod.Post,new { @id = "MainForm",enctype = "multipart/form-data" })) {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Codigo)
+        @Html.HiddenFor(m => m.Razao_Social)
+        @Html.HiddenFor(m => m.Atividade)
+        @Html.HiddenFor(m => m.CpfValue)
+        @Html.HiddenFor(m => m.Rg_IE)
+        @Html.HiddenFor(m => m.Evento_Codigo)
+
+        <div class="container" style="width:700px">
+            <div class="card">
+                <div class="card-header">Requerimentos</div>
+                <div class="card-body">
+                    <table width="640px">
+                        <tr style="height:25px">
+                            <td style="width:160px;font-size:14px">Tipo de Requerimento:</td>
+                            <td style="width:480px">
+                                <span style="color:brown;font-size:14px">@Model.Evento_Nome</span>
+                            </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:160px;font-size:14px">Razão Social:</td>
+                            <td style="width:480px;color:brown;font-size:14px;text-align:justify"> @Model.Razao_Social </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:160px;font-size:14px">Cpf/Cnpj:</td>
+                            <td style="width:480px;font-size:14px;color:brown">@Model.CpfValue </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:160px;font-size:14px">Rg/Insc.Estadual:</td>
+                            <td style="width:480px;font-size:14px;color:brown">@Model.Rg_IE </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:160px;font-size:14px">Atividade:</td>
+                            <td style="width:480px;font-size:14px;color:brown;text-align:justify">@Model.Atividade </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:160px;font-size:14px">Data da ocorrência:</td>
+                            <td style="width:480px;font-size:14px;color:brown"> @Html.DisplayFor(x => x.Data_Evento,"{0:dd/MM/yyyy}",new { @id = "DataTxt",@style = "width:90px;" })</td>
+                        </tr>
+                    </table>
+                    @if(Model.Evento_Codigo == 3 || Model.Evento_Codigo == 4) {
+                        <br />
+                        <label style="text-decoration:underline">Especifique as alterações</label> <span style="text-decoration:none;">(Razão Social, Endereço, Atividade, etc... )</span><br />
+                        @Html.TextAreaFor(m => m.Obs,new { @id = "ObsTxt",@style = "width:640px;height:120px",@readonly = true })
+                    }
+                    <br /><br />
+                          <table width="640px">
+                              <tr style="height:25px">
+                                  <td style="width:180px;font-size:14px">Situação atual:</td>
+                                  <td style="width:460px">
+                                      <span style="color:brown;font-size:14px">@Model.Situacao_Nome</span>
+                                  </td>
+                              </tr>
+                              @if(Model.Situacao_Codigo > 1) {
+                                  <tr style="height:25px">
+                                      <td style="width:180px;font-size:14px">Concluído/Cancelado em:</td>
+                                      <td style="width:460px;color:brown;font-size:14px;text-align:justify"> @Model.Data_Evento2 </td>
+                                  </tr>
+                                  <tr style="height:25px">
+                                      <td style="width:180px;font-size:14px">Concluído/Cancelado por:</td>
+                                      <td style="width:460px;color:brown;font-size:14px;text-align:justify"> @Model.Funcionario </td>
+                                  </tr>
+                              }
+                          </table>
+                    <br />
+                    @if(Model.Situacao_Codigo == 1) {
+                        <button type="submit" class="btn btn-success">Marcar com concluído</button>
+                    }
+                    <button type="button" class="btn btn-primary" onclick="javascript:history.back()">Voltar</button>
+
+                </div>
+                <div class="card-footer">
+                    @Html.ActionLink("Retornar ao menu de opções","mobreq_menu","MobReq",null,new { @class = "actionlink" })<br />
+                </div>
+            </div>
+
+
+
+        </div>
+
+    }
+
+
+</div>
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
+
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".maskData").inputmask("99/99/9999");
+
+
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".ui-dialog").css({
+                zIndex: '1060'
+            });
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+
+        });
+
+        function ValidateForm() {
+            var _data = document.getElementById('DataTxt').value;
+            var _obs = document.getElementById('ObsTxt').value.trim();
+            if (!Valida_Data(_data)) {
+                document.getElementById('lblMsg').innerHTML = "Data inválida";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+
+            if (_obs=='') {
+                document.getElementById('lblMsg').innerHTML = "Especifique as alterações!";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+            return true;
+        }
+
+
+    </script>
+}
