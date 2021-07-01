@@ -69,6 +69,7 @@
 
 @{
     var res = @ViewBag.Result;
+    var tipo = Model.Evento_Codigo;
 }
 
 <div class="center">
@@ -117,10 +118,12 @@
                     <br />
                     <label style="text-decoration:underline">Especifique as alterações</label> <span style="text-decoration:none;">(Razão Social, Endereço, Atividade, etc... )</span><br />
                     @Html.TextAreaFor(m => m.Obs,new { @id = "ObsTxt",@style = "width:640px;height:120px",@maxlength = "5000" })
+                } else {
+                    @Html.TextAreaFor(m => m.Obs,new { @id = "ObsTxt",@style = "width:640px;height:120px;display:none",@maxlength = "5000" })
                 }
                 <br /><br />
 
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary" onclick="return ValidateForm()">
                     Enviar
                 </button>
 
@@ -130,11 +133,8 @@
                 @Html.ActionLink("Retornar ao menu de opções","mobreq_menu","MobReq",null,new { @class = "actionlink" })<br />
             </div>
         </div>
-
-
        
     </div>
-
     }
 
 
@@ -142,6 +142,10 @@
 <div id="msgBox1" title="Atenção" style='display: none;'>
     <br />
     <label id="lblMsg"></label>
+</div>
+<div id="msgBox2" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg2"></label>
 </div>
 <div id="msgBoxBag" title="Atenção" style='display: none;'>
     <br />
@@ -154,11 +158,6 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $(".maskData").inputmask("99/99/9999");
-
-
-            $("#MainForm").submit(function () {
-                return ValidateForm();
-            });
 
             $('#msgBox1').dialog({
                 autoOpen: false,
@@ -173,6 +172,25 @@
                     "OK": function () {
                         $(this).dialog("close");
                     }
+                }
+            });
+
+            $('#msgBox2').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                },
+                close: function () {
+                    document.getElementById("MainForm").submit();
                 }
             });
 
@@ -216,15 +234,18 @@
                 $('#msgBox1').dialog('open');
                 return false;
             }
-         
-            if (_obs=='') {
-                document.getElementById('lblMsg').innerHTML = "Especifique as alterações!";
-                $('#msgBox1').dialog('open');
-                return false;
+            if ('@tipo' == 3 || '@tipo' == 4) {
+                if (_obs == '') {
+                    document.getElementById('lblMsg').innerHTML = "Especifique as alterações!";
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
             }
-            return true;
+            document.getElementById('lblMsg2').innerHTML = "Requisição enviada!";
+            $('#msgBox2').dialog('open');
+            return false;
         }
 
- 
+
     </script>
 }

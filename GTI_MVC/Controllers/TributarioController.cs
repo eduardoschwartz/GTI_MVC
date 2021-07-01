@@ -1013,9 +1013,9 @@ namespace GTI_Mvc.Controllers {
                     Ep= _debitos.Codigo_Situacao == 39 ? "S" : "N"
                 };
                 if (Convert.ToDateTime(editorViewModel.Data_Vencimento).Year == 2020 && Convert.ToDateTime(editorViewModel.Data_Vencimento).Month>3 && Convert.ToDateTime(editorViewModel.Data_Vencimento).Month < 7) {
-                    editorViewModel.Soma_Juros = 0;
-                    editorViewModel.Soma_Multa = 0;
-                    editorViewModel.Soma_Total = editorViewModel.Soma_Principal+editorViewModel.Soma_Correcao;
+                        editorViewModel.Soma_Juros = 0;
+                        editorViewModel.Soma_Multa = 0;
+                        editorViewModel.Soma_Total = editorViewModel.Soma_Principal + editorViewModel.Soma_Correcao;
                 }
                 _linha++;
                 model.Debito.Add(editorViewModel);

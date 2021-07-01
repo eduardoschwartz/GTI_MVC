@@ -631,7 +631,7 @@ namespace GTI_Mvc.Controllers {
                 foreach (SpExtrato item in ListaParcela) {
                     if (item.Codlancamento == 2 || item.Codlancamento == 6 || item.Codlancamento == 13 || item.Codlancamento == 14) {
                         if (item.Numparcela > 0 && item.Statuslanc == 1) goto Proximo;
-                        if (item.Numparcela == 0 && item.Statuslanc != 1) goto Proximo;
+                        if (item.Numparcela == 0 && item.Statuslanc > 2) goto Proximo;
 
                         Certidao reg = new Certidao {
                             Numero_Ano = _numero_certidao.ToString("00000") + "/" + DateTime.Now.Year.ToString("0000")
@@ -659,6 +659,10 @@ namespace GTI_Mvc.Controllers {
                         certidao.Add(reg);
                     }
                 Proximo:;
+                }
+                if(certidao.Count == 0) {
+                    ViewBag.Result = "Empresa não possue lançamentos pagos de Iss Fixo, Taxa de Licença e/ou Taxa de Vigilânica Sanitária.";
+                    return View(model);
                 }
 
                 ReportDocument rd = new ReportDocument();

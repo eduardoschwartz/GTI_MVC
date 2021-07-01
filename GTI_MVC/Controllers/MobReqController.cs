@@ -29,8 +29,6 @@ namespace GTI_Mvc.Controllers {
             MobReqViewModel model = new MobReqViewModel();
 
             Mobreq_bll mobreqRepository = new Mobreq_bll(_connection);
-            //List<Mobreq_evento> Lista = mobreqRepository.Lista_Evento();
-            //ViewBag.ListaEvento = new SelectList(Lista,"Codigo","Descricao",1);
 
             int _evento_codigo = Convert.ToInt32(t);
             if(string.IsNullOrEmpty(t)) t = "1";
@@ -127,7 +125,6 @@ namespace GTI_Mvc.Controllers {
             };
 
             Exception ex = mobreqRepository.Incluir_Mobreq_Main(reg);
-            ViewBag.Result = "Dados enviados com sucesso.";
             return RedirectToAction("Mobreq_menu");
         }
 
