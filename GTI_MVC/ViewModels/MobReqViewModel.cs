@@ -19,6 +19,7 @@ namespace GTI_Mvc.ViewModels {
         public string Situacao_Nome { get; set; }
         public string Data_Evento2 { get; set; }
         public string Funcionario { get; set; }
+        public string AnoNumero { get; set; }
     }
 
     public class MobReqQueryViewModel {

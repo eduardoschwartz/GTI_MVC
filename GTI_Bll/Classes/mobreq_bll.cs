@@ -16,10 +16,10 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Evento();
         }
 
-        public Exception Incluir_Mobreq_Main(Mobreq_main Reg) {
+        public int Incluir_Mobreq_Main(Mobreq_main Reg) {
             Mobreq_Data obj = new Mobreq_Data(_connection);
-            Exception ex = obj.Incluir_Mobreq_Main(Reg);
-            return ex;
+            int _numero = obj.Incluir_Mobreq_Main(Reg);
+            return _numero;
 
         }
 
@@ -38,6 +38,11 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Requerimento(Guid);
         }
 
+        public Exception Alterar_Situacao(string Guid,short NovaSituacao,int User) {
+            Mobreq_Data obj = new Mobreq_Data(_connection);
+            Exception ex = obj.Alterar_Situacao(Guid,NovaSituacao,User);
+            return ex;
+        }
 
     }
 }

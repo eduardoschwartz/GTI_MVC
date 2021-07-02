@@ -124,7 +124,7 @@ namespace GTI_Mvc.Controllers {
                 Situacao=1
             };
 
-            Exception ex = mobreqRepository.Incluir_Mobreq_Main(reg);
+            int _num = mobreqRepository.Incluir_Mobreq_Main(reg);
             return RedirectToAction("Mobreq_menu");
         }
 
@@ -189,9 +189,26 @@ namespace GTI_Mvc.Controllers {
             model.Funcionario = _req.UserId2_Nome??"";
             model.Situacao_Codigo = _req.Situacao_Codigo;
             model.Situacao_Nome = _req.Situacao_Nome;
+            model.AnoNumero= _req.Numero.ToString("0000") + "/" + _req.Ano.ToString();
             return View(model);
         }
 
+        [Route("Mobreq_sole")]
+        [HttpPost]
+        public ActionResult Mobreq_sole(MobReqViewModel model,string action) {
+            Mobreq_bll mobreqRepository = new Mobreq_bll(_connection);
+            int _userId = Convert.ToInt32(Session["hashid"]);
+            short _novaSituacao = 1;
+            if(action== "btnConcluido") {
+                _novaSituacao = 2;
+            } else {
+                if(action== "btnCancelar") {
+                    _novaSituacao = 3;
+                }
+            }
+            Exception ex = mobreqRepository.Alterar_Situacao(model.Guid,_novaSituacao,_userId);
+            return RedirectToAction("Mobreq_query");
+        }
 
 
 

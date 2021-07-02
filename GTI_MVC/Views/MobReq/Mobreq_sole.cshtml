@@ -80,12 +80,19 @@
         @Html.HiddenFor(m => m.CpfValue)
         @Html.HiddenFor(m => m.Rg_IE)
         @Html.HiddenFor(m => m.Evento_Codigo)
+        @Html.HiddenFor(m=>m.Guid)
 
         <div class="container" style="width:700px">
             <div class="card">
                 <div class="card-header">Requerimentos</div>
                 <div class="card-body">
                     <table width="640px">
+                        <tr style="height:25px">
+                            <td style="width:160px;font-size:14px">Nº do Requerimento:</td>
+                            <td style="width:480px">
+                                <span style="color:brown;font-size:14px">@Model.AnoNumero</span>
+                            </td>
+                        </tr>
                         <tr style="height:25px">
                             <td style="width:160px;font-size:14px">Tipo de Requerimento:</td>
                             <td style="width:480px">
@@ -119,27 +126,28 @@
                         @Html.TextAreaFor(m => m.Obs,new { @id = "ObsTxt",@style = "width:640px;height:120px",@readonly = true })
                     }
                     <br /><br />
-                          <table width="640px">
-                              <tr style="height:25px">
-                                  <td style="width:180px;font-size:14px">Situação atual:</td>
-                                  <td style="width:460px">
-                                      <span style="color:brown;font-size:14px">@Model.Situacao_Nome</span>
-                                  </td>
-                              </tr>
-                              @if(Model.Situacao_Codigo > 1) {
-                                  <tr style="height:25px">
-                                      <td style="width:180px;font-size:14px">Concluído/Cancelado em:</td>
-                                      <td style="width:460px;color:brown;font-size:14px;text-align:justify"> @Model.Data_Evento2 </td>
-                                  </tr>
-                                  <tr style="height:25px">
-                                      <td style="width:180px;font-size:14px">Concluído/Cancelado por:</td>
-                                      <td style="width:460px;color:brown;font-size:14px;text-align:justify"> @Model.Funcionario </td>
-                                  </tr>
-                              }
-                          </table>
+                    <table width="640px">
+                        <tr style="height:25px">
+                            <td style="width:180px;font-size:14px">Situação atual:</td>
+                            <td style="width:460px">
+                                <span style="color:brown;font-size:14px">@Model.Situacao_Nome</span>
+                            </td>
+                        </tr>
+                        @if(Model.Situacao_Codigo > 1) {
+                            <tr style="height:25px">
+                                <td style="width:180px;font-size:14px">Concluído/Cancelado em:</td>
+                                <td style="width:460px;color:brown;font-size:14px;text-align:justify"> @Model.Data_Evento2 </td>
+                            </tr>
+                            <tr style="height:25px">
+                                <td style="width:180px;font-size:14px">Concluído/Cancelado por:</td>
+                                <td style="width:460px;color:brown;font-size:14px;text-align:justify"> @Model.Funcionario </td>
+                            </tr>
+                        }
+                    </table>
                     <br />
                     @if(Model.Situacao_Codigo == 1) {
-                        <button type="submit" class="btn btn-success">Marcar com concluído</button>
+                        <button type="submit" class="btn btn-success" name="action" value="btnConcluido">Marcar com concluído</button><span>&nbsp;</span>
+                        <button type="submit" class="btn btn-danger" name="action" value="btnCancelar" onclick="return confirm('Cancelar este Requerimento?')" })">Cancelar requerimento</button><span>&nbsp;</span>
                     }
                     <button type="button" class="btn btn-primary" onclick="javascript:history.back()">Voltar</button>
 
@@ -171,12 +179,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $(".maskData").inputmask("99/99/9999");
-
-
-            $("#MainForm").submit(function () {
-                return ValidateForm();
-            });
+                    
 
             $('#msgBox1').dialog({
                 autoOpen: false,
@@ -226,22 +229,7 @@
 
         });
 
-        function ValidateForm() {
-            var _data = document.getElementById('DataTxt').value;
-            var _obs = document.getElementById('ObsTxt').value.trim();
-            if (!Valida_Data(_data)) {
-                document.getElementById('lblMsg').innerHTML = "Data inválida";
-                $('#msgBox1').dialog('open');
-                return false;
-            }
-
-            if (_obs=='') {
-                document.getElementById('lblMsg').innerHTML = "Especifique as alterações!";
-                $('#msgBox1').dialog('open');
-                return false;
-            }
-            return true;
-        }
+       
 
 
     </script>

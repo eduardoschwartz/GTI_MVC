@@ -15,6 +15,8 @@ namespace GTI_Models.Models {
         public short Situacao { get; set; }
         public int? UserId2 { get; set; }
         public DateTime? Data_Evento2 { get; set; }
+        public int Numero { get; set; }
+        public short Ano { get; set; }
     }
 
     public class Mobreq_main_Struct {
@@ -33,6 +35,9 @@ namespace GTI_Models.Models {
         public string Situacao_Nome { get; set; }
         public int?  UserId2_Codigo { get; set; }
         public string UserId2_Nome { get; set; }
+        public int Numero { get; set; }
+        public short Ano { get; set; }
+        public string AnoNumero { get; set; }
         public DateTime? Data_Evento2 { get; set; }
     }
 

@@ -73,7 +73,7 @@
                         <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal; white-space: nowrap;">
                             <tr style="height:14px;">
                                 <td style="display:none">Guid</td>
-                                <td style="width:90px;font-weight:normal">Data</td>
+                                <td style="width:90px;font-weight:normal">Número</td>
                                 <td style="width:310px;font-weight:normal">Razão Social</td>
                                 <td style="width:180px;font-weight:normal">Cpf/Cnpj</td>
                                 <td style="width:240px;font-weight:normal">Tipo de requiremento</td>
@@ -86,7 +86,8 @@
                                 if (item.Data_Inclusao.Year ==Model.Ano_Selected) {
                             <tr style="height:20px;">
                                 <td style="display:none">@Html.DisplayFor(modelItem => item.Guid)</td>
-                                <td style="width:90px;font-weight:normal">@DateTime.Parse(Html.DisplayFor(modelItem => item.Data_Inclusao).ToString()).ToString("dd/MM/yyyy")</td>
+                                @*<td style="width:90px;font-weight:normal">@DateTime.Parse(Html.DisplayFor(modelItem => item.Data_Inclusao).ToString()).ToString("dd/MM/yyyy")</td>*@
+                                <td style="width:90px;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
                                 <td style="width:310px;font-weight:normal;font-size:13px">@Html.DisplayFor(modelItem => item.Razao_Social)</td>
                                 <td style="width:180px;font-weight:normal">@Functions.FormatarCpfCnpj(Html.DisplayFor(modelItem => item.CpfCnpj).ToString())</td>
                                 <td style="width:240px;font-weight:normal">@Html.DisplayFor(modelItem => item.Tipo_Nome)</td>
@@ -97,11 +98,11 @@
                                 } else {
                                     <td style="width:100px;color:blue">@Html.DisplayFor(modelItem => item.Situacao_Nome)</td>
                                 }
-                            <td style="width:100px">
-                                <a href="@Url.Action("MobReq_sole", "MobReq", new { p = item.Guid })" title="Analisar"> <img src="@Url.Content("~/images/alterar.gif")"></a>
-                                <a href="@Url.Action("MobReq_print", "MobReq", new { p = item.Guid })" title="Imprimir"> <img src="@Url.Content("~/images/print.png")"></a>
-                                <a href="@Url.Action("MobReq_query", "Mobreq", new { p = item.Guid })" onclick="return confirm('Cancelar este Requerimento?')" })" title="Cancelar"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
-                            </td>
+                                <td style="width:100px">
+                                    <a href="@Url.Action("MobReq_sole", "MobReq", new { p = item.Guid })" title="Analisar"> <img src="@Url.Content("~/images/alterar.gif")"></a>
+                                    <a href="@Url.Action("MobReq_print", "MobReq", new { p = item.Guid })" title="Imprimir"> <img src="@Url.Content("~/images/print.png")"></a>
+                                    @*<a href="@Url.Action("MobReq_query", "Mobreq", new { p = item.Guid })" onclick="return confirm('Cancelar este Requerimento?')" })" title="Cancelar"> <img src="@Url.Content("~/images/cancelar.gif")"></a>*@
+                                </td>
                             </tr>
                                 }
                             }
