@@ -1,8 +1,13 @@
-﻿using GTI_Bll.Classes;
+﻿using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.Shared;
+using GTI_Bll.Classes;
 using GTI_Models.Models;
 using GTI_Mvc.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.IO;
 using System.Web.Mvc;
 
 namespace GTI_Mvc.Controllers {
@@ -210,7 +215,72 @@ namespace GTI_Mvc.Controllers {
             return RedirectToAction("Mobreq_query");
         }
 
+        public ActionResult Mobreq_print(string p) {
+            Mobreq_bll mobreqRepository = new Mobreq_bll(_connection);
+            Mobreq_main_Struct _req = mobreqRepository.Retorna_Requerimento(p);
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
+            EmpresaStruct _dados = empresaRepository.Retorna_Empresa(_req.Codigo);
 
+            string _rgie = "N/D";
+            bool _bCpf = _req.CpfCnpj.Length == 11 ? true : false;
+            if(_bCpf)
+                _rgie = string.IsNullOrEmpty(_dados.Rg) ? _rgie : _dados.Rg;
+            else
+                _rgie = string.IsNullOrEmpty(_dados.Inscricao_estadual) ? _rgie : _dados.Inscricao_estadual;
+
+            string _endereco = _dados.Endereco_nome_abreviado + ", " + _dados.Numero.ToString() + " " + _dados.Complemento??"" + ", " + _dados.Bairro_nome + " " ;
+            _endereco += _dados.Cidade_nome + "/" + _dados.UF;
+
+
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            Usuario_web _user = sistemaRepository.Retorna_Usuario_Web(_req.UserId);
+
+
+            string _filename = "";
+            if(_req.Tipo_Codigo == 1)
+                _filename = "MobReq_Inscricao.rpt";
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/"+_filename));
+            TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+            TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+            ConnectionInfo crConnectionInfo = new ConnectionInfo();
+            Tables CrTables;
+            string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+            string IPAddress = builder.DataSource;
+            string _userId = builder.UserID;
+            string _pwd = builder.Password;
+
+            crConnectionInfo.ServerName = IPAddress;
+            crConnectionInfo.DatabaseName = "Tributacao";
+            crConnectionInfo.UserID = _userId;
+            crConnectionInfo.Password = _pwd;
+            CrTables = rd.Database.Tables;
+            foreach(Table CrTable in CrTables) {
+                crtableLogoninfo = CrTable.LogOnInfo;
+                crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                CrTable.ApplyLogOnInfo(crtableLogoninfo);
+            }
+
+            rd.SetParameterValue("Guid",p);
+            rd.SetParameterValue("Razao",_req.Razao_Social);
+            rd.SetParameterValue("CpfCnpj",Functions.FormatarCpfCnpj( _req.CpfCnpj));
+            rd.SetParameterValue("RgIe",_rgie);
+            rd.SetParameterValue("DataCadastro",_req.Data_Evento);
+            rd.SetParameterValue("Endereco",_endereco);
+            rd.SetParameterValue("Atividade",_dados.Atividade_extenso);
+            rd.SetParameterValue("Nome",_user.Nome);
+            rd.SetParameterValue("Telefone",_user.Telefone);
+            rd.SetParameterValue("Email",_user.Email);
+
+            try {
+                Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                return File(stream,"application/pdf","Requerimento.pdf");
+            } catch {
+                throw;
+            }
+        }
 
     }
 }
