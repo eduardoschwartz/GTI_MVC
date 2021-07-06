@@ -16,14 +16,14 @@ namespace GTI_MVC.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class MobReq_Inscricao : ReportClass {
+    public class MobReq_Reativa : ReportClass {
         
-        public MobReq_Inscricao() {
+        public MobReq_Reativa() {
         }
         
         public override string ResourceName {
             get {
-                return "MobReq_Inscricao.rpt";
+                return "MobReq_Reativa.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace GTI_MVC.Reports {
         
         public override string FullResourceName {
             get {
-                return "GTI_MVC.Reports.MobReq_Inscricao.rpt";
+                return "GTI_MVC.Reports.MobReq_Reativa.rpt";
             }
             set {
                 // Do nothing
@@ -90,7 +90,7 @@ namespace GTI_MVC.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section DetailSection2 {
+        public CrystalDecisions.CrystalReports.Engine.Section DetailSection3 {
             get {
                 return this.ReportDefinition.Sections[5];
             }
@@ -98,7 +98,7 @@ namespace GTI_MVC.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section Section4 {
+        public CrystalDecisions.CrystalReports.Engine.Section DetailSection2 {
             get {
                 return this.ReportDefinition.Sections[6];
             }
@@ -106,9 +106,17 @@ namespace GTI_MVC.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section Section5 {
+        public CrystalDecisions.CrystalReports.Engine.Section Section4 {
             get {
                 return this.ReportDefinition.Sections[7];
+            }
+        }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.CrystalReports.Engine.Section Section5 {
+            get {
+                return this.ReportDefinition.Sections[8];
             }
         }
         
@@ -202,9 +210,9 @@ namespace GTI_MVC.Reports {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedMobReq_Inscricao : Component, ICachedReport {
+    public class CachedMobReq_Reativa : Component, ICachedReport {
         
-        public CachedMobReq_Inscricao() {
+        public CachedMobReq_Reativa() {
         }
         
         [Browsable(false)]
@@ -241,7 +249,7 @@ namespace GTI_MVC.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            MobReq_Inscricao rpt = new MobReq_Inscricao();
+            MobReq_Reativa rpt = new MobReq_Reativa();
             rpt.Site = this.Site;
             return rpt;
         }

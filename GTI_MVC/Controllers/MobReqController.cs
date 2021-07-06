@@ -235,10 +235,22 @@ namespace GTI_Mvc.Controllers {
             Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             Usuario_web _user = sistemaRepository.Retorna_Usuario_Web(_req.UserId);
 
-
             string _filename = "";
             if(_req.Tipo_Codigo == 1)
                 _filename = "MobReq_Inscricao.rpt";
+            else {
+                if(_req.Tipo_Codigo == 2) { 
+                    _filename = "MobReq_Baixa.rpt";
+                } else {
+                    if(_req.Tipo_Codigo == 3) {
+                        _filename = "MobReq_Alteracao.rpt";
+                    } else {
+                        if(_req.Tipo_Codigo == 4) {
+                            _filename = "MobReq_Reativa.rpt";
+                        }
+                    }
+                }
+            }
 
             ReportDocument rd = new ReportDocument();
             rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/"+_filename));
@@ -273,6 +285,7 @@ namespace GTI_Mvc.Controllers {
             rd.SetParameterValue("Nome",_user.Nome);
             rd.SetParameterValue("Telefone",_user.Telefone);
             rd.SetParameterValue("Email",_user.Email);
+            rd.SetParameterValue("Obs",_req.Obs??"");
 
             try {
                 Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);

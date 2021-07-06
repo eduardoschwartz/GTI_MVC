@@ -16,14 +16,14 @@ namespace GTI_MVC.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class MobReq_Inscricao : ReportClass {
+    public class MobReq_Baixa : ReportClass {
         
-        public MobReq_Inscricao() {
+        public MobReq_Baixa() {
         }
         
         public override string ResourceName {
             get {
-                return "MobReq_Inscricao.rpt";
+                return "MobReq_Baixa.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace GTI_MVC.Reports {
         
         public override string FullResourceName {
             get {
-                return "GTI_MVC.Reports.MobReq_Inscricao.rpt";
+                return "GTI_MVC.Reports.MobReq_Baixa.rpt";
             }
             set {
                 // Do nothing
@@ -202,9 +202,9 @@ namespace GTI_MVC.Reports {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedMobReq_Inscricao : Component, ICachedReport {
+    public class CachedMobReq_Baixa : Component, ICachedReport {
         
-        public CachedMobReq_Inscricao() {
+        public CachedMobReq_Baixa() {
         }
         
         [Browsable(false)]
@@ -241,7 +241,7 @@ namespace GTI_MVC.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            MobReq_Inscricao rpt = new MobReq_Inscricao();
+            MobReq_Baixa rpt = new MobReq_Baixa();
             rpt.Site = this.Site;
             return rpt;
         }
