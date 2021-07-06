@@ -19,6 +19,7 @@ namespace GTI_Mvc.Controllers {
                 Session.Remove("hashfname");
                 //Functions.pUserFullName = "Visitante";
             }
+            ViewBag.FiscalMov = Session["hashfiscalmov"] == null ? "N" : Session["hashfiscalmov"].ToString();
             return View(model);
         }
 

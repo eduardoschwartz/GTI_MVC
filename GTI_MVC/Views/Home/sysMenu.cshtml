@@ -39,34 +39,36 @@
     <div class="card">
         <div class="card-header">Selecione um serviço</div>
         <div class="card-body">
-            @if (Session["hashfunc"].ToString() == "S") {
-                @Html.ActionLink("Tramitação de processos", "Tramite_Processo", "Protocolo", null, new { @class = "actionlink" })<br />
+            @if(Session["hashfunc"].ToString() == "S") {
+                @Html.ActionLink("Tramitação de processos","Tramite_Processo","Protocolo",null,new { @class = "actionlink" })<br />
 
-                if (Session["hashfiscal"].ToString() == "S") {
-                    @Html.ActionLink("Notificação de ISS Contrução Civil", "Notificacao_menu", "Tributario", null, new { @class = "actionlink" })<br />
+                if(Session["hashfiscal"].ToString() == "S") {
+                    @Html.ActionLink("Notificação de ISS Contrução Civil","Notificacao_menu","Tributario",null,new { @class = "actionlink" })<br />
                 }
-                if (Session["hashfiscalpostura"].ToString() == "S") {
-                    @Html.ActionLink("Notificação de Limpeza de Terreno", "Notificacao_ter_menu", "Imovel", null, new { @class = "actionlink" })<br />
-                    @Html.ActionLink("Notificação de Regularização de Obra", "Notificacao_obra_menu", "Imovel", null, new { @class = "actionlink" })<br />
-                    @Html.ActionLink("Consulta aos cadastro de imóvel", "CadImovelqryC", "Imovel", null, new { @class = "actionlink" })<br />
-                    @Html.ActionLink("Consulta de processos", "ProcessoqryC", "Protocolo", null, new { @class = "actionlink" })<br />
+                if(Session["hashfiscalpostura"].ToString() == "S") {
+                    @Html.ActionLink("Notificação de Limpeza de Terreno","Notificacao_ter_menu","Imovel",null,new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Notificação de Regularização de Obra","Notificacao_obra_menu","Imovel",null,new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Consulta aos cadastro de imóvel","CadImovelqryC","Imovel",null,new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Consulta de processos","ProcessoqryC","Protocolo",null,new { @class = "actionlink" })<br />
                 }
-                if (Session["hashfiscalmov"].ToString() == "S") {
-                    @Html.ActionLink("Redesim", "UploadFiles", "RedeSim", null, new { @class = "actionlink" })<br />
-                    @Html.ActionLink("Alvará de Funcionamento", "Alvara", "Empresa", null, new { @class = "actionlink" })<br />
+                if(Session["hashfiscalmov"].ToString() == "S") {
+                    @Html.ActionLink("Redesim","UploadFiles","RedeSim",null,new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Alvará de Funcionamento","Alvara","Empresa",null,new { @class = "actionlink" })<br />
+
                 }
+                @Html.ActionLink("Requerimentos (Alteração cadastral, baixa de atividade, etc..)","mobreq_menu","MobReq",null,new { @class = "actionlink" })<br />
             }
-            @if (ViewBag.UsoPlataforma == "S") {
-                @Html.ActionLink("Uso de Plataforma (terminal Rodoviário)", "Rod_menu", "Plataforma", null, new { @class = "actionlink" })<br />
+            @if(ViewBag.UsoPlataforma == "S") {
+                @Html.ActionLink("Uso de Plataforma (terminal Rodoviário)","Rod_menu","Plataforma",null,new { @class = "actionlink" })<br />
             }
 
-            @if (Session["hashid"].ToString() == "433") {
+            @if(Session["hashid"].ToString() == "433") {
             }
-            @Html.ActionLink("Inclusão de Cep não cadastrado", "Cep_inc", "Shared", null, new { @class = "actionlink" })<br />
-            @Html.ActionLink("Imposto sobre Transmissão de Bens Imóveis (ITBI)", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Inclusão de Cep não cadastrado","Cep_inc","Shared",null,new { @class = "actionlink" })<br />
+            @Html.ActionLink("Imposto sobre Transmissão de Bens Imóveis (ITBI)","Itbi_menu","Itbi",null,new { @class = "actionlink" })<br />
 
-            @if (Session["hashid"].ToString() == "456") {
-                @Html.ActionLink("Parcelamento de débitos", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<span style="padding-left:5px;color:red">(** Somente para testes **)</span><br />
+            @if(Session["hashid"].ToString() == "456") {
+                @Html.ActionLink("Parcelamento de débitos","Parc_index","Parcelamento",null,new { @class = "actionlink" })<span style="padding-left:5px;color:red">(** Somente para testes **)</span><br />
             }
 
         </div>
