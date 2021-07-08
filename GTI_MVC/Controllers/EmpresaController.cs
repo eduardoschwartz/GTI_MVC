@@ -69,7 +69,7 @@ namespace GTI_Mvc.Controllers {
                 if (!_bCpf) {
                     bool _valida = Functions.ValidaCNPJ(_cpf); //CNPJ válido?
                     if (_valida) {
-                        _codigo = empresaRepository.ExisteEmpresaCnpj(_cpf);
+                        _codigo = empresaRepository.ExisteEmpresaCnpj_Todas(_cpf);
                         if (_codigo > 0)
                             _existeCod = true;
                     } else {
@@ -80,7 +80,7 @@ namespace GTI_Mvc.Controllers {
                     if (model.CpfValue != null) {
                         bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
                         if (_valida) {
-                            _codigo = empresaRepository.ExisteEmpresaCpf(_cpf);
+                            _codigo = empresaRepository.ExisteEmpresaCpf_Todas(_cpf);
                             if (_codigo > 0)
                                 _existeCod = true;
 

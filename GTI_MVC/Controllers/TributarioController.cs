@@ -838,14 +838,14 @@ namespace GTI_Mvc.Controllers {
                         return View(model);
                     } else {
                         if (model.CpfValue != null) {
-                            _existeCod = empresaRepository.ExisteEmpresaCpf(RetornaNumero(model.CpfValue))>0;
+                            _existeCod = empresaRepository.ExisteEmpresaCpf_Todas(RetornaNumero(model.CpfValue))>0;
                             if (!_existeCod) {
                                 ViewBag.Result = "CPF não pertence a esta inscrição.";
                                 return View(model);
                             }
                         } else {
                             if (model.CnpjValue != null) {
-                                _existeCod = empresaRepository.ExisteEmpresaCnpj(RetornaNumero(model.CnpjValue))>0;
+                                _existeCod = empresaRepository.ExisteEmpresaCnpj_Todas(RetornaNumero(model.CnpjValue))>0;
                                 if (!_existeCod) {
                                     ViewBag.Result = "CNPJ não pertence a esta inscrição.";
                                     return View(model);
