@@ -2916,9 +2916,19 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public bool Existe_AutoInfracao_Queimada(int Ano, int Numero) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from i in db.Auto_Infracao_Queimada
+                           where i.Ano_multa == Ano && i.Numero_multa == Numero select i.Inscricao).FirstOrDefault();
+                if (string.IsNullOrEmpty(reg))
+                    return false;
+                else
+                    return true;
+                }
+            }
 
 
-    }//end class
-}
+        }//end class
+    }
 
 

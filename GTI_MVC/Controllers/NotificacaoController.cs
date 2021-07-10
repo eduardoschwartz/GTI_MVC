@@ -760,6 +760,143 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
+        [Route("AutoInfracao_queimada_menu")]
+        [HttpGet]
+        public ActionResult AutoInfracao_queimada_menu() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            return View();
+        }
+
+        [Route("AutoInfracao_queimada_add")]
+        [HttpGet]
+        public ActionResult AutoInfracao_queimada_add() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            NotificacaoTerViewModel model = new NotificacaoTerViewModel();
+            List<int> Lista_Ano = new List<int>();
+            for (int i = 2020; i <= DateTime.Now.Year; i++) {
+                Lista_Ano.Add(i);
+                }
+            ViewBag.Lista_Ano = new SelectList(Lista_Ano);
+            model.Ano_Auto = DateTime.Now.Year;
+            return View(model);
+            }
+
+        [Route("AutoInfracao_queimada_add")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AutoInfracao_queimada_add(NotificacaoTerViewModel model, string action) {
+            if (model.Codigo_Imovel == 0) {
+                ViewBag.Result = "Código de imóvel inválido.";
+                return View(model);
+                }
+            int _codigo = model.Codigo_Imovel;
+            List<int> Lista_Ano = new List<int>();
+            for (int i = 2020; i <= DateTime.Now.Year; i++) {
+                Lista_Ano.Add(i);
+                }
+            ViewBag.Lista_Ano = new SelectList(Lista_Ano);
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+            if (action == "btnCodigoOK") {
+                ImovelStruct _imovel = imovelRepository.Dados_Imovel(_codigo);
+                Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+                List<ProprietarioStruct> Listaprop = imovelRepository.Lista_Proprietario(_codigo, false);
+                if (Listaprop.Count == 0) {
+                    ViewBag.Result = "Não é possível emitir multa para este imóvel.";
+                    model = new NotificacaoTerViewModel();
+                    return View(model);
+                    }
+                foreach (ProprietarioStruct prop in Listaprop) {
+                    if (prop.Tipo == "P" && prop.Principal) {
+                        model.Codigo_cidadao = prop.Codigo;
+                        model.Nome_Proprietario = prop.Nome;
+                        CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(prop.Codigo);
+                        model.Rg = _cidadao.Rg;
+                        model.Cpf = string.IsNullOrEmpty(_cidadao.Cnpj) ? _cidadao.Cpf : _cidadao.Cnpj;
+                        model.Cpf = Functions.FormatarCpfCnpj(model.Cpf);
+                        break;
+                        }
+                    }
+                foreach (ProprietarioStruct prop in Listaprop) {
+                    if (prop.Tipo == "P" && !prop.Principal) {
+                        model.Codigo_cidadao2 = prop.Codigo;
+                        model.Nome_Proprietario2 = prop.Nome;
+                        CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(prop.Codigo);
+                        model.Rg2 = _cidadao.Rg;
+                        model.Cpf2 = string.IsNullOrEmpty(_cidadao.Cnpj) ? _cidadao.Cpf : _cidadao.Cnpj;
+                        model.Cpf2 = Functions.FormatarCpfCnpj(model.Cpf);
+                        break;
+                        }
+                    }
+                if (string.IsNullOrEmpty(model.Nome_Proprietario2) && Listaprop.Count > 1) {
+                    foreach (ProprietarioStruct prop in Listaprop) {
+                        if (prop.Tipo != "P") {
+                            model.Codigo_cidadao2 = prop.Codigo;
+                            model.Nome_Proprietario2 = prop.Nome;
+                            CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(prop.Codigo);
+                            model.Rg2 = _cidadao.Rg;
+                            model.Cpf2 = string.IsNullOrEmpty(_cidadao.Cnpj) ? _cidadao.Cpf : _cidadao.Cnpj;
+                            model.Cpf2 = Functions.FormatarCpfCnpj(model.Cpf2);
+                            break;
+                            }
+                        }
+                    }
+
+                model.Inscricao = _imovel.Inscricao;
+                EnderecoStruct _endLocal = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Local);
+                string _compl = _endLocal.Complemento == null ? "" : " " + _endLocal.Complemento;
+                model.Endereco_Local = _endLocal.Endereco + ", " + _endLocal.Numero.ToString() + _compl + " - " + _endLocal.NomeBairro.ToString() + " - " + _endLocal.NomeCidade + "/" + _endLocal.UF + " Cep:" + _endLocal.Cep;
+
+                Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+                Contribuinte_Header_Struct _endProp = sistemaRepository.Contribuinte_Header(model.Codigo_cidadao);
+                _compl = _endProp.Complemento == null ? "" : " " + _endProp.Complemento;
+                model.Endereco_Prop = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _compl + " - " + _endProp.Nome_bairro.ToString() + " - " + _endProp.Nome_cidade + "/" + _endProp.Nome_uf + " Cep:" + _endProp.Cep;
+
+                if (model.Codigo_cidadao2 > 0) {
+                    _endProp = sistemaRepository.Contribuinte_Header(model.Codigo_cidadao2);
+                    _compl = _endProp.Complemento == null ? "" : " " + _endProp.Complemento;
+                    model.Endereco_prop2 = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _compl + " - " + _endProp.Nome_bairro.ToString() + " - " + _endProp.Nome_cidade + "/" + _endProp.Nome_uf + " Cep:" + _endProp.Cep;
+                    }
+
+                EnderecoStruct _endEntrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Entrega);
+                if (_endEntrega.Endereco != null) {
+                    _compl = _endEntrega.Complemento == null ? "" : " " + _endEntrega.Complemento;
+                    model.Endereco_Entrega = _endEntrega.Endereco + ", " + _endEntrega.Numero.ToString() + _compl + " - " + _endEntrega.NomeBairro.ToString() + " - " + _endEntrega.NomeCidade + "/" + _endEntrega.UF + " Cep:" + _endEntrega.Cep;
+                    } else {
+                    if (_imovel.EE_TipoEndereco == 0)
+                        model.Endereco_Entrega = model.Endereco_Local;
+                    else {
+                        model.Endereco_Entrega = model.Endereco_Prop;
+                        }
+                    }
+                }
+
+            if (action == "btnCodigoCancel") {
+                model = new NotificacaoTerViewModel();
+                return View(model);
+                }
+            if (action == "btnValida") {
+                bool _existe = imovelRepository.Existe_AutoInfracao_Queimada(model.Ano_Auto, model.Numero_Auto);
+                if (_existe) {
+                    ViewBag.Result = "Nº de Auto de Infração já cadastrado.";
+                    return View(model);
+                    } else {
+                    int _userid = Convert.ToInt32(Session["hashid"]);
+                    if (_userid == 0) {
+                        ViewBag.Result = "Sua sessão foi encerrada, favor fazer login novamente.";
+                        return View(model);
+                        }
+                    Save_Notificacao_Obra(model);
+                    return RedirectToAction("AutoInfracao_queimada_query");
+                    }
+                }
+
+            return View(model);
+            }
+
+
 
 
         }

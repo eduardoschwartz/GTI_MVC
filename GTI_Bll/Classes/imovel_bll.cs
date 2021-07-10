@@ -933,6 +933,11 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Imovel_Socio(Codigo_Socio);
         }
 
+        public bool Existe_AutoInfracao_Queimada(int Ano, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Existe_AutoInfracao_Queimada(Ano,Numero);
+        }
+
 
         #endregion
 

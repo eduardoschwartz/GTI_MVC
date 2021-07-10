@@ -206,5 +206,6 @@ namespace GTI_Dal {
         public DbSet<Mobreq_evento> Mobreq_Evento { get; set; }
         public DbSet<Mobreq_main> Mobreq_Main { get; set; }
         public DbSet<Mobreq_Situacao> Mobreq_Situacao { get; set; }
-    }
+        public DbSet<Auto_Infracao_Queimada> Auto_Infracao_Queimada { get; set; }
+        }
 }
