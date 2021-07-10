@@ -46,8 +46,8 @@
                     @Html.ActionLink("Notificação de ISS Contrução Civil","Notificacao_menu","Tributario",null,new { @class = "actionlink" })<br />
                 }
                 if(Session["hashfiscalpostura"].ToString() == "S") {
-                    @Html.ActionLink("Notificação de Limpeza de Terreno","Notificacao_ter_menu","Imovel",null,new { @class = "actionlink" })<br />
-                    @Html.ActionLink("Notificação de Regularização de Obra","Notificacao_obra_menu","Imovel",null,new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Notificação de Limpeza de Terreno","Notificacao_ter_menu", "Notificacao", null,new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Notificação de Regularização de Obra","Notificacao_obra_menu", "Notificacao", null,new { @class = "actionlink" })<br />
                     @Html.ActionLink("Consulta aos cadastro de imóvel","CadImovelqryC","Imovel",null,new { @class = "actionlink" })<br />
                     @Html.ActionLink("Consulta de processos","ProcessoqryC","Protocolo",null,new { @class = "actionlink" })<br />
                 }

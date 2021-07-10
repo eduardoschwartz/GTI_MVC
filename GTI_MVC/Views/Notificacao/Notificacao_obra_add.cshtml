@@ -2,79 +2,78 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Auto de Infração de Terreno";
+    ViewBag.Title = "Notificação de Regularização de Obra";
 }
 
 <style>
-    .textBoxBlue {
-        height: 25px;
-        position: relative;
-        border: 1px solid #0094ff;
-        border-color: rgba(0, 0, 0, .14);
-        background-color: white;
-        font-size: 14px;
-        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
-    }
+        .textBoxBlue {
+            height: 25px;
+            position: relative;
+            border: 1px solid #0094ff;
+            border-color: rgba(0, 0, 0, .14);
+            background-color: white;
+            font-size: 14px;
+            box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
+        }
 
-    .center {
-        margin: auto;
-    }
+        .center {
+            margin: auto;
+        }
 
-    .actionlink:hover {
-        color: darkgreen;
-    }
+        .actionlink:hover {
+            color: darkgreen;
+        }
 
-    .actionlink {
-        color: darkslateblue;
-    }
+        .actionlink {
+            color: darkslateblue;
+        }
 
-    .card-header {
-        background-color: mistyrose;
-        color: brown;
-        font-size: 14px
-    }
+        .card-header {
+            background-color: mistyrose;
+            color: brown;
+            font-size: 14px
+        }
 
-    .card {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 14px;
-    }
+        .card {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+        }
 
-    .card-footer {
-        background-color: whitesmoke;
-        font-size: 14px
-    }
+        .card-footer {
+            background-color: whitesmoke;
+            font-size: 14px
+        }
 
-    .btn-primary {
-        background-color: steelblue;
-    }
+        .btn-primary {
+            background-color: steelblue;
+        }
 
-    .btn {
-        font-size: 14px;
-        border-radius: 4px;
-    }
+        .btn {
+            font-size: 14px;
+            border-radius: 4px;
+        }
 
-    .errorlabel {
-        font-weight: normal;
-        color: red;
-        padding-left: 20px;
-        font-size: 13px;
-        font-family: Arial, Helvetica, sans-serif;
-    }
+        .errorlabel {
+            font-weight: normal;
+            color: red;
+            padding-left: 20px;
+            font-size: 13px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
 </style>
 
 <div class="center" style="width:700px">
 
-    @using (Html.BeginForm("AutoInfracao_ter_add", "Imovel", FormMethod.Post, new { @id = "MainForm" })) {
+    @using (Html.BeginForm("Notificacao_obra_add", "Notificacao", FormMethod.Post, new { @id = "MainForm" })) {
         @Html.AntiForgeryToken()
         <div class="container" style="width:700px">
             <div class="card">
-                <div class="card-header">Auto de Infração de Limpeza de Terreno</div>
+                <div class="card-header">Notificação de Regularização de Obra</div>
                 <div class="card-body">
 
                     <div style="padding-left:7px">
                         @Html.HiddenFor(m => m.Inscricao, new { Value = Model.Inscricao })
                         @Html.HiddenFor(m => m.Ano_Notificacao)
-                        @Html.HiddenFor(m => m.Ano_Auto)
                         @Html.HiddenFor(m => m.Endereco_Entrega, new { Value = Model.Endereco_Entrega })
                         @Html.HiddenFor(m => m.Endereco_entrega2, new { Value = Model.Endereco_entrega2 })
                         @Html.HiddenFor(m => m.Endereco_Local, new { Value = Model.Endereco_Local })
@@ -90,33 +89,27 @@
                         @Html.HiddenFor(m => m.Codigo_cidadao2, new { Value = Model.Codigo_cidadao2 })
 
 
-                        <table style="font-size:14px;width:480px">
+                        <table style="font-size:13px;width:640px">
                             <tr style="height:30px">
-                                <td style="width:60px">
-                                    <label style="font-weight:normal;padding-top:7px">Exercício:</label>
+                                <td style="width:120px">
+                                    <label style="font-weight:normal;padding-top:4px">Código do imóvel:</label>
                                 </td>
-                                <td style="width:100px">
-                                    @Html.DropDownListFor(m => m.Ano_Notificacao, ViewBag.Lista_Ano as SelectList, null, new { @id = "AnoDropDown", style = "width:70px;height:25px", rows = 10 })
-                                </td>
-                                <td style="width:80px">
-                                    <label style="font-weight:normal;padding-top:7px">Nº Notificação:</label>
-                                </td>
-                                <td style="width:150px">
-                                    @if (Model.Numero_Notificacao == 0) {
-                                        @Html.TextBoxFor(m => m.Numero_Notificacao, new { @id = "txtNumero", @onKeyPress = "return formata(this, '§§§§§', event)", style = "width:70px;", @Value = "" })
+                                <td>
+                                    @if (@Model.Inscricao == null) {
+                                        @Html.TextBoxFor(m => m.Codigo_Imovel, new { @id = "codigo", @style = "width:100px;height:25px", @Value = "", @onKeyPress = "return formata(this, '§§§§§', event)" })
                                         <label>&nbsp;&nbsp;</label>
                                         <button id="btnCodigoOk" type="submit" class="btn btn-primary" name="action" value="btnCodigoOK">Consultar</button>
                                     } else {
-                                        @Html.TextBoxFor(m => m.Numero_Notificacao, new { @id = "txtNumero", @onKeyPress = "return formata(this, '§§§§§', event)", style = "width:70px;color:blue", @readonly = true })
+                                        @Html.TextBoxFor(m => m.Codigo_Imovel, new { @id = "codigo", @style = "width:100px;height:25px;color:blue", @readonly = true })
                                         <label>&nbsp;&nbsp;</label>
                                         <button id="btnCodigoCancel" type="submit" class="btn btn-danger" onclick="return cancelarCodigo()" name="action" value="btnCodigoCancel" data-balloon-length="medium" aria-label="Ao cancelar, todos os dados inseridos neste lançamento de ITBI serão perdidos." data-balloon-pos="right">Cancelar</button>
+                                        <span style="padding-left:10px">Inscrição Cadastral:&nbsp;</span><span style="color:brown">@Model.Inscricao</span>
                                     }
                                 </td>
                             </tr>
                         </table>
 
-
-                        @if (!string.IsNullOrEmpty(Model.Nome_Proprietario)) {
+                        @if (@Model.Inscricao != null) {
                             <br />
                             <table style="font-size:13px;width:640px">
                                 <tr>
@@ -153,7 +146,7 @@
                                         @Model.Endereco_Prop
                                     </td>
                                 </tr>
-                                @if (!string.IsNullOrEmpty(Model.Endereco_prop2)) {
+                                @if (Model.Endereco_prop2 != null) {
                                     <tr>
                                         <td style="width:160px;height:20px">
                                             Endereço do Proprietário 2:
@@ -171,36 +164,35 @@
                                         @Model.Endereco_Entrega
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td><span>&nbsp;</span></td>
-                                </tr>
-                                <tr>
-                                    <td style="width:160px;height:20px">
-                                        Data da Notificação:
-                                    </td>
-                                    <td style="width:480px;color:brown">
-                                        @Html.TextBoxFor(m => m.Data_Notificacao, new { @id = "txtData", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)", style = "width:90px;" })
-                                    </td>
-                                </tr>
+                               
                             </table>
                             <br />
-                            <Label style="font-weight:bold;color:brown">Auto de Infração</Label><br />
-                            <table style="font-size:14px;width:360px">
+                            <table style="font-size:14px;width:600px">
                                 <tr style="height:30px">
-                                    <td style="width:80px">
+                                    <td style="width:120px">
                                         <label style="font-weight:normal;padding-top:7px">Exercício:</label>
                                     </td>
-                                    <td style="width:90px">
-                                        @Html.DropDownListFor(m => m.Ano_Auto, ViewBag.Lista_Ano as SelectList, null, new { @id = "AnoDropDown", style = "width:70px;height:25px", rows = 10 })
+                                    <td style="width:150px">
+                                        @Html.DropDownListFor(m => m.Ano_Notificacao, ViewBag.Lista_Ano as SelectList, null, new { @id = "AnoDropDown", style = "width:70px;height:25px", rows = 10 })
                                     </td>
-                                    <td style="width:90px">
-                                        <label style="font-weight:normal;padding-top:7px">Nº do Auto:</label>
+                                    <td style="width:150px">
+                                        <label style="font-weight:normal;padding-top:7px">Nº Notificação:</label>
                                     </td>
-                                    <td style="width:110px">
-                                        @if (Model.Numero_Auto > 0) {
-                                            @Html.TextBoxFor(m => m.Numero_Auto, new { @id = "txtNumero", @onKeyPress = "return formata(this, '§§§§§', event)", style = "width:70px;" })
+                                    <td style="width:100px">
+                                        @if (Model.Numero_Notificacao > 0) {
+                                            @Html.TextBoxFor(m => m.Numero_Notificacao, new { @id = "txtNumero", @onKeyPress = "return formata(this, '§§§§§', event)", style = "width:70px;", @Value = Model.Numero_Notificacao })
                                         } else {
-                                            @Html.TextBoxFor(m => m.Numero_Auto, new { @id = "txtNumero", @onKeyPress = "return formata(this, '§§§§§', event)", style = "width:70px;", @Value = "" })
+                                            @Html.TextBoxFor(m => m.Numero_Notificacao, new { @id = "txtNumero", @onKeyPress = "return formata(this, '§§§§§', event)", style = "width:70px;", @Value = "" })
+                                        }
+                                    </td>
+                                    <td style="width:200px">
+                                        <label style="font-weight:normal;padding-top:7px">Prazo em dias:</label>
+                                    </td>
+                                    <td style="width:100px">
+                                        @if (Model.Prazo > 0) {
+                                            @Html.TextBoxFor(m => m.Prazo, new { @id = "txtPrazo", @onKeyPress = "return formata(this, '§§§', event)", style = "width:70px;", @Value = Model.Prazo })
+                                        } else {
+                                            @Html.TextBoxFor(m => m.Prazo, new { @id = "txtPrazo", @onKeyPress = "return formata(this, '§§§', event)", style = "width:70px;", @Value = "" })
                                         }
                                     </td>
                                 </tr>
@@ -210,16 +202,16 @@
 
                 </div>
                 <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
-                @if (!string.IsNullOrEmpty(@Model.Nome_Proprietario)) {
+                @if (@Model.Inscricao != null) {
                     <div style="text-align:center">
-                        <button type="submit" id="btnOk" class="btn btn-primary" name="action"  value="btnValida">Gerar auto de infração</button>
+                        <button type="submit" id="btnOk" class="btn btn-primary" name="action"  value="btnValida">Gerar notificação</button>
                         <br />
                         <br />
                     </div>
                 }
 
                 <div class="card-footer">
-                    @Html.ActionLink("Retornar ao menu de opções", "Notificacao_ter_menu", "Imovel", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu de opções", "Notificacao_obra_menu", "Notificacao", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
                 </div>
             </div>
@@ -233,7 +225,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#btnCodigoOk").click(function () {
+            $("#btnOk").click(function () {
                 return ValidateForm();
             });
         });
@@ -241,11 +233,24 @@
         function ValidateForm() {
             ClearError();
             var _numero = document.getElementById('txtNumero').value;
+            var _prazo = document.getElementById('txtPrazo').value;
 
             if (_numero == "" || parseInt(_numero) == 0) {
                 document.getElementById('errorLabel').innerHTML = "Digite o nº da notificação";
                 return false;
             }
+            if (_prazo == "" || parseInt(_prazo) == 0) {
+                document.getElementById('errorLabel').innerHTML = "Digite o prazo em dias";
+                return false;
+            }
+
+
+            if (confirm('Você deseja gerar esta notificação?')) {
+                return true;
+            } else {
+                return false;
+            }
+
         }
 
         function ClearError() {
