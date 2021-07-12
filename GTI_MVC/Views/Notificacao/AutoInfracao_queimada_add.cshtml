@@ -184,14 +184,14 @@
                                         }
                                     </td>
                                     <td style="width:200px">
-                                        <label style="font-weight:normal;padding-top:7px">Prazo em dias:</label>
+                                        @*<label style="font-weight:normal;padding-top:7px">Prazo em dias:</label>*@
                                     </td>
                                     <td style="width:100px">
-                                        @if (Model.Prazo > 0) {
+                                        @*@if (Model.Prazo > 0) {
                                             @Html.TextBoxFor(m => m.Prazo, new { @id = "txtPrazo", @onKeyPress = "return formata(this, '§§§', event)", style = "width:70px;", @Value = Model.Prazo })
                                         } else {
                                             @Html.TextBoxFor(m => m.Prazo, new { @id = "txtPrazo", @onKeyPress = "return formata(this, '§§§', event)", style = "width:70px;", @Value = "" })
-                                        }
+                                        }*@
                                     </td>
                                 </tr>
                             </table>
@@ -280,18 +280,18 @@
 
         function ValidateForm() {
             var _numero = document.getElementById('txtNumero').value;
-            var _prazo = document.getElementById('txtPrazo').value;
+            /*var _prazo = document.getElementById('txtPrazo').value;*/
 
             if (_numero == "" || parseInt(_numero) == 0) {
                 document.getElementById('lblMsg').innerHTML = "Digite o nº do Auto de Infração";
                 $('#msgBox1').dialog('open');
                 return false;
             }
-            if (_prazo == "" || parseInt(_prazo) == 0) {
-                document.getElementById('lblMsg').innerHTML = "Digite o prazo em dias";
-                $('#msgBox1').dialog('open');
-                return false;
-            }
+            //if (_prazo == "" || parseInt(_prazo) == 0) {
+            //    document.getElementById('lblMsg').innerHTML = "Digite o prazo em dias";
+            //    $('#msgBox1').dialog('open');
+            //    return false;
+            //}
 
 
             if (confirm('Você deseja gerar este Auto de Infração?')) {

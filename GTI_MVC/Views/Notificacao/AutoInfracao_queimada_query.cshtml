@@ -75,7 +75,7 @@
                                 <td style="width:100px;font-weight:normal">Nº Auto.</td>
                                 <td style="width:460px;font-weight:normal">Nome do Contribuinte</td>
                                 <td style="width:80px;font-weight:normal;text-align:center">Data Emissão</td>
-                                <td style="width:105px;font-weight:normal;text-align:right">Prazo</td>
+                                @*<td style="width:105px;font-weight:normal;text-align:right">Prazo</td>*@
                                 <td style="width:50px;text-align:right">
                                 </td>
                             </tr>
@@ -87,7 +87,7 @@
                                 <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
                                 <td style="width:460px;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome_Proprietario)</td>
                                 <td style="width:80px;font-weight:normal;text-align:center">@Html.DisplayFor(modelItem => item.Data_Cadastro)</td>
-                                <td style="width:105px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Prazo)@Html.Raw("&nbsp;Dias")</td>
+                                @*<td style="width:105px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Prazo)@Html.Raw("&nbsp;Dias")</td>*@
                                 <td style="width:50px;text-align:right">
                                     <a href="@Url.Action("AutoInfracao_Queimada_Print", "Notificacao", new { a = item.Ano_Auto,n=item.Numero_Auto })" title="Imprimir a Multa"> <img src="@Url.Content("~/images/print.png")"></a>
                                 </td>
