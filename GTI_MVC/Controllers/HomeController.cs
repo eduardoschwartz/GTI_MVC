@@ -17,7 +17,6 @@ namespace GTI_Mvc.Controllers {
             LoginViewModel model = new LoginViewModel();
             if (Session["hashid"] == null) {
                 Session.Remove("hashfname");
-                //Functions.pUserFullName = "Visitante";
             }
             ViewBag.FiscalMov = Session["hashfiscalmov"] == null ? "N" : Session["hashfiscalmov"].ToString();
             return View(model);
@@ -46,7 +45,6 @@ namespace GTI_Mvc.Controllers {
             }
             Session.Remove("hashid");
             Session.Remove("hashfname");
-//            Functions.pUserFullName = "Visitante";
             LoginViewModel model = new LoginViewModel();
             return View(model);
         }
@@ -56,8 +54,6 @@ namespace GTI_Mvc.Controllers {
         public ViewResult Logout() {
             Session.Remove("hashfname");
             Session.Remove("hashlname");
-//            Functions.pUserFullName = "Visitante";
- //           Functions.pUserLoginName = "";
             Session.Remove("hashid");
             return View("Login_gti");
         }
@@ -153,13 +149,17 @@ namespace GTI_Mvc.Controllers {
                     } else {
                         ViewBag.UsoPlataforma = "S";
                     }
-                    if(Session["hashform"] == null) {
+                    if (Session["hashform"] == null) {
                         return View("../Home/SysMenu");
                     } else {
-                        if(Session["hashform"].ToString() == "mobreq") {
+                        if (Session["hashform"].ToString() == "mobreq") {
                             Session["hashform"] = "";
                             ViewBag.Fiscal = Session["hashfiscalmov"] == null ? "N" : Session["hashfiscalmov"].ToString();
                             return View("../MobReq/Mobreq_menu");
+                        } else if (Session["hashform"].ToString() == "itbi") {
+                            Session["hashform"] = "";
+                            ViewBag.Fiscal = Session["hashfiscalmov"] == null ? "N" : Session["hashfiscalmov"].ToString();
+                            return View("../Itbi/Itbi_menu");
                         } else {
                             return View("../Home/SysMenu");
                         }

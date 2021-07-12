@@ -938,6 +938,22 @@ namespace GTI_Bll.Classes {
             return obj.Existe_AutoInfracao_Queimada(Ano,Numero);
         }
 
+        public Exception Incluir_AutoInfracao_Queimada(Auto_Infracao_Queimada Reg) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Incluir_AutoInfracao_Queimada(Reg);
+            return ex;
+        }
+
+        public List<Auto_Infracao_Queimada_Struct> Lista_AutoInfracao_Queimada(int Ano) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Lista_AutoInfracao_Queimada(Ano);
+        }
+
+        public Auto_Infracao_Queimada_Struct Retorna_AutoInfracao_Queimada(int Ano, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_AutoInfracao_Queimada(Ano,Numero);
+}
+
 
         #endregion
 

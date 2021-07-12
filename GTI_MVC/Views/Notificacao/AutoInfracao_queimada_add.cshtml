@@ -6,62 +6,60 @@
 }
 
 <style>
-        .textBoxBlue {
-            height: 25px;
-            position: relative;
-            border: 1px solid #0094ff;
-            border-color: rgba(0, 0, 0, .14);
-            background-color: white;
-            font-size: 14px;
-            box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
-        }
+    .textBoxBlue {
+        height: 25px;
+        position: relative;
+        border: 1px solid #0094ff;
+        border-color: rgba(0, 0, 0, .14);
+        background-color: white;
+        font-size: 14px;
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
+    }
 
-        .center {
-            margin: auto;
-        }
+    .center {
+        margin: auto;
+    }
 
-        .actionlink:hover {
-            color: darkgreen;
-        }
+    .actionlink:hover {
+        color: darkgreen;
+    }
 
-        .actionlink {
-            color: darkslateblue;
-        }
+    .actionlink {
+        color: darkslateblue;
+    }
 
-        .card-header {
-            background-color: mistyrose;
-            color: brown;
-            font-size: 14px
-        }
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
 
-        .card {
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 14px;
-        }
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
 
-        .card-footer {
-            background-color: whitesmoke;
-            font-size: 14px
-        }
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
 
-        .btn-primary {
-            background-color: steelblue;
-        }
+    .btn-primary {
+        background-color: steelblue;
+    }
 
-        .btn {
-            font-size: 14px;
-            border-radius: 4px;
-        }
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
 
-        .errorlabel {
-            font-weight: normal;
-            color: red;
-            padding-left: 20px;
-            font-size: 13px;
-            font-family: Arial, Helvetica, sans-serif;
-        }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
 </style>
 
+@{var res = @ViewBag.Result;}
 <div class="center" style="width:700px">
 
     @using (Html.BeginForm("AutoInfracao_queimada_add", "Notificacao", FormMethod.Post, new { @id = "MainForm" })) {
@@ -164,7 +162,7 @@
                                         @Model.Endereco_Entrega
                                     </td>
                                 </tr>
-                               
+
                             </table>
                             <br />
                             <table style="font-size:14px;width:600px">
@@ -176,7 +174,7 @@
                                         @Html.DropDownListFor(m => m.Ano_Auto, ViewBag.Lista_Ano as SelectList, null, new { @id = "AnoDropDown", style = "width:70px;height:25px", rows = 10 })
                                     </td>
                                     <td style="width:150px">
-                                        <label style="font-weight:normal;padding-top:7px">Nº Notificação:</label>
+                                        <label style="font-weight:normal;padding-top:7px">Nº do auto:</label>
                                     </td>
                                     <td style="width:100px">
                                         @if (Model.Numero_Auto > 0) {
@@ -201,10 +199,9 @@
                     </div>
 
                 </div>
-                <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
                 @if (@Model.Inscricao != null) {
                     <div style="text-align:center">
-                        <button type="submit" id="btnOk" class="btn btn-primary" name="action"  value="btnValida">Gerar Multa</button>
+                        <button type="submit" id="btnOk" class="btn btn-primary" name="action" value="btnValida">Gerar Multa</button>
                         <br />
                         <br />
                     </div>
@@ -220,6 +217,14 @@
 
     }
 </div>
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
 
 @section scripts{
 
@@ -228,19 +233,63 @@
             $("#btnOk").click(function () {
                 return ValidateForm();
             });
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
         });
 
         function ValidateForm() {
-            ClearError();
             var _numero = document.getElementById('txtNumero').value;
             var _prazo = document.getElementById('txtPrazo').value;
 
             if (_numero == "" || parseInt(_numero) == 0) {
-                document.getElementById('errorLabel').innerHTML = "Digite o nº do Auto de Infração";
+                document.getElementById('lblMsg').innerHTML = "Digite o nº do Auto de Infração";
+                $('#msgBox1').dialog('open');
                 return false;
             }
             if (_prazo == "" || parseInt(_prazo) == 0) {
-                document.getElementById('errorLabel').innerHTML = "Digite o prazo em dias";
+                document.getElementById('lblMsg').innerHTML = "Digite o prazo em dias";
+                $('#msgBox1').dialog('open');
                 return false;
             }
 
@@ -251,10 +300,6 @@
                 return false;
             }
 
-        }
-
-        function ClearError() {
-            document.getElementById('errorLabel').innerHTML = "";
         }
 
 

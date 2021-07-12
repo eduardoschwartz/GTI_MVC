@@ -2927,8 +2927,113 @@ namespace GTI_Dal.Classes {
                 }
             }
 
+        public Exception Incluir_AutoInfracao_Queimada(Auto_Infracao_Queimada Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+                object[] Parametros = new object[21];
+                Parametros[0] = new SqlParameter { ParameterName = "@ano_multa", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano_multa };
+                Parametros[1] = new SqlParameter { ParameterName = "@numero_multa", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_multa };
+                Parametros[2] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
+                Parametros[3] = new SqlParameter { ParameterName = "@situacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Situacao };
+                Parametros[4] = new SqlParameter { ParameterName = "@endereco_infracao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_infracao };
+                Parametros[5] = new SqlParameter { ParameterName = "@endereco_prop", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_prop };
+                Parametros[6] = new SqlParameter { ParameterName = "@endereco_entrega", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_entrega };
+                Parametros[7] = new SqlParameter { ParameterName = "@nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nome };
+                Parametros[8] = new SqlParameter { ParameterName = "@inscricao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Inscricao };
+                Parametros[9] = new SqlParameter { ParameterName = "@prazo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Prazo };
+                Parametros[10] = new SqlParameter { ParameterName = "@data_cadastro", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_cadastro };
+                Parametros[11] = new SqlParameter { ParameterName = "@userid", SqlDbType = SqlDbType.Int, SqlValue = Reg.Userid };
+                Parametros[12] = new SqlParameter { ParameterName = "@nome2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nome2 ?? "" };
+                Parametros[13] = new SqlParameter { ParameterName = "@codigo_cidadao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo_cidadao };
+                Parametros[14] = new SqlParameter { ParameterName = "@codigo_cidadao2", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo_cidadao2 };
+                Parametros[15] = new SqlParameter { ParameterName = "@cpf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cpf };
+                Parametros[16] = new SqlParameter { ParameterName = "@rg", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Rg ?? "" };
+                Parametros[17] = new SqlParameter { ParameterName = "@cpf2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cpf2 ?? "" };
+                Parametros[18] = new SqlParameter { ParameterName = "@rg2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Rg2 ?? "" };
+                Parametros[19] = new SqlParameter { ParameterName = "@endereco_prop2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_prop2 ?? "" };
+                Parametros[20] = new SqlParameter { ParameterName = "@endereco_entrega2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_entrega2 ?? "" };
 
-        }//end class
-    }
+                db.Database.ExecuteSqlCommand("INSERT INTO auto_infracao_queimada(ano_multa,numero_multa,codigo,situacao,endereco_infracao,endereco_prop,endereco_entrega,nome,inscricao,prazo,data_cadastro," +
+                                              "userid,nome2,codigo_cidadao,codigo_cidadao2,cpf,rg,cpf2,rg2,endereco_prop2,endereco_entrega2) " +
+                                              " VALUES(@ano_multa,@numero_multa,@codigo,@situacao,@endereco_infracao,@endereco_prop,@endereco_entrega,@nome,@inscricao,@prazo,@data_cadastro,@userid," +
+                                              "@nome2,@codigo_cidadao,@codigo_cidadao2,@cpf,@rg,@cpf2,@rg2,@endereco_prop2,@endereco_entrega2)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public List<Auto_Infracao_Queimada_Struct> Lista_AutoInfracao_Queimada(int Ano) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Auto_Infracao_Queimada
+                           where t.Ano_multa == Ano
+                           orderby t.Numero_multa select new {
+                               Ano = t.Ano_multa, Numero = t.Numero_multa, Codigo = t.Codigo, Data_Cadastro = t.Data_cadastro, Usuario = t.Userid, Situacao = t.Situacao, Nome = t.Nome, Prazo = t.Prazo
+                           }).ToList();
+                List<Auto_Infracao_Queimada_Struct> Lista = new List<Auto_Infracao_Queimada_Struct>();
+                foreach (var item in Sql) {
+                    Auto_Infracao_Queimada_Struct reg = new Auto_Infracao_Queimada_Struct() {
+                        Ano_Multa = item.Ano,
+                        Numero_Multa = item.Numero,
+                        Codigo_Imovel = item.Codigo,
+                        Data_Cadastro = item.Data_Cadastro,
+                        Userid = item.Usuario,
+                        Situacao = item.Situacao,
+                        Prazo = item.Prazo,
+                        AnoNumero = item.Numero.ToString("0000") + "/" + item.Ano.ToString(),
+                        Nome_Proprietario = item.Nome
+                    };
+                    Lista.Add(reg);
+                }
+                return Lista;
+            }
+        }
+
+        public Auto_Infracao_Queimada_Struct Retorna_AutoInfracao_Queimada(int Ano, int Numero) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Auto_Infracao_Queimada
+                           join u in db.Usuario on t.Userid equals u.Id into tu from u in tu
+                           where t.Ano_multa == Ano && t.Numero_multa == Numero select new {
+                               Ano = t.Ano_multa, Numero = t.Numero_multa, Codigo = t.Codigo, Data_Cadastro = t.Data_cadastro, Usuario = t.Userid, Situacao = t.Situacao, Nome = t.Nome, Prazo = t.Prazo,
+                               Endereco_entrega = t.Endereco_entrega, Endereco_prop = t.Endereco_prop, Endereco_Infracao = t.Endereco_infracao, Usuario_Nome = u.Nomecompleto, Inscricao = t.Inscricao,
+                               t.Nome2, t.Codigo_cidadao, t.Codigo_cidadao2, t.Cpf, t.Rg, t.Cpf2, t.Rg2, t.Endereco_entrega2, t.Endereco_prop2
+                           }).FirstOrDefault();
+                Auto_Infracao_Queimada_Struct reg = null;
+                if (Sql != null) {
+                    reg = new Auto_Infracao_Queimada_Struct() {
+                        Ano_Multa = Sql.Ano,
+                        Numero_Multa = Sql.Numero,
+                        AnoNumero = Sql.Numero.ToString("0000") + "/" + Sql.Ano.ToString(),
+                        Codigo_Imovel = Sql.Codigo,
+                        Data_Cadastro = Sql.Data_Cadastro,
+                        Userid = Sql.Usuario,
+                        Nome_Proprietario = Sql.Nome,
+                        Prazo = Sql.Prazo,
+                        Endereco_Entrega = Sql.Endereco_entrega,
+                        Endereco_entrega2 = Sql.Endereco_entrega2,
+                        Endereco_Local = Sql.Endereco_Infracao,
+                        Endereco_Prop = Sql.Endereco_prop,
+                        Endereco_prop2 = Sql.Endereco_prop2,
+                        UsuarioNome = Sql.Usuario_Nome,
+                        Inscricao = Sql.Inscricao,
+                        Nome_Proprietario2 = Sql.Nome2,
+                        Codigo_cidadao = Sql.Codigo_cidadao,
+                        Codigo_cidadao2 = Sql.Codigo_cidadao2,
+                        Cpf = Sql.Cpf,
+                        Cpf2 = Sql.Cpf2,
+                        Rg = Sql.Rg,
+                        Rg2 = Sql.Rg2
+                    };
+                }
+                return reg;
+            }
+        }
+
+
+    }//end class
+}
 
 

@@ -27,6 +27,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_menu")]
         [HttpGet]
         public ActionResult Itbi_menu() {
+            Session["hashform"] = "itbi";
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
             ViewBag.Fiscal = Session["hashfiscalitbi"] == null ? "N" : Session["hashfiscalitbi"].ToString();

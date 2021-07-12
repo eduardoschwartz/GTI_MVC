@@ -888,7 +888,7 @@ namespace GTI_Mvc.Controllers {
                         ViewBag.Result = "Sua sessão foi encerrada, favor fazer login novamente.";
                         return View(model);
                         }
-                    Save_Notificacao_Obra(model);
+                    Save_AutoInfracao_Queimada(model);
                     return RedirectToAction("AutoInfracao_queimada_query");
                     }
                 }
@@ -896,8 +896,115 @@ namespace GTI_Mvc.Controllers {
             return View(model);
             }
 
+        private ActionResult Save_AutoInfracao_Queimada(NotificacaoTerViewModel model) {
+            Auto_Infracao_Queimada reg = new Auto_Infracao_Queimada() {
+                Ano_multa = model.Ano_Auto,
+                Numero_multa = model.Numero_Auto,
+                Codigo = model.Codigo_Imovel,
+                Inscricao = model.Inscricao,
+                Endereco_entrega = model.Endereco_Entrega,
+                Endereco_entrega2 = model.Endereco_entrega2,
+                Endereco_infracao = model.Endereco_Local,
+                Endereco_prop = model.Endereco_Prop,
+                Endereco_prop2 = model.Endereco_prop2,
+                Prazo = model.Prazo,
+                Nome = model.Nome_Proprietario,
+                Situacao = 3,//concluido
+                Userid = Convert.ToInt32(Session["hashid"]),
+                Data_cadastro = DateTime.Now,
+                Nome2 = model.Nome_Proprietario2,
+                Codigo_cidadao = model.Codigo_cidadao,
+                Codigo_cidadao2 = model.Codigo_cidadao2,
+                Cpf = model.Cpf,
+                Cpf2 = model.Cpf2,
+                Rg = model.Rg,
+                Rg2 = model.Rg2
+            };
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            Exception ex = imovelRepository.Incluir_AutoInfracao_Queimada(reg);
+            return null;
+        }
 
+        [Route("AutoInfracao_Queimada_Query")]
+        [HttpGet]
+        public ActionResult AutoInfracao_Queimada_Query() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            List<int> Lista_Ano = new List<int>();
+            for (int i = 2020; i <= DateTime.Now.Year; i++) {
+                Lista_Ano.Add(i);
+            }
+            ViewBag.Lista_Ano = new SelectList(Lista_Ano);
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            List<NotificacaoTerViewModel> ListaNot = new List<NotificacaoTerViewModel>();
+            List<Auto_Infracao_Queimada_Struct> _listaNot = imovelRepository.Lista_AutoInfracao_Queimada(DateTime.Now.Year);
+            foreach (Auto_Infracao_Queimada_Struct item in _listaNot) {
+                NotificacaoTerViewModel reg = new NotificacaoTerViewModel() {
+                    AnoNumero = item.AnoNumero,
+                    Ano_Auto = item.Ano_Multa,
+                    Numero_Auto = item.Numero_Multa,
+                    Codigo_Imovel = item.Codigo_Imovel,
+                    Data_Cadastro = item.Data_Cadastro,
+                    Prazo = item.Prazo,
+                    Nome_Proprietario = Functions.TruncateTo(item.Nome_Proprietario, 45),
+                    Situacao = item.Situacao
+                };
+                ListaNot.Add(reg);
+            }
 
+            NotificacaoTerQueryViewModel model = new NotificacaoTerQueryViewModel();
+            model.ListaNotificacao = ListaNot;
+            model.Ano_Selected = DateTime.Now.Year;
+            return View(model);
+        }
+
+        public ActionResult AutoInfracao_Queimada_Print(int a, int n) {
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            Auto_Infracao_Queimada_Struct _not = imovelRepository.Retorna_AutoInfracao_Queimada(a, n);
+
+            List<DtNotificacao> ListaNot = new List<DtNotificacao>();
+
+            DtNotificacao reg = new DtNotificacao() {
+                AnoNumero = _not.AnoNumero,
+                Codigo = _not.Codigo_Imovel.ToString("00000"),
+                Nome = _not.Codigo_cidadao.ToString() + "-" + _not.Nome_Proprietario,
+                Cpf = _not.Cpf ?? "",
+                Rg = _not.Rg ?? "",
+                Endereco_Entrega = _not.Endereco_Entrega,
+                Endereco_entrega2 = _not.Endereco_entrega2,
+                Endereco_Local = _not.Endereco_Local,
+                Endereco_Prop = _not.Endereco_Prop,
+                Endereco_prop2 = _not.Endereco_prop2,
+                Prazo = _not.Prazo,
+                Usuario = _not.UsuarioNome,
+                Inscricao = _not.Inscricao,
+                PrazoText = Functions.Escrever_Valor_Extenso(_not.Prazo),
+                Cpf2 = _not.Cpf2 ?? "",
+                Rg2 = _not.Rg2 ?? "",
+                Data_Cadastro = _not.Data_Cadastro
+            };
+            if (_not.Codigo_cidadao2 > 0) {
+                reg.Nome2 = _not.Codigo_cidadao2.ToString() + "-" + _not.Nome_Proprietario2;
+            }
+            ListaNot.Add(reg);
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/AutoInfracao_Queimada.rpt"));
+
+            try {
+                rd.SetDataSource(ListaNot);
+                Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                return File(stream, "application/pdf", "AutoInfracao.pdf");
+            } catch {
+
+                throw;
+            }
 
         }
+
+
+
+
+
     }
+}
