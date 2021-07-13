@@ -87,17 +87,16 @@ namespace GTI_Mvc.Controllers {
             string sLogin = model.Usuario, sNewPwd = model.Senha, sOldPwd, sOldPwd2, sName;
             LoginViewModel loginViewModel = new LoginViewModel();
 
-            Sistema_bll sistema_Class = new Sistema_bll(_connection);
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             TAcessoFunction tacesso_Class = new TAcessoFunction();
 
             bool bFuncionario = model.Usuario.LastIndexOf('@') > 1 ? false : true;
             Session["hashfunc"] = bFuncionario ? "S" : "N";
            // Functions.pUserGTI = bFuncionario;
-            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             if (bFuncionario) {
-                sOldPwd = sistema_Class.Retorna_User_Password(sLogin);
-                int UserId = sistema_Class.Retorna_User_LoginId(sLogin);
+                sOldPwd = sistemaRepository.Retorna_User_Password(sLogin);
+                int UserId = sistemaRepository.Retorna_User_LoginId(sLogin);
                 if (sOldPwd == null) {
                     Session.Remove("hashid");
                     ViewBag.Result = "Usuário/Senha inválido!";
@@ -142,6 +141,11 @@ namespace GTI_Mvc.Controllers {
                     }
                     int _userid = Convert.ToInt32(Session["hashid"]);
                     bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
+
+                    //log 
+                    LogWeb regWeb = new LogWeb() {UserId=_userid,Evento=1,Pref=true};
+                    sistemaRepository.Incluir_LogWeb(regWeb);
+                    //***
 
                     List<int> ListaUsoPlataforma = tributarioRepository.Lista_Rodo_Uso_Plataforma_UserEmpresa(_userid, _func);
                     if (ListaUsoPlataforma.Count == 0) {
@@ -192,19 +196,28 @@ namespace GTI_Mvc.Controllers {
                                 int _userid = Convert.ToInt32(Session["hashid"]);
                                 bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
 
+                                //log 
+                                LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 1, Pref = false };
+                                sistemaRepository.Incluir_LogWeb(regWeb);
+                                //***
+
                                 List<int> ListaUsoPlataforma = tributarioRepository.Lista_Rodo_Uso_Plataforma_UserEmpresa(_userid, _func);
                                 if (ListaUsoPlataforma.Count == 0) {
                                     ViewBag.UsoPlataforma = "N";
                                 } else {
                                     ViewBag.UsoPlataforma = "S";
                                 }
-                                if(Session["hashform"] == null) {
+                                if (Session["hashform"] == null) {
                                     return View("../Home/SysMenu");
                                 } else {
-                                    if(Session["hashform"].ToString() == "mobreq") {
+                                    if (Session["hashform"].ToString() == "mobreq") {
                                         Session["hashform"] = "";
                                         ViewBag.Fiscal = Session["hashfiscalmov"] == null ? "N" : Session["hashfiscalmov"].ToString();
                                         return View("../MobReq/Mobreq_menu");
+                                    } else if (Session["hashform"].ToString() == "itbi") {
+                                        Session["hashform"] = "";
+                                        ViewBag.Fiscal = Session["hashfiscalmov"] == null ? "N" : Session["hashfiscalmov"].ToString();
+                                        return View("../Itbi/Itbi_menu");
                                     } else {
                                         return View("../Home/SysMenu");
                                     }

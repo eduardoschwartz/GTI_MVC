@@ -292,5 +292,11 @@ namespace GTI_Bll.Classes {
             Sistema_Data obj = new Sistema_Data(_connection);
             return obj.Retorna_Usuario_Assinatura(Codigo);
         }
+
+        public void Incluir_LogWeb(LogWeb reg) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            obj.Incluir_LogWeb(reg);
+        }
+
     }
 }

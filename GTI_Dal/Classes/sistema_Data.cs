@@ -2,6 +2,7 @@
 using GTI_Models.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using static GTI_Models.modelCore;
@@ -733,6 +734,27 @@ namespace GTI_Dal.Classes {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 Assinatura Sql = (from a in db.Assinatura where a.Codigo == Codigo select a).FirstOrDefault();
                 return Sql;
+            }
+        }
+
+        public void Incluir_LogWeb(LogWeb reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                try {
+                    object[] Parametros = new object[5];
+                    Parametros[0] = new SqlParameter { ParameterName = "@data_evento", SqlDbType = SqlDbType.DateTime, SqlValue = DateTime.Now };
+                    Parametros[1] = new SqlParameter { ParameterName = "@userid", SqlDbType = SqlDbType.Int, SqlValue = reg.UserId };
+                    Parametros[2] = new SqlParameter { ParameterName = "@pref", SqlDbType = SqlDbType.Bit, SqlValue = reg.Pref };
+                    Parametros[3] = new SqlParameter { ParameterName = "@evento", SqlDbType = SqlDbType.SmallInt, SqlValue = reg.Evento };
+                    if(string.IsNullOrEmpty(reg.Obs))
+                        Parametros[4] = new SqlParameter { ParameterName = "@obs",  SqlValue = DBNull.Value };
+                    else
+                        Parametros[4] = new SqlParameter { ParameterName = "@obs", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Obs };
+
+                    db.Database.ExecuteSqlCommand("INSERT INTO logweb(data_evento,userid,pref,evento,obs)" +
+                                                  " VALUES(@data_evento,@userid,@pref,@evento,@obs)", Parametros);
+                } catch {
+                    throw;
+                }
             }
         }
 
