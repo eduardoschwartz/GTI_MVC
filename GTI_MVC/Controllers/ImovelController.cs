@@ -80,6 +80,16 @@ namespace GTI_Mvc.Controllers {
                 return View(certidaoViewModel);
             }
 
+            //**** log ****************
+            int _userid = 2;
+            bool _prf = Session["hashfunc"] == null ? false : Session["hashfunc"].ToString() == "S" ? true : false;
+            if (Session["hashid"] != null) _userid = Convert.ToInt32(Session["hashid"]);
+            string _obs = "Imóvel código: " + _codigo.ToString();
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 5, Pref = _prf, Obs = _obs };
+            sistemaRepository.Incluir_LogWeb(regWeb);
+            //*************************
+
             List<Certidao> certidao = new List<Certidao>();
             List<ProprietarioStruct> listaProp = imovelRepository.Lista_Proprietario(_codigo, true);
             ImovelStruct _dados = imovelRepository.Dados_Imovel(_codigo);
@@ -283,6 +293,16 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.Result = "Imóvel não cadastrado.";
                 return View(certidaoViewModel);
             }
+
+            //**** log ****************
+            int _userid = 2;
+            bool _prf = Session["hashfunc"] == null ? false : Session["hashfunc"].ToString() == "S" ? true : false;
+            if (Session["hashid"] != null) _userid = Convert.ToInt32(Session["hashid"]);
+            string _obs = "Imóvel código: " + _codigo.ToString();
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 6, Pref = _prf, Obs = _obs };
+            sistemaRepository.Incluir_LogWeb(regWeb);
+            //*************************
 
             List<ProprietarioStruct> listaProp = imovelRepository.Lista_Proprietario(_codigo, true);
             ImovelStruct _dados = imovelRepository.Dados_Imovel(_codigo);
@@ -532,6 +552,16 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
+            //**** log ****************
+            int _userid = 2;
+            bool _prf = Session["hashfunc"] == null ? false : Session["hashfunc"].ToString() == "S" ? true : false;
+            if (Session["hashid"] != null) _userid = Convert.ToInt32(Session["hashid"]);
+            string _obs = "Imóvel código: " + _codigo.ToString();
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 7, Pref = _prf, Obs = _obs };
+            sistemaRepository.Incluir_LogWeb(regWeb);
+            //*************************
+
             List<ProprietarioStruct> listaProp = imovelRepository.Lista_Proprietario(_codigo, true);
             ImovelStruct _dados = imovelRepository.Dados_Imovel(_codigo);
             Certidao reg = new Certidao() {
@@ -764,6 +794,15 @@ namespace GTI_Mvc.Controllers {
                 return View(imovelDetailsViewModel);
             }
 
+            //**** log ****************
+            int _userid = 2;
+            bool _prf = Session["hashfunc"] == null ? false : Session["hashfunc"].ToString() == "S" ? true : false;
+            if (Session["hashid"] != null) _userid = Convert.ToInt32(Session["hashid"]);
+            string _obs = "Imóvel código: " + _codigo.ToString();
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 3, Pref = _prf, Obs = _obs };
+            sistemaRepository.Incluir_LogWeb(regWeb);
+            //*************************
 
             Tributario_bll tributario_Class = new Tributario_bll(_connection);
             int _numero_certidao = tributario_Class.Retorna_Codigo_Certidao(TipoCertidao.Ficha_Imovel);
@@ -942,8 +981,19 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
+            //**** log ****************
+            int _userid = 2;
+            bool _prf = Session["hashfunc"]==null?false:  Session["hashfunc"].ToString() == "S" ? true : false;
+            if (Session["hashid"] != null)  _userid = Convert.ToInt32(Session["hashid"]);
+            string _obs = "Imóvel código: " + _codigo.ToString() + ", exercício: " + DateTime.Now.Year.ToString();
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 2, Pref = _prf ,Obs=_obs};
+            sistemaRepository.Incluir_LogWeb(regWeb);
+            //*************************
+
+
             //*** Renumera parcelas de 2021 ***
-            if(DateTime.Now.Year == 2021) {
+            if (DateTime.Now.Year == 2021) {
                 int _seq = 0;
                 foreach(DebitoStructure item in Extrato_Lista) {
                     Extrato_Lista[_seq].Numero_Parcela_Old = (short)item.Numero_Parcela ;
@@ -1266,6 +1316,16 @@ namespace GTI_Mvc.Controllers {
                 imovelDetailsViewModel.ErrorMessage = "Não é possível emitir 2ª via da CIP para este contribuinte.";
                 return View(imovelDetailsViewModel);
             }
+
+            //**** log ****************
+            int _userid = 2;
+            bool _prf = Session["hashfunc"] == null ? false : Session["hashfunc"].ToString() == "S" ? true : false;
+            if (Session["hashid"] != null) _userid = Convert.ToInt32(Session["hashid"]);
+            string _obs = "Imóvel código: " + _codigo.ToString() + ", exercício: " + DateTime.Now.Year.ToString();
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 4, Pref = _prf, Obs = _obs };
+            sistemaRepository.Incluir_LogWeb(regWeb);
+            //*************************
 
             List<Boletoguia> ListaBoleto = new List<Boletoguia>();
             foreach (DebitoStructure item in Extrato_Lista) {

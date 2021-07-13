@@ -422,6 +422,16 @@ namespace GTI_Mvc.Controllers {
                     }
                     Itbi_Save(model);
 
+                    //**** log ****************
+                    int _userid = 2;
+                    bool _prf = Session["hashfunc"] == null ? false : Session["hashfunc"].ToString() == "S" ? true : false;
+                    if (Session["hashid"] != null) _userid = Convert.ToInt32(Session["hashid"]);
+                    string _obs = "Imóvel código: " + model.Inscricao.ToString() + ", Itbi nº " + model.Itbi_NumeroAno;
+                    Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+                    LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 8, Pref = _prf, Obs = _obs };
+                    sistemaRepository.Incluir_LogWeb(regWeb);
+                    //*************************
+
                     return RedirectToAction("itbi_ok");
                 }
             }
@@ -907,6 +917,7 @@ namespace GTI_Mvc.Controllers {
             if (model.Itbi_Ano > 0)
                 model.Itbi_NumeroAno = model.Itbi_Numero.ToString("000000/") + model.Itbi_Ano.ToString();
 
+
             return View(model);
         }
 
@@ -1308,6 +1319,17 @@ namespace GTI_Mvc.Controllers {
                         model.Comprador.Codigo = Grava_Cidadao(model);
                     }
                     Itbi_Save(model);
+
+                    //**** log ****************
+                    int _userid = 2;
+                    bool _prf = Session["hashfunc"] == null ? false : Session["hashfunc"].ToString() == "S" ? true : false;
+                    if (Session["hashid"] != null) _userid = Convert.ToInt32(Session["hashid"]);
+                    string _obs = "Itbi nº " + model.Itbi_NumeroAno;
+                    Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+                    LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 9, Pref = _prf, Obs = _obs };
+                    sistemaRepository.Incluir_LogWeb(regWeb);
+                    //*************************
+
                     return RedirectToAction("itbi_ok");
                 }
             }
@@ -1737,7 +1759,6 @@ namespace GTI_Mvc.Controllers {
             if (_guid == "") {
                 ViewBag.Error = "* Ocorreu um erro ao gravar.";
             }
-
 
             return View(model);
         }
