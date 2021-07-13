@@ -9,8 +9,7 @@ using static GTI_Models.modelCore;
 namespace GTI_MVC.Controllers
 {
     public class CidadaoController : Controller   {
-        private readonly string _connection = "GTIconnection";
-        private readonly string _connectionTeste = "GTIconnectionTeste";
+        private readonly string _connection = "GTIconnectionTeste";
 
         [Route("Cidadao_menu")]
         [HttpGet]
@@ -28,6 +27,9 @@ namespace GTI_MVC.Controllers
                 return RedirectToAction("Login", "Home");
 
             CidadaoViewModel model = new CidadaoViewModel();
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+            List<Profissao> Lista = cidadaoRepository.Lista_Profissao();
+            ViewBag.Lista_Profissao = new SelectList(Lista, "Codigo", "Nome");
 
             return View(model);
         }
@@ -38,6 +40,9 @@ namespace GTI_MVC.Controllers
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
 
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+            List<Profissao> Lista = cidadaoRepository.Lista_Profissao();
+            ViewBag.Lista_Profissao = new SelectList(Lista, "Codigo", "Nome");
 
             return View(model);
         }

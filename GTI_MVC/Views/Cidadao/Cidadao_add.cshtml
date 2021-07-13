@@ -43,7 +43,6 @@
         border-radius: 4px;
     }
 
-
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
@@ -63,64 +62,111 @@
                 <div class="card-header">Cadastrar novo cidadão</div>
                 <div class="card-body">
 
-                    <div >
+                    <div>
                         <table style="font-size:13px;width:500px">
-                            <tr style="height:30px">
+                            <tr style="height:25px">
                                 <td style="width:80px">
-                                    <label style="font-weight:normal;padding-top:5px">Nome:</label>
+                                    <span >Nome:</span>
                                 </td>
                                 <td style="width:420px">
-                                    @Html.TextBoxFor(m => m.Nome, new { @id = "nome", @style = "width:400px;font-size:14px", @class = "uppercase" })
+                                    @Html.TextBoxFor(m => m.Nome, new { @id = "nome", @style = "width:400px", @class = "uppercase" })
                                 </td>
                             </tr>
-                            <tr style="height:30px">
+                            <tr style="height:25px">
                                 <td style="width:80px">
-                                    <label style="font-weight:normal">Cpf/Cnpj:</label>
+                                    <span style="font-weight:normal">Cpf/Cnpj:</span>
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(m => m.CpfCnpj, new { @id = "cpfcnpj", @style = "Width:160px;font-size:14px" })
-                                    <label style="font-weight:normal;padding-left:27px">Data de Nascimento:</label>
-                                    <span style="padding-left: 5px"> @Html.TextBoxFor(m => m.Data_Nascto, new { @id = "dataNascto", @style = "Width:80px", @class = "maskData" })</span>
+                                    @Html.TextBoxFor(m => m.CpfCnpj, new { @id = "cpfcnpj", @style = "Width:160px" })
+                                    <span style="font-weight:normal;padding-left:27px">Data de Nascimento:</span>
+                                    <span style="padding-left: 5px"> @Html.TextBoxFor(m => m.Data_Nascto, new { @id = "dataNascto", @style = "Width:78px", @class = "maskData" })</span>
                                 </td>
                             </tr>
-                            <tr style="height:30px">
+                            <tr style="height:25px">
                                 <td style="width:80px">
-                                    <label style="font-weight:normal">Nº do RG:</label>
+                                    <span style="font-weight:normal">Nº do RG:</span>
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(m => m.Rg_Numero, new { @id = "rgnumero", @style = "Width:160px;font-size:14px" })
-                                    <label style="font-weight:normal;padding-left:25px">Orgão:</label>
+                                    @Html.TextBoxFor(m => m.Rg_Numero, new { @id = "rgnumero", @style = "Width:160px" })
+                                    <span style="font-weight:normal;padding-left:25px">Orgão:</span>
                                     <span style="padding-left: 10px"> @Html.TextBoxFor(m => m.Rg_Orgao, new { @id = "rgorgao", @style = "Width:157px", @class = "uppercase" })</span>
                                 </td>
                             </tr>
-                            <tr style="height:30px">
+                            <tr style="height:25px">
                                 <td style="width:80px">
-                                    <label style="font-weight:normal">Nº da CNH:</label>
+                                    <span style="font-weight:normal">Nº da CNH:</span>
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(m => m.Cnh_Numero, new { @id = "cnhnumero", @style = "Width:160px;font-size:14px" })
-                                    <label style="font-weight:normal;padding-left:25px">Orgão:</label>
+                                    @Html.TextBoxFor(m => m.Cnh_Numero, new { @id = "cnhnumero", @style = "Width:160px" })
+                                    <span style="font-weight:normal;padding-left:25px">Orgão:</span>
                                     <span style="padding-left: 10px"> @Html.TextBoxFor(m => m.Cnh_Orgao, new { @id = "cnhorgao", @style = "Width:157px", @class = "uppercase" })</span>
                                 </td>
                             </tr>
+                            <tr style="height:25px">
+                                <td style="width: 80px;">
+                                    <span style="font-weight:normal">Profissão:</span>
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(m => Model.Profissao_Codigo, ViewBag.Lista_Profissao as SelectList, null, new { @id = "ProfissaoDropDown", @style = "font-weight:normal;width:400px" })
+                                </td>
+                            </tr>
                         </table>
-
-
-
                     </div>
+
+
+                </div>
+                <div class="card-header">Endereço Residencial</div>
+                <div class="card-body">
+                    <table style="font-size:13px;width:640px">
+                        <tr style="height:30px">
+                            <td style="width:62px">
+                                <label style="font-weight:normal">Cep:</label>
+                            </td>
+                            <td>
+                                <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Cep, new { style = "width:80px;height:25px", @readonly = true })</label>
+                                <label style="font-weight:normal;padding-left:10px">Logradouro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.NomeLogradouro, new { style = "width:385px;height:25px", @readonly = true })</label>
+                            </td>
+                        </tr>
+                        <tr style="height:30px">
+                            <td>
+                                <label style="font-weight:normal">Número:</label>
+                            </td>
+                            <td>
+                                <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Numero, new { style = "width:80px;height:25px", @readonly = true })</label>
+                                <label style="font-weight:normal;padding-left:10px">Complemento:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Complemento, new { style = "width:369px;height:25px", @readonly = true })</label>
+                            </td>
+                        </tr>
+                        <tr style="height:30px">
+                            <td>
+                                <label style="font-weight:normal">Quadra:</label>
+                            </td>
+                            <td>
+                                <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.QuadraOriginal, new { style = "width:110px;height:25px", @readonly = true })</label>
+                                <label style="font-weight:normal;padding-left:10px">Lote:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.LoteOriginal, new { style = "width:110px;height:25px", @readonly = true })</label>
+                                <label style="font-weight:normal;padding-left:10px">Bairro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.NomeBairro, new { style = "width:226px;height:25px", @readonly = true })</label>
+                            </td>
+                        </tr>
+                    </table>
+
+
+
+                </div>
+                <div class="card-header">Endereço Comercial</div>
+                <div class="card-body">
                     <br />
                     <div style="text-align:center">
-                        <button type="submit" id="btnOk" class="btn btn-primary" name="action" value="btnValida"> <img src="~/Images/save.png" /> &nbsp;Gravar</button>
-                        <br />
-                        <br />
+                        <button type="submit" id="btnOk" class="btn btn-primary" name="action" value="btnValida"> <img src="~/Images/save.png" /> &nbsp;Gravar Cidadão</button>&nbsp;&nbsp;
+                        <button type="button" id="btnOk" class="btn btn-danger" onclick="javascript:history.back()"> Cancelar</button>
+
                     </div>
+
 
                 </div>
                 <div class="card-footer">
-                        @Html.ActionLink("Retornar ao menu de opções", "Cidadao_menu", "Cidadao", null, new { @class = "actionlink" })<br />
-                        @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
-                    </div>
+                    @Html.ActionLink("Retornar ao menu de opções", "Cidadao_menu", "Cidadao", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
                 </div>
+            </div>
 
         
         </div>

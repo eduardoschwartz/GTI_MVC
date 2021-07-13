@@ -12,5 +12,6 @@ namespace GTI_Mvc.ViewModels {
         public string Rg_Orgao { get; set; }
         public string Cnh_Numero { get; set; }
         public string Cnh_Orgao { get; set; }
+        public int Profissao_Codigo { get; set; }
     }
 }
