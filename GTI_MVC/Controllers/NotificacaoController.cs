@@ -4,22 +4,11 @@ using GTI_Bll.Classes;
 using GTI_Models.Models;
 using GTI_Models.ReportModels;
 using GTI_Mvc.ViewModels;
-using GTI_Mvc.Views.Imovel.EditorTemplates;
-using Microsoft.Reporting.WebForms;
-using QRCoder;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Web;
 using System.Web.Mvc;
 using static GTI_Models.modelCore;
-using System.Net;
-using Newtonsoft.Json.Linq;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Linq;
 
 namespace GTI_Mvc.Controllers {
     public class NotificacaoController : Controller {

@@ -14,6 +14,7 @@ using Newtonsoft.Json.Linq;
 namespace GTI_Mvc.Controllers {
     public class ProtocoloController : Controller {
         private readonly string _connection = "GTIconnection";
+        private readonly string _connectionTeste = "GTIconnectionTeste";
         [Route("Tramite_Processo")]
         [HttpGet]
         public ViewResult Tramite_Processo() {
@@ -487,7 +488,6 @@ namespace GTI_Mvc.Controllers {
 
         }
 
-
         [Route("ProcessoqryC")]
         [HttpGet]
         public ActionResult ProcessoqryC(string id) {
@@ -578,5 +578,8 @@ namespace GTI_Mvc.Controllers {
         }
 
 
+
+
     }
+
 }

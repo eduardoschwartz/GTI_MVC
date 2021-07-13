@@ -1,0 +1,233 @@
+﻿@model GTI_Mvc.ViewModels.CidadaoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Cadastrar novo cidadão";
+}
+
+<style>
+    .center {
+        margin: auto;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
+
+    .uppercase {
+        text-transform: uppercase
+    }
+</style>
+
+@{var res = @ViewBag.Result;}
+<div class="center" style="width:700px">
+
+    @using (Html.BeginForm("Cidadao_add", "Cidadao", FormMethod.Post, new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
+        <div class="container" style="width:550px">
+            <div class="card">
+                <div class="card-header">Cadastrar novo cidadão</div>
+                <div class="card-body">
+
+                    <div >
+                        <table style="font-size:13px;width:500px">
+                            <tr style="height:30px">
+                                <td style="width:80px">
+                                    <label style="font-weight:normal;padding-top:5px">Nome:</label>
+                                </td>
+                                <td style="width:420px">
+                                    @Html.TextBoxFor(m => m.Nome, new { @id = "nome", @style = "width:400px;font-size:14px", @class = "uppercase" })
+                                </td>
+                            </tr>
+                            <tr style="height:30px">
+                                <td style="width:80px">
+                                    <label style="font-weight:normal">Cpf/Cnpj:</label>
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.CpfCnpj, new { @id = "cpfcnpj", @style = "Width:160px;font-size:14px" })
+                                    <label style="font-weight:normal;padding-left:27px">Data de Nascimento:</label>
+                                    <span style="padding-left: 5px"> @Html.TextBoxFor(m => m.Data_Nascto, new { @id = "dataNascto", @style = "Width:80px", @class = "maskData" })</span>
+                                </td>
+                            </tr>
+                            <tr style="height:30px">
+                                <td style="width:80px">
+                                    <label style="font-weight:normal">Nº do RG:</label>
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Rg_Numero, new { @id = "rgnumero", @style = "Width:160px;font-size:14px" })
+                                    <label style="font-weight:normal;padding-left:25px">Orgão:</label>
+                                    <span style="padding-left: 10px"> @Html.TextBoxFor(m => m.Rg_Orgao, new { @id = "rgorgao", @style = "Width:157px", @class = "uppercase" })</span>
+                                </td>
+                            </tr>
+                            <tr style="height:30px">
+                                <td style="width:80px">
+                                    <label style="font-weight:normal">Nº da CNH:</label>
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Cnh_Numero, new { @id = "cnhnumero", @style = "Width:160px;font-size:14px" })
+                                    <label style="font-weight:normal;padding-left:25px">Orgão:</label>
+                                    <span style="padding-left: 10px"> @Html.TextBoxFor(m => m.Cnh_Orgao, new { @id = "cnhorgao", @style = "Width:157px", @class = "uppercase" })</span>
+                                </td>
+                            </tr>
+                        </table>
+
+
+
+                    </div>
+                    <br />
+                    <div style="text-align:center">
+                        <button type="submit" id="btnOk" class="btn btn-primary" name="action" value="btnValida"> <img src="~/Images/save.png" /> &nbsp;Gravar</button>
+                        <br />
+                        <br />
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                        @Html.ActionLink("Retornar ao menu de opções", "Cidadao_menu", "Cidadao", null, new { @class = "actionlink" })<br />
+                        @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                    </div>
+                </div>
+
+        
+        </div>
+    }
+</div>
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".maskData").inputmask("99/99/9999");
+            $(".maskCep").inputmask("99999-999");
+
+            $("#btnOk").click(function () {
+                return ValidateForm();
+            });
+
+            //Máscara Cpf/Cnpj
+            $("#cpfcnpj").keydown(function () {
+                try {
+                    $("#cpfcnpj").unmask();
+                } catch (e) { }
+                var tamanho = $("#cpfcnpj").val().length;
+                if (tamanho < 11) {
+                    $("#cpfcnpj").mask("999.999.999-99");
+                } else {
+                    $("#cpfcnpj").mask("99.999.999/9999-99");
+                }
+                var elem = this;
+                setTimeout(function () {
+                    elem.selectionStart = elem.selectionEnd = 10000;
+                }, 0);
+                var currentValue = $(this).val();
+                $(this).val('');
+                $(this).val(currentValue);
+            });
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+        function ValidateForm() {
+            var _nome = document.getElementById('nomeText').value;
+
+            if (_nome==null || _nome=='') {
+                document.getElementById('lblMsg').innerHTML = "Digite o nome do cidadão";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+           
+
+            if (confirm('Você deseja gravar os dados?')) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+
+
+    </script>
+}
