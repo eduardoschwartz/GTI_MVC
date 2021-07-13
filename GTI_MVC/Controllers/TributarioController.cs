@@ -29,7 +29,11 @@ namespace GTI_Mvc.Controllers {
         private readonly string _connection = "GTIconnection";
         [Route("Certidao/Certidao_Debito_Codigo")]
         [HttpGet]
-        public ViewResult Certidao_Debito_Codigo() {
+        public ActionResult Certidao_Debito_Codigo() {
+            Session["hashform"] = "18";
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);
         }
@@ -311,7 +315,11 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Certidao/Certidao_Debito_Doc")]
         [HttpGet]
-        public ViewResult Certidao_Debito_Doc() {
+        public ActionResult Certidao_Debito_Doc() {
+            Session["hashform"] = "19";
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
             CertidaoViewModel model = new CertidaoViewModel {
                 OptionList = new List<SelectListaItem> {
                 new SelectListaItem { Text = " CPF", Value = "cpfCheck", Selected = true },
@@ -585,7 +593,11 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Comprovante_Pagamento")]
         [HttpGet]
-        public ViewResult Comprovante_Pagamento() {
+        public ActionResult Comprovante_Pagamento() {
+            Session["hashform"] = "20";
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);
         }
@@ -1494,7 +1506,11 @@ namespace GTI_Mvc.Controllers {
 
         [Route("SegundaVia_Parcelamento")]
         [HttpGet]
-        public ViewResult SegundaVia_Parcelamento() {
+        public ActionResult SegundaVia_Parcelamento() {
+            Session["hashform"] = "23";
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
             DebitoViewModel model = new DebitoViewModel();
             return View(model);
         }
@@ -1834,7 +1850,11 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Detalhe_Boleto")]
         [HttpGet]
-        public ViewResult Detalhe_Boleto() {
+        public ActionResult Detalhe_Boleto() {
+            Session["hashform"] = "21";
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);
         }

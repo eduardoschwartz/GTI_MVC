@@ -350,7 +350,11 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Consulta_Processo")]
         [HttpGet]
-        public ViewResult Consulta_Processo() {
+        public ActionResult Consulta_Processo() {
+            Session["hashform"] = "22";
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
             ProcessoViewModel model = new ProcessoViewModel();
             return View(model);
         }
@@ -359,10 +363,6 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Consulta_Processo(ProcessoViewModel model) {
-            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-            //    ViewBag.Result = "Código de verificação inválido.";
-            //    return View(model);
-            //}
             var response = Request["g-recaptcha-response"];
             string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
             var client = new WebClient();

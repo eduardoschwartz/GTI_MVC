@@ -426,7 +426,7 @@ namespace GTI_Mvc.Controllers {
                     int _userid = 2;
                     bool _prf = Session["hashfunc"] == null ? false : Session["hashfunc"].ToString() == "S" ? true : false;
                     if (Session["hashid"] != null) _userid = Convert.ToInt32(Session["hashid"]);
-                    string _obs = "Imóvel código: " + model.Inscricao.ToString() + ", Itbi nº " + model.Itbi_NumeroAno;
+                    string _obs = "Imóvel código: " + model.Inscricao.ToString() + ", Itbi nº " + model.Itbi_Numero.ToString() + "/" + model.Itbi_Ano.ToString();
                     Sistema_bll sistemaRepository = new Sistema_bll(_connection);
                     LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 8, Pref = _prf, Obs = _obs };
                     sistemaRepository.Incluir_LogWeb(regWeb);
@@ -2902,8 +2902,10 @@ namespace GTI_Mvc.Controllers {
         [Route("Itbi_isencao")]
         [HttpGet]
         public ActionResult Itbi_isencao(string guid, string a, int s = 0, string natureza = "27") {
+            Session["hashform"] = "16";
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
+
             ItbiViewModel model = new ItbiViewModel();
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             if (String.IsNullOrWhiteSpace(guid)) {

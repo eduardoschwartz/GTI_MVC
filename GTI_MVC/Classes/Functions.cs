@@ -370,7 +370,7 @@ namespace GTI_Mvc {
             int _dv = 0, _numero = 0,_ano=0;
             try {
                 _dv = Convert.ToInt32(Numero.Substring(Numero.IndexOf("-") + 1, 1));
-                _numero = Convert.ToInt32(Numero.Substring(0, Numero.IndexOf("-")));
+                _numero = Convert.ToInt32(Functions.RetornaNumero( Numero.Substring(0, Numero.IndexOf("-"))));
                 _ano = Convert.ToInt32((Numero.Substring(Numero.Length - 4)));
             } catch  {
             }

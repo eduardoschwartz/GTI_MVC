@@ -585,6 +585,9 @@ namespace GTI_Mvc.Controllers {
                 case "2":
                     _fr.Controller = "Imovel"; _fr.Action = "Carne_Iptu";
                     break;
+                case "3":
+                    _fr.Controller = "Imovel"; _fr.Action = "Carne_Cip";
+                    break;
                 case "5":
                     _fr.Controller = "Imovel"; _fr.Action = "Certidao_Endereco";
                     break;
@@ -596,6 +599,45 @@ namespace GTI_Mvc.Controllers {
                     break;
                 case "10":
                     _fr.Controller = "Tributario"; _fr.Action = "Dama";
+                    break;
+                case "11":
+                    _fr.Controller = "Empresa"; _fr.Action = "Carne_tl";
+                    break;
+                case "12":
+                    _fr.Controller = "Empresa"; _fr.Action = "Carne_vs";
+                    break;
+                case "13":
+                    _fr.Controller = "Empresa"; _fr.Action = "Details";
+                    break;
+                case "14":
+                    _fr.Controller = "Empresa"; _fr.Action = "Alvara_Funcionamento";
+                    break;
+                case "15":
+                    _fr.Controller = "Empresa"; _fr.Action = "Certidao_Inscricao";
+                    break;
+                case "16":
+                    _fr.Controller = "Itbi"; _fr.Action = "Itbi_isencao";
+                    break;
+                case "17":
+                    _fr.Controller = "Empresa"; _fr.Action = "Certidao_Pagamento";
+                    break;
+                case "18":
+                    _fr.Controller = "Tributario"; _fr.Action = "Certidao_Debito_Codigo";
+                    break;
+                case "19":
+                    _fr.Controller = "Tributario"; _fr.Action = "Certidao_Debito_Doc";
+                    break;
+                case "20":
+                    _fr.Controller = "Tributario"; _fr.Action = "Comprovante_Pagamento";
+                    break;
+                case "21":
+                    _fr.Controller = "Tributario"; _fr.Action = "Detalhe_Boleto";
+                    break;
+                case "22":
+                    _fr.Controller = "Protocolo"; _fr.Action = "Consulta_Processo";
+                    break;
+                case "23":
+                    _fr.Controller = "Tributario"; _fr.Action = "SegundaVia_Parcelamento";
                     break;
                 default:
                     _fr.Controller = "Home"; _fr.Action = "SysMenu";

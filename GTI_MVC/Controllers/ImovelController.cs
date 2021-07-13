@@ -1257,7 +1257,11 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Carne_Cip")]
         [HttpGet]
-        public ViewResult Carne_Cip() {
+        public ActionResult Carne_Cip() {
+            Session["hashform"] = "3";
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);
         }
