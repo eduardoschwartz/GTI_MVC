@@ -31,7 +31,8 @@
         font-size: 14px;
         font-family: Arial, Helvetica, sans-serif;
     }
-    
+
+
 </style>
 
 
@@ -52,21 +53,21 @@
 
         <div style="margin-left: 420px;">
             <span class="spantext">Para sua empresa</span><br />
-            @Html.ActionLink("Emissão do carnê de Iss Fixo/Taxa de Licença","Carne_tl","Empresa",null,new { @class = "actionlink" })<br />
-            @Html.ActionLink("Emissão do carnê de Vigilância Sanitária","Carne_vs","Empresa",null,new { @class = "actionlink" })<br />
-            @Html.ActionLink("Dados cadastrais de uma empresa","Details","Empresa",null,new { @class = "actionlink" })<br />
+            @Html.ActionLink("Emissão do carnê de Iss Fixo/Taxa de Licença", "Carne_tl", "Empresa", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Emissão do carnê de Vigilância Sanitária", "Carne_vs", "Empresa", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Dados cadastrais de uma empresa", "Details", "Empresa", null, new { @class = "actionlink" })<br />
             <a href="~/Files/DECA2018.pdf" class="actionlink">Download da declaração cadastral (DECA)</a><br />
-            @Html.ActionLink("Renovação de alvará de funcionamento","Alvara_Funcionamento","Empresa",null,new { @class = "actionlink" })<br />
-            @Html.ActionLink("Certidão de inscrição e situação cadastral","Certidao_Inscricao","Empresa",null,new { @class = "actionlink" })<br />
-            @Html.ActionLink("Situação dos débitos ref. a ISS Fixo, Tx.Licença/Vig. Sanitária (Exerc.2021)","Certidao_Pagamento","Empresa",null,new { @class = "actionlink" })<br />
-            @if(ViewBag.FiscalMov == "S") {
-                @Html.ActionLink("Requerimentos (Alteração cadastral, baixa de atividade, etc..)","mobreq_menu","MobReq",null,new { @class = "actionlink" })<br />
+            @Html.ActionLink("Renovação de alvará de funcionamento", "Alvara_Funcionamento", "Empresa", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Certidão de inscrição e situação cadastral", "Certidao_Inscricao", "Empresa", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Situação dos débitos ref. a ISS Fixo, Tx.Licença/Vig. Sanitária (Exerc.2021)", "Certidao_Pagamento", "Empresa", null, new { @class = "actionlink" })<br />
+            @if (ViewBag.FiscalMov == "S") {
+                @Html.ActionLink("Requerimentos (Alteração cadastral, baixa de atividade, etc..)", "mobreq_menu", "MobReq", null, new { @class = "actionlink" })<br />
             }
-            </div>
+        </div>
     </div>
 
 
- 
+
     <br />
     <div style="width: 100%; overflow: hidden;">
         <div style="width: 400px; float: left;">
@@ -93,4 +94,5 @@
     </div>
 </div>
 <br />
+
 

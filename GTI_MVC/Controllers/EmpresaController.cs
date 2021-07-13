@@ -1,4 +1,5 @@
-﻿using CrystalDecisions.CrystalReports.Engine;
+﻿
+using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
 using GTI_Models.ReportModels;
 using System;
@@ -93,6 +94,16 @@ namespace GTI_Mvc.Controllers {
             }
 
             if (_existeCod) {
+                //**** log ****************
+                int _userid = 2;
+                bool _prf = Session["hashfunc"] == null ? false : Session["hashfunc"].ToString() == "S" ? true : false;
+                if (Session["hashid"] != null) _userid = Convert.ToInt32(Session["hashid"]);
+                string _obs = "Inscrição: " + _codigo.ToString() ;
+                Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+                LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 13, Pref = _prf, Obs = _obs };
+                sistemaRepository.Incluir_LogWeb(regWeb);
+                //*************************
+
                 EmpresaStruct empresa = empresaRepository.Retorna_Empresa(_codigo);
                 empresaDetailsViewModel.EmpresaStruct = empresa;
                 empresaDetailsViewModel.TaxaLicenca = empresaRepository.Empresa_tem_TL(_codigo) ? "Sim" : "Não";
@@ -309,10 +320,6 @@ namespace GTI_Mvc.Controllers {
                 } 
             }
 
-            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-            //    ViewBag.Result = "Código de verificação inválido.";
-            //    return View(model);
-            //}
             var response = Request["g-recaptcha-response"];
             var client = new WebClient();
             string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
@@ -331,6 +338,16 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.Result = "Nenhum código selecionado ou não disponível.";
                 return View(model);
             }
+
+            //**** log ****************
+            int _userid = 2;
+            bool _prf = Session["hashfunc"] == null ? false : Session["hashfunc"].ToString() == "S" ? true : false;
+            if (Session["hashid"] != null) _userid = Convert.ToInt32(Session["hashid"]);
+            string _obs = "Inscrição: " + _codigo.ToString();
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 15, Pref = _prf, Obs = _obs };
+            sistemaRepository.Incluir_LogWeb(regWeb);
+            //*************************
 
             EmpresaStruct _dados = empresaRepository.Retorna_Empresa(_codigo);
             string _sufixo = model.Extrato ? _dados.Data_Encerramento == null ? "XA" : "XE" : "IE";
@@ -805,6 +822,16 @@ namespace GTI_Mvc.Controllers {
             }
 
             if (_existeCod) {
+                //**** log ****************
+                int _userid = 2;
+                bool _prf = Session["hashfunc"] == null ? false : Session["hashfunc"].ToString() == "S" ? true : false;
+                if (Session["hashid"] != null) _userid = Convert.ToInt32(Session["hashid"]);
+                string _obs = "Inscrição: " + _codigo.ToString();
+                Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+                LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 14, Pref = _prf, Obs = _obs };
+                sistemaRepository.Incluir_LogWeb(regWeb);
+                //*************************
+
                 int _ano_certidao = DateTime.Now.Year;
                 int _numero_certidao = empresaRepository.Retorna_Alvara_Disponivel(_ano_certidao);
                 string controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _codigo.ToString() + "-AF";
@@ -1036,11 +1063,19 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
+            //**** log ****************
+            int _userid = 2;
+            bool _prf = Session["hashfunc"] == null ? false : Session["hashfunc"].ToString() == "S" ? true : false;
+            if (Session["hashid"] != null) _userid = Convert.ToInt32(Session["hashid"]);
+            string _obs = "Inscrição: " + _codigo.ToString() + ", exercício: " + DateTime.Now.Year.ToString();
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 11, Pref = _prf, Obs = _obs };
+            sistemaRepository.Incluir_LogWeb(regWeb);
+            //*************************
+
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
 
             Paramparcela _parametro_parcela = tributarioRepository.Retorna_Parametro_Parcela(_ano, (int)TipoCarne.Iss_Taxa);
-            //int _qtde_parcela = (int)_parametro_parcela.Qtdeparcela;
-            
             decimal _SomaISS = 0, _SomaTaxa = 0;
 
             List<DebitoStructure> Lista_Taxa = tributarioRepository.Lista_Parcelas_Taxa(_codigo, _ano);
@@ -1411,6 +1446,16 @@ namespace GTI_Mvc.Controllers {
                 ViewBag.Result = "Inscrição Municipal não cadastrada!";
                 return View(model);
             }
+
+            //**** log ****************
+            int _userid = 2;
+            bool _prf = Session["hashfunc"] == null ? false : Session["hashfunc"].ToString() == "S" ? true : false;
+            if (Session["hashid"] != null) _userid = Convert.ToInt32(Session["hashid"]);
+            string _obs = "Inscrição: " + _codigo.ToString() + ", exercício: " + DateTime.Now.Year.ToString();
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 12, Pref = _prf, Obs = _obs };
+            sistemaRepository.Incluir_LogWeb(regWeb);
+            //*************************
 
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             Paramparcela _parametro_parcela = tributarioRepository.Retorna_Parametro_Parcela(_ano, (int)TipoCarne.Vigilancia);

@@ -72,5 +72,9 @@ namespace GTI_Models.Models {
         public string Descricao { get; set; }
     }
 
+    public class Form_Redirect {
+        public string Action { get; set; }
+        public string Controller { get; set; }
+    }
 
 }

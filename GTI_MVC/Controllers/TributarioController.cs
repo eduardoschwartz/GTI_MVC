@@ -710,7 +710,11 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Dama")]
         [HttpGet]
-        public ViewResult Dama() {
+        public ActionResult Dama() {
+            Session["hashform"] = "10";
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);
         }
@@ -883,6 +887,16 @@ namespace GTI_Mvc.Controllers {
                     _cpfcnpj = string.IsNullOrWhiteSpace(_cidadao.Cpf) ? _cidadao.Cnpj: _cidadao.Cpf;
                 }
             }
+            //**** log ****************
+            int _userid = 2;
+            bool _prf = Session["hashfunc"] == null ? false : Session["hashfunc"].ToString() == "S" ? true : false;
+            if (Session["hashid"] != null) _userid = Convert.ToInt32(Session["hashid"]);
+            string _obs = "Código: " + _codigo.ToString();
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 10, Pref = _prf, Obs = _obs };
+            sistemaRepository.Incluir_LogWeb(regWeb);
+            //*************************
+
             DebitoSelectionViewModel modelt = new DebitoSelectionViewModel() {
                 Inscricao=_codigo,
                 Nome=_nome,

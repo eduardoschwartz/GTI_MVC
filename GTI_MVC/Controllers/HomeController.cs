@@ -13,14 +13,18 @@ using Newtonsoft.Json.Linq;
 namespace GTI_Mvc.Controllers {
     public class HomeController : Controller {
         private readonly string _connection = "GTIconnection";
-        public ViewResult Login_gti() {
+        [Route("Login_gti")]
+        [HttpGet]
+        public ActionResult Login_gti(string c) {
             LoginViewModel model = new LoginViewModel();
             if (Session["hashid"] == null) {
                 Session.Remove("hashfname");
             }
+           
             ViewBag.FiscalMov = Session["hashfiscalmov"] == null ? "N" : Session["hashfiscalmov"].ToString();
             return View(model);
         }
+
 
         [Route("Certidao")]
         public ViewResult Certidao() {
@@ -83,7 +87,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Login")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ViewResult Login(LoginViewModel model) {
+        public ActionResult Login(LoginViewModel model) {
             string sLogin = model.Usuario, sNewPwd = model.Senha, sOldPwd, sOldPwd2, sName;
             LoginViewModel loginViewModel = new LoginViewModel();
 
@@ -92,8 +96,9 @@ namespace GTI_Mvc.Controllers {
 
             bool bFuncionario = model.Usuario.LastIndexOf('@') > 1 ? false : true;
             Session["hashfunc"] = bFuncionario ? "S" : "N";
-           // Functions.pUserGTI = bFuncionario;
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            Form_Redirect fr = new Form_Redirect();
+
             if (bFuncionario) {
                 sOldPwd = sistemaRepository.Retorna_User_Password(sLogin);
                 int UserId = sistemaRepository.Retorna_User_LoginId(sLogin);
@@ -143,8 +148,8 @@ namespace GTI_Mvc.Controllers {
                     bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
 
                     //log 
-                    LogWeb regWeb = new LogWeb() {UserId=_userid,Evento=1,Pref=true};
-                    sistemaRepository.Incluir_LogWeb(regWeb);
+                    //LogWeb regWeb = new LogWeb() {UserId=_userid,Evento=1,Pref=true};
+                    //sistemaRepository.Incluir_LogWeb(regWeb);
                     //***
 
                     List<int> ListaUsoPlataforma = tributarioRepository.Lista_Rodo_Uso_Plataforma_UserEmpresa(_userid, _func);
@@ -153,20 +158,11 @@ namespace GTI_Mvc.Controllers {
                     } else {
                         ViewBag.UsoPlataforma = "S";
                     }
+
                     if (Session["hashform"] == null) {
                         return View("../Home/SysMenu");
                     } else {
-                        if (Session["hashform"].ToString() == "mobreq") {
-                            Session["hashform"] = "";
-                            ViewBag.Fiscal = Session["hashfiscalmov"] == null ? "N" : Session["hashfiscalmov"].ToString();
-                            return View("../MobReq/Mobreq_menu");
-                        } else if (Session["hashform"].ToString() == "itbi") {
-                            Session["hashform"] = "";
-                            ViewBag.Fiscal = Session["hashfiscalmov"] == null ? "N" : Session["hashfiscalmov"].ToString();
-                            return View("../Itbi/Itbi_menu");
-                        } else {
-                            return View("../Home/SysMenu");
-                        }
+                        fr= RedirectToForm(Session["hashform"].ToString());
                     }
                 }
             } else {
@@ -197,8 +193,8 @@ namespace GTI_Mvc.Controllers {
                                 bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
 
                                 //log 
-                                LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 1, Pref = false };
-                                sistemaRepository.Incluir_LogWeb(regWeb);
+                                //LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 1, Pref = false };
+                                //sistemaRepository.Incluir_LogWeb(regWeb);
                                 //***
 
                                 List<int> ListaUsoPlataforma = tributarioRepository.Lista_Rodo_Uso_Plataforma_UserEmpresa(_userid, _func);
@@ -210,24 +206,14 @@ namespace GTI_Mvc.Controllers {
                                 if (Session["hashform"] == null) {
                                     return View("../Home/SysMenu");
                                 } else {
-                                    if (Session["hashform"].ToString() == "mobreq") {
-                                        Session["hashform"] = "";
-                                        ViewBag.Fiscal = Session["hashfiscalmov"] == null ? "N" : Session["hashfiscalmov"].ToString();
-                                        return View("../MobReq/Mobreq_menu");
-                                    } else if (Session["hashform"].ToString() == "itbi") {
-                                        Session["hashform"] = "";
-                                        ViewBag.Fiscal = Session["hashfiscalmov"] == null ? "N" : Session["hashfiscalmov"].ToString();
-                                        return View("../Itbi/Itbi_menu");
-                                    } else {
-                                        return View("../Home/SysMenu");
-                                    }
+                                    fr = RedirectToForm(Session["hashform"].ToString());
                                 }
-
                             }
                         }
                     }
                 }
             }
+            return RedirectToAction(fr.Action,fr.Controller);
         }
 
         [Route("Login_update")]
@@ -422,10 +408,6 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ViewResult Login_resend(LoginViewModel model) {
-            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-            //    ViewBag.Result = "Código de verificação inválido.";
-            //    return View(model);
-            //}
             var response = Request["g-recaptcha-response"];
             var client = new WebClient();
             string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
@@ -589,7 +571,38 @@ namespace GTI_Mvc.Controllers {
             return View(model);
         }
 
-      
+        Form_Redirect RedirectToForm(string _name) {
+            ViewBag.Fiscal = Session["hashfiscalmov"] == null ? "N" : Session["hashfiscalmov"].ToString();
+            Form_Redirect _fr = new Form_Redirect();
+            Session["hashform"] = "";
+            switch (_name) {
+                case "mobreq":
+                    _fr.Controller = "MobReq"; _fr.Action = "Mobreq_menu";
+                    break;
+                case "itbi":
+                    _fr.Controller = "Itbi"; _fr.Action = "Itbi_menu";
+                    break;
+                case "2":
+                    _fr.Controller = "Imovel"; _fr.Action = "Carne_Iptu";
+                    break;
+                case "5":
+                    _fr.Controller = "Imovel"; _fr.Action = "Certidao_Endereco";
+                    break;
+                case "6":
+                    _fr.Controller = "Imovel"; _fr.Action = "Certidao_Valor_Venal";
+                    break;
+                case "7":
+                    _fr.Controller = "Imovel"; _fr.Action = "Certidao_Isencao";
+                    break;
+                case "10":
+                    _fr.Controller = "Tributario"; _fr.Action = "Dama";
+                    break;
+                default:
+                    _fr.Controller = "Home"; _fr.Action = "SysMenu";
+                    break;
+            }
+            return _fr;
+        }      
 
     }
 }

@@ -40,7 +40,11 @@ namespace GTI_Mvc.Controllers {
         #region Certidões
         [Route("Certidao/Certidao_Endereco")]
         [HttpGet]
-        public ViewResult Certidao_Endereco() {
+        public ActionResult Certidao_Endereco() {
+            Session["hashform"] = "5";
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);
         }
@@ -258,7 +262,11 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Certidao/Certidao_Valor_Venal")]
         [HttpGet]
-        public ViewResult Certidao_Valor_Venal() {
+        public ActionResult Certidao_Valor_Venal() {
+            Session["hashform"] = "6";
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);
         }
@@ -498,7 +506,11 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Certidao/Certidao_Isencao")]
         [HttpGet]
-        public ViewResult Certidao_Isencao() {
+        public ActionResult Certidao_Isencao() {
+            Session["hashform"] = "7";
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);
         }
@@ -887,7 +899,11 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Carne_Iptu")]
         [HttpGet]
-        public ViewResult Carne_Iptu() {
+        public ActionResult Carne_Iptu() {
+            Session["hashform"] = "2";
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);
         }
