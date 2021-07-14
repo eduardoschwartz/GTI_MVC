@@ -8,7 +8,7 @@ using System.Net.Mail;
 using System.Web.Mvc;
 using static GTI_Models.modelCore;
 using Newtonsoft.Json.Linq;
-
+using System.Web;
 
 namespace GTI_Mvc.Controllers {
     public class HomeController : Controller {
@@ -34,7 +34,7 @@ namespace GTI_Mvc.Controllers {
         [Route("Login")]
         [HttpGet]
         public ViewResult Login() {
-            
+            LoginViewModel model = new LoginViewModel();
             if (Session["hashid"]!= null) {
                 int _userid = Convert.ToInt32(Session["hashid"]);
                 bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
@@ -46,10 +46,19 @@ namespace GTI_Mvc.Controllers {
                     ViewBag.UsoPlataforma = "S";
                 }
                 return View("SysMenu");
+            } else {
+                if (Request.Cookies["2lG*"] != null) {
+                    model.RememberMe = true;
+                    model.Usuario = Functions.Decrypt( Request.Cookies["2lG*"].Value.ToString());
+                } 
+                if (Request.Cookies["4%pWr@"] != null) {
+                    model.RememberMe = true;
+                    model.Senha = Functions.Decrypt( Request.Cookies["4%pWr@"].Value.ToString());
+                }
+
             }
             Session.Remove("hashid");
             Session.Remove("hashfname");
-            LoginViewModel model = new LoginViewModel();
             return View(model);
         }
 
@@ -159,6 +168,23 @@ namespace GTI_Mvc.Controllers {
                         ViewBag.UsoPlataforma = "S";
                     }
 
+                    // **Rememeber me
+                    if (model.RememberMe) {
+                        var cookie = new HttpCookie("2lG*", Functions.Encrypt( model.Usuario));
+                        cookie.Expires = DateTime.Now.AddDays(30);
+                        System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
+                        
+                        cookie = new HttpCookie("4%pWr@", Functions.Encrypt( model.Senha));
+                        cookie.Expires = DateTime.Now.AddDays(30);
+                        System.Web.HttpContext.Current.Response.Cookies.Add( cookie);
+                    }
+                    else{
+                        Response.Cookies["2lG*"].Expires = DateTime.Now.AddDays(-1);
+                        Response.Cookies["4%pWr@"].Expires = DateTime.Now.AddDays(-1);
+                    }
+                    //******************
+
+
                     if (Session["hashform"] == null) {
                         return View("../Home/SysMenu");
                     } else {
@@ -196,6 +222,20 @@ namespace GTI_Mvc.Controllers {
                                 //LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 1, Pref = false };
                                 //sistemaRepository.Incluir_LogWeb(regWeb);
                                 //***
+                                // **Rememeber me
+                                if (model.RememberMe) {
+                                    var cookie = new HttpCookie("2lG*", Functions.Encrypt(model.Usuario));
+                                    cookie.Expires = DateTime.Now.AddDays(30);
+                                    System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
+
+                                    cookie = new HttpCookie("4%pWr@", Functions.Encrypt(model.Senha));
+                                    cookie.Expires = DateTime.Now.AddDays(30);
+                                    System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
+                                } else {
+                                    Response.Cookies["2lG*"].Expires = DateTime.Now.AddDays(-1);
+                                    Response.Cookies["4%pWr@"].Expires = DateTime.Now.AddDays(-1);
+                                }
+                                //******************
 
                                 List<int> ListaUsoPlataforma = tributarioRepository.Lista_Rodo_Uso_Plataforma_UserEmpresa(_userid, _func);
                                 if (ListaUsoPlataforma.Count == 0) {

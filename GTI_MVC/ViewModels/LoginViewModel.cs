@@ -21,6 +21,6 @@ namespace GTI_Mvc.ViewModels {
         public string Chave { get; set; }
         public string Email { get; set; }
         public string Telefone { get; set; }
-
+        public bool RememberMe { get; set; }
     }
 }
