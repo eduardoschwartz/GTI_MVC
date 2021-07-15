@@ -50,6 +50,18 @@
     .uppercase {
         text-transform: uppercase
     }
+
+    button {
+        background: none !important;
+        border: none;
+        padding: 0 !important;
+        /*optional*/
+        font-family: arial, sans-serif;
+        /*input has OS specific font-family*/
+        color: #069;
+        text-decoration: underline;
+        cursor: pointer;
+    }
 </style>
 
 @{var res = @ViewBag.Result;}
@@ -69,7 +81,7 @@
                                     <span >Nome:</span>
                                 </td>
                                 <td style="width:420px">
-                                    @Html.TextBoxFor(m => m.Nome, new { @id = "nome", @style = "width:400px", @class = "uppercase" })
+                                    @Html.TextBoxFor(m => m.Nome, new { @id = "nome", @style = "width:398px", @class = "uppercase" })
                                 </td>
                             </tr>
                             <tr style="height:25px">
@@ -115,44 +127,124 @@
 
 
                 </div>
-                <div class="card-header">Endereço Residencial</div>
+                <div class="card-header">Endereço Residencial<input type="button" value="Capacity Chart" onclick="CapacityChart();"></div>
                 <div class="card-body">
-                    @*<table style="font-size:13px;width:640px">
-                        <tr style="height:30px">
-                            <td style="width:62px">
-                                <label style="font-weight:normal">Cep:</label>
+                    <table style="font-size:13px;width:500px">
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <label style="font-weight:normal;padding-top:7px">Nº do Cep:</label>
                             </td>
                             <td>
-                                <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Cep, new { style = "width:80px;height:25px", @readonly = true })</label>
-                                <label style="font-weight:normal;padding-left:10px">Logradouro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.NomeLogradouro, new { style = "width:385px;height:25px", @readonly = true })</label>
+                                <span style="font-weight:normal;">@Html.TextBoxFor(m => m.EnderecoR.Cep, new { @class = "maskCep", @id = "txtCep", style = "width:90px" })</span>
+                                <button type="submit" name="action" style="background-color:brown;color:white" value="btnCepCompradorOK">Pesquisar</button>
+                                <span style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank">aqui</a> para consultar o Cep</span>
                             </td>
                         </tr>
-                        <tr style="height:30px">
-                            <td>
-                                <label style="font-weight:normal">Número:</label>
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <span style="font-weight:normal">Logradouro:</span>
                             </td>
                             <td>
-                                <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Numero, new { style = "width:80px;height:25px", @readonly = true })</label>
-                                <label style="font-weight:normal;padding-left:10px">Complemento:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.Complemento, new { style = "width:369px;height:25px", @readonly = true })</label>
-                            </td>
-                        </tr>
-                        <tr style="height:30px">
-                            <td>
-                                <label style="font-weight:normal">Quadra:</label>
-                            </td>
-                            <td>
-                                <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.QuadraOriginal, new { style = "width:110px;height:25px", @readonly = true })</label>
-                                <label style="font-weight:normal;padding-left:10px">Lote:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.LoteOriginal, new { style = "width:110px;height:25px", @readonly = true })</label>
-                                <label style="font-weight:normal;padding-left:10px">Bairro:&nbsp;&nbsp;</label><label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Dados_Imovel.NomeBairro, new { style = "width:226px;height:25px", @readonly = true })</label>
+                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoR.Endereco, new { style = "width:313px", @readonly = true })</span>
+                                <span style="font-weight:normal;padding-left:10px">Nº:&nbsp;</span><span style="font-weight:normal">
+                                    @Html.TextBoxFor(m => m.EnderecoR.Numero, new { style = "width:50px", @onKeyPress = "return formata(this, '§§§§§', event)" })
+                                </span>
                             </td>
                         </tr>
-                    </table>*@
-
-
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <span style="font-weight:normal">Complem.:</span>
+                            </td>
+                            <td>
+                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoR.Complemento, new { style = "width:150px" })</span>
+                                <span style="font-weight:normal;padding-left:10px">Bairro:&nbsp;</span><span style="font-weight:normal">
+                                    @Html.TextBoxFor(m => m.EnderecoR.NomeBairro, new { style = "width:192px" })
+                                </span>
+                            </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <span style="font-weight:normal">Cidade:</span>
+                            </td>
+                            <td>
+                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoR.NomeCidade, new { style = "width:300px" })</span>
+                                <span style="font-weight:normal;padding-left:10px">UF:&nbsp;</span><span style="font-weight:normal">
+                                    @Html.TextBoxFor(m => m.EnderecoR.UF, new { style = "width:60px" })
+                                </span>
+                            </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <span style="font-weight:normal">Telefone:</span>
+                            </td>
+                            <td>
+                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoR.Telefone, new { style = "width:120px" })</span>
+                                <span style="font-weight:normal;padding-left:10px">Email:&nbsp;</span><span style="font-weight:normal">
+                                    @Html.TextBoxFor(m => m.EnderecoR.Email, new { style = "width:225px" })
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
 
                 </div>
                 <div class="card-header">Endereço Comercial</div>
                 <div class="card-body">
+                    <table style="font-size:13px;width:500px">
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <label style="font-weight:normal;padding-top:7px">Nº do Cep:</label>
+                            </td>
+                            <td>
+                                <span style="font-weight:normal;">@Html.TextBoxFor(m => m.EnderecoC.Cep, new { @class = "maskCep", @id = "txtCep", style = "width:90px" })</span>
+                                <button type="submit" name="action" style="background-color:brown;color:white" value="btnCepCompradorOK" >Pesquisar</button>
+                                <span style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank">aqui</a> para consultar o Cep</span>
+                            </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <span style="font-weight:normal">Logradouro:</span>
+                            </td>
+                            <td>
+                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoC.Endereco, new { style = "width:313px", @readonly = true })</span>
+                                <span style="font-weight:normal;padding-left:10px">Nº:&nbsp;</span><span style="font-weight:normal">
+                                    @Html.TextBoxFor(m => m.EnderecoC.Numero, new { style = "width:50px", @onKeyPress = "return formata(this, '§§§§§', event)" })
+                                </span>
+                            </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <span style="font-weight:normal">Complem.:</span>
+                            </td>
+                            <td>
+                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoC.Complemento, new { style = "width:150px" })</span>
+                                <span style="font-weight:normal;padding-left:10px">Bairro:&nbsp;</span><span style="font-weight:normal">
+                                    @Html.TextBoxFor(m => m.EnderecoC.NomeBairro, new { style = "width:192px" })
+                                </span>
+                            </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <span style="font-weight:normal">Cidade:</span>
+                            </td>
+                            <td>
+                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoC.NomeCidade, new { style = "width:300px" })</span>
+                                <span style="font-weight:normal;padding-left:10px">UF:&nbsp;</span><span style="font-weight:normal">
+                                    @Html.TextBoxFor(m => m.EnderecoC.UF, new { style = "width:60px" })
+                                </span>
+                            </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <span style="font-weight:normal">Telefone:</span>
+                            </td>
+                            <td>
+                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoC.Telefone, new { style = "width:120px" })</span>
+                                <span style="font-weight:normal;padding-left:10px">Email:&nbsp;</span><span style="font-weight:normal">
+                                    @Html.TextBoxFor(m => m.EnderecoC.Email, new { style = "width:225px" })
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
                     <br />
                     <div style="text-align:center">
                         <button type="submit" id="btnOk" class="btn btn-primary" name="action" value="btnValida"> <img src="~/Images/save.png" /> &nbsp;Gravar Cidadão</button>&nbsp;&nbsp;

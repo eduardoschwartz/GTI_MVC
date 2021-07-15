@@ -684,7 +684,49 @@ namespace GTI_Mvc.Controllers {
                     break;
             }
             return _fr;
-        }      
+        }
+
+        [Route("User_Query")]
+        [HttpGet]
+        public ActionResult User_Query() {
+            LoginViewModel model = new LoginViewModel();
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
+            List<Usuario_web> Lista = new List<Usuario_web>();
+
+            model.Lista_Usuario_Web = Lista;
+            return View(model);
+        }
+
+
+        [Route("User_Query")]
+        [HttpPost]
+        public ActionResult User_Query(LoginViewModel model,int? ide,string action) {
+
+            List<Usuario_web> Lista = new List<Usuario_web>();
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+
+            if (action == "rs") {
+
+                //Usuario_web _user = sistemaRepository.Retorna_Usuario_Web((int)ide);
+                //if (!_user.Ativo) {
+                //    ViewBag.Result = "A conta não esta ativa";
+                //    return View(model);
+                //} else {
+                    Exception ex = sistemaRepository.Alterar_Usuario_Web_Senha((int)ide, Functions.Encrypt("123456"));
+                //    ViewBag.Result = "A senha foi reseta com sucesso";
+                //}
+            }
+
+            if (!string.IsNullOrEmpty(model.Filter))
+                Lista = sistemaRepository.Lista_Usuario_Web(model.Filter);
+
+            model.Lista_Usuario_Web = Lista;
+            return View(model);
+        }
+
+
 
     }
 }

@@ -66,6 +66,11 @@
             @if (Session["hashid"].ToString() == "433") {
                 @Html.ActionLink("Cadastro Cidadão", "Cidadao_menu", "Cidadao", null, new { @class = "actionlink" })<br />
             }
+
+            @if (Session["hashid"].ToString() == "433" || Session["hashid"].ToString() == "22" || Session["hashid"].ToString() == "235" || Session["hashid"].ToString() == "416") {
+                @Html.ActionLink("Lisa de contribuintes cadastrados", "User_Query", "Home", null, new { @class = "actionlink" })<br />
+            }
+
             @Html.ActionLink("Inclusão de Cep não cadastrado", "Cep_inc", "Shared", null, new { @class = "actionlink" })<br />
             @Html.ActionLink("Imposto sobre Transmissão de Bens Imóveis (ITBI)", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })<br />
 

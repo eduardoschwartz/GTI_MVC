@@ -700,6 +700,15 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<Usuario_web> Lista_Usuario_Web(string e) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Usuario_Web where t.Email.Contains(e) || t.Nome.Contains(e) orderby t.Nome select t);
+                return Sql.ToList();
+            }
+        }
+
+
+
         public Usuario_web Retorna_Usuario_Web(string Email) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 Usuario_web Sql = (from t in db.Usuario_Web where t.Email == Email select t).FirstOrDefault();

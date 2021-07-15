@@ -667,6 +667,7 @@
     <Content Include="Images\help.png" />
     <Content Include="Images\OK.gif" />
     <Content Include="Images\ok.png" />
+    <Content Include="Images\refresh.png" />
     <Content Include="Images\save.png" />
     <Content Include="webfonts\fa-brands-400.svg" />
     <Content Include="webfonts\fa-regular-400.svg" />
@@ -1067,6 +1068,7 @@
     <Content Include="Views\Cidadao\Cidadao_menu.cshtml" />
     <Content Include="Views\Cidadao\Cidadao_add.cshtml" />
     <Content Include="Views\Cidadao\Cidadao_query.cshtml" />
+    <Content Include="Views\Home\user_query.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

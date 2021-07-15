@@ -298,5 +298,10 @@ namespace GTI_Bll.Classes {
             obj.Incluir_LogWeb(reg);
         }
 
+        public List<Usuario_web> Lista_Usuario_Web(string e) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            return obj.Lista_Usuario_Web(e);
+        }
+
     }
 }

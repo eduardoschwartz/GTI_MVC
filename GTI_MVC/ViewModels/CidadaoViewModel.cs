@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GTI_Models.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,5 +14,9 @@ namespace GTI_Mvc.ViewModels {
         public string Cnh_Numero { get; set; }
         public string Cnh_Orgao { get; set; }
         public int Profissao_Codigo { get; set; }
+        public EnderecoStruct EnderecoR { get; set; }
+        public EnderecoStruct EnderecoC { get; set; }
     }
+
+
 }

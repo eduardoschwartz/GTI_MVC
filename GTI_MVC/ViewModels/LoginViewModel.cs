@@ -1,7 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using GTI_Models.Models;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace GTI_Mvc.ViewModels {
     public class LoginViewModel {
+        public int UserId { get; set; }
         [Display(Name = "Usuário: ")]
         public string Usuario { get; set; }
         [Display(Name = "Senha: ")]
@@ -22,5 +25,7 @@ namespace GTI_Mvc.ViewModels {
         public string Email { get; set; }
         public string Telefone { get; set; }
         public bool RememberMe { get; set; }
+        public List<Usuario_web> Lista_Usuario_Web { get; set; }
+        public string Filter { get; set; }
     }
 }
