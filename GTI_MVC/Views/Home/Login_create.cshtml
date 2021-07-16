@@ -46,60 +46,69 @@
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
 </style>
 
 @{var res = ViewBag.Result;}
 <div class="center container" style="width:540px">
     @using(Html.BeginForm("Login_create","Home",FormMethod.Post,new { @id = "MainForm" })) {
         @Html.AntiForgeryToken()
-        <div class="card">
-            <div class="card-header">Por favor faça o seu cadastro</div>
-            <div class="card-body">
-                <table width="500px">
-                    <tr style="height:30px">
-                        <td style="width:150px;font-size:14px">Nome Completo:</td>
-                        <td style="width:300px">@Html.TextBoxFor(m => m.Usuario,new { @id = "nome",@style = "max-width:400px;width:300px;font-size:14px",@maxlength = "200" })</td>
-                    </tr>
-                    <tr style="height:30px">
-                        <td style="width:150px;font-size:14px">Cpf/Cnpj:</td>
-                        <td style="width:300px">
-                            @Html.TextBoxFor(m => m.CpfValue,new { @id = "cpfTxt",@name = "cpfTxt",@style = "Width:200px;font-size:14px" })
-                        </td>
-                    </tr>
-                    <tr style="height:30px">
-                        <td style="width:150px;font-size:14px">Nº de Telefone:</td>
-                        <td>@Html.TextBoxFor(m => m.Telefone,new { @id = "telefone",@style = "max-width:400px;width:300px;font-size:14px",@maxlength = "50" })</td>
-                    </tr>
-                    <tr style="height:30px">
-                        <td style="width:150px;font-size:14px">Endereço de Email:</td>
-                        <td>@Html.TextBoxFor(m => m.Email,new { @id = "email",@style = "max-width:400px;width:300px;font-size:14px",@maxlength = "250" })</td>
-                    </tr>
-                    <tr style="height:30px">
-                        <td style="width:150px;font-size:14px">Digite a Senha:</td>
-                        <td>@Html.TextBoxFor(m => m.Senha2,new { @type = "password",@id = "senha2",@style = "max-width:400px;font-size:14px",@maxlength = "50" })</td>
-                    </tr>
-                    <tr style="height:30px">
-                        <td style="width:150px;font-size:14px">Confirme a Senha:</td>
-                        <td>@Html.TextBoxFor(m => m.Senha3,new { @type = "password",@id = "senha3",@style = "max-width:400px;font-size:14px" })</td>
-                    </tr>
-                </table>
-                <br />
-                <div style="text-align:justify; display:block;color:maroon;font-size:14px">
-                    <input type="checkbox" id="chkAceite" name="chkAceite" value="0"><span>
-                        Declaro que os dados preenchidos expressam a verdade e são de minha inteira responsabilidade. Estou ciente que a declaração de informações falsas para acesso a lançamentos e negociação de débitos fiscais, constituem crime, sujeito às penalidades legais.
-                    </span>
-                </div>
-                <br />
-                <div class="g-recaptcha" data-sitekey="6LfRjG0aAAAAAOEd4ksnWZYw3oX4cUsimIy7yOqD"></div>
-                <br />
-                <button type="submit" title="Finalizar o cadastro" class="btn btn-primary">  <img src="~/Images/save.png" />&nbsp; Gravar os dados
-                </button>
+    <div class="card">
+        <div class="card-header">Por favor faça o seu cadastro</div>
+        <div class="card-body">
+            <table width="500px">
+                <tr style="height:30px">
+                    <td style="width:150px;font-size:14px">Nome Completo:</td>
+                    <td style="width:300px">@Html.TextBoxFor(m => m.Usuario, new { @id = "nome", @style = "max-width:400px;width:300px;font-size:14px", @maxlength = "200" })</td>
+                </tr>
+                <tr style="height:30px">
+                    <td style="width:150px;font-size:14px">Cpf/Cnpj:</td>
+                    <td style="width:300px">
+                        @Html.TextBoxFor(m => m.CpfValue, new { @id = "cpfTxt", @name = "cpfTxt", @style = "Width:200px;font-size:14px" })
+                    </td>
+                </tr>
+                <tr style="height:30px">
+                    <td style="width:150px;font-size:14px">Nº de Telefone:</td>
+                    <td>@Html.TextBoxFor(m => m.Telefone, new { @id = "telefone", @style = "max-width:400px;width:300px;font-size:14px", @maxlength = "50" })</td>
+                </tr>
+                <tr style="height:30px">
+                    <td style="width:150px;font-size:14px">Endereço de Email:</td>
+                    <td>@Html.TextBoxFor(m => m.Email, new { @id = "email", @style = "max-width:400px;width:300px;font-size:14px", @maxlength = "250" })</td>
+                </tr>
+                <tr style="height:30px">
+                    <td style="width:150px;font-size:14px">Digite a Senha:</td>
+                    <td>@Html.TextBoxFor(m => m.Senha2, new { @type = "password", @id = "senha2", @style = "max-width:400px;font-size:14px", @maxlength = "50" })</td>
+                </tr>
+                <tr style="height:30px">
+                    <td style="width:150px;font-size:14px">Confirme a Senha:</td>
+                    <td>@Html.TextBoxFor(m => m.Senha3, new { @type = "password", @id = "senha3", @style = "max-width:400px;font-size:14px" })</td>
+                </tr>
+            </table>
+            <br />
+            <div style="text-align:justify; display:block;color:maroon;font-size:14px">
+                <input type="checkbox" id="chkAceite" name="chkAceite" value="0"><span>
+                    Declaro que os dados preenchidos expressam a verdade e são de minha inteira responsabilidade. Estou ciente que a declaração de informações falsas para acesso a lançamentos e negociação de débitos fiscais, constituem crime, sujeito às penalidades legais.
+                </span>
             </div>
-
-            <div class="card-footer">
-                @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
-            </div>
+            <br />
+            <div class="g-recaptcha" data-sitekey="6LfRjG0aAAAAAOEd4ksnWZYw3oX4cUsimIy7yOqD"></div>
+            <br />
+            <button type="submit" title="Finalizar o cadastro" class="btn btn-primary">
+                <img src="~/Images/save.png" />&nbsp; Gravar os dados
+            </button>
         </div>
+        @*<label class="errorlabel" id="errorLabel">@ViewBag.Result</label>*@
+        <div class="card-footer">
+            @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+        </div>
+    </div>
     }
 
 </div>
@@ -116,9 +125,31 @@
 @section scripts{
 
     <script type="text/javascript">
+       
+
         $(document).ready(function () {
             $("#MainForm").submit(function () {
                 return ValidateForm();
+            });
+
+            //Máscara Cpf/Cnpj
+            $("#cpfTxt").keydown(function () {
+                try {
+                    $("#cpfTxt").unmask();
+                } catch (e) { }
+                var tamanho = $("#cpfTxt").val().length;
+                if (tamanho < 11) {
+                    $("#cpfTxt").mask("999.999.999-99");
+                } else {
+                    $("#cpfTxt").mask("99.999.999/9999-99");
+                }
+                var elem = this;
+                setTimeout(function () {
+                    elem.selectionStart = elem.selectionEnd = 10000;
+                }, 0);
+                var currentValue = $(this).val();
+                $(this).val('');
+                $(this).val(currentValue);
             });
 
             $('#msgBox1').dialog({
@@ -154,25 +185,15 @@
             $(".foo .ui-dialog-title").css("font-size", "13px");
             $(".foo .ui-widget-content").css("font-size", "13px");
 
-            //Máscara Cpf/Cnpj
-            $("#cpfTxt").keydown(function () {
-                try {
-                    $("#cpfTxt").unmask();
-                } catch (e) { }
-                var tamanho = $("#cpfTxt").val().length;
-                if (tamanho < 11) {
-                    $("#cpfTxt").mask("999.999.999-99");
-                } else {
-                    $("#cpfTxt").mask("99.999.999/9999-99");
-                }
-                var elem = this;
-                setTimeout(function () {
-                    elem.selectionStart = elem.selectionEnd = 10000;
-                }, 0);
-                var currentValue = $(this).val();
-                $(this).val('');
-                $(this).val(currentValue);
-            });
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+
+           
 
         });
 
@@ -240,7 +261,7 @@
             return true;
         }
 
-   
+
 
         function valida_Cpf(cpf) {
             cpf = cpf.split("").filter(n => (Number(n) || n == 0)).join("");

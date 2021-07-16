@@ -41,9 +41,9 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Endereco")]
         [HttpGet]
         public ActionResult Certidao_Endereco() {
-            Session["hashform"] = "5";
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
+            //Session["hashform"] = "5";
+            //if (Session["hashid"] == null)
+            //    return RedirectToAction("Login", "Home");
 
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);
@@ -263,9 +263,9 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Valor_Venal")]
         [HttpGet]
         public ActionResult Certidao_Valor_Venal() {
-            Session["hashform"] = "6";
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
+            //Session["hashform"] = "6";
+            //if (Session["hashid"] == null)
+            //    return RedirectToAction("Login", "Home");
 
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);
@@ -507,9 +507,9 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Isencao")]
         [HttpGet]
         public ActionResult Certidao_Isencao() {
-            Session["hashform"] = "7";
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
+            //Session["hashform"] = "7";
+            //if (Session["hashid"] == null)
+            //    return RedirectToAction("Login", "Home");
 
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);
@@ -900,9 +900,9 @@ namespace GTI_Mvc.Controllers {
         [Route("Carne_Iptu")]
         [HttpGet]
         public ActionResult Carne_Iptu() {
-            Session["hashform"] = "2";
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
+            //Session["hashform"] = "2";
+            //if (Session["hashid"] == null)
+            //    return RedirectToAction("Login", "Home");
 
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);

@@ -30,9 +30,9 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Debito_Codigo")]
         [HttpGet]
         public ActionResult Certidao_Debito_Codigo() {
-            Session["hashform"] = "18";
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
+            //Session["hashform"] = "18";
+            //if (Session["hashid"] == null)
+            //    return RedirectToAction("Login", "Home");
 
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);
@@ -316,9 +316,9 @@ namespace GTI_Mvc.Controllers {
         [Route("Certidao/Certidao_Debito_Doc")]
         [HttpGet]
         public ActionResult Certidao_Debito_Doc() {
-            Session["hashform"] = "19";
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
+            //Session["hashform"] = "19";
+            //if (Session["hashid"] == null)
+            //    return RedirectToAction("Login", "Home");
 
             CertidaoViewModel model = new CertidaoViewModel {
                 OptionList = new List<SelectListaItem> {
@@ -594,9 +594,9 @@ namespace GTI_Mvc.Controllers {
         [Route("Comprovante_Pagamento")]
         [HttpGet]
         public ActionResult Comprovante_Pagamento() {
-            Session["hashform"] = "20";
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
+            //Session["hashform"] = "20";
+            //if (Session["hashid"] == null)
+            //    return RedirectToAction("Login", "Home");
 
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);
@@ -723,9 +723,9 @@ namespace GTI_Mvc.Controllers {
         [Route("Dama")]
         [HttpGet]
         public ActionResult Dama() {
-            Session["hashform"] = "10";
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
+            //Session["hashform"] = "10";
+            //if (Session["hashid"] == null)
+            //    return RedirectToAction("Login", "Home");
 
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);
@@ -1507,9 +1507,9 @@ namespace GTI_Mvc.Controllers {
         [Route("SegundaVia_Parcelamento")]
         [HttpGet]
         public ActionResult SegundaVia_Parcelamento() {
-            Session["hashform"] = "23";
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
+            //Session["hashform"] = "23";
+            //if (Session["hashid"] == null)
+            //    return RedirectToAction("Login", "Home");
 
             DebitoViewModel model = new DebitoViewModel();
             return View(model);
@@ -1851,9 +1851,9 @@ namespace GTI_Mvc.Controllers {
         [Route("Detalhe_Boleto")]
         [HttpGet]
         public ActionResult Detalhe_Boleto() {
-            Session["hashform"] = "21";
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
+            //Session["hashform"] = "21";
+            //if (Session["hashid"] == null)
+            //    return RedirectToAction("Login", "Home");
 
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);
