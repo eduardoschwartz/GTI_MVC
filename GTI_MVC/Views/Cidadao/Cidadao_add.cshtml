@@ -198,7 +198,7 @@
                                 <label style="font-weight:normal;padding-top:7px">Nº do Cep:</label>
                             </td>
                             <td>
-                                <span style="font-weight:normal;">@Html.TextBoxFor(m => m.EnderecoC.Cep, new {  @class = "maskCep", @id = "txtCep", style = "width:90px" })</span>
+                                <span style="font-weight:normal;">@Html.TextBoxFor(m => m.EnderecoC.Cep, new {  @class = "maskCep", @id = "CepC", style = "width:90px" })</span>
                                 <button type="submit" name="action" style="background-color:brown;color:white" value="btnCepCompradorOK" >Pesquisar</button>
                                 <span style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank">aqui</a> para consultar o Cep</span>
                             </td>
@@ -335,7 +335,7 @@
                 height: "auto",
                 width: 340,
                 modal: true,
-                dialogClass: "foo",
+                dialogClass: "foo2",
                 buttons: {
                     "OK": function () {
                         $('#MainForm').submit();
@@ -363,8 +363,10 @@
 
             $(".foo .ui-dialog-title").css("font-size", "13px");
             $(".foo .ui-widget-content").css("font-size", "13px");
-            $(".foo .ui-dialog-titlebar").css("background", "lightblue");
-            $(".foo .ui-dialog-titlebar").css("color", "black");
+            $(".foo2 .ui-dialog-title").css("font-size", "13px");
+            $(".foo2 .ui-widget-content").css("font-size", "13px");
+            $(".foo2 .ui-dialog-titlebar").css("background", "saddlebrown");
+            $(".foo2 .ui-dialog-titlebar").css("color", "white");
 
             var _res = '@res';
             if (_res != "") {
@@ -377,12 +379,100 @@
 
         function ValidateForm() {
             var _nome = document.getElementById('nome').value;
+            var _cpf = document.getElementById('cpfcnpj').value;
+            var _dataNascto = document.getElementById('dataNascto').value;
+            var _rg = document.getElementById('rgnumero').value;
+            var _rgorgao = document.getElementById('rgorgao').value;
+            var _cnh = document.getElementById('cnhnumero').value;
+            var _cnhorgao = document.getElementById('cnhorgao').value;
+            var _cepR = document.getElementById('CepR').value;
+            var _cepC = document.getElementById('CepC').value;
+            var _bEndR = false;
+            var _bEndC =  false;
+            var _ruaR = document.getElementById('EnderecoR').value;
+
+            if (isNullOrWhitespace(_cepR)) {
+                _cepR = '';
+            } else {
+                _cepR = RetornaNumero(_cepR);
+            }
+            if (isNullOrWhitespace(_cepC)) {
+                _cepC = '';
+            } else {
+                _cepC = RetornaNumero(_cepC);
+            }
 
             if (isNullOrWhitespace(_nome)) {
                 document.getElementById('lblMsg').innerHTML = "Digite o nome do cidadão";
                 $('#msgBox1').dialog('open');
                 return false;
             }
+
+            //*** Valida CpfCnpj ***
+            if (_cpf.length == 14) {
+                if (!valida_Cpf(_cpf)) {
+                    document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido!";
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
+            } else {
+                if (_cpf.length == 18) {
+                    if (!valida_Cnpj(_cpf)) {
+                        document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido!";
+                        $('#msgBox1').dialog('open');
+                        return false;
+                    }
+                } else {
+                    document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido!";
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
+            }
+            //*********************
+
+            if (!Valida_Data(_dataNascto)) {
+                document.getElementById('lblMsg').innerHTML = "Data de nascimento inválida!";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+
+            if (isNullOrWhitespace(_rg) && !isNullOrWhitespace(_rgorgao)) {
+                document.getElementById('lblMsg').innerHTML = "Digite o nº do Rg ou remova ou orgão emissor!";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+
+            if (isNullOrWhitespace(_cnh) && !isNullOrWhitespace(_cnhorgao)) {
+                document.getElementById('lblMsg').innerHTML = "Digite o nº da CNH ou remova ou orgão emissor!";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+
+            if (_cepR.length > 0 && _cepR.length < 8) {
+                document.getElementById('lblMsg').innerHTML = "Cep residencial inválido!";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+            if (_cepR.length == 8) {
+                _bEndR = true;
+            }
+            if (_cepC.length > 0 && _cepC.length < 8) {
+                document.getElementById('lblMsg').innerHTML = "Cep comercial inválido!";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+            if (_cepC.length == 8) {
+                _bEndC = true;
+            }
+
+            if (_bEndR) {
+                if (isNullOrWhitespace(_ruaR)) {
+                    document.getElementById('lblMsg').innerHTML = "Endereço residencial incompleto!";
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
+            }
+
 
             document.getElementById('lblMsg2').innerHTML = "Você deseja gravar os dados?";
             $('#msgBox2').dialog('open');
@@ -416,10 +506,12 @@
         }
 
         function isNullOrWhitespace(input) {
-
             if (typeof input === 'undefined' || input == null) return true;
-
             return input.replace(/\s/g, '').length < 1;
+        }
+
+        function RetornaNumero(valor) {
+            return valor.replace(/\D/g, "");
         }
 
     </script>

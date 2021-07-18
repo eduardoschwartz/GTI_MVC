@@ -32,6 +32,8 @@ function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
+
+
 function countOccurrence(palavra,char) {
     var count = 0;
     for (var i = 0; i < palavra.length; i++) {
@@ -83,6 +85,8 @@ function Valida_Numero_Processo(_numero) {
     
     return "";
 }
+
+
 
 function valida_Cpf(cpf) {
     cpf = cpf.split("").filter(n => (Number(n) || n == 0)).join("");
@@ -237,5 +241,7 @@ function RetornaAno(date) {
     var n = d.getFullYear()
     return n
 }
+
+
 
 
