@@ -24,7 +24,7 @@
         color: brown;
         font-size: 14px
     }
-
+    
     .card {
         font-family: Arial, Helvetica, sans-serif;
         font-size: 14px;
@@ -92,8 +92,6 @@
                                     <td style="width:400px;font-weight:normal">@Html.DisplayFor(modelItem => item.Email)</td>
                                     <td style="width:30px;font-weight:normal">@Html.DisplayFor(modelItem => item.Ativo)</td>
                                     <td style="width:50px;text-align:right">
-                                        @*<a href="@Url.Action("User_reset", "Home", new { p = item.Id  })" onclick="return confirm('Você deseja resetar a senha deste email para 123456?')" })" title="Resetar a senha"> <img src="@Url.Content("~/images/refresh.png")"></a>*@
-                                        @*<a href="@Url.Action("User_query", "Home")" onclick="return Enviar(@item.Id)" title="Resetar a senha"> <img src="@Url.Content("~/images/refresh.png")"></a>*@
                                         <a href="#" class="actionlink" onclick="Enviar(@item.Id)">Resetar</a>
                                     </td>
                                 </tr>
