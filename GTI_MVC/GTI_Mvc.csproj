@@ -295,32 +295,32 @@
     <Compile Include="Reports\MobReq_Baixa.cs">
       <DependentUpon>MobReq_Baixa.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\MobReq_Alteracao.cs">
       <DependentUpon>MobReq_Alteracao.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\MobReq_Reativa.cs">
       <DependentUpon>MobReq_Reativa.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\MobReq_Inscricao.cs">
       <DependentUpon>MobReq_Inscricao.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\AutoInfracao_Queimada.cs">
       <DependentUpon>AutoInfracao_Queimada.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\ParcelamentoWeb.cs">
       <AutoGen>True</AutoGen>
@@ -331,8 +331,8 @@
     <Compile Include="Reports\Resumo_Parcelamento.cs">
       <DependentUpon>Resumo_Parcelamento.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Resumo_Parcelamento_Previa.cs">
       <AutoGen>True</AutoGen>
@@ -343,20 +343,20 @@
     <Compile Include="Reports\Simulado_Parcelamento.cs">
       <DependentUpon>Simulado_Parcelamento.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Alvara_Funcionamento_Prov.cs">
       <DependentUpon>Alvara_Funcionamento_Prov.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Alvara_Funcionamento_Def.cs">
       <DependentUpon>Alvara_Funcionamento_Def.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Alvara_Funcionamento.cs">
       <AutoGen>True</AutoGen>
@@ -427,20 +427,20 @@
     <Compile Include="Reports\Notificacao_Obra.cs">
       <DependentUpon>Notificacao_Obra.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Termo_ConfDivida.cs">
       <DependentUpon>Termo_ConfDivida.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Termo_Anuencia.cs">
       <DependentUpon>Termo_Anuencia.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Certidao_Debito_Imovel.cs">
       <AutoGen>True</AutoGen>
@@ -481,8 +481,8 @@
     <Compile Include="Reports\Certidao_Isencao_Itbi_valida.cs">
       <DependentUpon>Certidao_Isencao_Itbi_valida.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Certidao_Isencao_Processo.cs">
       <AutoGen>True</AutoGen>
@@ -499,8 +499,8 @@
     <Compile Include="Reports\Auto_Infracao.cs">
       <DependentUpon>Auto_Infracao.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Itbi_Main.cs">
       <AutoGen>True</AutoGen>
@@ -511,8 +511,8 @@
     <Compile Include="Reports\Notificacao_Terreno.cs">
       <DependentUpon>Notificacao_Terreno.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Certidao_Valor_Venal.cs">
       <AutoGen>True</AutoGen>
@@ -565,8 +565,8 @@
     <Compile Include="Reports\Itbi_Rural.cs">
       <DependentUpon>Itbi_Rural.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Resumo_Pagto_Itbi.cs">
       <AutoGen>True</AutoGen>
