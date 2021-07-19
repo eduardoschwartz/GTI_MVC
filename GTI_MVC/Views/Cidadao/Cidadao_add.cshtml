@@ -122,7 +122,7 @@
                                     <span style="font-weight:normal">Profissão:</span>
                                 </td>
                                 <td>
-                                    @Html.DropDownListFor(m => Model.Profissao_Codigo, ViewBag.Lista_Profissao as SelectList, null, new { @id = "ProfissaoDropDown", @style = "font-weight:normal;width:400px" })
+                                    @Html.DropDownListFor(m => Model.Profissao_Codigo, ViewBag.Lista_Profissao as SelectList, null, new { @id = "ProfissaoDropDown", @style = "font-weight:normal;width:400px;height:21px" })
                                 </td>
                             </tr>
                         </table>
@@ -139,7 +139,7 @@
                             </td>
                             <td>
                                 <span style="font-weight:normal;">@Html.TextBoxFor(m => m.EnderecoR.Cep, new { @class = "maskCep", @id = "CepR", style = "width:90px" })</span>
-                                <button type="submit" name="action" style="background-color:brown;color:white" value="btnCepCompradorOK">Pesquisar</button>
+                                <button type="submit" name="action" style="background-color:brown;color:white" value="btnCepR">Pesquisar</button>
                                 <span style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank">aqui</a> para consultar o Cep</span>
                             </td>
                         </tr>
@@ -148,9 +148,9 @@
                                 <span style="font-weight:normal">Logradouro:</span>
                             </td>
                             <td>
-                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoR.Endereco, new {@id="EnderecoR" ,style = "width:313px", @readonly = true })</span>
+                                @Html.DropDownListFor(m => m.EnderecoR.Endereco, ViewBag.Logradouro as SelectList, null, new { @id = "EnderecoR", style = "width:312px;height:21px;color:blue", rows = 10 })
                                 <span style="font-weight:normal;padding-left:10px">Nº:&nbsp;</span><span style="font-weight:normal">
-                                    @Html.TextBoxFor(m => m.EnderecoR.Numero, new { @id = "NumeroR",style = "width:50px", @onKeyPress = "return formata(this, '§§§§§', event)" })
+                                    @Html.TextBoxFor(m => m.EnderecoR.Numero, new { @id = "NumeroR", style = "width:50px", @onKeyPress = "return formata(this, '§§§§§', event)" })
                                 </span>
                             </td>
                         </tr>
@@ -161,7 +161,11 @@
                             <td>
                                 <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoR.Complemento, new { @id = "ComplementoR", style = "width:150px", @maxlength = "50" })</span>
                                 <span style="font-weight:normal;padding-left:10px">Bairro:&nbsp;</span><span style="font-weight:normal">
-                                    @Html.TextBoxFor(m => m.EnderecoR.NomeBairro, new { @id = "BairroR", style = "width:192px", @readonly = true })
+                                    @if (Model.EnderecoR.NomeBairro != null) {
+                                        @Html.TextBoxFor(m => m.EnderecoR.NomeBairro, new { @id = "BairroR", style = "width:192px;color:blue", @readonly = true, @Value = Model.EnderecoR.NomeBairro })
+                                    } else {
+                                        @Html.TextBoxFor(m => m.EnderecoR.NomeBairro, new { @id = "BairroR", style = "width:192px", @readonly = true, @Value = "" })
+                                    }
                                 </span>
                             </td>
                         </tr>
@@ -170,9 +174,17 @@
                                 <span style="font-weight:normal">Cidade:</span>
                             </td>
                             <td>
-                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoR.NomeCidade, new { @id = "CidadeR", style = "width:300px", @readonly = true })</span>
+                                @if (Model.EnderecoR.NomeBairro != null) {
+                                    <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoR.NomeCidade, new { @id = "CidadeR", style = "width:300px;color:blue", @readonly = true, @Value = Model.EnderecoR.NomeCidade })</span>
+                                } else {
+                                    <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoR.NomeCidade, new { @id = "CidadeR", style = "width:300px", @readonly = true })</span>
+                                }
                                 <span style="font-weight:normal;padding-left:10px">UF:&nbsp;</span><span style="font-weight:normal">
-                                    @Html.TextBoxFor(m => m.EnderecoR.UF, new { @id = "CidadeR", style = "width:60px", @readonly = true })
+                                    @if (Model.EnderecoR.NomeBairro != null) {
+                                        @Html.TextBoxFor(m => m.EnderecoR.UF, new { @id = "UfR", style = "width:60px;color:blue", @readonly = true,@Value=Model.EnderecoR.UF })
+                                    } else {
+                                        @Html.TextBoxFor(m => m.EnderecoR.UF, new { @id = "UfR", style = "width:60px", @readonly = true })
+                                    }
                                 </span>
                             </td>
                         </tr>
@@ -199,7 +211,7 @@
                             </td>
                             <td>
                                 <span style="font-weight:normal;">@Html.TextBoxFor(m => m.EnderecoC.Cep, new {  @class = "maskCep", @id = "CepC", style = "width:90px" })</span>
-                                <button type="submit" name="action" style="background-color:brown;color:white" value="btnCepCompradorOK" >Pesquisar</button>
+                                <button type="submit" name="action" style="background-color:brown;color:white" value="btnCepC" >Pesquisar</button>
                                 <span style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank">aqui</a> para consultar o Cep</span>
                             </td>
                         </tr>
@@ -389,7 +401,7 @@
             var _cepC = document.getElementById('CepC').value;
             var _bEndR = false;
             var _bEndC =  false;
-            var _ruaR = document.getElementById('EnderecoR').value;
+            var _bairroR = document.getElementById('BairroR').value;
 
             if (isNullOrWhitespace(_cepR)) {
                 _cepR = '';
@@ -466,7 +478,7 @@
             }
 
             if (_bEndR) {
-                if (isNullOrWhitespace(_ruaR)) {
+                if (isNullOrWhitespace(_bairroR)) {
                     document.getElementById('lblMsg').innerHTML = "Endereço residencial incompleto!";
                     $('#msgBox1').dialog('open');
                     return false;
@@ -482,13 +494,14 @@
         }
 
         function ClearR() {
+
             document.getElementById('CepR').value = '';
-            document.getElementById('EnderecoR').value = '';
+            document.getElementById('EnderecoR').options.length = 0;
             document.getElementById('NumeroR').value = '';
             document.getElementById('ComplementoR').value = '';
             document.getElementById('BairroR').value = '';
             document.getElementById('CidadeR').value = '';
-            document.getElementById('CidadeR').value = '';
+            document.getElementById('UfR').value = '';
             document.getElementById('TelefoneR').value = '';
             document.getElementById('EmailR').value = '';
         }
