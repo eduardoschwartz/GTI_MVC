@@ -352,9 +352,9 @@ namespace GTI_Mvc.Controllers {
         [Route("Consulta_Processo")]
         [HttpGet]
         public ActionResult Consulta_Processo() {
-            Session["hashform"] = "22";
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
+            //Session["hashform"] = "22";
+            //if (Session["hashid"] == null)
+            //    return RedirectToAction("Login", "Home");
 
             ProcessoViewModel model = new ProcessoViewModel();
             return View(model);

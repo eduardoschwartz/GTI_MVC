@@ -202,7 +202,7 @@
                     </table>
 
                 </div>
-                <div class="card-header">Endereço Comercial&nbsp;&nbsp;<input class="btEdit" type="button" id="EditarR" value="Limpar Dados" onclick="ClearC()" /></div>
+                <div class="card-header">Endereço Comercial&nbsp;&nbsp;<input class="btEdit" type="button" id="EditarC" value="Limpar Dados" onclick="ClearC()" /></div>
                 <div class="card-body">
                     <table style="font-size:13px;width:500px">
                         <tr style="height:25px">
@@ -210,8 +210,8 @@
                                 <label style="font-weight:normal;padding-top:7px">Nº do Cep:</label>
                             </td>
                             <td>
-                                <span style="font-weight:normal;">@Html.TextBoxFor(m => m.EnderecoC.Cep, new {  @class = "maskCep", @id = "CepC", style = "width:90px" })</span>
-                                <button type="submit" name="action" style="background-color:brown;color:white" value="btnCepC" >Pesquisar</button>
+                                <span style="font-weight:normal;">@Html.TextBoxFor(m => m.EnderecoC.Cep, new { @class = "maskCep", @id = "CepC", style = "width:90px" })</span>
+                                <button type="submit" name="action" style="background-color:brown;color:white" value="btnCepC">Pesquisar</button>
                                 <span style="font-size:10px;padding-left:10px">&nbsp;Caso deseje, clique <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank">aqui</a> para consultar o Cep</span>
                             </td>
                         </tr>
@@ -220,7 +220,7 @@
                                 <span style="font-weight:normal">Logradouro:</span>
                             </td>
                             <td>
-                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoC.Endereco, new { @id = "EnderecoC", style = "width:313px", @readonly = true })</span>
+                                @Html.DropDownListFor(m => m.EnderecoC.Endereco, ViewBag.Logradouro as SelectList, null, new { @id = "EnderecoC", style = "width:312px;height:21px;color:blue", rows = 10 })
                                 <span style="font-weight:normal;padding-left:10px">Nº:&nbsp;</span><span style="font-weight:normal">
                                     @Html.TextBoxFor(m => m.EnderecoC.Numero, new { @id = "NumeroC", style = "width:50px", @onKeyPress = "return formata(this, '§§§§§', event)" })
                                 </span>
@@ -231,9 +231,13 @@
                                 <span style="font-weight:normal">Complem.:</span>
                             </td>
                             <td>
-                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoC.Complemento, new { @id = "ComplementoR", style = "width:150px", @maxlength = "50" })</span>
+                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoC.Complemento, new { @id = "ComplementoC", style = "width:150px", @maxlength = "50" })</span>
                                 <span style="font-weight:normal;padding-left:10px">Bairro:&nbsp;</span><span style="font-weight:normal">
-                                    @Html.TextBoxFor(m => m.EnderecoC.NomeBairro, new { @id = "BairroC", style = "width:192px", @readonly = true })
+                                    @if (Model.EnderecoC.NomeBairro != null) {
+                                        @Html.TextBoxFor(m => m.EnderecoC.NomeBairro, new { @id = "BairroC", style = "width:192px;color:blue", @readonly = true, @Value = Model.EnderecoC.NomeBairro })
+                                    } else {
+                                        @Html.TextBoxFor(m => m.EnderecoC.NomeBairro, new { @id = "BairroC", style = "width:192px", @readonly = true, @Value = "" })
+                                    }
                                 </span>
                             </td>
                         </tr>
@@ -242,9 +246,17 @@
                                 <span style="font-weight:normal">Cidade:</span>
                             </td>
                             <td>
-                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoC.NomeCidade, new { @id = "CidadeR", style = "width:300px", @readonly = true })</span>
+                                @if (Model.EnderecoC.NomeBairro != null) {
+                                    <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoC.NomeCidade, new { @id = "CidadeC", style = "width:300px;color:blue", @readonly = true, @Value = Model.EnderecoC.NomeCidade })</span>
+                                } else {
+                                    <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoC.NomeCidade, new { @id = "CidadeC", style = "width:300px", @readonly = true })</span>
+                                }
                                 <span style="font-weight:normal;padding-left:10px">UF:&nbsp;</span><span style="font-weight:normal">
-                                    @Html.TextBoxFor(m => m.EnderecoC.UF, new { @id = "UFC", style = "width:60px", @readonly = true })
+                                    @if (Model.EnderecoC.NomeBairro != null) {
+                                        @Html.TextBoxFor(m => m.EnderecoC.UF, new { @id = "UfC", style = "width:60px;color:blue", @readonly = true, @Value = Model.EnderecoC.UF })
+                                    } else {
+                                        @Html.TextBoxFor(m => m.EnderecoC.UF, new { @id = "UfC", style = "width:60px", @readonly = true })
+                                    }
                                 </span>
                             </td>
                         </tr>
@@ -402,6 +414,7 @@
             var _bEndR = false;
             var _bEndC =  false;
             var _bairroR = document.getElementById('BairroR').value;
+            var _bairroC = document.getElementById('BairroC').value;
 
             if (isNullOrWhitespace(_cepR)) {
                 _cepR = '';
@@ -485,6 +498,13 @@
                 }
             }
 
+            if (_bEndC) {
+                if (isNullOrWhitespace(_bairroC)) {
+                    document.getElementById('lblMsg').innerHTML = "Endereço comercial incompleto!";
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
+            }
 
             document.getElementById('lblMsg2').innerHTML = "Você deseja gravar os dados?";
             $('#msgBox2').dialog('open');
@@ -513,7 +533,7 @@
             document.getElementById('ComplementoC').value = '';
             document.getElementById('BairroC').value = '';
             document.getElementById('CidadeC').value = '';
-            document.getElementById('CidadeC').value = '';
+            document.getElementById('UfC').value = '';
             document.getElementById('TelefoneC').value = '';
             document.getElementById('EmailC').value = '';
         }
