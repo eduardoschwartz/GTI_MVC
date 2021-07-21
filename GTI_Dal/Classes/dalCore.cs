@@ -19,6 +19,7 @@ namespace GTI_Dal.Classes {
 
 
         public static bool IsDate(Object date) {
+            if (date == null) return false;
             try {
                 DateTime dt = DateTime.Parse(date.ToString());
                 return true;
