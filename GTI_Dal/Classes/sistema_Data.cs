@@ -92,7 +92,7 @@ namespace GTI_Dal.Classes {
             string _nome = "";
 
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from m in db.Mobiliario where m.Cnpj == cnpj select m.Razaosocial).FirstOrDefault();
+                var Sql = (from m in db.Mobiliario where m.Cnpj == cnpj && m.Dataencerramento==null select m.Razaosocial).FirstOrDefault();
                 if (Sql != null) {
                     _nome = Sql.ToString();
                 } else {
