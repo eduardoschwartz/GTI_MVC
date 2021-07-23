@@ -1479,7 +1479,7 @@ namespace GTI_Dal.Classes {
                 var reg = (from p in db.Proprietario
                            join c in db.Cidadao on p.Codcidadao equals c.Codcidadao into pc from c in pc.DefaultIfEmpty()
                            where p.Codreduzido == Codigo && p.Principal == true select new { Nome = c.Nomecidadao, Cpf = c.Cpf }).FirstOrDefault();
-                if (reg.Cpf == null)
+                if (string.IsNullOrEmpty(  reg.Cpf))
                     return false;
                 else {
                     string _cpf = Convert.ToInt64(reg.Cpf).ToString();
