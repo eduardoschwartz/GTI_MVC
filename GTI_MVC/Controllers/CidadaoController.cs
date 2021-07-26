@@ -23,7 +23,7 @@ namespace GTI_MVC.Controllers
 
         [Route("Cidadao_add")]
         [HttpGet]
-        public ActionResult Cidadao_add() {
+        public ActionResult Cidadao_add(string c) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
 
@@ -33,10 +33,12 @@ namespace GTI_MVC.Controllers
             ViewBag.Lista_Profissao = new SelectList(Lista, "Codigo", "Nome");
 
             List<Logradouro> Lista_Logradouro = new List<Logradouro>();
-            ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
+            ViewBag.LogradouroR = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
+            ViewBag.LogradouroC = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
+
             model.EnderecoR = new EnderecoStruct();
             model.EnderecoC = new EnderecoStruct();
-
+            model.CpfCnpj = c;
             return View(model);
         }
 
@@ -51,8 +53,9 @@ namespace GTI_MVC.Controllers
             Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
             List<Profissao> Lista = cidadaoRepository.Lista_Profissao();
             ViewBag.Lista_Profissao = new SelectList(Lista, "Codigo", "Nome");
-            List<Logradouro> Lista_Logradouro = new List<Logradouro>();
-            ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
+            List<Logradouro> Lista_LogradouroR = new List<Logradouro>();
+            List<Logradouro> Lista_LogradouroC = new List<Logradouro>();
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
 
             if (action == "btnCepR") {
                  _cep = Convert.ToInt32(Functions.RetornaNumero(model.EnderecoR.Cep));
@@ -62,16 +65,14 @@ namespace GTI_MVC.Controllers
                     if (rua.IndexOf('-') > 0) {
                         rua = rua.Substring(0, rua.IndexOf('-'));
                     }
-
-                    Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+                    
                     List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_cep);
                     int s = 1;
                     foreach (string item in Lista_Tmp) {
-                        Lista_Logradouro.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
+                        Lista_LogradouroR.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
                         s++;
                     }
-                    ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
-
+                    ViewBag.LogradouroR = new SelectList(Lista_LogradouroR, "Codlogradouro", "Endereco");
 
                     Bairro bairro = enderecoRepository.Retorna_CepDB_Bairro(_cep);
                     if (bairro != null) {
@@ -113,10 +114,10 @@ namespace GTI_MVC.Controllers
                         List<string> Lista_Tmp = EnderecoCepository.Retorna_CepDB_Logradouro(_cep);
                         int s = 1;
                         foreach (string item in Lista_Tmp) {
-                            Lista_Logradouro.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
+                            Lista_LogradouroC.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
                             s++;
                         }
-                        ViewBag.Logradouro = new SelectList(Lista_Logradouro, "Codlogradouro", "Endereco");
+                        ViewBag.LogradouroC = new SelectList(Lista_LogradouroC, "Codlogradouro", "Endereco");
 
 
                         Bairro bairro = EnderecoCepository.Retorna_CepDB_Bairro(_cep);
@@ -145,14 +146,68 @@ namespace GTI_MVC.Controllers
                         ViewBag.Error = "* Cep do endereço comercial não localizado.";
                         return View(model);
                     }
+                } else {
+                    if (action == "btnCancel") {
+                        return RedirectToAction("Cidadao_menu");
+                    } else {
+                        if (action == "btnValida") {
+                            Grava_Cidadao(model);
+                            return RedirectToAction("Cidadao_menu");
+                        }
+
+                    }
                 }
             }
 
-            
+            if (ViewBag.LogradouroR==null && !string.IsNullOrEmpty(model.EnderecoR.Cep)){
+                _cep = Convert.ToInt32(Functions.RetornaNumero(model.EnderecoR.Cep));
+                List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_cep);
+                int s = 1;
+                foreach (string item in Lista_Tmp) {
+                    Lista_LogradouroR.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
+                    s++;
+                }
+                ViewBag.LogradouroR = new SelectList(Lista_LogradouroR, "Codlogradouro", "Endereco");
+            } else {
+                ViewBag.LogradouroR = new SelectList(Lista_LogradouroR, "Codlogradouro", "Endereco");
+            }
+            if (ViewBag.LogradouroC==null && !string.IsNullOrEmpty(model.EnderecoC.Cep)) {
+                _cep = Convert.ToInt32(Functions.RetornaNumero( model.EnderecoC.Cep));
+                List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_cep);
+                int s = 1;
+                foreach (string item in Lista_Tmp) {
+                    Lista_LogradouroC.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
+                    s++;
+                }
+                ViewBag.LogradouroC = new SelectList(Lista_LogradouroC, "Codlogradouro", "Endereco");
+            } else {
+                ViewBag.LogradouroC = new SelectList(Lista_LogradouroC, "Codlogradouro", "Endereco");
+            }
 
             return View(model);
         }
 
+        private int Grava_Cidadao(CidadaoViewModel model) {
+            return 0;
+        }
+
+        [Route("Cidadao_chk")]
+        [HttpGet]
+        public ActionResult Cidadao_chk() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
+            CidadaoViewModel model = new CidadaoViewModel();
+
+            return View(model);
+        }
+
+        [Route("Cidadao_chk")]
+        [HttpPost]
+        public ActionResult Cidadao_chk(CidadaoViewModel model) {
+
+            return RedirectToAction("Cidadao_add",new {c=model.CpfCnpj});
+        }
 
     }
 }

@@ -9,11 +9,6 @@
 
     .center {
         margin: auto;
-        width: 780px;
-        border: 1px solid rgba(0,0,0,0.24);
-        padding: 20px;
-        box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
     }
 
     .actionlink:hover {
@@ -59,7 +54,7 @@
 <div class="center">
 
     <br />
-    <div class="card">
+    <div class="card" style="width:700px">
         <div class="card-header">
             Processo de análise do ITBI nº:&nbsp;<span style="font-weight:bold">@Model[0].Ano_Numero</span> &nbsp;&nbsp;Tipo de ITBI:&nbsp;<span style="font-weight:bold">@Model[0].Tipo_Itbi</span><br />
             Declarado em:&nbsp;<span style="font-weight:bold">@Model[0].Data_Itbi</span> &nbsp;&nbsp;Declarado por:&nbsp;<span style="font-weight:bold">@Model[0].User_Name</span><br />
@@ -74,7 +69,7 @@
                     <div class="panel panel-info">
                         <div class="panel-heading">Mensagem enviada em: @item.Datahora por @item.User_Name </div>
                         <div class="panel-body">
-                            <table>
+                            <table style="width:650px">
                                 <tr>
                                     <td style="font-size:13px;color:dodgerblue">
                                         @item.Mensagem
@@ -104,18 +99,18 @@
 
 </div>
 
-<div class="modal fade" id="MsgModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="MsgModal" tabindex="-1" role="dialog" aria-hidden="true" >
+    <div class="modal-dialog" role="document" >
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Digite o texto da mensagem</h4>
             </div>
             <div class="modal-body">
 
-                <table>
+                <table style="width:0px;text-align:center">
                     <tr style="height:30px">
                         <td>
-                            <textarea id="MsgTxt" name="MsgTxt" cols="68" rows="5" maxlength="5000"></textarea>
+                            <textarea id="MsgTxt" name="MsgTxt" cols="68" rows="5" maxlength="5000" style="width:470px"></textarea>
                         </td>
                     </tr>
                 </table>

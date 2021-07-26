@@ -92,7 +92,7 @@
                                     <span style="font-weight:normal">Cpf/Cnpj:</span>
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(m => m.CpfCnpj, new { @id = "cpfcnpj", @style = "Width:160px" })
+                                    @Html.TextBoxFor(m => m.CpfCnpj, new { @id = "cpfcnpj", @style = "Width:160px;color:blue", @readonly = true })
                                     <span style="font-weight:normal;padding-left:27px">Data de Nascimento:</span>
                                     <span style="padding-left: 5px"> @Html.TextBoxFor(m => m.Data_Nascto, new { @id = "dataNascto", @style = "Width:78px", @class = "maskData" })</span>
                                 </td>
@@ -148,7 +148,7 @@
                                 <span style="font-weight:normal">Logradouro:</span>
                             </td>
                             <td>
-                                @Html.DropDownListFor(m => m.EnderecoR.Endereco, ViewBag.Logradouro as SelectList, null, new { @id = "EnderecoR", style = "width:312px;height:21px;color:blue", rows = 10 })
+                                @Html.DropDownListFor(m => m.EnderecoR.Endereco, ViewBag.LogradouroR as SelectList, null, new { @id = "EnderecoR", style = "width:312px;height:21px;color:blue", rows = 10 })
                                 <span style="font-weight:normal;padding-left:10px">Nº:&nbsp;</span><span style="font-weight:normal">
                                     @Html.TextBoxFor(m => m.EnderecoR.Numero, new { @id = "NumeroR", style = "width:50px", @onKeyPress = "return formata(this, '§§§§§', event)" })
                                 </span>
@@ -220,7 +220,7 @@
                                 <span style="font-weight:normal">Logradouro:</span>
                             </td>
                             <td>
-                                @Html.DropDownListFor(m => m.EnderecoC.Endereco, ViewBag.Logradouro as SelectList, null, new { @id = "EnderecoC", style = "width:312px;height:21px;color:blue", rows = 10 })
+                                @Html.DropDownListFor(m => m.EnderecoC.Endereco, ViewBag.LogradouroC as SelectList, null, new { @id = "EnderecoC", style = "width:312px;height:21px;color:blue", rows = 10 })
                                 <span style="font-weight:normal;padding-left:10px">Nº:&nbsp;</span><span style="font-weight:normal">
                                     @Html.TextBoxFor(m => m.EnderecoC.Numero, new { @id = "NumeroC", style = "width:50px", @onKeyPress = "return formata(this, '§§§§§', event)" })
                                 </span>
@@ -275,7 +275,7 @@
                     <br />
                     <div style="text-align:center">
                         <button type="submit" id="btnOk" class="btn btn-primary" name="action" value="btnValida"> <img src="~/Images/save.png" /> &nbsp;Gravar Cidadão</button>&nbsp;&nbsp;
-                        <button type="button" id="btnOk" class="btn btn-danger" onclick="javascript:history.back()"> Cancelar</button>
+                        <button type="submit" id="btnOk" class="btn btn-danger" name="action" value="btnCancel" onclick="return confirm('Você deseja cancelar?')" > Cancelar</button>
 
                     </div>
 
@@ -309,47 +309,11 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $(".maskData").inputmask("99/99/9999");
-            $(".maskCep").inputmask("99999-999");
 
             $("#btnOk").click(function () {
                 return ValidateForm();
             });
 
-            //Máscara Cpf/Cnpj
-            $("#cpfcnpj").keydown(function () {
-                try {
-                    $("#cpfcnpj").unmask();
-                } catch (e) { }
-                var tamanho = $("#cpfcnpj").val().length;
-                if (tamanho < 11) {
-                    $("#cpfcnpj").mask("999.999.999-99");
-                } else {
-                    $("#cpfcnpj").mask("99.999.999/9999-99");
-                }
-                var elem = this;
-                setTimeout(function () {
-                    elem.selectionStart = elem.selectionEnd = 10000;
-                }, 0);
-                var currentValue = $(this).val();
-                $(this).val('');
-                $(this).val(currentValue);
-            });
-
-            $('#msgBox1').dialog({
-                autoOpen: false,
-                resizable: false,
-                draggable: false,
-                position: { my: 'top', at: 'top+300' },
-                height: "auto",
-                width: 340,
-                modal: true,
-                dialogClass: "foo",
-                buttons: {
-                    "OK": function () {
-                        $(this).dialog("close");
-                    }
-                }
-            });
 
             $('#msgBox2').dialog({
                 autoOpen: false,
@@ -384,6 +348,22 @@
                     }
                 }
             });
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
 
             $(".foo .ui-dialog-title").css("font-size", "13px");
             $(".foo .ui-widget-content").css("font-size", "13px");
@@ -403,7 +383,6 @@
 
         function ValidateForm() {
             var _nome = document.getElementById('nome').value;
-            var _cpf = document.getElementById('cpfcnpj').value;
             var _dataNascto = document.getElementById('dataNascto').value;
             var _rg = document.getElementById('rgnumero').value;
             var _rgorgao = document.getElementById('rgorgao').value;
@@ -432,28 +411,6 @@
                 $('#msgBox1').dialog('open');
                 return false;
             }
-
-            //*** Valida CpfCnpj ***
-            if (_cpf.length == 14) {
-                if (!valida_Cpf(_cpf)) {
-                    document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido!";
-                    $('#msgBox1').dialog('open');
-                    return false;
-                }
-            } else {
-                if (_cpf.length == 18) {
-                    if (!valida_Cnpj(_cpf)) {
-                        document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido!";
-                        $('#msgBox1').dialog('open');
-                        return false;
-                    }
-                } else {
-                    document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido!";
-                    $('#msgBox1').dialog('open');
-                    return false;
-                }
-            }
-            //*********************
 
             if (!Valida_Data(_dataNascto)) {
                 document.getElementById('lblMsg').innerHTML = "Data de nascimento inválida!";
@@ -501,6 +458,14 @@
             if (_bEndC) {
                 if (isNullOrWhitespace(_bairroC)) {
                     document.getElementById('lblMsg').innerHTML = "Endereço comercial incompleto!";
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
+            }
+
+            if (!_bEndR && !_bEndC) {
+                if (isNullOrWhitespace(_bairroC)) {
+                    document.getElementById('lblMsg').innerHTML = "Informe ao menos um endereço!";
                     $('#msgBox1').dialog('open');
                     return false;
                 }

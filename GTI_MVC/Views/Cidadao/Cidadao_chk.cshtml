@@ -1,0 +1,206 @@
+﻿@model GTI_Mvc.ViewModels.CidadaoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Cadastrar novo cidadão";
+}
+
+<style>
+    .center {
+        margin: auto;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
+
+    .uppercase {
+        text-transform: uppercase
+    }
+
+
+    .btEdit {
+        background: none !important;
+        border: none;
+        padding: 0 !important;
+        font-family: arial, sans-serif;
+        color: darkslateblue;
+        text-decoration: underline;
+        cursor: pointer;
+        
+    }
+        .btEdit:hover {
+            color: darkgreen;
+        }
+</style>
+
+@{var res = @ViewBag.Result;}
+<div class="center" style="width:700px">
+
+    @using (Html.BeginForm("Cidadao_chk", "Cidadao", FormMethod.Post, new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
+        <div class="container" style="width:550px">
+            <div class="card">
+                <div class="card-header">Cadastrar novo cidadão</div>
+                <div class="card-body">
+
+                    <div>
+                        <table style="font-size:13px;width:500px">
+                            <tr style="height:25px">
+                                <td style="width:80px">
+                                    <span style="font-weight:normal">Cpf/Cnpj:</span>
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.CpfCnpj, new { @id = "cpfcnpj", @style = "Width:160px" })
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+
+                    <br />
+                    <div >
+                        <button type="submit" id="btnOk" class="btn btn-primary" name="action" value="btnValida"> Continuar</button>&nbsp;&nbsp;
+
+                    </div>
+
+
+                </div>
+                <div class="card-footer">
+                    @Html.ActionLink("Retornar ao menu de opções", "Cidadao_menu", "Cidadao", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                </div>
+            </div>
+
+        
+        </div>
+    }
+</div>
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+            $("#btnOk").click(function () {
+                return ValidateForm();
+            });
+
+            $("input[id*='cpfcnpj']").inputmask({
+                mask: ['999.999.999-99', '99.999.999/9999-99'],
+                keepStatic: true
+            });
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+        function ValidateForm() {
+            var _cpf = document.getElementById('cpfcnpj').value;
+
+            //*** Valida CpfCnpj ***
+            if (_cpf.length == 14) {
+                if (!valida_Cpf(_cpf)) {
+                    document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido!";
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
+            } else {
+                if (_cpf.length == 18) {
+                    if (!valida_Cnpj(_cpf)) {
+                        document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido!";
+                        $('#msgBox1').dialog('open');
+                        return false;
+                    }
+                } else {
+                    document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido!";
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
+            }
+        }
+
+    </script>
+}
