@@ -21,6 +21,40 @@ namespace GTI_MVC.Controllers
             return View();
         }
 
+        [Route("Cidadao_chk")]
+        [HttpGet]
+        public ActionResult Cidadao_chk() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
+            CidadaoViewModel model = new CidadaoViewModel();
+
+            return View(model);
+        }
+
+        [Route("Cidadao_chk")]
+        [HttpPost]
+        public ActionResult Cidadao_chk(CidadaoViewModel model) {
+            string _cpfcnpj = Functions.RetornaNumero(model.CpfCnpj);
+            bool _bCpf = _cpfcnpj.Length == 11 ? true : false;
+            bool _bCnpj = !_bCpf;
+
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+            int _codigo = 0;
+            if (_bCpf) {
+                _codigo = cidadaoRepository.Existe_Cidadao_Cpf(_cpfcnpj);
+            } else {
+                _codigo = cidadaoRepository.Existe_Cidadao_Cnpj(_cpfcnpj);
+            }
+
+            if (_codigo > 0) {
+                ViewBag.Result = "Já existe um cadastro com este Cpf/Cnpj!";
+                return View(model);
+            }
+
+            return RedirectToAction("Cidadao_add", new { c = model.CpfCnpj });
+        }
+
         [Route("Cidadao_add")]
         [HttpGet]
         public ActionResult Cidadao_add(string c) {
@@ -150,7 +184,7 @@ namespace GTI_MVC.Controllers
                     if (action == "btnCancel") {
                         return RedirectToAction("Cidadao_menu");
                     } else {
-                        if (action == "btnValida") {
+                        if (action == "btnValida" || action=="Cidadao_add") {
                             Grava_Cidadao(model);
                             return RedirectToAction("Cidadao_menu");
                         }
@@ -188,26 +222,80 @@ namespace GTI_MVC.Controllers
         }
 
         private int Grava_Cidadao(CidadaoViewModel model) {
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+
+            //Tratamento do endereço residencial
+            string _cepRes = model.EnderecoR.Cep;
+            int _cepR = string.IsNullOrEmpty(_cepRes) ? 0 : Convert.ToInt32(Functions.RetornaNumero(_cepRes));
+            string _logradouroNomeR = model.EnderecoR.Endereco;
+            int _logradouroCodigoR = 0;
+            short _bairroCodigoR = 0;
+            short _cidadeCodigoR = 0;
+            string _ufR = "";
+
+            if (_cepR > 0) {
+                Cepdb _cepdbR = enderecoRepository.Retorna_CepDB(_cepR);
+                _bairroCodigoR = (short)_cepdbR.Bairrocodigo;
+                if (_cepdbR.Uf == "SP" && _cepdbR.Cidadecodigo == 413) {
+                    LogradouroStruct _ruaR = enderecoRepository.Retorna_Logradouro_Cep(_cepR);
+                    _logradouroCodigoR = (int)_ruaR.CodLogradouro;
+                    _cidadeCodigoR = 413;
+                    _ufR = "SP";
+                } else {
+
+                    _cidadeCodigoR = (short)_cepdbR.Cidadecodigo;
+                    _ufR = _cepdbR.Uf;
+                    _logradouroNomeR = _cepdbR.Logradouro;
+                }
+            }
+
+            //Tratamento do endereço comercial
+            string _cepCom = model.EnderecoC.Cep;
+            int _cepC = string.IsNullOrEmpty(_cepCom) ? 0 : Convert.ToInt32(Functions.RetornaNumero(_cepCom));
+            string _logradouroNomeC = model.EnderecoR.Endereco;
+            int _logradouroCodigoC = 0;
+            short _bairroCodigoC = 0;
+            short _cidadeCodigoC = 0;
+            string _ufC = "";
+
+            if (_cepC > 0) {
+                Cepdb _cepdbC = enderecoRepository.Retorna_CepDB(_cepC);
+                _bairroCodigoC = (short)_cepdbC.Bairrocodigo;
+                if (_cepdbC.Uf == "SP" && _cepdbC.Cidadecodigo == 413) {
+                    LogradouroStruct _ruaC = enderecoRepository.Retorna_Logradouro_Cep(_cepC);
+                    _logradouroCodigoC = (int)_ruaC.CodLogradouro;
+                    _cidadeCodigoC = 413;
+                    _ufC = "SP";
+                } else {
+
+                    _cidadeCodigoC = (short)_cepdbC.Cidadecodigo;
+                    _ufC = _cepdbC.Uf;
+                    _logradouroNomeC = _cepdbC.Logradouro;
+                }
+            }
+
+
+            Cidadao _cid = new Cidadao() {
+                Cep = _cepR,
+                Cep2 = _cepC,
+                Codlogradouro = _logradouroCodigoR,
+                Nomelogradouro = _logradouroNomeR,
+                Codbairro=_bairroCodigoR,
+                Codcidade=_cidadeCodigoR,
+                Siglauf=_ufC,
+                Codlogradouro2 = _logradouroCodigoC,
+                Nomelogradouro2 = _logradouroNomeC,
+                Codbairro2 = _bairroCodigoC,
+                Codcidade2 = _cidadeCodigoC,
+                Siglauf2 = _ufC
+
+            };
+
             return 0;
         }
 
-        [Route("Cidadao_chk")]
-        [HttpGet]
-        public ActionResult Cidadao_chk() {
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
-
-            CidadaoViewModel model = new CidadaoViewModel();
-
-            return View(model);
-        }
-
-        [Route("Cidadao_chk")]
-        [HttpPost]
-        public ActionResult Cidadao_chk(CidadaoViewModel model) {
-
-            return RedirectToAction("Cidadao_add",new {c=model.CpfCnpj});
-        }
+       
 
     }
 }
