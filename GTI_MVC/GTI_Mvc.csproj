@@ -1072,6 +1072,7 @@
     <Content Include="Views\Cidadao\Cidadao_add.cshtml" />
     <Content Include="Views\Cidadao\Cidadao_query.cshtml" />
     <Content Include="Views\Home\user_query.cshtml" />
+    <Content Include="Views\Cidadao\Cidadao_chk.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
