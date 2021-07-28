@@ -225,25 +225,47 @@ namespace GTI_MVC.Controllers
             Endereco_bll enderecoRepository = new Endereco_bll(_connection);
             Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
 
+            string _nome = model.Nome.ToUpper();
+            bool _bCpf = model.CpfCnpj.Length == 11 ? true : false;
+            bool _bCnpj = !_bCpf;
+            string _cpf = "", _cnpj = "";
+            if (_bCpf)
+                _cpf = model.CpfCnpj;
+            else
+                _cnpj = model.CpfCnpj;
+            DateTime _dataNascto =Convert.ToDateTime( model.Data_Nascto);
+            int _profissao = model.Profissao_Codigo;
+            string _rg = model.Rg_Numero ?? "";
+            string _rgorgao = model.Rg_Orgao ?? "";
+            string _cnh = model.Cnh_Numero ?? "";
+            string _cnhorgao = model.Cnh_Numero ?? "";
+
             //Tratamento do endereço residencial
             string _cepRes = model.EnderecoR.Cep;
             int _cepR = string.IsNullOrEmpty(_cepRes) ? 0 : Convert.ToInt32(Functions.RetornaNumero(_cepRes));
             string _logradouroNomeR = model.EnderecoR.Endereco;
-            int _logradouroCodigoR = 0;
-            short _bairroCodigoR = 0;
+            int _logradouroCodigoR = 0,_paisR=0;
+            short _bairroCodigoR = 0,_numImovelR=0;
             short _cidadeCodigoR = 0;
-            string _ufR = "";
+            string _ufR = "",_telefoneR="",_emailR="",_complR="";
+            string _etiqR = "N";
 
             if (_cepR > 0) {
                 Cepdb _cepdbR = enderecoRepository.Retorna_CepDB(_cepR);
                 _bairroCodigoR = (short)_cepdbR.Bairrocodigo;
+                _telefoneR = model.EnderecoR.Telefone ?? "";
+                _emailR = model.EnderecoR.Email ?? "";
+                _complR = model.EnderecoR.Complemento ?? "";
+                _etiqR = "S";
+                if (model.EnderecoR.Numero != null)
+                    _numImovelR = Convert.ToInt16(model.EnderecoR.Numero);
+                _paisR = 1;
                 if (_cepdbR.Uf == "SP" && _cepdbR.Cidadecodigo == 413) {
                     LogradouroStruct _ruaR = enderecoRepository.Retorna_Logradouro_Cep(_cepR);
                     _logradouroCodigoR = (int)_ruaR.CodLogradouro;
                     _cidadeCodigoR = 413;
                     _ufR = "SP";
                 } else {
-
                     _cidadeCodigoR = (short)_cepdbR.Cidadecodigo;
                     _ufR = _cepdbR.Uf;
                     _logradouroNomeR = _cepdbR.Logradouro;
@@ -254,42 +276,69 @@ namespace GTI_MVC.Controllers
             string _cepCom = model.EnderecoC.Cep;
             int _cepC = string.IsNullOrEmpty(_cepCom) ? 0 : Convert.ToInt32(Functions.RetornaNumero(_cepCom));
             string _logradouroNomeC = model.EnderecoR.Endereco;
-            int _logradouroCodigoC = 0;
-            short _bairroCodigoC = 0;
+            int _logradouroCodigoC = 0,_paisC=0;
+            short _bairroCodigoC = 0, _numImovelC = 0;
             short _cidadeCodigoC = 0;
-            string _ufC = "";
+            string _ufC = "", _telefoneC = "", _emailC = "", _complC = "";
+            string _etiqC = "N";
 
             if (_cepC > 0) {
                 Cepdb _cepdbC = enderecoRepository.Retorna_CepDB(_cepC);
                 _bairroCodigoC = (short)_cepdbC.Bairrocodigo;
+                _telefoneC = model.EnderecoC.Telefone ?? "";
+                _emailC = model.EnderecoC.Email ?? "";
+                _complC = model.EnderecoC.Complemento ?? "";
+                _etiqC = "S";
+                if (model.EnderecoC.Numero != null)
+                    _numImovelC = Convert.ToInt16(model.EnderecoC.Numero);
+                _paisC = 1;
                 if (_cepdbC.Uf == "SP" && _cepdbC.Cidadecodigo == 413) {
                     LogradouroStruct _ruaC = enderecoRepository.Retorna_Logradouro_Cep(_cepC);
                     _logradouroCodigoC = (int)_ruaC.CodLogradouro;
                     _cidadeCodigoC = 413;
                     _ufC = "SP";
                 } else {
-
                     _cidadeCodigoC = (short)_cepdbC.Cidadecodigo;
                     _ufC = _cepdbC.Uf;
                     _logradouroNomeC = _cepdbC.Logradouro;
                 }
             }
 
-
             Cidadao _cid = new Cidadao() {
+                Nomecidadao = _nome,
+                Cpf = _cpf,
+                Cnpj = _cnpj,
+                Data_nascimento = _dataNascto,
+                Rg = _rg,
+                Orgao = _rgorgao,
+                Cnh = _cnh,
+                Orgaocnh = _cnhorgao,
                 Cep = _cepR,
                 Cep2 = _cepC,
                 Codlogradouro = _logradouroCodigoR,
                 Nomelogradouro = _logradouroNomeR,
-                Codbairro=_bairroCodigoR,
-                Codcidade=_cidadeCodigoR,
+                Complemento=_complR,
+                Numimovel=_numImovelR,
+                Codbairro = _bairroCodigoR,
+                Codcidade = _cidadeCodigoR,
+                Codpais = _paisR,
                 Siglauf=_ufC,
+                Telefone=_telefoneR,
+                Email=_emailR,
+                Etiqueta=_etiqR,
                 Codlogradouro2 = _logradouroCodigoC,
                 Nomelogradouro2 = _logradouroNomeC,
+                Complemento2=_complC,
+                Numimovel2=_numImovelC,
                 Codbairro2 = _bairroCodigoC,
                 Codcidade2 = _cidadeCodigoC,
-                Siglauf2 = _ufC
-
+                Siglauf2 = _ufC,
+                Telefone2=_telefoneC,
+                Email2=_emailC,
+                Etiqueta2=_etiqC,
+                Codpais2=_paisC,
+                Codprofissao=_profissao
+                
             };
 
             return 0;

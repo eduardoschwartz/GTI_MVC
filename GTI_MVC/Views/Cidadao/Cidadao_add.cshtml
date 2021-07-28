@@ -193,7 +193,7 @@
                                 <span style="font-weight:normal">Telefone:</span>
                             </td>
                             <td>
-                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoR.Telefone, new { @id = "TelefoneR", style = "width:120px", @maxlength = "30" })</span>
+                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoR.Telefone, new { @id = "TelefoneR",@name="TelefoneR", style = "width:120px", @maxlength = "30" })</span>
                                 <span style="font-weight:normal;padding-left:10px">Email:&nbsp;</span><span style="font-weight:normal">
                                     @Html.TextBoxFor(m => m.EnderecoR.Email, new { @id = "EmailR", style = "width:225px", @maxlength = "50" })
                                 </span>
@@ -309,11 +309,26 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $(".maskData").inputmask("99/99/9999");
-
+            $(".maskCep").inputmask("99999-999");
             $("#btnOk").click(function () {
                 return ValidateForm();
             });
-
+            $('#TelefoneR').mask('(00) 0000-00009');
+            $('#TelefoneR').blur(function (event) {
+                if ($(this).val().length == 15) { // Celular com 9 dígitos + 2 dígitos DDD e 4 da máscara
+                    $('#TelefoneR').mask('(00) 00000-0009');
+                } else {
+                    $('#TelefoneR').mask('(00) 0000-00009');
+                }
+            });
+            $('#TelefoneC').mask('(00) 0000-00009');
+            $('#TelefoneC').blur(function (event) {
+                if ($(this).val().length == 15) { // Celular com 9 dígitos + 2 dígitos DDD e 4 da máscara
+                    $('#TelefoneC').mask('(00) 00000-0009');
+                } else {
+                    $('#TelefoneC').mask('(00) 0000-00009');
+                }
+            });
 
             $('#msgBox2').dialog({
                 autoOpen: false,
@@ -380,6 +395,8 @@
                 return true;
             }
         });
+
+
 
         function ValidateForm() {
             var _nome = document.getElementById('nome').value;
