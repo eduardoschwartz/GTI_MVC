@@ -47,7 +47,7 @@ namespace GTI_Dal.Classes {
                                      c.Orgao,c.Codlogradouro,c.Codlogradouro2,c.Nomelogradouro,c.Nomelogradouro2,c.Codbairro,c.Codbairro2,c.Codcidade,c.Codcidade2,
                                      c.Siglauf,c.Siglauf2,c.Cep,c.Cep2,c.Codpais,c.Codpais2,c.Telefone,c.Telefone2,c.Email,c.Email2,c.Whatsapp,c.Whatsapp2,c.Numimovel,
                                      c.Numimovel2,c.Complemento,c.Complemento2,c.Codprofissao,Endereco_NomeR=l.Endereco, Endereco_NomeC = l2.Endereco,Bairro_NomeR=b.Descbairro,
-                                     Bairro_NomeC = b2.Descbairro,Nome_CidadeR=a.Desccidade,Nome_CidadeC=a2.Desccidade}).FirstOrDefault();
+                                     Bairro_NomeC = b2.Descbairro,Nome_CidadeR=a.Desccidade,Nome_CidadeC=a2.Desccidade,Cnh=c.Cnh,OrgaoCnh=c.Orgaocnh}).FirstOrDefault();
 
                 CidadaoStruct reg = new CidadaoStruct() {
                     Codigo=Sql.Codcidadao,
@@ -89,7 +89,9 @@ namespace GTI_Dal.Classes {
                     NomeBairroR=Sql.Bairro_NomeR,
                     NomeBairroC=Sql.Bairro_NomeC,
                     CepR=Sql.Cep,
-                    CepC=Sql.Cep2
+                    CepC=Sql.Cep2,
+                    Cnh=Sql.Cnh,
+                    Orgaocnh=Sql.OrgaoCnh
                 };
                 if (Sql.Codlogradouro > 0)
                     reg.EnderecoR = Sql.Endereco_NomeR;

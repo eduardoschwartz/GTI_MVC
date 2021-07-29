@@ -431,6 +431,13 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<Cepdb> Retorna_CepDB_Logradouro_Codigo(int Cep,int Bairro) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                return (from c in db.CepDB where c.Cep == Cep.ToString() && c.Bairrocodigo==Bairro orderby c.Logradouro select c).ToList();
+            }
+        }
+
+
         public Cidade Retorna_CepDB_Cidade(int Cep) {
             Cidade reg = null;
             using (GTI_Context db = new GTI_Context(_connection)) {

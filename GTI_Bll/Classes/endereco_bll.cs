@@ -199,6 +199,12 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_CepDB_Bairro(Cep);
         }
 
+        public List<Cepdb> Retorna_CepDB_Logradouro_Codigo(int Cep, int Bairro) {
+            Endereco_Data obj = new Endereco_Data(_connection);
+            return obj.Retorna_CepDB_Logradouro_Codigo(Cep,Bairro);
+        }
+
+
 
     }
 }
