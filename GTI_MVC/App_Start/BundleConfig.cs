@@ -25,9 +25,7 @@ namespace GTI_Mvc {
                       "~/Content/site.css",
                       "~/Content/all.css"));
 
-            bundles.Add(new ScriptBundle("~/bundles/angular").Include(
-                        "~/Scripts/angular.js",
-                        "~/Scripts/angular-route.js"));
+           
         }
     }
 }
