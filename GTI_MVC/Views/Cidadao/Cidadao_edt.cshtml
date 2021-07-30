@@ -72,6 +72,8 @@
 
     @using (Html.BeginForm("Cidadao_edt", "Cidadao", FormMethod.Post, new { @id = "MainForm" })) {
         @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Codigo)
+
         <div class="container" style="width:550px">
             <div class="card">
                 <div class="card-header">Alteração de dados cadastrais do cidadão:&nbsp;@Model.Codigo.ToString()</div>
@@ -138,7 +140,7 @@
                                 <label style="font-weight:normal;padding-top:7px">Nº do Cep:</label>
                             </td>
                             <td>
-                                @if (Model.EnderecoR.Cep.Length > 2) {
+                                @if (Model.EnderecoR.Cep!=null && Model.EnderecoR.Cep.Length > 2) {
                                     <span style="font-weight:normal;">@Html.TextBoxFor(m => m.EnderecoR.Cep, new { @class = "maskCep", @id = "CepR", style = "width:90px" })</span>
                                 } else {
                                     <span style="font-weight:normal;">@Html.TextBoxFor(m => m.EnderecoR.Cep, new { @class = "maskCep", @id = "CepR", style = "width:90px" ,@Value=""})</span>
@@ -214,7 +216,7 @@
                                 <label style="font-weight:normal;padding-top:7px">Nº do Cep:</label>
                             </td>
                             <td>
-                                @if (Model.EnderecoC.Cep.Length > 2) {
+                                @if (Model.EnderecoC.Cep!=null && Model.EnderecoC.Cep.Length > 2) {
                                     <span style="font-weight:normal;">@Html.TextBoxFor(m => m.EnderecoC.Cep, new { @class = "maskCep", @id = "CepC", style = "width:90px" })</span>
                                 } else {
                                     <span style="font-weight:normal;">@Html.TextBoxFor(m => m.EnderecoC.Cep, new { @class = "maskCep", @id = "CepC", style = "width:90px",@Value="" })</span>
