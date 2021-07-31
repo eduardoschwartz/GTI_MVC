@@ -642,5 +642,20 @@ namespace GTI_MVC.Controllers
 
             return _codigo;
         }
+
+        [Route("Cidadao_qry")]
+        [HttpGet]
+        public ActionResult Cidadao_qry() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
+            CidadaoViewModel model = new CidadaoViewModel();
+            List<CidadaoHeader> Lista_Cidadao = new List<CidadaoHeader>();
+            model.Lista_Cidadao = Lista_Cidadao;
+
+            return View(model);
+        }
+
+
     }
 }

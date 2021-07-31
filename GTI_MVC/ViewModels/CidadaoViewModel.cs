@@ -16,7 +16,10 @@ namespace GTI_Mvc.ViewModels {
         public int Profissao_Codigo { get; set; }
         public EnderecoStruct EnderecoR { get; set; }
         public EnderecoStruct EnderecoC { get; set; }
+        public List<CidadaoHeader> Lista_Cidadao { get; set; }
     }
+
+    
 
 
 }

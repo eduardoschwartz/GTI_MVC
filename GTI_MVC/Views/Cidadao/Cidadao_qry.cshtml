@@ -1,0 +1,212 @@
+﻿@model GTI_Mvc.ViewModels.CidadaoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Consulta de cidadão";
+}
+
+
+
+
+<style>
+    .textBoxBlue {
+        height: 25px;
+        position: relative;
+        border: 1px solid #0094ff;
+        border-color: rgba(0, 0, 0, .14);
+        background-color: white;
+        font-size: 14px;
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
+    }
+
+    .center {
+        margin: auto;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+        font-size:14px;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .card-body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 18px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    a:link {
+        color: darkslateblue;
+        background-color: transparent;
+        text-decoration: none;
+    }
+
+    a:visited {
+        color: darkslateblue;
+        background-color: transparent;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: red;
+        background-color: transparent;
+        text-decoration: underline;
+    }
+
+    a:active {
+        color: yellow;
+        background-color: transparent;
+        text-decoration: underline;
+    }
+
+</style>
+
+
+<div class="center">
+
+    @using (Html.BeginForm("Cidadao_qry", "Cidadao", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+        @Html.AntiForgeryToken()
+        <div class="container" style="width:600px">
+            <div class="card">
+                <div class="card-header">Consulta de cidadão</div>
+                <div class="card-body">
+                    <table style="font-weight:normal;font-size:12px">
+                        <tr>
+                            <td>
+                                Código:
+                            </td>
+                            <td style="width:10px"></td>
+                            <td>
+                                Nome:
+                            </td>
+                            <td style="width:10px"></td>
+                            <td>
+                                Cpf/Cnpj:
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @if (Model.Codigo > 0) {
+                                    @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:60px", @class = "maskCod" })
+                                } else {
+                                    @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:60px", @Value = "", @class = "maskCod" })
+                                }
+                            </td>
+                            <td style="width:10px"></td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(Model.Nome)) {
+                                    @Html.TextBoxFor(m => m.Nome, new { @id = "nome", @style = "width:300px" })
+                                } else {
+                                    @Html.TextBoxFor(m => m.Nome, new { @id = "nome", @style = "width:300px", @Value = "" })
+                                }
+                            </td>
+                            <td style="width:10px"></td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(Model.CpfCnpj)) {
+                                    @Html.TextBoxFor(m => m.CpfCnpj, new { @id = "cpfcnpj", @style = "Width:140px" })
+                                } else {
+                                    @Html.TextBoxFor(m => m.CpfCnpj, new { @id = "cpfcnpj", @style = "Width:140px;color", @Value = "" })
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                    <button id="btnCodigo" type="submit" class="btn btn-primary" name="action" value="btnCodigoOK">Consultar</button>
+                    <br /><br />
+                    @if (Model.Lista_Cidadao.Count > 0) {
+                        <table style="font-size:12px;width:730px">
+                            <thead style="background-color:darkred;color:whitesmoke">
+                                <tr style="height:10px">
+                                    <td style="width:50px;text-align:center">Código</td>
+                                    <td style="width:260px" ;text-align:left">Nome</td>
+                                    <td style="width:370px;text-align:left">Cpf/Cnpj</td>
+                                </tr>
+                            </thead>
+                            @foreach (GTI_Models.Models.CidadaoHeader item in Model.Lista_Cidadao) {
+                                <tr style="height:20px;">
+                                    <td style="width:50px;text-align:center;font-weight:normal">@item.Codigo.ToString() </td>
+                                    <td style="width:260px;text-align:center;font-weight:normal">@item.Nome </td>
+                                    <td style="width:370px;text-align:center;font-weight:normal">@item.CpfCnpj </td>
+                                </tr>
+                            }
+                        </table>
+                    }
+
+                </div>
+                <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+                <div class="card-footer">
+                    @Html.ActionLink("Retornar ao menu de opções", "Cidadao_menu", "Cidadao", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink", style = "color:darkslateblue" })
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $(".maskCod").inputmask("999999");
+            $("input[id*='cpfcnpj']").inputmask({
+                mask: ['999.999.999-99', '99.999.999/9999-99'],
+                keepStatic: true
+            });
+
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+        });
+
+
+        function ValidateForm() {
+            var _cod = document.getElementById('codigo').value;
+            var _nome = document.getElementById('nome').value;
+            var _cpfcnpj = document.getElementById('cpfcnpj').value;
+
+            if ( parseInt(_cod) == 0  && _nome=="" && _cpfcnpj==""  ) {
+                document.getElementById('errorLabel').innerHTML = "Nenhum critério selecionado!";
+                return false;
+            }
+        }
+
+        
+
+
+    </script>
+}
