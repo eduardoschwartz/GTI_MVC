@@ -1071,11 +1071,11 @@
     <Content Include="Views\Notificacao\AutoInfracao_queimada_query.cshtml" />
     <Content Include="Views\Cidadao\Cidadao_menu.cshtml" />
     <Content Include="Views\Cidadao\Cidadao_add.cshtml" />
-    <Content Include="Views\Cidadao\Cidadao_query.cshtml" />
     <Content Include="Views\Home\user_query.cshtml" />
     <Content Include="Views\Cidadao\Cidadao_chk.cshtml" />
     <Content Include="Views\Cidadao\Cidadao_edt.cshtml" />
     <Content Include="Views\Cidadao\Cidadao_chkedt.cshtml" />
+    <Content Include="Views\Cidadao\Cidadao_qry.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
