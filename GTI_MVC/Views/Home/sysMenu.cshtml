@@ -64,7 +64,8 @@
             }
 
             @if (Session["hashid"].ToString() == "433") {
-                @Html.ActionLink("Cadastro Cidadão", "Cidadao_menu", "Cidadao", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Cadastro cidadão", "Cidadao_menu", "Cidadao", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Cadastro de processos", "Processo_menu", "Processo", null, new { @class = "actionlink" })<br />
             }
 
             @if (Session["hashid"].ToString() == "433" || Session["hashid"].ToString() == "22" || Session["hashid"].ToString() == "235" || Session["hashid"].ToString() == "416") {

@@ -1,0 +1,72 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Menu de Opções";
+}
+<link href="~/css/gti.css" rel="stylesheet" />
+<style>
+    .center {
+        margin: auto;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+        font-size:14px;
+    }
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+</style>
+<br />
+
+<div class="center">
+    <div class="container" style="width:350px">
+        <div class="card">
+            <div class="card-header">Cadastro de Processos </div>
+            <div class="card-body">
+                @Html.ActionLink("Cadastrar um novo processo", "Processo_tp", "Processo", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Alterar um processo existente", "Processo_edt", "Processo", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Consultar processos cadastrados", "Processo_qry", "Processo", null, new { @class = "actionlink" })<br />
+            </div>
+            <div class="card-footer">
+                @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
+        </div>
+ 
+    
+    </div>
+</div>

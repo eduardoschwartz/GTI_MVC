@@ -245,6 +245,7 @@
     <Compile Include="Controllers\NotificacaoController.cs" />
     <Compile Include="Controllers\ParcelamentoController.cs" />
     <Compile Include="Controllers\PlataformaController.cs" />
+    <Compile Include="Controllers\ProcessoController.cs" />
     <Compile Include="Controllers\ProtocoloController.cs" />
     <Compile Include="Controllers\RedeSimController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
@@ -603,6 +604,7 @@
     <Compile Include="ViewModels\NotificacaoIssViewModel.cs" />
     <Compile Include="ViewModels\NotificacaoTerViewModel.cs" />
     <Compile Include="ViewModels\ParcelamentoViewModel.cs" />
+    <Compile Include="ViewModels\Processo2ViewModel.cs" />
     <Compile Include="ViewModels\ProcessoViewModel.cs" />
     <Compile Include="ViewModels\RedesimImportViewModel.cs" />
     <Compile Include="ViewModels\RodoviariaViewModel.cs" />
@@ -1076,6 +1078,8 @@
     <Content Include="Views\Cidadao\Cidadao_edt.cshtml" />
     <Content Include="Views\Cidadao\Cidadao_chkedt.cshtml" />
     <Content Include="Views\Cidadao\Cidadao_qry.cshtml" />
+    <Content Include="Views\Processo\Processo_menu.cshtml" />
+    <Content Include="Views\Processo\Processo_tp.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
