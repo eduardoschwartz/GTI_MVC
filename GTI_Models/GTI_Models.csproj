@@ -92,6 +92,7 @@
     <Compile Include="Models\assuntodoc.cs" />
     <Compile Include="Models\atividade.cs" />
     <Compile Include="Models\atividadeiss.cs" />
+    <Compile Include="Models\auto_infracao_obra.cs" />
     <Compile Include="Models\auto_infracao.cs" />
     <Compile Include="Models\bairro.cs" />
     <Compile Include="Models\banco.cs" />

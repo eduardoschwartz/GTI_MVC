@@ -209,5 +209,6 @@ namespace GTI_Dal {
         public DbSet<Auto_Infracao_Queimada> Auto_Infracao_Queimada { get; set; }
         public DbSet<LogWeb> LogWeb { get; set; }
         public DbSet<LogWeb_Evento> LogWeb_Evento { get; set; }
+        public DbSet<Auto_infracao_obra> Auto_Infracao_Obra { get; set; }
     }
 }

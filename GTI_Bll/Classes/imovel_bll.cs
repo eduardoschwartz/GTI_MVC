@@ -917,7 +917,6 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Notificacao_Obra(Ano,Numero);
         }
 
-
         public short Retorna_Proxima_Seq_Historico(int Codigo) {
             Imovel_Data obj = new Imovel_Data(_connection);
             return obj.Retorna_Proxima_Seq_Historico(Codigo);
@@ -952,8 +951,28 @@ namespace GTI_Bll.Classes {
         public Auto_Infracao_Queimada_Struct Retorna_AutoInfracao_Queimada(int Ano, int Numero) {
             Imovel_Data obj = new Imovel_Data(_connection);
             return obj.Retorna_AutoInfracao_Queimada(Ano,Numero);
-}
+        }
 
+        public bool Existe_Auto_Infracao_Obra(int Ano, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Existe_Auto_Infracao_Obra(Ano, Numero);
+        }
+
+        public Exception Incluir_auto_infracao_Obra(Auto_infracao_obra Reg) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Incluir_auto_infracao_Obra(Reg);
+            return ex;
+        }
+
+        public List<Auto_Infracao_Obra_Struct> Lista_Auto_Infracao_Obra(int Ano) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Lista_Auto_Infracao_Obra(Ano);
+        }
+
+        public Auto_Infracao_Obra_Struct Retorna_Auto_Infracao_Obra(int Ano, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Auto_Infracao_Obra(Ano, Numero);
+        }
 
         #endregion
 

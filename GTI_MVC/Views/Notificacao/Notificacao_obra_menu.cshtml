@@ -64,6 +64,8 @@
             <div class="card-body">
                 @Html.ActionLink("Preencher nova notificação", "Notificacao_obra_add", "Notificacao", null, new { @class = "actionlink" })<br />
                 @Html.ActionLink("Consultar notificações emitidas", "Notificacao_obra_query", "Notificacao", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Gerar auto de infração", "AutoInfracao_obra_add", "Notificacao", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Consultar os autos de infrações emitidos", "AutoInfracao_obra_query", "Notificacao", null, new { @class = "actionlink" })<br />
             </div>
             <div class="card-footer">
                 @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />

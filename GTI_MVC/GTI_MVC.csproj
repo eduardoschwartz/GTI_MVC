@@ -296,6 +296,12 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\Auto_Infracao_Obra.cs">
+      <DependentUpon>Auto_Infracao_Obra.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Reports\MobReq_Baixa.cs">
       <DependentUpon>MobReq_Baixa.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1080,6 +1086,8 @@
     <Content Include="Views\Cidadao\Cidadao_qry.cshtml" />
     <Content Include="Views\Processo\Processo_menu.cshtml" />
     <Content Include="Views\Processo\Processo_tp.cshtml" />
+    <Content Include="Views\Notificacao\AutoInfracao_obra_add.cshtml" />
+    <Content Include="Views\Notificacao\AutoInfracao_obra_query.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1091,6 +1099,10 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reports\Auto_Infracao_Obra.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Auto_Infracao_Obra.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\MobReq_Baixa.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>MobReq_Baixa.cs</LastGenOutput>
