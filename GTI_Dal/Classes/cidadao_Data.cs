@@ -26,6 +26,15 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<Cidadao> Lista_Cidadao(int Codigo, string Nome, string CpfCnpj) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from c in db.Cidadao select c);
+                if (Codigo>0)
+                    Sql = Sql.Where(c => c.Codcidadao==Codigo);
+                return Sql.ToList();
+            }
+        }
+
         public Cidadao Retorna_Cidadao(int Codigo) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var Sql = (from c in db.Cidadao where c.Codcidadao==Codigo  select c).FirstOrDefault();

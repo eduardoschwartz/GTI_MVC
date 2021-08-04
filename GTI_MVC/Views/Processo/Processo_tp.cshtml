@@ -43,14 +43,6 @@
         border-radius: 4px;
     }
 
-    .modal:nth-of-type(even) {
-        z-index: 1062 !important;
-    }
-
-    .modal-backdrop.show:nth-of-type(even) {
-        z-index: 1061 !important;
-    }
-
     .modal-header {
         padding: 9px 15px;
         border-bottom: 1px solid #eee;
@@ -105,8 +97,8 @@
                     <div>
                         <table style="font-size:13px;width:500px">
                             <tr style="height:25px">
-                                <td style="width:80px">
-                                    <span style="font-weight:normal;font-weight:bold">Requerente:&nbsp;</span>
+                                <td style="width:150px">
+                                    <span style="font-weight:normal;font-weight:bold">Tipo de Requerente:&nbsp;</span>
                                 </td>
                                 <td style="width:400px;">
                                     @Html.RadioButtonFor(model => model.Tipo_Requerente, "Prefeitura", new { @id = "reqChk1", @name = "reqChk1", @checked = true, @onclick = "radioCheck()" })<span style="font-weight:normal">&nbsp;Prefeitura&nbsp;</span>
@@ -128,7 +120,7 @@
                     <br />
 
                     <div>
-                        <button type="button" id="btnCallModal" class="btn btn-primary" name="action" value="btnSearch"> Consultar</button>&nbsp;&nbsp;
+                        <button type="button" id="btnCallModal" class="btn btn-primary" name="action" value="btnSearch"> <i class="fas fa-search"></i>&nbsp;Consultar</button>&nbsp;&nbsp;
                         <button type="submit" id="btnNext" class="btn btn-success" name="action" value="btnSearch"> Próximo</button>
                     </div>
 
@@ -147,7 +139,7 @@
 
 
 <div class="modal fade" id="ModalInterno" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-">
+    <div class="modal-dialog" style="max-width: 430px;" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <span>Selecione o Centro de Custos</span>
@@ -165,16 +157,67 @@
     </div>
 </div>
 
+<div class="modal fade" id="ModalExterno" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 640px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Selecione o Centro de Custos</span>
+
+            </div>
+            <div class="container"></div>
+            <div class="modal-body">
+                @Html.TextBoxFor(m => m.Centro_Custo_Codigo, new { @id = "codigo", @style = "width:70px;font-size:14px", @placeholder = "Código", @Value = "" })
+                @Html.TextBoxFor(m => m.Centro_Custo_Nome, new { @id = "nome", @style = "width:324px;font-size:14px", @placeholder = "Nome do contribuinte" })
+                @Html.TextBoxFor(m => m.Centro_Custo_CpfCnpj, new { @id = "cpfcnpj", @style = "width:160px;font-size:14px", @placeholder = "Cpf/Cnpj" })
+                <button type="button" class="btn btn-info" id="btnFind" style="height:30px;padding-bottom:10px" title="Filtrar"><i class="fas fa-search"></i></button>
+                <br />
+                <br />
+
+                <table id="mainTable" class="tbl table-bordered table-condensed table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th style = "width:80px;font-size:14px">codigo</th>
+                            <th style = "width:360px;font-size:14px">nome</th>
+                            <th style = "width:160px;font-size:14px">cpf</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mainTableBody"></tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSelectCidadao"><i class="fas fa-search"></i>&nbsp; Selecionar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-ban"></i>&nbsp;Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section scripts{
 
     <script type="text/javascript">
         $(document).ready(function () {
+            $("input[id*='cpfcnpj']").inputmask({
+                mask: ['999.999.999-99', '99.999.999/9999-99'],
+                keepStatic: true
+            });
+            $("input[id*='codigo']").inputmask({
+                mask: ['999999'],
+                keepStatic: true
+            });
+
+            $("#btnCallModal").click(function () {
+                var _c1 = $("#reqChk1").is(":checked")
+                var _c2 = $("#reqChk2").is(":checked")
+
+                if (_c1) {
+                    $('#ModalInterno').modal({ backdrop: 'static', keyboard: false });
+                } else {
+                    $('#ModalExterno').modal({ backdrop: 'static', keyboard: false });
+                }
+            });
 
             $("#btnSelectCC").click(function () {
-                document.getElementById("divInterno").style.display = "block";
-                document.getElementById("divExterno").style.display = "none";
-
                 var ccText = $("#CCustoDropDown option:selected").text();
                 var ccValue = $("#CCustoDropDown option:selected").val();
                 document.getElementById('CCusto_Codigo').value = ccValue;
@@ -183,20 +226,15 @@
                 $('#ModalInterno').modal('hide');
             });
 
-            $("#btnCallModal").click(function () {
-                var _c1 = $("#reqChk1").is(":checked")
-                var _c2 = $("#reqChk2").is(":checked")
-
-                if (_c1) {
-                    OpenModalInterno();
-                }
-
+            $("#btnSelectCidadao").click(function () {
+                var ccText = "NOME DO CIDADÃO DE TESTE";
+                var ccValue = "510232";
+                document.getElementById('CCusto_Codigo').value = ccValue;
+                document.getElementById('CCusto_Nome').value = ccText;
+                document.getElementById("NomeCC").textContent = ccText;
+                $('#ModalInterno').modal('hide');
             });
         });
-
-        function OpenModalInterno() {
-            $('#ModalInterno').modal();
-        }
 
         function radioCheck() {
             var _c1 = $("#reqChk1").is(":checked")
@@ -211,5 +249,34 @@
             }
         }
 
+
+        /*{ codigo: _codigo, subject: subVal, section: secVal },*/
+        $("#btnFind").click(function () {
+
+            /*            clearTable();*/
+            $("#mainTableBody").empty();
+            var _codigo = document.getElementById('codigo').value;
+            
+            $.getJSON("Lista_Cidadao",
+                { codigo: _codigo },
+                function (json) {
+                    var tr;
+                    
+                    for (var i = 0; i < json.length; i++) {
+                        tr = $('<tr/>');
+                        tr.append("<td style='font-size:14px'>" + json[i].Codcidadao + "</td>");
+                        tr.append("<td style='font-size:14px'>" + json[i].Nomecidadao + "</td>");
+                        tr.append("<td style='font-size:14px'>" + json[i].Cpf + "</td>");
+                        $("table.tbl").find('tbody').append(tr);
+                    }
+                });
+        });
+
+        function clearTable() {
+            var tableRef = document.getElementById('mainTable');
+            while (tableRef.rows.length > 0) {
+                tableRef.deleteRow(0);
+            }
+        }
     </script>
 }
