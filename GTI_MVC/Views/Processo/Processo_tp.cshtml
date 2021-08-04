@@ -43,6 +43,27 @@
         border-radius: 4px;
     }
 
+    .modal:nth-of-type(even) {
+        z-index: 1062 !important;
+    }
+
+    .modal-backdrop.show:nth-of-type(even) {
+        z-index: 1061 !important;
+    }
+
+    .modal-header {
+        padding: 9px 15px;
+        border-bottom: 1px solid #eee;
+        background-color: darkslategrey;
+        color: whitesmoke;
+        -webkit-border-top-left-radius: 5px;
+        -webkit-border-top-right-radius: 5px;
+        -moz-border-radius-topleft: 5px;
+        -moz-border-radius-topright: 5px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
@@ -60,18 +81,22 @@
         color: darkslateblue;
         text-decoration: underline;
         cursor: pointer;
-        
     }
+
         .btEdit:hover {
             color: darkgreen;
         }
 </style>
 
-@{var res = @ViewBag.Result;}
+
 <div class="center" style="width:700px">
 
-    @using (Html.BeginForm("Processo_tp", "Processo", FormMethod.Post, new { @id = "MainForm" })) {
+    @using (Html.BeginForm("Processo_tp", "Processo", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(m => m.Centro_Custo_Codigo, new { @id = "CCusto_Codigo" })
+        @Html.HiddenFor(m => m.Centro_Custo_Nome, new { @id = "CCusto_Nome" })
+
         <div class="container" style="width:550px">
             <div class="card">
                 <div class="card-header">Cadastro de novo processo</div>
@@ -84,19 +109,27 @@
                                     <span style="font-weight:normal;font-weight:bold">Requerente:&nbsp;</span>
                                 </td>
                                 <td style="width:400px;">
-                                    @Html.RadioButtonFor(model => model.Tipo_Requerente, "Prefeitura", new { @id = "reqChk", @checked = true  })<span style="font-weight:normal">&nbsp;Prefeitura&nbsp;</span>
-                                    @Html.RadioButtonFor(model => model.Tipo_Requerente, "Contribuinte", new { @id = "reqChk"})<span style="font-weight:normal">&nbsp;Contribuinte</span>
+                                    @Html.RadioButtonFor(model => model.Tipo_Requerente, "Prefeitura", new { @id = "reqChk1", @name = "reqChk1", @checked = true, @onclick = "radioCheck()" })<span style="font-weight:normal">&nbsp;Prefeitura&nbsp;</span>
+                                    @Html.RadioButtonFor(model => model.Tipo_Requerente, "Contribuinte", new { @id = "reqChk2",@onclick = "radioCheck()" })<span style="font-weight:normal">&nbsp;Contribuinte</span>
                                     @*@Html.CheckBoxFor(m => m.Tipo_Requerente, new List<SelectListItem>{new SelectListItem{ Text="Prefeitura", Value = "1" }, new SelectListItem{ Text="Requerente", Value = "2" },  })*@
                                 </td>
                             </tr>
                         </table>
                     </div>
-
-
                     <br />
-                    <div >
-                        <button type="submit" id="btnOk" class="btn btn-primary" name="action" value="btnValida"> Continuar</button>&nbsp;&nbsp;
+                    <div id="divInterno" style="display:block;">
+                        <span style="font-weight:bold">Centro de Custo</span><br />
+                        <span id="NomeCC">(Não selecionado)</span>
+                    </div>
+                    <div id="divExterno" style="display:none;">
+                        <span style="font-weight:bold">Contribuinte</span><br />
+                        <span id="NomeCC">(Não selecionado)</span>
+                    </div>
+                    <br />
 
+                    <div>
+                        <button type="button" id="btnCallModal" class="btn btn-primary" name="action" value="btnSearch"> Consultar</button>&nbsp;&nbsp;
+                        <button type="submit" id="btnNext" class="btn btn-success" name="action" value="btnSearch"> Próximo</button>
                     </div>
 
 
@@ -107,100 +140,74 @@
                 </div>
             </div>
 
-        
+
         </div>
     }
 </div>
-<div id="msgBox1" title="Atenção" style='display: none;'>
-    <br />
-    <label id="lblMsg"></label>
+
+
+<div class="modal fade" id="ModalInterno" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Selecione o Centro de Custos</span>
+
+            </div>
+            <div class="container">&nbsp;</div>
+            <div class="modal-body">
+                @Html.DropDownListFor(m => Model.Centro_Custo_Codigo, ViewBag.Lista_CCusto as SelectList, null, new { @id = "CCustoDropDown", @style = "font-weight:normal;width:400px;font-size:14px" })
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSelectCC"><i class="fas fa-search"></i>&nbsp; Selecionar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-ban"></i>&nbsp;Cancelar</button>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div id="msgBoxBag" title="Atenção" style='display: none;'>
-    <br />
-    <p>@ViewBag.Result</p>
-</div>
 
 @section scripts{
 
     <script type="text/javascript">
         $(document).ready(function () {
-            
-            $("#btnOk").click(function () {
-                return ValidateForm();
+
+            $("#btnSelectCC").click(function () {
+                document.getElementById("divInterno").style.display = "block";
+                document.getElementById("divExterno").style.display = "none";
+
+                var ccText = $("#CCustoDropDown option:selected").text();
+                var ccValue = $("#CCustoDropDown option:selected").val();
+                document.getElementById('CCusto_Codigo').value = ccValue;
+                document.getElementById('CCusto_Nome').value = ccText;
+                document.getElementById("NomeCC").textContent = ccText;
+                $('#ModalInterno').modal('hide');
             });
 
-            $("input[id*='cpfcnpj']").inputmask({
-                mask: ['999.999.999-99', '99.999.999/9999-99'],
-                keepStatic: true
-            });
-            $('#msgBox1').dialog({
-                autoOpen: false,
-                resizable: false,
-                draggable: false,
-                position: { my: 'top', at: 'top+300' },
-                height: "auto",
-                width: 340,
-                modal: true,
-                dialogClass: "foo",
-                buttons: {
-                    "OK": function () {
-                        $(this).dialog("close");
-                    }
+            $("#btnCallModal").click(function () {
+                var _c1 = $("#reqChk1").is(":checked")
+                var _c2 = $("#reqChk2").is(":checked")
+
+                if (_c1) {
+                    OpenModalInterno();
                 }
+
             });
-
-
-            $('#msgBoxBag').dialog({
-                autoOpen: false,
-                resizable: false,
-                draggable: false,
-                position: { my: 'top', at: 'top+300' },
-                height: "auto",
-                width: 340,
-                modal: true,
-                dialogClass: "foo",
-                buttons: {
-                    "OK": function () {
-                        $(this).dialog("close");
-                    }
-                }
-            });
-
-            $(".foo .ui-dialog-title").css("font-size", "13px");
-            $(".foo .ui-widget-content").css("font-size", "13px");
-
-            var _res = '@res';
-            if (_res != "") {
-                $('#msgBoxBag').dialog('open');
-                return false;
-            } else {
-                return true;
-            }
         });
 
-        function ValidateForm() {
-            var _cpf = document.getElementById('cpfcnpj').value;
+        function OpenModalInterno() {
+            $('#ModalInterno').modal();
+        }
 
-            //*** Valida CpfCnpj ***
-            if (_cpf.length == 14) {
-                if (!valida_Cpf(_cpf)) {
-                    document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido!";
-                    $('#msgBox1').dialog('open');
-                    return false;
-                }
-            } else {
-                if (_cpf.length == 18) {
-                    if (!valida_Cnpj(_cpf)) {
-                        document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido!";
-                        $('#msgBox1').dialog('open');
-                        return false;
-                    }
-                } else {
-                    document.getElementById('lblMsg').innerHTML = "Nº de Cpf/Cnpj inválido!";
-                    $('#msgBox1').dialog('open');
-                    return false;
-                }
+        function radioCheck() {
+            var _c1 = $("#reqChk1").is(":checked")
+            var _c2 = $("#reqChk2").is(":checked")
+            if (_c1) {
+                document.getElementById('divInterno').style.display = 'block';
+                document.getElementById('divExterno').style.display = 'none';
+            }
+            else {
+                document.getElementById('divInterno').style.display = 'none';
+                document.getElementById('divExterno').style.display = 'block';
             }
         }
 

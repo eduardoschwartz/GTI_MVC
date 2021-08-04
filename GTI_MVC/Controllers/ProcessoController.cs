@@ -1,4 +1,5 @@
 ﻿using GTI_Bll.Classes;
+using GTI_Models.Models;
 using GTI_Mvc.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -27,11 +28,18 @@ namespace GTI_MVC.Controllers
                 return RedirectToAction("Login", "Home");
             Processo2ViewModel model = new Processo2ViewModel();
 
+            Processo_bll processoRepository = new Processo_bll(_connection);
+            List<Centrocusto> ListaCC = processoRepository.Lista_Local(true,false);
+            ViewBag.Lista_CCusto = new SelectList(ListaCC, "Codigo", "Descricao");
+
+
+
             return View(model);
         }
 
         [Route("Processo_tp")]
         [HttpPost]
+
         public ActionResult Processo_tp(Processo2ViewModel model) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
