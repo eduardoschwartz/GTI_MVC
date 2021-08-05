@@ -210,5 +210,6 @@ namespace GTI_Dal {
         public DbSet<LogWeb> LogWeb { get; set; }
         public DbSet<LogWeb_Evento> LogWeb_Evento { get; set; }
         public DbSet<Auto_infracao_obra> Auto_Infracao_Obra { get; set; }
+        public DbSet<Processo_web> Processo_Web { get; set; }
     }
 }

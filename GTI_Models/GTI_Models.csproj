@@ -218,6 +218,7 @@
     <Compile Include="Models\processoend.cs" />
     <Compile Include="Models\processoreparc.cs" />
     <Compile Include="Models\processo_historico.cs" />
+    <Compile Include="Models\processo_web.cs" />
     <Compile Include="Models\proprietario.cs" />
     <Compile Include="Models\certidao_inscricao_extrato.cs" />
     <Compile Include="Models\redesim_arquivo.cs" />

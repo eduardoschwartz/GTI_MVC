@@ -60,6 +60,9 @@
         visibility: hidden;
     }
 
+    .no-titlebar .ui-dialog-titlebar {
+        display: none;
+    }
     .uppercase {
         text-transform: uppercase
     }
@@ -95,16 +98,17 @@
         font-weight:normal;
         font-size:13px;
     }
+   
 </style>
 
 
 <div class="center" style="width:700px">
-
     @using (Html.BeginForm("Processo_tp", "Processo", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
 
         @Html.HiddenFor(m => m.Centro_Custo_Codigo, new { @id = "CCusto_Codigo" })
         @Html.HiddenFor(m => m.Centro_Custo_Nome, new { @id = "CCusto_Nome" })
+        @Html.HiddenFor(m => m.Centro_Custo_CpfCnpj, new { @id = "CCusto_CpfCnpj" })
 
         <div class="container" style="width:550px">
             <div class="card">
@@ -119,7 +123,7 @@
                                 </td>
                                 <td style="width:400px;">
                                     @Html.RadioButtonFor(model => model.Tipo_Requerente, "Prefeitura", new { @id = "reqChk1", @name = "reqChk1", @checked = true, @onclick = "radioCheck()" })<span style="font-weight:normal">&nbsp;Prefeitura&nbsp;</span>
-                                    @Html.RadioButtonFor(model => model.Tipo_Requerente, "Contribuinte", new { @id = "reqChk2",@onclick = "radioCheck()" })<span style="font-weight:normal">&nbsp;Contribuinte</span>
+                                    @Html.RadioButtonFor(model => model.Tipo_Requerente, "Contribuinte", new { @id = "reqChk2", @onclick = "radioCheck()" })<span style="font-weight:normal">&nbsp;Contribuinte</span>
                                     @*@Html.CheckBoxFor(m => m.Tipo_Requerente, new List<SelectListItem>{new SelectListItem{ Text="Prefeitura", Value = "1" }, new SelectListItem{ Text="Requerente", Value = "2" },  })*@
                                 </td>
                             </tr>
@@ -132,7 +136,7 @@
                     </div>
                     <div id="divExterno" style="display:none;">
                         <span style="font-weight:bold">Contribuinte</span><br />
-                        <span id="NomeCC">(Não selecionado)</span>
+                        <span id="NomeCC2">(Não selecionado)</span>
                     </div>
                     <br />
 
@@ -153,7 +157,6 @@
         </div>
     }
 </div>
-
 
 <div class="modal fade" id="ModalInterno" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" style="max-width: 430px;" role="document">
@@ -216,6 +219,7 @@
     </div>
 </div>
 
+
 @section scripts{
 
     <script type="text/javascript">
@@ -232,6 +236,10 @@
             $("#btnCallModal").click(function () {
                 var _c1 = $("#reqChk1").is(":checked")
                 var _c2 = $("#reqChk2").is(":checked")
+                document.getElementById("CCusto_Codigo").value = '';
+                document.getElementById("CCusto_Nome").value = '';
+                document.getElementById("NomeCC").textContent = '';
+                document.getElementById("NomeCC2").textContent = '';
 
                 if (_c1) {
                     $('#ModalInterno').modal({ backdrop: 'static', keyboard: false });
@@ -250,32 +258,33 @@
             });
 
             $("#btnSelectCidadao").click(function () {
-                //var ccText = "NOME DO CIDADÃO DE TESTE";
-                //var ccValue = "510232";
-                //document.getElementById('CCusto_Codigo').value = ccValue;
-                //document.getElementById('CCusto_Nome').value = ccText;
-                //document.getElementById("NomeCC").textContent = ccText;
+                var ccText = document.getElementById('CCusto_Nome').value;
+                var ccValue = document.getElementById('CCusto_Codigo').value;
+                if(ccText!='')
+                    document.getElementById("NomeCC2").textContent = ccValue + ' - ' + ccText;
+                else
+                    document.getElementById("NomeCC2").textContent = '';
                 $('#ModalExterno').modal('hide');
             });
 
-   
             $('#ModalExterno').on("click", '#mainTable tbody tr', function () {
-                var row = $(this).find('td:first').text();
-//                alert(row);
-               
+                var tableData = $(this).children("td").map(function () {
+                    return $(this).text();
+                }).get();
+
+                document.getElementById('CCusto_Codigo').value = $.trim(tableData[0]);
+                document.getElementById('CCusto_Nome').value = $.trim(tableData[1]);
+                document.getElementById('CCusto_CpfCnpj').value = $.trim(tableData[2]);
+             
+              
                 $('#mainTable tr').click(function (e) {
                     $('#mainTable tr').removeClass('highlighted');
                     $(this).addClass('highlighted');
                 });
-//                $(this).css("color", "white");
-//                $(this).css("background-color", "darkblue");
-            //    document.getElementById('CCusto_Codigo').value = row;
-            //    document.getElementById("NomeCC").textContent = ccText;
             });
 
-           
+        
         });
-
 
         function radioCheck() {
             var _c1 = $("#reqChk1").is(":checked")
@@ -290,14 +299,24 @@
             }
         }
 
-
+        function clearTable() {
+            var tableRef = document.getElementById('mainTable');
+            while (tableRef.rows.length > 0) {
+                tableRef.deleteRow(0);
+            }
+        }
 
         $("#btnFind").click(function () {
             $("#mainTableBody").empty();
             var _codigo = document.getElementById('codigo').value;
             var _nome = document.getElementById('nome').value;
             var _cpfcnpj = document.getElementById('cpfcnpj').value;
-            $("#dvMsg1").hide();$("#dvMsg2").hide();
+            if (_codigo == '' && _nome == '' && _cpfcnpj == '') {
+                alert('Selecione ao menos um dos critérios');
+                return false;
+            }
+
+            $("#dvMsg1").hide(); $("#dvMsg2").hide();
             $.getJSON("Lista_Cidadao",
                 { codigo: _codigo, nome: _nome, cpfcnpj: _cpfcnpj },
                 function (json) {
@@ -321,19 +340,12 @@
                     if (_pos == 0) {
                         $("#dvMsg2").show();
                     } else {
+                        $("#mainTable>tbody>tr:first").trigger('click');
                         $("#dvMsg2").hide();
                     }
 
                 });
         });
-
        
-
-        function clearTable() {
-            var tableRef = document.getElementById('mainTable');
-            while (tableRef.rows.length > 0) {
-                tableRef.deleteRow(0);
-            }
-        }
     </script>
 }

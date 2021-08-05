@@ -1669,6 +1669,35 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Incluir_Processo_Web(Processo_web reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[5];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@data_geracao", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_geracao };
+                Parametros[2] = new SqlParameter { ParameterName = "@centro_custo_codigo", SqlDbType = SqlDbType.Int, SqlValue = reg.Centro_custo_codigo };
+                Parametros[3] = new SqlParameter { ParameterName = "@centro_custo_nome", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Centro_custo_nome };
+                Parametros[4] = new SqlParameter { ParameterName = "@Interno", SqlDbType = SqlDbType.Bit, SqlValue = reg.Interno };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO processo_web(guid,data_geracao,centro_custo_codigo,centro_custo_nome,interno) " +
+                    "VALUES(@guid,@data_geracao,@centro_custo_codigo,@centro_custo_nome,@interno)", Parametros);
+
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Processo_web Retorna_Processo_Web(string guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+                var Sql = (from p in db.Processo_Web where p.Guid == guid select p).FirstOrDefault(); 
+                return Sql;
+            }
+        }
+
 
     }
 }

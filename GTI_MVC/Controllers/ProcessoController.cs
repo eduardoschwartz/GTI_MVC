@@ -40,8 +40,18 @@ namespace GTI_MVC.Controllers {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
 
+            Processo_bll processoRepository = new Processo_bll(_connection);
+            string _guid= Guid.NewGuid().ToString("N");
+            Processo_web reg = new Processo_web {
+                Guid = _guid,
+                Centro_custo_codigo=model.Centro_Custo_Codigo,
+                Centro_custo_nome=model.Centro_Custo_Nome,
+                Data_geracao=DateTime.Now,
+                Interno=model.Tipo_Requerente=="Prefeitura"?true:false
+            };
+            Exception ex = processoRepository.Incluir_Processo_Web(reg);
 
-            return View(model);
+            return RedirectToAction("Processo_add",new {p=_guid });
         }
 
         [HttpGet]
@@ -72,7 +82,19 @@ namespace GTI_MVC.Controllers {
             return Json(ObjCid, JsonRequestBehavior.AllowGet);
         }
 
+        [Route("Processo_add")]
+        [HttpGet]
+        public ActionResult Processo_add(string p) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
 
+            Processo_bll processoRepository = new Processo_bll(_connection);
+            Processo_web _proc = processoRepository.Retorna_Processo_Web(p);
+            Processo2ViewModel model = new Processo2ViewModel();
+            model.Centro_Custo_Nome = _proc.Centro_custo_nome;
+
+            return View(model);
+        }
 
 
     }

@@ -638,6 +638,16 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Processos_CCusto(Local);
         }
 
+        public Exception Incluir_Processo_Web(Processo_web reg) {
+            Processo_Data obj = new Processo_Data(_connection);
+            Exception ex = obj.Incluir_Processo_Web(reg);
+            return ex;
+        }
+
+        public Processo_web Retorna_Processo_Web(string guid) {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Retorna_Processo_Web(guid);
+        }
 
     }
 }

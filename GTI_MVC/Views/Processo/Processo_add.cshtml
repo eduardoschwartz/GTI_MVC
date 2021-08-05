@@ -1,0 +1,151 @@
+﻿@model GTI_Mvc.ViewModels.Processo2ViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Cadastro de novo processo";
+}
+
+<style>
+    .center {
+        margin: auto;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .modal-header {
+        padding: 9px 15px;
+        border-bottom: 1px solid #eee;
+        background-color: darkslategrey;
+        color: whitesmoke;
+        -webkit-border-top-left-radius: 5px;
+        -webkit-border-top-right-radius: 5px;
+        -moz-border-radius-topleft: 5px;
+        -moz-border-radius-topright: 5px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
+
+    .no-titlebar .ui-dialog-titlebar {
+        display: none;
+    }
+    .uppercase {
+        text-transform: uppercase
+    }
+
+
+    .btEdit {
+        background: none !important;
+        border: none;
+        padding: 0 !important;
+        font-family: arial, sans-serif;
+        color: darkslateblue;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+        .btEdit:hover {
+            color: darkgreen;
+        }
+
+    .tbl tbody tr:hover {
+        background-color: red;
+        color:white;
+    }
+
+    tr.highlighted td {
+        background: maroon;
+        color: white;
+    }
+
+    .titulo {
+        background: darkblue;
+        color: white;
+        font-weight:normal;
+        font-size:13px;
+    }
+   
+</style>
+
+
+<div class="center" style="width:700px">
+    @using (Html.BeginForm("Processo_add", "Processo", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(m => m.Centro_Custo_Codigo, new { @id = "CCusto_Codigo" })
+        @Html.HiddenFor(m => m.Centro_Custo_Nome, new { @id = "CCusto_Nome" })
+
+
+        <div class="container" style="width:550px">
+            <div class="card">
+                <div class="card-header">Cadastro de novo processo</div>
+                <div class="card-body">
+                    @Model.Centro_Custo_Nome
+         
+                     
+
+                    <div>
+                        <button type="button" id="btnCallModal" class="btn btn-primary" name="action" value="btnSearch"> <i class="fas fa-search"></i>&nbsp;Consultar</button>&nbsp;&nbsp;
+                        <button type="submit" id="btnNext" class="btn btn-success" name="action" value="btnSearch"> Próximo</button>
+                    </div>
+
+
+                </div>
+                <div class="card-footer">
+                    @Html.ActionLink("Retornar ao menu de opções", "Cidadao_menu", "Cidadao", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                </div>
+            </div>
+
+
+        </div>
+    }
+</div>
+
+
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+        });
+
+       
+       
+    </script>
+}
