@@ -78,6 +78,23 @@
         .btEdit:hover {
             color: darkgreen;
         }
+
+    .tbl tbody tr:hover {
+        background-color: red;
+        color:white;
+    }
+
+    tr.highlighted td {
+        background: maroon;
+        color: white;
+    }
+
+    .titulo {
+        background: darkblue;
+        color: white;
+        font-weight:normal;
+        font-size:13px;
+    }
 </style>
 
 
@@ -161,7 +178,7 @@
     <div class="modal-dialog" style="max-width: 640px;" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <span>Selecione o Centro de Custos</span>
+                <span>Selecione o Contribuinte</span>
 
             </div>
             <div class="container"></div>
@@ -173,18 +190,23 @@
                 <br />
                 <br />
 
-                <table id="mainTable" class="tbl table-bordered table-condensed table-hover table-striped">
+                <table id="mainTable" class="tbl table-bordered table-condensed table-hover " >
                     <thead>
                         <tr>
-                            <th style = "width:80px;font-size:14px">codigo</th>
-                            <th style = "width:360px;font-size:14px">nome</th>
-                            <th style = "width:160px;font-size:14px">cpf</th>
+                            <th class="titulo" style="width:80px">Código</th>
+                            <th class="titulo" style="width:364px">Nome do Contribuinte</th>
+                            <th class="titulo" style="width:160px">Cpf/Cnpj</th>
                         </tr>
                     </thead>
                     <tbody id="mainTableBody"></tbody>
                 </table>
                 <br />
-                <span style="color:red;font-size:13px">***Apenas os 10 primeiros resultados serão exibidos***</span>
+                <div id="dvMsg1" style="display:none">
+                    <span style="color:red;font-size:13px">***Apenas os 10 primeiros resultados serão exibidos***</span>
+                </div>
+                <div id="dvMsg2" style="display:none">
+                    <span style="color:red;font-size:13px">***Nenhum registro localizado com os critérios selecionados***</span>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnSelectCidadao"><i class="fas fa-search"></i>&nbsp; Selecionar</button>
@@ -228,14 +250,32 @@
             });
 
             $("#btnSelectCidadao").click(function () {
-                var ccText = "NOME DO CIDADÃO DE TESTE";
-                var ccValue = "510232";
-                document.getElementById('CCusto_Codigo').value = ccValue;
-                document.getElementById('CCusto_Nome').value = ccText;
-                document.getElementById("NomeCC").textContent = ccText;
-                $('#ModalInterno').modal('hide');
+                //var ccText = "NOME DO CIDADÃO DE TESTE";
+                //var ccValue = "510232";
+                //document.getElementById('CCusto_Codigo').value = ccValue;
+                //document.getElementById('CCusto_Nome').value = ccText;
+                //document.getElementById("NomeCC").textContent = ccText;
+                $('#ModalExterno').modal('hide');
             });
+
+   
+            $('#ModalExterno').on("click", '#mainTable tbody tr', function () {
+                var row = $(this).find('td:first').text();
+//                alert(row);
+               
+                $('#mainTable tr').click(function (e) {
+                    $('#mainTable tr').removeClass('highlighted');
+                    $(this).addClass('highlighted');
+                });
+//                $(this).css("color", "white");
+//                $(this).css("background-color", "darkblue");
+            //    document.getElementById('CCusto_Codigo').value = row;
+            //    document.getElementById("NomeCC").textContent = ccText;
+            });
+
+           
         });
+
 
         function radioCheck() {
             var _c1 = $("#reqChk1").is(":checked")
@@ -257,7 +297,7 @@
             var _codigo = document.getElementById('codigo').value;
             var _nome = document.getElementById('nome').value;
             var _cpfcnpj = document.getElementById('cpfcnpj').value;
-            
+            $("#dvMsg1").hide();$("#dvMsg2").hide();
             $.getJSON("Lista_Cidadao",
                 { codigo: _codigo, nome: _nome, cpfcnpj: _cpfcnpj },
                 function (json) {
@@ -265,7 +305,7 @@
                     var _pos = 0;
                     for (var i = 0; i < json.length; i++) {
                         if (_pos < 10) {
-                            tr = $('<tr/>');
+                            tr = $('<tr style="cursor:pointer"  />');
                             tr.append("<td style='font-size:14px'>" + json[i].Codcidadao + "</td>");
                             tr.append("<td style='font-size:14px'>" + json[i].Nomecidadao + "</td>");
                             tr.append("<td style='font-size:14px'>" + json[i].Cpf + "</td>");
@@ -273,8 +313,21 @@
                         }
                         _pos++;
                     }
+                    if (_pos >= 10) {
+                        $("#dvMsg1").show();
+                    } else {
+                        $("#dvMsg1").hide();
+                    }
+                    if (_pos == 0) {
+                        $("#dvMsg2").show();
+                    } else {
+                        $("#dvMsg2").hide();
+                    }
+
                 });
         });
+
+       
 
         function clearTable() {
             var tableRef = document.getElementById('mainTable');

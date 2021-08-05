@@ -4,12 +4,9 @@ using GTI_Mvc;
 using GTI_Mvc.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
-namespace GTI_MVC.Controllers
-{
+namespace GTI_MVC.Controllers {
     public class ProcessoController : Controller    {
         private readonly string _connection = "GTIconnectionTeste";
 
@@ -32,8 +29,6 @@ namespace GTI_MVC.Controllers
             Processo_bll processoRepository = new Processo_bll(_connection);
             List<Centrocusto> ListaCC = processoRepository.Lista_Local(true,false);
             ViewBag.Lista_CCusto = new SelectList(ListaCC, "Codigo", "Descricao");
-
-
 
             return View(model);
         }
@@ -58,12 +53,18 @@ namespace GTI_MVC.Controllers
 
             Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
             List<Cidadao> Lista = cidadaoRepository.Lista_Cidadao(_cod, _nome, _cpfcnpj,12);
+
             List<Cidadao> ObjCid = new List<Cidadao>();
             foreach (Cidadao cid in Lista) {
+                if (string.IsNullOrEmpty(cid.Cnpj) && cid.Cnpj!="0")
+                    _cpfcnpj = cid.Cpf;
+                else
+                    _cpfcnpj = cid.Cnpj;
+
                 Cidadao reg = new Cidadao() {
                     Codcidadao = cid.Codcidadao,
-                    Nomecidadao = cid.Nomecidadao,
-                    Cpf = Functions.FormatarCpfCnpj( cid.Cpf)
+                    Nomecidadao = Functions.TruncateTo( cid.Nomecidadao.ToUpper(),45),
+                    Cpf = Functions.FormatarCpfCnpj( _cpfcnpj)
                 };
                 ObjCid.Add(reg);
             }

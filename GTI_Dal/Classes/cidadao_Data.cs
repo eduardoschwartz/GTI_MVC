@@ -28,7 +28,7 @@ namespace GTI_Dal.Classes {
 
         public List<Cidadao> Lista_Cidadao(int Codigo, string Nome, string CpfCnpj,int maxRows) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from c in db.Cidadao select c);
+                var Sql = (from c in db.Cidadao where c.Codcidadao>=500000 && c.Codcidadao<700000  select c );
                 if (Codigo>0)
                     Sql = Sql.Where(c => c.Codcidadao==Codigo);
                 if (Nome!="")
