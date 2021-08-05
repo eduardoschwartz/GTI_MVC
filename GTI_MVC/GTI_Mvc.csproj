@@ -1088,6 +1088,7 @@
     <Content Include="Views\Processo\Processo_tp.cshtml" />
     <Content Include="Views\Notificacao\AutoInfracao_obra_add.cshtml" />
     <Content Include="Views\Notificacao\AutoInfracao_obra_query.cshtml" />
+    <Content Include="Views\Processo\Processo_add.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
