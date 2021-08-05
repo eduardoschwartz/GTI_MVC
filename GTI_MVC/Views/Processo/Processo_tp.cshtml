@@ -183,7 +183,8 @@
                     </thead>
                     <tbody id="mainTableBody"></tbody>
                 </table>
-
+                <br />
+                <span style="color:red;font-size:13px">***Apenas os 10 primeiros resultados serão exibidos***</span>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnSelectCidadao"><i class="fas fa-search"></i>&nbsp; Selecionar</button>
@@ -250,24 +251,27 @@
         }
 
 
-        /*{ codigo: _codigo, subject: subVal, section: secVal },*/
-        $("#btnFind").click(function () {
 
-            /*            clearTable();*/
+        $("#btnFind").click(function () {
             $("#mainTableBody").empty();
             var _codigo = document.getElementById('codigo').value;
+            var _nome = document.getElementById('nome').value;
+            var _cpfcnpj = document.getElementById('cpfcnpj').value;
             
             $.getJSON("Lista_Cidadao",
-                { codigo: _codigo },
+                { codigo: _codigo, nome: _nome, cpfcnpj: _cpfcnpj },
                 function (json) {
                     var tr;
-                    
+                    var _pos = 0;
                     for (var i = 0; i < json.length; i++) {
-                        tr = $('<tr/>');
-                        tr.append("<td style='font-size:14px'>" + json[i].Codcidadao + "</td>");
-                        tr.append("<td style='font-size:14px'>" + json[i].Nomecidadao + "</td>");
-                        tr.append("<td style='font-size:14px'>" + json[i].Cpf + "</td>");
-                        $("table.tbl").find('tbody').append(tr);
+                        if (_pos < 10) {
+                            tr = $('<tr/>');
+                            tr.append("<td style='font-size:14px'>" + json[i].Codcidadao + "</td>");
+                            tr.append("<td style='font-size:14px'>" + json[i].Nomecidadao + "</td>");
+                            tr.append("<td style='font-size:14px'>" + json[i].Cpf + "</td>");
+                            $("table.tbl").find('tbody').append(tr);
+                        }
+                        _pos++;
                     }
                 });
         });

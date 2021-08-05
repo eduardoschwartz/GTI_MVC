@@ -52,12 +52,12 @@ namespace GTI_MVC.Controllers
         [HttpGet]
         public JsonResult Lista_Cidadao(string codigo, string nome, string cpfcnpj) {
             if (string.IsNullOrEmpty(codigo)) codigo = "0";
-            int _cod = Convert.ToInt32(codigo);
-            string _nome = nome ?? "";
-            string _cpfcnpj = cpfcnpj ?? "";
+            int _cod = Convert.ToInt32(Functions.RetornaNumero(codigo));
+            string _nome = nome.Trim() ?? "";
+            string _cpfcnpj = Functions.RetornaNumero(cpfcnpj) ?? "";
 
             Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
-            List<Cidadao> Lista = cidadaoRepository.Lista_Cidadao(_cod, _nome, _cpfcnpj);
+            List<Cidadao> Lista = cidadaoRepository.Lista_Cidadao(_cod, _nome, _cpfcnpj,12);
             List<Cidadao> ObjCid = new List<Cidadao>();
             foreach (Cidadao cid in Lista) {
                 Cidadao reg = new Cidadao() {

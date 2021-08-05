@@ -197,9 +197,9 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Cidadao_Socio(Codigo_Empresa);
         }
 
-        public List<Cidadao> Lista_Cidadao(int Codigo, string Nome, string CpfCnpj) {
+        public List<Cidadao> Lista_Cidadao(int Codigo, string Nome, string CpfCnpj, int maxRows) {
             Cidadao_Data obj = new Cidadao_Data(_connection);
-            return obj.Lista_Cidadao(Codigo,Nome,CpfCnpj);
+            return obj.Lista_Cidadao(Codigo,Nome,CpfCnpj,maxRows);
         }
 
     }

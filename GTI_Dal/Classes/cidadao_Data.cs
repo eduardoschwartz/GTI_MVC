@@ -26,11 +26,18 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public List<Cidadao> Lista_Cidadao(int Codigo, string Nome, string CpfCnpj) {
+        public List<Cidadao> Lista_Cidadao(int Codigo, string Nome, string CpfCnpj,int maxRows) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var Sql = (from c in db.Cidadao select c);
                 if (Codigo>0)
                     Sql = Sql.Where(c => c.Codcidadao==Codigo);
+                if (Nome!="")
+                    Sql = Sql.Where(c => c.Nomecidadao.Contains(Nome) );
+                if (CpfCnpj != "" && CpfCnpj!="0")
+                    Sql = Sql.Where(c => c.Cpf.Contains(CpfCnpj) || c.Cnpj.Contains(CpfCnpj));
+                Sql = Sql.OrderBy(c => c.Nomecidadao);
+                if (maxRows>0)   
+                    Sql=Sql.Take(maxRows);
                 return Sql.ToList();
             }
         }
