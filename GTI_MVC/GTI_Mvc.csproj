@@ -681,6 +681,7 @@
     <Content Include="Images\refresh.png" />
     <Content Include="Images\save.png" />
     <Content Include="Scripts\MacApp.js" />
+    <Content Include="Scripts\show-hide-password.js" />
     <Content Include="webfonts\fa-brands-400.svg" />
     <Content Include="webfonts\fa-regular-400.svg" />
     <Content Include="webfonts\fa-solid-900.svg" />
