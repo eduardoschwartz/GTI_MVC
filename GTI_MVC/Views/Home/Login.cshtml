@@ -64,7 +64,7 @@
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
                             <i class="input-group-text fa fa-user-circle" style="height:30px"></i>
-                            @Html.TextBoxFor(m => m.Usuario,new { @id = "codigo",@style = "width:320px;height:30px",placeholder = "Nome de usuário ou Email" })<br /><br />
+                            @Html.TextBoxFor(m => m.Usuario, new { @id = "codigo", @style = "width:320px;height:30px", placeholder = "Nome de usuário ou Email" })<br /><br />
                         </div>
                     </div>
                 </div>
@@ -72,14 +72,15 @@
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
                             <i class="input-group-text fa fa-key" style="height:30px"></i>
-                            @Html.TextBoxFor(m => m.Senha,new { @type = "password",@id = "senha",@style = "width:250px;height:30px",placeholder = "Digite a senha" })<br />
-                            <input type="checkbox" onclick="fPwd()" style="font-size:14px;margin-left:10px;margin-top:8px;cursor:pointer">&nbsp;<span style="font-size:14px;padding-top:5px">Exibir</span>
+                            @Html.TextBoxFor(m => m.Senha, new { @type = "password", @id = "senha", @style = "width:320px;height:30px", placeholder = "Digite a senha" })<br />
+
                         </div>
                     </div>
                 </div>
                 <br />
-                @Html.EditorFor(m=>m.RememberMe) <span style="padding-left:5px;font-size:14px">Lembrar neste computador</span>    
-              <br />
+
+                @Html.EditorFor(m => m.RememberMe) <span style="padding-left:5px;font-size:14px">Lembrar neste computador</span>
+                <br />
                 <br />
                 <button type="submit" title="Acessar o sistema" id="btOk" class="btn btn-primary"><i class="fas fa-check"></i>&nbsp; Entrar</button>
                 <span style="padding-left:5px"></span>
@@ -116,16 +117,14 @@
 @section scripts{
 
     <script type="text/javascript">
-        function fPwd() {
-            var x = document.getElementById("senha");
-            if (x.type === "password") {
-                x.type = "text";
-            } else {
-                x.type = "password";
-            }
-        }
+        
 
         $(document).ready(function () {
+            $(function () {
+                $('input[type=\'password\']').showHidePassword();
+            });
+
+
             $('#msgBox1').dialog({
                 autoOpen: false,
                 resizable: false,
@@ -176,6 +175,19 @@
             } else {
                 return true;
             }
+
+            $(showHideIcon).css({
+              position: 'absolute',
+              display: 'none',
+              top: '0',
+              right: '0',
+              height: $(this).outerHeight(true) - 2,
+              marginTop: '1px',
+              padding: '6px 11px',
+              cursor: 'pointer',
+              zIndex : '999',
+              color : 'black'
+            });
 
 
 

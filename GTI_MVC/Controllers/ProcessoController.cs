@@ -62,7 +62,7 @@ namespace GTI_MVC.Controllers {
             string _cpfcnpj = Functions.RetornaNumero(cpfcnpj) ?? "";
 
             Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
-            List<Cidadao> Lista = cidadaoRepository.Lista_Cidadao(_cod, _nome, _cpfcnpj,12);
+            List<Cidadao> Lista = cidadaoRepository.Lista_Cidadao(_cod, _nome, _cpfcnpj,15);
 
             List<Cidadao> ObjCid = new List<Cidadao>();
             foreach (Cidadao cid in Lista) {
