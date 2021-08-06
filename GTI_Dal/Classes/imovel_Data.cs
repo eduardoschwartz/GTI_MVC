@@ -3141,6 +3141,21 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<int> Lista_Terrenos_Cip() {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 360;
+                //var subselect = (from b in db.Areas select b.Codreduzido).ToList();
+                //var result = (from c in db.Cadimob where c.Inativo==false && c.Imune==false  && c.Cip==false && !subselect.Contains(c.Codreduzido) select c.Codreduzido).ToList();
+                List<int> Lista = new List<int>();
+                var result = db.SpLista_Terreno_Cip.SqlQuery("EXEC spLista_Terreno_Cip").ToList();
+                foreach (var item in result) {
+                    Lista.Add(Convert.ToInt32(item.Codreduzido));
+                }
+
+                return Lista;
+            }
+        }
+
     }//end class
 }
 

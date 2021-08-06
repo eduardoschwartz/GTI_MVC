@@ -1671,15 +1671,17 @@ namespace GTI_Dal.Classes {
 
         public Exception Incluir_Processo_Web(Processo_web reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[5];
+                object[] Parametros = new object[7];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@data_geracao", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_geracao };
                 Parametros[2] = new SqlParameter { ParameterName = "@centro_custo_codigo", SqlDbType = SqlDbType.Int, SqlValue = reg.Centro_custo_codigo };
                 Parametros[3] = new SqlParameter { ParameterName = "@centro_custo_nome", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Centro_custo_nome };
                 Parametros[4] = new SqlParameter { ParameterName = "@Interno", SqlDbType = SqlDbType.Bit, SqlValue = reg.Interno };
+                Parametros[5] = new SqlParameter { ParameterName = "@user_id", SqlDbType = SqlDbType.Int, SqlValue = reg.User_id };
+                Parametros[6] = new SqlParameter { ParameterName = "@user_pref", SqlDbType = SqlDbType.Bit, SqlValue = reg.User_pref };
 
-                db.Database.ExecuteSqlCommand("INSERT INTO processo_web(guid,data_geracao,centro_custo_codigo,centro_custo_nome,interno) " +
-                    "VALUES(@guid,@data_geracao,@centro_custo_codigo,@centro_custo_nome,@interno)", Parametros);
+                db.Database.ExecuteSqlCommand("INSERT INTO processo_web(guid,data_geracao,centro_custo_codigo,centro_custo_nome,interno,user_id,user_pref) " +
+                    "VALUES(@guid,@data_geracao,@centro_custo_codigo,@centro_custo_nome,@interno,@user_id,@user_pref)", Parametros);
 
                 try {
                     db.SaveChanges();

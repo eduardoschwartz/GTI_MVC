@@ -974,6 +974,12 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Auto_Infracao_Obra(Ano, Numero);
         }
 
+        public List<int> Lista_Terrenos_Cip() {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Lista_Terrenos_Cip();
+        }
+
+
         #endregion
 
     }//end class

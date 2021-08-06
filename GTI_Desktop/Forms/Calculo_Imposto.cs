@@ -12,14 +12,15 @@ namespace GTI_Desktop.Forms {
     public partial class Calculo_Imposto : Form {
         string _connection = gtiCore.Connection_Name();
         string _path = @"c:\cadastro\bin\";
-        int _ano = 2022;
-        int _documento = 19102760;
+        int _ano = 2021;
+        int _documento = 19121190;
         decimal _ipca = (decimal)3.1352;
  
         private enum Tipo_imposto {
             Iptu = 1,
             ISS_Fixo_TLL=2,
-            Vigilancia=5
+            Vigilancia=5,
+            Cip=6
         }
 
         public Calculo_Imposto() {
@@ -42,6 +43,9 @@ namespace GTI_Desktop.Forms {
                     break; 
                 case 2:
                     Calculo_Vigilancia();
+                    break;
+                case 3:
+                    Calculo_Cip();
                     break;
                 default:
                     break;
@@ -979,6 +983,100 @@ namespace GTI_Desktop.Forms {
             MsgToolStrip.Text = "Selecione uma opção de cálculo";
             Refresh();
             MessageBox.Show("Exportação finalizada.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+
+        private void Calculo_Cip() {
+
+            FileStream fsDP = new FileStream(_path + "DEBITOPARCELA.TXT", FileMode.Create, FileAccess.Write);
+            StreamWriter fs1 = new StreamWriter(fsDP, System.Text.Encoding.Default);
+            FileStream fsDT = new FileStream(_path + "DEBITOTRIBUTO.TXT", FileMode.Create, FileAccess.Write);
+            StreamWriter fs2 = new StreamWriter(fsDT, System.Text.Encoding.Default);
+            FileStream fsPD = new FileStream(_path + "PARCELADOCUMENTO.TXT", FileMode.Create, FileAccess.Write);
+            StreamWriter fs3 = new StreamWriter(fsPD, System.Text.Encoding.Default);
+            FileStream fsND = new FileStream(_path + "NUMDOCUMENTO.TXT", FileMode.Create, FileAccess.Write);
+            StreamWriter fs4 = new StreamWriter(fsND, System.Text.Encoding.Default);
+
+            MsgToolStrip.Text = "Calculando CIP";
+
+            List<DateTime> aVencimento = new List<DateTime>();
+            List<decimal> aDesconto = new List<decimal>();
+
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            Paramparcela _Prm = tributarioRepository.Retorna_Parametro_Parcela(_ano, (int)Tipo_imposto.Cip);
+
+            decimal _valor_parcela = tributarioRepository.Retorna_Valor_Tributo(_ano, 669);
+
+            aDesconto.Add((decimal)_Prm.Descontounica);
+
+            aVencimento.Add((DateTime)_Prm.Venc01);
+            aVencimento.Add((DateTime)_Prm.Venc02);
+            aVencimento.Add((DateTime)_Prm.Venc03);
+
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            List<int> ListaTerreno = imovelRepository.Lista_Terrenos_Cip();
+
+            int _total = ListaTerreno.Count, _pos = 1;
+            int _qtde_normal = 0,  _qtde_total = 0, _qtde_laminas = 0;
+
+            string[] aDocumento = new string[15];
+            string  _valor1 = "";
+            string _dataBase = DateTime.Now.ToString("dd/MM/yyyy");
+
+            foreach (int Codigo in ListaTerreno) {
+
+                if (_pos % 50 == 0) {
+                    PBar.Value = _pos * 100 / _total;
+                    PBar.Update();
+                    Refresh();
+                    QtdeNormal.Text = _qtde_normal.ToString("00000");
+                    QtdeLamina.Text = _qtde_laminas.ToString("000000");
+
+                    Application.DoEvents();
+                }
+
+                _qtde_laminas += 3;
+
+                    //parcela única
+                    string _linha = Codigo + "#" + _ano + "#79#0#0#0#18#" + aVencimento[0].ToString("dd/MM/yyyy") + "#" + _dataBase;
+                    fs1.WriteLine(_linha);
+                    _documento++;
+
+                    //parcelas normais
+                    for (int _parcela = 1; _parcela <= 3; _parcela++) {
+                        string _vencto = aVencimento[_parcela - 1].ToString("dd/MM/yyyy");
+                        _linha = Codigo + "#" + _ano + "#79#0#" + _parcela + "#0#18#" + _vencto + "#" + _dataBase;
+                        fs1.WriteLine(_linha);
+                        _linha = Codigo + "#" + _ano + "#79#0#" + _parcela + "#0#669#" + _valor_parcela.ToString("#0.00");
+                        fs2.WriteLine(_linha);
+                        _linha = Codigo + "#" + _ano + "#79#0#" + _parcela + "#0#" + _documento;
+                        fs3.WriteLine(_linha);
+                        _linha = _documento + "#" + DateTime.Now.ToString("dd/MM/yyyy");
+                        fs4.WriteLine(_linha);
+
+                        _valor1 = _valor_parcela.ToString("#0.00");
+                        aDocumento[_parcela] = _documento.ToString();
+
+                        _documento++;
+                    }
+
+                   
+
+                _pos++;
+            }
+
+            fs1.Close(); fs2.Close(); fs3.Close(); fs4.Close() ; fsDT.Close(); fsND.Close(); fsPD.Close();
+            PBar.Value = 100;
+            PBar.Update();
+
+            MsgToolStrip.Text = "Selecione uma opção de cálculo";
+            QtdeNormal.Text = _qtde_normal.ToString("00000");
+            QtdeLamina.Text = _qtde_laminas.ToString("000000");
+            QtdeTotal.Text = _qtde_total.ToString("00000");
+
+            Refresh();
+            MessageBox.Show("Cálculo finalizado.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
         }
 
 

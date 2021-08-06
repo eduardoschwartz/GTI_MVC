@@ -78,7 +78,8 @@
             this.ImpostoList.Items.AddRange(new object[] {
             "CÁLCULO DE IPTU",
             "CÁLCULO DE ISS FIXO/TLL",
-            "CÁLCULO DE VIGILÂNCIA SANITÁRIA"});
+            "CÁLCULO DE VIGILÂNCIA SANITÁRIA",
+            "CÁLCULO DA CIP"});
             this.ImpostoList.Location = new System.Drawing.Point(108, 20);
             this.ImpostoList.Name = "ImpostoList";
             this.ImpostoList.Size = new System.Drawing.Size(243, 21);

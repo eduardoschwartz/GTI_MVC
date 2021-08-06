@@ -40,15 +40,21 @@ namespace GTI_MVC.Controllers {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
 
+            int _userId = Convert.ToInt32(Session["hashid"]);
+            bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
+
             Processo_bll processoRepository = new Processo_bll(_connection);
             string _guid= Guid.NewGuid().ToString("N");
             Processo_web reg = new Processo_web {
                 Guid = _guid,
-                Centro_custo_codigo=model.Centro_Custo_Codigo,
-                Centro_custo_nome=model.Centro_Custo_Nome,
-                Data_geracao=DateTime.Now,
-                Interno=model.Tipo_Requerente=="Prefeitura"?true:false
+                Centro_custo_codigo = model.Centro_Custo_Codigo,
+                Centro_custo_nome = model.Centro_Custo_Nome,
+                Data_geracao = DateTime.Now,
+                Interno = model.Tipo_Requerente == "Prefeitura" ? true : false,
+                User_id = _userId,
+                User_pref = _func
             };
+
             Exception ex = processoRepository.Incluir_Processo_Web(reg);
 
             return RedirectToAction("Processo_add",new {p=_guid });

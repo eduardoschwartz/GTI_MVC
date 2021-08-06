@@ -110,14 +110,20 @@
         @Html.HiddenFor(m => m.Centro_Custo_Nome, new { @id = "CCusto_Nome" })
 
 
-        <div class="container" style="width:550px">
+        <div class="container" style="width:600px">
             <div class="card">
                 <div class="card-header">Cadastro de novo processo</div>
                 <div class="card-body">
-                    @Model.Centro_Custo_Nome
+                    <table>
+                        <tr>
+                            <td style="width:200px;font-size:14px">Requerente:</td>
+                            <td style="width:400px;font-size:14px">@Model.Centro_Custo_Codigo-@Model.Centro_Custo_Nome</td>
+                        </tr>
+                    </table>
+                    
          
                      
-
+                    <br />
                     <div>
                         <button type="button" id="btnCallModal" class="btn btn-primary" name="action" value="btnSearch"> <i class="fas fa-search"></i>&nbsp;Consultar</button>&nbsp;&nbsp;
                         <button type="submit" id="btnNext" class="btn btn-success" name="action" value="btnSearch"> Próximo</button>

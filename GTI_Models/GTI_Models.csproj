@@ -248,6 +248,7 @@
     <Compile Include="Models\spExtrato.cs" />
     <Compile Include="Models\spExtrato_carta.cs" />
     <Compile Include="Models\spExtrato_Parcelamento.cs" />
+    <Compile Include="Models\spLista_Terreno_Cip.cs" />
     <Compile Include="Models\spParcelamentoDestinoWeb.cs" />
     <Compile Include="Models\spParcelamentoOrigem.cs" />
     <Compile Include="Models\tabelaiss.cs" />

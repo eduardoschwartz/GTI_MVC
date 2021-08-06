@@ -9,5 +9,7 @@ namespace GTI_Models.Models {
         public int Centro_custo_codigo { get; set; }
         public string Centro_custo_nome { get; set; }
         public bool Interno { get; set; }
+        public int User_id { get; set; }
+        public bool User_pref { get; set; }
     }
 }
