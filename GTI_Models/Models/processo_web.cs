@@ -11,5 +11,9 @@ namespace GTI_Models.Models {
         public bool Interno { get; set; }
         public int User_id { get; set; }
         public bool User_pref { get; set; }
+        public bool Fisico { get; set; }
+        public int Assunto_codigo { get; set; }
+        public string Complemento { get; set; }
     }
 }
+

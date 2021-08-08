@@ -66,38 +66,6 @@
     .uppercase {
         text-transform: uppercase
     }
-
-
-    .btEdit {
-        background: none !important;
-        border: none;
-        padding: 0 !important;
-        font-family: arial, sans-serif;
-        color: darkslateblue;
-        text-decoration: underline;
-        cursor: pointer;
-    }
-
-        .btEdit:hover {
-            color: darkgreen;
-        }
-
-    .tbl tbody tr:hover {
-        background-color: red;
-        color:white;
-    }
-
-    tr.highlighted td {
-        background: maroon;
-        color: white;
-    }
-
-    .titulo {
-        background: darkblue;
-        color: white;
-        font-weight:normal;
-        font-size:13px;
-    }
    
 </style>
 
@@ -108,21 +76,42 @@
 
         @Html.HiddenFor(m => m.Centro_Custo_Codigo, new { @id = "CCusto_Codigo" })
         @Html.HiddenFor(m => m.Centro_Custo_Nome, new { @id = "CCusto_Nome" })
+        @Html.HiddenFor(m=>m.Tipo_Requerente)
+        @Html.HiddenFor(m=>m.Guid)    
 
-
-        <div class="container" style="width:600px">
+        <div class="container" style="width:670px">
             <div class="card">
                 <div class="card-header">Cadastro de novo processo</div>
                 <div class="card-body">
-                    <table>
+                    <table style="width:600px">
                         <tr>
-                            <td style="width:200px;font-size:14px">Requerente:</td>
-                            <td style="width:400px;font-size:14px">@Model.Centro_Custo_Codigo-@Model.Centro_Custo_Nome</td>
+                            <td style="width:20%;font-size:14px">Requerente:</td>
+                            <td style="width:80%;font-size:14px;color:blue">@Model.Centro_Custo_Codigo-@Model.Centro_Custo_Nome</td>
+                        </tr>
+                        <tr><td style="height:10px"></td></tr>
+                        <tr>
+                            <td style="width:20%;font-size:14px">Origem:</td>
+                            <td style="width:80%; font-size: 14px; color: blue">@Model.Tipo_Requerente<span style="color:black;padding-left:50px">Processo Físico?&nbsp; @Html.EditorFor(m => m.Fisico)</span> </td>
+                        </tr>
+                        <tr><td style="height:10px"></td></tr>
+                        <tr>
+                            <td style="width:20%;font-size:14px">Assunto:</td>
+                            <td style="width:80%; font-size: 14px">@Html.DropDownListFor(m => Model.Assunto_Codigo, ViewBag.Lista_Assunto as SelectList, null, new { @id = "CCustoDropDown", @style = "font-weight:normal;width:500px;font-size:14px" })</td>
+                        </tr>
+                        <tr><td style="height:10px"></td></tr>
+                        <tr>
+                            <td style="width:20%;font-size:14px">Complemento:</td>
+                            <td style="width:80%; font-size: 14px">@Html.TextBoxFor(m => m.Complemento, new { @style = "width:500px" })</td>
+                        </tr>
+                        <tr><td style="height:10px"></td></tr>
+                        <tr>
+                            <td style="width:20%;font-size:14px;vertical-align:top">Observação:</td>
+                            <td style="width:80%; font-size: 14px">@Html.TextAreaFor(m => m.Observacao, new { @maxlength = "5000", @cols = 86, @rows = 5, @style = "resize:none;width:500px" })</td>
                         </tr>
                     </table>
+
                     
-         
-                     
+
                     <br />
                     <div>
                         <button type="button" id="btnCallModal" class="btn btn-primary" name="action" value="btnSearch"> <i class="fas fa-search"></i>&nbsp;Consultar</button>&nbsp;&nbsp;
@@ -147,8 +136,9 @@
 @section scripts{
 
     <script type="text/javascript">
+
         $(document).ready(function () {
-            
+
         });
 
        
