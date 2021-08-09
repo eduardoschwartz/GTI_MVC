@@ -86,7 +86,7 @@
                     <table style="width:600px">
                         <tr>
                             <td style="width:20%;font-size:14px">Requerente:</td>
-                            <td style="width:80%;font-size:14px;color:blue">@Model.Centro_Custo_Codigo-@Model.Centro_Custo_Nome</td>
+                            <td style="width:80%;font-size:14px;color:darkblue">@Model.Centro_Custo_Codigo-@Model.Centro_Custo_Nome</td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
@@ -109,17 +109,48 @@
                             <td style="width:80%; font-size: 14px">@Html.TextAreaFor(m => m.Observacao, new { @maxlength = "5000", @cols = 86, @rows = 5, @style = "resize:none;width:500px" })</td>
                         </tr>
                     </table>
-
                     
-
-                    <br />
-                    <div>
-                        <button type="button" id="btnCallModal" class="btn btn-primary" name="action" value="btnSearch"> <i class="fas fa-search"></i>&nbsp;Consultar</button>&nbsp;&nbsp;
-                        <button type="submit" id="btnNext" class="btn btn-success" name="action" value="btnSearch"> Próximo</button>
-                    </div>
-
-
                 </div>
+                <div class="card-header" >Endereço(s) de Ocorrência</div>
+                <div class="card-body">
+                    <table style="width:600px;" class="tblEndereco table-bordered table-condensed">
+                        <thead>
+                            <tr style="background-color:maroon;color:white">
+                                <td style="width: 0px; font-size: 14px;display:none">Código</td>
+                                <td style="width: 480px; font-size: 14px">Endereço</td>
+                                <td style="width: 70px; font-size: 14px">Número</td>
+                                <td style="width: 40px; font-size: 14px"></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <br /><br />
+                    <button type="button" id="btnCallModalEnd" class="btn btn-info" name="action" value="btnAddEnd"> <i class="fas fa-plus"></i>&nbsp;Adicionar</button>&nbsp;&nbsp;
+                </div>
+                <div class="card-header" >Documento(s) Necessário(s)</div>
+                <div class="card-body">
+                    <table style="width:600px;" class="tblEndereco table-bordered table-condensed">
+                        <thead>
+                            <tr style="background-color:maroon;color:white">
+                                <td style="width: 0px; font-size: 14px;display:none">Código</td>
+                                <td style="width: 450px; font-size: 14px">Documento</td>
+                                <td style="width: 90px; font-size: 14px">Entregue em</td>
+                                <td style="width: 60px; font-size: 14px"></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <br /><br />
+                    <button type="button" id="btnCallModalDoc" class="btn btn-info" name="action" value="btnAddDoc"> <i class="fas fa-plus"></i>&nbsp;Adicionar</button>&nbsp;&nbsp;
+                    <br /><br /><br /><br />
+                    <div style="text-align:center">
+                        <button type="button" id="btnCallModal" class="btn btn-success" name="action" value="btnSave">  <img src="~/Images/save.png" /> &nbsp;Gravar</button>&nbsp;&nbsp;
+                        <button type="submit" id="btnNext" class="btn btn-danger" name="action" value="btnCancel"><img src="~/Images/cancel2.png" /> &nbsp; Cancelar</button>
+                    </div>
+                </div>
+
                 <div class="card-footer">
                     @Html.ActionLink("Retornar ao menu de opções", "Cidadao_menu", "Cidadao", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })

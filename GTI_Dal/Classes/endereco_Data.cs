@@ -340,9 +340,10 @@ namespace GTI_Dal.Classes {
         }
 
         public Cepdb Retorna_CepDB(int Cep) {
+            string _cep = Cep.ToString().PadLeft(8, '0');
             using (GTI_Context db = new GTI_Context(_connection)) {
                 Cepdb _cepdb = null;
-                var sql= (from c in db.CepDB where c.Cep == Cep.ToString() select c).FirstOrDefault();
+                var sql= (from c in db.CepDB where c.Cep == _cep select c).FirstOrDefault();
 
                 if (sql != null) {
                     _cepdb = new Cepdb() {
@@ -369,9 +370,10 @@ namespace GTI_Dal.Classes {
         }
 
         public Cepdb Retorna_CepDB(int Cep,string Logradouro) {
+            string _cep = Cep.ToString().PadLeft(8, '0');
             Cepdb _cepdb = null;
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var sql = (from c in db.CepDB where c.Cep == Cep.ToString()  && c.Logradouro==Logradouro select c).FirstOrDefault();
+                var sql = (from c in db.CepDB where c.Cep == _cep  && c.Logradouro==Logradouro select c).FirstOrDefault();
                 if (sql != null) {
                     _cepdb = new Cepdb() {
                         Cep = sql.Cep,
@@ -420,8 +422,9 @@ namespace GTI_Dal.Classes {
         }
 
         public List<string> Retorna_CepDB_Logradouro(int Cep) {
+            string _cep = Cep.ToString().PadLeft(8, '0');
             using (GTI_Context db = new GTI_Context(_connection)) {
-                return (from c in db.CepDB where c.Cep == Cep.ToString() orderby c.Logradouro select c.Logradouro).ToList();
+                return (from c in db.CepDB where c.Cep == _cep orderby c.Logradouro select c.Logradouro).ToList();
             }
         }
 
@@ -439,11 +442,12 @@ namespace GTI_Dal.Classes {
 
 
         public Cidade Retorna_CepDB_Cidade(int Cep) {
+            string _cep = Cep.ToString().PadLeft(8, '0');
             Cidade reg = null;
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var sql= (from c in db.CepDB
                         join l in db.Cidade on new { p1 = c.Uf, p2 = (short)c.Cidadecodigo } equals new { p1 = l.Siglauf, p2 = l.Codcidade } into cl from l in cl.DefaultIfEmpty()
-                        where c.Cep == Cep.ToString() select new  { Siglauf = c.Uf, Codcidade = (short)c.Cidadecodigo, Desccidade = l.Desccidade }).FirstOrDefault();
+                        where c.Cep == _cep select new  { Siglauf = c.Uf, Codcidade = (short)c.Cidadecodigo, Desccidade = l.Desccidade }).FirstOrDefault();
                 if (sql != null) {
                     reg = new Cidade() {
                         Siglauf = sql.Siglauf,
@@ -463,11 +467,12 @@ namespace GTI_Dal.Classes {
         }
 
         public Bairro Retorna_CepDB_Bairro(int Cep) {
+            string _cep = Cep.ToString().PadLeft(8, '0');
             Bairro reg = null;
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var sql= (from c in db.CepDB
                         join l in db.Bairro on c.Bairrocodigo equals l.Codbairro into cl from l in cl.DefaultIfEmpty()
-                        where c.Cep == Cep.ToString() select new  { Siglauf = c.Uf, Codcidade = (short)c.Cidadecodigo, CodBairro= (short)c.Bairrocodigo ,Descbairro = l.Descbairro }).FirstOrDefault();
+                        where c.Cep == _cep select new  { Siglauf = c.Uf, Codcidade = (short)c.Cidadecodigo, CodBairro= (short)c.Bairrocodigo ,Descbairro = l.Descbairro }).FirstOrDefault();
                 if (sql != null) {
                     reg = new Bairro() {
                         Siglauf = sql.Siglauf,
