@@ -116,6 +116,11 @@ namespace GTI_MVC.Controllers {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
 
+            if (model.Assunto_Codigo == 0) {
+                ViewBag.Result = "Selecione um assunto válido!";
+                return View(model);
+            }
+
             Processo_bll processoRepository = new Processo_bll(_connection);
 
             return View(model);

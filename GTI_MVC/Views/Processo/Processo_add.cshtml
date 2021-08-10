@@ -13,7 +13,7 @@
     .actionlink:hover {
         color: darkgreen;
     }
-    
+
     .actionlink {
         color: darkslateblue;
     }
@@ -63,17 +63,33 @@
     .no-titlebar .ui-dialog-titlebar {
         display: none;
     }
+
     .uppercase {
         text-transform: uppercase
     }
 
     .ui-autocomplete {
-        font-size:13px;
+        font-size: 13px;
         border-radius: 0px;
+        border-color: maroon;
+    }
+
+    .highlight {
+        background-color: #FFFFAF;
+        color: Red;
+        font-weight: bold;
+        text-transform: uppercase
+    }
+
+    .ui-menu-item .ui-menu-item-wrapper.ui-state-active {
+        background: darkred !important;
+        font-weight: bold !important;
+        color: #ffffff !important;
     }
 </style>
 
 
+@{var res = @ViewBag.Result;}
 <div class="center" style="width:700px">
     @using (Html.BeginForm("Processo_add", "Processo", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
@@ -87,7 +103,7 @@
 
         <div class="container" style="width:670px">
             <div class="card">
-                <div class="card-header">Cadastro de novo processo</div>
+                <div class="card-header">Abrir um novo processo</div>
                 <div class="card-body">
                     <table style="width:600px">
                         <tr>
@@ -97,12 +113,12 @@
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px">Origem:</td>
-                            <td style="width:80%; font-size: 14px; color: blue">@Model.Tipo_Requerente<span style="color:black;padding-left:50px">Processo Físico?&nbsp; @Html.EditorFor(m => m.Fisico)</span> </td>
+                            <td style="width:80%; font-size: 14px; color: darkblue">@Model.Tipo_Requerente<span style="color:black;padding-left:50px">Processo Físico?&nbsp; @Html.EditorFor(m => m.Fisico)</span> </td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px">Assunto:</td>
-                            <td style="width:80%; font-size: 14px"><input type="text" id="searchInput" style="width:500px" /></td>
+                            <td style="width:80%; font-size: 14px"><input type="text" id="searchInput" style="width: 500px; " placeholder="Digite ao menos 3 caracteres..." /></td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
@@ -115,13 +131,7 @@
                             <td style="width:80%; font-size: 14px">@Html.TextAreaFor(m => m.Observacao, new { @maxlength = "5000", @cols = 86, @rows = 5, @style = "resize:none;width:500px" })</td>
                         </tr>
                     </table>
-                    <br /><br />
-                    <div>
-                        <label>Country Serach</label>
-
-                    </div>
-
-
+ 
                 </div>
                 <div class="card-header">Endereço(s) de Ocorrência</div>
                 <div class="card-body">
@@ -158,13 +168,12 @@
                     <button type="button" id="btnCallModalDoc" class="btn btn-info" name="action" value="btnAddDoc"> <i class="fas fa-plus"></i>&nbsp;Adicionar</button>&nbsp;&nbsp;
                     <br /><br /><br /><br />
                     <div style="text-align:center">
-                        <button type="button" id="btnCallModal" class="btn btn-success" name="action" value="btnSave">  <img src="~/Images/save.png" /> &nbsp;Gravar</button>&nbsp;&nbsp;
-                        <button type="submit" id="btnNext" class="btn btn-danger" name="action" value="btnCancel"><img src="~/Images/cancel2.png" /> &nbsp; Cancelar</button>
+                        <button type="submit" id="btnNext" class="btn btn-primary" name="action" value="btnNext">Gravar o processo</button>&nbsp;&nbsp;
                     </div>
                 </div>
 
                 <div class="card-footer">
-                    @Html.ActionLink("Retornar ao menu de opções", "Cidadao_menu", "Cidadao", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu de opções", "Processo_menu", "Processo", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
                 </div>
             </div>
@@ -173,13 +182,21 @@
         </div>
     }
 </div>
-
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
 
 
 @section scripts{
 
     <script type="text/javascript">
         $("#searchInput").autocomplete({
+            minLength:3,
             source: function (request, response) {
                 $.ajax({
                     url: '@Url.Action("Lista_Assunto","Processo")',
@@ -195,17 +212,67 @@
                     }
                 });
             }
-        });
+        }).data("ui-autocomplete")._renderItem = function (ul, item) {
+            var regx = new RegExp('(' + this.term + ')', 'ig');
+            var label = item.value.replace(regx, "<span class='highlight'>" + this.term + "</span>");
+            return $("<li/>").data("ui-autocomplete-item", item).append($("<a>").html(label)).appendTo(ul);
+        };;
 
+
+     
 
         $(document).ready(function () {
             $('#searchInput').on('autocompleteselect', function (e, ui) {
                 document.getElementById("Ass_Cod").value = ui.item.cod;
                 document.getElementById("Ass_Nome").value = ui.item.label;
             });
+
+             $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+
         });
 
-       
-       
+
+
     </script>
 }
