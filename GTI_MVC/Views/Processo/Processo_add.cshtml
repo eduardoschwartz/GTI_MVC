@@ -13,7 +13,7 @@
     .actionlink:hover {
         color: darkgreen;
     }
-
+    
     .actionlink {
         color: darkslateblue;
     }
@@ -66,7 +66,11 @@
     .uppercase {
         text-transform: uppercase
     }
-   
+
+    .ui-autocomplete {
+        font-size:13px;
+        border-radius: 0px;
+    }
 </style>
 
 
@@ -76,8 +80,10 @@
 
         @Html.HiddenFor(m => m.Centro_Custo_Codigo, new { @id = "CCusto_Codigo" })
         @Html.HiddenFor(m => m.Centro_Custo_Nome, new { @id = "CCusto_Nome" })
-        @Html.HiddenFor(m=>m.Tipo_Requerente)
-        @Html.HiddenFor(m=>m.Guid)    
+        @Html.HiddenFor(m => m.Assunto_Codigo, new { @id = "Ass_Cod" })
+        @Html.HiddenFor(m => m.Assunto_Nome, new { @id = "Ass_Nome" })
+        @Html.HiddenFor(m => m.Tipo_Requerente)
+        @Html.HiddenFor(m => m.Guid)
 
         <div class="container" style="width:670px">
             <div class="card">
@@ -96,7 +102,7 @@
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px">Assunto:</td>
-                            <td style="width:80%; font-size: 14px">@Html.DropDownListFor(m => Model.Assunto_Codigo, ViewBag.Lista_Assunto as SelectList, null, new { @id = "CCustoDropDown", @style = "font-weight:normal;width:500px;font-size:14px" })</td>
+                            <td style="width:80%; font-size: 14px"><input type="text" id="searchInput" style="width:500px" /></td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
@@ -109,9 +115,15 @@
                             <td style="width:80%; font-size: 14px">@Html.TextAreaFor(m => m.Observacao, new { @maxlength = "5000", @cols = 86, @rows = 5, @style = "resize:none;width:500px" })</td>
                         </tr>
                     </table>
-                    
+                    <br /><br />
+                    <div>
+                        <label>Country Serach</label>
+
+                    </div>
+
+
                 </div>
-                <div class="card-header" >Endereço(s) de Ocorrência</div>
+                <div class="card-header">Endereço(s) de Ocorrência</div>
                 <div class="card-body">
                     <table style="width:600px;" class="tblEndereco table-bordered table-condensed">
                         <thead>
@@ -128,7 +140,7 @@
                     <br /><br />
                     <button type="button" id="btnCallModalEnd" class="btn btn-info" name="action" value="btnAddEnd"> <i class="fas fa-plus"></i>&nbsp;Adicionar</button>&nbsp;&nbsp;
                 </div>
-                <div class="card-header" >Documento(s) Necessário(s)</div>
+                <div class="card-header">Documento(s) Necessário(s)</div>
                 <div class="card-body">
                     <table style="width:600px;" class="tblEndereco table-bordered table-condensed">
                         <thead>
@@ -167,9 +179,30 @@
 @section scripts{
 
     <script type="text/javascript">
+        $("#searchInput").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("Lista_Assunto","Processo")',
+                    dataType: "json",
+                    data: { search: $("#searchInput").val() },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Nome, value: item.Nome,cod: item.Codigo };
+                        }));
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Error");
+                    }
+                });
+            }
+        });
+
 
         $(document).ready(function () {
-
+            $('#searchInput').on('autocompleteselect', function (e, ui) {
+                document.getElementById("Ass_Cod").value = ui.item.cod;
+                document.getElementById("Ass_Nome").value = ui.item.label;
+            });
         });
 
        

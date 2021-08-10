@@ -121,5 +121,12 @@ namespace GTI_MVC.Controllers {
             return View(model);
         }
 
+        public JsonResult Lista_Assunto(string search) {
+            Processo_bll processoRepository = new Processo_bll(_connection);
+            List<Assunto> Lista_Search = processoRepository.Lista_Assunto(true, false, search);
+            return new JsonResult { Data = Lista_Search,JsonRequestBehavior= JsonRequestBehavior.AllowGet };
+        }
+
+
     }
 }
