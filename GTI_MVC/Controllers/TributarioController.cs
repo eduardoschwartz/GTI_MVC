@@ -486,7 +486,8 @@ namespace GTI_Mvc.Controllers {
                 Numero = _numero_certidao,
                 Nome_Requerente = _lista_certidao[0]._Nome,
                 Cpf_Cnpj = !string.IsNullOrWhiteSpace(model.CpfValue) ? model.CpfValue : model.CnpjValue,
-                Numero_Ano = _numero_certidao.ToString("00000") + "/" + _ano_certidao.ToString()
+                Numero_Ano = _numero_certidao.ToString("00000") + "/" + _ano_certidao.ToString(),
+                Tributo=_tributo
             };
             if (_tipo_Certidao == RetornoCertidaoDebito.Negativa) {
                 cert.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "-IN";
@@ -504,7 +505,8 @@ namespace GTI_Mvc.Controllers {
                 } else {
                     if (_tipo_Certidao == RetornoCertidaoDebito.NegativaPositiva) {
                         cert.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "-IS";
-//                        cert.Tributo = "Consta débito apurado contra o(a) mesmo(a) com referência a: " + _tributo + " que se encontram em sua exigibilidade suspensa, em razão de parcelamento dos débitos";
+                        cert.Tributo = _tributo;
+                        //                        cert.Tributo = "Consta débito apurado contra o(a) mesmo(a) com referência a: " + _tributo + " que se encontram em sua exigibilidade suspensa, em razão de parcelamento dos débitos";
                         _reportName = "CertidaoDebitoDocumentoPN.rpt";
                         _tipo_certidao = "Positiva com efeito negativa";
                         cert.Nao = "";

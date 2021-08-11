@@ -325,10 +325,7 @@
             } else {
                 return true;
             }
-
-           
         });
-
 
         $('#searchInput').on('autocompleteselect', function (e, ui) {
             document.getElementById("Ass_Cod").value = ui.item.cod;
@@ -348,22 +345,15 @@
             tr.append($('<td style="display:none">' + _cod + '</td>'));
             tr.append($('<td>' + _nome + '</td>'));
             tr.append($('<td>' + _num + '</td>'));
-            tr.append($('<td>  <input type="button" id="btnDelEnd" class="btnimage" title="Remover"/> </td>'));
+            tr.append($('<td>  <input type="button" id="btnDelEnd" class="btnimage" title="Remover" onclick="delRowEnd(this)"/> </td>'));
             $('#mainTableEnd').append(tr);
             $('#ModalEndereco').modal('hide');
-
         });
 
-        var TableEnd = document.getElementById('mainTableEnd');
-        TableEnd.addEventListener('click', function (e) {
-            var button = e.target;
-            var cell = button.parentNode;
-            var row = cell.parentNode;
-            var rowFirstCellText = row.querySelector('td').innerHTML;
-            /*alert('Clicked on row with <b>' + rowFirstCellText + '</b>')*/
-            row.remove();
-        }, false);
-        
+        function delRowEnd(x) {
+            document.getElementById("mainTableEnd").deleteRow(x.parentElement.parentElement.rowIndex);
+        }
+
         function OpenModalEnd() {
             document.getElementById("searchEndInput").value = '';
             document.getElementById("searchNumInput").value = '';
