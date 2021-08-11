@@ -105,6 +105,14 @@
         width: 16px;
         height: 16px;
     }
+
+    .btnimage2 {
+        border: 0 none;
+        background: none;
+        background-image: url('../../Images/ok.png');
+        width: 16px;
+        height: 16px;
+    }
 </style>
 
 @{
@@ -188,8 +196,6 @@
                         </tbody>
                     </table>
                     <br /><br />
-                    <button type="button" id="btnCallModalDoc" class="btn btn-info" onclick="OpenModalEnd()" style="height:32px"> <i class="fas fa-plus"></i>&nbsp;Adicionar</button>
-                    <br /><br /><br /><br />
                 </div>
                 <div class="card-footer" style="text-align:center;background-color:white">
                     <button type="button" id="btnNext" class="btn btn-primary" name="action" value="btnNext" style="height:32px" onclick="Gravar()">Gravar o processo</button>
@@ -281,9 +287,16 @@
             }
         });
 
-        $("#searchInput").on('change', function (){
-            $("#mainTableDoc tbody tr").remove(); //Clear tbody rows
+        $("#searchInput").on('blur', function () {
+            var _assCod = document.getElementById("Ass_Cod").value;
+            if (_assCod == "") {
+                $("#mainTableDoc tbody tr").remove(); //Clear tbody rows
+            }
         });
+        $("#searchInput").on('keydown', function () {
+            document.getElementById("Ass_Cod").value="";
+        });
+
 
         $("#searchInput").autocomplete({
             minLength:3,
@@ -291,6 +304,7 @@
                 $.ajax({
                     url: '@Url.Action("Lista_Assunto","Processo")',
                     dataType: "json",
+                    autoFocus: true,
                     data: { search: $("#searchInput").val() },
                     success: function (data) {
                         response($.map(data, function (item) {
@@ -326,6 +340,8 @@
                         var tr = $('<tr style="font-size: 14px" />');
                         tr.append($('<td style="display:none">' + _cod + '</td>'));
                         tr.append($('<td>' + _nome + '</td>'));
+                        tr.append($('<td>' + "" + '</td>'));
+                        tr.append($('<td>  <input type="button" id="btnEditDoc" class="btnimage2" title="Marcar como entregue" onclick="editRowDoc(this)"/>&nbsp;<input type="button" id="btnDelDoc" class="btnimage" title="Remover data" onclick="delRowDoc(this)"/> </td>'));
                         $('#mainTableDoc').append(tr);
                     }
                 }
@@ -384,6 +400,16 @@
             document.getElementById("mainTableEnd").deleteRow(x.parentElement.parentElement.rowIndex);
         }
 
+        function delRowDoc(x) {
+
+        }
+
+        function editRowDoc(x) {
+           /* document.getElementById("mainTableDoc").deleteRow(x.parentElement.parentElement.rowIndex);*/
+        }
+
+
+
         function OpenModalEnd() {
             document.getElementById("searchEndInput").value = '';
             document.getElementById("searchNumInput").value = '';
@@ -431,8 +457,16 @@
                 contentType: 'application/json',
                 data: JSON.stringify({Dados: dados}),
                 dataType: "json",
-                success: function (data) {
-                    alert("Processo gravado com sucesso!");
+                success: function (response) {
+                    if (response.success) {
+                        document.getElementById('lblMsg').innerHTML = "Processo gravado com sucesso!";
+                    } else {
+                        document.getElementById('lblMsg').innerHTML = response.responseText;
+                    }
+                    $('#msgBox1').dialog('open');
+                },
+                error: function (response) {
+                    alert("Error!!");
                 }
             });
 

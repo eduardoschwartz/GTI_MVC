@@ -140,13 +140,20 @@ namespace GTI_MVC.Controllers {
             return new JsonResult { Data = Lista_Search, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-
         public JsonResult Processo_addx(List<Processo2ViewModel> dados) {
+            if (dados[0].Assunto_Codigo == 0) {
+                return Json(new { success = false, responseText = "Selecione um assunto válido." }, JsonRequestBehavior.AllowGet);
+            }
+            
+            
             string reg = "";
             //foreach (TableEndereco _end in Lista_End) {
             //    reg += _end.Endereco;
             //}
-            return Json(reg);
+
+
+
+            return Json(new { success = true, responseText = "Processo gravado com sucesso!" }, JsonRequestBehavior.AllowGet);
         }
 
 
