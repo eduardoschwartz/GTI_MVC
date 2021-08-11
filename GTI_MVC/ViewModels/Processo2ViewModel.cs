@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GTI_Models.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -15,5 +16,15 @@ namespace GTI_Mvc.ViewModels {
         public string Assunto_Nome { get; set; }
         public string Complemento { get; set; }
         public string Observacao { get; set; }
+        public List<TableEndereco> Lista_Endereco { get; set; }
     }
+
+    public class TableEndereco {
+        public string Codigo { get; set; }
+        public string Endereco { get; set; }
+        public string Numero { get; set; }
+    }
+
+
+
 }

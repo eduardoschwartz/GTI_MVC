@@ -4,6 +4,7 @@ using GTI_Mvc;
 using GTI_Mvc.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Common.CommandTrees;
 using System.Web.Mvc;
 
 namespace GTI_MVC.Controllers {
@@ -110,26 +111,34 @@ namespace GTI_MVC.Controllers {
             return View(model);
         }
 
-        [Route("Processo_add")]
-        [HttpPost]
-        public ActionResult Processo_add(Processo2ViewModel model) {
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
+        //[Route("Processo_add")]
+        //[HttpPost]
+        //public ActionResult Processo_add(Processo2ViewModel model) {
+        //    if (Session["hashid"] == null)
+        //        return RedirectToAction("Login", "Home");
 
-            if (model.Assunto_Codigo == 0) {
-                ViewBag.Result = "Selecione um assunto válido!";
-                return View(model);
-            }
+        //    if (model.Assunto_Codigo == 0) {
+        //        ViewBag.Result = "Selecione um assunto válido!";
+        //        return View(model);
+        //    }
 
-            Processo_bll processoRepository = new Processo_bll(_connection);
+        //    Processo_bll processoRepository = new Processo_bll(_connection);
 
-            return View(model);
-        }
+        //    return View(model);
+        //}
 
         public JsonResult Lista_Assunto(string search) {
             Processo_bll processoRepository = new Processo_bll(_connection);
             List<Assunto> Lista_Search = processoRepository.Lista_Assunto(true, false, search);
             return new JsonResult { Data = Lista_Search,JsonRequestBehavior= JsonRequestBehavior.AllowGet };
+        }
+
+        public JsonResult Processo_addx(List<TableEndereco>ListaEnd,List<Processo2ViewModel> dados) {
+            string reg = "";
+            //foreach (TableEndereco _end in Lista_End) {
+            //    reg += _end.Endereco;
+            //}
+            return Json(reg);
         }
 
 

@@ -86,20 +86,45 @@
         font-weight: bold !important;
         color: #ffffff !important;
     }
+
+    ul.ui-autocomplete {
+        z-index: 1100;
+    }
+
+    .titulo {
+        background: maroon;
+        color: white;
+        font-weight: normal;
+        font-size: 13px;
+    }
+
+    .btnimage {
+        border: 0 none;
+        background: none;
+        background-image: url('../../Images/cancelar.gif');
+        width: 16px;
+        height: 16px;
+    }
 </style>
 
+@{
+    var res = @ViewBag.Result;
+}
 
-@{var res = @ViewBag.Result;}
 <div class="center" style="width:700px">
     @using (Html.BeginForm("Processo_add", "Processo", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
 
+        <input type="hidden" id="End_Cod">
+        <input type="hidden" id="End_Nome">
+
+        @Html.HiddenFor(m => m.Lista_Endereco, new { @id = "Tabela_Endereco" })
         @Html.HiddenFor(m => m.Centro_Custo_Codigo, new { @id = "CCusto_Codigo" })
         @Html.HiddenFor(m => m.Centro_Custo_Nome, new { @id = "CCusto_Nome" })
         @Html.HiddenFor(m => m.Assunto_Codigo, new { @id = "Ass_Cod" })
         @Html.HiddenFor(m => m.Assunto_Nome, new { @id = "Ass_Nome" })
         @Html.HiddenFor(m => m.Tipo_Requerente)
-        @Html.HiddenFor(m => m.Guid)
+        @Html.HiddenFor(m => m.Guid, new { @id = "Guid" })
 
         <div class="container" style="width:670px">
             <div class="card">
@@ -131,31 +156,30 @@
                             <td style="width:80%; font-size: 14px">@Html.TextAreaFor(m => m.Observacao, new { @maxlength = "5000", @cols = 86, @rows = 5, @style = "resize:none;width:500px" })</td>
                         </tr>
                     </table>
- 
                 </div>
                 <div class="card-header">Endereço(s) de Ocorrência</div>
                 <div class="card-body">
-                    <table style="width:600px;" class="tblEndereco table-bordered table-condensed">
+                    <table id="mainTableEnd" class="tbl table-bordered table-condensed " style="width:600px">
                         <thead>
                             <tr style="background-color:maroon;color:white">
-                                <td style="width: 0px; font-size: 14px;display:none">Código</td>
-                                <td style="width: 480px; font-size: 14px">Endereço</td>
-                                <td style="width: 70px; font-size: 14px">Número</td>
-                                <td style="width: 40px; font-size: 14px"></td>
+                                <th class="titulo" style="width:0px;display:none">Código</th>
+                                <th class="titulo" style="width:490px">Endereço</th>
+                                <th class="titulo" style="width:70px">Número</th>
+                                <th class="titulo" style="width:40px"></th>
                             </tr>
                         </thead>
-                        <tbody>
-                        </tbody>
+                        <tbody id="mainTableBodyEnd"></tbody>
                     </table>
+
                     <br /><br />
-                    <button type="button" id="btnCallModalEnd" class="btn btn-info" name="action" value="btnAddEnd"> <i class="fas fa-plus"></i>&nbsp;Adicionar</button>&nbsp;&nbsp;
+                    <button type="button" id="btnCallModalEnd" class="btn btn-info" onclick="OpenModalEnd()" style="height:32px"> <i class="fas fa-plus"></i>&nbsp;Adicionar</button>
                 </div>
                 <div class="card-header">Documento(s) Necessário(s)</div>
                 <div class="card-body">
                     <table style="width:600px;" class="tblEndereco table-bordered table-condensed">
                         <thead>
                             <tr style="background-color:maroon;color:white">
-                                <td style="width: 0px; font-size: 14px;display:none">Código</td>
+                                <td style="width: 80px; font-size: 14px;display:none">Código</td>
                                 <td style="width: 450px; font-size: 14px">Documento</td>
                                 <td style="width: 90px; font-size: 14px">Entregue em</td>
                                 <td style="width: 60px; font-size: 14px"></td>
@@ -165,11 +189,11 @@
                         </tbody>
                     </table>
                     <br /><br />
-                    <button type="button" id="btnCallModalDoc" class="btn btn-info" name="action" value="btnAddDoc"> <i class="fas fa-plus"></i>&nbsp;Adicionar</button>&nbsp;&nbsp;
+                    <button type="button" id="btnCallModalDoc" class="btn btn-info" onclick="OpenModalEnd()" style="height:32px"> <i class="fas fa-plus"></i>&nbsp;Adicionar</button>
                     <br /><br /><br /><br />
-                    <div style="text-align:center">
-                        <button type="submit" id="btnNext" class="btn btn-primary" name="action" value="btnNext">Gravar o processo</button>&nbsp;&nbsp;
-                    </div>
+                </div>
+                <div class="card-footer" style="text-align:center;background-color:white">
+                    <button type="button" id="btnNext" class="btn btn-primary" name="action" value="btnNext" style="height:32px" onclick="Gravar()">Gravar o processo</button>
                 </div>
 
                 <div class="card-footer">
@@ -177,11 +201,10 @@
                     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
                 </div>
             </div>
-
-
         </div>
     }
 </div>
+
 <div id="msgBox1" title="Atenção" style='display: none;'>
     <br />
     <label id="lblMsg"></label>
@@ -191,6 +214,25 @@
     <p>@ViewBag.Result</p>
 </div>
 
+<div class="modal fade" id="ModalEndereco" tabindex="-1" role="dialog" aria-hidden="true" >
+    <div class="modal-dialog" style="max-width: 590px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Informe o Endereço</span>
+
+            </div>
+            <div class="container"></div>
+            <div class="modal-body">
+                <span style="font-size:13px">Endereço:&nbsp;&nbsp;</span><input type="text" id="searchEndInput" style="width: 390px;font-size:13px " placeholder="Digite ao menos 3 caracteres..." /><span style="font-size:13px;padding-left:10px">
+                <span style="font-size:13px">Nº&nbsp;&nbsp;</span></span><input type="text" id="searchNumInput" style="width: 60px;font-size:13px" onKeyPress = "return formata(this, '§§§§', event)"  />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSelectEnd">  <i class="fas fa-check"></i>&nbsp;Selecionar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section scripts{
 
@@ -218,16 +260,31 @@
             return $("<li/>").data("ui-autocomplete-item", item).append($("<a>").html(label)).appendTo(ul);
         };;
 
-
-     
+        $("#searchEndInput").autocomplete({
+            minLength:3,
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("Lista_Endereco","Shared")',
+                    dataType: "json",
+                    data: { search: $("#searchEndInput").val() },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Endereco, value: item.Endereco, cod: item.Codlogradouro };
+                        }));
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Error");
+                    }
+                });
+            }
+        }).data("ui-autocomplete")._renderItem = function (ul, item) {
+            var regx = new RegExp('(' + this.term + ')', 'ig');
+            var label = item.value.replace(regx, "<span class='highlight'>" + this.term + "</span>");
+            return $("<li/>").data("ui-autocomplete-item", item).append($("<a>").html(label)).appendTo(ul);
+        };;
 
         $(document).ready(function () {
-            $('#searchInput').on('autocompleteselect', function (e, ui) {
-                document.getElementById("Ass_Cod").value = ui.item.cod;
-                document.getElementById("Ass_Nome").value = ui.item.label;
-            });
-
-             $('#msgBox1').dialog({
+            $('#msgBox1').dialog({
                 autoOpen: false,
                 resizable: false,
                 draggable: false,
@@ -242,7 +299,6 @@
                     }
                 }
             });
-
             $('#msgBoxBag').dialog({
                 autoOpen: false,
                 resizable: false,
@@ -270,9 +326,85 @@
                 return true;
             }
 
+           
         });
 
 
+        $('#searchInput').on('autocompleteselect', function (e, ui) {
+            document.getElementById("Ass_Cod").value = ui.item.cod;
+            document.getElementById("Ass_Nome").value = ui.item.label;
+        });
+
+        $('#searchEndInput').on('autocompleteselect', function (e, ui) {
+            document.getElementById("End_Cod").value = ui.item.cod;
+            document.getElementById("End_Nome").value = ui.item.label;
+        });
+
+        $("#btnSelectEnd").click(function () {
+            var tr = $('<tr style="font-size: 14px" />');
+            var _cod = document.getElementById("End_Cod").value;
+            var _nome = document.getElementById("End_Nome").value;
+            var _num = document.getElementById("searchNumInput").value;
+            tr.append($('<td style="display:none">' + _cod + '</td>'));
+            tr.append($('<td>' + _nome + '</td>'));
+            tr.append($('<td>' + _num + '</td>'));
+            tr.append($('<td>  <input type="button" id="btnDelEnd" class="btnimage" title="Remover"/> </td>'));
+            $('#mainTableEnd').append(tr);
+            $('#ModalEndereco').modal('hide');
+
+        });
+
+        var TableEnd = document.getElementById('mainTableEnd');
+        TableEnd.addEventListener('click', function (e) {
+            var button = e.target;
+            var cell = button.parentNode;
+            var row = cell.parentNode;
+            var rowFirstCellText = row.querySelector('td').innerHTML;
+            /*alert('Clicked on row with <b>' + rowFirstCellText + '</b>')*/
+            row.remove();
+        }, false);
+        
+        function OpenModalEnd() {
+            document.getElementById("searchEndInput").value = '';
+            document.getElementById("searchNumInput").value = '';
+            $('#ModalEndereco').modal({ backdrop: 'static', keyboard: false });
+        }
+
+        function Gravar() {
+            var _ass_cod = document.getElementById("Ass_Cod").value;
+            var _ass_nome = document.getElementById("Ass_Nome").value;
+            var _guid = document.getElementById("Guid").value;
+
+            var dados = new Array();
+            var reg = {};
+            reg.Assunto_Codigo = _ass_cod;
+            reg.Assunto_Nome = _ass_nome;
+            reg.Guid = _guid;
+            dados.push(reg);
+
+            var enderecos = new Array();
+            $("#mainTableEnd tbody tr").each(function () {
+                var row = $(this);
+                var end = {};
+                end.Codigo = row.find("td").eq(0).html();
+                end.Endereco = row.find("td").eq(1).html();
+                end.Numero = row.find("td").eq(2).html();
+                enderecos.push(end);
+            })
+            document.getElementById("Tabela_Endereco").value = enderecos;
+
+            $.ajax({
+                type: "POST",
+                url: "/Processo/Processo_addx",
+                contentType: 'application/json',
+                data: JSON.stringify({ ListaEnd: enderecos, Dados: dados }),
+                dataType: "json",
+                success: function (data) {
+                    alert(data);
+                }
+            });
+
+        }
 
     </script>
 }

@@ -388,7 +388,13 @@ namespace GTI_MVC.Controllers {
             return View(model);
         }
 
-       
+        public JsonResult Lista_Endereco(string search) {
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+            List<Logradouro> Lista_Search = enderecoRepository.Lista_Logradouro( search);
+            return new JsonResult { Data = Lista_Search, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+
 
     }
 }
