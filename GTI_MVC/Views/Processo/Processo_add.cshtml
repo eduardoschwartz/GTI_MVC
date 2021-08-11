@@ -118,12 +118,11 @@
         <input type="hidden" id="End_Cod">
         <input type="hidden" id="End_Nome">
 
-        @Html.HiddenFor(m => m.Lista_Endereco, new { @id = "Tabela_Endereco" })
         @Html.HiddenFor(m => m.Centro_Custo_Codigo, new { @id = "CCusto_Codigo" })
         @Html.HiddenFor(m => m.Centro_Custo_Nome, new { @id = "CCusto_Nome" })
         @Html.HiddenFor(m => m.Assunto_Codigo, new { @id = "Ass_Cod" })
         @Html.HiddenFor(m => m.Assunto_Nome, new { @id = "Ass_Nome" })
-        @Html.HiddenFor(m => m.Tipo_Requerente)
+        @Html.HiddenFor(m => m.Tipo_Requerente, new { @id = "Tipo_Requerente" })
         @Html.HiddenFor(m => m.Guid, new { @id = "Guid" })
 
         <div class="container" style="width:670px">
@@ -138,7 +137,7 @@
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px">Origem:</td>
-                            <td style="width:80%; font-size: 14px; color: darkblue">@Model.Tipo_Requerente<span style="color:black;padding-left:50px">Processo Físico?&nbsp; @Html.EditorFor(m => m.Fisico)</span> </td>
+                            <td style="width:80%; font-size: 14px; color: darkblue">@Model.Tipo_Requerente<span style="color:black;padding-left:50px">Processo Físico?&nbsp; @Html.EditorFor(m => m.Fisico,new { @id="fisico"})</span> </td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
@@ -148,12 +147,12 @@
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px">Complemento:</td>
-                            <td style="width:80%; font-size: 14px">@Html.TextBoxFor(m => m.Complemento, new { @style = "width:500px" })</td>
+                            <td style="width:80%; font-size: 14px">@Html.TextBoxFor(m => m.Complemento, new {@id="complemento",  @style = "width:500px" })</td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px;vertical-align:top">Observação:</td>
-                            <td style="width:80%; font-size: 14px">@Html.TextAreaFor(m => m.Observacao, new { @maxlength = "5000", @cols = 86, @rows = 5, @style = "resize:none;width:500px" })</td>
+                            <td style="width:80%; font-size: 14px">@Html.TextAreaFor(m => m.Observacao, new {@id="observacao", @maxlength = "5000", @cols = 86, @rows = 5, @style = "resize:none;width:500px" })</td>
                         </tr>
                     </table>
                 </div>
@@ -176,13 +175,13 @@
                 </div>
                 <div class="card-header">Documento(s) Necessário(s)</div>
                 <div class="card-body">
-                    <table style="width:600px;" class="tblEndereco table-bordered table-condensed">
+                    <table id="mainTableDoc" style="width:600px;" class="tbl table-bordered table-condensed">
                         <thead>
                             <tr style="background-color:maroon;color:white">
-                                <td style="width: 80px; font-size: 14px;display:none">Código</td>
-                                <td style="width: 450px; font-size: 14px">Documento</td>
-                                <td style="width: 90px; font-size: 14px">Entregue em</td>
-                                <td style="width: 60px; font-size: 14px"></td>
+                                <td style="width: 0px; font-size: 14px;display:none">Código</td>
+                                <td style="width: 470px; font-size: 14px">Documento</td>
+                                <td style="width: 90px; font-size: 14px;text-align:center">Entregue em</td>
+                                <td style="width: 40px; font-size: 14px"></td>
                             </tr>
                         </thead>
                         <tbody>
@@ -209,6 +208,7 @@
     <br />
     <label id="lblMsg"></label>
 </div>
+
 <div id="msgBoxBag" title="Atenção" style='display: none;'>
     <br />
     <p>@ViewBag.Result</p>
@@ -237,52 +237,6 @@
 @section scripts{
 
     <script type="text/javascript">
-        $("#searchInput").autocomplete({
-            minLength:3,
-            source: function (request, response) {
-                $.ajax({
-                    url: '@Url.Action("Lista_Assunto","Processo")',
-                    dataType: "json",
-                    data: { search: $("#searchInput").val() },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return { label: item.Nome, value: item.Nome,cod: item.Codigo };
-                        }));
-                    },
-                    error: function (xhr, status, error) {
-                        alert("Error");
-                    }
-                });
-            }
-        }).data("ui-autocomplete")._renderItem = function (ul, item) {
-            var regx = new RegExp('(' + this.term + ')', 'ig');
-            var label = item.value.replace(regx, "<span class='highlight'>" + this.term + "</span>");
-            return $("<li/>").data("ui-autocomplete-item", item).append($("<a>").html(label)).appendTo(ul);
-        };;
-
-        $("#searchEndInput").autocomplete({
-            minLength:3,
-            source: function (request, response) {
-                $.ajax({
-                    url: '@Url.Action("Lista_Endereco","Shared")',
-                    dataType: "json",
-                    data: { search: $("#searchEndInput").val() },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return { label: item.Endereco, value: item.Endereco, cod: item.Codlogradouro };
-                        }));
-                    },
-                    error: function (xhr, status, error) {
-                        alert("Error");
-                    }
-                });
-            }
-        }).data("ui-autocomplete")._renderItem = function (ul, item) {
-            var regx = new RegExp('(' + this.term + ')', 'ig');
-            var label = item.value.replace(regx, "<span class='highlight'>" + this.term + "</span>");
-            return $("<li/>").data("ui-autocomplete-item", item).append($("<a>").html(label)).appendTo(ul);
-        };;
-
         $(document).ready(function () {
             $('#msgBox1').dialog({
                 autoOpen: false,
@@ -327,10 +281,79 @@
             }
         });
 
+        $("#searchInput").on('change', function (){
+            $("#mainTableDoc tbody tr").remove(); //Clear tbody rows
+        });
+
+        $("#searchInput").autocomplete({
+            minLength:3,
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("Lista_Assunto","Processo")',
+                    dataType: "json",
+                    data: { search: $("#searchInput").val() },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Nome, value: item.Nome,cod: item.Codigo };
+                        }));
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Error");
+                    }
+                });
+            }
+        }).data("ui-autocomplete")._renderItem = function (ul, item) {
+            var regx = new RegExp('(' + this.term + ')', 'ig');
+            var label = item.value.replace(regx, "<span class='highlight'>" + this.term + "</span>");
+            return $("<li/>").data("ui-autocomplete-item", item).append($("<a>").html(label)).appendTo(ul);
+        };;
+
         $('#searchInput').on('autocompleteselect', function (e, ui) {
             document.getElementById("Ass_Cod").value = ui.item.cod;
             document.getElementById("Ass_Nome").value = ui.item.label;
+            $("#mainTableDoc tbody tr").remove(); //Clear tbody rows
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Lista_Doc","Processo")',
+                dataType: "json",
+                data: { assunto: ui.item.cod },
+                success: function (data) {
+                    var len = data.length;
+                    for (var i = 0; i < len; i++) {
+                        var _cod = data[i].Codigo;
+                        var _nome = data[i].Nome;
+                        var tr = $('<tr style="font-size: 14px" />');
+                        tr.append($('<td style="display:none">' + _cod + '</td>'));
+                        tr.append($('<td>' + _nome + '</td>'));
+                        $('#mainTableDoc').append(tr);
+                    }
+                }
+            })
         });
+
+        $("#searchEndInput").autocomplete({
+            minLength:3,
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("Lista_Endereco","Shared")',
+                    dataType: "json",
+                    data: { search: $("#searchEndInput").val() },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Endereco, value: item.Endereco, cod: item.Codlogradouro };
+                        }));
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Error");
+                    }
+                });
+            }
+        }).data("ui-autocomplete")._renderItem = function (ul, item) {
+            var regx = new RegExp('(' + this.term + ')', 'ig');
+            var label = item.value.replace(regx, "<span class='highlight'>" + this.term + "</span>");
+            return $("<li/>").data("ui-autocomplete-item", item).append($("<a>").html(label)).appendTo(ul);
+        };;
 
         $('#searchEndInput').on('autocompleteselect', function (e, ui) {
             document.getElementById("End_Cod").value = ui.item.cod;
@@ -342,12 +365,19 @@
             var _cod = document.getElementById("End_Cod").value;
             var _nome = document.getElementById("End_Nome").value;
             var _num = document.getElementById("searchNumInput").value;
-            tr.append($('<td style="display:none">' + _cod + '</td>'));
-            tr.append($('<td>' + _nome + '</td>'));
-            tr.append($('<td>' + _num + '</td>'));
-            tr.append($('<td>  <input type="button" id="btnDelEnd" class="btnimage" title="Remover" onclick="delRowEnd(this)"/> </td>'));
-            $('#mainTableEnd').append(tr);
-            $('#ModalEndereco').modal('hide');
+            if (_num == "") {
+                _num = 0;
+            }
+            if (_cod == "" || parseInt(_cod) == 0) {
+                alert("Selecione um endereço válido!");
+            } else {
+                tr.append($('<td style="display:none">' + _cod + '</td>'));
+                tr.append($('<td>' + _nome + '</td>'));
+                tr.append($('<td>' + _num + '</td>'));
+                tr.append($('<td>  <input type="button" id="btnDelEnd" class="btnimage" title="Remover" onclick="delRowEnd(this)"/> </td>'));
+                $('#mainTableEnd').append(tr);
+                $('#ModalEndereco').modal('hide');
+            }
         });
 
         function delRowEnd(x) {
@@ -363,14 +393,13 @@
         function Gravar() {
             var _ass_cod = document.getElementById("Ass_Cod").value;
             var _ass_nome = document.getElementById("Ass_Nome").value;
+            var _ccusto_cod = document.getElementById("CCusto_Codigo").value;
+            var _ccusto_nome = document.getElementById("CCusto_Nome").value;
             var _guid = document.getElementById("Guid").value;
-
-            var dados = new Array();
-            var reg = {};
-            reg.Assunto_Codigo = _ass_cod;
-            reg.Assunto_Nome = _ass_nome;
-            reg.Guid = _guid;
-            dados.push(reg);
+            var _tipo_req = document.getElementById("Tipo_Requerente").value;
+            var _compl = document.getElementById("complemento").value;
+            var _obs = document.getElementById("observacao").value;
+            var _fisicoValue = $('#fisico:checked').val();
 
             var enderecos = new Array();
             $("#mainTableEnd tbody tr").each(function () {
@@ -381,16 +410,29 @@
                 end.Numero = row.find("td").eq(2).html();
                 enderecos.push(end);
             })
-            document.getElementById("Tabela_Endereco").value = enderecos;
+
+            var dados = new Array();
+            var reg = {};
+            reg.Assunto_Codigo = _ass_cod;
+            reg.Assunto_Nome = _ass_nome;
+            reg.Centro_Custo_Codigo = _ccusto_cod;
+            reg.Centro_Custo_Nome = _ccusto_nome;
+            reg.Guid = _guid;
+            reg.Tipo_Requerente = _tipo_req;
+            reg.Complemento = _compl;
+            reg.Observacao = _obs;
+            reg.Fisico = _fisicoValue;
+            reg.Lista_Endereco = enderecos;
+            dados.push(reg);
 
             $.ajax({
                 type: "POST",
                 url: "/Processo/Processo_addx",
                 contentType: 'application/json',
-                data: JSON.stringify({ ListaEnd: enderecos, Dados: dados }),
+                data: JSON.stringify({Dados: dados}),
                 dataType: "json",
                 success: function (data) {
-                    alert(data);
+                    alert("Processo gravado com sucesso!");
                 }
             });
 

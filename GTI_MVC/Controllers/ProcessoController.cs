@@ -133,7 +133,15 @@ namespace GTI_MVC.Controllers {
             return new JsonResult { Data = Lista_Search,JsonRequestBehavior= JsonRequestBehavior.AllowGet };
         }
 
-        public JsonResult Processo_addx(List<TableEndereco>ListaEnd,List<Processo2ViewModel> dados) {
+        public JsonResult Lista_Doc(string assunto) {
+            short _codAss = Convert.ToInt16(assunto);
+            Processo_bll processoRepository = new Processo_bll(_connection);
+            List<AssuntoDocStruct> Lista_Search = processoRepository.Lista_Assunto_Documento(_codAss);
+            return new JsonResult { Data = Lista_Search, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+
+        public JsonResult Processo_addx(List<Processo2ViewModel> dados) {
             string reg = "";
             //foreach (TableEndereco _end in Lista_End) {
             //    reg += _end.Endereco;

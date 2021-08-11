@@ -1745,8 +1745,10 @@ namespace GTI_Dal.Classes {
                                 break;
                             }
                         }
-                        if (!bFind)
-                            alArrayParceladoAVencer.Add(sDescTmp);
+                        if (!bFind) {
+                            if (item.Codtributo != 26 && item.Codtributo != 90 && item.Codtributo != 112 && item.Codtributo != 113 && item.Codtributo != 585 && item.Codtributo != 587 && item.Codtributo != 24 && item.Codtributo != 28)
+                                alArrayParceladoAVencer.Add(sDescTmp);
+                        }
                     }
                 }
 
