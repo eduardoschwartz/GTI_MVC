@@ -5,11 +5,24 @@ using GTI_Mvc.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Common.CommandTrees;
+using System.Web.Helpers;
 using System.Web.Mvc;
 
 namespace GTI_MVC.Controllers {
     public class ProcessoController : Controller    {
         private readonly string _connection = "GTIconnectionTeste";
+        [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+        public class ValidateJsonAntiForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter {
+            public void OnAuthorization(AuthorizationContext filterContext) {
+                if (filterContext == null) {
+                    throw new ArgumentNullException("filterContext");
+                }
+
+                var httpContext = filterContext.HttpContext;
+                var cookie = httpContext.Request.Cookies[AntiForgeryConfig.CookieName];
+                AntiForgery.Validate(cookie != null ? cookie.Value : null, httpContext.Request.Headers["__RequestVerificationToken"]);
+            }
+        }
 
         [Route("Processo_menu")]
         [HttpGet]
@@ -35,8 +48,8 @@ namespace GTI_MVC.Controllers {
         }
 
         [Route("Processo_tp")]
+        [ValidateAntiForgeryToken]
         [HttpPost]
-
         public ActionResult Processo_tp(Processo2ViewModel model) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
@@ -100,6 +113,10 @@ namespace GTI_MVC.Controllers {
             Processo_bll processoRepository = new Processo_bll(_connection);
             Processo_web _proc = processoRepository.Retorna_Processo_Web(p);
 
+            if (_proc == null) {
+                return RedirectToAction("Processo_tp", "Processo");
+            }
+
             List<Assunto> ListaAssunto= processoRepository.Lista_Assunto(true, false, "");
             ViewBag.Lista_Assunto= new SelectList(ListaAssunto, "Codigo", "Nome");
 
@@ -140,18 +157,18 @@ namespace GTI_MVC.Controllers {
             return new JsonResult { Data = Lista_Search, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        public JsonResult Processo_addx(List<Processo2ViewModel> dados) {
+        [ValidateJsonAntiForgeryTokenAttribute]
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult Processo_addx(List<Processo2ViewModel> dados) {
             if (dados[0].Assunto_Codigo == 0) {
                 return Json(new { success = false, responseText = "Selecione um assunto válido." }, JsonRequestBehavior.AllowGet);
             }
-            
-            
+                       
             string reg = "";
             //foreach (TableEndereco _end in Lista_End) {
             //    reg += _end.Endereco;
             //}
-
-
 
             return Json(new { success = true, responseText = "Processo gravado com sucesso!" }, JsonRequestBehavior.AllowGet);
         }

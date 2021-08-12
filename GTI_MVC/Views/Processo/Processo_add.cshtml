@@ -341,7 +341,7 @@
                         tr.append($('<td style="display:none">' + _cod + '</td>'));
                         tr.append($('<td>' + _nome + '</td>'));
                         tr.append($('<td>' + "" + '</td>'));
-                        tr.append($('<td>  <input type="button" id="btnEditDoc" class="btnimage2" title="Marcar como entregue" onclick="editRowDoc(this)"/>&nbsp;<input type="button" id="btnDelDoc" class="btnimage" title="Remover data" onclick="delRowDoc(this)"/> </td>'));
+                        tr.append($('<td>  <input type="button" id="btnEditDoc" class="btnimage2" title="Marcar como entregue" onclick="editRowDoc(this)"/>&nbsp;<input type="button" id="btnDelDoc" class="btnimage" title="Remover data" onclick="delDataDoc(this)"/> </td>'));
                         $('#mainTableDoc').append(tr);
                     }
                 }
@@ -400,15 +400,13 @@
             document.getElementById("mainTableEnd").deleteRow(x.parentElement.parentElement.rowIndex);
         }
 
-        function delRowDoc(x) {
+        function delDataDoc(x) {
 
         }
 
         function editRowDoc(x) {
            /* document.getElementById("mainTableDoc").deleteRow(x.parentElement.parentElement.rowIndex);*/
         }
-
-
 
         function OpenModalEnd() {
             document.getElementById("searchEndInput").value = '';
@@ -417,6 +415,7 @@
         }
 
         function Gravar() {
+            
             var _ass_cod = document.getElementById("Ass_Cod").value;
             var _ass_nome = document.getElementById("Ass_Nome").value;
             var _ccusto_cod = document.getElementById("CCusto_Codigo").value;
@@ -426,6 +425,7 @@
             var _compl = document.getElementById("complemento").value;
             var _obs = document.getElementById("observacao").value;
             var _fisicoValue = $('#fisico:checked').val();
+
 
             var enderecos = new Array();
             $("#mainTableEnd tbody tr").each(function () {
@@ -451,11 +451,16 @@
             reg.Lista_Endereco = enderecos;
             dados.push(reg);
 
+            var token = $('input[name="__RequestVerificationToken"]').val();
+            var headers = {};
+            headers['__RequestVerificationToken'] = token;
+
             $.ajax({
                 type: "POST",
                 url: "/Processo/Processo_addx",
+                headers: headers,
                 contentType: 'application/json',
-                data: JSON.stringify({Dados: dados}),
+                data: JSON.stringify({ Dados: dados}),
                 dataType: "json",
                 success: function (response) {
                     if (response.success) {
@@ -465,8 +470,8 @@
                     }
                     $('#msgBox1').dialog('open');
                 },
-                error: function (response) {
-                    alert("Error!!");
+                error: function (xhr, status, error) {
+                    alert(error);
                 }
             });
 
