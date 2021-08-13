@@ -22,5 +22,23 @@ namespace GTI_Bll.Classes {
             return obj.RetornaEmployee(id);
         }
 
+        public Exception SaveEmployee(employees employee) {
+            Employee_Data obj = new Employee_Data(_connection);
+            Exception ex = obj.SaveEmployee(employee);
+            return ex;
+        }
+
+        public void DeleteEmployee(int id) {
+            Employee_Data obj = new Employee_Data(_connection);
+            obj.DeleteEmployee(id);
+            return;
+        }
+
+        public Exception UpdateEmployee(int id,employees employee) {
+            Employee_Data obj = new Employee_Data(_connection);
+            Exception ex = obj.UpdateEmployee(id,employee);
+            return ex;
+        }
+
     }
 }

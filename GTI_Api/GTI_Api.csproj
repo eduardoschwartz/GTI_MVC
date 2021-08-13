@@ -52,6 +52,12 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="GTI_Bll">
+      <HintPath>..\GTI_Bll\bin\Debug\GTI_Bll.dll</HintPath>
+    </Reference>
+    <Reference Include="GTI_Models">
+      <HintPath>..\GTI_Models\bin\Debug\GTI_Models.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -269,16 +275,6 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GTI_Bll\GTI_Bll.csproj">
-      <Project>{9b7b83db-4417-4143-b465-52fe4870d2e0}</Project>
-      <Name>GTI_Bll</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GTI_Models\GTI_Models.csproj">
-      <Project>{859b188d-0d59-418e-af77-5235b79087f4}</Project>
-      <Name>GTI_Models</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -164,7 +164,9 @@ namespace GTI_MVC.Controllers {
             if (dados[0].Assunto_Codigo == 0) {
                 return Json(new { success = false, responseText = "Selecione um assunto válido." }, JsonRequestBehavior.AllowGet);
             }
-                       
+
+
+
             string reg = "";
             //foreach (TableEndereco _end in Lista_End) {
             //    reg += _end.Endereco;
