@@ -4,9 +4,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using GTI_Bll.Classes;
+using GTI_Models.Models;
 
 namespace GTI_Api.Controllers {
-    public class ValuesController : ApiController {
+    public class EmployeeController : ApiController {
+        private readonly string _connection = "GTIconnection";
+
+
         // GET api/values
         public IEnumerable<string> Get() {
             return new string[] { "value1", "value5" };
@@ -14,7 +19,8 @@ namespace GTI_Api.Controllers {
 
         // GET api/values/5
         public string Get(int id) {
-            return "value";
+            Employee_bll employeeRepository = new Employee_bll(_connection);
+            return employeeRepository.RetornaEmployee(id).FirstName;
         }
 
         // POST api/values
