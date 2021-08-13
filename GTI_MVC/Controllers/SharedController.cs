@@ -394,7 +394,11 @@ namespace GTI_MVC.Controllers {
             return new JsonResult { Data = Lista_Search, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-
+        [Route("Teste_Pix")]
+        [HttpGet]
+        public ActionResult Teste_Pix(string c, string p) {
+            return View();
+        }
 
     }
 }

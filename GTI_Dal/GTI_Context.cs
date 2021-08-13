@@ -212,5 +212,6 @@ namespace GTI_Dal {
         public DbSet<Auto_infracao_obra> Auto_Infracao_Obra { get; set; }
         public DbSet<Processo_web> Processo_Web { get; set; }
         public DbSet<SpLista_Terreno_Cip> SpLista_Terreno_Cip { get; set; }
+        public DbSet<employees> Employees { get; set; }
     }
 }

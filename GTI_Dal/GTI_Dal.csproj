@@ -106,6 +106,7 @@
     <Compile Include="Classes\mobreq_Data.cs" />
     <Compile Include="Classes\parcelamento_Data.cs" />
     <Compile Include="Classes\redesim_Data.cs" />
+    <Compile Include="Classes\employee_Data.cs" />
     <Compile Include="Integrativa_Context.cs" />
     <Compile Include="Classes\sistema_Data.cs" />
     <Compile Include="Classes\tributario_Data.cs" />
