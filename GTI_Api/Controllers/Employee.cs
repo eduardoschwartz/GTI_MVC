@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using GTI_Bll.Classes;
 using GTI_Models.Models;
+using WebGrease;
 
 namespace GTI_Api.Controllers {
     public class EmployeeController : ApiController {
@@ -14,9 +15,20 @@ namespace GTI_Api.Controllers {
 
         // GET api/values
         [HttpGet]
-        public IEnumerable<employees> List_Employees() {
+        public HttpResponseMessage Lista_Employees(string gender="All") {
             Employee_bll employeeRepository = new Employee_bll(_connection);
-            return employeeRepository.ListaEmployee().ToList();
+            IEnumerable<employees>Lista= employeeRepository.ListaEmployee().ToList();
+
+            switch (gender.ToLower()) {
+                case "all":
+                    return Request.CreateResponse(HttpStatusCode.OK, Lista);
+                case "male":
+                    return Request.CreateResponse(HttpStatusCode.OK, Lista.Where(c => c.Gender.ToLower()=="male"));
+                case "female":
+                    return Request.CreateResponse(HttpStatusCode.OK, Lista.Where(c => c.Gender.ToLower() == "female"));
+                default:
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Value for gender must be All, Male or Female. " + gender + " is invalid.");
+            }
         }
 
         // GET api/values/5

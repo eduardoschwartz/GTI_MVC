@@ -14,12 +14,10 @@ namespace GTI_Dal.Classes {
             _connection = sConnection;
         }
 
-
         public IEnumerable<employees> ListaEmployee() {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 return db.Employees.ToList();
             }
-
         }
 
         public employees RetornaEmployee(int id) {
