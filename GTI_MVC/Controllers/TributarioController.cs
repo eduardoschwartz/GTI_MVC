@@ -613,6 +613,7 @@ namespace GTI_Mvc.Controllers {
             bool _existe;
             string _nome,_cpfcnpj;
             if (model.Documento.Length < 16) {
+//                _documento = Convert.ToInt32(model.Documento);
                 ViewBag.Result = "Nº de documento inválido.";
                 return View(model);
             } else

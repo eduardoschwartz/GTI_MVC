@@ -1848,28 +1848,32 @@ namespace GTI_Dal.Classes {
                            join b in db.Banco on m.Codbanco equals b.Codbanco into bm from b in bm.DefaultIfEmpty()
                            where m.Numdocumento == nNumDocumento select new DebitoPagoStruct { Ano = m.Anoexercicio,Banco_Codigo=m.Codbanco,Banco_Nome=b.Nomebanco,
                            Codigo=m.Codreduzido,Codigo_Agencia=m.Codagencia,Complemento=m.Codcomplemento,Data_Pagamento=m.Datapagamento,Data_Recebimento=m.Datarecebimento,
-                           Lancamento=m.Codlancamento,Parcela=m.Numparcela,Restituido=m.Restituido,Sequencia=m.Seqlancamento,Sequencia_Pagamento=m.Seqpag,Valor_Pago=m.Valorpago,Valor_Pago_Real=m.Valorpagoreal});
+                           Lancamento=m.Codlancamento,Parcela=m.Numparcela,Restituido=m.Restituido,Sequencia=m.Seqlancamento,Sequencia_Pagamento=m.Seqpag,Valor_Pago=m.Valorpago,Valor_Pago_Real=m.Valorpagoreal}).ToList();
 
+                ret = new DebitoPagoStruct {
+                    Codigo = reg[0].Codigo,
+                    Ano = reg[0].Ano,
+                    Banco_Codigo = reg[0].Banco_Codigo,
+                    Banco_Nome = reg[0].Banco_Nome,
+                    Codigo_Agencia = reg[0].Codigo_Agencia,
+                    Complemento = reg[0].Complemento,
+                    Data_Pagamento = reg[0].Data_Pagamento,
+                    Data_Recebimento = reg[0].Data_Recebimento,
+                    Lancamento = reg[0].Lancamento,
+                    Numero_Documento = reg[0].Numero_Documento,
+                    Parcela = reg[0].Parcela,
+                    Restituido = reg[0].Restituido,
+                    Sequencia = reg[0].Sequencia,
+                    Sequencia_Pagamento = reg[0].Sequencia_Pagamento
+                };
+
+                decimal _decimalv1=0 , _decimalv2=0 ;
                 foreach (DebitoPagoStruct item in reg) {
-                    ret = new DebitoPagoStruct {
-                        Codigo = item.Codigo,
-                        Ano = item.Ano,
-                        Banco_Codigo = item.Banco_Codigo,
-                        Banco_Nome = item.Banco_Nome,
-                        Codigo_Agencia = item.Codigo_Agencia,
-                        Complemento = item.Complemento,
-                        Data_Pagamento = item.Data_Pagamento,
-                        Data_Recebimento = item.Data_Recebimento,
-                        Lancamento = item.Lancamento,
-                        Numero_Documento = item.Numero_Documento,
-                        Parcela = item.Parcela,
-                        Restituido = item.Restituido,
-                        Sequencia = item.Sequencia,
-                        Sequencia_Pagamento = item.Sequencia_Pagamento,
-                        Valor_Pago = item.Valor_Pago,
-                        Valor_Pago_Real = item.Valor_Pago_Real
-                    };
-                }           
+                   _decimalv1 += item.Valor_Pago;
+                   _decimalv2 += Convert.ToDecimal(item.Valor_Pago_Real);
+                }
+                ret.Valor_Pago = _decimalv1;
+                ret.Valor_Pago_Real = _decimalv2;
 
                 return ret;
             }
