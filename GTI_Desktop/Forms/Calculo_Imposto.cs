@@ -13,7 +13,7 @@ namespace GTI_Desktop.Forms {
         string _connection = gtiCore.Connection_Name();
         string _path = @"c:\cadastro\bin\";
         int _ano = 2021;
-        int _documento = 19121190;
+        int _documento = 19126490;
         decimal _ipca = (decimal)3.1352;
  
         private enum Tipo_imposto {
@@ -1037,15 +1037,15 @@ namespace GTI_Desktop.Forms {
 
                 _qtde_laminas += 3;
 
-                    //parcela única
-                    string _linha = Codigo + "#" + _ano + "#79#0#0#0#18#" + aVencimento[0].ToString("dd/MM/yyyy") + "#" + _dataBase;
-                    fs1.WriteLine(_linha);
-                    _documento++;
+                    ////parcela única (não existe)
+                    //string _linha = Codigo + "#" + _ano + "#79#0#0#0#18#" + aVencimento[0].ToString("dd/MM/yyyy") + "#" + _dataBase;
+                    //fs1.WriteLine(_linha);
+                    //_documento++;
 
                     //parcelas normais
                     for (int _parcela = 1; _parcela <= 3; _parcela++) {
                         string _vencto = aVencimento[_parcela - 1].ToString("dd/MM/yyyy");
-                        _linha = Codigo + "#" + _ano + "#79#0#" + _parcela + "#0#18#" + _vencto + "#" + _dataBase;
+                        string _linha = Codigo + "#" + _ano + "#79#0#" + _parcela + "#0#18#" + _vencto + "#" + _dataBase;
                         fs1.WriteLine(_linha);
                         _linha = Codigo + "#" + _ano + "#79#0#" + _parcela + "#0#669#" + _valor_parcela.ToString("#0.00");
                         fs2.WriteLine(_linha);

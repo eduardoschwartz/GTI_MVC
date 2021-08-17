@@ -17,7 +17,7 @@
     <br />
     <br />
 
-    @using (Html.BeginForm("Pagto_pix", "Shared", FormMethod.Post, new { @id = "MainForm" })) {
+    @using (Html.BeginForm("Pagto_pix", "Shared", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data"  })) {
         @Html.AntiForgeryToken()
         <div id="divCode">
         </div>
@@ -34,6 +34,7 @@
 
 
 <script>
+    
     $("#btnGerar").click(function () {
         /*****GERAR TOKEN******/
         var _token;
@@ -42,7 +43,7 @@
             headers: {
                 "Authorization": "Basic ZXlKcFpDSTZJalV5TnpoaE16WXRPVEJrTUMwME9UUXhMV0l4WXpVdE1pSXNJbU52WkdsbmIxQjFZbXhwWTJGa2IzSWlPakFzSW1OdlpHbG5iMU52Wm5SM1lYSmxJam95TURjMk5pd2ljMlZ4ZFdWdVkybGhiRWx1YzNSaGJHRmpZVzhpT2pGOTpleUpwWkNJNklqaGhZbVZqTUNJc0ltTnZaR2xuYjFCMVlteHBZMkZrYjNJaU9qQXNJbU52WkdsbmIxTnZablIzWVhKbElqb3lNRGMyTml3aWMyVnhkV1Z1WTJsaGJFbHVjM1JoYkdGallXOGlPakVzSW5ObGNYVmxibU5wWVd4RGNtVmtaVzVqYVdGc0lqb3hMQ0poYldKcFpXNTBaU0k2SW1odmJXOXNiMmRoWTJGdklpd2lhV0YwSWpveE5qSTVNRE0xTlRneE9UY3dmUQ=="
             },
-            url: "https://oauth.hm.bb.com.br/oauth/token?gw-app-key=d27b67790cffab50136be17db0050c56b9d1a5b1",
+            url: "https://oauth.hm.bb.com.br/oauth/token?gw-dev-app-key=d27b67790cffab50136be17db0050c56b9d1a5b1",
             contentType: 'application/x-www-form-urlencoded',
             data: ({
                 "grant_type": "client_credentials",
@@ -60,13 +61,21 @@
 
         function Gerar_Cobranca(token) {
             /***************GERAR COBRANÇA****************/
+
             $.ajax({
                 type: "POST",
                 headers: {
-                    "Authorization": "Bearer " + _token
+                    "Authorization": "Bearer " + _token,
+                    "Accept-Encoding":"gzip, deflate, br",
+                    "Origin": "http://sistemas.jaboticabal.sp.gov.br/gti/",
+                    "Access-Control-Allow-Methods":"GET, POST, PUT, DELETE, OPTIONS",
+                    "Access-Control-Allow-Credentials": "true",
+                    "Access-Control-Allow-Origin":"*"
                 },
-                url: "https://api.hm.bb.com.br/cobrancas/v2/boletos?gw-app-key=d27b67790cffab50136be17db0050c56b9d1a5b1",
-                contentType: 'application/x-www-form-urlencoded',
+                crossDomain:true,
+                accepts:"application/json, text/javascript, */*; q=0.01",
+                contentType: "application/x-www-form-urlencoded",
+                url: "https://api.hm.bb.com.br/cobrancas/v2/boletos?gw-dev-app-key=d27b67790cffab50136be17db0050c56b9d1a5b1",
                 data: ({
                     "numeroConvenio": 3128557,
                     "numeroCarteira": 17,
@@ -81,7 +90,7 @@
                     "indicadorPermissaoRecebimentoParcial": "N",
                     "numeroTituloBeneficiario": "1234566",
                     "campoUtilizacaoBeneficiario": "UMA OBSERVACAO",
-                    "numeroTituloCliente": "00031285570004035400",
+                    "numeroTituloCliente": "00031285570004035500",
                     "mensagemBloquetoOcorrencia": "OUTRO TEXTO",
                     "pagador": {
                         "tipoInscricao": 1,
