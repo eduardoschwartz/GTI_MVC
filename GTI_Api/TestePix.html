@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="Scripts/jquery-3.4.1.js"></script>
+    <script type="text/javascript">
+        $("#btn").click(function () {
+            alert("ALo");
+            //var _token = "";
+
+            //$.ajax({
+            //    type: "POST",
+            //    headers: {
+            //        "Authorization": "Bearer " + _token,
+            //        "Accept-Encoding": "gzip, deflate, br",
+            //        "Origin": "http://sistemas.jaboticabal.sp.gov.br/gti/",
+            //        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            //        "Access-Control-Allow-Credentials": "true",
+            //        "Access-Control-Allow-Origin": "*"
+            //    },
+            //    crossDomain: true,
+            //    accepts: "application/json, text/javascript, */*; q=0.01",
+            //    contentType: "application/x-www-form-urlencoded",
+            //    url: "https://api.hm.bb.com.br/cobrancas/v2/boletos?gw-dev-app-key=d27b67790cffab50136be17db0050c56b9d1a5b1",
+            //    data: ({
+            //        "numeroConvenio": 3128557,
+            //        "numeroCarteira": 17,
+            //        "numeroVariacaoCarteira": 35,
+            //        "codigoModalidade": 1,
+            //        "dataEmissao": "15.08.2021",
+            //        "dataVencimento": "20.08.2021",
+            //        "valorOriginal": 253.42,
+            //        "valorAbatimento": 0,
+            //        "codigoAceite": "N",
+            //        "codigoTipoTitulo": 2,
+            //        "indicadorPermissaoRecebimentoParcial": "N",
+            //        "numeroTituloBeneficiario": "1234566",
+            //        "campoUtilizacaoBeneficiario": "UMA OBSERVACAO",
+            //        "numeroTituloCliente": "00031285570004035500",
+            //        "mensagemBloquetoOcorrencia": "OUTRO TEXTO",
+            //        "pagador": {
+            //            "tipoInscricao": 1,
+            //            "numeroInscricao": 96050176876,
+            //            "nome": "VALERIO DE AGUIAR ZORZATO",
+            //            "endereco": "AVENIDA DIAS GOMES 1970",
+            //            "cep": 77458000,
+            //            "cidade": "SUCUPIRA",
+            //            "bairro": "CENTRO",
+            //            "uf": "TO",
+            //            "telefone": "63987654321"
+            //        },
+            //        "indicadorPix": "S"
+            //    }),
+            //    dataType: "json",
+            //    success: function (data) {
+            //        var _numero = data.numero;
+            //        document.getElementById('errorLabel').innerHTML = _numero;
+            //    },
+            //    error: function (xhr, status, error) {
+            //        alert(error);
+            //    }
+            //});
+        });
+    </script>
+</head>
+<body>
+    <input id="btn" type="button" value="Gerar" />
+</body>
+</html>

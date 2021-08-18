@@ -11,6 +11,8 @@ using System.IO;
 using System.Web.Mvc;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Net;
+using RestSharp;
 
 namespace GTI_MVC.Controllers {
     public class SharedController : Controller {
@@ -399,6 +401,76 @@ namespace GTI_MVC.Controllers {
         public ActionResult Pagto_Pix(string c, string p) {
             return View();
         }
+
+        [Route("Pagto_pix")]
+        [HttpPost]
+        public ActionResult Pagto_Pix() {
+            //var url = "https://oauth.hm.bb.com.br/oauth/token?gw-dev-app-key=d27b67790cffab50136be17db0050c56b9d1a5b1";
+            //ServicePointManager.Expect100Continue = true;
+            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
+            //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            //request.Headers["Authorization"] = "Basic ZXlKcFpDSTZJalV5TnpoaE16WXRPVEJrTUMwME9UUXhMV0l4WXpVdE1pSXNJbU52WkdsbmIxQjFZbXhwWTJGa2IzSWlPakFzSW1OdlpHbG5iMU52Wm5SM1lYSmxJam95TURjMk5pd2ljMlZ4ZFdWdVkybGhiRWx1YzNSaGJHRmpZVzhpT2pGOTpleUpwWkNJNklqaGhZbVZqTUNJc0ltTnZaR2xuYjFCMVlteHBZMkZrYjNJaU9qQXNJbU52WkdsbmIxTnZablIzWVhKbElqb3lNRGMyTml3aWMyVnhkV1Z1WTJsaGJFbHVjM1JoYkdGallXOGlPakVzSW5ObGNYVmxibU5wWVd4RGNtVmtaVzVqYVdGc0lqb3hMQ0poYldKcFpXNTBaU0k2SW1odmJXOXNiMmRoWTJGdklpd2lhV0YwSWpveE5qSTVNRE0xTlRneE9UY3dmUQ==";
+            //request.ContentType = "application/x-www-form-urlencoded";
+            //request.AllowAutoRedirect = false;
+            //HttpWebResponse ChecaServidor = (HttpWebResponse)request.GetResponse();
+
+
+            var client = new RestClient("https://oauth.hm.bb.com.br/oauth/token?gw-dev-app-key=d27b67790cffab50136be17db0050c56b9d1a5b1");
+            client.Timeout = -1;
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("Authorization", "Basic ZXlKcFpDSTZJalV5TnpoaE16WXRPVEJrTUMwME9UUXhMV0l4WXpVdE1pSXNJbU52WkdsbmIxQjFZbXhwWTJGa2IzSWlPakFzSW1OdlpHbG5iMU52Wm5SM1lYSmxJam95TURjMk5pd2ljMlZ4ZFdWdVkybGhiRWx1YzNSaGJHRmpZVzhpT2pGOTpleUpwWkNJNklqaGhZbVZqTUNJc0ltTnZaR2xuYjFCMVlteHBZMkZrYjNJaU9qQXNJbU52WkdsbmIxTnZablIzWVhKbElqb3lNRGMyTml3aWMyVnhkV1Z1WTJsaGJFbHVjM1JoYkdGallXOGlPakVzSW5ObGNYVmxibU5wWVd4RGNtVmtaVzVqYVdGc0lqb3hMQ0poYldKcFpXNTBaU0k2SW1odmJXOXNiMmRoWTJGdklpd2lhV0YwSWpveE5qSTVNRE0xTlRneE9UY3dmUQ==");
+            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+            request.AddParameter("grant_type", "client_credentials");
+            request.AddParameter("scope", "cobrancas.boletos-info cobrancas.boletos-requisicao");
+            IRestResponse response = client.Execute(request);
+            Console.WriteLine(response.Content);
+
+
+            var _token = "AI3D-TlPnyrfuyppfs86VGp7KNzf7D2MC5YjSE3JC-56TK3tZcdZryzaIC_h1XLnRMUgR4v_UHlz3DAAw2HVxg.hm8-zbXqqkrQK1U-HI0GqCUHU0MACJcvYcQiuFGo8UA8bqR3cYU-Wjs7HvRy_Ed1Zbzh0GXzFrs_xaVwiPRni5BJSJ-Wn18Ad-a-hPtCKAbSJm0-RW09SJ1C8b0Wj3oYuYLFCI18sZVpv2lBmqW6AElE7pi69wLC9Py5YqbrhBXE8JvAL9gRaNi_CaslN4zN0aRiod1Snu6ZJKqUMJtZf5XanLYxaoLk4VWjPeHIxD_rpsqE_eDKnIGUCuZmTMmXCNkjWFRywIsTPNiQt-_EOXvyxouApbZVNX1D-3BqezKXxgJ3LaQS_lkA7LS8iPAhe68Mkb8JcksP3T2M36NFrAGfjuINBApS1DQXcRIk_CeCYx9oPSkH1lOQmM6Yufq_gPxGy55TjtnDlIBTIHGWrZ96Ba2HEtjTi84v09Ih7CntXrM-0PY6_rVbamxhuuFIIoYL04xm-AhDrpv6roCV4JjzNGOLg-D1MIcFLf68-22VIScH5Pp4uTFBuG_kendNIDMFYN1feSCCfQP-fhsOtU6aphsS6BJxvCvaCEUIOzgLTRMZYLHUDVz1cVhHXoe-wX0S2jMnbi3Tw1_nRWR2aS9XF8FX3IeAOb3zt5DY_2FfJqiTf51WoA-BpDdSWG3c-goqgGrqTqov8GQsykcVfOa76xn5nxBSc_UaoQ95M6lNtGalb59xKt7Yd0AUp8nAsRPYdgQhn_dKHMimHwe2EXdQxKdDX-lGigqXTSDbY2aNmHf3UMTVBFuoBFwJPi_FGGFeBhG9b2xqhsCsh3SvtqZvzMtgcAJnQIduzoWDPnxi2rXOC481O1GLICVUV85Lh5CMvT5fP1nyYGJMBWpBh8lMgKsKu8u1AWTAFwqIU8Z1gem7Rqf6YhrDZjGY5HboEKEZN3D8w2-qr7J11QpLQbk_s2R93_HgZT6dhy1A1zr4Sis2ZdO2LF9rxUzSvgeTZJXrWxY2GU-zcISlGEMyZ6PBNBO8dgYQvJt0EJEm2TCbXBvcDbNzMC54Emiw8bQ66VWi4y-NDRT24pEUaRJzzQ.OdR6eKHvabIT_3PBXoxXTkHyhdCO0kwR5MUv5S9ITQJ4vj2JCcA6PYCk2j-QWT7Rz3k8ItN-dTJkzZ8bfQ9dvw";
+            client = new RestClient("https://api.hm.bb.com.br/cobrancas/v2/boletos?gw-dev-app-key=d27b67790cffab50136be17db0050c56b9d1a5b1");
+            client.Timeout = -1;
+            request = new RestRequest(Method.POST);
+            request.AddHeader("Authorization", "Bearer " + _token);
+            request.AddHeader("Content-Type", "application/json");
+            var body = @"{" + "\n" +
+            @"  ""numeroConvenio"": 3128557," + "\n" +
+            @"  ""numeroCarteira"": 17," + "\n" +
+            @"  ""numeroVariacaoCarteira"": 35," + "\n" +
+            @"  ""codigoModalidade"": 1," + "\n" +
+            @"  ""dataEmissao"": ""15.08.2021""," + "\n" +
+            @"  ""dataVencimento"": ""20.08.2021""," + "\n" +
+            @"  ""valorOriginal"": 253.42," + "\n" +
+            @"  ""valorAbatimento"": 0," + "\n" +
+            @"  ""codigoAceite"": ""N""," + "\n" +
+            @"  ""codigoTipoTitulo"": 2," + "\n" +
+            @"  ""indicadorPermissaoRecebimentoParcial"": ""N""," + "\n" +
+            @"  ""numeroTituloBeneficiario"": ""1234566""," + "\n" +
+            @"  ""campoUtilizacaoBeneficiario"": ""UMA OBSERVACAO""," + "\n" +
+            @"  ""numeroTituloCliente"": ""00031285570005932900""," + "\n" +
+            @"  ""mensagemBloquetoOcorrencia"": ""OUTRO TEXTO""," + "\n" +
+            @"  ""pagador"": {" + "\n" +
+            @"    ""tipoInscricao"": 1," + "\n" +
+            @"    ""numeroInscricao"": 96050176876," + "\n" +
+            @"    ""nome"": ""VALERIO DE AGUIAR ZORZATO""," + "\n" +
+            @"    ""endereco"": ""AVENIDA DIAS GOMES 1970""," + "\n" +
+            @"    ""cep"": 77458000," + "\n" +
+            @"    ""cidade"": ""SUCUPIRA""," + "\n" +
+            @"    ""bairro"": ""CENTRO""," + "\n" +
+            @"    ""uf"": ""TO""," + "\n" +
+            @"    ""telefone"": ""63987654321""" + "\n" +
+            @"  }," + "\n" +
+            @"  ""indicadorPix"": ""S""" + "\n" +
+            @"}" + "\n" +
+            @"";
+            request.AddParameter("application/json", body, RestSharp.ParameterType.RequestBody);
+            IRestResponse response2 = client.Execute(request);
+            Console.WriteLine(response2.Content);
+
+
+
+            return View();
+        }
+
 
     }
 }

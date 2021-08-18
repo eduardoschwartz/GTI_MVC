@@ -795,7 +795,7 @@ namespace GTI_Mvc.Controllers {
 
             }
             if(model.CnpjValue != null) {
-                string _cnpj = model.CnpjValue;
+                string _cnpj = Functions.RetornaNumero( model.CnpjValue);
                 bool _valida = Functions.ValidaCNPJ(_cnpj); //CNPJ válido?
                 if(_valida) {
                     int _codigo2 = empresaRepository.ExisteEmpresaCnpj(_cnpj);
@@ -809,7 +809,7 @@ namespace GTI_Mvc.Controllers {
                 }
             } else {
                 if(model.CpfValue != null) {
-                    string _cpf = model.CpfValue;
+                    string _cpf = Functions.RetornaNumero( model.CpfValue);
                     bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
                     if(_valida) {
                         int _codigo2 = empresaRepository.ExisteEmpresaCpf(_cpf);

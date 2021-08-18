@@ -23,7 +23,7 @@
         </div>
         <br />
         <br />
-        <button id="btnGerar" type="button" class="btn btn-primary"> Clique para gerar</button>
+        <button id="btnGerar" type="submit" class="btn btn-primary"> Clique para gerar</button>
         <br />
         <br />
         <div class="form-group row">
@@ -35,7 +35,11 @@
 
 <script>
     
-    $("#btnGerar").click(function () {
+    $(document).ready(function () {
+        
+    });
+
+    $("#btnGerar2").click(function () {
         /*****GERAR TOKEN******/
         var _token;
         $.ajax({
@@ -65,16 +69,9 @@
             $.ajax({
                 type: "POST",
                 headers: {
-                    "Authorization": "Bearer " + _token,
-                    "Accept-Encoding":"gzip, deflate, br",
-                    "Origin": "http://sistemas.jaboticabal.sp.gov.br/gti/",
-                    "Access-Control-Allow-Methods":"GET, POST, PUT, DELETE, OPTIONS",
-                    "Access-Control-Allow-Credentials": "true",
-                    "Access-Control-Allow-Origin":"*"
+                    "Authorization": "Bearer " + token,
+                    "Content-Type": "application/json"
                 },
-                crossDomain:true,
-                accepts:"application/json, text/javascript, */*; q=0.01",
-                contentType: "application/x-www-form-urlencoded",
                 url: "https://api.hm.bb.com.br/cobrancas/v2/boletos?gw-dev-app-key=d27b67790cffab50136be17db0050c56b9d1a5b1",
                 data: ({
                     "numeroConvenio": 3128557,
@@ -94,8 +91,8 @@
                     "mensagemBloquetoOcorrencia": "OUTRO TEXTO",
                     "pagador": {
                         "tipoInscricao": 1,
-                        "numeroInscricao": 96050176876,
-                        "nome": "VALERIO DE AGUIAR ZORZATO",
+                        "numeroInscricao": 88398158808,
+                        "nome": "JOAO DA COSTA ANTUNES",
                         "endereco": "AVENIDA DIAS GOMES 1970",
                         "cep": 77458000,
                         "cidade": "SUCUPIRA",
