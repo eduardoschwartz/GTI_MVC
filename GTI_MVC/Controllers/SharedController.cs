@@ -16,6 +16,9 @@ using RestSharp;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using GTI_Mvc.Classes;
+using System.Web.Script.Serialization;
+using Microsoft.Ajax.Utilities;
 
 namespace GTI_MVC.Controllers {
     public class SharedController : Controller {
@@ -433,51 +436,68 @@ namespace GTI_MVC.Controllers {
                 return View();
             }
 
+            //**********************************************
             //***********Geração da Cobrança****************
+            //**********************************************
+
             //****Campos variaveis****
-
-            //************************
-
-
+            int _numeroConvenio = 3128557;
+            string _dataEmissao = DateTime.Now.ToString("dd.MM.yyyy");
+            string _dataVencimento = Convert.ToDateTime("25/08/2021").ToString("dd.MM.yyyy");
+            double _valorOriginal = Math.Round(235.42, 2);
+            string _numeroTituloBeneficiario = "17345783";
+            string _campoUtilizacaoBeneficiario = Functions.RemoveDiacritics("UMA OBSERVAÇÃO");
+            string _numeroTituloCliente = "000" + _numeroConvenio.ToString() + "00" + _numeroTituloBeneficiario.ToString();
+            string _mensagemBloquetoOcorrencia = Functions.RemoveDiacritics("OUTRO TEXTO");
+            int _tipoInscricao = 1; //(1-Cpf,2-Cnpj)
+            long _numeroInscricao = 96050176876;
+            string _nome= "VALERIO DE AGUIAR ZORZATO";
+            string _endereco = "AVENIDA DIAS GOMES 1970";
+            int _cep = 77458000;
+            string _cidade = "SUCUPIRA";
+            string _bairro = "CENTRO";
+            string _uf = "TO";
+            string _telefone = "63987654321";
+             //************************
 
             client = new RestClient("https://api.hm.bb.com.br/cobrancas/v2/boletos?gw-dev-app-key=d27b67790cffab50136be17db0050c56b9d1a5b1");
             client.Timeout = -1;
             request = new RestRequest(Method.POST);
             request.AddHeader("Authorization", "Bearer " + _token); //<===== Informar o token gerado
             request.AddHeader("Content-Type", "application/json");
-            var body = @"{" + "\n" +
-            @"  ""numeroConvenio"": 3128557," + "\n" +
-            @"  ""numeroCarteira"": 17," + "\n" +
-            @"  ""numeroVariacaoCarteira"": 35," + "\n" +
-            @"  ""codigoModalidade"": 1," + "\n" +
-            @"  ""dataEmissao"": ""15.08.2021""," + "\n" +
-            @"  ""dataVencimento"": ""20.08.2021""," + "\n" +
-            @"  ""valorOriginal"": 253.42," + "\n" +
-            @"  ""valorAbatimento"": 0," + "\n" +
-            @"  ""codigoAceite"": ""N""," + "\n" +
-            @"  ""codigoTipoTitulo"": 2," + "\n" +
-            @"  ""indicadorPermissaoRecebimentoParcial"": ""N""," + "\n" +
-            @"  ""numeroTituloBeneficiario"": ""1234566""," + "\n" +
-            @"  ""campoUtilizacaoBeneficiario"": ""UMA OBSERVACAO""," + "\n" +
-            @"  ""numeroTituloCliente"": ""00031285570005942916""," + "\n" +
-            @"  ""mensagemBloquetoOcorrencia"": ""OUTRO TEXTO""," + "\n" +
-            @"  ""pagador"": {" + "\n" +
-            @"    ""tipoInscricao"": 1," + "\n" +
-            @"    ""numeroInscricao"": 96050176876," + "\n" +
-            @"    ""nome"": ""VALERIO DE AGUIAR ZORZATO""," + "\n" +
-            @"    ""endereco"": ""AVENIDA DIAS GOMES 1970""," + "\n" +
-            @"    ""cep"": 77458000," + "\n" +
-            @"    ""cidade"": ""SUCUPIRA""," + "\n" +
-            @"    ""bairro"": ""CENTRO""," + "\n" +
-            @"    ""uf"": ""TO""," + "\n" +
-            @"    ""telefone"": ""63987654321""" + "\n" +
-            @"  }," + "\n" +
-            @"  ""indicadorPix"": ""S""" + "\n" +
-            @"}" + "\n" +
-            @"";
-            request.AddParameter("application/json", body, RestSharp.ParameterType.RequestBody);
+
+            var obj = new Cobranca {
+                numeroConvenio = _numeroConvenio,
+                numeroCarteira = 17,
+                numeroVariacaoCarteira=35,
+                codigoModalidade=1,
+                dataEmissao=_dataEmissao,
+                dataVencimento=_dataVencimento,
+                valorOriginal=_valorOriginal,
+                valorAbatimento=0,
+                codigoAceite="N",
+                codigoTipoTitulo=2,
+                indicadorPermissaoRecebimentoParcial="N",
+                numeroTituloBeneficiario=_numeroTituloBeneficiario,
+                campoUtilizacaoBeneficiario=_campoUtilizacaoBeneficiario,
+                numeroTituloCliente= _numeroTituloCliente,
+                mensagemBloquetoOcorrencia = _mensagemBloquetoOcorrencia,
+                pagador = new CobrancaPagador {
+                    tipoInscricao = _tipoInscricao,
+                    numeroInscricao = _numeroInscricao,
+                    nome = _nome,
+                    endereco= _endereco,
+                    cep= _cep,
+                    cidade=_cidade,
+                    bairro=_bairro,
+                    uf=_uf,
+                    telefone=_telefone
+                },
+                indicadorPix="S"
+            };
+            var json = new JavaScriptSerializer().Serialize(obj);
+            request.AddParameter("application/json", json, RestSharp.ParameterType.RequestBody);
             IRestResponse response2 = client.Execute(request);
-         //   Console.WriteLine(response2.Content);
 
             string _linhaDigitavel = "",_codigoBarraNumerico="",_qrCode="",_numero="",_url="",_txId="",_emv="";
             responseContent = JsonConvert.DeserializeObject(response2.Content);
