@@ -238,6 +238,7 @@
     <Compile Include="Classes\CaptchaResult.cs" />
     <Compile Include="Classes\CaptchaResultNew.cs" />
     <Compile Include="Classes\Cep.cs" />
+    <Compile Include="Classes\Cobranca.cs" />
     <Compile Include="Controllers\CidadaoController.cs" />
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
