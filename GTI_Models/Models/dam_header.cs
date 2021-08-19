@@ -23,5 +23,8 @@ namespace GTI_Models.Models {
         public string Codigo_barra { get; set; }
         public string Linha_digitavel { get; set; }
         public byte[] Qrcodeimage { get; set; }
+        public string Url { get; set; }
+        public string Txid { get; set; }
+        public string Emv { get; set; }
     }
 }
