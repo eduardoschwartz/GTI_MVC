@@ -17,6 +17,7 @@ namespace GTI_Models.Models {
         public string Quadra { get; set; }
         public string Lote { get; set; }
         public int Cep { get; set; }
+        public string Nosso_Numero { get; set; }
         public int Numero_documento { get; set; }
         public decimal Valor_guia { get; set; }
         public DateTime Data_vencimento { get; set; }

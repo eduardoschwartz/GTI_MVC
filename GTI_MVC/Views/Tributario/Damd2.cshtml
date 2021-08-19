@@ -51,7 +51,6 @@
 <div class="center container" style="width:830px">
 
     @using (Html.BeginForm("Damd2", "Tributario", FormMethod.Post, new { id = "formField", encType = "multipart/form-data", name = "frmExtrato", @Class = "mt-3" })) {
-        @Html.AntiForgeryToken()
         <div class="card">
             <div class="card-header">
                 Emissão de Documento de Arrecadação Municipal (D.A.M.)<br />

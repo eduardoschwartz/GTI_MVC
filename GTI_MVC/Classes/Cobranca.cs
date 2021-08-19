@@ -84,21 +84,21 @@ namespace GTI_Mvc.Classes {
             //****Campos variaveis****
             int _numeroConvenio = 3128557;
             string _dataEmissao = DateTime.Now.ToString("dd.MM.yyyy");
-            string _dataVencimento = Convert.ToDateTime("25/08/2021").ToString("dd.MM.yyyy");
-            double _valorOriginal = Math.Round(235.42, 2);
+            string _dataVencimento = dam.Data_vencimento.ToString("dd.MM.yyyy");
+            double _valorOriginal = Math.Round((double)dam.Valor_guia, 2);
             string _numeroTituloBeneficiario = dam.Numero_documento.ToString();
-            string _campoUtilizacaoBeneficiario = Functions.RemoveDiacritics("UMA OBSERVAÇÃO");
+            string _campoUtilizacaoBeneficiario = Functions.RemoveDiacritics("NÃO RECEBER APÓS O VENCIMENTO");
             string _numeroTituloCliente = "000" + _numeroConvenio.ToString() + "00" + _numeroTituloBeneficiario.ToString();
-            string _mensagemBloquetoOcorrencia = Functions.RemoveDiacritics("OUTRO TEXTO");
-            int _tipoInscricao = 1; //(1-Cpf,2-Cnpj)
-            long _numeroInscricao = 96050176876;
-            string _nome = "VALERIO DE AGUIAR ZORZATO";
-            string _endereco = "AVENIDA DIAS GOMES 1970";
-            int _cep = 77458000;
-            string _cidade = "SUCUPIRA";
-            string _bairro = "CENTRO";
-            string _uf = "TO";
-            string _telefone = "63987654321";
+            string _mensagemBloquetoOcorrencia = Functions.RemoveDiacritics("Atualize seus boletos em www.bb.com.br");
+            int _tipoInscricao = 1; //(1-Cpf,2-Cnpj)     //─┐
+            long _numeroInscricao = 96050176876;         //─┤
+            string _nome = "VALERIO DE AGUIAR ZORZATO";  //─┴─ APÓS HOMOLOGAÇÃO TROCAR ESTES 3 CAMPOS POR DADOS REAIS
+            string _endereco = Functions.RemoveDiacritics( dam.Endereco);
+            int _cep = dam.Cep;
+            string _cidade = Functions.RemoveDiacritics(dam.Cidade);
+            string _bairro = Functions.RemoveDiacritics(dam.Bairro);
+            string _uf = dam.Uf;
+            string _telefone = ""; 
             //************************
 
             client = new RestClient("https://api.hm.bb.com.br/cobrancas/v2/boletos?gw-dev-app-key=d27b67790cffab50136be17db0050c56b9d1a5b1");

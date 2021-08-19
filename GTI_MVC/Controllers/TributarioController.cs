@@ -1076,8 +1076,8 @@ namespace GTI_Mvc.Controllers {
             if (_tipoCadastro == TipoCadastro.Imovel) {
                 ImovelStruct _imovel = imovelRepository.Dados_Imovel(_codigo);
                 _complemento = string.IsNullOrWhiteSpace(_imovel.Complemento) ? "" : " " + _imovel.Complemento;
-                _endereco = _imovel.NomeLogradouro + ", " + _imovel.Numero.ToString() + _complemento + " " + _imovel.NomeBairro;
-                _endereco2 = _imovel.NomeLogradouro + ", " + _imovel.Numero.ToString() + _complemento;
+                _endereco = _imovel.NomeLogradouroAbreviado + ", " + _imovel.Numero.ToString() + _complemento + " " + _imovel.NomeBairro;
+                _endereco2 = _imovel.NomeLogradouroAbreviado + ", " + _imovel.Numero.ToString() + _complemento;
                 _bairro = _imovel.NomeBairro;
                 _cidade = "JABOTICABAL";
                 _uf = "SP";
@@ -2616,8 +2616,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Damd2")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Damd2(string p) {
+          public ActionResult Damd2(string p) {
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             DebitoListViewModel model = (DebitoListViewModel)TempData["debito2"];
 
@@ -2645,7 +2644,7 @@ namespace GTI_Mvc.Controllers {
                 //           Exception ex = tributarioRepository.Insert_Parcela_Documento(parcReg);
             }
 
-            //Se tiver honorárops gera uma parcela para ele
+            //Se tiver honorárois gera uma parcela para ele
             if (model.Soma_Honorario > 0) {
                 short _seqHon = tributarioRepository.Retorna_Ultima_Seq_Honorario(model.Inscricao, DateTime.Now.Year);
                 _seqHon++;
@@ -2688,7 +2687,6 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-
             //Carrega Dam Header
             string _guid = Guid.NewGuid().ToString("N");
             byte[] _qrcode = new byte[10];
@@ -2707,7 +2705,8 @@ namespace GTI_Mvc.Controllers {
                 Data_vencimento = model.Data_Vencimento,
                 Numero_documento = _documento,
                 Valor_guia = model.Soma_Total,
-                Qrcodeimage=_qrcode
+                Qrcodeimage=_qrcode,
+                Nosso_Numero= "000" + "3128557" + "00" + _documento.ToString()
             };
 
             //Envia para registro
@@ -2732,6 +2731,47 @@ namespace GTI_Mvc.Controllers {
             //#######################################################################
 
             ex = tributarioRepository.Insert_Dam_Header(_dh);
+
+
+            //Carrega Dataset para o boleto
+
+            List<Dam_data> Lista_Dados = new List<Dam_data>();
+
+            //Imprime o boleto
+            Warning[] warnings;
+            string[] streamIds;
+            string mimeType = string.Empty;
+            string encoding = string.Empty;
+            string extension = string.Empty;
+            Session["sid"] = "";
+            DataSet Ds = Functions.ToDataSet(Lista_Dados);
+            ReportDataSource rdsAct = new ReportDataSource("dsDamPix", Ds.Tables[0]);
+            ReportViewer viewer = new ReportViewer();
+            viewer.LocalReport.Refresh();
+            viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Dam_with_Pix.rdlc"); ;
+            viewer.LocalReport.DataSources.Add(rdsAct); // Add  datasource here       
+
+            List<ReportParameter> parameters = new List<ReportParameter>();
+            parameters.Add(new ReportParameter("LinhaDigitavel", _dh.Linha_digitavel));
+            parameters.Add(new ReportParameter("DataVencimento", _dh.Data_vencimento.ToString("dd/MM/yyyy")));
+            parameters.Add(new ReportParameter("NossoNumero",    _dh.Nosso_Numero));
+            parameters.Add(new ReportParameter("NumeroGuia", _dh.Numero_documento.ToString()));
+            parameters.Add(new ReportParameter("PagadorNome", _dh.Nome));
+            parameters.Add(new ReportParameter("PagadorEndereco", _dh.Endereco));
+            parameters.Add(new ReportParameter("PagadorCpfCnpj", _dh.Cpf_cnpj));
+            parameters.Add(new ReportParameter("ValorGuia", _dh.Valor_guia.ToString("#0.00")));
+            viewer.LocalReport.SetParameters(parameters);
+            byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
+            Response.Buffer = true;
+            Response.Clear();
+            Response.ContentType = mimeType;
+            Response.AddHeader("content-disposition", "attachment; filename=" + _guid + "." + extension);
+            Response.OutputStream.Write(bytes, 0, bytes.Length);
+            Response.Flush();
+            Response.End();
+
+
+
 
 
             return View(model);
