@@ -13,6 +13,9 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Net;
 using RestSharp;
+using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace GTI_MVC.Controllers {
     public class SharedController : Controller {
@@ -405,16 +408,7 @@ namespace GTI_MVC.Controllers {
         [Route("Pagto_pix")]
         [HttpPost]
         public ActionResult Pagto_Pix() {
-            //var url = "https://oauth.hm.bb.com.br/oauth/token?gw-dev-app-key=d27b67790cffab50136be17db0050c56b9d1a5b1";
-            //ServicePointManager.Expect100Continue = true;
-            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
-            //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            //request.Headers["Authorization"] = "Basic ZXlKcFpDSTZJalV5TnpoaE16WXRPVEJrTUMwME9UUXhMV0l4WXpVdE1pSXNJbU52WkdsbmIxQjFZbXhwWTJGa2IzSWlPakFzSW1OdlpHbG5iMU52Wm5SM1lYSmxJam95TURjMk5pd2ljMlZ4ZFdWdVkybGhiRWx1YzNSaGJHRmpZVzhpT2pGOTpleUpwWkNJNklqaGhZbVZqTUNJc0ltTnZaR2xuYjFCMVlteHBZMkZrYjNJaU9qQXNJbU52WkdsbmIxTnZablIzWVhKbElqb3lNRGMyTml3aWMyVnhkV1Z1WTJsaGJFbHVjM1JoYkdGallXOGlPakVzSW5ObGNYVmxibU5wWVd4RGNtVmtaVzVqYVdGc0lqb3hMQ0poYldKcFpXNTBaU0k2SW1odmJXOXNiMmRoWTJGdklpd2lhV0YwSWpveE5qSTVNRE0xTlRneE9UY3dmUQ==";
-            //request.ContentType = "application/x-www-form-urlencoded";
-            //request.AllowAutoRedirect = false;
-            //HttpWebResponse ChecaServidor = (HttpWebResponse)request.GetResponse();
-
-
+            //***********Geração do Token****************
             var client = new RestClient("https://oauth.hm.bb.com.br/oauth/token?gw-dev-app-key=d27b67790cffab50136be17db0050c56b9d1a5b1");
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
@@ -422,15 +416,34 @@ namespace GTI_MVC.Controllers {
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
             request.AddParameter("grant_type", "client_credentials");
             request.AddParameter("scope", "cobrancas.boletos-info cobrancas.boletos-requisicao");
+            request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
             IRestResponse response = client.Execute(request);
-            Console.WriteLine(response.Content);
+
+            dynamic responseContent = JsonConvert.DeserializeObject(response.Content);
+            string _token = "";
+            foreach (dynamic prop in responseContent) {
+                string _name = prop.Name.ToString();
+                string _value = prop.Value.ToString();
+                if (_name == "access_token") {
+                    _token = _value;  //<============ Token Gerado
+                    break;
+                }
+            }
+            if (_token == "") {//<========= Se o token for inválido retorna erro
+                return View();
+            }
+
+            //***********Geração da Cobrança****************
+            //****Campos variaveis****
+
+            //************************
 
 
-            var _token = "AI3D-TlPnyrfuyppfs86VGp7KNzf7D2MC5YjSE3JC-56TK3tZcdZryzaIC_h1XLnRMUgR4v_UHlz3DAAw2HVxg.hm8-zbXqqkrQK1U-HI0GqCUHU0MACJcvYcQiuFGo8UA8bqR3cYU-Wjs7HvRy_Ed1Zbzh0GXzFrs_xaVwiPRni5BJSJ-Wn18Ad-a-hPtCKAbSJm0-RW09SJ1C8b0Wj3oYuYLFCI18sZVpv2lBmqW6AElE7pi69wLC9Py5YqbrhBXE8JvAL9gRaNi_CaslN4zN0aRiod1Snu6ZJKqUMJtZf5XanLYxaoLk4VWjPeHIxD_rpsqE_eDKnIGUCuZmTMmXCNkjWFRywIsTPNiQt-_EOXvyxouApbZVNX1D-3BqezKXxgJ3LaQS_lkA7LS8iPAhe68Mkb8JcksP3T2M36NFrAGfjuINBApS1DQXcRIk_CeCYx9oPSkH1lOQmM6Yufq_gPxGy55TjtnDlIBTIHGWrZ96Ba2HEtjTi84v09Ih7CntXrM-0PY6_rVbamxhuuFIIoYL04xm-AhDrpv6roCV4JjzNGOLg-D1MIcFLf68-22VIScH5Pp4uTFBuG_kendNIDMFYN1feSCCfQP-fhsOtU6aphsS6BJxvCvaCEUIOzgLTRMZYLHUDVz1cVhHXoe-wX0S2jMnbi3Tw1_nRWR2aS9XF8FX3IeAOb3zt5DY_2FfJqiTf51WoA-BpDdSWG3c-goqgGrqTqov8GQsykcVfOa76xn5nxBSc_UaoQ95M6lNtGalb59xKt7Yd0AUp8nAsRPYdgQhn_dKHMimHwe2EXdQxKdDX-lGigqXTSDbY2aNmHf3UMTVBFuoBFwJPi_FGGFeBhG9b2xqhsCsh3SvtqZvzMtgcAJnQIduzoWDPnxi2rXOC481O1GLICVUV85Lh5CMvT5fP1nyYGJMBWpBh8lMgKsKu8u1AWTAFwqIU8Z1gem7Rqf6YhrDZjGY5HboEKEZN3D8w2-qr7J11QpLQbk_s2R93_HgZT6dhy1A1zr4Sis2ZdO2LF9rxUzSvgeTZJXrWxY2GU-zcISlGEMyZ6PBNBO8dgYQvJt0EJEm2TCbXBvcDbNzMC54Emiw8bQ66VWi4y-NDRT24pEUaRJzzQ.OdR6eKHvabIT_3PBXoxXTkHyhdCO0kwR5MUv5S9ITQJ4vj2JCcA6PYCk2j-QWT7Rz3k8ItN-dTJkzZ8bfQ9dvw";
+
             client = new RestClient("https://api.hm.bb.com.br/cobrancas/v2/boletos?gw-dev-app-key=d27b67790cffab50136be17db0050c56b9d1a5b1");
             client.Timeout = -1;
             request = new RestRequest(Method.POST);
-            request.AddHeader("Authorization", "Bearer " + _token);
+            request.AddHeader("Authorization", "Bearer " + _token); //<===== Informar o token gerado
             request.AddHeader("Content-Type", "application/json");
             var body = @"{" + "\n" +
             @"  ""numeroConvenio"": 3128557," + "\n" +
@@ -446,7 +459,7 @@ namespace GTI_MVC.Controllers {
             @"  ""indicadorPermissaoRecebimentoParcial"": ""N""," + "\n" +
             @"  ""numeroTituloBeneficiario"": ""1234566""," + "\n" +
             @"  ""campoUtilizacaoBeneficiario"": ""UMA OBSERVACAO""," + "\n" +
-            @"  ""numeroTituloCliente"": ""00031285570005932900""," + "\n" +
+            @"  ""numeroTituloCliente"": ""00031285570005942916""," + "\n" +
             @"  ""mensagemBloquetoOcorrencia"": ""OUTRO TEXTO""," + "\n" +
             @"  ""pagador"": {" + "\n" +
             @"    ""tipoInscricao"": 1," + "\n" +
@@ -464,8 +477,43 @@ namespace GTI_MVC.Controllers {
             @"";
             request.AddParameter("application/json", body, RestSharp.ParameterType.RequestBody);
             IRestResponse response2 = client.Execute(request);
-            Console.WriteLine(response2.Content);
+         //   Console.WriteLine(response2.Content);
 
+            string _linhaDigitavel = "",_codigoBarraNumerico="",_qrCode="",_numero="",_url="",_txId="",_emv="";
+            responseContent = JsonConvert.DeserializeObject(response2.Content);
+            foreach (dynamic prop in responseContent) {
+                string _name = prop.Name.ToString();
+                string _value = prop.Value.ToString();
+                if (_name == "linhaDigitavel") {
+                    _linhaDigitavel = _value;
+                }
+                if (_name == "codigoBarraNumerico") {
+                    _codigoBarraNumerico = _value;
+                }
+                if (_name == "numero") {
+                    _numero = _value;
+                }
+                if (_name == "qrCode") {
+                    _qrCode = _value;
+                    dynamic responseContent2 = JsonConvert.DeserializeObject(_qrCode);
+                    foreach (dynamic prop2 in responseContent2) {
+                        _name = prop2.Name.ToString();
+                        _value = prop2.Value.ToString();
+                        if (_name == "url") {
+                            _url = _value;
+                        }
+                        if (_name == "txId") {
+                            _txId = _value;
+                        }
+                        if (_name == "emv") {
+                            _emv = _value;
+                        }
+                    }
+                }
+            }
+            if (_numero == "") {
+                return View();
+            }
 
 
             return View();
