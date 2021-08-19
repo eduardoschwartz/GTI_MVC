@@ -1069,27 +1069,36 @@ namespace GTI_Mvc.Controllers {
             Endereco_bll enderecoRepository = new Endereco_bll(_connection);
 
             int _codigo = model.Inscricao;
-            string _endereco="",_complemento="",_cidade="",_uf="",_cep="";
+            string _endereco="",_complemento="",_cidade="",_uf="",_cep="",_endereco2="",_bairro="",_quadra="",_lote="";
             TipoCadastro _tipoCadastro = Tipo_Cadastro(_codigo);
             if (_tipoCadastro == TipoCadastro.Imovel) {
                 ImovelStruct _imovel = imovelRepository.Dados_Imovel(_codigo);
                 _complemento = string.IsNullOrWhiteSpace(_imovel.Complemento) ? "" : " " + _imovel.Complemento;
                 _endereco = _imovel.NomeLogradouro + ", " + _imovel.Numero.ToString() +  _complemento + " " + _imovel.NomeBairro;
+                _endereco2 = _imovel.NomeLogradouro + ", " + _imovel.Numero.ToString() + _complemento;
+                _bairro = _imovel.NomeBairro;
                 _cidade = "JABOTICABAL";
                 _uf = "SP";
                 _cep = _imovel.Cep;
+                _quadra = _imovel.QuadraOriginal ?? "";
+                _lote = _imovel.LoteOriginal ?? "";
             } else {
                 if (_tipoCadastro == TipoCadastro.Empresa) {
                     EmpresaStruct _empresa = empresaRepository.Retorna_Empresa(_codigo);
                     _endereco = _empresa.Nome_logradouro + ", " + _empresa.Numero.ToString() + _empresa.Complemento == null ? "" : " " + _empresa.Complemento + " " + _empresa.Bairro_nome;
+                    _endereco2 = _empresa.Nome_logradouro + ", " + _empresa.Numero.ToString() + _empresa.Complemento == null ? "" : " " + _empresa.Complemento;
+                    _bairro = _empresa.Bairro_nome;
                     _cidade = _empresa.Cidade_nome;
                     _uf = _empresa.UF;
                     _cep = _empresa.Cep;
                 } else {
                     CidadaoStruct _cidadao = requerenteRepository.Dados_Cidadao(_codigo);
                     _endereco = _cidadao.EnderecoR + ", " + _cidadao.NumeroR.ToString() + (_cidadao.ComplementoR == null ? "" : " " + _cidadao.ComplementoR) + " " + _cidadao.NomeBairroR;
-                    _cidade = _cidadao.NomeCidadeR;
-                    _uf = _cidadao.UfR;
+                    _endereco2 = _cidadao.EnderecoR + ", " + _cidadao.NumeroR.ToString() + (_cidadao.ComplementoR == null ? "" : " " + _cidadao.ComplementoR) ;
+                    _endereco2 = _endereco2 ?? "";
+                    _bairro = _cidadao.NomeBairroR??"";
+                    _cidade = _cidadao.NomeCidadeR??"";
+                    _uf = _cidadao.UfR??"";
                     if (_cidadao.CodigoCidadeR == 413)
                         _cep = (enderecoRepository.RetornaCep((int)_cidadao.CodigoLogradouroR, (short)_cidadao.NumeroR)).ToString();
                     else {
@@ -1107,9 +1116,13 @@ namespace GTI_Mvc.Controllers {
                 Inscricao=model.Inscricao,
                 CpfCnpjLabel=model.CpfCnpjLabel,
                 Endereco=_endereco,
+                Endereco2=_endereco2,
+                Bairro=_bairro,
                 Cidade=_cidade,
                 UF=_uf,
-                Cep=RetornaNumero( _cep)
+                Cep=RetornaNumero( _cep),
+                Quadra=_quadra,
+                Lote=_lote
             };
             decimal _somaP = 0,_somaJ=0,_somaM=0,_somaC=0,_somaT=0,_somaH=0;
 
@@ -1204,7 +1217,16 @@ namespace GTI_Mvc.Controllers {
             modelt.Soma_Total = _somaP+_somaJ+_somaM+_somaC+_somaH;
             modelt.Valor_Boleto = Convert.ToInt32((_somaP + _somaJ + _somaM + _somaC + _somaH) * 100).ToString();
             TempData["debito"] = modelt;
-            return RedirectToAction("Damd");
+            if (Session["hashid"] != null) {
+                if(Convert.ToInt32(Session["hashid"])==433) //apenas durante a homologação do Pix
+                    return RedirectToAction("Damd2");
+                else
+                    return RedirectToAction("Damd");
+            } else
+                return RedirectToAction("Damd");
+
+
+
         }
 
         public ActionResult Damd() {
@@ -2578,6 +2600,107 @@ namespace GTI_Mvc.Controllers {
             return null;
         }
 
-        
+
+        [Route("Damd2")]
+        [HttpGet]
+        public ActionResult Damd2() {
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            if (TempData["debito"] == null)
+                return RedirectToAction("Login_gti", "Home");
+            DebitoListViewModel model = (DebitoListViewModel)TempData["debito"];
+
+            //grava o documento
+            Numdocumento docReg = new Numdocumento() {
+                Datadocumento = Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy")),
+                Emissor = "WebDam",
+                Registrado = true,
+                Valorguia = model.Soma_Total
+            };
+            int _documento = tributarioRepository.Insert_Documento(docReg);
+
+            Exception ex = null;//tirar depois da homologação do pix e descomentar a linha debaixo
+            foreach (ListDebitoEditorViewModel _debitos in model.Debito) {
+                Parceladocumento parcReg = new Parceladocumento() {
+                    Codreduzido = model.Inscricao,
+                    Anoexercicio = (short)_debitos.Exercicio,
+                    Codlancamento = (short)_debitos.Lancamento,
+                    Seqlancamento = (short)_debitos.Seq,
+                    Numparcela = (byte)_debitos.Parcela,
+                    Codcomplemento = (byte)_debitos.Complemento,
+                    Plano = Convert.ToInt16(model.Plano.ToString()),
+                    Numdocumento = _documento
+                };
+     //           Exception ex = tributarioRepository.Insert_Parcela_Documento(parcReg);
+            }
+
+            //Se tiver honorárops gera uma parcela para ele
+            if (model.Soma_Honorario > 0) {
+                short _seqHon = tributarioRepository.Retorna_Ultima_Seq_Honorario(model.Inscricao, DateTime.Now.Year);
+                _seqHon++;
+                Debitoparcela regParcela = new Debitoparcela {
+                    Codreduzido = model.Inscricao,
+                    Anoexercicio = (short)DateTime.Now.Year,
+                    Codlancamento = 41,
+                    Seqlancamento = _seqHon,
+                    Numparcela = 1,
+                    Codcomplemento = 0,
+                    Statuslanc = 3,
+                    Datavencimento = model.Data_Vencimento,
+                    Datadebase = DateTime.Now,
+                    Userid = 236
+                };
+       //         Exception ex = tributarioRepository.Insert_Debito_Parcela(regParcela);
+                if (ex == null) {
+                    Debitotributo regTributo = new Debitotributo {
+                        Codreduzido = model.Inscricao,
+                        Anoexercicio = (short)DateTime.Now.Year,
+                        Codlancamento = 41,
+                        Seqlancamento = _seqHon,
+                        Numparcela = 1,
+                        Codcomplemento = 0,
+                        Codtributo = 90,
+                        Valortributo = model.Soma_Honorario
+                    };
+     //               Exception ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
+                    Parceladocumento parcReg = new Parceladocumento() {
+                        Codreduzido = model.Inscricao,
+                        Anoexercicio = (short)DateTime.Now.Year,
+                        Codlancamento = 41,
+                        Seqlancamento = _seqHon,
+                        Numparcela = 1,
+                        Codcomplemento = 0,
+                        Plano = Convert.ToInt16(model.Plano.ToString()),
+                        Numdocumento = _documento
+                    };
+    //                ex2 = tributarioRepository.Insert_Parcela_Documento(parcReg);
+                }
+            }
+
+
+            //Gravar Dam Header
+            string _guid = Guid.NewGuid().ToString("N");
+            byte[] _qrcode = new byte[10];
+            Dam_header _dh = new Dam_header {
+                Guid = _guid,
+                Codigo=model.Inscricao,
+                Nome=model.Nome,
+                Endereco=model.Endereco2,
+                Bairro=model.Bairro,
+                Cidade=model.Cidade,
+                Uf=model.UF,
+                Quadra=model.Quadra,
+                Lote=model.Lote,
+                Cep=Convert.ToInt32(RetornaNumero( model.Cep)),
+                Cpf_cnpj=RetornaNumero( model.CpfCnpjLabel),
+                Data_vencimento=model.Data_Vencimento,
+                Numero_documento=_documento,
+                Valor_guia=model.Soma_Total,
+                Qrcodeimage=_qrcode
+            };
+            ex = tributarioRepository.Insert_Dam_Header(_dh);
+            return View(model);
+        }
+
+
     }
 }

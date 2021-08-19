@@ -10,9 +10,13 @@ namespace GTI_Mvc.ViewModels {
         public DateTime Data_Vencimento { get; set; }
         public string Nome { get; set; }
         public string Endereco { get; set; }
+        public string Endereco2 { get; set; }
+        public string Bairro { get; set; }
         public string Cidade { get; set; }
         public string UF { get; set; }
         public string Cep { get; set; }
+        public string Quadra { get; set; }
+        public string Lote { get; set; }
         public string CpfCnpjLabel { get; set; }
         public string CpfValue { get; set; }
         public string CnpjValue { get; set; }

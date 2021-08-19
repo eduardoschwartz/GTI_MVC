@@ -104,6 +104,7 @@
     <Compile Include="Models\chaveStruct.cs" />
     <Compile Include="Models\cidadao_socio.cs" />
     <Compile Include="Models\dados_imovel_web.cs" />
+    <Compile Include="Models\dam_header.cs" />
     <Compile Include="Models\employees.cs" />
     <Compile Include="Models\encargo_cvd.cs" />
     <Compile Include="Models\itbi_guia.cs" />
