@@ -312,6 +312,12 @@
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Reports\dam_v6.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dam_v6.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\MobReq_Baixa.cs">
       <DependentUpon>MobReq_Baixa.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1127,6 +1133,10 @@
     <EmbeddedResource Include="Reports\Auto_Infracao_Obra.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Auto_Infracao_Obra.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\dam_v6.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>dam_v6.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Dam_with_Pix.rdlc" />
     <EmbeddedResource Include="Reports\MobReq_Baixa.rpt">
