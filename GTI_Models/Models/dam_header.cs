@@ -27,5 +27,6 @@ namespace GTI_Models.Models {
         public string Url { get; set; }
         public string Txid { get; set; }
         public string Emv { get; set; }
+        public byte[] Codebar { get; set; }
     }
 }

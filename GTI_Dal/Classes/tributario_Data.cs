@@ -3118,7 +3118,7 @@ Proximo:;
 
         public Exception Insert_Dam_Header(Dam_header Reg) {
             using (var db = new GTI_Context(_connection)) {
-                object[] Parametros = new object[22];
+                object[] Parametros = new object[23];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
                 if(string.IsNullOrEmpty(Reg.Inscricao))
                     Parametros[1] = new SqlParameter { ParameterName = "@inscricao",  SqlValue = DBNull.Value};
@@ -3180,11 +3180,12 @@ Proximo:;
                     Parametros[21] = new SqlParameter { ParameterName = "@emv", SqlValue = DBNull.Value };
                 else
                     Parametros[21] = new SqlParameter { ParameterName = "@emv", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Emv };
+                Parametros[22] = new SqlParameter { ParameterName = "@codebar", SqlDbType = SqlDbType.Image, SqlValue = Reg.Codebar };
 
                 db.Database.ExecuteSqlCommand("INSERT INTO dam_header(guid,inscricao,codigo,lancamento,nome,cpf_cnpj,endereco,bairro,cidade,uf,quadra,lote,numero_documento,data_vencimento,codigo_barra,linha_digitavel," +
-                                              "qrcodeimage,cep,valor_guia,url,txid,emv) " +
+                                              "qrcodeimage,cep,valor_guia,url,txid,emv,codebar) " +
                                               "VALUES(@guid,@inscricao,@codigo,@lancamento,@nome,@cpf_cnpj,@endereco,@bairro,@cidade,@uf,@quadra,@lote,@numero_documento,@data_vencimento,@codigo_barra,@linha_digitavel," +
-                                              "@qrcodeimage,@cep,@valor_guia,@url,@txid,@emv)", Parametros);
+                                              "@qrcodeimage,@cep,@valor_guia,@url,@txid,@emv,@codebar)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {

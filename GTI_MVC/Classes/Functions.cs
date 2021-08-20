@@ -495,6 +495,18 @@ namespace GTI_Mvc {
             return new_Word;
         }
 
+        public static string TruncateToNoSufix(string word, int lenght) {
+            string new_Word = word;
+            if (word == null)
+                return "";
+            if (word.Length > lenght) {
+                new_Word = word.Substring(0, lenght ) ;
+            }
+
+            return new_Word;
+        }
+
+
         /// <summary>
         /// Remove multiplos espaços no meio da palavra
         /// </summary>

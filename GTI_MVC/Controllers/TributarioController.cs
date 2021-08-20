@@ -2698,8 +2698,8 @@ namespace GTI_Mvc.Controllers {
                 Bairro = model.Bairro,
                 Cidade = model.Cidade,
                 Uf = model.UF,
-                Quadra = model.Quadra,
-                Lote = model.Lote,
+                Quadra =TruncateToNoSufix( model.Quadra,12),
+                Lote = TruncateToNoSufix( model.Lote,12),
                 Cep = Convert.ToInt32(RetornaNumero(model.Cep)),
                 Cpf_cnpj = RetornaNumero(model.CpfCnpjLabel),
                 Data_vencimento = model.Data_Vencimento,
@@ -2718,8 +2718,8 @@ namespace GTI_Mvc.Controllers {
             _dh.Emv = cob.Emv;
 
             //Extrai o QrCode 
-            string base64string;
-            //##### QRCode ##########################################################
+            string base64string, base64stringBC;
+            //##### QRCode && BarCode################################################
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(_dh.Emv, QRCodeGenerator.ECCLevel.Q);
             using (Bitmap bitmap = qrCode.GetGraphic(20)) {
@@ -2730,53 +2730,125 @@ namespace GTI_Mvc.Controllers {
                     _dh.Qrcodeimage = byteImage;
                 }
             }
+
+           Image img=  Int2of5.GenerateBarCode(cob.Codigo_Barra, 1000, 100, 2);
+            using (Image bitmap = img) {
+                using (MemoryStream ms = new MemoryStream()) {
+                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    byte[] byteImage = ms.ToArray();
+                    base64stringBC = Convert.ToBase64String(byteImage);
+                    _dh.Codebar = byteImage;
+                }
+            }
             //#######################################################################
-            
+
+
             ex = tributarioRepository.Insert_Dam_Header(_dh);
 
             //Carrega Dataset com os lançamentos para o boleto
             List<Dam_data> Lista_Dados = new List<Dam_data>();
+            foreach (ListDebitoEditorViewModel row in model.Debito) {
+                Dam_data reg = new Dam_data {
+                    Exercicio = (short)row.Exercicio,
+                    Lancamento=(short)row.Lancamento,
+                    Sequencia=(short)row.Seq,
+                    Parcela=(byte)row.Parcela,
+                    Complemento=(byte)row.Complemento,
+                    Datavencimento=Convert.ToDateTime(row.Data_Vencimento),
+                    Da=Convert.ToChar(row.Da),
+                    Aj=Convert.ToChar(row.Aj),
+                    Principal=row.Soma_Principal,
+                    Juros=row.Soma_Juros,
+                    Multa=row.Soma_Multa,
+                    Correcao=row.Soma_Correcao,
+                    Total=row.Soma_Total
+                };
+                reg.Descricao = "IPTU/JUROS/MULTA/" + row.Lancamento_Nome;
+                Lista_Dados.Add(reg);
+            }
+
+            string _fullLanc = "IPTU";
 
             //Imprime o boleto
-            Warning[] warnings;
-            string[] streamIds;
-            string mimeType = string.Empty;
-            string encoding = string.Empty;
-            string extension = string.Empty;
-            Session["sid"] = "";
-            DataSet Ds = Functions.ToDataSet(Lista_Dados);
-            ReportDataSource rdsAct = new ReportDataSource("dsDamPix", Ds.Tables[0]);
-            ReportViewer viewer = new ReportViewer();
-            viewer.LocalReport.Refresh();
-            viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Dam_with_Pix.rdlc"); ;
-            viewer.LocalReport.DataSources.Add(rdsAct); // Add  datasource here       
 
-            List<ReportParameter> parameters = new List<ReportParameter>();
-            parameters.Add(new ReportParameter("LinhaDigitavel", Formata_Linha_Digitavel(_dh.Linha_digitavel)));
-            parameters.Add(new ReportParameter("DataVencimento", _dh.Data_vencimento.ToString("dd/MM/yyyy")));
-            parameters.Add(new ReportParameter("NossoNumero",    _dh.Nosso_Numero));
-            parameters.Add(new ReportParameter("NumeroGuia", _dh.Numero_documento.ToString()));
-            parameters.Add(new ReportParameter("PagadorNome", _dh.Nome));
-            parameters.Add(new ReportParameter("PagadorEndereco", _dh.Endereco));
-            parameters.Add(new ReportParameter("PagadorCpfCnpj", _dh.Cpf_cnpj));
-            parameters.Add(new ReportParameter("ValorGuia", _dh.Valor_guia.ToString("#0.00")));
-            parameters.Add(new ReportParameter("QRCode", base64string));
-            parameters.Add(new ReportParameter("CodigoBarra", _dh.Codigo_barra));
-            parameters.Add(new ReportParameter("PagadorBairro", _dh.Bairro??""));
-            parameters.Add(new ReportParameter("PagadorCep", _dh.Cep.ToString()));
-            parameters.Add(new ReportParameter("PagadorCidade", _dh.Cidade??""));
-            parameters.Add(new ReportParameter("PagadorUF", _dh.Uf ?? ""));
-            parameters.Add(new ReportParameter("PagadorQuadra", string.IsNullOrEmpty( _dh.Quadra) ? " ":_dh.Quadra));
-            parameters.Add(new ReportParameter("PagadorLote", string.IsNullOrEmpty(_dh.Lote) ? " " : _dh.Lote));
-            viewer.LocalReport.SetParameters(parameters);
-            byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
-            Response.Buffer = true;
-            Response.Clear();
-            Response.ContentType = mimeType;
-            Response.AddHeader("content-disposition", "attachment; filename=" + _guid + "." + extension);
-            Response.OutputStream.Write(bytes, 0, bytes.Length);
-            Response.Flush();
-            Response.End();
+            ReportDocument rd = new ReportDocument();
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/dam_v6.rpt"));
+            TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+            TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+            ConnectionInfo crConnectionInfo = new ConnectionInfo();
+            Tables CrTables;
+            string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+            string IPAddress = builder.DataSource;
+            string _userId = builder.UserID;
+            string _pwd = builder.Password;
+
+            crConnectionInfo.ServerName = IPAddress;
+            crConnectionInfo.DatabaseName = "Tributacao";
+            crConnectionInfo.UserID = _userId;
+            crConnectionInfo.Password = _pwd;
+            CrTables = rd.Database.Tables;
+            foreach (Table CrTable in CrTables) {
+                crtableLogoninfo = CrTable.LogOnInfo;
+                crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                CrTable.ApplyLogOnInfo(crtableLogoninfo);
+            }
+
+            try {
+                rd.RecordSelectionFormula = "{dam_header.guid}='" + _guid + "'";
+                rd.SetParameterValue("Codigo", _dh.Codigo.ToString("000000"));
+                rd.SetParameterValue("NossoNumero", _dh.Nosso_Numero);
+                rd.SetParameterValue("Lancamento", _fullLanc);
+                Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                return File(stream, "application/pdf", _guid+  ".pdf");
+            } catch {
+                throw;
+            }
+
+
+
+            //Warning[] warnings;
+            //string[] streamIds;
+            //string mimeType = string.Empty;
+            //string encoding = string.Empty;
+            //string extension = string.Empty;
+            //Session["sid"] = "";
+            //DataSet Ds = Functions.ToDataSet(Lista_Dados);
+            //ReportDataSource rdsAct = new ReportDataSource("dsDamPix", Ds.Tables[0]);
+            //ReportViewer viewer = new ReportViewer();
+            //viewer.LocalReport.Refresh();
+            //viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Dam_with_Pix.rdlc"); ;
+            //viewer.LocalReport.DataSources.Add(rdsAct); // Add  datasource here       
+
+            //List<ReportParameter> parameters = new List<ReportParameter>();
+            //parameters.Add(new ReportParameter("LinhaDigitavel", Formata_Linha_Digitavel(_dh.Linha_digitavel)));
+            //parameters.Add(new ReportParameter("DataVencimento", _dh.Data_vencimento.ToString("dd/MM/yyyy")));
+            //parameters.Add(new ReportParameter("NossoNumero",    _dh.Nosso_Numero));
+            //parameters.Add(new ReportParameter("NumeroGuia", _dh.Nosso_Numero));
+            //parameters.Add(new ReportParameter("PagadorNome", _dh.Nome));
+            //parameters.Add(new ReportParameter("PagadorEndereco", _dh.Endereco));
+            //parameters.Add(new ReportParameter("PagadorCpfCnpj", FormatarCpfCnpj( _dh.Cpf_cnpj)));
+            //parameters.Add(new ReportParameter("ValorGuia", _dh.Valor_guia.ToString("#0.00")));
+            //parameters.Add(new ReportParameter("QRCode", base64string));
+            //parameters.Add(new ReportParameter("CodigoBarra", _dh.Codigo_barra));
+            //parameters.Add(new ReportParameter("PagadorBairro", _dh.Bairro??""));
+            //parameters.Add(new ReportParameter("PagadorCep", _dh.Cep.ToString()));
+            //parameters.Add(new ReportParameter("PagadorCidade", _dh.Cidade??""));
+            //parameters.Add(new ReportParameter("PagadorUF", _dh.Uf ?? ""));
+            //parameters.Add(new ReportParameter("PagadorQuadra", string.IsNullOrEmpty( _dh.Quadra) ? " ":_dh.Quadra));
+            //parameters.Add(new ReportParameter("PagadorLote", string.IsNullOrEmpty(_dh.Lote) ? " " :  _dh.Lote));
+            //parameters.Add(new ReportParameter("PagadorCodigo", _dh.Codigo.ToString("000000")));
+            //parameters.Add(new ReportParameter("LancamentoFull", _fullLanc));
+            //parameters.Add(new ReportParameter("BarCode", base64stringBC));
+            //viewer.LocalReport.SetParameters(parameters);
+            //byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
+            //Response.Buffer = true;
+            //Response.Clear();
+            //Response.ContentType = mimeType;
+            //Response.AddHeader("content-disposition", "attachment; filename=" + _guid + "." + extension);
+            //Response.OutputStream.Write(bytes, 0, bytes.Length);
+            //Response.Flush();
+            //Response.End();
 
             return View(model);
         }
