@@ -7,6 +7,7 @@ using System.Data;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web.Caching;
 
 namespace GTI_Mvc {
     public static class Functions {
@@ -501,8 +502,6 @@ namespace GTI_Mvc {
             return  Regex.Replace(word, @"\s+", " ").Trim();
         }
 
-
-        // O método EscreverExtenso recebe um valor do tipo decimal
         public static string EscreverExtenso(decimal valor) {
             if (valor <= 0 | valor >= 1000000000000000)
                 return "Valor não suportado pelo sistema.";
@@ -556,6 +555,7 @@ namespace GTI_Mvc {
                 return valor_por_extenso;
             }
         }
+    
         public static string Escrever_Valor_Extenso(decimal valor) {
             if (valor <= 0)
                 return string.Empty;
@@ -612,6 +612,23 @@ namespace GTI_Mvc {
 
 
         }
+
+        public static string Formata_Linha_Digitavel(string Linha_sem_Formato) {//Converte para ==> 00190.00009 03128.557000 19152.037172 6 87280000009042
+            string newStr = "";
+            string r = Linha_sem_Formato;
+
+            newStr = r.Substring(0, 5)+".";
+            newStr += r.Substring(5, 5) + " ";
+            newStr += r.Substring(10, 5) + ".";
+            newStr += r.Substring(15, 6) + " ";
+            newStr += r.Substring(21, 5) + ".";
+            newStr += r.Substring(26, 6) + " ";
+            newStr += r.Substring(32, 1) + " ";
+            newStr += r.Substring(33, 14) + " ";
+
+            return newStr;
+        }
+
 
     }
 

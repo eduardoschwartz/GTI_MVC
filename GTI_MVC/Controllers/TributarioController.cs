@@ -2712,12 +2712,13 @@ namespace GTI_Mvc.Controllers {
             //Envia para registro
             Cobranca_Retorno cob = Sistema_Cobranca.Registrar_Cobranca(_dh);
             _dh.Linha_digitavel = cob.Linha_Digitavel;
-            _dh.Codigo_barra = cob.Codigo_Barra;
+            _dh.Codigo_barra = Functions.Gera2of5Str(cob.Codigo_Barra); ;
             _dh.Url = cob.Url;
             _dh.Txid = cob.txId;
             _dh.Emv = cob.Emv;
 
             //Extrai o QrCode 
+            string base64string;
             //##### QRCode ##########################################################
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(_dh.Emv, QRCodeGenerator.ECCLevel.Q);
@@ -2725,16 +2726,15 @@ namespace GTI_Mvc.Controllers {
                 using (MemoryStream ms = new MemoryStream()) {
                     bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
                     byte[] byteImage = ms.ToArray();
+                    base64string = Convert.ToBase64String(byteImage);
                     _dh.Qrcodeimage = byteImage;
                 }
             }
             //#######################################################################
-
+            
             ex = tributarioRepository.Insert_Dam_Header(_dh);
 
-
-            //Carrega Dataset para o boleto
-
+            //Carrega Dataset com os lançamentos para o boleto
             List<Dam_data> Lista_Dados = new List<Dam_data>();
 
             //Imprime o boleto
@@ -2752,7 +2752,7 @@ namespace GTI_Mvc.Controllers {
             viewer.LocalReport.DataSources.Add(rdsAct); // Add  datasource here       
 
             List<ReportParameter> parameters = new List<ReportParameter>();
-            parameters.Add(new ReportParameter("LinhaDigitavel", _dh.Linha_digitavel));
+            parameters.Add(new ReportParameter("LinhaDigitavel", Formata_Linha_Digitavel(_dh.Linha_digitavel)));
             parameters.Add(new ReportParameter("DataVencimento", _dh.Data_vencimento.ToString("dd/MM/yyyy")));
             parameters.Add(new ReportParameter("NossoNumero",    _dh.Nosso_Numero));
             parameters.Add(new ReportParameter("NumeroGuia", _dh.Numero_documento.ToString()));
@@ -2760,6 +2760,14 @@ namespace GTI_Mvc.Controllers {
             parameters.Add(new ReportParameter("PagadorEndereco", _dh.Endereco));
             parameters.Add(new ReportParameter("PagadorCpfCnpj", _dh.Cpf_cnpj));
             parameters.Add(new ReportParameter("ValorGuia", _dh.Valor_guia.ToString("#0.00")));
+            parameters.Add(new ReportParameter("QRCode", base64string));
+            parameters.Add(new ReportParameter("CodigoBarra", _dh.Codigo_barra));
+            parameters.Add(new ReportParameter("PagadorBairro", _dh.Bairro??""));
+            parameters.Add(new ReportParameter("PagadorCep", _dh.Cep.ToString()));
+            parameters.Add(new ReportParameter("PagadorCidade", _dh.Cidade??""));
+            parameters.Add(new ReportParameter("PagadorUF", _dh.Uf ?? ""));
+            parameters.Add(new ReportParameter("PagadorQuadra", string.IsNullOrEmpty( _dh.Quadra) ? " ":_dh.Quadra));
+            parameters.Add(new ReportParameter("PagadorLote", string.IsNullOrEmpty(_dh.Lote) ? " " : _dh.Lote));
             viewer.LocalReport.SetParameters(parameters);
             byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
             Response.Buffer = true;
@@ -2770,11 +2778,8 @@ namespace GTI_Mvc.Controllers {
             Response.Flush();
             Response.End();
 
-
-
-
-
             return View(model);
         }
+
     }
 }

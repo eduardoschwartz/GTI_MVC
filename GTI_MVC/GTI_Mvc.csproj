@@ -140,6 +140,7 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
@@ -270,6 +271,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsDAM.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Datasets\dsDamPix.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsDamPix.xsd</DependentUpon>
     </Compile>
     <Compile Include="Datasets\dsGuia_Itbi.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -775,6 +781,17 @@
     <Content Include="Datasets\dsDAM.xss">
       <DependentUpon>dsDAM.xsd</DependentUpon>
     </Content>
+    <Content Include="Datasets\dsDamPix.xsc">
+      <DependentUpon>dsDamPix.xsd</DependentUpon>
+    </Content>
+    <None Include="Datasets\dsDamPix.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsDamPix.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Datasets\dsDamPix.xss">
+      <DependentUpon>dsDamPix.xsd</DependentUpon>
+    </Content>
     <None Include="Datasets\dsGuia_Itbi.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -1111,6 +1128,7 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Auto_Infracao_Obra.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Dam_with_Pix.rdlc" />
     <EmbeddedResource Include="Reports\MobReq_Baixa.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>MobReq_Baixa.cs</LastGenOutput>
