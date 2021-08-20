@@ -2602,7 +2602,6 @@ namespace GTI_Mvc.Controllers {
             return null;
         }
 
-
         [Route("Damd2")]
         [HttpGet]
         public ActionResult Damd2() {
@@ -2619,6 +2618,7 @@ namespace GTI_Mvc.Controllers {
           public ActionResult Damd2(string p) {
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             DebitoListViewModel model = (DebitoListViewModel)TempData["debito2"];
+            string _guid = Guid.NewGuid().ToString("N");
 
             //grava o documento
             Numdocumento docReg = new Numdocumento() {
@@ -2660,7 +2660,7 @@ namespace GTI_Mvc.Controllers {
                     Datadebase = DateTime.Now,
                     Userid = 236
                 };
-                //         Exception ex = tributarioRepository.Insert_Debito_Parcela(regParcela);
+                ex = tributarioRepository.Insert_Debito_Parcela(regParcela);
                 if (ex == null) {
                     Debitotributo regTributo = new Debitotributo {
                         Codreduzido = model.Inscricao,
@@ -2672,7 +2672,7 @@ namespace GTI_Mvc.Controllers {
                         Codtributo = 90,
                         Valortributo = model.Soma_Honorario
                     };
-                    //               Exception ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
+                    Exception ex2 = tributarioRepository.Insert_Debito_Tributo(regTributo);
                     Parceladocumento parcReg = new Parceladocumento() {
                         Codreduzido = model.Inscricao,
                         Anoexercicio = (short)DateTime.Now.Year,
@@ -2683,12 +2683,32 @@ namespace GTI_Mvc.Controllers {
                         Plano = Convert.ToInt16(model.Plano.ToString()),
                         Numdocumento = _documento
                     };
-                    //                ex2 = tributarioRepository.Insert_Parcela_Documento(parcReg);
+                    ex2 = tributarioRepository.Insert_Parcela_Documento(parcReg);
                 }
+
+                Dam_data reg = new Dam_data {
+                    Exercicio = (short)DateTime.Now.Year,
+                    Lancamento = 41,
+                    Sequencia = _seqHon,
+                    Parcela =1,
+                    Complemento = 0,
+                    Datavencimento = model.Data_Vencimento,
+                    Da = 'N',
+                    Aj = 'N',
+                    Principal = model.Soma_Honorario,
+                    Juros = 0,
+                    Multa = 0,
+                    Correcao = 0,
+                    Total =model.Soma_Honorario,
+                    Guid = _guid,
+                    Descricao="DESPESAS JUDICIAIS"
+                };
+                ex = tributarioRepository.Insert_Dam_Data(reg);
+
             }
 
             //Carrega Dam Header
-            string _guid = Guid.NewGuid().ToString("N");
+            
             byte[] _qrcode = new byte[10];
             Dam_header _dh = new Dam_header {
                 Guid = _guid,
@@ -2741,12 +2761,9 @@ namespace GTI_Mvc.Controllers {
                 }
             }
             //#######################################################################
-
-
             ex = tributarioRepository.Insert_Dam_Header(_dh);
 
-            //Carrega Dataset com os lançamentos para o boleto
-            List<Dam_data> Lista_Dados = new List<Dam_data>();
+            //Grava os lançamentos para o boleto
             foreach (ListDebitoEditorViewModel row in model.Debito) {
                 Dam_data reg = new Dam_data {
                     Exercicio = (short)row.Exercicio,
@@ -2761,13 +2778,13 @@ namespace GTI_Mvc.Controllers {
                     Juros=row.Soma_Juros,
                     Multa=row.Soma_Multa,
                     Correcao=row.Soma_Correcao,
-                    Total=row.Soma_Total
+                    Total=row.Soma_Total,
+                    Descricao=row.Lancamento_Nome,
+                    Guid=_guid
                 };
-                reg.Descricao = "IPTU/JUROS/MULTA/" + row.Lancamento_Nome;
-                Lista_Dados.Add(reg);
+                
+                ex = tributarioRepository.Insert_Dam_Data(reg);
             }
-
-            string _fullLanc = "IPTU";
 
             //Imprime o boleto
 
@@ -2798,60 +2815,73 @@ namespace GTI_Mvc.Controllers {
                 rd.RecordSelectionFormula = "{dam_header.guid}='" + _guid + "'";
                 rd.SetParameterValue("Codigo", _dh.Codigo.ToString("000000"));
                 rd.SetParameterValue("NossoNumero", _dh.Nosso_Numero);
-                rd.SetParameterValue("Lancamento", _fullLanc);
+                rd.SetParameterValue("Nome", _dh.Nome);
+                rd.SetParameterValue("CpfCnpj", FormatarCpfCnpj(_dh.Cpf_cnpj));
+                rd.SetParameterValue("Endereco", _dh.Endereco);
+                rd.SetParameterValue("Bairro", _dh.Bairro??"");
+                rd.SetParameterValue("Cidade", _dh.Cidade);
+                rd.SetParameterValue("UF", _dh.Uf);
+                rd.SetParameterValue("Quadra", _dh.Quadra);
+                rd.SetParameterValue("Lote", _dh.Lote);
+                rd.SetParameterValue("Cep", _dh.Cep);
+                rd.SetParameterValue("DataVencto", _dh.Data_vencimento.ToString("dd/MM/yyyy"));
+                rd.SetParameterValue("ValorGuia", _dh.Valor_guia.ToString("#0.00"));
+                rd.SetParameterValue("LinhaDigitavel", Formata_Linha_Digitavel(_dh.Linha_digitavel));
                 Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
                 return File(stream, "application/pdf", _guid+  ".pdf");
             } catch {
                 throw;
             }
-
-
-
-            //Warning[] warnings;
-            //string[] streamIds;
-            //string mimeType = string.Empty;
-            //string encoding = string.Empty;
-            //string extension = string.Empty;
-            //Session["sid"] = "";
-            //DataSet Ds = Functions.ToDataSet(Lista_Dados);
-            //ReportDataSource rdsAct = new ReportDataSource("dsDamPix", Ds.Tables[0]);
-            //ReportViewer viewer = new ReportViewer();
-            //viewer.LocalReport.Refresh();
-            //viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Dam_with_Pix.rdlc"); ;
-            //viewer.LocalReport.DataSources.Add(rdsAct); // Add  datasource here       
-
-            //List<ReportParameter> parameters = new List<ReportParameter>();
-            //parameters.Add(new ReportParameter("LinhaDigitavel", Formata_Linha_Digitavel(_dh.Linha_digitavel)));
-            //parameters.Add(new ReportParameter("DataVencimento", _dh.Data_vencimento.ToString("dd/MM/yyyy")));
-            //parameters.Add(new ReportParameter("NossoNumero",    _dh.Nosso_Numero));
-            //parameters.Add(new ReportParameter("NumeroGuia", _dh.Nosso_Numero));
-            //parameters.Add(new ReportParameter("PagadorNome", _dh.Nome));
-            //parameters.Add(new ReportParameter("PagadorEndereco", _dh.Endereco));
-            //parameters.Add(new ReportParameter("PagadorCpfCnpj", FormatarCpfCnpj( _dh.Cpf_cnpj)));
-            //parameters.Add(new ReportParameter("ValorGuia", _dh.Valor_guia.ToString("#0.00")));
-            //parameters.Add(new ReportParameter("QRCode", base64string));
-            //parameters.Add(new ReportParameter("CodigoBarra", _dh.Codigo_barra));
-            //parameters.Add(new ReportParameter("PagadorBairro", _dh.Bairro??""));
-            //parameters.Add(new ReportParameter("PagadorCep", _dh.Cep.ToString()));
-            //parameters.Add(new ReportParameter("PagadorCidade", _dh.Cidade??""));
-            //parameters.Add(new ReportParameter("PagadorUF", _dh.Uf ?? ""));
-            //parameters.Add(new ReportParameter("PagadorQuadra", string.IsNullOrEmpty( _dh.Quadra) ? " ":_dh.Quadra));
-            //parameters.Add(new ReportParameter("PagadorLote", string.IsNullOrEmpty(_dh.Lote) ? " " :  _dh.Lote));
-            //parameters.Add(new ReportParameter("PagadorCodigo", _dh.Codigo.ToString("000000")));
-            //parameters.Add(new ReportParameter("LancamentoFull", _fullLanc));
-            //parameters.Add(new ReportParameter("BarCode", base64stringBC));
-            //viewer.LocalReport.SetParameters(parameters);
-            //byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
-            //Response.Buffer = true;
-            //Response.Clear();
-            //Response.ContentType = mimeType;
-            //Response.AddHeader("content-disposition", "attachment; filename=" + _guid + "." + extension);
-            //Response.OutputStream.Write(bytes, 0, bytes.Length);
-            //Response.Flush();
-            //Response.End();
-
-            return View(model);
         }
-
     }
 }
+
+
+
+
+
+
+//Warning[] warnings;
+//string[] streamIds;
+//string mimeType = string.Empty;
+//string encoding = string.Empty;
+//string extension = string.Empty;
+//Session["sid"] = "";
+//DataSet Ds = Functions.ToDataSet(Lista_Dados);
+//ReportDataSource rdsAct = new ReportDataSource("dsDamPix", Ds.Tables[0]);
+//ReportViewer viewer = new ReportViewer();
+//viewer.LocalReport.Refresh();
+//viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Dam_with_Pix.rdlc"); ;
+//viewer.LocalReport.DataSources.Add(rdsAct); // Add  datasource here       
+
+//List<ReportParameter> parameters = new List<ReportParameter>();
+//parameters.Add(new ReportParameter("LinhaDigitavel", Formata_Linha_Digitavel(_dh.Linha_digitavel)));
+//parameters.Add(new ReportParameter("DataVencimento", _dh.Data_vencimento.ToString("dd/MM/yyyy")));
+//parameters.Add(new ReportParameter("NossoNumero",    _dh.Nosso_Numero));
+//parameters.Add(new ReportParameter("NumeroGuia", _dh.Nosso_Numero));
+//parameters.Add(new ReportParameter("PagadorNome", _dh.Nome));
+//parameters.Add(new ReportParameter("PagadorEndereco", _dh.Endereco));
+//parameters.Add(new ReportParameter("PagadorCpfCnpj", FormatarCpfCnpj( _dh.Cpf_cnpj)));
+//parameters.Add(new ReportParameter("ValorGuia", _dh.Valor_guia.ToString("#0.00")));
+//parameters.Add(new ReportParameter("QRCode", base64string));
+//parameters.Add(new ReportParameter("CodigoBarra", _dh.Codigo_barra));
+//parameters.Add(new ReportParameter("PagadorBairro", _dh.Bairro??""));
+//parameters.Add(new ReportParameter("PagadorCep", _dh.Cep.ToString()));
+//parameters.Add(new ReportParameter("PagadorCidade", _dh.Cidade??""));
+//parameters.Add(new ReportParameter("PagadorUF", _dh.Uf ?? ""));
+//parameters.Add(new ReportParameter("PagadorQuadra", string.IsNullOrEmpty( _dh.Quadra) ? " ":_dh.Quadra));
+//parameters.Add(new ReportParameter("PagadorLote", string.IsNullOrEmpty(_dh.Lote) ? " " :  _dh.Lote));
+//parameters.Add(new ReportParameter("PagadorCodigo", _dh.Codigo.ToString("000000")));
+//parameters.Add(new ReportParameter("LancamentoFull", _fullLanc));
+//parameters.Add(new ReportParameter("BarCode", base64stringBC));
+//viewer.LocalReport.SetParameters(parameters);
+//byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
+//Response.Buffer = true;
+//Response.Clear();
+//Response.ContentType = mimeType;
+//Response.AddHeader("content-disposition", "attachment; filename=" + _guid + "." + extension);
+//Response.OutputStream.Write(bytes, 0, bytes.Length);
+//Response.Flush();
+//Response.End();
+
+//return View(model);

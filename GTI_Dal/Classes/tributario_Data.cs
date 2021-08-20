@@ -3195,7 +3195,35 @@ Proximo:;
             }
         }
 
+        public Exception Insert_Dam_Data(Dam_data Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[15];
+                Parametros[0] = new SqlParameter { ParameterName = "@exercicio", SqlDbType = SqlDbType.Int, SqlValue = Reg.Exercicio };
+                Parametros[1] = new SqlParameter { ParameterName = "@lancamento", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Lancamento };
+                Parametros[2] = new SqlParameter { ParameterName = "@sequencia", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Sequencia };
+                Parametros[3] = new SqlParameter { ParameterName = "@parcela", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Parcela };
+                Parametros[4] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.TinyInt, SqlValue = Reg.Complemento };
+                Parametros[5] = new SqlParameter { ParameterName = "@da", SqlDbType = SqlDbType.Char, SqlValue = Reg.Da };
+                Parametros[6] = new SqlParameter { ParameterName = "@aj", SqlDbType = SqlDbType.Char, SqlValue = Reg.Aj };
+                Parametros[7] = new SqlParameter { ParameterName = "@datavencimento", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Datavencimento };
+                Parametros[8] = new SqlParameter { ParameterName = "@principal", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Principal };
+                Parametros[9] = new SqlParameter { ParameterName = "@juros", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Juros };
+                Parametros[10] = new SqlParameter { ParameterName = "@multa", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Multa };
+                Parametros[11] = new SqlParameter { ParameterName = "@correcao", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Correcao };
+                Parametros[12] = new SqlParameter { ParameterName = "@total", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Total};
+                Parametros[13] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                Parametros[14] = new SqlParameter { ParameterName = "@descricao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Descricao };
 
+                db.Database.ExecuteSqlCommand("INSERT INTO dam_data(exercicio,lancamento,sequencia,parcela,complemento,da,aj,datavencimento,principal,juros,multa,correcao,total,guid,descricao) " +
+                                              "VALUES(@exercicio,@lancamento,@sequencia,@parcela,@complemento,@da,@aj,@datavencimento,@principal,@juros,@multa,@correcao,@total,@guid,@descricao)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
 
 
 

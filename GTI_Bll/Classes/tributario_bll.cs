@@ -1587,6 +1587,12 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Insert_Dam_Data(Dam_data Reg) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            Exception ex = obj.Insert_Dam_Data(Reg);
+            return ex;
+        }
+
     }//end class
 }
 
