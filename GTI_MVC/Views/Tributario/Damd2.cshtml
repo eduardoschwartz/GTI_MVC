@@ -21,6 +21,7 @@
     .actionlink {
         color: darkslateblue;
     }
+
     .card-header {
         background-color: mistyrose;
         color: brown;
@@ -45,11 +46,10 @@
         font-size: 14px;
         border-radius: 4px;
     }
-
 </style>
 
 <div class="center container" style="width:830px">
-
+    @{var res = ViewBag.Result;}
     @using (Html.BeginForm("Damd2", "Tributario", FormMethod.Post, new { id = "formField", encType = "multipart/form-data", name = "frmExtrato", @Class = "mt-3" })) {
         <div class="card">
             <div class="card-header">
@@ -185,3 +185,46 @@
         </div>
     }
 </div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+          
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+    </script>
+}
+
+
+
+

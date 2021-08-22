@@ -4,6 +4,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.EnterpriseServices;
 using System.Linq;
 using System.Web.Script.Serialization;
 
@@ -53,7 +54,7 @@ namespace GTI_Mvc.Classes {
 
     public class Sistema_Cobranca {
         public static Cobranca_Retorno Registrar_Cobranca(Dam_header dam) {
-            Cobranca_Retorno cob = new Cobranca_Retorno() {Erro=""};
+            Cobranca_Retorno cob = new Cobranca_Retorno() { Erro = "" };
 
             //***********Geração do Token****************
             var client = new RestClient("https://oauth.hm.bb.com.br/oauth/token?gw-dev-app-key=d27b67790cffab50136be17db0050c56b9d1a5b1");
@@ -77,7 +78,7 @@ namespace GTI_Mvc.Classes {
                 }
             }
             if (_token == "") {//<========= Se o token for inválido retorna erro
-           //     return View();
+                               //     return View();
             }
 
             //**********************************************
@@ -96,12 +97,12 @@ namespace GTI_Mvc.Classes {
             int _tipoInscricao = 1; //(1-Cpf,2-Cnpj)     //─┐
             long _numeroInscricao = 96050176876;         //─┤
             string _nome = "VALERIO DE AGUIAR ZORZATO";  //─┴─ APÓS HOMOLOGAÇÃO TROCAR ESTES 3 CAMPOS POR DADOS REAIS
-            string _endereco = Functions.RemoveDiacritics( dam.Endereco);
+            string _endereco = Functions.RemoveDiacritics(dam.Endereco);
             int _cep = dam.Cep;
             string _cidade = Functions.RemoveDiacritics(dam.Cidade);
             string _bairro = Functions.RemoveDiacritics(dam.Bairro);
             string _uf = dam.Uf;
-            string _telefone = ""; 
+            string _telefone = "";
             //************************
 
             client = new RestClient("https://api.hm.bb.com.br/cobrancas/v2/boletos?gw-dev-app-key=d27b67790cffab50136be17db0050c56b9d1a5b1");
@@ -175,10 +176,15 @@ namespace GTI_Mvc.Classes {
                 }
             }
 
+            if (string.IsNullOrEmpty(cob.txId)){
+                cob.Erro = "ERRO";
+            }
+
             return cob;
 
         }
     }
+
 
     public static class Int2of5 {
         private static string Encode(string Data) {

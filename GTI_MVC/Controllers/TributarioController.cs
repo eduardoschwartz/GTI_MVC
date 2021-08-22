@@ -2615,10 +2615,14 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Damd2")]
         [HttpPost]
-          public ActionResult Damd2(string p) {
+        public ActionResult Damd2(string p) {
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             DebitoListViewModel model = (DebitoListViewModel)TempData["debito2"];
             string _guid = Guid.NewGuid().ToString("N");
+
+            if (model == null) {
+                return RedirectToAction("Dama");
+            }
 
             //grava o documento
             Numdocumento docReg = new Numdocumento() {
@@ -2690,7 +2694,7 @@ namespace GTI_Mvc.Controllers {
                     Exercicio = (short)DateTime.Now.Year,
                     Lancamento = 41,
                     Sequencia = _seqHon,
-                    Parcela =1,
+                    Parcela = 1,
                     Complemento = 0,
                     Datavencimento = model.Data_Vencimento,
                     Da = 'N',
@@ -2699,43 +2703,52 @@ namespace GTI_Mvc.Controllers {
                     Juros = 0,
                     Multa = 0,
                     Correcao = 0,
-                    Total =model.Soma_Honorario,
+                    Total = model.Soma_Honorario,
                     Guid = _guid,
-                    Descricao="DESPESAS JUDICIAIS"
+                    Descricao = "DESPESAS JUDICIAIS"
                 };
                 ex = tributarioRepository.Insert_Dam_Data(reg);
 
             }
 
             //Carrega Dam Header
-            
+
             byte[] _qrcode = new byte[10];
             Dam_header _dh = new Dam_header {
                 Guid = _guid,
+                Form=1,
                 Codigo = model.Inscricao,
                 Nome = model.Nome,
                 Endereco = model.Endereco2,
                 Bairro = model.Bairro,
                 Cidade = model.Cidade,
                 Uf = model.UF,
-                Quadra =TruncateToNoSufix( model.Quadra,12),
-                Lote = TruncateToNoSufix( model.Lote,12),
+                Quadra = TruncateToNoSufix(model.Quadra, 12),
+                Lote = TruncateToNoSufix(model.Lote, 12),
                 Cep = Convert.ToInt32(RetornaNumero(model.Cep)),
                 Cpf_cnpj = RetornaNumero(model.CpfCnpjLabel),
                 Data_vencimento = model.Data_Vencimento,
                 Numero_documento = _documento,
                 Valor_guia = model.Soma_Total,
-                Qrcodeimage=_qrcode,
-                Nosso_Numero= "000" + "3128557" + "00" + _documento.ToString()
+                Qrcodeimage = _qrcode,
+                Nosso_Numero = "000" + "3128557" + "00" + _documento.ToString()
             };
 
             //Envia para registro
-            Cobranca_Retorno cob = Sistema_Cobranca.Registrar_Cobranca(_dh);
-            _dh.Linha_digitavel = cob.Linha_Digitavel;
-            _dh.Codigo_barra = Functions.Gera2of5Str(cob.Codigo_Barra); ;
-            _dh.Url = cob.Url;
-            _dh.Txid = cob.txId;
-            _dh.Emv = cob.Emv;
+            Cobranca_Retorno cob = Sistema_Cobranca.Registrar_Cobranca(_dh); //<------Efetua o Registro
+            if (cob.Codigo_Barra != null) {
+                _dh.Linha_digitavel = cob.Linha_Digitavel;
+                _dh.Codigo_barra = Functions.Gera2of5Str(cob.Codigo_Barra); ;
+                _dh.Url = cob.Url;
+                _dh.Txid = cob.txId;
+                _dh.Emv = cob.Emv;
+            } else {
+                //Se houver erro e não for registrado retorna o erro e sai
+                if (cob.Erro != "") {
+                    ViewBag.Result = "Não foi possível registrar p boleto, tente novamente em alguns instantes...";
+                    return View(model);
+                }
+            }
 
             //Extrai o QrCode 
             string base64string, base64stringBC;
@@ -2836,52 +2849,3 @@ namespace GTI_Mvc.Controllers {
     }
 }
 
-
-
-
-
-
-//Warning[] warnings;
-//string[] streamIds;
-//string mimeType = string.Empty;
-//string encoding = string.Empty;
-//string extension = string.Empty;
-//Session["sid"] = "";
-//DataSet Ds = Functions.ToDataSet(Lista_Dados);
-//ReportDataSource rdsAct = new ReportDataSource("dsDamPix", Ds.Tables[0]);
-//ReportViewer viewer = new ReportViewer();
-//viewer.LocalReport.Refresh();
-//viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Dam_with_Pix.rdlc"); ;
-//viewer.LocalReport.DataSources.Add(rdsAct); // Add  datasource here       
-
-//List<ReportParameter> parameters = new List<ReportParameter>();
-//parameters.Add(new ReportParameter("LinhaDigitavel", Formata_Linha_Digitavel(_dh.Linha_digitavel)));
-//parameters.Add(new ReportParameter("DataVencimento", _dh.Data_vencimento.ToString("dd/MM/yyyy")));
-//parameters.Add(new ReportParameter("NossoNumero",    _dh.Nosso_Numero));
-//parameters.Add(new ReportParameter("NumeroGuia", _dh.Nosso_Numero));
-//parameters.Add(new ReportParameter("PagadorNome", _dh.Nome));
-//parameters.Add(new ReportParameter("PagadorEndereco", _dh.Endereco));
-//parameters.Add(new ReportParameter("PagadorCpfCnpj", FormatarCpfCnpj( _dh.Cpf_cnpj)));
-//parameters.Add(new ReportParameter("ValorGuia", _dh.Valor_guia.ToString("#0.00")));
-//parameters.Add(new ReportParameter("QRCode", base64string));
-//parameters.Add(new ReportParameter("CodigoBarra", _dh.Codigo_barra));
-//parameters.Add(new ReportParameter("PagadorBairro", _dh.Bairro??""));
-//parameters.Add(new ReportParameter("PagadorCep", _dh.Cep.ToString()));
-//parameters.Add(new ReportParameter("PagadorCidade", _dh.Cidade??""));
-//parameters.Add(new ReportParameter("PagadorUF", _dh.Uf ?? ""));
-//parameters.Add(new ReportParameter("PagadorQuadra", string.IsNullOrEmpty( _dh.Quadra) ? " ":_dh.Quadra));
-//parameters.Add(new ReportParameter("PagadorLote", string.IsNullOrEmpty(_dh.Lote) ? " " :  _dh.Lote));
-//parameters.Add(new ReportParameter("PagadorCodigo", _dh.Codigo.ToString("000000")));
-//parameters.Add(new ReportParameter("LancamentoFull", _fullLanc));
-//parameters.Add(new ReportParameter("BarCode", base64stringBC));
-//viewer.LocalReport.SetParameters(parameters);
-//byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
-//Response.Buffer = true;
-//Response.Clear();
-//Response.ContentType = mimeType;
-//Response.AddHeader("content-disposition", "attachment; filename=" + _guid + "." + extension);
-//Response.OutputStream.Write(bytes, 0, bytes.Length);
-//Response.Flush();
-//Response.End();
-
-//return View(model);

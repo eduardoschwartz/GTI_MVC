@@ -3120,10 +3120,7 @@ Proximo:;
             using (var db = new GTI_Context(_connection)) {
                 object[] Parametros = new object[23];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
-                if(string.IsNullOrEmpty(Reg.Inscricao))
-                    Parametros[1] = new SqlParameter { ParameterName = "@inscricao",  SqlValue = DBNull.Value};
-                else
-                    Parametros[1] = new SqlParameter { ParameterName = "@inscricao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Inscricao };
+                Parametros[1] = new SqlParameter { ParameterName = "@form", SqlDbType = SqlDbType.Int, SqlValue = Reg.Form };
                 Parametros[2] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
                 if (string.IsNullOrEmpty(Reg.Lancamento))
                     Parametros[3] = new SqlParameter { ParameterName = "@lancamento",  SqlValue = DBNull.Value};
@@ -3182,9 +3179,9 @@ Proximo:;
                     Parametros[21] = new SqlParameter { ParameterName = "@emv", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Emv };
                 Parametros[22] = new SqlParameter { ParameterName = "@codebar", SqlDbType = SqlDbType.Image, SqlValue = Reg.Codebar };
 
-                db.Database.ExecuteSqlCommand("INSERT INTO dam_header(guid,inscricao,codigo,lancamento,nome,cpf_cnpj,endereco,bairro,cidade,uf,quadra,lote,numero_documento,data_vencimento,codigo_barra,linha_digitavel," +
+                db.Database.ExecuteSqlCommand("INSERT INTO dam_header(guid,form,codigo,lancamento,nome,cpf_cnpj,endereco,bairro,cidade,uf,quadra,lote,numero_documento,data_vencimento,codigo_barra,linha_digitavel," +
                                               "qrcodeimage,cep,valor_guia,url,txid,emv,codebar) " +
-                                              "VALUES(@guid,@inscricao,@codigo,@lancamento,@nome,@cpf_cnpj,@endereco,@bairro,@cidade,@uf,@quadra,@lote,@numero_documento,@data_vencimento,@codigo_barra,@linha_digitavel," +
+                                              "VALUES(@guid,@form,@codigo,@lancamento,@nome,@cpf_cnpj,@endereco,@bairro,@cidade,@uf,@quadra,@lote,@numero_documento,@data_vencimento,@codigo_barra,@linha_digitavel," +
                                               "@qrcodeimage,@cep,@valor_guia,@url,@txid,@emv,@codebar)", Parametros);
                 try {
                     db.SaveChanges();

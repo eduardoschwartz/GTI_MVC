@@ -5,7 +5,7 @@ namespace GTI_Models.Models {
     public class Dam_header {
         [Key]
         public string Guid { get; set; }
-        public string Inscricao { get; set; }
+        public int Form { get; set; }
         public int Codigo { get; set; }
         public string Lancamento { get; set; }
         public string Nome { get; set; }

@@ -303,6 +303,7 @@ namespace GTI_Mvc {
         }
 
         public static string Gera2of5Str(string sCodigo_Barra) {
+            
             string DataToEncode; string DataToPrint = ""; char StartCode = (char)203; char StopCode = (char)204; int CurrentChar ;
             DataToEncode = sCodigo_Barra;
             if (DataToEncode.Length % 2 == 1)
