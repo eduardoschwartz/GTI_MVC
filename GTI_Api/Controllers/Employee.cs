@@ -1,12 +1,11 @@
-﻿using System;
+﻿using GTI_Bll.Classes;
+using GTI_Models.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using GTI_Bll.Classes;
-using GTI_Models.Models;
-using WebGrease;
 
 namespace GTI_Api.Controllers {
     public class EmployeeController : ApiController {
@@ -16,6 +15,7 @@ namespace GTI_Api.Controllers {
         // GET api/values
         [HttpGet]
         public HttpResponseMessage Lista_Employees(string gender="All") {
+
             Employee_bll employeeRepository = new Employee_bll(_connection);
             IEnumerable<employees>Lista= employeeRepository.ListaEmployee().ToList();
 
@@ -34,10 +34,22 @@ namespace GTI_Api.Controllers {
         // GET api/values/5
         [HttpGet]
         public HttpResponseMessage Return_Employee(int id) {
-            Employee_bll employeeRepository = new Employee_bll(_connection);
-            var reg= employeeRepository.RetornaEmployee(id);
-            if (reg != null) {
-                return Request.CreateResponse(HttpStatusCode.OK, reg);
+            employees a = new employees() {
+                FirstName="Eduyar",
+                LastName="gggg",
+                Salary=554,
+                Gender="Male",
+                Id=7
+            };
+            try {
+                Employee_bll employeeRepository = new Employee_bll(_connection);
+                var reg = employeeRepository.RetornaEmployee(id);
+            } catch (Exception ex) {
+
+                a.Erro = ex.ToString();
+            }
+            if (a != null) {
+                return Request.CreateResponse(HttpStatusCode.OK, a);
             } else {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Employee with id " + id.ToString() + " not found!");
             }

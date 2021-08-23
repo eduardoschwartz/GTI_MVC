@@ -9,5 +9,6 @@ namespace GTI_Models.Models {
         public string LastName { get; set; }
         public string Gender { get; set; }
         public int Salary { get; set; }
+        public string   Erro { get; set; }
     }
 }
