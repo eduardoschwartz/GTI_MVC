@@ -17,6 +17,19 @@ namespace GTI_Api {
                 defaults: new { id = RouteParameter.Optional }
             );
 
+            config.Routes.MapHttpRoute(
+               name: "GetImovelDistrito",
+               routeTemplate: "Imovel/GetImovelInscricao/{distrito}",
+               defaults: new { controller = "Imovel", action = "GetImovelInscricao" }
+           );
+            config.Routes.MapHttpRoute(
+               name: "GetImovelId",
+               routeTemplate: "Imovel/GetImovelId/{id}",
+               defaults: new { controller = "Imovel", action = "GetImovelId" }
+           );
+
+
+
             config.Formatters.JsonFormatter.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
