@@ -24,6 +24,10 @@ using System.Data.SqlClient;
 using GTI_Mvc.Classes;
 using System.Data.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Threading;
 
 namespace GTI_Mvc.Controllers {
     [Route("Tributario")]
@@ -2615,7 +2619,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Damd2")]
         [HttpPost]
-        public ActionResult Damd2(string p) {
+        public async Task< ActionResult> Damd2(string p) {
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             DebitoListViewModel model = (DebitoListViewModel)TempData["debito2"];
             string _guid = Guid.NewGuid().ToString("N");
@@ -2735,20 +2739,60 @@ namespace GTI_Mvc.Controllers {
             };
 
             //Envia para registro
-            Cobranca_Retorno cob = Sistema_Cobranca.Registrar_Cobranca(_dh); //<------Efetua o Registro
-            if (cob.Codigo_Barra != null) {
-                _dh.Linha_digitavel = cob.Linha_Digitavel;
-                _dh.Codigo_barra = Functions.Gera2of5Str(cob.Codigo_Barra); ;
-                _dh.Url = cob.Url;
-                _dh.Txid = cob.txId;
-                _dh.Emv = cob.Emv;
-            } else {
-                //Se houver erro e não for registrado retorna o erro e sai
-                if (cob.Erro != "") {
-                    ViewBag.Result = "Não foi possível registrar p boleto, tente novamente em alguns instantes...";
-                    return View(model);
+
+            Token _token=null;
+            using (var client = new HttpClient()) {
+                ServicePointManager.Expect100Continue = true;
+                ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls ;
+
+                string urlApiGeraToken = "https://oauth.hm.bb.com.br/oauth/token?gw-dev-app-key=d27b67790cffab50136be17db0050c56b9d1a5b1";
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Add("Authorization", "Basic ZXlKcFpDSTZJalV5TnpoaE16WXRPVEJrTUMwME9UUXhMV0l4WXpVdE1pSXNJbU52WkdsbmIxQjFZbXhwWTJGa2IzSWlPakFzSW1OdlpHbG5iMU52Wm5SM1lYSmxJam95TURjMk5pd2ljMlZ4ZFdWdVkybGhiRWx1YzNSaGJHRmpZVzhpT2pGOTpleUpwWkNJNklqaGhZbVZqTUNJc0ltTnZaR2xuYjFCMVlteHBZMkZrYjNJaU9qQXNJbU52WkdsbmIxTnZablIzWVhKbElqb3lNRGMyTml3aWMyVnhkV1Z1WTJsaGJFbHVjM1JoYkdGallXOGlPakVzSW5ObGNYVmxibU5wWVd4RGNtVmtaVzVqYVdGc0lqb3hMQ0poYldKcFpXNTBaU0k2SW1odmJXOXNiMmRoWTJGdklpd2lhV0YwSWpveE5qSTVNRE0xTlRneE9UY3dmUQ==");
+                var parameters = new Dictionary<string, string> { { "grant_type", "client_credentials" }, { "scope", "cobrancas.boletos-info cobrancas.boletos-requisicao" } };
+                var encodedContent = new FormUrlEncodedContent(parameters);
+                var response = await client.PostAsync(urlApiGeraToken, encodedContent).ConfigureAwait(false);
+                if (response.StatusCode == HttpStatusCode.OK) {
+                    var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    _token = JsonConvert.DeserializeObject<Token>(responseContent);
                 }
             }
+
+            int _tentativas = 1;
+        Inicio:;
+            Thread.Sleep(2000);
+            if (_token == null) {
+                if (_tentativas > 3) {
+                   ViewBag.Result = "Não foi possível registrar p boleto, tente novamente em alguns instantes...";
+                   return View(model);
+                } else {
+                    _tentativas++;
+                    goto Inicio;
+                }
+            } else {
+                ViewBag.Result = _token.access_token;
+                return View(model);
+            }
+
+
+
+
+
+
+            //            Cobranca_Retorno cob= Sistema_Cobranca.Registrar_Cobranca(_dh); //<------Efetua o Registro
+            //            await Task.Run(() 
+            //if (cob.Codigo_Barra != null) {
+            //    _dh.Linha_digitavel = cob.Linha_Digitavel;
+            //    _dh.Codigo_barra = Functions.Gera2of5Str(cob.Codigo_Barra); ;
+            //    _dh.Url = cob.Url;
+            //    _dh.Txid = cob.txId;
+            //    _dh.Emv = cob.Emv;
+            //} else {
+            //    //Se houver erro e não for registrado retorna o erro e sai
+            //    if (cob.Erro != "") {
+            //        ViewBag.Result = "Não foi possível registrar p boleto, tente novamente em alguns instantes...";
+            //        return View(model);
+            //    }
+            //}
 
             //Extrai o QrCode 
             string base64string, base64stringBC;
@@ -2764,15 +2808,15 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
-           Image img=  Int2of5.GenerateBarCode(cob.Codigo_Barra, 1000, 100, 2);
-            using (Image bitmap = img) {
-                using (MemoryStream ms = new MemoryStream()) {
-                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                    byte[] byteImage = ms.ToArray();
-                    base64stringBC = Convert.ToBase64String(byteImage);
-                    _dh.Codebar = byteImage;
-                }
-            }
+           //Image img=  Int2of5.GenerateBarCode(cob.Codigo_Barra, 1000, 100, 2);
+           // using (Image bitmap = img) {
+           //     using (MemoryStream ms = new MemoryStream()) {
+           //         bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+           //         byte[] byteImage = ms.ToArray();
+           //         base64stringBC = Convert.ToBase64String(byteImage);
+           //         _dh.Codebar = byteImage;
+           //     }
+           // }
             //#######################################################################
             ex = tributarioRepository.Insert_Dam_Header(_dh);
 

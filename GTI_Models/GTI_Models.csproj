@@ -261,6 +261,7 @@
     <Compile Include="Models\tipoconstr.cs" />
     <Compile Include="Models\tipolivro.cs" />
     <Compile Include="Models\tipousuario.cs" />
+    <Compile Include="Models\token.cs" />
     <Compile Include="Models\topografia.cs" />
     <Compile Include="Models\tramitacao.cs" />
     <Compile Include="Models\tramitacaocc.cs" />
