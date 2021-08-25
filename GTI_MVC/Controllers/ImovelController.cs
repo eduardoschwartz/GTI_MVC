@@ -939,25 +939,13 @@ namespace GTI_Mvc.Controllers {
                 bool _bCpf = model.CpfValue.Length == 14 ? true : false;
                 string _cpf = Functions.RetornaNumero(model.CpfValue);
                 if(!_bCpf) {
-//                    bool _valida = Functions.ValidaCNPJ(_cpf); //CNPJ válido?
-//                    if(_valida) {
                         _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo,_cpf);
-//                    } else {
-//                        model.ErrorMessage = "Cnpj inválido.";
-//                        return View(model);
-//                    }
                     if(!_existeCod) {
                         model.ErrorMessage = "Este Cnpj não pertence ao imóvel.";
                         return View(model);
                     }
                 } else {
-//                    bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
-//                    if(_valida) {
                         _existeCod = imovelRepository.Existe_Imovel_Cpf(_codigo,_cpf);
-//                    } else {
-//                        model.ErrorMessage = "Cpf inválido.";
-//                        return View(model);
-//                    }
                     if(!_existeCod) {
                         model.ErrorMessage = "Este Cpf não pertence ao imóvel.";
                         return View(model);

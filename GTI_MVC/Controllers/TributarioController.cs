@@ -791,15 +791,19 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Damb(CertidaoViewModel model, int Codigo = 0) {
-            if (model.CpfValue != null) {
-                if (!ValidaCpf(model.CpfValue)) {
-                    ViewBag.Result = "CPF inválido.";
+
+            bool _bCpf = model.CpfValue.Length == 14 ? true : false;
+            string _cpf = Functions.RetornaNumero(model.CpfValue);
+            if (!_bCpf) {
+                bool _valido = ValidaCNPJ( _cpf);
+                if (!_valido) {
+                    ViewBag.Result = "CNPJ inválido.";
                     return View(model);
                 }
-            }
-            if (model.CnpjValue != null) {
-                if (!ValidaCNPJ(model.CnpjValue)) {
-                    ViewBag.Result = "CNPJ inválido.";
+            } else {
+                bool _valido = ValidaCpf(_cpf);
+                if (!_valido) {
+                    ViewBag.Result = "CPF inválido.";
                     return View(model);
                 }
             }
@@ -816,14 +820,6 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
-
-            //if (Codigo == 0) {
-
-            //}
-            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-            //    ViewBag.Result = "Código de verificação inválido.";
-            //    return View(model);
-            //}
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             Empresa_bll empresaRepository = new Empresa_bll(_connection);
             Cidadao_bll requerenteRepository = new Cidadao_bll(_connection);
@@ -836,19 +832,17 @@ namespace GTI_Mvc.Controllers {
                     ViewBag.Result = "Inscrição não cadastrada.";
                     return View(model);
                 } else {
-                    if (model.CpfValue != null) {
-                        _existeCod = imovelRepository.Existe_Imovel_Cpf(_codigo, RetornaNumero(model.CpfValue));
+                    if (_bCpf) {
+                        _existeCod = imovelRepository.Existe_Imovel_Cpf(_codigo, RetornaNumero(_cpf));
                         if (!_existeCod) {
                             ViewBag.Result = "CPF não pertence a esta inscrição.";
                             return View(model);
                         }
                     } else {
-                        if (model.CnpjValue != null) {
-                            _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo, RetornaNumero(model.CnpjValue));
-                            if (!_existeCod) {
-                                ViewBag.Result = "CNPJ não pertence a esta inscrição.";
-                                return View(model);
-                            }
+                        _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo, RetornaNumero(_cpf));
+                        if (!_existeCod) {
+                            ViewBag.Result = "CNPJ não pertence a esta inscrição.";
+                            return View(model);
                         }
                     }
                     List<ProprietarioStruct> _prop = imovelRepository.Lista_Proprietario(_codigo, true);
@@ -862,19 +856,17 @@ namespace GTI_Mvc.Controllers {
                         ViewBag.Result = "Inscrição não cadastrada.";
                         return View(model);
                     } else {
-                        if (model.CpfValue != null) {
-                            _existeCod = empresaRepository.ExisteEmpresaCpf_Todas(RetornaNumero(model.CpfValue)) > 0;
+                        if (_bCpf) {
+                            _existeCod = empresaRepository.ExisteEmpresaCpf_Todas(RetornaNumero(_cpf)) > 0;
                             if (!_existeCod) {
                                 ViewBag.Result = "CPF não pertence a esta inscrição.";
                                 return View(model);
                             }
                         } else {
-                            if (model.CnpjValue != null) {
-                                _existeCod = empresaRepository.ExisteEmpresaCnpj_Todas(RetornaNumero(model.CnpjValue)) > 0;
-                                if (!_existeCod) {
-                                    ViewBag.Result = "CNPJ não pertence a esta inscrição.";
-                                    return View(model);
-                                }
+                            _existeCod = empresaRepository.ExisteEmpresaCnpj_Todas(RetornaNumero(_cpf)) > 0;
+                            if (!_existeCod) {
+                                ViewBag.Result = "CNPJ não pertence a esta inscrição.";
+                                return View(model);
                             }
                         }
                     }
@@ -887,19 +879,17 @@ namespace GTI_Mvc.Controllers {
                         ViewBag.Result = "Inscrição não cadastrada.";
                         return View(model);
                     } else {
-                        if (model.CpfValue != null) {
-                            _existeCod = requerenteRepository.Existe_Cidadao_Cpf(_codigo, RetornaNumero(model.CpfValue));
+                        if (_bCpf) {
+                            _existeCod = requerenteRepository.Existe_Cidadao_Cpf(_codigo, RetornaNumero(_cpf));
                             if (!_existeCod) {
                                 ViewBag.Result = "CPF não pertence a esta inscrição.";
                                 return View(model);
                             }
                         } else {
-                            if (model.CnpjValue != null) {
-                                _existeCod = requerenteRepository.Existe_Cidadao_Cnpj(_codigo, RetornaNumero(model.CnpjValue));
-                                if (!_existeCod) {
-                                    ViewBag.Result = "CNPJ não pertence a esta inscrição.";
-                                    return View(model);
-                                }
+                            _existeCod = requerenteRepository.Existe_Cidadao_Cnpj(_codigo, RetornaNumero(_cpf));
+                            if (!_existeCod) {
+                                ViewBag.Result = "CNPJ não pertence a esta inscrição.";
+                                return View(model);
                             }
                         }
                     }

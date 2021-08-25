@@ -7,16 +7,7 @@
 
 
 <style>
-    .textBoxBlue {
-        height: 25px;
-        position: relative;
-        border: 1px solid #0094ff;
-        border-color: rgba(0, 0, 0, .14);
-        background-color: white;
-        font-size: 14px;
-        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
-    }
-
+   
     .center {
         margin: auto;
     }
@@ -64,39 +55,40 @@
 </style>
 
 @{var res = @ViewBag.Result;}
-<div class="center container" style="width:450px">
+<div class="center container" style="width:400px">
     @using(Html.BeginForm("Damb","Tributario",FormMethod.Post,new { @id = "MainForm" })) {
         @Html.AntiForgeryToken()
         <div class="card">
             <div class="card-header">Consulta e atualização de débitos vencidos</div>
             <div class="card-body">
-                <table width="500px">
+                <table width="350px" >
                     <tr style="height:40px">
                         <td style="padding-top:10px;width:150px">
-                            <label style="font-weight:normal">Data de Vencimento:</label>
+                            <label style="font-weight:normal;font-size:14px">Data de Vencimento:</label>
                         </td>
-                        <td style="width: 300px;font-weight:bold">
+                        <td style="width: 260px;font-weight:bold">
                             @Html.DisplayFor(m => Model.DataVencimento)
                             @Html.HiddenFor(m => Model.DataVencimento)
                         </td>
                     </tr>
                     <tr style="height:40px">
-                        <td style="padding-top:15px;width:150px">
-                            @Html.LabelFor(m => m.Inscricao,new { @style = "font-weight:normal" })
+                        <td style="padding-top:8px;width:200px" >
+                            <label style="font-size:14px">Inscrição Municipal:</label><span style="color:darkred">*</span>
                         </td>
-                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao,new { @id = "Codigo",@class = "textBoxBlue",@style = "max-width:100px",@onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
+                        <td style="width:140px">@Html.TextBoxFor(m => m.Inscricao,new { @id = "Codigo",@style = "max-width:100px;font-size:14px",@onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="font-size:12px;color:red">* No caso dos imóveis informar o código do imóvel </td>
+                        <td colspan="2" style="font-size:12px;color:darkred">* No caso dos imóveis informar o código do imóvel </td>
+                    </tr>
+                    <tr style="height:10px">
+                        <td></td><td></td>
                     </tr>
                     <tr style="height:40px">
-                        <td style="width: 150px">
-                            CPF:&nbsp; <input type="radio" required asp-for="CpfCnpjLabel" id="cpfCheck" value="cpf" name="doc" checked="checked" onclick="radioCheck()" />
-                            &nbsp;CNPJ:&nbsp;  <input type="radio" required asp-for="CpfCnpjLabel" id="cnpjCheck" value="cnpj" name="doc" onclick="radioCheck()" />
+                        <td style="width: 260px">
+                            <label style="padding-top: 8px; font-size: 14px">Nº do CPF/CNPJ:</label>
                         </td>
-                        <td style="width:300px">
-                            @Html.TextBoxFor(m => m.CpfValue,new { @id = "cpfTxt",@class = "textBoxBlue",@style = "max-width:200px",@onKeyPress = "return formata(this, '§§§.§§§.§§§-§§', event)",@placeholder = "Digite o nº do CPF" })
-                            @Html.TextBoxFor(m => m.CnpjValue,new { @id = "cnpjTxt",@class = "textBoxBlue",@style = "max-width:200px;display:none",@onKeyPress = "return formata(this, '§§.§§§.§§§/§§§§-§§', event)",@placeholder = "Digite o nº do CNPJ" })
+                        <td style="width:140px">
+                            @Html.TextBoxFor(m => m.CpfValue, new { @id = "cpfcnpj", @name = "cpfcnpj", @style = "Width:160px;font-size:14px" })
                         </td>
                     </tr>
 
@@ -130,6 +122,11 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            $("input[id*='cpfcnpj']").inputmask({
+                mask: ['999.999.999-99', '99.999.999/9999-99'],
+                keepStatic: true
+            });
+
             $("#MainForm").submit(function () {
                 return ValidateForm();
             });
