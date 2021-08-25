@@ -1,0 +1,37 @@
+﻿@model GTI_Mvc.ViewModels.CertidaoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Teste de CEP";
+}
+
+<style>
+    .center {
+        text-align: center;
+        width: 350px;
+    }
+</style>
+
+<div class="center">
+
+    @using (Html.BeginForm("ViaCep", "Shared", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data"  })) {
+        @Html.AntiForgeryToken()
+        <div id="divCode">
+        </div>
+        <input type="text" name="cep" placeholder="Digite o cep"  />
+        <br />
+        <br />
+        <button id="btnGerar" type="submit" class="btn btn-primary"> Clique para consultar</button>
+        <br />
+        <br />
+        <div class="form-group row">
+            <label style="font-weight:normal;color:red" id="errorLabel">@ViewBag.Result</label>
+        </div>
+
+
+
+
+    }
+</div>
+
+

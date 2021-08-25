@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using GTI_Mvc.Classes;
 using System.Web.Script.Serialization;
 using Microsoft.Ajax.Utilities;
+using Cep = GTI_Mvc.Classes.Cep;
 
 namespace GTI_MVC.Controllers {
     public class SharedController : Controller {
@@ -539,6 +540,29 @@ namespace GTI_MVC.Controllers {
             return View();
         }
 
+
+        [Route("ViaCep")]
+        [HttpGet]
+        public ActionResult ViaCep() {
+            return View();
+        }
+
+        [Route("ViaCep")]
+        [HttpPost]
+        public ActionResult ViaCep(string cep) {
+            string cep_new = Functions.RetornaNumero(cep);
+            Cep _cep = GTI_Mvc.Classes.Cep.BuscaViaCep(cep_new);
+            
+            if(_cep==null)
+                ViewBag.Result = "Cep não Localizado";
+            else {
+                if(_cep.Endereco!="")
+                    ViewBag.Result = _cep.Endereco;
+                else
+                    ViewBag.Result = "Cep não Localizado";
+            }
+            return View();
+        }
 
     }
 }

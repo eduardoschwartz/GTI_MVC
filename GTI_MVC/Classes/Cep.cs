@@ -166,6 +166,117 @@ namespace GTI_Mvc.Classes {
             return cepObj;
         }
 
+        public static Cep BuscaViaCep(string cep) {
+            var cepObj = new Cep();
+             var url = "https://viacep.com.br/ws/" + cep + "/json/";
+
+            //***************
+            cep = Functions.RetornaNumero(cep);
+            if (cep.Length < 8) {
+                cep = cep.PadLeft(8, '0');
+            }
+
+            if (Convert.ToInt32(cep) == 0) {
+                return null;
+            }
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls;
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.AllowAutoRedirect = false;
+            HttpWebResponse ChecaServidor = (HttpWebResponse)request.GetResponse();
+
+            using (Stream webStream = ChecaServidor.GetResponseStream()) {
+                if (webStream != null) {
+                    using (StreamReader responseReader = new StreamReader(webStream)) {
+                        string response = responseReader.ReadToEnd();
+                        response = Regex.Replace(response, "[{},]", string.Empty);
+                        response = response.Replace("\"", "");
+
+                        String[] substrings = response.Split('\n');
+
+                        int cont = 0;
+                        foreach (var substring in substrings) {
+                            if (cont == 1) {
+                                string[] valor = substring.Split(":".ToCharArray());
+                                if (valor[0] == "  erro") {
+                                    cepObj.Endereco = "";
+                                    cepObj.Bairro = "";
+                                    cepObj.CEP = "";
+                                    cepObj.Cidade = "";
+                                    cepObj.Estado = "";
+                                    return cepObj;
+                                }
+                            }
+
+                            //Logradouro
+                            if (cont == 1) {
+                                string[] valor = substring.Split(":".ToCharArray());
+                                cepObj.CEP = valor[1];
+                            }
+
+                            if (cont == 2) {
+                                string[] valor = substring.Split(":".ToCharArray());
+                                cepObj.Endereco = valor[1];
+                            }
+
+                            //Complemento
+                            if (cont == 3) {
+                                string[] valor = substring.Split(":".ToCharArray());
+                                //                                txtComplemento.Text = valor[1];
+                            }
+
+                            //Bairro
+                            if (cont == 4) {
+                                string[] valor = substring.Split(":".ToCharArray());
+                                cepObj.Bairro = valor[1];
+                            }
+
+                            //Localidade (Cidade)
+                            if (cont == 5) {
+                                string[] valor = substring.Split(":".ToCharArray());
+                                cepObj.Cidade = valor[1];
+                            }
+
+                            //Estado (UF)
+                            if (cont == 6) {
+                                string[] valor = substring.Split(":".ToCharArray());
+                                cepObj.Estado = valor[1];
+                            }
+
+                            cont++;
+                        }
+                    }
+                }
+            }
+
+
+            ////******************
+            //var url = "http://apps.widenet.com.br/busca-cep/api/cep.json?code=" + cep;
+            //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+
+            //request.AutomaticDecompression = DecompressionMethods.GZip;
+
+            //string json = string.Empty;
+            //using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            //using (Stream stream = response.GetResponseStream())
+            //using (StreamReader reader = new StreamReader(stream)) {
+            //    json = reader.ReadToEnd();
+            //}
+
+            //JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            //JsonCepObject cepJson = json_serializer.Deserialize<JsonCepObject>(json);
+
+            //cepObj.CEP = cepJson.code;
+            //cepObj.Endereco = cepJson.address;
+            //cepObj.Bairro = cepJson.district;
+            //cepObj.Cidade = cepJson.city;
+            //cepObj.Estado = cepJson.state;
+            return cepObj;
+
+        }
+
+
 
     }
 
