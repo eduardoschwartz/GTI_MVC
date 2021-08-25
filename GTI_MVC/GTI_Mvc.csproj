@@ -1119,6 +1119,7 @@
     <Content Include="Views\Processo\Processo_add.cshtml" />
     <Content Include="Views\Shared\Pagto_pix.cshtml" />
     <Content Include="Views\Tributario\Damd2.cshtml" />
+    <Content Include="Views\Shared\ViaCep.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
