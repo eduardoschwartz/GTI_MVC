@@ -6,15 +6,7 @@
 }
 
 <style>
-    .textBoxBlue {
-        height: 25px;
-        position: relative;
-        border: 1px solid #0094ff;
-        border-color: rgba(0, 0, 0, .14);
-        background-color: white;
-        font-size: 14px;
-        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
-    }
+   
 
     .center {
         margin: auto;
@@ -59,7 +51,7 @@
 </style>
 
 @{var res = @ViewBag.Result;}
-<div class="center container" style="width:400px">
+<div class="center container" style="width:380px">
 
     @using(Html.BeginForm("Comprovante_Pagamento","Tributario",FormMethod.Post,new { @id = "MainForm" })) {
         @Html.AntiForgeryToken()
@@ -67,14 +59,14 @@
             <div class="card-header">Comprovante de Pagamento</div>
             <div class="card-body">
 
-                <table width="500px">
+                <table width="330px" >
                     <tr style="height:40px">
-                        <td style="width:150px">@Html.LabelFor(m => m.Inscricao,new { @style = "font-weight:normal" })</td>
-                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao,new { @id = "codigo",@class = "textBoxBlue",@style = "max-width:100px",@onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
+                        <td><label style="font-size:14px;width:130px;padding-top:8px">Inscrição Municipal:</label></td>
+                        <td style="width:200px">@Html.TextBoxFor(m => m.Inscricao,new { @id = "codigo",@style = "width:70px;font-size:14px",@onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
                     </tr>
                     <tr style="height:40px">
-                        <td style="width:150px">@Html.LabelFor(m => m.Documento,new { @style = "font-weight:normal" })</td>
-                        <td style="width:300px">@Html.TextBoxFor(m => m.Documento,new { @id = "documento",@class = "textBoxBlue",@style = "max-width:250px",@onKeyPress = "return formata(this, '§§§§§§§§§§§§§§§§§', event)" })</td>
+                        <td><label style="font-size: 14px; width: 130px; padding-top: 8px">Nº do documento:</label></td>
+                        <td style="width:200px">@Html.TextBoxFor(m => m.Documento,new { @id = "documento",@style = "width:170px;font-size:14px", @onKeyPress = "return formata(this, '§§§§§§§§§§§§§§§§§', event)" })</td>
                     </tr>
                 </table>
 

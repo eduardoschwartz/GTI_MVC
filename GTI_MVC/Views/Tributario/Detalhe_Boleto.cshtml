@@ -6,15 +6,7 @@
 }
 
 <style>
-    .textBoxBlue {
-        height: 25px;
-        position: relative;
-        border: 1px solid #0094ff;
-        border-color: rgba(0, 0, 0, .14);
-        background-color: white;
-        font-size: 14px;
-        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.24),0 1px 6px 0 rgba(0,0,0,0.19);
-    }
+    
 
     .center {
         margin: auto;
@@ -67,14 +59,14 @@
             <div class="card-header">Detalhe de um boleto</div>
             <div class="card-body">
 
-                <table width="500px">
+                <table width="400px">
                     <tr style="height:40px">
-                        <td style="width:150px">Cpf/Cnpj:</td>
-                        <td style="width:300px">@Html.TextBoxFor(m => m.CpfCnpjLabel,new { @id = "cpfcnpjTxt",@onpaste = "return false",@class = "textBoxBlue",@style = "max-width:250px",@onKeyPress = "return formata(this, '§§§§§§§§§§§§§§', event)" })</td>
+                        <td style="width:150px;font-size:14px">Cpf/Cnpj:</td>
+                        <td style="width:250px">@Html.TextBoxFor(m => m.CpfCnpjLabel,new { @id = "cpfcnpj",@onpaste = "return false",@style = "max-width:250px;font-size:14px", @onKeyPress = "return formata(this, '§§§§§§§§§§§§§§', event)" })</td>
                     </tr>
                     <tr style="height:40px">
-                        <td style="width:150px">Nº do Documento:</td>
-                        <td style="width:300px">@Html.TextBoxFor(m => m.Documento,new { @id = "documento",@class = "textBoxBlue",@style = "max-width:250px",@onKeyPress = "return formata(this, '§§§§§§§§§§§§§§§§§', event)" })</td>
+                        <td style="width:150px;font-size:14px">Nº do Documento:</td>
+                        <td style="width:250px">@Html.TextBoxFor(m => m.Documento,new { @id = "documento",@style = "max-width:250px;font-size:14px", @onKeyPress = "return formata(this, '§§§§§§§§§§§§§§§§§', event)" })</td>
                     </tr>
                 </table>
                 <br />
@@ -102,6 +94,11 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            $("input[id*='cpfcnpj']").inputmask({
+                mask: ['999.999.999-99', '99.999.999/9999-99'],
+                keepStatic: true
+            });
+
             $("#MainForm").submit(function () {
                 return ValidateForm();
             });
@@ -151,7 +148,7 @@
         });
 
         function ValidateForm() {
-            var _cpfcnpj = document.getElementById('cpfcnpjTxt').value;
+            var _cpfcnpj = document.getElementById('cpfcnpj').value;
             var _doc = document.getElementById('documento').value;
 
             var _consultar = false;
@@ -176,7 +173,7 @@
             var cnpjtmp = _cpfcnpj.padStart(14, '0');
             var cpftmp = _cpfcnpj.padStart(11, '0');
             var cpfcnpj = "";
-            if (_cpfcnpj.length > 11) {
+            if (_cpfcnpj.length > 14) {
                 if (!valida_Cnpj(cnpjtmp)) {
                     document.getElementById('lblMsg').innerHTML = "Nº de Cnpj inválido.";
                     $('#msgBox1').dialog('open');

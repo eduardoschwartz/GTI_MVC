@@ -1893,23 +1893,24 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
+            string _cpfCnpj = RetornaNumero(_cpfMask);
             string _cpf = "", _cnpj = "";
-            if (_cpfMask.Length == 11)
-                _cpf = _cpfMask;
+            if (_cpfCnpj.Length == 11)
+                _cpf = _cpfCnpj;
             else
-                _cnpj = _cpfMask;
+                _cnpj = _cpfCnpj;
             //            _cnpj = model.CnpjValue;
             bool _bCpf = _cpf != "";
             int _documento;
             if (model.Documento.Length < 8) {
                 ViewBag.Result = "Nº de documento inválido.";
                 return View(model);
-            } else
+            } else {
                 if (model.Documento.Length > 8)
-                _documento = Convert.ToInt32(model.Documento.Substring(model.Documento.Length - 8, 8));
-            else
-                _documento = Convert.ToInt32(model.Documento);
-
+                    _documento = Convert.ToInt32(model.Documento.Substring(model.Documento.Length - 8, 8));
+                else
+                    _documento = Convert.ToInt32(model.Documento);
+            }
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             bool _existe = tributarioRepository.Existe_Documento(_documento);
             if (!_existe) {

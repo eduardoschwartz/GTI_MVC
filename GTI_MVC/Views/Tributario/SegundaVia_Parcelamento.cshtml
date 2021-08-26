@@ -79,23 +79,16 @@
                 <table width="500px">
                     <tr style="height:40px">
                         <td style="  padding-top:15px;width:150px">
-                            @Html.LabelFor(m => m.Inscricao,new { @style = "font-weight:normal" })
+                            <label style="font-size:14px">Inscrição Municipal</label>
                         </td>
-                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao,new { @id = "Codigo",@class = "textBoxBlue",@style = "max-width:100px",@onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Inscricao,new { @id = "Codigo",@style = "max-width:100px;font-size:14px", @onKeyPress = "return formata(this, '§§§§§§', event)" })</td>
                     </tr>
                     <tr style="height:40px">
-                        <td style="width:150px"><label style="font-weight:normal">Nº do Processo: </label></td>
-                        <td style="width:300px">@Html.TextBoxFor(m => m.Numero_Processo,new { @id = "numprocesso",@class = "textBoxBlue",@style = "max-width:150px" })</td>
+                        <td style="width:150px"><label style="font-weight:normal;font-size:14px">Nº do Processo: </label></td>
+                        <td style="width:300px">@Html.TextBoxFor(m => m.Numero_Processo,new { @id = "numprocesso",@style = "max-width:150px;font-size:14px", placeholder = "####0-0/0000" })</td>
                     </tr>
 
-                    @*<tr style="height:40px">
-                            <td style="width:150px" valign="middle">
-                                <img id="img-captcha" src="~/Empresa/GetCaptcha" />
-                            </td>
-                            <td style="width:150px" valign="middle">
-                                @Html.TextBoxFor(m => m.CaptchaCode, new { @id = "captchaTxt", @class = "textBoxBlue", @maxlength = "6", @style = "max-width:100px;" })
-                            </td>
-                        </tr>*@
+                   
                 </table>
 
                 <br />
@@ -114,16 +107,16 @@
                         </td>
                         <td style="width:575px">
 
-                            @Html.TextBoxFor(m => m.ProcessoAntigo,new { @id = "codigo",@class = "textBoxBlue",@style = "width:100px;height:25px" })
+                            @Html.TextBoxFor(m => m.ProcessoAntigo,new { @id = "codigo",@style = "width:100px;height:25px;font-size:14px" })
                             <label>&nbsp;&nbsp;</label>
                             <button id="btnDigito" type="submit" class="btn btn-success" name="action" value="btnDigito">Verificar</button>
-                            <span style="padding-left:10px">Nº Processo Novo:&nbsp;</span><span style="color:brown">@Model.ProcessoNovo</span>
+                            <span style="padding-left: 10px; font-size: 14px">Nº Processo Novo:&nbsp;</span><span style="color:brown">@Model.ProcessoNovo</span>
                         </td>
                     </tr>
                 </table>
 
             </div>
-            @*<label class="errorlabel" id="errorLabel">@ViewBag.Result</label>*@
+
             <div class="card-footer">
                 @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
             </div>
