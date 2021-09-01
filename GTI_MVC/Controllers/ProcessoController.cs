@@ -27,7 +27,7 @@ namespace GTI_MVC.Controllers {
         [Route("Processo_menu")]
         [HttpGet]
         public ActionResult Processo_menu() {
-            if (Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login", "Home");
 
             return View();
@@ -36,7 +36,7 @@ namespace GTI_MVC.Controllers {
         [Route("Processo_tp")]
         [HttpGet]
         public ActionResult Processo_tp() {
-            if (Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login", "Home");
             Processo2ViewModel model = new Processo2ViewModel();
 
@@ -107,8 +107,9 @@ namespace GTI_MVC.Controllers {
         [Route("Processo_add")]
         [HttpGet]
         public ActionResult Processo_add(string p) {
-            if (Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null) {
                 return RedirectToAction("Login", "Home");
+            }
 
             Processo_bll processoRepository = new Processo_bll(_connection);
             Processo_web _proc = processoRepository.Retorna_Processo_Web(p);
@@ -127,23 +128,7 @@ namespace GTI_MVC.Controllers {
             model.Tipo_Requerente = _proc.Interno ? "Prefeitura" : "Contribuinte";
             return View(model);
         }
-
-        //[Route("Processo_add")]
-        //[HttpPost]
-        //public ActionResult Processo_add(Processo2ViewModel model) {
-        //    if (Session["hashid"] == null)
-        //        return RedirectToAction("Login", "Home");
-
-        //    if (model.Assunto_Codigo == 0) {
-        //        ViewBag.Result = "Selecione um assunto válido!";
-        //        return View(model);
-        //    }
-
-        //    Processo_bll processoRepository = new Processo_bll(_connection);
-
-        //    return View(model);
-        //}
-
+      
         public JsonResult Lista_Assunto(string search) {
             Processo_bll processoRepository = new Processo_bll(_connection);
             List<Assunto> Lista_Search = processoRepository.Lista_Assunto(true, false, search);
@@ -157,7 +142,7 @@ namespace GTI_MVC.Controllers {
             return new JsonResult { Data = Lista_Search, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        [ValidateJsonAntiForgeryTokenAttribute]
+        [ValidateJsonAntiForgeryToken]
         [AllowAnonymous]
         [HttpPost]
         public ActionResult Processo_addx(List<Processo2ViewModel> dados) {
@@ -165,9 +150,21 @@ namespace GTI_MVC.Controllers {
                 return Json(new { success = false, responseText = "Selecione um assunto válido." }, JsonRequestBehavior.AllowGet);
             }
 
+            Processogti reg = new Processogti() {
+                Ano = (short)DateTime.Now.Year,
+                Fisico = dados[0].Fisico,
+                Origem = dados[0].Tipo_Requerente == "Prefeitura" ? (short)1 : (short)2,
+                Codassunto =(short) dados[0].Assunto_Codigo
+            };
 
 
-            string reg = "";
+
+
+
+
+
+
+
             //foreach (TableEndereco _end in Lista_End) {
             //    reg += _end.Endereco;
             //}

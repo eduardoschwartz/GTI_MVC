@@ -183,7 +183,9 @@ namespace GTI_Mvc.Controllers {
                         Response.Cookies["4%pWr@"].Expires = DateTime.Now.AddDays(-1);
                     }
                     //******************
-
+                    var cookie2 = new HttpCookie("2lG1H*", Functions.Encrypt(model.Usuario));
+                    cookie2.Expires = DateTime.Now.AddHours(1);
+                    System.Web.HttpContext.Current.Response.Cookies.Add(cookie2);
 
                     if (Session["hashform"] == null) {
                         return View("../Home/SysMenu");
@@ -236,6 +238,11 @@ namespace GTI_Mvc.Controllers {
                                     Response.Cookies["4%pWr@"].Expires = DateTime.Now.AddDays(-1);
                                 }
                                 //******************
+                                var cookie2 = new HttpCookie("2lG1H*", Functions.Encrypt(model.Usuario));
+                                cookie2.Expires = DateTime.Now.AddDays(1);
+                                System.Web.HttpContext.Current.Response.Cookies.Add(cookie2);
+
+
 
                                 List<int> ListaUsoPlataforma = tributarioRepository.Lista_Rodo_Uso_Plataforma_UserEmpresa(_userid, _func);
                                 if (ListaUsoPlataforma.Count == 0) {

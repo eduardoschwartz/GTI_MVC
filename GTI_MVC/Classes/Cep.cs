@@ -180,7 +180,8 @@ namespace GTI_Mvc.Classes {
                 return null;
             }
             ServicePointManager.Expect100Continue = true;
-            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls;
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls | SecurityProtocolType.Ssl3;
+            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.AllowAutoRedirect = false;

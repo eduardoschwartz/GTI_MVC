@@ -293,10 +293,10 @@
                 $("#mainTableDoc tbody tr").remove(); //Clear tbody rows
             }
         });
+
         $("#searchInput").on('keydown', function () {
             document.getElementById("Ass_Cod").value="";
         });
-
 
         $("#searchInput").autocomplete({
             minLength:3,
@@ -340,7 +340,7 @@
                         var tr = $('<tr style="font-size: 14px" />');
                         tr.append($('<td style="display:none">' + _cod + '</td>'));
                         tr.append($('<td>' + _nome + '</td>'));
-                        tr.append($('<td>' + "" + '</td>'));
+                        tr.append($('<td style="text-align:center">' + "" + '</td>'));
                         tr.append($('<td>  <input type="button" id="btnEditDoc" class="btnimage2" title="Marcar como entregue" onclick="editRowDoc(this)"/>&nbsp;<input type="button" id="btnDelDoc" class="btnimage" title="Remover data" onclick="delDataDoc(this)"/> </td>'));
                         $('#mainTableDoc').append(tr);
                     }
@@ -401,11 +401,15 @@
         }
 
         function delDataDoc(x) {
-
+            var table = document.getElementById("mainTableDoc");
+            var rows = table.getElementsByTagName('tr');
+            table.rows[x.parentElement.parentElement.rowIndex].cells[2].textContent = "";
         }
 
         function editRowDoc(x) {
-           /* document.getElementById("mainTableDoc").deleteRow(x.parentElement.parentElement.rowIndex);*/
+            var table = document.getElementById("mainTableDoc");
+            var rows = table.getElementsByTagName('tr');
+            table.rows[x.parentElement.parentElement.rowIndex].cells[2].textContent = DataAtualFormatada();
         }
 
         function OpenModalEnd() {
@@ -437,6 +441,17 @@
                 enderecos.push(end);
             })
 
+            var documentos = new Array();
+            $("#mainTableDoc tbody tr").each(function () {
+                var row = $(this);
+                var doc = {};
+                doc.Codigo = row.find("td").eq(0).html();
+                doc.Descricao = row.find("td").eq(1).html();
+                doc.Data_Entregue = row.find("td").eq(2).html();
+                documentos.push(doc);
+            })
+
+
             var dados = new Array();
             var reg = {};
             reg.Assunto_Codigo = _ass_cod;
@@ -449,6 +464,7 @@
             reg.Observacao = _obs;
             reg.Fisico = _fisicoValue;
             reg.Lista_Endereco = enderecos;
+            reg.Lista_Documento = documentos;
             dados.push(reg);
 
             var token = $('input[name="__RequestVerificationToken"]').val();
@@ -475,6 +491,16 @@
                 }
             });
 
+        }
+
+        function DataAtualFormatada() {
+            var data = new Date(),
+                dia = data.getDate().toString(),
+                diaF = (dia.length == 1) ? '0' + dia : dia,
+                mes = (data.getMonth() + 1).toString(), //+1 pois no getMonth Janeiro começa com zero.
+                mesF = (mes.length == 1) ? '0' + mes : mes,
+                anoF = data.getFullYear();
+            return diaF + "/" + mesF + "/" + anoF;
         }
 
     </script>
