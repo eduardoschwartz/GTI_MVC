@@ -1,4 +1,5 @@
-﻿using GTI_Bll.Classes;
+﻿using Antlr.Runtime.Tree;
+using GTI_Bll.Classes;
 using GTI_Models.Models;
 using GTI_Mvc;
 using GTI_Mvc.ViewModels;
@@ -150,14 +151,36 @@ namespace GTI_MVC.Controllers {
                 return Json(new { success = false, responseText = "Selecione um assunto válido." }, JsonRequestBehavior.AllowGet);
             }
 
+            Processo_bll processoRepository = new Processo_bll(_connection);
+            int _numero = processoRepository.Retorna_Numero_Disponivel(DateTime.Now.Year);
+            int _user = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
+            bool _isFunc =Functions.Decrypt( Request.Cookies["2FN*"].Value) == "S" ? true : false;
+            short _tipoRequerente = dados[0].Tipo_Requerente == "Prefeitura" ? (short)1 : (short)2;
+
             Processogti reg = new Processogti() {
                 Ano = (short)DateTime.Now.Year,
+                Numero=_numero,
                 Fisico = dados[0].Fisico,
-                Origem = dados[0].Tipo_Requerente == "Prefeitura" ? (short)1 : (short)2,
-                Codassunto =(short) dados[0].Assunto_Codigo
+                Origem = 1,
+                Interno=_tipoRequerente==1,
+                Codassunto =(short) dados[0].Assunto_Codigo,
+                Observacao=dados[0].Observacao,
+                Dataentrada=DateTime.Now.Date,
+                Userid=_user,
+                Userweb=!_isFunc,
+                Complemento=dados[0].Complemento,
+                Etiqueta=false,
+                Hora= DateTime.Now.ToShortTimeString().ToString()
             };
+            if (_tipoRequerente == 2) {
+                reg.Codcidadao = dados[0].Centro_Custo_Codigo;
+                reg.Centrocusto = 0;
+            } else {
+                reg.Codcidadao = 0;
+                reg.Centrocusto = dados[0].Centro_Custo_Codigo;
+            }
 
-
+            Exception ex = processoRepository.Incluir_Processo(reg);
 
 
 

@@ -105,6 +105,12 @@ namespace GTI_Mvc.Controllers {
 
             bool bFuncionario = model.Usuario.LastIndexOf('@') > 1 ? false : true;
             Session["hashfunc"] = bFuncionario ? "S" : "N";
+
+            var cookieF = new HttpCookie("2FN*", Functions.Encrypt(bFuncionario ? "S" : "N"));
+            cookieF.Expires = DateTime.Now.AddHours(1);
+            System.Web.HttpContext.Current.Response.Cookies.Add(cookieF);
+
+
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             Form_Redirect fr = new Form_Redirect();
 
@@ -186,6 +192,9 @@ namespace GTI_Mvc.Controllers {
                     var cookie2 = new HttpCookie("2lG1H*", Functions.Encrypt(model.Usuario));
                     cookie2.Expires = DateTime.Now.AddHours(1);
                     System.Web.HttpContext.Current.Response.Cookies.Add(cookie2);
+                    var cookie3 = new HttpCookie("2uC*", Functions.Encrypt(_userid.ToString()));
+                    cookie3.Expires = DateTime.Now.AddHours(1);
+                    System.Web.HttpContext.Current.Response.Cookies.Add(cookie3);
 
                     if (Session["hashform"] == null) {
                         return View("../Home/SysMenu");
@@ -241,6 +250,9 @@ namespace GTI_Mvc.Controllers {
                                 var cookie2 = new HttpCookie("2lG1H*", Functions.Encrypt(model.Usuario));
                                 cookie2.Expires = DateTime.Now.AddDays(1);
                                 System.Web.HttpContext.Current.Response.Cookies.Add(cookie2);
+                                var cookie3 = new HttpCookie("2uC*", Functions.Encrypt(user_web.Id.ToString()));
+                                cookie3.Expires = DateTime.Now.AddHours(1);
+                                System.Web.HttpContext.Current.Response.Cookies.Add(cookie3);
 
 
 

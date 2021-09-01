@@ -215,6 +215,10 @@
     <label id="lblMsg"></label>
 </div>
 
+<div id="msgBoxWait" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsgWait"></label>
+</div>
 <div id="msgBoxBag" title="Atenção" style='display: none;'>
     <br />
     <p>@ViewBag.Result</p>
@@ -256,6 +260,22 @@
                 buttons: {
                     "OK": function () {
                         $(this).dialog("close");
+                    }
+                }
+            });
+            $('#msgBoxWait').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        var urlnew = '@Url.Action("Processo_menu", "Processo")';
+                        window.location.href = urlnew;
                     }
                 }
             });
@@ -419,7 +439,7 @@
         }
 
         function Gravar() {
-            
+
             var _ass_cod = document.getElementById("Ass_Cod").value;
             var _ass_nome = document.getElementById("Ass_Nome").value;
             var _ccusto_cod = document.getElementById("CCusto_Codigo").value;
@@ -471,6 +491,7 @@
             var headers = {};
             headers['__RequestVerificationToken'] = token;
 
+
             $.ajax({
                 type: "POST",
                 url: "/Processo/Processo_addx",
@@ -480,11 +501,13 @@
                 dataType: "json",
                 success: function (response) {
                     if (response.success) {
-                        document.getElementById('lblMsg').innerHTML = "Processo gravado com sucesso!";
+                        document.getElementById('lblMsgWait').innerHTML = "Processo gravado com sucesso!";
+                        $('#msgBoxWait').dialog('open');
                     } else {
                         document.getElementById('lblMsg').innerHTML = response.responseText;
+                        $('#msgBox1').dialog('open');
                     }
-                    $('#msgBox1').dialog('open');
+                    
                 },
                 error: function (xhr, status, error) {
                     alert(error);
