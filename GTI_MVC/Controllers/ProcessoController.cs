@@ -6,6 +6,7 @@ using GTI_Mvc.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Common.CommandTrees;
+using System.Net.NetworkInformation;
 using System.Web.Helpers;
 using System.Web.Mvc;
 
@@ -52,11 +53,11 @@ namespace GTI_MVC.Controllers {
         [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Processo_tp(Processo2ViewModel model) {
-            if (Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null || Request.Cookies["2uC*"]==null || Request.Cookies["2FN*"]==null)
                 return RedirectToAction("Login", "Home");
-
-            int _userId = Convert.ToInt32(Session["hashid"]);
-            bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
+            
+            int _userId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
+            bool _func = Functions.Decrypt(Request.Cookies["2FN*"].Value) == "S" ? true : false;
 
             Processo_bll processoRepository = new Processo_bll(_connection);
             string _guid= Guid.NewGuid().ToString("N");
@@ -153,12 +154,13 @@ namespace GTI_MVC.Controllers {
 
             Processo_bll processoRepository = new Processo_bll(_connection);
             int _numero = processoRepository.Retorna_Numero_Disponivel(DateTime.Now.Year);
+            short _ano = Convert.ToInt16(DateTime.Now.Year);
             int _user = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
             bool _isFunc =Functions.Decrypt( Request.Cookies["2FN*"].Value) == "S" ? true : false;
             short _tipoRequerente = dados[0].Tipo_Requerente == "Prefeitura" ? (short)1 : (short)2;
 
             Processogti reg = new Processogti() {
-                Ano = (short)DateTime.Now.Year,
+                Ano = _ano,
                 Numero=_numero,
                 Fisico = dados[0].Fisico,
                 Origem = 1,
@@ -182,19 +184,59 @@ namespace GTI_MVC.Controllers {
 
             Exception ex = processoRepository.Incluir_Processo(reg);
 
+            if (dados[0].Lista_Endereco != null) {
+                List<Processoend> _listaE = new List<Processoend>();
+                foreach (TableEndereco end in dados[0].Lista_Endereco) {
+                    Processoend regE = new Processoend() {
+                        Ano = _ano,
+                        Numprocesso = _numero,
+                        Codlogr = Convert.ToInt16(end.Codigo),
+                        Numero = end.Numero
+                    };
+                    _listaE.Add(regE);
+                }
+                ex = processoRepository.Incluir_Processo_Endereco(_listaE, _ano, _numero);
+            }
 
 
+            if (dados[0].Lista_Documento != null) {
+                List<Processodoc> _listaD = new List<Processodoc>();
+                foreach (TableProcessoDoc doc in dados[0].Lista_Documento) {
+                    Processodoc regD = new Processodoc() {
+                        Ano = _ano,
+                        Numero = _numero,
+                        Coddoc = (short)doc.Codigo
+                    };
+                    if (!string.IsNullOrEmpty(doc.Data_Entregue))
+                        regD.Data = Convert.ToDateTime(doc.Data_Entregue);
 
+                    _listaD.Add(regD);
+                }
+                ex = processoRepository.Incluir_Processo_Documento(_listaD, _ano, _numero);
+            }
 
-
-
-            //foreach (TableEndereco _end in Lista_End) {
-            //    reg += _end.Endereco;
-            //}
-
-            return Json(new { success = true, responseText = "Processo gravado com sucesso!" }, JsonRequestBehavior.AllowGet);
+            return Json(new { success = true, responseText = "Processo gravado com sucesso!", ano = Functions.Encrypt(_ano.ToString()), numero = Functions.Encrypt(_numero.ToString()) }, JsonRequestBehavior.AllowGet);
         }
 
+        [Route("Processo_vw")]
+        [HttpGet]
+        public ActionResult Processo_vw(string a,string n) {
+            if (Request.Cookies["2lG1H*"] == null) {
+                return RedirectToAction("Login", "Home");
+            }
 
+            int _ano = Convert.ToInt32(Functions.Decrypt(a));
+            int _numero = Convert.ToInt32(Functions.Decrypt(n));
+
+            Processo_bll processoRepository = new Processo_bll(_connection);
+            ProcessoStruct _proc = processoRepository.Dados_Processo(_ano, _numero);
+
+            Processo2ViewModel model = new Processo2ViewModel();
+            model.NumProcesso = _numero;
+            model.AnoProcesso = _ano;
+            model.Numero_Processo = _numero.ToString() + "-" + Functions.RetornaDvProcesso(_numero) + "/" + _ano.ToString();
+            model.Complemento = _proc.Complemento;
+            return View(model);
+        }
     }
 }

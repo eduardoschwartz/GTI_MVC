@@ -117,9 +117,7 @@
 
 @{
     var res = @ViewBag.Result;
-    var _ano = 0;
-    var _numero=0;
-} 
+}
 
 <div class="center" style="width:700px">
     @using (Html.BeginForm("Processo_add", "Processo", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
@@ -137,7 +135,8 @@
 
         <div class="container" style="width:670px">
             <div class="card">
-                <div class="card-header">Abrir um novo processo</div>
+                <div class="card-header">Dados do Processo nº<span style="padding-left:10px;font-weight:bold">Model.Numero_Processo</span>@</div>
+                
                 <div class="card-body">
                     <table style="width:600px">
                         <tr>
@@ -147,7 +146,7 @@
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px">Origem:</td>
-                            <td style="width:80%; font-size: 14px; color: darkblue">@Model.Tipo_Requerente<span style="color:black;padding-left:50px">Processo Físico?&nbsp; @Html.EditorFor(m => m.Fisico,new { @id="fisico"})</span> </td>
+                            <td style="width:80%; font-size: 14px; color: darkblue">@Model.Tipo_Requerente<span style="color:black;padding-left:50px">Processo Físico?&nbsp; @Html.EditorFor(m => m.Fisico, new { @id = "fisico" })</span> </td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
@@ -157,12 +156,12 @@
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px">Complemento:</td>
-                            <td style="width:80%; font-size: 14px">@Html.TextBoxFor(m => m.Complemento, new {@id="complemento",  @style = "width:500px" })</td>
+                            <td style="width:80%; font-size: 14px">@Html.TextBoxFor(m => m.Complemento, new { @id = "complemento", @style = "width:500px" })</td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px;vertical-align:top">Observação:</td>
-                            <td style="width:80%; font-size: 14px">@Html.TextAreaFor(m => m.Observacao, new {@id="observacao", @maxlength = "5000", @cols = 86, @rows = 5, @style = "resize:none;width:500px" })</td>
+                            <td style="width:80%; font-size: 14px">@Html.TextAreaFor(m => m.Observacao, new { @id = "observacao", @maxlength = "5000", @cols = 86, @rows = 5, @style = "resize:none;width:500px" })</td>
                         </tr>
                     </table>
                 </div>
@@ -275,8 +274,9 @@
                 dialogClass: "foo",
                 buttons: {
                     "OK": function () {
-                        var urlnew = '@Url.Action("Processo_vw", "Processo")?a=' + _ano + '&n=' + _numero;
-                        window.location.href = urlnew;
+                        @*var urlnew = '@Url.Action("Processo_menu", "Processo")';
+                        window.location.href = urlnew;*@
+                        $(this).dialog("close");
                     }
                 }
             });
@@ -501,8 +501,6 @@
                 success: function (response) {
                     if (response.success) {
                         document.getElementById('lblMsgWait').innerHTML = "Processo gravado com sucesso!";
-                        _ano = response.ano;
-                        _numero = response.numero;
                         $('#msgBoxWait').dialog('open');
                     } else {
                         document.getElementById('lblMsg').innerHTML = response.responseText;

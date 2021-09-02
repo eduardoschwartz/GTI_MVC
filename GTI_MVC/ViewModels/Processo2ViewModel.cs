@@ -6,6 +6,9 @@ using System.Web;
 
 namespace GTI_Mvc.ViewModels {
     public class Processo2ViewModel {
+        public string Numero_Processo { get; set; }
+        public int AnoProcesso { get; set; }
+        public int NumProcesso { get; set; }
         public string Guid { get; set; }
         public string Tipo_Requerente { get; set; }
         public int Centro_Custo_Codigo { get; set; }
