@@ -51,9 +51,9 @@ namespace GTI_Mvc.Controllers {
                     model.RememberMe = true;
                     model.Usuario = Functions.Decrypt( Request.Cookies["2lG*"].Value.ToString());
                 } 
-                if (Request.Cookies["4%pWr@"] != null) {
+                if (Request.Cookies["2pW*"] != null) {
                     model.RememberMe = true;
-                    model.Senha = Functions.Decrypt( Request.Cookies["4%pWr@"].Value.ToString());
+                    model.Senha = Functions.Decrypt( Request.Cookies["2pW*"].Value.ToString());
                 }
 
             }
@@ -106,7 +106,7 @@ namespace GTI_Mvc.Controllers {
             bool bFuncionario = model.Usuario.LastIndexOf('@') > 1 ? false : true;
             Session["hashfunc"] = bFuncionario ? "S" : "N";
 
-            var cookieF = new HttpCookie("2FN*", Functions.Encrypt(bFuncionario ? "S" : "N"));
+            var cookieF = new HttpCookie("2fN*", Functions.Encrypt(bFuncionario ? "S" : "N"));
             cookieF.Expires = DateTime.Now.AddHours(1);
             System.Web.HttpContext.Current.Response.Cookies.Add(cookieF);
 
@@ -180,13 +180,13 @@ namespace GTI_Mvc.Controllers {
                         cookie.Expires = DateTime.Now.AddDays(30);
                         System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
                         
-                        cookie = new HttpCookie("4%pWr@", Functions.Encrypt( model.Senha));
+                        cookie = new HttpCookie("2pW*", Functions.Encrypt( model.Senha));
                         cookie.Expires = DateTime.Now.AddDays(30);
                         System.Web.HttpContext.Current.Response.Cookies.Add( cookie);
                     }
                     else{
                         Response.Cookies["2lG*"].Expires = DateTime.Now.AddDays(-1);
-                        Response.Cookies["4%pWr@"].Expires = DateTime.Now.AddDays(-1);
+                        Response.Cookies["2pW*"].Expires = DateTime.Now.AddDays(-1);
                     }
                     //******************
                     var cookie2 = new HttpCookie("2lG1H*", Functions.Encrypt(model.Usuario));
@@ -239,12 +239,12 @@ namespace GTI_Mvc.Controllers {
                                     cookie.Expires = DateTime.Now.AddDays(30);
                                     System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
 
-                                    cookie = new HttpCookie("4%pWr@", Functions.Encrypt(model.Senha));
+                                    cookie = new HttpCookie("2pW*", Functions.Encrypt(model.Senha));
                                     cookie.Expires = DateTime.Now.AddDays(30);
                                     System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
                                 } else {
                                     Response.Cookies["2lG*"].Expires = DateTime.Now.AddDays(-1);
-                                    Response.Cookies["4%pWr@"].Expires = DateTime.Now.AddDays(-1);
+                                    Response.Cookies["2pW*"].Expires = DateTime.Now.AddDays(-1);
                                 }
                                 //******************
                                 var cookie2 = new HttpCookie("2lG1H*", Functions.Encrypt(model.Usuario));

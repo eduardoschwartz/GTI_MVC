@@ -15,9 +15,8 @@ namespace GTI_Mvc {
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Login_gti", id = UrlParameter.Optional }
             );
-                     
 
-
+           
         }
     }
 }

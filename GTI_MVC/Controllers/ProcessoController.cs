@@ -9,6 +9,7 @@ using System.Data.Entity.Core.Common.CommandTrees;
 using System.Net.NetworkInformation;
 using System.Web.Helpers;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 
 namespace GTI_MVC.Controllers {
     public class ProcessoController : Controller    {
@@ -53,11 +54,11 @@ namespace GTI_MVC.Controllers {
         [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Processo_tp(Processo2ViewModel model) {
-            if (Request.Cookies["2lG1H*"] == null || Request.Cookies["2uC*"]==null || Request.Cookies["2FN*"]==null)
+            if (Request.Cookies["2lG1H*"] == null || Request.Cookies["2uC*"]==null || Request.Cookies["2fN*"]==null)
                 return RedirectToAction("Login", "Home");
             
             int _userId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
-            bool _func = Functions.Decrypt(Request.Cookies["2FN*"].Value) == "S" ? true : false;
+            bool _func = Functions.Decrypt(Request.Cookies["2fN*"].Value) == "S" ? true : false;
 
             Processo_bll processoRepository = new Processo_bll(_connection);
             string _guid= Guid.NewGuid().ToString("N");
@@ -143,20 +144,25 @@ namespace GTI_MVC.Controllers {
             List<AssuntoDocStruct> Lista_Search = processoRepository.Lista_Assunto_Documento(_codAss);
             return new JsonResult { Data = Lista_Search, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+              
 
         [ValidateJsonAntiForgeryToken]
         [AllowAnonymous]
         [HttpPost]
+        [Route("Processo_addx")]
         public ActionResult Processo_addx(List<Processo2ViewModel> dados) {
             if (dados[0].Assunto_Codigo == 0) {
                 return Json(new { success = false, responseText = "Selecione um assunto válido." }, JsonRequestBehavior.AllowGet);
             }
 
+            if(Request.Cookies["2uC*"]==null || Request.Cookies["2fN*"].Value==null)
+                return RedirectToAction("Login", "Home");
+
             Processo_bll processoRepository = new Processo_bll(_connection);
             int _numero = processoRepository.Retorna_Numero_Disponivel(DateTime.Now.Year);
             short _ano = Convert.ToInt16(DateTime.Now.Year);
             int _user = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
-            bool _isFunc =Functions.Decrypt( Request.Cookies["2FN*"].Value) == "S" ? true : false;
+            bool _isFunc =Functions.Decrypt( Request.Cookies["2fN*"].Value) == "S" ? true : false;
             short _tipoRequerente = dados[0].Tipo_Requerente == "Prefeitura" ? (short)1 : (short)2;
 
             Processogti reg = new Processogti() {
@@ -231,11 +237,16 @@ namespace GTI_MVC.Controllers {
             Processo_bll processoRepository = new Processo_bll(_connection);
             ProcessoStruct _proc = processoRepository.Dados_Processo(_ano, _numero);
 
+            string _assunto = processoRepository.Retorna_Assunto((int)_proc.CodigoAssunto);
+
             Processo2ViewModel model = new Processo2ViewModel();
             model.NumProcesso = _numero;
             model.AnoProcesso = _ano;
             model.Numero_Processo = _numero.ToString() + "-" + Functions.RetornaDvProcesso(_numero) + "/" + _ano.ToString();
             model.Complemento = _proc.Complemento;
+            model.Assunto_Codigo =(int) _proc.CodigoAssunto;
+            model.Assunto_Nome = _assunto;
+            model.Observacao = _proc.Observacao;
             return View(model);
         }
     }

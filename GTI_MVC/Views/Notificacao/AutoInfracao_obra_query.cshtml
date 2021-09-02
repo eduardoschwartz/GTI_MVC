@@ -86,8 +86,8 @@
                             @foreach(var item in Model.ListaNotificacao) {
                                 if(item.Ano_Notificacao == Model.Ano_Selected) {
                                     <tr style="height:20px;">
-                                        <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
                                         <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumeroAuto)</td>
+                                        <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
                                         <td style="width:465px;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome_Proprietario)</td>
                                         <td style="width:80px;font-weight:normal;text-align:center">@Html.DisplayFor(modelItem => item.Data_Cadastro)</td>
 
@@ -106,8 +106,9 @@
 
                 </div>
                 <div class="card-footer">
-                    @Html.ActionLink("Preencher outro auto de infração","AutoInfracao_obra_add", "Notificacao", null,new { @class = "actionlink" })<br />
-                    @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
+                    @Html.ActionLink("Preencher outro auto de infração", "AutoInfracao_obra_add", "Notificacao", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu de opções", "Notificacao_obra_menu", "Notificacao", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
                 </div>
             </div>
         </div>

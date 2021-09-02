@@ -1173,6 +1173,7 @@ namespace GTI_Mvc.Controllers {
             DtNotificacao reg = new DtNotificacao() {
                 AnoNumeroAuto = _not.AnoNumeroAuto,
                 AnoNumero = _not.AnoNumero,
+                Data_Cadastro = _not.Data_Cadastro,
                 Data_Notificacao = _not.Data_Notificacao,
                 Codigo = _not.Codigo_Imovel.ToString("00000"),
                 Nome = _not.Codigo_cidadao.ToString() + "-" + _not.Nome_Proprietario,
