@@ -160,6 +160,9 @@ namespace GTI_MVC.Controllers {
 
             Processo_bll processoRepository = new Processo_bll(_connection);
             int _numero = processoRepository.Retorna_Numero_Disponivel(DateTime.Now.Year);
+            if(_numero==0)
+                return Json(new { success = false, responseText = "Erro ao gravar." }, JsonRequestBehavior.AllowGet);
+
             short _ano = Convert.ToInt16(DateTime.Now.Year);
             int _user = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
             bool _isFunc =Functions.Decrypt( Request.Cookies["2fN*"].Value) == "S" ? true : false;
@@ -221,20 +224,32 @@ namespace GTI_MVC.Controllers {
                 ex = processoRepository.Incluir_Processo_Documento(_listaD, _ano, _numero);
             }
 
-            return Json(new { success = true, responseText = "Processo gravado com sucesso!", ano = Functions.Encrypt(_ano.ToString()), numero = Functions.Encrypt(_numero.ToString()) }, JsonRequestBehavior.AllowGet);
+            string _p = Functions.Encrypt( _numero.ToString() + "-" + Functions.RetornaDvProcesso(_numero) + "/" + _ano.ToString());
+            return Json(new { success = true, responseText = "Processo gravado com sucesso!", processo=_p}, JsonRequestBehavior.AllowGet);
+            //TempData["p"] = _p;
         }
 
         [Route("Processo_vw")]
         [HttpGet]
-        public ActionResult Processo_vw(string a,string n) {
+        public ActionResult Processo_vw(string p) {
             if (Request.Cookies["2lG1H*"] == null) {
                 return RedirectToAction("Login", "Home");
             }
 
-            int _ano = Convert.ToInt32(Functions.Decrypt(a));
-            int _numero = Convert.ToInt32(Functions.Decrypt(n));
+            string _processo = Functions.Decrypt(p);
+            if(_processo=="")
+                return RedirectToAction("Processo_menu", "Processo");
 
             Processo_bll processoRepository = new Processo_bll(_connection);
+            
+            ProcessoNumero processoNumero = Functions.Split_Processo_Numero(_processo);
+            int _ano = processoNumero.Ano;
+            int _numero = processoNumero.Numero;
+
+            bool _existe = processoRepository.Existe_Processo(_ano, _numero);
+            if(!_existe)
+                return RedirectToAction("sysMenu", "Home");
+
             ProcessoStruct _proc = processoRepository.Dados_Processo(_ano, _numero);
 
             string _assunto = processoRepository.Retorna_Assunto((int)_proc.CodigoAssunto);
@@ -247,7 +262,14 @@ namespace GTI_MVC.Controllers {
             model.Assunto_Codigo =(int) _proc.CodigoAssunto;
             model.Assunto_Nome = _assunto;
             model.Observacao = _proc.Observacao;
-            return View(model);
+            if (_proc.Interno) {
+                model.Centro_Custo_Codigo = (int)_proc.CentroCusto;
+                model.Centro_Custo_Nome = _proc.CentroCustoNome;
+            } else {
+                model.Centro_Custo_Codigo = (int)_proc.CodigoCidadao;
+                model.Centro_Custo_Nome = _proc.NomeCidadao;
+            }
+            return View( model);
         }
     }
 }

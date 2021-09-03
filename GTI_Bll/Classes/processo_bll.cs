@@ -649,5 +649,10 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Processo_Web(guid);
         }
 
+        public string Retorna_CentroCusto(int Codigo) {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Retorna_CentroCusto(Codigo);
+        }
+
     }
 }

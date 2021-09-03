@@ -409,6 +409,7 @@ namespace GTI_Dal.Classes {
                         row.NomeCidadao = "";
                 } else {
                     row.CentroCusto = Convert.ToInt16(reg.CentroCusto);
+                    row.CentroCustoNome = Retorna_CentroCusto((int)reg.CentroCusto);
                     row.CodigoCidadao = 0;
                     row.NomeCidadao = "";
                 }
@@ -1702,6 +1703,12 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public string Retorna_CentroCusto(int Codigo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                string Sql = (from c in db.Centrocusto where c.Codigo == Codigo select c.Descricao).FirstOrDefault();
+                return Sql;
+            }
+        }
 
     }
 }
