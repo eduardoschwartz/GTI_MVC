@@ -129,6 +129,7 @@ namespace GTI_MVC.Controllers {
             model.Centro_Custo_Nome = _proc.Centro_custo_nome;
             model.Centro_Custo_Codigo = _proc.Centro_custo_codigo;
             model.Tipo_Requerente = _proc.Interno ? "Prefeitura" : "Contribuinte";
+            model.Interno = _proc.Interno ? "Sim" : "Não";
             return View(model);
         }
       
@@ -210,33 +211,37 @@ namespace GTI_MVC.Controllers {
 
             if (dados[0].Lista_Documento != null) {
                 List<Processodoc> _listaD = new List<Processodoc>();
-                foreach (TableProcessoDoc doc in dados[0].Lista_Documento) {
+                foreach (ProcessoDocStruct doc in dados[0].Lista_Documento) {
                     Processodoc regD = new Processodoc() {
                         Ano = _ano,
                         Numero = _numero,
-                        Coddoc = (short)doc.Codigo
+                        Coddoc = (short)doc.CodigoDocumento
                     };
-                    if (!string.IsNullOrEmpty(doc.Data_Entregue))
-                        regD.Data = Convert.ToDateTime(doc.Data_Entregue);
+                    if (Functions.IsDate(doc.DataEntrega))
+                        regD.Data = Convert.ToDateTime(doc.DataEntrega);
 
                     _listaD.Add(regD);
                 }
                 ex = processoRepository.Incluir_Processo_Documento(_listaD, _ano, _numero);
             }
-
+            
             string _p = Functions.Encrypt( _numero.ToString() + "-" + Functions.RetornaDvProcesso(_numero) + "/" + _ano.ToString());
+            TempData["p"] = _p;
             return Json(new { success = true, responseText = "Processo gravado com sucesso!", processo=_p}, JsonRequestBehavior.AllowGet);
-            //TempData["p"] = _p;
+            
         }
 
         [Route("Processo_vw")]
         [HttpGet]
-        public ActionResult Processo_vw(string p) {
+        public ActionResult Processo_vw() {
             if (Request.Cookies["2lG1H*"] == null) {
                 return RedirectToAction("Login", "Home");
             }
 
-            string _processo = Functions.Decrypt(p);
+            if(TempData["p"]==null)
+                return RedirectToAction("sysMenu", "Home");
+
+            string _processo = Functions.Decrypt(TempData["p"].ToString());
             if(_processo=="")
                 return RedirectToAction("Processo_menu", "Processo");
 
@@ -269,6 +274,10 @@ namespace GTI_MVC.Controllers {
                 model.Centro_Custo_Codigo = (int)_proc.CodigoCidadao;
                 model.Centro_Custo_Nome = _proc.NomeCidadao;
             }
+            model.Interno = _proc.Interno ? "Sim" : "Não";
+            model.Fisico_Nome = _proc.Fisico ? "Sim" : "Não";
+            model.Lista_Documento = processoRepository.Lista_Processo_Documento(_ano, _numero);
+
             return View( model);
         }
     }

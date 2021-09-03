@@ -141,12 +141,12 @@
                     <table style="width:600px">
                         <tr>
                             <td style="width:20%;font-size:14px">Requerente:</td>
-                            <td style="width:80%;font-size:14px;color:darkblue">@Model.Centro_Custo_Codigo-@Model.Centro_Custo_Nome</td>
+                            <td style="width:80%;font-size:14px;color:blue">@Model.Centro_Custo_Codigo-@Model.Centro_Custo_Nome</td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
-                            <td style="width:20%;font-size:14px">Origem:</td>
-                            <td style="width:80%; font-size: 14px; color: darkblue">@Model.Tipo_Requerente<span style="color:black;padding-left:50px">Processo Físico?&nbsp; @Html.EditorFor(m => m.Fisico,new { @id="fisico"})</span> </td>
+                            <td style="width:20%;font-size:14px">Proc.Interno:</td>
+                            <td style="width:80%; font-size: 14px; color: darkblue"><span style="color:blue">@Model.Interno</span><span style="color:black;padding-left:50px">Processo Físico?&nbsp; @Html.EditorFor(m => m.Fisico, new { @id = "fisico" })</span> </td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
@@ -448,9 +448,9 @@
             $("#mainTableDoc tbody tr").each(function () {
                 var row = $(this);
                 var doc = {};
-                doc.Codigo = row.find("td").eq(0).html();
-                doc.Descricao = row.find("td").eq(1).html();
-                doc.Data_Entregue = row.find("td").eq(2).html();
+                doc.CodigoDocumento = row.find("td").eq(0).html();
+                doc.NomeDocumento = row.find("td").eq(1).html();
+                doc.DataEntrega = row.find("td").eq(2).html();
                 documentos.push(doc);
             })
 
@@ -484,10 +484,11 @@
                 success: function (response) {
                     if (response.success) {
                         alert( "Processo gravado com sucesso!");
-                        window.location.href = '@Url.Action("Processo_vw", "Processo")?p=' + response.processo ;
+                        window.location.href = '@Url.Action("Processo_vw", "Processo")' ;
                     } else {
                         document.getElementById('lblMsg').innerHTML = response.responseText;
                         $('#msgBox1').dialog('open');
+                        $("#btnGravar").attr("disabled", false);
                     }
                 },
                 error: function (xhr, status, error) {

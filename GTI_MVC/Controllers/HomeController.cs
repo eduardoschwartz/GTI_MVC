@@ -35,7 +35,7 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult Login() {
             LoginViewModel model = new LoginViewModel();
-            if (Session["hashid"]!= null) {
+            if (Session["hashid"]!= null ) {
                 int _userid = Convert.ToInt32(Session["hashid"]);
                 bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
                 Tributario_bll tributarioRepository = new Tributario_bll(_connection);

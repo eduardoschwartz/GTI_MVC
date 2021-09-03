@@ -654,5 +654,10 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_CentroCusto(Codigo);
         }
 
+        public List<ProcessoDocStruct> Lista_Processo_Documento(int ano, int numero) {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Lista_Processo_Documento(ano,numero);
+        }
+
     }
 }

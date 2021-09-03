@@ -15,12 +15,14 @@ namespace GTI_Mvc.ViewModels {
         public string Centro_Custo_Nome { get; set; }
         public string Centro_Custo_CpfCnpj { get; set; }
         public bool Fisico { get; set; }
+        public string Fisico_Nome { get; set; }
+        public string Interno { get; set; }
         public int Assunto_Codigo { get; set; }
         public string Assunto_Nome { get; set; }
         public string Complemento { get; set; }
         public string Observacao { get; set; }
         public List<TableEndereco> Lista_Endereco { get; set; }
-        public List<TableProcessoDoc> Lista_Documento { get; set; }
+        public List<ProcessoDocStruct> Lista_Documento { get; set; }
     }
 
     public class TableEndereco {
@@ -29,11 +31,11 @@ namespace GTI_Mvc.ViewModels {
         public string Numero { get; set; }
     }
 
-    public class TableProcessoDoc {
-        public int Codigo { get; set; }
-        public string Descricao { get; set; }
-        public string Data_Entregue { get; set; }
-    }
+    //public class TableProcessoDoc {
+    //    public int Codigo { get; set; }
+    //    public string Descricao { get; set; }
+    //    public string Data_Entregue { get; set; }
+    //}
 
 
 

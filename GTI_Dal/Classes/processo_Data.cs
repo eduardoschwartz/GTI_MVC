@@ -1226,7 +1226,6 @@ namespace GTI_Dal.Classes {
             }
         }
 
-
         public Exception Enviar_Processo(Tramitacao reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 Tramitacao t = db.Tramitacao.First(i => i.Ano == reg.Ano && i.Numero == reg.Numero && i.Seq == reg.Seq);
@@ -1484,7 +1483,6 @@ namespace GTI_Dal.Classes {
             }
         }
 
-
         public Local_Tramite Verificar_Processo(short Ano, int Numero) {
             Local_Tramite lt = new Local_Tramite() {
                 Ano = Ano,
@@ -1709,6 +1707,30 @@ namespace GTI_Dal.Classes {
                 return Sql;
             }
         }
+
+        public List<ProcessoDocStruct> Lista_Processo_Documento(int ano,int numero) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = from p in db.Processodoc
+                          join d in db.Documento  on p.Coddoc equals d.Codigo into pd from d in pd.DefaultIfEmpty()
+                          where p.Ano==ano && p.Numero==numero
+                          orderby d.Nome select new {Codigo=p.Coddoc,Nome=d.Nome,Data=p.Data };
+
+                List<ProcessoDocStruct> Lista = new List<ProcessoDocStruct>();
+
+                foreach (var item in Sql) {
+                    ProcessoDocStruct reg = new ProcessoDocStruct() {
+                        CodigoDocumento=item.Codigo,
+                        NomeDocumento=item.Nome
+                    };
+                    if (item.Data != null)
+                        reg.DataEntrega =item.Data;
+                    Lista.Add(reg);
+                }
+
+                return Lista;
+            }
+        }
+
 
     }
 }

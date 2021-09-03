@@ -141,27 +141,27 @@
                     <table style="width:600px">
                         <tr>
                             <td style="width:20%;font-size:14px">Requerente:</td>
-                            <td style="width:80%;font-size:14px;color:darkblue">@Model.Centro_Custo_Codigo-@Model.Centro_Custo_Nome</td>
+                            <td style="width:80%;font-size:14px;color:blue">@Model.Centro_Custo_Codigo-@Model.Centro_Custo_Nome</td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px">Origem:</td>
-                            <td style="width:80%; font-size: 14px; color: darkblue">@Model.Tipo_Requerente<span style="color:black;padding-left:50px">Processo Físico?&nbsp; @Html.EditorFor(m => m.Fisico, new { @id = "fisico" })</span> </td>
+                            <td style="width:80%; font-size: 14px; color: blue"><span style="color:blue">@Model.Interno</span><span style="color:black;padding-left:50px">Processo Físico?&nbsp; <span style="color:blue">@Model.Fisico_Nome</span></span> </td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px">Assunto:</td>
-                            <td style="width:80%; font-size: 14px"><input type="text" id="searchInput" style="width: 500px; " placeholder="Digite ao menos 3 caracteres..." /></td>
+                            <td style="width:80%; font-size: 14px">@Html.TextBoxFor(m=>m.Assunto_Nome,new { @style ="width:500px;color:blue", @readonly = true })</td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px">Complemento:</td>
-                            <td style="width:80%; font-size: 14px">@Html.TextBoxFor(m => m.Complemento, new { @id = "complemento", @style = "width:500px" })</td>
+                            <td style="width:80%; font-size: 14px">@Html.TextBoxFor(m => m.Complemento, new { @id = "complemento", @style = "width:500px;color:blue", @readonly = true })</td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px;vertical-align:top">Observação:</td>
-                            <td style="width:80%; font-size: 14px">@Html.TextAreaFor(m => m.Observacao, new { @id = "observacao", @maxlength = "5000", @cols = 86, @rows = 5, @style = "resize:none;width:500px" })</td>
+                            <td style="width:80%; font-size: 14px">@Html.TextAreaFor(m => m.Observacao, new { @id = "observacao", @maxlength = "5000", @cols = 86, @rows = 5, @style = "resize:none;width:500px;color:blue", @readonly = true })</td>
                         </tr>
                     </table>
                 </div>
@@ -179,8 +179,6 @@
                         <tbody id="mainTableBodyEnd"></tbody>
                     </table>
 
-                    <br /><br />
-                    <button type="button" id="btnCallModalEnd" class="btn btn-info" onclick="OpenModalEnd()" style="height:32px"> <i class="fas fa-plus"></i>&nbsp;Adicionar</button>
                 </div>
                 <div class="card-header">Documento(s) Necessário(s)</div>
                 <div class="card-body">
@@ -190,16 +188,23 @@
                                 <td style="width: 0px; font-size: 14px;display:none">Código</td>
                                 <td style="width: 470px; font-size: 14px">Documento</td>
                                 <td style="width: 90px; font-size: 14px;text-align:center">Entregue em</td>
-                                <td style="width: 40px; font-size: 14px"></td>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach (GTI_Models.Models.ProcessoDocStruct itemD in Model.Lista_Documento) {
+                            <tr style="font-size: 14px;color:blue">
+                                <td style="display:none">@itemD.CodigoDocumento</td>
+                                <td style="width:500px">@itemD.NomeDocumento</td>
+                                @if (itemD.DataEntrega != null) {
+                                    <td style="text-align:center;width:100px">@Convert.ToDateTime(itemD.DataEntrega).ToString("dd/MM/yyyy")</td>
+                                } else {
+                                    <td style="text-align:center;width:100px"></td>
+                                }
+                            </tr>
+                            }
                         </tbody>
                     </table>
                     <br /><br />
-                </div>
-                <div class="card-footer" style="text-align:center;background-color:white">
-                    <button type="button" id="btnNext" class="btn btn-primary" name="action" value="btnNext" style="height:32px" onclick="Gravar()">Gravar o processo</button>
                 </div>
 
                 <div class="card-footer">
@@ -211,319 +216,9 @@
     }
 </div>
 
-<div id="msgBox1" title="Atenção" style='display: none;'>
-    <br />
-    <label id="lblMsg"></label>
-</div>
-<div id="msgBoxWait" title="Atenção" style='display: none;'>
-    <br />
-    <label id="lblMsgWait"></label>
-</div>
-<div id="msgBoxBag" title="Atenção" style='display: none;'>
-    <br />
-    <p>@ViewBag.Result</p>
-</div>
-
-<div class="modal fade" id="ModalEndereco" tabindex="-1" role="dialog" aria-hidden="true" >
-    <div class="modal-dialog" style="max-width: 590px;" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span>Informe o Endereço</span>
-
-            </div>
-            <div class="container"></div>
-            <div class="modal-body">
-                <span style="font-size:13px">Endereço:&nbsp;&nbsp;</span><input type="text" id="searchEndInput" style="width: 390px;font-size:13px " placeholder="Digite ao menos 3 caracteres..." /><span style="font-size:13px;padding-left:10px">
-                <span style="font-size:13px">Nº&nbsp;&nbsp;</span></span><input type="text" id="searchNumInput" style="width: 60px;font-size:13px" onKeyPress = "return formata(this, '§§§§', event)"  />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnSelectEnd">  <i class="fas fa-check"></i>&nbsp;Selecionar</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-@section scripts{
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#msgBox1').dialog({
-                autoOpen: false,
-                resizable: false,
-                draggable: false,
-                position: { my: 'top', at: 'top+300' },
-                height: "auto",
-                width: 340,
-                modal: true,
-                dialogClass: "foo",
-                buttons: {
-                    "OK": function () {
-                        $(this).dialog("close");
-                    }
-                }
-            });
-            $('#msgBoxWait').dialog({
-                autoOpen: false,
-                resizable: false,
-                draggable: false,
-                position: { my: 'top', at: 'top+300' },
-                height: "auto",
-                width: 340,
-                modal: true,
-                dialogClass: "foo",
-                buttons: {
-                    "OK": function () {
-                        @*var urlnew = '@Url.Action("Processo_menu", "Processo")';
-                        window.location.href = urlnew;*@
-                        $(this).dialog("close");
-                    }
-                }
-            });
-            $('#msgBoxBag').dialog({
-                autoOpen: false,
-                resizable: false,
-                draggable: false,
-                position: { my: 'top', at: 'top+300' },
-                height: "auto",
-                width: 340,
-                modal: true,
-                dialogClass: "foo",
-                buttons: {
-                    "OK": function () {
-                        $(this).dialog("close");
-                    }
-                }
-            });
-
-            $(".foo .ui-dialog-title").css("font-size", "13px");
-            $(".foo .ui-widget-content").css("font-size", "13px");
-
-            var _res = '@res';
-            if (_res != "") {
-                $('#msgBoxBag').dialog('open');
-                return false;
-            } else {
-                return true;
-            }
-        });
-
-        $("#searchInput").on('blur', function () {
-            var _assCod = document.getElementById("Ass_Cod").value;
-            if (_assCod == "") {
-                $("#mainTableDoc tbody tr").remove(); //Clear tbody rows
-            }
-        });
-
-        $("#searchInput").on('keydown', function () {
-            document.getElementById("Ass_Cod").value="";
-        });
-
-        $("#searchInput").autocomplete({
-            minLength:3,
-            source: function (request, response) {
-                $.ajax({
-                    url: '@Url.Action("Lista_Assunto","Processo")',
-                    dataType: "json",
-                    autoFocus: true,
-                    data: { search: $("#searchInput").val() },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return { label: item.Nome, value: item.Nome,cod: item.Codigo };
-                        }));
-                    },
-                    error: function (xhr, status, error) {
-                        alert("Error");
-                    }
-                });
-            }
-        }).data("ui-autocomplete")._renderItem = function (ul, item) {
-            var regx = new RegExp('(' + this.term + ')', 'ig');
-            var label = item.value.replace(regx, "<span class='highlight'>" + this.term + "</span>");
-            return $("<li/>").data("ui-autocomplete-item", item).append($("<a>").html(label)).appendTo(ul);
-        };;
-
-        $('#searchInput').on('autocompleteselect', function (e, ui) {
-            document.getElementById("Ass_Cod").value = ui.item.cod;
-            document.getElementById("Ass_Nome").value = ui.item.label;
-            $("#mainTableDoc tbody tr").remove(); //Clear tbody rows
-
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("Lista_Doc","Processo")',
-                dataType: "json",
-                data: { assunto: ui.item.cod },
-                success: function (data) {
-                    var len = data.length;
-                    for (var i = 0; i < len; i++) {
-                        var _cod = data[i].Codigo;
-                        var _nome = data[i].Nome;
-                        var tr = $('<tr style="font-size: 14px" />');
-                        tr.append($('<td style="display:none">' + _cod + '</td>'));
-                        tr.append($('<td>' + _nome + '</td>'));
-                        tr.append($('<td style="text-align:center">' + "" + '</td>'));
-                        tr.append($('<td>  <input type="button" id="btnEditDoc" class="btnimage2" title="Marcar como entregue" onclick="editRowDoc(this)"/>&nbsp;<input type="button" id="btnDelDoc" class="btnimage" title="Remover data" onclick="delDataDoc(this)"/> </td>'));
-                        $('#mainTableDoc').append(tr);
-                    }
-                }
-            })
-        });
-
-        $("#searchEndInput").autocomplete({
-            minLength:3,
-            source: function (request, response) {
-                $.ajax({
-                    url: '@Url.Action("Lista_Endereco","Shared")',
-                    dataType: "json",
-                    data: { search: $("#searchEndInput").val() },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return { label: item.Endereco, value: item.Endereco, cod: item.Codlogradouro };
-                        }));
-                    },
-                    error: function (xhr, status, error) {
-                        alert("Error");
-                    }
-                });
-            }
-        }).data("ui-autocomplete")._renderItem = function (ul, item) {
-            var regx = new RegExp('(' + this.term + ')', 'ig');
-            var label = item.value.replace(regx, "<span class='highlight'>" + this.term + "</span>");
-            return $("<li/>").data("ui-autocomplete-item", item).append($("<a>").html(label)).appendTo(ul);
-        };;
-
-        $('#searchEndInput').on('autocompleteselect', function (e, ui) {
-            document.getElementById("End_Cod").value = ui.item.cod;
-            document.getElementById("End_Nome").value = ui.item.label;
-        });
-
-        $("#btnSelectEnd").click(function () {
-            var tr = $('<tr style="font-size: 14px" />');
-            var _cod = document.getElementById("End_Cod").value;
-            var _nome = document.getElementById("End_Nome").value;
-            var _num = document.getElementById("searchNumInput").value;
-            if (_num == "") {
-                _num = 0;
-            }
-            if (_cod == "" || parseInt(_cod) == 0) {
-                alert("Selecione um endereço válido!");
-            } else {
-                tr.append($('<td style="display:none">' + _cod + '</td>'));
-                tr.append($('<td>' + _nome + '</td>'));
-                tr.append($('<td>' + _num + '</td>'));
-                tr.append($('<td>  <input type="button" id="btnDelEnd" class="btnimage" title="Remover" onclick="delRowEnd(this)"/> </td>'));
-                $('#mainTableEnd').append(tr);
-                $('#ModalEndereco').modal('hide');
-            }
-        });
-
-        function delRowEnd(x) {
-            document.getElementById("mainTableEnd").deleteRow(x.parentElement.parentElement.rowIndex);
-        }
-
-        function delDataDoc(x) {
-            var table = document.getElementById("mainTableDoc");
-            var rows = table.getElementsByTagName('tr');
-            table.rows[x.parentElement.parentElement.rowIndex].cells[2].textContent = "";
-        }
-
-        function editRowDoc(x) {
-            var table = document.getElementById("mainTableDoc");
-            var rows = table.getElementsByTagName('tr');
-            table.rows[x.parentElement.parentElement.rowIndex].cells[2].textContent = DataAtualFormatada();
-        }
-
-        function OpenModalEnd() {
-            document.getElementById("searchEndInput").value = '';
-            document.getElementById("searchNumInput").value = '';
-            $('#ModalEndereco').modal({ backdrop: 'static', keyboard: false });
-        }
-
-        function Gravar() {
-
-            var _ass_cod = document.getElementById("Ass_Cod").value;
-            var _ass_nome = document.getElementById("Ass_Nome").value;
-            var _ccusto_cod = document.getElementById("CCusto_Codigo").value;
-            var _ccusto_nome = document.getElementById("CCusto_Nome").value;
-            var _guid = document.getElementById("Guid").value;
-            var _tipo_req = document.getElementById("Tipo_Requerente").value;
-            var _compl = document.getElementById("complemento").value;
-            var _obs = document.getElementById("observacao").value;
-            var _fisicoValue = $('#fisico:checked').val();
-            var enderecos = new Array();
-
-            $("#mainTableEnd tbody tr").each(function () {
-                var row = $(this);
-                var end = {};
-                end.Codigo = row.find("td").eq(0).html();
-                end.Endereco = row.find("td").eq(1).html();
-                end.Numero = row.find("td").eq(2).html();
-                enderecos.push(end);
-            })
-
-            var documentos = new Array();
-            $("#mainTableDoc tbody tr").each(function () {
-                var row = $(this);
-                var doc = {};
-                doc.Codigo = row.find("td").eq(0).html();
-                doc.Descricao = row.find("td").eq(1).html();
-                doc.Data_Entregue = row.find("td").eq(2).html();
-                documentos.push(doc);
-            })
-
-            var dados = new Array();
-            var reg = {};
-            reg.Assunto_Codigo = _ass_cod;
-            reg.Assunto_Nome = _ass_nome;
-            reg.Centro_Custo_Codigo = _ccusto_cod;
-            reg.Centro_Custo_Nome = _ccusto_nome;
-            reg.Guid = _guid;
-            reg.Tipo_Requerente = _tipo_req;
-            reg.Complemento = _compl;
-            reg.Observacao = _obs;
-            reg.Fisico = _fisicoValue;
-            reg.Lista_Endereco = enderecos;
-            reg.Lista_Documento = documentos;
-            dados.push(reg);
-
-            var token = $('input[name="__RequestVerificationToken"]').val();
-            var headers = {};
-            headers['__RequestVerificationToken'] = token;
 
 
-            $.ajax({
-                type: "POST",
-                url: "/Processo/Processo_addx",
-                headers: headers,
-                contentType: 'application/json',
-                data: JSON.stringify({ Dados: dados}),
-                dataType: "json",
-                success: function (response) {
-                    if (response.success) {
-                        document.getElementById('lblMsgWait').innerHTML = "Processo gravado com sucesso!";
-                        $('#msgBoxWait').dialog('open');
-                    } else {
-                        document.getElementById('lblMsg').innerHTML = response.responseText;
-                        $('#msgBox1').dialog('open');
-                    }
-                    
-                },
-                error: function (xhr, status, error) {
-                    alert(error);
-                }
-            });
 
-        }
 
-        function DataAtualFormatada() {
-            var data = new Date(),
-                dia = data.getDate().toString(),
-                diaF = (dia.length == 1) ? '0' + dia : dia,
-                mes = (data.getMonth() + 1).toString(), //+1 pois no getMonth Janeiro começa com zero.
-                mesF = (mes.length == 1) ? '0' + mes : mes,
-                anoF = data.getFullYear();
-            return diaF + "/" + mesF + "/" + anoF;
-        }
 
-    </script>
-}
+
