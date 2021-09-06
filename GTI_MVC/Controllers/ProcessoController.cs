@@ -196,11 +196,11 @@ namespace GTI_MVC.Controllers {
 
             if (dados[0].Lista_Endereco != null) {
                 List<Processoend> _listaE = new List<Processoend>();
-                foreach (TableEndereco end in dados[0].Lista_Endereco) {
+                foreach (ProcessoEndStruct end in dados[0].Lista_Endereco) {
                     Processoend regE = new Processoend() {
                         Ano = _ano,
                         Numprocesso = _numero,
-                        Codlogr = Convert.ToInt16(end.Codigo),
+                        Codlogr = Convert.ToInt16(end.CodigoLogradouro),
                         Numero = end.Numero
                     };
                     _listaE.Add(regE);
@@ -277,8 +277,21 @@ namespace GTI_MVC.Controllers {
             model.Interno = _proc.Interno ? "Sim" : "Não";
             model.Fisico_Nome = _proc.Fisico ? "Sim" : "Não";
             model.Lista_Documento = processoRepository.Lista_Processo_Documento(_ano, _numero);
+            model.Lista_Endereco = processoRepository.Lista_Processo_Endereco((short)_ano, _numero);
 
             return View( model);
         }
+
+        [Route("Processo_qry")]
+        [HttpGet]
+        public ActionResult Processo_qry() {
+            if (Request.Cookies["2lG1H*"] == null)
+                return RedirectToAction("Login", "Home");
+
+
+            return View();
+        }
+
+
     }
 }

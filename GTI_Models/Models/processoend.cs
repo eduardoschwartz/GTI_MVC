@@ -11,7 +11,7 @@ namespace GTI_Models.Models {
         public int Numprocesso { get; set; }
         [Key]
         [Column(Order = 3)]
-        public short Codlogr { get; set; }
+        public int Codlogr { get; set; }
         [Key]
         [Column(Order = 4)]
         [Required]

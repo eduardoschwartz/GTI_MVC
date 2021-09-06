@@ -659,5 +659,10 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Processo_Documento(ano,numero);
         }
 
+        public List<ProcessoEndStruct> Lista_Processo_Endereco(short ano, int numero) {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Lista_Processo_Endereco(ano, numero);
+        }
+
     }
 }

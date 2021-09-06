@@ -1731,6 +1731,31 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<ProcessoEndStruct> Lista_Processo_Endereco(short ano, int numero) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = from p in db.Processoend
+                          join d in db.Logradouro on p.Codlogr equals d.Codlogradouro into pd from d in pd.DefaultIfEmpty()
+                          where p.Ano == ano && p.Numprocesso == numero
+                          orderby d.Endereco_resumido select new { Codigo = p.Codlogr, Nome = d.Endereco_resumido, Numero = p.Numero };
+
+                List<ProcessoEndStruct> Lista = new List<ProcessoEndStruct>();
+
+                foreach (var item in Sql) {
+                    ProcessoEndStruct reg = new ProcessoEndStruct() {
+                        CodigoLogradouro = item.Codigo,
+                        NomeLogradouro = item.Nome,
+                        Numero=item.Numero
+                    };
+                    Lista.Add(reg);
+                }
+
+                return Lista;
+            }
+        }
+
+
+
+
 
     }
 }

@@ -141,27 +141,27 @@
                     <table style="width:600px">
                         <tr>
                             <td style="width:20%;font-size:14px">Requerente:</td>
-                            <td style="width:80%;font-size:14px;color:blue">@Model.Centro_Custo_Codigo-@Model.Centro_Custo_Nome</td>
+                            <td style="width:80%;font-size:14px;color:darkblue">@Model.Centro_Custo_Codigo-@Model.Centro_Custo_Nome</td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px">Origem:</td>
-                            <td style="width:80%; font-size: 14px; color: blue"><span style="color:blue">@Model.Interno</span><span style="color:black;padding-left:50px">Processo Físico?&nbsp; <span style="color:blue">@Model.Fisico_Nome</span></span> </td>
+                            <td style="width:80%; font-size: 14px; color: darkblue"><span style="color:darkblue">@Model.Interno</span><span style="color:black;padding-left:50px">Processo Físico?&nbsp; <span style="color:darkblue">@Model.Fisico_Nome</span></span> </td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px">Assunto:</td>
-                            <td style="width:80%; font-size: 14px">@Html.TextBoxFor(m=>m.Assunto_Nome,new { @style ="width:500px;color:blue", @readonly = true })</td>
+                            <td style="width:80%; font-size: 14px">@Html.TextBoxFor(m=>m.Assunto_Nome,new { @style ="width:500px;color:darkblue", @readonly = true })</td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px">Complemento:</td>
-                            <td style="width:80%; font-size: 14px">@Html.TextBoxFor(m => m.Complemento, new { @id = "complemento", @style = "width:500px;color:blue", @readonly = true })</td>
+                            <td style="width:80%; font-size: 14px">@Html.TextBoxFor(m => m.Complemento, new { @id = "complemento", @style = "width:500px;color:darkblue", @readonly = true })</td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px;vertical-align:top">Observação:</td>
-                            <td style="width:80%; font-size: 14px">@Html.TextAreaFor(m => m.Observacao, new { @id = "observacao", @maxlength = "5000", @cols = 86, @rows = 5, @style = "resize:none;width:500px;color:blue", @readonly = true })</td>
+                            <td style="width:80%; font-size: 14px">@Html.TextAreaFor(m => m.Observacao, new { @id = "observacao", @maxlength = "5000", @cols = 86, @rows = 5, @style = "resize:none;width:500px;color:darkblue", @readonly = true })</td>
                         </tr>
                     </table>
                 </div>
@@ -173,10 +173,17 @@
                                 <th class="titulo" style="width:0px;display:none">Código</th>
                                 <th class="titulo" style="width:490px">Endereço</th>
                                 <th class="titulo" style="width:70px">Número</th>
-                                <th class="titulo" style="width:40px"></th>
                             </tr>
                         </thead>
-                        <tbody id="mainTableBodyEnd"></tbody>
+                        <tbody id="mainTableBodyEnd">
+                            @foreach (GTI_Models.Models.ProcessoEndStruct itemD in Model.Lista_Endereco) {
+                                <tr style="font-size: 14px;color:darkblue">
+                                    <td style="display:none">@itemD.CodigoLogradouro</td>
+                                    <td style="width:490px">@itemD.NomeLogradouro</td>
+                                    <td style="width:70px">@itemD.Numero</td>
+                                </tr>
+                            }
+                        </tbody>
                     </table>
 
                 </div>
@@ -192,15 +199,15 @@
                         </thead>
                         <tbody>
                             @foreach (GTI_Models.Models.ProcessoDocStruct itemD in Model.Lista_Documento) {
-                            <tr style="font-size: 14px;color:blue">
-                                <td style="display:none">@itemD.CodigoDocumento</td>
-                                <td style="width:500px">@itemD.NomeDocumento</td>
-                                @if (itemD.DataEntrega != null) {
-                                    <td style="text-align:center;width:100px">@Convert.ToDateTime(itemD.DataEntrega).ToString("dd/MM/yyyy")</td>
-                                } else {
-                                    <td style="text-align:center;width:100px"></td>
-                                }
-                            </tr>
+                                <tr style="font-size: 14px;color:darkblue">
+                                    <td style="display:none">@itemD.CodigoDocumento</td>
+                                    <td style="width:500px">@itemD.NomeDocumento</td>
+                                    @if (itemD.DataEntrega != null) {
+                                        <td style="text-align:center;width:100px">@Convert.ToDateTime(itemD.DataEntrega).ToString("dd/MM/yyyy")</td>
+                                    } else {
+                                        <td style="text-align:center;width:100px"></td>
+                                    }
+                                </tr>
                             }
                         </tbody>
                     </table>
