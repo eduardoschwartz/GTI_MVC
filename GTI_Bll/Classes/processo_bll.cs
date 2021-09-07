@@ -664,5 +664,10 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Processo_Endereco(ano, numero);
         }
 
+        public List<ProcessoStruct> Lista_Processos_Web(ProcessoFilter Filter) {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Lista_Processos_Web(Filter);
+        }
+
     }
 }

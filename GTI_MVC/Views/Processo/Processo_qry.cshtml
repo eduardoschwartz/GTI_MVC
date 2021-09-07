@@ -130,7 +130,7 @@
             <div class="card">
                 <div class="card-header">Consulta de Processos</div>
                 <div class="card-body">
-                    <div  sstyle="display:table">
+                    <div sstyle="display:table">
                         <div style="display: table-row">
                             <div style="display: table-cell;">
                                 <table style="width:580px">
@@ -142,32 +142,39 @@
                                     </tr>
                                     <tr style="height:30px">
                                         <td style="width: 110px; font-size: 13px">Assunto: </td>
-                                        <td style="width: 470px; font-size: 13px"><input type="text" id="NumProcessoText" style="font-size:13px;width:400px " /></td>
+                                        <td style="width: 470px; font-size: 13px"><input type="text" id="AssuntoText" style="font-size:13px;width:400px " /></td>
                                     </tr>
                                     <tr style="height:30px">
                                         <td style="width: 110px; font-size: 13px">Requerente: </td>
-                                        <td style="width: 470px; font-size: 13px"><input type="text" id="NumProcessoText" style="font-size:13px;width:400px " /></td>
+                                        <td style="width: 470px; font-size: 13px"><input type="text" id="RequerenteText" style="font-size:13px;width:400px " /></td>
                                     </tr>
                                     <tr style="height:30px">
                                         <td style="width: 110px; font-size: 13px">Endereço: </td>
-                                        <td style="width: 470px; font-size: 13px"><input type="text" id="NumProcessoText" style="font-size:13px;width:400px " /></td>
+                                        <td style="width: 470px; font-size: 13px"><input type="text" id="EnderecoText" style="font-size:13px;width:400px " /></td>
                                     </tr>
                                 </table>
                             </div>
                             <div style="display: table-cell;">
-                                
-                                    <button type="button" id="btnGravar" class="btn btn-primary" name="action" value="btnGravar" style="height:32px;width:100px;vertical-align:baseline">Pesquisar</button>
-                                
+                                <button type="button" id="btnGravar" class="btn btn-primary" name="action" value="btnGravar" style="height:32px;width:110px;vertical-align:baseline" onclick="Validar()"><i class="fas fa-search"></i>&nbsp; Pesquisar</button>
                             </div>
                         </div>
                     </div>
-
-
-
+                    <br />
+                    <div style="text-align:center">
+                        <table id="mainTable" style="width:700px;" class="tbl table-bordered table-condensed">
+                            <thead>
+                                <tr style="background-color:maroon;color:white">
+                                    <td style="width: 100px; font-size: 13px">Nº Proc.</td>
+                                    <td style="width: 80px; font-size: 13px;text-align:center">Dt.Ent.</td>
+                                    <td style="width: 260px; font-size: 13px">Assunto</td>
+                                    <td style="width: 260px; font-size: 13px">Requerente</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-
-
-
                 <div class="card-footer">
                     @Html.ActionLink("Retornar ao menu de opções", "Processo_menu", "Processo", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
@@ -184,6 +191,10 @@
 <div id="msgBoxBag" title="Atenção" style='display: none;'>
     <br />
     <p>@ViewBag.Result</p>
+</div>
+<div id="msgBoxWait" style='display: none;text-align:center'>
+    <img src="~/Images/ajax-loader.gif"><br />
+    <p>Processando, aguarde . . . </p>
 </div>
 
 
@@ -223,7 +234,16 @@
                     }
                 }
             });
-
+            $('#msgBoxWait').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "no-titlebar"
+            });
 
             $(".foo .ui-dialog-title").css("font-size", "13px");
             $(".foo .ui-widget-content").css("font-size", "13px");
@@ -237,6 +257,63 @@
             }
         });
 
+        function Pesquisar() {
+            var _processo = document.getElementById("NumProcessoText").value;
+
+            var dados = new Array();
+            var reg = {};
+            reg.Numero_Processo = _processo;
+            dados.push(reg);
+
+            var token = $('input[name="__RequestVerificationToken"]').val();
+            var headers = {};
+            headers['__RequestVerificationToken'] = token;
+
+            $.ajax({
+                type: "POST",
+                url: "Processo_qryx",
+                headers: headers,
+                contentType: 'application/json',
+                data: JSON.stringify({ Dados: dados}),
+                dataType: "json",
+                success: function (data) {
+                    var len = data.length;
+                    for (var i = 0; i < len; i++) {
+                        var _processo = data[i].Numero_Processo;
+                        var _data = data[i].Data_Entrada;
+                        var tr = $('<tr style="font-size: 14px" />');
+                        tr.append($('<td>' + _processo + '</td>'));
+                        tr.append($('<td>' + _data + '</td>'));
+                        tr.append($('<td>' + "" + '</td>'));
+                        tr.append($('<td>' + "" + '</td>'));
+                        $('#mainTable').append(tr);
+                    }
+                    $('#msgBoxWait').dialog('close');
+                },
+                error: function (xhr, status, error) {
+                    $('#msgBoxWait').dialog('close');
+                    if (xhr.status != 200) {
+                        alert(error);
+                    }
+                }
+            });
+        }
+
+        function Validar() {
+            var _processo = document.getElementById("NumProcessoText").value;
+            if (_processo != "") {
+                var _error = Valida_Numero_Processo(_processo);
+                if (_error != "") {
+                    $('#msgBoxWait').dialog('close');
+                    document.getElementById('lblMsg').innerHTML = _error;
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
+            }
+            $('#msgBoxWait').dialog('open');
+
+            Pesquisar();
+        }
 
     </script>
 }

@@ -288,10 +288,47 @@ namespace GTI_MVC.Controllers {
             if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login", "Home");
 
-
             return View();
         }
 
+        [ValidateJsonAntiForgeryToken]
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("Processo_qryx")]
+        public ActionResult Processo_qryx(List<Processo2ViewModel> dados) {
+            if (Request.Cookies["2uC*"] == null || Request.Cookies["2fN*"].Value == null)
+                return RedirectToAction("Login", "Home");
 
+            string _numero_processo = "";
+            int _anoProc = 0, _numProc = 0;
+
+            if (!string.IsNullOrEmpty(dados[0].Numero_Processo)) {
+                _numero_processo = dados[0].Numero_Processo;
+            }
+
+            Processo_bll processoRepository = new Processo_bll(_connection);
+
+            if (_numero_processo != "") {
+                ProcessoNumero processoNumero = Functions.Split_Processo_Numero(_numero_processo);
+                _anoProc = processoNumero.Ano;
+                _numProc = processoNumero.Numero;
+            }
+
+            ProcessoFilter _filter = new ProcessoFilter() {
+                Ano = _anoProc,
+                Numero = _numProc
+            };
+            List<ProcessoStruct> Lista = processoRepository.Lista_Processos_Web(_filter);
+            List<Processo2ViewModel> Lista_Proc = new List<Processo2ViewModel>();
+            foreach (ProcessoStruct item in Lista) {
+                Processo2ViewModel reg = new Processo2ViewModel() {
+                    Numero_Processo = item.Numero.ToString("00000") + "-" + Functions.RetornaDvProcesso(item.Numero) + "/" + item.Ano.ToString(),
+                    Data_Entrada = Convert.ToDateTime(item.DataEntrada).ToString("dd/MM/yyyy")
+                };
+                Lista_Proc.Add(reg);
+            };
+        
+            return new JsonResult { Data = Lista_Proc, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
     }
 }

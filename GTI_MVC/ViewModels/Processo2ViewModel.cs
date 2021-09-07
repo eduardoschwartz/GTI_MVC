@@ -21,6 +21,7 @@ namespace GTI_Mvc.ViewModels {
         public string Assunto_Nome { get; set; }
         public string Complemento { get; set; }
         public string Observacao { get; set; }
+        public string Data_Entrada { get; set; }
         public List<ProcessoEndStruct> Lista_Endereco { get; set; }
         public List<ProcessoDocStruct> Lista_Documento { get; set; }
     }
