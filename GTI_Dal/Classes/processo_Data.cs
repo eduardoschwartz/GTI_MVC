@@ -928,6 +928,8 @@ namespace GTI_Dal.Classes {
                     Sql = Sql.Where(c => c.Ano == Filter.Ano);
                 if (Filter.Numero > 0)
                     Sql = Sql.Where(c => c.Numero == Filter.Numero);
+                if (dalCore.IsDate( Filter.DataEntrada))
+                    Sql = Sql.Where(c => c.DataEntrada == Filter.DataEntrada);
 
                 return Sql.ToList();
             }

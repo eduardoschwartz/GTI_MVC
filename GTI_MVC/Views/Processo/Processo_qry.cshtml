@@ -114,6 +114,23 @@
         width: 16px;
         height: 16px;
     }
+
+    .tbl tbody tr:hover {
+        background-color: red;
+        color: white;
+    }
+
+    tr.highlighted td {
+        background: maroon;
+        color: white;
+    }
+
+    .titulo {
+        background: darkblue;
+        color: white;
+        font-weight: normal;
+        font-size: 13px;
+    }
 </style>
 
 @{
@@ -132,7 +149,7 @@
                 <div class="card-body">
                     <div sstyle="display:table">
                         <div style="display: table-row">
-                            <div style="display: table-cell;">
+                            <div id="dvTable" style="display: table-cell;">
                                 <table style="width:580px">
                                     <tr style="height:30px">
                                         <td style="width:110px;font-size:13px">Nº do Processo: </td>
@@ -255,14 +272,35 @@
             } else {
                 return true;
             }
+
+            $('#dvTable').on("click", '#mainTable tbody tr', function () {
+                var tableData = $(this).children("td").map(function () {
+                    return $(this).text();
+                }).get();
+
+                document.getElementById('Numero_Processo').value = $.trim(tableData[0]);
+                document.getElementById('Data_Entrada').value = $.trim(tableData[1]);
+                document.getElementById('Assunto_Nome').value = $.trim(tableData[2]);
+                document.getElementById('Centro_Custo_Nome').value = $.trim(tableData[3]);
+
+
+                $('#mainTable tr').click(function (e) {
+                    $('#mainTable tr').removeClass('highlighted');
+                    $(this).addClass('highlighted');
+                });
+            });
+
+
         });
 
         function Pesquisar() {
             var _processo = document.getElementById("NumProcessoText").value;
-
+            var _data_entrada = document.getElementById("DataEntradaText").value;
+            $("#mainTable tbody tr").remove(); //Clear tbody rows
             var dados = new Array();
             var reg = {};
             reg.Numero_Processo = _processo;
+            reg.Data_Entrada = _data_entrada;
             dados.push(reg);
 
             var token = $('input[name="__RequestVerificationToken"]').val();
@@ -278,15 +316,30 @@
                 dataType: "json",
                 success: function (data) {
                     var len = data.length;
+                    var _pos = 0;
                     for (var i = 0; i < len; i++) {
+                        var _error = data[i].Erro;
+                        if (_error != "") {
+                            $('#msgBoxWait').dialog('close');
+                            document.getElementById('lblMsg').innerHTML = _error;
+                            $('#msgBox1').dialog('open');
+                            return false;
+                        }
+
                         var _processo = data[i].Numero_Processo;
                         var _data = data[i].Data_Entrada;
-                        var tr = $('<tr style="font-size: 14px" />');
-                        tr.append($('<td>' + _processo + '</td>'));
-                        tr.append($('<td>' + _data + '</td>'));
-                        tr.append($('<td>' + "" + '</td>'));
-                        tr.append($('<td>' + "" + '</td>'));
+                        var _assunto = data[i].Assunto_Nome;
+                        var _ccusto = data[i].Centro_Custo_Nome;
+                        var tr = $('<tr style="white-space:nowrap;cursor:pointer" />');
+                        tr.append($('<td style="font-size: 12px">' + _processo + '</td>'));
+                        tr.append($('<td style="font-size: 12px">' + _data + '</td>'));
+                        tr.append($('<td style="font-size: 12px" >' + _assunto + '</td>'));
+                        tr.append($('<td style="font-size: 12px">' + _ccusto + '</td>'));
                         $('#mainTable').append(tr);
+                        _pos++;
+                    }
+                    if (_pos > 0) {
+                        $("#mainTable>tbody>tr:first").trigger('click');
                     }
                     $('#msgBoxWait').dialog('close');
                 },

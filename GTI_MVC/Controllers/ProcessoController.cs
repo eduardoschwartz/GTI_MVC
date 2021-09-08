@@ -299,8 +299,11 @@ namespace GTI_MVC.Controllers {
             if (Request.Cookies["2uC*"] == null || Request.Cookies["2fN*"].Value == null)
                 return RedirectToAction("Login", "Home");
 
+            ProcessoFilter _filter = new ProcessoFilter() {};
+
             string _numero_processo = "";
             int _anoProc = 0, _numProc = 0;
+            List<Processo2ViewModel> Lista_Proc = new List<Processo2ViewModel>();
 
             if (!string.IsNullOrEmpty(dados[0].Numero_Processo)) {
                 _numero_processo = dados[0].Numero_Processo;
@@ -312,19 +315,36 @@ namespace GTI_MVC.Controllers {
                 ProcessoNumero processoNumero = Functions.Split_Processo_Numero(_numero_processo);
                 _anoProc = processoNumero.Ano;
                 _numProc = processoNumero.Numero;
+                int _dv = Functions.RetornaDvProcesso(_numProc);
+                if(_dv != processoNumero.Dv) {
+                    Processo2ViewModel reg = new Processo2ViewModel() {
+                        Erro = "Digito verificador inválido!"
+                    };
+                    Lista_Proc.Add(reg);
+                    return new JsonResult { Data = Lista_Proc, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+                _filter.Ano = _anoProc;
+                _filter.Numero = _numProc;
             }
 
-            ProcessoFilter _filter = new ProcessoFilter() {
-                Ano = _anoProc,
-                Numero = _numProc
-            };
+            if(Functions.IsDate(dados[0].Data_Entrada)) {
+                _filter.DataEntrada = Convert.ToDateTime(dados[0].Data_Entrada);
+            }
+
             List<ProcessoStruct> Lista = processoRepository.Lista_Processos_Web(_filter);
-            List<Processo2ViewModel> Lista_Proc = new List<Processo2ViewModel>();
+            
             foreach (ProcessoStruct item in Lista) {
                 Processo2ViewModel reg = new Processo2ViewModel() {
                     Numero_Processo = item.Numero.ToString("00000") + "-" + Functions.RetornaDvProcesso(item.Numero) + "/" + item.Ano.ToString(),
-                    Data_Entrada = Convert.ToDateTime(item.DataEntrada).ToString("dd/MM/yyyy")
+                    Data_Entrada = Convert.ToDateTime(item.DataEntrada).ToString("dd/MM/yyyy"),
+                    Assunto_Nome=Functions.TruncateTo( item.Assunto,35),
+                    Erro = ""
                 };
+                if (item.Interno)
+                    reg.Centro_Custo_Nome =  item.CentroCustoNome ?? "";
+                else
+                    reg.Centro_Custo_Nome = item.NomeCidadao ?? "";
+                reg.Centro_Custo_Nome = Functions.TruncateTo(reg.Centro_Custo_Nome, 35);
                 Lista_Proc.Add(reg);
             };
         

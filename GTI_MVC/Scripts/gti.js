@@ -32,8 +32,6 @@ function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
-
-
 function countOccurrence(palavra,char) {
     var count = 0;
     for (var i = 0; i < palavra.length; i++) {
@@ -81,12 +79,10 @@ function Valida_Numero_Processo(_numero) {
     if (!isNumeric(_numero.substring(0, _pos))) {
         return "Número do processo inválido. Utilize o formato '####0-0/0000' (onde # é opcional)";
     }
+      
 
-    
     return "";
 }
-
-
 
 function valida_Cpf(cpf) {
     cpf = cpf.split("").filter(n => (Number(n) || n == 0)).join("");
@@ -242,6 +238,24 @@ function RetornaAno(date) {
     return n
 }
 
+function RetornaDvProcesso(Numero) {
+    var soma = 0, index = 0, Mult = 6;
+    var sNumProc = Numero.ToString().PadLeft(5, '0');
+    while (index < 5) {
+        var nChar = Convert.ToInt32(sNumProc.Substring(index, 1));
+        soma += (Mult * nChar);
+        Mult--;
+        index++;
+    }
 
+    var DigAux = soma % 11;
+    var Digito = 11 - DigAux;
+    if (Digito == 10)
+        Digito = 0;
+    if (Digito == 11)
+        Digito = 1;
+
+    return Digito;
+}
 
 
