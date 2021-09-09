@@ -997,6 +997,21 @@ namespace GTI_Desktop.Forms
             gtiCore.Liberado(this);
         }
 
+        private void listaDeDevedoresToolStripMenuItem_Click(object sender, EventArgs e) {
+            gtiCore.Ocupado(this);
+            var formToShow = Application.OpenForms.Cast<Form>().FirstOrDefault(c => c is Forms.Lista_Devedor);
+            if (formToShow != null) {
+                formToShow.Show();
+            } else {
+                Lista_Devedor f1 = new Lista_Devedor {
+                    Tag = "Menu",
+                    MdiParent = this
+                };
+                f1.Show();
+            }
+            gtiCore.Liberado(this);
+        }
+
         //private void FillBackgroundImage(bool bTeste) {
         //    Bitmap img = bTeste ? Properties.Resources.rosa : Properties.Resources.bege;
         //    Color cor = bTeste ? Color.FromArgb(250, 218, 226) : Color.OldLace;

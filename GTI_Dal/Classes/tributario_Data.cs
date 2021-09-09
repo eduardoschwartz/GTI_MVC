@@ -9,6 +9,7 @@ using System.Text;
 using System.Configuration;
 using static GTI_Models.modelCore;
 using GTI_Models;
+using OfficeOpenXml.Table.PivotTable;
 
 namespace GTI_Dal.Classes {
     public class Tributario_Data {
@@ -3222,6 +3223,116 @@ Proximo:;
             }
         }
 
+        public List<int> Lista_Codigo_Devedor(int _codigo_inicial, int _codigo_final,DateTime _data_vencimento) {
+            int _ano1 = 2016, _ano2 = 2017;
+
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 3 * 60;
+                List<int> Lista = (from d in db.Debitoparcela where d.Codreduzido >= _codigo_inicial && d.Codreduzido <= _codigo_final && d.Datavencimento <= _data_vencimento &&
+                                   d.Numparcela>0 && (d.Statuslanc == 3 || d.Statuslanc == 42 || d.Statuslanc == 43) && d.Codlancamento != 20 && d.Anoexercicio>=_ano1 && 
+                                   d.Anoexercicio<=_ano2 && d.Dataajuiza == null  orderby d.Codreduzido select d.Codreduzido).Distinct().ToList();
+                return Lista;
+            }
+        }
+
+        public Exception Insert_Lista_devedor(Lista_devedor Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[4];
+                Parametros[0] = new SqlParameter { ParameterName = "@userid", SqlDbType = SqlDbType.Int, SqlValue = Reg.Userid };
+                Parametros[1] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
+                Parametros[2] = new SqlParameter { ParameterName = "@ano", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Ano };
+                Parametros[3] = new SqlParameter { ParameterName = "@valor_total", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.valor_total };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO lista_devedor(userid,codigo,ano,valor_total) VALUES(@userid,@codigo,@ano,@valor_total)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Excluir_Lista_Devedor(int UserId) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                try {
+                    db.Lista_Devedor.RemoveRange(db.Lista_Devedor.Where(i => i.Userid == UserId));
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public List<SpExtrato_carta> Lista_Extrato_Tributo_Devedor(int Codigo, short Ano1,short Ano2 , DateTime? Data_Atualizacao = null, string Usuario = "") {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+                var prmCod1 = new SqlParameter { ParameterName = "@CodReduz1", SqlDbType = SqlDbType.Int, SqlValue = Codigo };
+                var prmCod2 = new SqlParameter { ParameterName = "@CodReduz2", SqlDbType = SqlDbType.Int, SqlValue = Codigo };
+                var prmAno1 = new SqlParameter { ParameterName = "@AnoExercicio1", SqlDbType = SqlDbType.SmallInt, SqlValue = Ano1 };
+                var prmAno2 = new SqlParameter { ParameterName = "@AnoExercicio2", SqlDbType = SqlDbType.SmallInt, SqlValue = Ano2 };
+                var prmLanc1 = new SqlParameter { ParameterName = "@CodLancamento1", SqlDbType = SqlDbType.SmallInt, SqlValue = 0 };
+                var prmLanc2 = new SqlParameter { ParameterName = "@CodLancamento2", SqlDbType = SqlDbType.SmallInt, SqlValue = 99 };
+                var prmSeq1 = new SqlParameter { ParameterName = "@SeqLancamento1", SqlDbType = SqlDbType.SmallInt, SqlValue = 0 };
+                var prmSeq2 = new SqlParameter { ParameterName = "@SeqLancamento2", SqlDbType = SqlDbType.SmallInt, SqlValue = 99 };
+                var prmPc1 = new SqlParameter { ParameterName = "@NumParcela1", SqlDbType = SqlDbType.SmallInt, SqlValue = 1 };
+                var prmPc2 = new SqlParameter { ParameterName = "@NumParcela2", SqlDbType = SqlDbType.SmallInt, SqlValue = 120 };
+                var prmCp1 = new SqlParameter { ParameterName = "@CodComplemento1", SqlDbType = SqlDbType.SmallInt, SqlValue = 0 };
+                var prmCp2 = new SqlParameter { ParameterName = "@CodComplemento2", SqlDbType = SqlDbType.SmallInt, SqlValue = 999 };
+                var prmSta1 = new SqlParameter { ParameterName = "@Status1", SqlDbType = SqlDbType.SmallInt, SqlValue = 3 };
+                var prmSta2 = new SqlParameter { ParameterName = "@Status2", SqlDbType = SqlDbType.SmallInt, SqlValue = 43 };
+                var prmDtA = new SqlParameter { ParameterName = "@DataNow", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Data_Atualizacao == null ? DateTime.Now : Data_Atualizacao };
+                var prmUser = new SqlParameter { ParameterName = "@Usuario", SqlDbType = SqlDbType.VarChar, SqlValue = Usuario };
+
+                var result = db.SpExtrato_carta.SqlQuery("EXEC spEXTRATO_CARTA @CodReduz1, @CodReduz2, @AnoExercicio1 ,@AnoExercicio2 ,@CodLancamento1 ,@CodLancamento2, @SeqLancamento1 ,@SeqLancamento2, @NumParcela1, @NumParcela2, @CodComplemento1, @CodComplemento2, @Status1, @Status2, @DataNow, @Usuario ",
+                    prmCod1, prmCod2, prmAno1, prmAno2, prmLanc1, prmLanc2, prmSeq1, prmSeq2, prmPc1, prmPc2, prmCp1, prmCp2, prmSta1, prmSta2, prmDtA, prmUser).ToList();
+
+                List<SpExtrato_carta> ListaDebito = new List<SpExtrato_carta>();
+                foreach (SpExtrato_carta item in result) {
+                    if (item.Codlancamento!=20 && (item.Statuslanc == 3 || item.Statuslanc == 42 || item.Statuslanc == 43) && item.Datavencimento<DateTime.Now && item.Dataajuiza==null  && item.Numparcela>0) {
+                        SpExtrato_carta reg = new SpExtrato_carta {
+                            Anoexercicio = item.Anoexercicio,
+                            Codlancamento = item.Codlancamento,
+                            Desclancamento = item.Desclancamento,
+                            Seqlancamento = item.Seqlancamento,
+                            Numparcela = item.Numparcela,
+                            Codcomplemento = item.Codcomplemento,
+                            Datavencimento = item.Datavencimento,
+                            Datadebase = item.Datadebase,
+                            Datapagamento = item.Datapagamento,
+                            Codreduzido = item.Codreduzido,
+                            Statuslanc = item.Statuslanc,
+                            Situacao = item.Situacao,
+                            Datainscricao = item.Datainscricao,
+                            Certidao = item.Certidao,
+                            Numlivro = item.Numlivro,
+                            Pagina = item.Pagina,
+                            Numdocumento = item.Numdocumento,
+                            Dataajuiza = item.Dataajuiza,
+                            Valortributo = item.Valortributo,
+                            Valormulta = item.Valormulta,
+                            Valorjuros = item.Valorjuros,
+                            Valorcorrecao = item.Valorcorrecao,
+                            Valortotal = item.Valortotal,
+                            Valorpago = item.Valorpago,
+                            Valorpagoreal = item.Valorpagoreal,
+                            Abrevtributo = item.Abrevtributo,
+                            Codtributo = item.Codtributo,
+                        };
+                        reg.Valortributo = item.Valortributo;
+                        reg.Anoexecfiscal = item.Anoexecfiscal;
+                        reg.Numexecfiscal = item.Numexecfiscal;
+                        reg.Processocnj = item.Processocnj;
+                        reg.Prot_certidao = item.Prot_certidao;
+                        reg.Prot_dtremessa = item.Prot_dtremessa;
+                        ListaDebito.Add(reg);
+                    }
+                }
+                return ListaDebito;
+            }
+
+        }
 
 
     }//end class

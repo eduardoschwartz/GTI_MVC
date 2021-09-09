@@ -320,6 +320,7 @@
             var _processo = document.getElementById("NumProcessoText").value;
             var _data_entrada = document.getElementById("DataEntradaText").value;
             var _assunto = document.getElementById("Ass_Cod").value;
+            var _ano = parseInt(document.getElementById("AnoText").value);
 
             $("#mainTable tbody tr").remove(); //Clear tbody rows
             var dados = new Array();
@@ -329,6 +330,7 @@
             if (_assunto != "" && _assunto != 0) {
                 reg.Assunto_Codigo = _assunto;
             }
+            reg.AnoProcesso = _ano;
             dados.push(reg);
 
             var token = $('input[name="__RequestVerificationToken"]').val();
@@ -384,6 +386,7 @@
 
         function Validar() {
             var _processo = document.getElementById("NumProcessoText").value;
+            var _ano = parseInt(document.getElementById("AnoText").value);
             if (_processo != "") {
                 var _error = Valida_Numero_Processo(_processo);
                 if (_error != "") {
@@ -393,6 +396,17 @@
                     return false;
                 }
             }
+            if (_ano != "") {
+                var currentTime = new Date();
+                var year = currentTime.getFullYear();
+                if (_ano < 1990 | _ano > year) {
+                    $('#msgBoxWait').dialog('close');
+                    document.getElementById('lblMsg').innerHTML = "Exercício inválido!";
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
+            }
+
             $('#msgBoxWait').dialog('open');
             Pesquisar();
         }
@@ -434,7 +448,7 @@
         $('#AssuntoText').on('autocompleteselect', function (e, ui) {
             document.getElementById("Ass_Cod").value = ui.item.cod;
             document.getElementById("Ass_Nome").value = ui.item.label;
-            alert(ui.item.cod);
+          //  alert(ui.item.cod);
 
         });
 

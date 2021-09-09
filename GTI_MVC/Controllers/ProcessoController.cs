@@ -334,6 +334,10 @@ namespace GTI_MVC.Controllers {
             if (dados[0].Assunto_Codigo > 0) {
                 _filter.AssuntoCodigo = dados[0].Assunto_Codigo;
             }
+            if (dados[0].AnoProcesso > 0) {
+                _filter.Ano = dados[0].AnoProcesso;
+            }
+
 
             List<ProcessoStruct> Lista = processoRepository.Lista_Processos_Web(_filter);
 

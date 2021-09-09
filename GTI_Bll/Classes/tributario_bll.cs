@@ -236,6 +236,7 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Extrato_Tributo_Carta(Codigo, Ano1, Ano2, Lancamento1, Lancamento2, Sequencia1, Sequencia2, Parcela1, Parcela2, Complemento1, Complemento2, Status1, Status2, Data_Atualizacao, Usuario);
         }
 
+
         ///<summary> Retorna todas as linhas da spExtrato_parcelamento
         ///</summary>
         public List<SpExtrato_Parcelamento> Lista_Extrato_Tributo_Parcelamento(int Codigo = 3, short Ano1 = 1990, short Ano2 = 2050, short Lancamento1 = 1, short Lancamento2 = 99, short Sequencia1 = 0, short Sequencia2 = 9999,
@@ -1592,6 +1593,29 @@ namespace GTI_Bll.Classes {
             Exception ex = obj.Insert_Dam_Data(Reg);
             return ex;
         }
+
+        public List<int> Lista_Codigo_Devedor(int _codigo_inicial, int _codigo_final,DateTime _data_vencimento) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Lista_Codigo_Devedor(_codigo_inicial,_codigo_final,_data_vencimento);
+        }
+
+        public Exception Insert_Lista_devedor(Lista_devedor Reg) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            Exception ex = obj.Insert_Lista_devedor(Reg);
+            return ex;
+        }
+
+        public Exception Excluir_Lista_Devedor(int UserId) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            Exception ex = obj.Excluir_Lista_Devedor(UserId);
+            return ex;
+        }
+
+        public List<SpExtrato_carta> Lista_Extrato_Tributo_Devedor(int Codigo, short Ano1,short Ano2, DateTime? Data_Atualizacao = null, string Usuario = "") {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Lista_Extrato_Tributo_Devedor(Codigo, Ano1,Ano2,Data_Atualizacao,Usuario);
+        }
+
 
     }//end class
 }

@@ -377,6 +377,12 @@
     <Compile Include="Forms\inputBox.designer.cs">
       <DependentUpon>inputBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Lista_Devedor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Lista_Devedor.Designer.cs">
+      <DependentUpon>Lista_Devedor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -744,6 +750,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Imovel.resx">
       <DependentUpon>Imovel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Lista_Devedor.resx">
+      <DependentUpon>Lista_Devedor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>

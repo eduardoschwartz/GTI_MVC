@@ -215,5 +215,6 @@ namespace GTI_Dal {
         public DbSet<employees> Employees { get; set; }
         public DbSet<Dam_header> Dam_Header { get; set; }
         public DbSet<Dam_data> Dam_Data { get; set; }
+        public DbSet<Lista_devedor> Lista_Devedor { get; set; }
     }
 }

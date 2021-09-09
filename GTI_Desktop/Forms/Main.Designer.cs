@@ -93,6 +93,7 @@
             this.RelatorioProtocoloMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.ProcessoAtrasoMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.localEmQueUmProcessoSeEncontraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.processosQueEstãoUmCentroDeCustosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OutrosMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.ConfigMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.SecurityMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -135,7 +136,7 @@
             this.Dv2Option = new System.Windows.Forms.RadioButton();
             this.Dv1Option = new System.Windows.Forms.RadioButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.processosQueEstãoUmCentroDeCustosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listaDeDevedoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BarStatus.SuspendLayout();
             this.MenuBarStrip.SuspendLayout();
             this.TopBarToolStrip.SuspendLayout();
@@ -545,7 +546,7 @@
             this.CadastroLancamentoMenu,
             this.CadastroTributosMenu});
             this.TributarioTabelasMenu.Name = "TributarioTabelasMenu";
-            this.TributarioTabelasMenu.Size = new System.Drawing.Size(137, 22);
+            this.TributarioTabelasMenu.Size = new System.Drawing.Size(180, 22);
             this.TributarioTabelasMenu.Text = "Tabelas";
             // 
             // CadastroLancamentoMenu
@@ -565,15 +566,16 @@
             // DividaAtivaMenu
             // 
             this.DividaAtivaMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CartaCobrancaMenu});
+            this.CartaCobrancaMenu,
+            this.listaDeDevedoresToolStripMenuItem});
             this.DividaAtivaMenu.Name = "DividaAtivaMenu";
-            this.DividaAtivaMenu.Size = new System.Drawing.Size(137, 22);
+            this.DividaAtivaMenu.Size = new System.Drawing.Size(180, 22);
             this.DividaAtivaMenu.Text = "Divida Ativa";
             // 
             // CartaCobrancaMenu
             // 
             this.CartaCobrancaMenu.Name = "CartaCobrancaMenu";
-            this.CartaCobrancaMenu.Size = new System.Drawing.Size(170, 22);
+            this.CartaCobrancaMenu.Size = new System.Drawing.Size(180, 22);
             this.CartaCobrancaMenu.Text = "Carta de cobrança";
             this.CartaCobrancaMenu.Click += new System.EventHandler(this.CartaCobrancaMenu_Click);
             // 
@@ -582,7 +584,7 @@
             this.BancosMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.RegistroBancarioMenu});
             this.BancosMenu.Name = "BancosMenu";
-            this.BancosMenu.Size = new System.Drawing.Size(137, 22);
+            this.BancosMenu.Size = new System.Drawing.Size(180, 22);
             this.BancosMenu.Text = "Bancos";
             // 
             // RegistroBancarioMenu
@@ -671,6 +673,13 @@
             this.localEmQueUmProcessoSeEncontraToolStripMenuItem.Size = new System.Drawing.Size(295, 22);
             this.localEmQueUmProcessoSeEncontraToolStripMenuItem.Text = "Local em que um processo se encontra";
             this.localEmQueUmProcessoSeEncontraToolStripMenuItem.Click += new System.EventHandler(this.localEmQueUmProcessoSeEncontraToolStripMenuItem_Click);
+            // 
+            // processosQueEstãoUmCentroDeCustosToolStripMenuItem
+            // 
+            this.processosQueEstãoUmCentroDeCustosToolStripMenuItem.Name = "processosQueEstãoUmCentroDeCustosToolStripMenuItem";
+            this.processosQueEstãoUmCentroDeCustosToolStripMenuItem.Size = new System.Drawing.Size(295, 22);
+            this.processosQueEstãoUmCentroDeCustosToolStripMenuItem.Text = "Processos que estão um Centro de Custos";
+            this.processosQueEstãoUmCentroDeCustosToolStripMenuItem.Click += new System.EventHandler(this.processosQueEstãoUmCentroDeCustosToolStripMenuItem_Click);
             // 
             // OutrosMenu
             // 
@@ -1079,12 +1088,12 @@
             this.Dv1Option.UseVisualStyleBackColor = false;
             this.Dv1Option.CheckedChanged += new System.EventHandler(this.OptDv1_CheckedChanged);
             // 
-            // processosQueEstãoUmCentroDeCustosToolStripMenuItem
+            // listaDeDevedoresToolStripMenuItem
             // 
-            this.processosQueEstãoUmCentroDeCustosToolStripMenuItem.Name = "processosQueEstãoUmCentroDeCustosToolStripMenuItem";
-            this.processosQueEstãoUmCentroDeCustosToolStripMenuItem.Size = new System.Drawing.Size(295, 22);
-            this.processosQueEstãoUmCentroDeCustosToolStripMenuItem.Text = "Processos que estão um Centro de Custos";
-            this.processosQueEstãoUmCentroDeCustosToolStripMenuItem.Click += new System.EventHandler(this.processosQueEstãoUmCentroDeCustosToolStripMenuItem_Click);
+            this.listaDeDevedoresToolStripMenuItem.Name = "listaDeDevedoresToolStripMenuItem";
+            this.listaDeDevedoresToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.listaDeDevedoresToolStripMenuItem.Text = "Lista de Devedores";
+            this.listaDeDevedoresToolStripMenuItem.Click += new System.EventHandler(this.listaDeDevedoresToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -1225,6 +1234,7 @@
         private System.Windows.Forms.ToolStripMenuItem EmissaoGuiaMenu;
         private System.Windows.Forms.ToolStripMenuItem localEmQueUmProcessoSeEncontraToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem processosQueEstãoUmCentroDeCustosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem listaDeDevedoresToolStripMenuItem;
     }
 }
 
