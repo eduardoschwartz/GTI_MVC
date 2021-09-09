@@ -331,8 +331,13 @@ namespace GTI_MVC.Controllers {
                 _filter.DataEntrada = Convert.ToDateTime(dados[0].Data_Entrada);
             }
 
+            if (dados[0].Assunto_Codigo > 0) {
+                _filter.AssuntoCodigo = dados[0].Assunto_Codigo;
+            }
+
             List<ProcessoStruct> Lista = processoRepository.Lista_Processos_Web(_filter);
-            
+
+            int _pos = 0;
             foreach (ProcessoStruct item in Lista) {
                 Processo2ViewModel reg = new Processo2ViewModel() {
                     Numero_Processo = item.Numero.ToString("00000") + "-" + Functions.RetornaDvProcesso(item.Numero) + "/" + item.Ano.ToString(),
@@ -346,6 +351,8 @@ namespace GTI_MVC.Controllers {
                     reg.Centro_Custo_Nome = item.NomeCidadao ?? "";
                 reg.Centro_Custo_Nome = Functions.TruncateTo(reg.Centro_Custo_Nome, 35);
                 Lista_Proc.Add(reg);
+                //if (_pos == 100) break;
+                _pos++;
             };
         
             return new JsonResult { Data = Lista_Proc, JsonRequestBehavior = JsonRequestBehavior.AllowGet };

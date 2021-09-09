@@ -131,6 +131,14 @@
         font-weight: normal;
         font-size: 13px;
     }
+
+    .btn-group-xs > .btn, .btn-xs {
+        padding: .25rem .3rem;
+        font-size: .675rem;
+        line-height: .9;
+        border-radius: .2rem;
+    }
+
 </style>
 
 @{
@@ -141,47 +149,61 @@
 <div class="center" style="width:800px">
     @using (Html.BeginForm("Processo_qry", "Processo", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Numero_Processo, new { @id = "Numero_Processo" })
+        @Html.HiddenFor(m => m.Assunto_Codigo, new { @id = "Ass_Cod" })
+        @Html.HiddenFor(m => m.Assunto_Nome, new { @id = "Ass_Nome" })
 
 
         <div class="container" style="width:770px">
             <div class="card">
                 <div class="card-header">Consulta de Processos</div>
                 <div class="card-body">
-                    <div sstyle="display:table">
+                    <div style="display:table">
                         <div style="display: table-row">
-                            <div id="dvTable" style="display: table-cell;">
+                            <div style="display: table-cell;">
                                 <table style="width:580px">
-                                    <tr style="height:30px">
-                                        <td style="width:110px;font-size:13px">Nº do Processo: </td>
-                                        <td style="width: 470px; font-size: 13px">
-                                            <input type="text" id="NumProcessoText" style="width: 100px;font-size:13px " placeholder="####0-0/0000" /><span style="font-size:13px;padding-left:20px">Data Entrada:&nbsp;&nbsp;</span><input type="text" id="DataEntradaText" style="width: 80px;font-size:13px " class="maskData" /><span style="font-size:13px;padding-left:10px">Interno&nbsp;</span><input type="checkbox" id="internoCheck" name="internoCheck" />
+                                    <tr style="height:28px">
+                                        <td style="width:110px;font-size:13px;">Nº do Processo: </td>
+                                        <td style="width: 470px; font-size: 13px;">
+                                            <input type="text" id="NumProcessoText" style="width: 100px;font-size:13px " placeholder="####0-0/0000" /><span style="font-size:13px;padding-left:20px">Exercício:&nbsp;&nbsp;</span><input type="text" id="AnoText" style="width: 50px;font-size:13px;text-align:center " class="maskAno" />
                                         </td>
                                     </tr>
-                                    <tr style="height:30px">
+                                    <tr style="height:28px">
+                                        <td style="width:110px;font-size:13px;">Data Entrada: </td>
+                                        <td style="width: 470px; font-size: 13px;">
+                                            <input type="text" id="DataEntradaText" style="width: 80px;font-size:13px " class="maskData" /><span style="font-size:13px;padding-left:25px">Interno&nbsp;</span><input type="checkbox" id="internoCheck" name="internoCheck" /><span style="font-size:13px;padding-left:15px">Físico&nbsp;</span><input type="checkbox" id="internoCheck" name="internoCheck" /><span style="font-size:13px;padding-left:15px">Cancelado&nbsp;</span><input type="checkbox" id="internoCheck" name="internoCheck" />
+                                        </td>
+                                    </tr>
+                                    <tr style="height:28px">
                                         <td style="width: 110px; font-size: 13px">Assunto: </td>
-                                        <td style="width: 470px; font-size: 13px"><input type="text" id="AssuntoText" style="font-size:13px;width:400px " /></td>
+                                        <td style="width: 470px; font-size: 13px"><input type="text" id="AssuntoText" style="font-size:13px;width:413px" placeholder="Digite ao menos 3 caracteres..." /></td>
                                     </tr>
-                                    <tr style="height:30px">
+                                    <tr style="height:28px">
                                         <td style="width: 110px; font-size: 13px">Requerente: </td>
-                                        <td style="width: 470px; font-size: 13px"><input type="text" id="RequerenteText" style="font-size:13px;width:400px " /></td>
+                                        <td style="width: 470px; font-size: 13px"><input type="text" id="RequerenteText" style="font-size:13px;width:365px;color:darkblue" readonly="readonly" />&nbsp;<button type="button" id="btnRequerente" title="Consultar" class="btn btn-info btn-xs">...</button> <button type="button" id="btnRequerente" title="Apagar" class="btn btn-danger btn-xs">X</button></td>
                                     </tr>
-                                    <tr style="height:30px">
+                                    <tr style="height:28px">
                                         <td style="width: 110px; font-size: 13px">Endereço: </td>
-                                        <td style="width: 470px; font-size: 13px"><input type="text" id="EnderecoText" style="font-size:13px;width:400px " /></td>
+                                        <td style="width: 470px; font-size: 13px"><input type="text" id="EnderecoText" style="font-size:13px;width:335px" placeholder="Digite ao menos 3 caracteres..." /><span style="padding-left:10px">Nº&nbsp;</span><input type="text" id="EnderecoText" style="font-size:13px;width:50px" /></td>
                                     </tr>
                                 </table>
+
                             </div>
+
                             <div style="display: table-cell;">
                                 <button type="button" id="btnGravar" class="btn btn-primary" name="action" value="btnGravar" style="height:32px;width:110px;vertical-align:baseline" onclick="Validar()"><i class="fas fa-search"></i>&nbsp; Pesquisar</button>
                             </div>
                         </div>
+
                     </div>
+                    @*<br />*@
+                    @*<span style="font-size:13px;color:brown">Obs: Apenas os 100 primeiros resultados serão exibidos</span>*@
                     <br />
-                    <div style="text-align:center">
+                    <div id="table-container" style="overflow-x: scroll; max-height: 360px; height: auto; overflow: auto; width: 700px">
                         <table id="mainTable" style="width:700px;" class="tbl table-bordered table-condensed">
                             <thead>
-                                <tr style="background-color:maroon;color:white">
-                                    <td style="width: 100px; font-size: 13px">Nº Proc.</td>
+                                <tr style="background-color:darkblue;color:white">
+                                    <td style="width: 100px; font-size: 13px; text-align: center">Nº Processo</td>
                                     <td style="width: 80px; font-size: 13px;text-align:center">Dt.Ent.</td>
                                     <td style="width: 260px; font-size: 13px">Assunto</td>
                                     <td style="width: 260px; font-size: 13px">Requerente</td>
@@ -190,7 +212,11 @@
                             <tbody>
                             </tbody>
                         </table>
+                        <div id="bottom_anchor"></div>
                     </div>
+
+                    <br />
+                    <button type="button" id="btnDetalhe" class="btn btn-primary" name="action" title="Exibir os detalhes do processo" style="height:32px;width:110px;vertical-align:baseline" onclick="Exibir_Detalhe()"> Detalhes</button>
                 </div>
                 <div class="card-footer">
                     @Html.ActionLink("Retornar ao menu de opções", "Processo_menu", "Processo", null, new { @class = "actionlink" })<br />
@@ -221,6 +247,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $(".maskData").inputmask("99/99/9999");
+            $(".maskAno").inputmask("9999");
             $('#msgBox1').dialog({
                 autoOpen: false,
                 resizable: false,
@@ -273,34 +300,35 @@
                 return true;
             }
 
-            $('#dvTable').on("click", '#mainTable tbody tr', function () {
-                var tableData = $(this).children("td").map(function () {
-                    return $(this).text();
-                }).get();
-
-                document.getElementById('Numero_Processo').value = $.trim(tableData[0]);
-                document.getElementById('Data_Entrada').value = $.trim(tableData[1]);
-                document.getElementById('Assunto_Nome').value = $.trim(tableData[2]);
-                document.getElementById('Centro_Custo_Nome').value = $.trim(tableData[3]);
-
-
-                $('#mainTable tr').click(function (e) {
-                    $('#mainTable tr').removeClass('highlighted');
-                    $(this).addClass('highlighted');
-                });
-            });
-
-
         });
+
+        $("#mainTable tbody").delegate('tr', 'click', function () {
+            var tableData = $(this).children("td").map(function () {
+                return $(this).text();
+            }).get();
+
+            document.getElementById('Numero_Processo').value = $.trim(tableData[0]);
+
+            $('#mainTable tr').click(function (e) {
+                $('#mainTable tr').removeClass('highlighted');
+                $(this).addClass('highlighted');
+            });
+        });
+
 
         function Pesquisar() {
             var _processo = document.getElementById("NumProcessoText").value;
             var _data_entrada = document.getElementById("DataEntradaText").value;
+            var _assunto = document.getElementById("Ass_Cod").value;
+
             $("#mainTable tbody tr").remove(); //Clear tbody rows
             var dados = new Array();
             var reg = {};
             reg.Numero_Processo = _processo;
             reg.Data_Entrada = _data_entrada;
+            if (_assunto != "" && _assunto != 0) {
+                reg.Assunto_Codigo = _assunto;
+            }
             dados.push(reg);
 
             var token = $('input[name="__RequestVerificationToken"]').val();
@@ -331,8 +359,8 @@
                         var _assunto = data[i].Assunto_Nome;
                         var _ccusto = data[i].Centro_Custo_Nome;
                         var tr = $('<tr style="white-space:nowrap;cursor:pointer" />');
-                        tr.append($('<td style="font-size: 12px">' + _processo + '</td>'));
-                        tr.append($('<td style="font-size: 12px">' + _data + '</td>'));
+                        tr.append($('<td style="font-size: 12px;text-align:center">' + _processo + '</td>'));
+                        tr.append($('<td style="font-size: 12px;text-align:center">' + _data + '</td>'));
                         tr.append($('<td style="font-size: 12px" >' + _assunto + '</td>'));
                         tr.append($('<td style="font-size: 12px">' + _ccusto + '</td>'));
                         $('#mainTable').append(tr);
@@ -341,6 +369,8 @@
                     if (_pos > 0) {
                         $("#mainTable>tbody>tr:first").trigger('click');
                     }
+                    var firstTr = $('#mainTable>tbody>tr:first');
+                    firstTr.addClass('highlighted');
                     $('#msgBoxWait').dialog('close');
                 },
                 error: function (xhr, status, error) {
@@ -364,9 +394,51 @@
                 }
             }
             $('#msgBoxWait').dialog('open');
-
             Pesquisar();
         }
+
+        function Exibir_Detalhe() {
+            var ccText = document.getElementById('Numero_Processo').value;
+            alert(ccText);
+        }
+
+  
+        $("#AssuntoText").on('keydown', function () {
+            document.getElementById("Ass_Cod").value="";
+        });
+
+        $("#AssuntoText").autocomplete({
+            minLength:3,
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("Lista_Assunto","Processo")',
+                    dataType: "json",
+                    autoFocus: true,
+                    data: { search: $("#AssuntoText").val() },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Nome, value: item.Nome,cod: item.Codigo };
+                        }));
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Error");
+                    }
+                });
+            }
+        }).data("ui-autocomplete")._renderItem = function (ul, item) {
+            var regx = new RegExp('(' + this.term + ')', 'ig');
+            var label = item.value.replace(regx, "<span class='highlight'>" + this.term + "</span>");
+            return $("<li/>").data("ui-autocomplete-item", item).append($("<a>").html(label)).appendTo(ul);
+        };;
+
+        $('#AssuntoText').on('autocompleteselect', function (e, ui) {
+            document.getElementById("Ass_Cod").value = ui.item.cod;
+            document.getElementById("Ass_Nome").value = ui.item.label;
+            alert(ui.item.cod);
+
+        });
+
+
 
     </script>
 }
