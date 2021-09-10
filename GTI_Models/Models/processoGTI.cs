@@ -87,6 +87,7 @@ namespace GTI_Models.Models {
         public List<ProcessoDocStruct> ListaProcessoDoc { get; set; }
         public string TipoEnd { get; set; }
         public string ObsAnexo { get; set; }
+        public int? LogradouroCodigo { get; set; }
         public string LogradouroNome { get; set; }
         public string LogradouroNumero { get; set; }
     }

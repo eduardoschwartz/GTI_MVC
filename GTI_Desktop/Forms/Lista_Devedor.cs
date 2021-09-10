@@ -24,7 +24,7 @@ namespace GTI_Desktop.Forms {
 
         private void FindButton_Click(object sender, EventArgs e) {
             bool _ExisteReg = false;
-            int _codigo1 = 1,_codigo2=5000;
+            int _codigo1 = 1,_codigo2=700000;
             int _userId = Properties.Settings.Default.UserId;
             short _ano=0;
             DateTime _data_vencimento = DateTime.Now.Date;
@@ -49,23 +49,13 @@ namespace GTI_Desktop.Forms {
                     else
                         _soma2017 += Lista_Extrato_Parcela[i].Valortotal;
                 }
-                if (_soma2016 > 0) {
+                if (_soma2016 > 0 || _soma2017>0) {
                     _ExisteReg = true;
                     Lista_devedor reg = new Lista_devedor() {
                         Userid = _userId,
                         Codigo = _cod,
-                        Ano = 2016,
-                        valor_total = _soma2016
-                    };
-                    ex = tributarioRepository.Insert_Lista_devedor(reg);
-                }
-                if (_soma2017 > 0) {
-                    _ExisteReg = true;
-                    Lista_devedor reg = new Lista_devedor() {
-                        Userid = _userId,
-                        Codigo = _cod,
-                        Ano = 2017,
-                        valor_total = _soma2017
+                        valor_total1 = _soma2016,
+                        valor_total2 = _soma2017
                     };
                     ex = tributarioRepository.Insert_Lista_devedor(reg);
                 }

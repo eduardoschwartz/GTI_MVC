@@ -337,7 +337,10 @@ namespace GTI_MVC.Controllers {
             if (dados[0].AnoProcesso > 0) {
                 _filter.Ano = dados[0].AnoProcesso;
             }
-
+            if (dados[0].Endereco_Codigo > 0) {
+                _filter.CodLogradouro = dados[0].Endereco_Codigo;
+                _filter.NumEnd = dados[0].Endereco_Numero;
+            }
 
             List<ProcessoStruct> Lista = processoRepository.Lista_Processos_Web(_filter);
 
@@ -354,7 +357,17 @@ namespace GTI_MVC.Controllers {
                 else
                     reg.Centro_Custo_Nome = item.NomeCidadao ?? "";
                 reg.Centro_Custo_Nome = Functions.TruncateTo(reg.Centro_Custo_Nome, 35);
-                Lista_Proc.Add(reg);
+
+
+                bool _existe = false;
+                foreach (Processo2ViewModel t in Lista_Proc) {
+                    if (t.Numero_Processo == reg.Numero_Processo) {
+                        _existe = true;
+                        break;
+                    }
+                }
+                if(!_existe)
+                    Lista_Proc.Add(reg);
                 //if (_pos == 100) break;
                 _pos++;
             };

@@ -3240,10 +3240,10 @@ Proximo:;
                 object[] Parametros = new object[4];
                 Parametros[0] = new SqlParameter { ParameterName = "@userid", SqlDbType = SqlDbType.Int, SqlValue = Reg.Userid };
                 Parametros[1] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
-                Parametros[2] = new SqlParameter { ParameterName = "@ano", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Ano };
-                Parametros[3] = new SqlParameter { ParameterName = "@valor_total", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.valor_total };
+                Parametros[2] = new SqlParameter { ParameterName = "@valor_total1", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.valor_total1 };
+                Parametros[3] = new SqlParameter { ParameterName = "@valor_total2", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.valor_total2 };
 
-                db.Database.ExecuteSqlCommand("INSERT INTO lista_devedor(userid,codigo,ano,valor_total) VALUES(@userid,@codigo,@ano,@valor_total)", Parametros);
+                db.Database.ExecuteSqlCommand("INSERT INTO lista_devedor(userid,codigo,valor_total1,valor_total2) VALUES(@userid,@codigo,@valor_total1,@valor_total2)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {

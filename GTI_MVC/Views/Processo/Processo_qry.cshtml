@@ -152,7 +152,8 @@
         @Html.HiddenFor(m => m.Numero_Processo, new { @id = "Numero_Processo" })
         @Html.HiddenFor(m => m.Assunto_Codigo, new { @id = "Ass_Cod" })
         @Html.HiddenFor(m => m.Assunto_Nome, new { @id = "Ass_Nome" })
-
+        <input type="hidden" id="End_Cod">
+        <input type="hidden" id="End_Nome">
 
         <div class="container" style="width:770px">
             <div class="card">
@@ -184,7 +185,7 @@
                                     </tr>
                                     <tr style="height:28px">
                                         <td style="width: 110px; font-size: 13px">Endereço: </td>
-                                        <td style="width: 470px; font-size: 13px"><input type="text" id="EnderecoText" style="font-size:13px;width:335px" placeholder="Digite ao menos 3 caracteres..." /><span style="padding-left:10px">Nº&nbsp;</span><input type="text" id="EnderecoText" style="font-size:13px;width:50px" /></td>
+                                        <td style="width: 470px; font-size: 13px"><input type="text" id="EnderecoText" style="font-size:13px;width:335px" placeholder="Digite ao menos 3 caracteres..." /><span style="padding-left:10px">Nº&nbsp;</span><input type="text" id="NumeroText" style="font-size:13px;width:50px" onKeyPress = "return formata(this, '§§§§', event)" /></td>
                                     </tr>
                                 </table>
 
@@ -321,6 +322,8 @@
             var _data_entrada = document.getElementById("DataEntradaText").value;
             var _assunto = document.getElementById("Ass_Cod").value;
             var _ano = parseInt(document.getElementById("AnoText").value);
+            var _endereco = document.getElementById("End_Cod").value;
+            var _endereco_num = document.getElementById("NumeroText").value;
 
             $("#mainTable tbody tr").remove(); //Clear tbody rows
             var dados = new Array();
@@ -329,6 +332,10 @@
             reg.Data_Entrada = _data_entrada;
             if (_assunto != "" && _assunto != 0) {
                 reg.Assunto_Codigo = _assunto;
+            }
+            if (_endereco != "" && _endereco != 0) {
+                reg.Endereco_Codigo = _endereco;
+                reg.Endereco_Numero = _endereco_num;
             }
             reg.AnoProcesso = _ano;
             dados.push(reg);
@@ -416,7 +423,7 @@
             alert(ccText);
         }
 
-  
+
         $("#AssuntoText").on('keydown', function () {
             document.getElementById("Ass_Cod").value="";
         });
@@ -448,11 +455,37 @@
         $('#AssuntoText').on('autocompleteselect', function (e, ui) {
             document.getElementById("Ass_Cod").value = ui.item.cod;
             document.getElementById("Ass_Nome").value = ui.item.label;
-          //  alert(ui.item.cod);
+        
 
         });
 
+        $("#EnderecoText").autocomplete({
+            minLength:3,
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("Lista_Endereco","Shared")',
+                    dataType: "json",
+                    data: { search: $("#EnderecoText").val() },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Endereco, value: item.Endereco, cod: item.Codlogradouro };
+                        }));
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Error");
+                    }
+                });
+            }
+        }).data("ui-autocomplete")._renderItem = function (ul, item) {
+            var regx = new RegExp('(' + this.term + ')', 'ig');
+            var label = item.value.replace(regx, "<span class='highlight'>" + this.term + "</span>");
+            return $("<li/>").data("ui-autocomplete-item", item).append($("<a>").html(label)).appendTo(ul);
+        };;
 
+        $('#EnderecoText').on('autocompleteselect', function (e, ui) {
+            document.getElementById("End_Cod").value = ui.item.cod;
+            document.getElementById("End_Nome").value = ui.item.label;
+        });
 
     </script>
 }

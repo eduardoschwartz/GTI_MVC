@@ -917,12 +917,12 @@ namespace GTI_Dal.Classes {
                            join e in db.Processoend on new { P1 = p.Ano, P2 = p.Numero } equals new { P1 = e.Ano, P2 = e.Numprocesso } into ep from e in ep.DefaultIfEmpty()
                            join l in db.Logradouro on e.Codlogr equals l.Codlogradouro into le from l in le.DefaultIfEmpty()
                            join u in db.Centrocusto on p.Centrocusto equals u.Codigo into pu from u in pu.DefaultIfEmpty()
-                           orderby p.Ano, p.Numero
+                           orderby  p.Ano, p.Numero 
                            select new ProcessoStruct {
                                Ano = p.Ano, Numero = p.Numero, NomeCidadao = c.Nomecidadao, Assunto = a.Nome, DataEntrada = p.Dataentrada, DataCancelado = p.Datacancel,
                                DataReativacao = p.Datareativa, DataArquivado = p.Dataarquiva, DataSuspensao = p.Datasuspenso, Interno = p.Interno, Fisico = p.Fisico, LogradouroNome = l.Endereco,
                                LogradouroNumero = e.Numero, Complemento = p.Complemento, CentroCustoNome = u.Descricao, Inscricao = p.Insc, CodigoCidadao = p.Codcidadao, CodigoAssunto = p.Codassunto,
-                               CentroCusto = p.Centrocusto
+                               CentroCusto = p.Centrocusto,LogradouroCodigo=e.Codlogr
                            });
                 if (Filter.Ano > 0)
                     Sql = Sql.Where(c => c.Ano == Filter.Ano);
@@ -932,7 +932,10 @@ namespace GTI_Dal.Classes {
                     Sql = Sql.Where(c => c.DataEntrada == Filter.DataEntrada);
                 if (Filter.AssuntoCodigo > 0)
                     Sql = Sql.Where(c => c.CodigoAssunto == Filter.AssuntoCodigo);
-
+                if (Filter.CodLogradouro > 0)
+                    Sql = Sql.Where(c => c.LogradouroCodigo == Filter.CodLogradouro);
+                if (Filter.NumEnd > 0)
+                    Sql = Sql.Where(c => c.LogradouroNumero == Filter.NumEnd.ToString());
                 return Sql.ToList();
             }
         }

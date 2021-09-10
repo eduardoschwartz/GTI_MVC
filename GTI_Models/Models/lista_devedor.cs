@@ -9,7 +9,7 @@ namespace GTI_Models.Models {
         [Key]
         [Column(Order = 2)]
         public int Codigo { get; set; }
-        public short    Ano { get; set; }
-        public decimal valor_total { get; set; }
+        public decimal valor_total1 { get; set; }
+        public decimal valor_total2 { get; set; }
     }
 }
