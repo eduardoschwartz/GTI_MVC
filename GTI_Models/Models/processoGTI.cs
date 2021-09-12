@@ -163,6 +163,7 @@ namespace GTI_Models.Models {
         public int NumEnd { get; set; }
         public string Complemento { get; set; }
         public bool? Arquivado { get; set; }
+        public bool? Cancelado { get; set; }
         public int? Inscricao { get; set; }
     }
 

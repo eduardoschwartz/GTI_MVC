@@ -288,7 +288,12 @@ namespace GTI_MVC.Controllers {
             if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login", "Home");
 
-            return View();
+            Processo2ViewModel model = new Processo2ViewModel();
+
+            Processo_bll processoRepository = new Processo_bll(_connection);
+            List<Centrocusto> ListaCC = processoRepository.Lista_Local(true, false);
+            ViewBag.Lista_CCusto = new SelectList(ListaCC, "Codigo", "Descricao");
+            return View(model);
         }
 
         [ValidateJsonAntiForgeryToken]
@@ -308,6 +313,13 @@ namespace GTI_MVC.Controllers {
             if (!string.IsNullOrEmpty(dados[0].Numero_Processo)) {
                 _numero_processo = dados[0].Numero_Processo;
             }
+            int _endereco_codigo = dados[0].Endereco_Codigo;
+            int _assunto_codigo = dados[0].Assunto_Codigo; ;
+            int _exercicio = dados[0].AnoProcesso;
+            string _data_entrada = dados[0].Data_Entrada;
+            int _endereco_numero= dados[0].Endereco_Numero;
+            int _centro_custo = dados[0].Centro_Custo_Codigo;
+            bool _interno = dados[0].Interno == "S" ? true : false;
 
             Processo_bll processoRepository = new Processo_bll(_connection);
 
@@ -317,9 +329,7 @@ namespace GTI_MVC.Controllers {
                 _numProc = processoNumero.Numero;
                 int _dv = Functions.RetornaDvProcesso(_numProc);
                 if(_dv != processoNumero.Dv) {
-                    Processo2ViewModel reg = new Processo2ViewModel() {
-                        Erro = "Digito verificador inválido!"
-                    };
+                    Processo2ViewModel reg = new Processo2ViewModel() {Erro = "Digito verificador inválido!"};
                     Lista_Proc.Add(reg);
                     return new JsonResult { Data = Lista_Proc, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                 }
@@ -327,20 +337,40 @@ namespace GTI_MVC.Controllers {
                 _filter.Numero = _numProc;
             }
 
-            if(Functions.IsDate(dados[0].Data_Entrada)) {
-                _filter.DataEntrada = Convert.ToDateTime(dados[0].Data_Entrada);
+            if(Functions.IsDate(_data_entrada)) {
+                _filter.DataEntrada = Convert.ToDateTime(_data_entrada);
             }
 
-            if (dados[0].Assunto_Codigo > 0) {
-                _filter.AssuntoCodigo = dados[0].Assunto_Codigo;
+            if (_assunto_codigo > 0) {
+                _filter.AssuntoCodigo = _assunto_codigo;
             }
-            if (dados[0].AnoProcesso > 0) {
-                _filter.Ano = dados[0].AnoProcesso;
+            if (_exercicio > 0) {
+                _filter.Ano = _exercicio;
             }
-            if (dados[0].Endereco_Codigo > 0) {
-                _filter.CodLogradouro = dados[0].Endereco_Codigo;
-                _filter.NumEnd = dados[0].Endereco_Numero;
+            if (_endereco_codigo > 0) {
+                _filter.CodLogradouro = _endereco_codigo;
+                _filter.NumEnd = _endereco_numero;
             }
+
+            if (_centro_custo > 0) {
+                _filter.Interno = _interno;
+                _filter.Requerente = _centro_custo;
+            } else {
+                _filter.Requerente = 0;
+            }
+
+            if(_numero_processo=="" && !Functions.IsDate( _data_entrada) && _exercicio == 0){
+                Processo2ViewModel reg = new Processo2ViewModel() {Erro = "Selecione um exercício válido!"};
+                Lista_Proc.Add(reg);
+                return new JsonResult { Data = Lista_Proc, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+
+            if(_numero_processo == "" && !Functions.IsDate(_data_entrada) &&_assunto_codigo==0 && _endereco_codigo == 0 && _centro_custo==0) {
+                Processo2ViewModel reg = new Processo2ViewModel() { Erro = "Selecione algum critério!" };
+                Lista_Proc.Add(reg);
+                return new JsonResult { Data = Lista_Proc, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+
 
             List<ProcessoStruct> Lista = processoRepository.Lista_Processos_Web(_filter);
 
@@ -352,7 +382,7 @@ namespace GTI_MVC.Controllers {
                     Assunto_Nome=Functions.TruncateTo( item.Assunto,35),
                     Erro = ""
                 };
-                if (item.Interno)
+                if (!string.IsNullOrEmpty( item.CentroCustoNome))
                     reg.Centro_Custo_Nome =  item.CentroCustoNome ?? "";
                 else
                     reg.Centro_Custo_Nome = item.NomeCidadao ?? "";

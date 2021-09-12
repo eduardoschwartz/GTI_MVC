@@ -99,10 +99,7 @@
         font-size:13px;
     }
 
-    
-
 </style>
-
 
 <div class="center" style="width:700px">
     @using (Html.BeginForm("Processo_tp", "Processo", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
@@ -281,7 +278,6 @@
                 document.getElementById('CCusto_Codigo').value = $.trim(tableData[0]);
                 document.getElementById('CCusto_Nome').value = $.trim(tableData[1]);
                 document.getElementById('CCusto_CpfCnpj').value = $.trim(tableData[2]);
-             
               
                 $('#mainTable tr').click(function (e) {
                     $('#mainTable tr').removeClass('highlighted');

@@ -5,6 +5,7 @@
     ViewBag.Title = "Consulta de processos";
 }
 
+
 <style>
 
     .center {
@@ -139,12 +140,56 @@
         border-radius: .2rem;
     }
 
+    /*****DropDownMenu****/
+    .dropbtn {
+        background-color: darkred;
+        color: white;
+        padding: 4px;
+        font-size: 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+        .dropbtn:hover, .dropbtn:focus {
+            background-color: red;
+        }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 120px;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+        .dropdown-content a {
+            color: black;
+            padding: 4px 4px;
+            text-decoration: none;
+            display: block;
+        }
+
+    .dropdown a:hover {
+        background-color: black;
+        color: yellow
+    }
+
+    .show {
+        display: block;
+    }
+    }
+    /*******************/
 </style>
 
-@{
-    var res = @ViewBag.Result;
-
-}
+@{ var res = @ViewBag.Result;}
 
 <div class="center" style="width:800px">
     @using (Html.BeginForm("Processo_qry", "Processo", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
@@ -152,13 +197,18 @@
         @Html.HiddenFor(m => m.Numero_Processo, new { @id = "Numero_Processo" })
         @Html.HiddenFor(m => m.Assunto_Codigo, new { @id = "Ass_Cod" })
         @Html.HiddenFor(m => m.Assunto_Nome, new { @id = "Ass_Nome" })
+        @Html.HiddenFor(m => m.Centro_Custo_Codigo, new { @id = "CCusto_Codigo" })
+        @Html.HiddenFor(m => m.Centro_Custo_Nome, new { @id = "CCusto_Nome" })
         <input type="hidden" id="End_Cod">
         <input type="hidden" id="End_Nome">
 
+     
         <div class="container" style="width:770px">
             <div class="card">
                 <div class="card-header">Consulta de Processos</div>
                 <div class="card-body">
+
+
                     <div style="display:table">
                         <div style="display: table-row">
                             <div style="display: table-cell;">
@@ -172,7 +222,7 @@
                                     <tr style="height:28px">
                                         <td style="width:110px;font-size:13px;">Data Entrada: </td>
                                         <td style="width: 470px; font-size: 13px;">
-                                            <input type="text" id="DataEntradaText" style="width: 80px;font-size:13px " class="maskData" /><span style="font-size:13px;padding-left:25px">Interno&nbsp;</span><input type="checkbox" id="internoCheck" name="internoCheck" /><span style="font-size:13px;padding-left:15px">Físico&nbsp;</span><input type="checkbox" id="internoCheck" name="internoCheck" /><span style="font-size:13px;padding-left:15px">Cancelado&nbsp;</span><input type="checkbox" id="internoCheck" name="internoCheck" />
+                                            <input type="text" id="DataEntradaText" style="width: 80px;font-size:13px " class="maskData" /><span style="font-size:13px;padding-left:25px">Interno&nbsp;</span><input type="checkbox" id="internoCheck" name="internoCheck" />
                                         </td>
                                     </tr>
                                     <tr style="height:28px">
@@ -181,11 +231,23 @@
                                     </tr>
                                     <tr style="height:28px">
                                         <td style="width: 110px; font-size: 13px">Requerente: </td>
-                                        <td style="width: 470px; font-size: 13px"><input type="text" id="RequerenteText" style="font-size:13px;width:365px;color:darkblue" readonly="readonly" />&nbsp;<button type="button" id="btnRequerente" title="Consultar" class="btn btn-info btn-xs">...</button> <button type="button" id="btnRequerente" title="Apagar" class="btn btn-danger btn-xs">X</button></td>
-                                    </tr>
+                                        @*<td style="width: 470px; font-size: 13px"><input type="text" id="RequerenteText" style="font-size:13px;width:365px;color:darkblue" readonly="readonly" />&nbsp;<button type="button" id="btnRequerente" title="Consultar" class="btn btn-info btn-xs">...</button> <button type="button" id="btnDelRequerente" title="Apagar" class="btn btn-danger btn-xs">X</button></td>*@
+                                    <td style="width: 470px; font-size: 13px">
+                                        <input type="text" id="RequerenteText" style="font-size:13px;width:381px;color:darkblue" readonly="readonly" />
+                                        <div class="dropdown">
+                                            <button type="button" onclick="myFunction()" class="dropbtn">&nbsp;&nbsp;...&nbsp;&nbsp;</button>
+                                            <div id="myDropdown" class="dropdown-content">
+                                                <ul style="list-style: none;margin: 0;padding: 0">
+                                                    <li><a href="javascript:b('Home');">Home</a></li>
+                                                    <li><a href="javascript:b('About');">About</a></li>
+                                                    <li><a href="#contact">Contact</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+</tr>
                                     <tr style="height:28px">
                                         <td style="width: 110px; font-size: 13px">Endereço: </td>
-                                        <td style="width: 470px; font-size: 13px"><input type="text" id="EnderecoText" style="font-size:13px;width:335px" placeholder="Digite ao menos 3 caracteres..." /><span style="padding-left:10px">Nº&nbsp;</span><input type="text" id="NumeroText" style="font-size:13px;width:50px" onKeyPress = "return formata(this, '§§§§', event)" /></td>
+                                        <td style="width: 470px; font-size: 13px"><input type="text" id="EnderecoText" style="font-size:13px;width:335px" placeholder="Digite ao menos 3 caracteres..." /><span style="padding-left:10px">Nº&nbsp;</span><input type="text" id="NumeroText" style="font-size:13px;width:50px" onKeyPress="return formata(this, '§§§§', event)" /></td>
                                     </tr>
                                 </table>
 
@@ -197,11 +259,9 @@
                         </div>
 
                     </div>
-                    @*<br />*@
-                    @*<span style="font-size:13px;color:brown">Obs: Apenas os 100 primeiros resultados serão exibidos</span>*@
                     <br />
                     <div id="table-container" style="overflow-x: scroll; max-height: 360px; height: auto; overflow: auto; width: 700px">
-                        <table id="mainTable" style="width:700px;" class="tbl table-bordered table-condensed">
+                        <table id="mainTable" style="width:700px;" class="table-bordered table-condensed">
                             <thead>
                                 <tr style="background-color:darkblue;color:white">
                                     <td style="width: 100px; font-size: 13px; text-align: center">Nº Processo</td>
@@ -228,6 +288,68 @@
     }
 </div>
 
+<div class="modal fade" id="ModalInterno" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 430px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Selecione o Centro de Custos</span>
+
+            </div>
+            <div class="container">&nbsp;</div>
+            <div class="modal-body">
+                @Html.DropDownListFor(m => Model.Centro_Custo_Codigo, ViewBag.Lista_CCusto as SelectList, null, new { @id = "CCustoDropDown", @style = "font-weight:normal;width:400px;font-size:14px" })
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSelectCC"> Selecionar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalExterno" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 640px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Selecione o Contribuinte</span>
+
+            </div>
+            <div class="container"></div>
+            <div class="modal-body">
+                @Html.TextBoxFor(m => m.Centro_Custo_Codigo, new { @id = "codigo", @style = "width:70px;font-size:14px", @placeholder = "Código", @Value = "" })
+                @Html.TextBoxFor(m => m.Centro_Custo_Nome, new { @id = "nome", @style = "width:324px;font-size:14px", @placeholder = "Nome do contribuinte" })
+                @Html.TextBoxFor(m => m.Centro_Custo_CpfCnpj, new { @id = "cpfcnpj", @style = "width:160px;font-size:14px", @placeholder = "Cpf/Cnpj" })
+                <button type="button" class="btn btn-info" id="btnFind" style="height:30px;padding-bottom:10px" title="Filtrar"><i class="fas fa-search"></i></button>
+                <br />
+                <br />
+
+                <table id="mainTableEnd" class="tbl table-bordered table-condensed table-hover ">
+                    <thead>
+                        <tr>
+                            <th class="titulo" style="width:80px">Código</th>
+                            <th class="titulo" style="width:364px">Nome do Contribuinte</th>
+                            <th class="titulo" style="width:160px">Cpf/Cnpj</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mainTableEndBody"></tbody>
+                </table>
+                <br />
+                <div id="dvMsg1" style="display:none">
+                    <span style="color:red;font-size:13px">***Apenas os 10 primeiros resultados serão exibidos***</span>
+                </div>
+                <div id="dvMsg2" style="display:none">
+                    <span style="color:red;font-size:13px">***Nenhum registro localizado com os critérios selecionados***</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSelectCidadao"> Selecionar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div id="msgBox1" title="Atenção" style='display: none;'>
     <br />
     <label id="lblMsg"></label>
@@ -249,6 +371,8 @@
         $(document).ready(function () {
             $(".maskData").inputmask("99/99/9999");
             $(".maskAno").inputmask("9999");
+            $('.dropdown-submenu > a').submenupicker();
+
             $('#msgBox1').dialog({
                 autoOpen: false,
                 resizable: false,
@@ -303,6 +427,8 @@
 
         });
 
+
+
         $("#mainTable tbody").delegate('tr', 'click', function () {
             var tableData = $(this).children("td").map(function () {
                 return $(this).text();
@@ -316,7 +442,6 @@
             });
         });
 
-
         function Pesquisar() {
             var _processo = document.getElementById("NumProcessoText").value;
             var _data_entrada = document.getElementById("DataEntradaText").value;
@@ -324,6 +449,8 @@
             var _ano = parseInt(document.getElementById("AnoText").value);
             var _endereco = document.getElementById("End_Cod").value;
             var _endereco_num = document.getElementById("NumeroText").value;
+            var _ccusto = document.getElementById("CCusto_Codigo").value;
+            var _interno = document.getElementById("internoCheck").checked;
 
             $("#mainTable tbody tr").remove(); //Clear tbody rows
             var dados = new Array();
@@ -337,7 +464,13 @@
                 reg.Endereco_Codigo = _endereco;
                 reg.Endereco_Numero = _endereco_num;
             }
+            if (_interno) {
+                reg.Interno = "S";
+            } else {
+                reg.Interno = "N";
+            }
             reg.AnoProcesso = _ano;
+            reg.Centro_Custo_Codigo = _ccusto;
             dados.push(reg);
 
             var token = $('input[name="__RequestVerificationToken"]').val();
@@ -353,6 +486,13 @@
                 dataType: "json",
                 success: function (data) {
                     var len = data.length;
+                    if (len == 0) {
+                        $('#msgBoxWait').dialog('close');
+                        document.getElementById('lblMsg').innerHTML = "Nenhum processo localizado com este(s) critério(s)";
+                        $('#msgBox1').dialog('open');
+                        return false;
+                    }
+
                     var _pos = 0;
                     for (var i = 0; i < len; i++) {
                         var _error = data[i].Erro;
@@ -394,6 +534,7 @@
         function Validar() {
             var _processo = document.getElementById("NumProcessoText").value;
             var _ano = parseInt(document.getElementById("AnoText").value);
+
             if (_processo != "") {
                 var _error = Valida_Numero_Processo(_processo);
                 if (_error != "") {
@@ -403,9 +544,10 @@
                     return false;
                 }
             }
+            var currentTime = new Date();
+            var year = currentTime.getFullYear();
+
             if (_ano != "") {
-                var currentTime = new Date();
-                var year = currentTime.getFullYear();
                 if (_ano < 1990 | _ano > year) {
                     $('#msgBoxWait').dialog('close');
                     document.getElementById('lblMsg').innerHTML = "Exercício inválido!";
@@ -422,7 +564,6 @@
             var ccText = document.getElementById('Numero_Processo').value;
             alert(ccText);
         }
-
 
         $("#AssuntoText").on('keydown', function () {
             document.getElementById("Ass_Cod").value="";
@@ -455,8 +596,6 @@
         $('#AssuntoText').on('autocompleteselect', function (e, ui) {
             document.getElementById("Ass_Cod").value = ui.item.cod;
             document.getElementById("Ass_Nome").value = ui.item.label;
-        
-
         });
 
         $("#EnderecoText").autocomplete({
@@ -486,6 +625,124 @@
             document.getElementById("End_Cod").value = ui.item.cod;
             document.getElementById("End_Nome").value = ui.item.label;
         });
+
+        $('#btnRequerente').click(function () {
+            
+            var _c = $("#internoCheck").is(":checked")
+            document.getElementById("CCusto_Codigo").value = '';
+            document.getElementById("CCusto_Nome").value = '';
+            document.getElementById("RequerenteText").textContent = '';
+
+            if (_c) {
+                $('#ModalInterno').modal({ backdrop: 'static', keyboard: false });
+            } else {
+                $('#ModalExterno').modal({ backdrop: 'static', keyboard: false });
+            }
+        });
+
+        $('#btnDelRequerente').click(function () {
+            document.getElementById("RequerenteText").textContent = '';
+            document.getElementById('CCusto_Codigo').value = "";
+            document.getElementById('CCusto_Nome').value = "";
+        });
+
+        $('#ModalExterno').on("click", '#mainTableEnd tbody tr', function () {
+            var tableData = $(this).children("td").map(function () {
+                return $(this).text();
+            }).get();
+
+            document.getElementById('CCusto_Codigo').value = $.trim(tableData[0]);
+            document.getElementById('CCusto_Nome').value = $.trim(tableData[1]);
+
+            $('#mainTableEnd tr').click(function (e) {
+                $('#mainTableEnd tr').removeClass('highlighted');
+                $(this).addClass('highlighted');
+            });
+        });
+
+        $("#btnSelectCC").click(function () {
+            var ccText = $("#CCustoDropDown option:selected").text();
+            var ccValue = $("#CCustoDropDown option:selected").val();
+            document.getElementById('CCusto_Codigo').value = ccValue;
+            document.getElementById('CCusto_Nome').value = ccText;
+            $('#RequerenteText').val(ccText);
+            $('#ModalInterno').modal('hide');
+        });
+
+        $("#btnSelectCidadao").click(function () {
+            var ccText = document.getElementById('CCusto_Nome').value;
+            var ccValue = document.getElementById('CCusto_Codigo').value;
+            if (ccText != '')
+                $('#RequerenteText').val(ccValue + ' - ' + ccText);
+            else
+                $('#RequerenteText').val();
+            $('#ModalExterno').modal('hide');
+        });
+
+        $("#btnFind").click(function () {
+            $("#mainTableEndBody").empty();
+            var _codigo = document.getElementById('codigo').value;
+            var _nome = document.getElementById('nome').value;
+            var _cpfcnpj = document.getElementById('cpfcnpj').value;
+            if (_codigo == '' && _nome == '' && _cpfcnpj == '') {
+                alert('Selecione ao menos um dos critérios');
+                return false;
+            }
+
+            $("#dvMsg1").hide(); $("#dvMsg2").hide();
+            $.getJSON("Lista_Cidadao",
+                { codigo: _codigo, nome: _nome, cpfcnpj: _cpfcnpj },
+                function (json) {
+                    var tr;
+                    var _pos = 0;
+                    for (var i = 0; i < json.length; i++) {
+                        if (_pos < 10) {
+                            tr = $('<tr style="cursor:pointer"  />');
+                            tr.append("<td style='font-size:14px'>" + json[i].Codcidadao + "</td>");
+                            tr.append("<td style='font-size:14px'>" + json[i].Nomecidadao + "</td>");
+                            tr.append("<td style='font-size:14px'>" + json[i].Cpf + "</td>");
+                            $("table.tbl").find('tbody').append(tr);
+                        }
+                        _pos++;
+                    }
+                    if (_pos >= 10) {
+                        $("#dvMsg1").show();
+                    } else {
+                        $("#dvMsg1").hide();
+                    }
+                    if (_pos == 0) {
+                        $("#dvMsg2").show();
+                    } else {
+                        $("#mainTableEnd>tbody>tr:first").trigger('click');
+                        $("#dvMsg2").hide();
+                    }
+
+                });
+        });
+
+        /* When the user clicks on the button, Toggle between hiding and showing the dropdown content */
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function (event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
+        function b(texto) {
+            alert(texto);
+        }
+
 
     </script>
 }

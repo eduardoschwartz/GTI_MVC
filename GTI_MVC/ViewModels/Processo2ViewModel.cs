@@ -15,6 +15,7 @@ namespace GTI_Mvc.ViewModels {
         public string Centro_Custo_Nome { get; set; }
         public string Centro_Custo_CpfCnpj { get; set; }
         public bool Fisico { get; set; }
+        public bool Cancelado { get; set; }
         public string Fisico_Nome { get; set; }
         public string Interno { get; set; }
         public int Assunto_Codigo { get; set; }

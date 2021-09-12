@@ -765,6 +765,7 @@
     <Content Include="webfonts\fa-solid-900.ttf" />
     <Content Include="webfonts\fa-solid-900.woff" />
     <Content Include="webfonts\fa-solid-900.woff2" />
+    <Content Include="bower.json" />
     <None Include="Datasets\dsBoletoGuia.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsBoletoGuia1.Designer.cs</LastGenOutput>
@@ -854,6 +855,7 @@
     <Content Include="Files\Login Manual do Usuario.pdf" />
     <Content Include="Files\Parcelamento Manual do Usuario.pdf" />
     <Content Include="Files\Decreto7408.pdf" />
+    <Content Include="package.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />

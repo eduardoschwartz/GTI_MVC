@@ -936,6 +936,13 @@ namespace GTI_Dal.Classes {
                     Sql = Sql.Where(c => c.LogradouroCodigo == Filter.CodLogradouro);
                 if (Filter.NumEnd > 0)
                     Sql = Sql.Where(c => c.LogradouroNumero == Filter.NumEnd.ToString());
+                if (Filter.Requerente > 0) {
+                    if (Filter.Interno == true) {
+                        Sql = Sql.Where(c => c.CentroCusto == Filter.Requerente);
+                    } else {
+                        Sql = Sql.Where(c => c.CodigoCidadao == Filter.Requerente);
+                    }
+                }
                 return Sql.ToList();
             }
         }
