@@ -296,6 +296,22 @@ namespace GTI_MVC.Controllers {
             return View(model);
         }
 
+        [Route("Processo_qry")]
+        [HttpPost]
+        public ActionResult Processo_qry(Processo2ViewModel model) {
+            if (Request.Cookies["2lG1H*"] == null)
+                return RedirectToAction("Login", "Home");
+            
+            if(string.IsNullOrEmpty( model.Numero_Processo))
+                return RedirectToAction("Login", "Home");
+
+            string _numero = model.Numero_Processo;
+            string _p = Functions.Encrypt(_numero);
+            TempData["p"] = _p;
+
+            return RedirectToAction("Processo_vw");
+        }
+
         [ValidateJsonAntiForgeryToken]
         [AllowAnonymous]
         [HttpPost]
@@ -404,5 +420,6 @@ namespace GTI_MVC.Controllers {
         
             return new JsonResult { Data = Lista_Proc, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+
     }
 }

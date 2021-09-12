@@ -937,7 +937,7 @@ namespace GTI_Dal.Classes {
                 if (Filter.NumEnd > 0)
                     Sql = Sql.Where(c => c.LogradouroNumero == Filter.NumEnd.ToString());
                 if (Filter.Requerente > 0) {
-                    if (Filter.Interno == true) {
+                    if (Filter.Requerente<500000) {
                         Sql = Sql.Where(c => c.CentroCusto == Filter.Requerente);
                     } else {
                         Sql = Sql.Where(c => c.CodigoCidadao == Filter.Requerente);
