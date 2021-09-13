@@ -1,0 +1,534 @@
+﻿@model GTI_Mvc.ViewModels.CidadaoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Consulta ao cadastro cidadão";
+}
+
+<style>
+    .center {
+        margin: auto;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
+
+    .uppercase {
+        text-transform: uppercase
+    }
+
+
+    .btEdit {
+        background: none !important;
+        border: none;
+        padding: 0 !important;
+        font-family: arial, sans-serif;
+        color: darkslateblue;
+        text-decoration: underline;
+        cursor: pointer;
+        
+    }
+        .btEdit:hover {
+            color: darkgreen;
+        }
+</style>
+
+@{var res = @ViewBag.Result;}
+<div class="center" style="width:700px">
+
+    @using (Html.BeginForm("Cidadao_vw", "Cidadao", FormMethod.Post, new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Codigo)
+
+        <div class="container" style="width:550px">
+            <div class="card">
+                <div class="card-header">Consulta ao cadastro cidadão:<span style="padding-left:10px;font-weight:bold">@Model.Codigo.ToString()</span></div>
+                <div class="card-body">
+                    <div>
+                        <table style="font-size:13px;width:500px">
+                            <tr style="height:25px">
+                                <td style="width:80px">
+                                    <span >Nome:</span>
+                                </td>
+                                <td style="width:420px">
+                                    @Html.TextBoxFor(m => m.Nome, new { @id = "nome", @style = "width:398px;color:blue", @class = "uppercase", @maxlength = "100", @autocomplete = "off",@readonly=true })
+                                </td>
+                            </tr>
+                            <tr style="height:25px">
+                                <td style="width:80px">
+                                    <span style="font-weight:normal">Cpf/Cnpj:</span>
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.CpfCnpj, new { @id = "cpfcnpj", @style = "Width:160px;color:blue", @readonly = true })
+                                    <span style="font-weight:normal;padding-left:27px">Data de Nascimento:</span>
+                                    <span style="padding-left: 5px"> @Html.TextBoxFor(m => m.Data_Nascto, new { @id = "dataNascto", @style = "Width:78px;color:blue", @class = "maskData", @readonly = true })</span>
+                                </td>
+                            </tr>
+                            <tr style="height:25px">
+                                <td style="width:80px">
+                                    <span style="font-weight:normal">Nº do RG:</span>
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Rg_Numero, new { @id = "rgnumero", @style = "Width:160px;color:blue", @maxlength = "25", @autocomplete = "off", @readonly = true })
+                                    <span style="font-weight:normal;padding-left:25px">Orgão:</span>
+                                    <span style="padding-left: 10px"> @Html.TextBoxFor(m => m.Rg_Orgao, new { @id = "rgorgao", @style = "Width:157px;color:blue", @class = "uppercase", @maxlength = "25", @autocomplete = "off", @readonly = true })</span>
+                                </td>
+                            </tr>
+                            <tr style="height:25px">
+                                <td style="width:80px">
+                                    <span style="font-weight:normal">Nº da CNH:</span>
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Cnh_Numero, new { @id = "cnhnumero", @style = "Width:160px;color:blue", @maxlength = "30", @autocomplete = "off", @readonly = true })
+                                    <span style="font-weight:normal;padding-left:25px">Orgão:</span>
+                                    <span style="padding-left: 10px"> @Html.TextBoxFor(m => m.Cnh_Orgao, new { @id = "cnhorgao", @style = "Width:157px;color:blue", @class = "uppercase", @maxlength = "30", @autocomplete = "off", @readonly = true })</span>
+                                </td>
+                            </tr>
+                            <tr style="height:25px">
+                                <td style="width: 80px;">
+                                    <span style="font-weight:normal">Profissão:</span>
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => Model.Profissao_Nome, new { @id = "ProfissaoDropDown", @style = "font-weight:normal;width:400px;height:21px;color:blue", @readonly = true })
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+
+                </div>
+                <div class="card-header">Endereço Residencial</div>
+                <div class="card-body">
+                    <table style="font-size:13px;width:500px">
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <label style="font-weight:normal;padding-top:7px">Nº do Cep:</label>
+                            </td>
+                            <td>
+                                @if (Model.EnderecoR.Cep!=null && Model.EnderecoR.Cep.Length > 2) {
+                                    <span style="font-weight:normal;">@Html.TextBoxFor(m => m.EnderecoR.Cep, new { @class = "maskCep", @id = "CepR", style = "width:90px;color:blue", @readonly = true })</span>
+                                } else {
+                                    <span style="font-weight:normal;">@Html.TextBoxFor(m => m.EnderecoR.Cep, new { @class = "maskCep", @id = "CepR", style = "width:90px;color:blue" ,@Value="", @readonly = true })</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <span style="font-weight:normal">Logradouro:</span>
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m => m.EnderecoR.Endereco, new { @id = "EnderecoR", style = "width:312px;height:21px;color:blue", @readonly = true })
+                                <span style="font-weight:normal;padding-left:10px">Nº:&nbsp;</span><span style="font-weight:normal">
+                                    @Html.TextBoxFor(m => m.EnderecoR.Numero, new { @id = "NumeroR", @autocomplete = "off", style = "width:50px;color:blue", @onKeyPress = "return formata(this, '§§§§§', event)", @readonly = true })
+                                </span>
+                            </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <span style="font-weight:normal">Complem.:</span>
+                            </td>
+                            <td>
+                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoR.Complemento, new { @id = "ComplementoR", @autocomplete = "off", style = "width:150px;color:blue", @maxlength = "50", @readonly = true })</span>
+                                <span style="font-weight:normal;padding-left:10px">Bairro:&nbsp;</span><span style="font-weight:normal">
+                                    @if (Model.EnderecoR.NomeBairro != null) {
+                                        @Html.TextBoxFor(m => m.EnderecoR.NomeBairro, new { @id = "BairroR", style = "width:192px;color:blue", @readonly = true, @Value = Model.EnderecoR.NomeBairro })
+                                    } else {
+                                        @Html.TextBoxFor(m => m.EnderecoR.NomeBairro, new { @id = "BairroR", style = "width:192px;color:blue", @readonly = true, @Value = "" })
+                                    }
+                                </span>
+                            </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <span style="font-weight:normal">Cidade:</span>
+                            </td>
+                            <td>
+                                @if (Model.EnderecoR.NomeBairro != null) {
+                                    <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoR.NomeCidade, new { @id = "CidadeR", style = "width:300px;color:blue", @readonly = true, @Value = Model.EnderecoR.NomeCidade })</span>
+                                } else {
+                                    <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoR.NomeCidade, new { @id = "CidadeR", style = "width:300px;color:blue", @readonly = true })</span>
+                                }
+                                <span style="font-weight:normal;padding-left:10px">UF:&nbsp;</span><span style="font-weight:normal">
+                                    @if (Model.EnderecoR.NomeBairro != null) {
+                                        @Html.TextBoxFor(m => m.EnderecoR.UF, new { @id = "UfR", style = "width:60px;color:blue", @readonly = true,@Value=Model.EnderecoR.UF })
+                                    } else {
+                                        @Html.TextBoxFor(m => m.EnderecoR.UF, new { @id = "UfR", style = "width:60px;color:blue", @readonly = true })
+                                    }
+                                </span>
+                            </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <span style="font-weight:normal">Telefone:</span>
+                            </td>
+                            <td>
+                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoR.Telefone, new { @id = "TelefoneR", @autocomplete = "off", @name="TelefoneR", style = "width:120px;color:blue", @maxlength = "30", @readonly = true })</span>
+                                <span style="font-weight:normal;padding-left:10px">Email:&nbsp;</span><span style="font-weight:normal">
+                                    @Html.TextBoxFor(m => m.EnderecoR.Email, new { @id = "EmailR", @autocomplete = "off", style = "width:225px;color:blue", @maxlength = "50", @readonly = true })
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+                <div class="card-header">Endereço Comercial</div>
+                <div class="card-body">
+                    <table style="font-size:13px;width:500px">
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <label style="font-weight:normal;padding-top:7px">Nº do Cep:</label>
+                            </td>
+                            <td>
+                                @if (Model.EnderecoC.Cep!=null && Model.EnderecoC.Cep.Length > 2) {
+                                    <span style="font-weight:normal;">@Html.TextBoxFor(m => m.EnderecoC.Cep, new { @class = "maskCep", @id = "CepC", style = "width:90px;color:blue", @readonly = true })</span>
+                                } else {
+                                    <span style="font-weight:normal;">@Html.TextBoxFor(m => m.EnderecoC.Cep, new { @class = "maskCep", @id = "CepC", style = "width:90px;color:blue",@Value="", @readonly = true })</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <span style="font-weight:normal">Logradouro:</span>
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m => m.EnderecoC.Endereco, new { @id = "EnderecoC", style = "width:312px;height:21px;color:blue", @readonly = true })
+                                <span style="font-weight:normal;padding-left:10px">Nº:&nbsp;</span><span style="font-weight:normal">
+                                    @Html.TextBoxFor(m => m.EnderecoC.Numero, new { @id = "NumeroC", style = "width:50px;color:blue", @onKeyPress = "return formata(this, '§§§§§', event)", @readonly = true })
+                                </span>
+                            </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <span style="font-weight:normal">Complem.:</span>
+                            </td>
+                            <td>
+                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoC.Complemento, new { @id = "ComplementoC", @autocomplete = "off", style = "width:150px;color:blue", @maxlength = "50", @readonly = true })</span>
+                                <span style="font-weight:normal;padding-left:10px">Bairro:&nbsp;</span><span style="font-weight:normal">
+                                    @if (Model.EnderecoC.NomeBairro != null) {
+                                        @Html.TextBoxFor(m => m.EnderecoC.NomeBairro, new { @id = "BairroC", style = "width:192px;color:blue", @readonly = true, @Value = Model.EnderecoC.NomeBairro })
+                                    } else {
+                                        @Html.TextBoxFor(m => m.EnderecoC.NomeBairro, new { @id = "BairroC", style = "width:192px;color:blue", @readonly = true, @Value = "" })
+                                    }
+                                </span>
+                            </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <span style="font-weight:normal">Cidade:</span>
+                            </td>
+                            <td>
+                                @if (Model.EnderecoC.NomeBairro != null) {
+                                    <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoC.NomeCidade, new { @id = "CidadeC", style = "width:300px;color:blue", @readonly = true, @Value = Model.EnderecoC.NomeCidade })</span>
+                                } else {
+                                    <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoC.NomeCidade, new { @id = "CidadeC", style = "width:300px;color:blue", @readonly = true })</span>
+                                }
+                                <span style="font-weight:normal;padding-left:10px">UF:&nbsp;</span><span style="font-weight:normal">
+                                    @if (Model.EnderecoC.NomeBairro != null) {
+                                        @Html.TextBoxFor(m => m.EnderecoC.UF, new { @id = "UfC", style = "width:60px;color:blue", @readonly = true, @Value = Model.EnderecoC.UF })
+                                    } else {
+                                        @Html.TextBoxFor(m => m.EnderecoC.UF, new { @id = "UfC", style = "width:60px;color:blue", @readonly = true })
+                                    }
+                                </span>
+                            </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:80px">
+                                <span style="font-weight:normal">Telefone:</span>
+                            </td>
+                            <td>
+                                <span style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.EnderecoC.Telefone, new { @id = "TelefoneC", @autocomplete = "off", style = "width:120px;color:blue", @maxlength = "30", @readonly = true })</span>
+                                <span style="font-weight:normal;padding-left:10px">Email:&nbsp;</span><span style="font-weight:normal">
+                                    @Html.TextBoxFor(m => m.EnderecoC.Email, new { @id = "EmailC", @autocomplete = "off", style = "width:225px;color:blue", @maxlength = "50", @readonly = true })
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                    <div style="text-align:center">
+                        <button type="submit" id="btnEdit" class="btn btn-primary" name="action" value="btnEdit" title="Alterar os dados cadastrais">Alterar</button>&nbsp;&nbsp;
+                    </div>
+                </div>
+                <div class="card-footer">
+                    @Html.ActionLink("Retornar ao menu de opções", "Cidadao_menu", "Cidadao", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                </div>
+            </div>
+
+        
+        </div>
+    }
+</div>
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBox2" title="Confirmação" style='display: none;'>
+    <br />
+    <label id="lblMsg2"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".maskData").inputmask("99/99/9999");
+            $(".maskCep").inputmask("99999-999");
+            $("#btnOk").click(function () {
+                return ValidateForm();
+            });
+            $('#TelefoneR').mask('(00) 0000-00009');
+            $('#TelefoneR').blur(function (event) {
+                if ($(this).val().length == 15) { // Celular com 9 dígitos + 2 dígitos DDD e 4 da máscara
+                    $('#TelefoneR').mask('(00) 00000-0009');
+                } else {
+                    $('#TelefoneR').mask('(00) 0000-00009');
+                }
+            });
+            $('#TelefoneC').mask('(00) 0000-00009');
+            $('#TelefoneC').blur(function (event) {
+                if ($(this).val().length == 15) { // Celular com 9 dígitos + 2 dígitos DDD e 4 da máscara
+                    $('#TelefoneC').mask('(00) 00000-0009');
+                } else {
+                    $('#TelefoneC').mask('(00) 0000-00009');
+                }
+            });
+
+            $('#msgBox2').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo2",
+                buttons: {
+                    "OK": function () {
+                        $('#MainForm').submit();
+                    },
+                    "Cancel": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+            $(".foo2 .ui-dialog-title").css("font-size", "13px");
+            $(".foo2 .ui-widget-content").css("font-size", "13px");
+            $(".foo2 .ui-dialog-titlebar").css("background", "saddlebrown");
+            $(".foo2 .ui-dialog-titlebar").css("color", "white");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+
+
+        function ValidateForm() {
+            var _nome = document.getElementById('nome').value;
+            var _dataNascto = document.getElementById('dataNascto').value;
+            var _rg = document.getElementById('rgnumero').value;
+            var _rgorgao = document.getElementById('rgorgao').value;
+            var _cnh = document.getElementById('cnhnumero').value;
+            var _cnhorgao = document.getElementById('cnhorgao').value;
+            var _cepR = document.getElementById('CepR').value;
+            var _cepC = document.getElementById('CepC').value;
+            var _bEndR = false;
+            var _bEndC =  false;
+            var _bairroR = document.getElementById('BairroR').value;
+            var _bairroC = document.getElementById('BairroC').value;
+
+            if (isNullOrWhitespace(_cepR)) {
+                _cepR = '';
+            } else {
+                _cepR = RetornaNumero(_cepR);
+            }
+            if (isNullOrWhitespace(_cepC)) {
+                _cepC = '';
+            } else {
+                _cepC = RetornaNumero(_cepC);
+            }
+
+            if (isNullOrWhitespace(_nome)) {
+                document.getElementById('lblMsg').innerHTML = "Digite o nome do cidadão";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+
+            if (!Valida_Data(_dataNascto)) {
+                document.getElementById('lblMsg').innerHTML = "Data de nascimento inválida!";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+
+            if (isNullOrWhitespace(_rg) && !isNullOrWhitespace(_rgorgao)) {
+                document.getElementById('lblMsg').innerHTML = "Digite o nº do Rg ou remova ou orgão emissor!";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+
+            if (isNullOrWhitespace(_cnh) && !isNullOrWhitespace(_cnhorgao)) {
+                document.getElementById('lblMsg').innerHTML = "Digite o nº da CNH ou remova ou orgão emissor!";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+
+            if (_cepR.length > 0 && _cepR.length < 8) {
+                document.getElementById('lblMsg').innerHTML = "Cep residencial inválido!";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+            if (_cepR.length == 8) {
+                _bEndR = true;
+            }
+            if (_cepC.length > 0 && _cepC.length < 8) {
+                document.getElementById('lblMsg').innerHTML = "Cep comercial inválido!";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+            if (_cepC.length == 8) {
+                _bEndC = true;
+            }
+
+            if (_bEndR) {
+                if (isNullOrWhitespace(_bairroR)) {
+                    document.getElementById('lblMsg').innerHTML = "Endereço residencial incompleto!";
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
+            }
+
+            if (_bEndC) {
+                if (isNullOrWhitespace(_bairroC)) {
+                    document.getElementById('lblMsg').innerHTML = "Endereço comercial incompleto!";
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
+            }
+
+            if (!_bEndR && !_bEndC) {
+                if (isNullOrWhitespace(_bairroC)) {
+                    document.getElementById('lblMsg').innerHTML = "Informe ao menos um endereço!";
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
+            }
+
+            document.getElementById('lblMsg2').innerHTML = "Você deseja gravar os dados?";
+            $('#msgBox2').dialog('open');
+            return false;
+
+
+        }
+
+        function ClearR() {
+
+            document.getElementById('CepR').value = '';
+            document.getElementById('EnderecoR').options.length = 0;
+            document.getElementById('NumeroR').value = '';
+            document.getElementById('ComplementoR').value = '';
+            document.getElementById('BairroR').value = '';
+            document.getElementById('CidadeR').value = '';
+            document.getElementById('UfR').value = '';
+            document.getElementById('TelefoneR').value = '';
+            document.getElementById('EmailR').value = '';
+        }
+
+        function ClearC() {
+            document.getElementById('CepC').value = '';
+            document.getElementById('EnderecoC').value = '';
+            document.getElementById('NumeroC').value = '';
+            document.getElementById('ComplementoC').value = '';
+            document.getElementById('BairroC').value = '';
+            document.getElementById('CidadeC').value = '';
+            document.getElementById('UfC').value = '';
+            document.getElementById('TelefoneC').value = '';
+            document.getElementById('EmailC').value = '';
+        }
+
+        function isNullOrWhitespace(input) {
+            if (typeof input === 'undefined' || input == null) return true;
+            return input.replace(/\s/g, '').length < 1;
+        }
+
+        function RetornaNumero(valor) {
+            return valor.replace(/\D/g, "");
+        }
+
+    </script>
+}

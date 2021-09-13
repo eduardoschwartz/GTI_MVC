@@ -202,5 +202,10 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Cidadao(Codigo,Nome,CpfCnpj,maxRows);
         }
 
+        public string Retorna_Profissao_Nome(int id_profissao) {
+            Cidadao_Data obj = new Cidadao_Data(_connection);
+            return obj.Retorna_Profissao_Nome(id_profissao);
+        }
+
     }
 }

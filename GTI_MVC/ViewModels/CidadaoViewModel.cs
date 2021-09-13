@@ -14,6 +14,7 @@ namespace GTI_Mvc.ViewModels {
         public string Cnh_Numero { get; set; }
         public string Cnh_Orgao { get; set; }
         public int Profissao_Codigo { get; set; }
+        public string Profissao_Nome { get; set; }
         public EnderecoStruct EnderecoR { get; set; }
         public EnderecoStruct EnderecoC { get; set; }
         public List<CidadaoHeader> Lista_Cidadao { get; set; }

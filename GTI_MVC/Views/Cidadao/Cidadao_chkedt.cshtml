@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Alteração de cadastro cidadão";
+    ViewBag.Title = "Consulta ao cadastro cidadão";
 }
 
 <style>
@@ -73,7 +73,7 @@
     @using (Html.BeginForm("Cidadao_chkedt", "Cidadao", FormMethod.Post, new { @id = "MainForm" })) {
         @Html.AntiForgeryToken()<div class="container" style="width:550px">
             <div class="card">
-                <div class="card-header">Alteração de dados cadastrais</div>
+                <div class="card-header">Consulta ao cadastro cidadão</div>
                 <div class="card-body">
 
                     <div>

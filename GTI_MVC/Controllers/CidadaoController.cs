@@ -5,10 +5,8 @@ using GTI_Mvc.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using static GTI_Models.modelCore;
 
-namespace GTI_MVC.Controllers
-{
+namespace GTI_MVC.Controllers {
     public class CidadaoController : Controller   {
         private readonly string _connection = "GTIconnectionTeste";
 
@@ -33,6 +31,7 @@ namespace GTI_MVC.Controllers
         }
 
         [Route("Cidadao_chk")]
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Cidadao_chk(CidadaoViewModel model) {
             string _cpfcnpj = Functions.RetornaNumero(model.CpfCnpj);
@@ -82,6 +81,7 @@ namespace GTI_MVC.Controllers
         }
 
         [Route("Cidadao_add")]
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Cidadao_add(CidadaoViewModel model, string action) {
             if (Session["hashid"] == null)
@@ -190,8 +190,9 @@ namespace GTI_MVC.Controllers
                         return RedirectToAction("Cidadao_menu");
                     } else {
                         if (action == "btnValida" || action=="Cidadao_add") {
-                            Grava_Cidadao(model,true);
-                            return RedirectToAction("Cidadao_menu");
+                            int _cod=Grava_Cidadao(model,true);
+                            TempData["cod"] = _cod;
+                            return RedirectToAction("Cidadao_vw");
                         }
                     }
                 }
@@ -237,6 +238,7 @@ namespace GTI_MVC.Controllers
         }
 
         [Route("Cidadao_chkedt")]
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Cidadao_chkedt(CidadaoViewModel model) {
             string _cpfcnpj = Functions.RetornaNumero(model.CpfCnpj);
@@ -267,7 +269,7 @@ namespace GTI_MVC.Controllers
             }
 
             TempData["cod"] = _codigo;
-            return RedirectToAction("Cidadao_edt");
+            return RedirectToAction("Cidadao_vw");
         }
 
         [Route("Cidadao_edt")]
@@ -364,6 +366,7 @@ namespace GTI_MVC.Controllers
         }
 
         [Route("Cidadao_edt")]
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Cidadao_edt(CidadaoViewModel model, string action) {
             if (Session["hashid"] == null)
@@ -652,6 +655,112 @@ namespace GTI_MVC.Controllers
             CidadaoViewModel model = new CidadaoViewModel();
             List<CidadaoHeader> Lista_Cidadao = new List<CidadaoHeader>();
             model.Lista_Cidadao = Lista_Cidadao;
+
+            return View(model);
+        }
+
+        [Route("Cidadao_vw")]
+        [HttpGet]
+        public ActionResult Cidadao_vw() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+
+            List<Profissao> Lista = cidadaoRepository.Lista_Profissao();
+            ViewBag.Lista_Profissao = new SelectList(Lista, "Codigo", "Nome");
+
+            var _cod = TempData["cod"];
+            int _codigo = 0;
+            if (_cod == null)
+                return RedirectToAction("Cidadao_chkedt");
+            else
+                _codigo = Convert.ToInt32(_cod);
+
+            if (_codigo == 0)
+                return RedirectToAction("Cidadao_chkedt");
+
+            CidadaoStruct _cid = cidadaoRepository.Dados_Cidadao(_codigo);
+            CidadaoViewModel model = new CidadaoViewModel() {
+                Codigo = _codigo,
+                CpfCnpj = string.IsNullOrEmpty(_cid.Cnpj) ? Functions.FormatarCpfCnpj(_cid.Cpf) : Functions.FormatarCpfCnpj(_cid.Cnpj),
+                Nome = _cid.Nome,
+                Data_Nascto = _cid.DataNascto == null ? "" : Convert.ToDateTime(_cid.DataNascto).ToString("dd/MM/yyyy"),
+                Rg_Numero = _cid.Rg ?? "",
+                Rg_Orgao = _cid.Orgao ?? "",
+                Cnh_Numero = _cid.Cnh ?? "",
+                Cnh_Orgao = _cid.Orgaocnh ?? "",
+                Profissao_Codigo = _cid.CodigoProfissao == null ? 0 : (int)_cid.CodigoProfissao,
+                EnderecoR = new EnderecoStruct() {
+                    Cep = _cid.CepR == null ? "" : _cid.CepR.ToString(),
+                    Numero = _cid.NumeroR,
+                    Complemento = _cid.ComplementoR ?? "",
+                    NomeBairro = _cid.NomeBairroR ?? "",
+                    NomeCidade = _cid.NomeCidadeR ?? "",
+                    UF = _cid.UfR,
+                    Telefone = _cid.TelefoneR ?? "",
+                    Email = _cid.EmailR ?? ""
+                },
+                EnderecoC = new EnderecoStruct() {
+                    Cep = _cid.CepC == null ? "" : _cid.CepC.ToString(),
+                    Numero = _cid.NumeroC,
+                    Complemento = _cid.ComplementoC ?? "",
+                    NomeBairro = _cid.NomeBairroC ?? "",
+                    NomeCidade = _cid.NomeCidadeC ?? "",
+                    UF = _cid.UfC,
+                    Telefone = _cid.TelefoneC ?? "",
+                    Email = _cid.EmailC ?? ""
+                },
+            };
+            if (model.Profissao_Codigo > 0)
+                model.Profissao_Nome = cidadaoRepository.Retorna_Profissao_Nome(model.Profissao_Codigo);
+            List<Logradouro> Lista_LogradouroR = new List<Logradouro>();
+            List<Logradouro> Lista_LogradouroC = new List<Logradouro>();
+            ViewBag.LogradouroR = new SelectList(Lista_LogradouroR, "Codlogradouro", "Endereco");
+            ViewBag.LogradouroC = new SelectList(Lista_LogradouroC, "Codlogradouro", "Endereco");
+
+            int _cepR = string.IsNullOrEmpty(model.EnderecoR.Cep) ? 0 : Convert.ToInt32(model.EnderecoR.Cep);
+            int _cepC = string.IsNullOrEmpty(model.EnderecoC.Cep) ? 0 : Convert.ToInt32(model.EnderecoC.Cep);
+
+            if (_cepR > 0) {
+                List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_cepR);
+                int s = 1;
+                foreach (string item in Lista_Tmp) {
+                    Lista_LogradouroR.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
+                    s++;
+                }
+                List<Cepdb> cepdbR = enderecoRepository.Retorna_CepDB_Logradouro_Codigo(_cepR, _cid.CodigoBairroR == null ? 0 : (int)_cid.CodigoBairroR);
+                if (cepdbR.Count > 0)
+                    model.EnderecoR.Endereco = cepdbR[0].Logradouro.ToUpper();
+            }
+            if (_cepC > 0) {
+                List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_cepC);
+                int s = 1;
+                foreach (string item in Lista_Tmp) {
+                    Lista_LogradouroC.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
+                    s++;
+                }
+                List<Cepdb> cepdbC = enderecoRepository.Retorna_CepDB_Logradouro_Codigo(_cepC, _cid.CodigoBairroC == null ? 0 : (int)_cid.CodigoBairroC);
+                if (cepdbC.Count > 0)
+                    model.EnderecoC.Endereco = cepdbC[0].Logradouro.ToUpper();
+            }
+
+            return View(model);
+        }
+
+        [Route("Cidadao_vw")]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult Cidadao_vw(CidadaoViewModel model,string action) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
+            if(action== "btnEdit") {
+                TempData["cod"] = model.Codigo;
+                return RedirectToAction("Cidadao_edt");
+            }
+
 
             return View(model);
         }

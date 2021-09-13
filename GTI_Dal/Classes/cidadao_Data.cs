@@ -621,7 +621,13 @@ namespace GTI_Dal.Classes {
                 return cntCod1 > 0  ? true : false;
             }
         }
-        
+
+        public string Retorna_Profissao_Nome(int  id_profissao) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                return (from c in db.Profissao where c.Codigo == id_profissao select c.Nome).FirstOrDefault();
+            }
+        }
+
         public CidadaoStruct LoadReg(int nCodigo) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var reg = (from c in db.Cidadao
