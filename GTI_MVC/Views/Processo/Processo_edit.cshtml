@@ -220,7 +220,7 @@
                     </table>
                     <br />
 
-                    <button type="submit" id="btnSave" class="btn btn-primary" name="action" value="btnEditar" title="Gravar as alterações" style="height:32px;width:110px;vertical-align:baseline"> Gravar</button>&nbsp;&nbsp;
+                    <button type="button" id="btnGravar" class="btn btn-primary" name="action" value="btnGravar" title="Gravar as alterações" style="height:32px;width:110px;vertical-align:baseline"> Gravar</button>&nbsp;&nbsp;
                     <button type="submit" id="btnCancel" class="btn btn-danger" name="action" value="btnCancelar" title="Descartar as alterações" style="height:32px;width:110px;vertical-align:baseline"> Cancelar</button>
                 </div>
 
@@ -335,6 +335,78 @@
                 anoF = data.getFullYear();
             return diaF + "/" + mesF + "/" + anoF;
         }
+
+         $("#btnGravar").click(function () {
+             $("#btnGravar").attr("disabled", true);
+             Gravar();
+        });
+
+        function Gravar() {
+            var _processo = document.getElementById("Numero_Processo").value;
+            var _compl = document.getElementById("complemento").value;
+            var _obs = document.getElementById("observacao").value;
+
+            var enderecos = new Array();
+            $("#mainTableEnd tbody tr").each(function () {
+                var row = $(this);
+                var end = {};
+                end.CodigoLogradouro = row.find("td").eq(0).html();
+                end.NomeLogradouro = row.find("td").eq(1).html();
+                end.Numero = row.find("td").eq(2).html();
+                enderecos.push(end);
+            })
+
+            var documentos = new Array();
+            $("#mainTableDoc tbody tr").each(function () {
+                var row = $(this);
+                var doc = {};
+                doc.CodigoDocumento = row.find("td").eq(0).html();
+                doc.NomeDocumento = row.find("td").eq(1).html();
+                doc.DataEntrega = row.find("td").eq(2).html();
+                documentos.push(doc);
+            })
+
+            var dados = new Array();
+            var reg = {};
+            reg.Numero_Processo = _processo;
+            reg.Complemento = _compl;
+            reg.Observacao = _obs;
+            reg.Lista_Endereco = enderecos;
+            reg.Lista_Documento = documentos;
+            dados.push(reg);
+
+            var token = $('input[name="__RequestVerificationToken"]').val();
+            var headers = {};
+            headers['__RequestVerificationToken'] = token;
+
+
+            $.ajax({
+                type: "POST",
+                url: "Processo_editx",
+                headers: headers,
+                contentType: 'application/json',
+                data: JSON.stringify({ Dados: dados}),
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        alert( "Processo gravado com sucesso!");
+                        window.location.href = '@Url.Action("Processo_vw", "Processo")' ;
+                    } else {
+                        document.getElementById('lblMsg').innerHTML = response.responseText;
+                        $('#msgBox1').dialog('open');
+                        $("#btnGravar").attr("disabled", false);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status != 200) {
+                        alert(error);
+                    }
+                }
+
+            });
+        }
+
+
     </script>
 }
 

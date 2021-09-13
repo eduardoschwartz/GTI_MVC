@@ -479,17 +479,82 @@ namespace GTI_MVC.Controllers {
             if (Request.Cookies["2lG1H*"] == null) {
                 return RedirectToAction("Login", "Home");
             }
-            if (action == "btnGravar") {
-            }
-
+            
             if (action == "btnCancelar") {
                 string _numero = model.Numero_Processo;
                 string _p = Functions.Encrypt(_numero);
                 TempData["p"] = _p;
                 return RedirectToAction("Processo_vw");
             }
-
+           
             return View(model);
         }
+
+        [ValidateJsonAntiForgeryToken]
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("Processo_editx")]
+        public ActionResult Processo_editx(List<Processo2ViewModel> dados) {
+            if (Request.Cookies["2uC*"] == null || Request.Cookies["2fN*"].Value == null)
+                return RedirectToAction("Login", "Home");
+
+            string _numero_processo = dados[0].Numero_Processo;
+
+            Processo_bll processoRepository = new Processo_bll(_connection);
+            ProcessoNumero processoNumero = Functions.Split_Processo_Numero(_numero_processo);
+            short _ano = Convert.ToInt16(processoNumero.Ano);
+            int _numero = processoNumero.Numero;
+
+            bool _existe = processoRepository.Existe_Processo(_ano, _numero);
+            if (!_existe) {
+                return RedirectToAction("SysMenu", "Home");
+            }
+
+            Processogti reg = new Processogti() {
+                Ano = _ano,
+                Numero = _numero,
+                Observacao = dados[0].Observacao,
+                Complemento = dados[0].Complemento,
+            };
+
+            Exception ex = processoRepository.Alterar_Processo_Web(reg);
+
+            if (dados[0].Lista_Endereco != null) {
+                List<Processoend> _listaE = new List<Processoend>();
+                foreach (ProcessoEndStruct end in dados[0].Lista_Endereco) {
+                    Processoend regE = new Processoend() {
+                        Ano = _ano,
+                        Numprocesso = _numero,
+                        Codlogr = Convert.ToInt16(end.CodigoLogradouro),
+                        Numero = end.Numero
+                    };
+                    _listaE.Add(regE);
+                }
+                ex = processoRepository.Incluir_Processo_Endereco(_listaE, _ano, _numero);
+            }
+
+
+            if (dados[0].Lista_Documento != null) {
+                List<Processodoc> _listaD = new List<Processodoc>();
+                foreach (ProcessoDocStruct doc in dados[0].Lista_Documento) {
+                    Processodoc regD = new Processodoc() {
+                        Ano = _ano,
+                        Numero = _numero,
+                        Coddoc = (short)doc.CodigoDocumento
+                    };
+                    if (Functions.IsDate(doc.DataEntrega))
+                        regD.Data = Convert.ToDateTime(doc.DataEntrega);
+
+                    _listaD.Add(regD);
+                }
+                ex = processoRepository.Incluir_Processo_Documento(_listaD, _ano, _numero);
+            }
+
+            string _p = Functions.Encrypt(_numero_processo);
+            TempData["p"] = _p;
+            return RedirectToAction("Processo_vw");
+
+        }
+
     }
 }

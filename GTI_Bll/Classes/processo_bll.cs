@@ -669,5 +669,10 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Processos_Web(Filter);
         }
 
+        public Exception Alterar_Processo_Web(Processogti reg) {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Alterar_Processo_Web(reg);
+        }
+
     }
 }

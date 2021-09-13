@@ -330,8 +330,8 @@ namespace GTI_MVC.Controllers
             ViewBag.LogradouroR = new SelectList(Lista_LogradouroR, "Codlogradouro", "Endereco");
             ViewBag.LogradouroC = new SelectList(Lista_LogradouroC, "Codlogradouro", "Endereco");
 
-            int _cepR = Convert.ToInt32(model.EnderecoR.Cep);
-            int _cepC = Convert.ToInt32(model.EnderecoC.Cep);
+            int _cepR =  string.IsNullOrEmpty(model.EnderecoR.Cep)?0: Convert.ToInt32(model.EnderecoR.Cep);
+            int _cepC =  string.IsNullOrEmpty(model.EnderecoC.Cep)?0: Convert.ToInt32(model.EnderecoC.Cep);
 
             if (_cepR >0) {
                 List<string> Lista_Tmp = enderecoRepository.Retorna_CepDB_Logradouro(_cepR);
@@ -340,7 +340,7 @@ namespace GTI_MVC.Controllers
                     Lista_LogradouroR.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
                     s++;
                 }
-                List<Cepdb> cepdbR = enderecoRepository.Retorna_CepDB_Logradouro_Codigo(_cepR, (int)_cid.CodigoBairroR);
+                List<Cepdb> cepdbR = enderecoRepository.Retorna_CepDB_Logradouro_Codigo(_cepR, _cid.CodigoBairroR==null?0: (int)_cid.CodigoBairroR);
                 if (cepdbR.Count > 0)
                     model.EnderecoR.Endereco = cepdbR[0].Logradouro;
             } 
@@ -355,7 +355,7 @@ namespace GTI_MVC.Controllers
                     Lista_LogradouroC.Add(new Logradouro() { Codlogradouro = s, Endereco = item.ToUpper() });
                     s++;
                 }
-                List<Cepdb> cepdbC = enderecoRepository.Retorna_CepDB_Logradouro_Codigo(_cepC, (int)_cid.CodigoBairroC);
+                List<Cepdb> cepdbC = enderecoRepository.Retorna_CepDB_Logradouro_Codigo(_cepC,_cid.CodigoBairroC==null?0: (int)_cid.CodigoBairroC);
                 if (cepdbC.Count > 0)
                     model.EnderecoC.Endereco = cepdbC[0].Logradouro;
             }

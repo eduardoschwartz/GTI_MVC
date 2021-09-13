@@ -1161,6 +1161,24 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Alterar_Processo_Web(Processogti reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                short _ano = reg.Ano;
+                int _numero = reg.Numero;
+                Processogti p = db.Processogti.First(i => i.Ano == _ano && i.Numero == _numero);
+                p.Complemento = reg.Complemento;
+                p.Observacao = reg.Observacao;
+
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+
         public List<Processo_Numero> Lista_Processo_Parcelamento_Header(int Codigo) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var Sql = (from p in db.Processoreparc where p.Codigoresp == Codigo orderby p.Anoproc, p.Numproc
