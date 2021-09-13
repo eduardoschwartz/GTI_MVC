@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace GTI_MVC.Controllers {
     public class CidadaoController : Controller   {
-        private readonly string _connection = "GTIconnectionTeste";
+        private readonly string _connection = "GTIconnection";
 
         [Route("Cidadao_menu")]
         [HttpGet]

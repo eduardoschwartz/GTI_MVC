@@ -6,6 +6,7 @@ using GTI_Mvc.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Common.CommandTrees;
+using System.Linq;
 using System.Net.NetworkInformation;
 using System.Web.Helpers;
 using System.Web.Mvc;
@@ -13,7 +14,7 @@ using System.Web.UI.WebControls;
 
 namespace GTI_MVC.Controllers {
     public class ProcessoController : Controller    {
-        private readonly string _connection = "GTIconnectionTeste";
+        private readonly string _connection = "GTIconnection";
         [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
         public class ValidateJsonAntiForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter {
             public void OnAuthorization(AuthorizationContext filterContext) {
@@ -131,7 +132,6 @@ namespace GTI_MVC.Controllers {
             List<AssuntoDocStruct> Lista_Search = processoRepository.Lista_Assunto_Documento(_codAss);
             return new JsonResult { Data = Lista_Search, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
-              
 
         [ValidateJsonAntiForgeryToken]
         [AllowAnonymous]
@@ -283,7 +283,6 @@ namespace GTI_MVC.Controllers {
             return View(model);
         }
 
-
         [Route("Processo_qry")]
         [HttpGet]
         public ActionResult Processo_qry() {
@@ -311,7 +310,14 @@ namespace GTI_MVC.Controllers {
             string _p = Functions.Encrypt(_numero);
             TempData["p"] = _p;
 
-            return RedirectToAction("Processo_vw");
+            if(model.Evento=="btnDetalhe")
+                return RedirectToAction("Processo_vw");
+            else {
+                if(model.Evento=="btnTramite")
+                    return RedirectToAction("Processo_trm");
+            }
+
+            return View(model);
         }
 
         [ValidateJsonAntiForgeryToken]
@@ -555,6 +561,82 @@ namespace GTI_MVC.Controllers {
             return RedirectToAction("Processo_vw");
 
         }
+
+        [Route("Processo_trm")]
+        [HttpGet]
+        public ActionResult Processo_trm() {
+            if (TempData["p"] == null)
+                return RedirectToAction("sysMenu", "Home");
+
+            string _processo =Functions.Decrypt( TempData["p"].ToString());
+            Processo_bll processoRepository = new Processo_bll(_connection);
+
+            ProcessoNumero processoNumero = Functions.Split_Processo_Numero(_processo);
+            int _ano = processoNumero.Ano;
+            int _numero = processoNumero.Numero;
+
+            if (Request.Cookies["2lG1H*"] == null)
+                return RedirectToAction("Login", "Home");
+
+            if (_ano == 0)
+                RedirectToAction("Login", "Home");
+
+            string Numero_Ano = _numero.ToString() + "-" + Functions.RetornaDvProcesso(_numero) + "/" + _ano.ToString();
+            ProcessoViewModel modelt = Exibe_Tramite(Numero_Ano, 0);
+            if (modelt.Lista_Tramite == null)
+                return View("Tramite_Processo");
+            else
+                return View(modelt);
+        }
+
+        private ProcessoViewModel Exibe_Tramite(string Numero_Ano, int Seq = 0) {
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
+            ProcessoViewModel processoViewModel = new ProcessoViewModel();
+            int _userId = Convert.ToInt32(Session["hashid"]);
+            if (_userId > 0) {
+
+                List<UsuariocentroCusto> _listaCC = protocoloRepository.ListaCentrocustoUsuario(_userId);
+                string Lista_CC = "";
+                foreach (UsuariocentroCusto item in _listaCC) {
+                    Lista_CC += item.Codigo + ",";
+                }
+                Lista_CC = Lista_CC.Substring(0, Lista_CC.Length - 1);
+
+
+                List<Centrocusto> Lista_CentroCusto = protocoloRepository.Lista_Local(true, false);
+                ViewBag.Lista_CentroCusto = new SelectList(Lista_CentroCusto, "Codigo", "Descricao");
+
+                ProcessoNumero processoNumero = Functions.Split_Processo_Numero(Numero_Ano);
+                ProcessoStruct _dados = protocoloRepository.Dados_Processo(processoNumero.Ano, processoNumero.Numero);
+                if (_dados != null) {
+                    List<TramiteStruct> Lista_Tramite = protocoloRepository.DadosTramite((short)processoNumero.Ano, processoNumero.Numero, (int)_dados.CodigoAssunto);
+
+                    if (Seq > 0) {
+                        Lista_Tramite = Lista_Tramite.Where(m => m.Seq == Seq).ToList();
+                    }
+                    TramiteStruct TramiteAtual = protocoloRepository.Dados_Tramite(processoNumero.Ano, processoNumero.Numero, Seq);
+
+
+                    processoViewModel.Despacho_Codigo = TramiteAtual.DespachoCodigo;
+                    processoViewModel.Ano = processoNumero.Ano;
+                    processoViewModel.Numero = processoNumero.Numero;
+                    processoViewModel.User_Id = Convert.ToInt32(ViewBag.UserId);
+                    processoViewModel.Data_Processo = Convert.ToDateTime(_dados.DataEntrada).ToString("dd/MM/yyyy");
+                    processoViewModel.Requerente = _dados.NomeCidadao;
+                    processoViewModel.Assunto_Nome = _dados.Assunto;
+                    processoViewModel.Lista_Tramite = Lista_Tramite;
+                    processoViewModel.Lista_CC = Lista_CC;
+                    processoViewModel.Numero_Ano = Numero_Ano;
+                    processoViewModel.ObsGeral = Lista_Tramite[0].ObsGeral;
+                    processoViewModel.ObsInterna = Lista_Tramite[0].ObsInterna;
+                } else {
+                    ViewBag.Result = "Processo não cadastrado.";
+                }
+            }
+            return processoViewModel;
+        }
+
+
 
     }
 }

@@ -1126,6 +1126,7 @@
     <Content Include="Views\Processo\Processo_qry.cshtml" />
     <Content Include="Views\Processo\Processo_edit.cshtml" />
     <Content Include="Views\Cidadao\Cidadao_vw.cshtml" />
+    <Content Include="Views\Processo\Processo_trm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

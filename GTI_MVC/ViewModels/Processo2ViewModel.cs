@@ -29,6 +29,7 @@ namespace GTI_Mvc.ViewModels {
         public List<ProcessoEndStruct> Lista_Endereco { get; set; }
         public List<ProcessoDocStruct> Lista_Documento { get; set; }
         public string Erro { get; set; }
+        public string Evento { get; set; }
     }
      
 
