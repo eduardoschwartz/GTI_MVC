@@ -60,23 +60,9 @@ namespace GTI_MVC.Controllers {
             int _userId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
             bool _func = Functions.Decrypt(Request.Cookies["2fN*"].Value) == "S" ? true : false;
 
-            Processo_bll processoRepository = new Processo_bll(_connection);
-            string _guid= Guid.NewGuid().ToString("N");
-            Processo_web reg = new Processo_web {
-                Guid = _guid,
-                Centro_custo_codigo = model.Centro_Custo_Codigo,
-                Centro_custo_nome = model.Centro_Custo_Nome,
-                Data_geracao = DateTime.Now,
-                Interno = model.Tipo_Requerente == "Prefeitura" ? true : false,
-                User_id = _userId,
-                User_pref = _func,
-                Fisico=false,
-                Assunto_codigo=0
-            };
-
-            Exception ex = processoRepository.Incluir_Processo_Web(reg);
-
-            return RedirectToAction("Processo_add",new {p=_guid });
+            TempData["CentroCustoCod"] = model.Centro_Custo_Codigo;
+            TempData["CentroCustoNome"] = model.Centro_Custo_Nome;
+            return RedirectToAction("Processo_add");
         }
 
         [HttpGet]
@@ -113,11 +99,12 @@ namespace GTI_MVC.Controllers {
             if (Request.Cookies["2lG1H*"] == null) {
                 return RedirectToAction("Login", "Home");
             }
+            int _centro_custo_cod = Convert.ToInt32(TempData["CentroCustoCod"]);
+            string _centro_custo_nome = TempData["CentroCustoNome"].ToString();
 
             Processo_bll processoRepository = new Processo_bll(_connection);
-            Processo_web _proc = processoRepository.Retorna_Processo_Web(p);
 
-            if (_proc == null) {
+            if (_centro_custo_cod == 0) {
                 return RedirectToAction("Processo_tp", "Processo");
             }
 
@@ -125,11 +112,10 @@ namespace GTI_MVC.Controllers {
             ViewBag.Lista_Assunto= new SelectList(ListaAssunto, "Codigo", "Nome");
 
             Processo2ViewModel model = new Processo2ViewModel();
-            model.Guid = p;
-            model.Centro_Custo_Nome = _proc.Centro_custo_nome;
-            model.Centro_Custo_Codigo = _proc.Centro_custo_codigo;
-            model.Tipo_Requerente = _proc.Interno ? "Prefeitura" : "Contribuinte";
-            model.Interno = _proc.Interno ? "Sim" : "Não";
+            model.Centro_Custo_Nome = _centro_custo_nome;
+            model.Centro_Custo_Codigo = _centro_custo_cod;
+            model.Tipo_Requerente = _centro_custo_cod<500000 ? "Prefeitura" : "Contribuinte";
+            model.Interno = _centro_custo_cod<500000 ? "Sim" : "Não";
             return View(model);
         }
       
@@ -282,6 +268,22 @@ namespace GTI_MVC.Controllers {
             return View( model);
         }
 
+        [Route("Processo_vw")]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult Processo_vw(Processo2ViewModel model, string action) {
+            if (Request.Cookies["2lG1H*"] == null) {
+                return RedirectToAction("Login", "Home");
+            }
+            if (action == "btnEditar") {
+                TempData["p"] = model.Numero_Processo;
+                return RedirectToAction("Processo_edit");
+            }
+
+            return View(model);
+        }
+
+
         [Route("Processo_qry")]
         [HttpGet]
         public ActionResult Processo_qry() {
@@ -421,5 +423,73 @@ namespace GTI_MVC.Controllers {
             return new JsonResult { Data = Lista_Proc, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        [Route("Processo_edit")]
+        [HttpGet]
+        public ActionResult Processo_edit() {
+            if (Request.Cookies["2lG1H*"] == null) {
+                return RedirectToAction("Login", "Home");
+            }
+
+            if (TempData["p"] == null)
+                return RedirectToAction("sysMenu", "Home");
+
+            string _processo = TempData["p"].ToString();
+
+            Processo_bll processoRepository = new Processo_bll(_connection);
+
+            ProcessoNumero processoNumero = Functions.Split_Processo_Numero(_processo);
+            int _ano = processoNumero.Ano;
+            int _numero = processoNumero.Numero;
+
+            bool _existe = processoRepository.Existe_Processo(_ano, _numero);
+            if (!_existe)
+                return RedirectToAction("sysMenu", "Home");
+
+            ProcessoStruct _proc = processoRepository.Dados_Processo(_ano, _numero);
+
+            string _assunto = processoRepository.Retorna_Assunto((int)_proc.CodigoAssunto);
+
+            Processo2ViewModel model = new Processo2ViewModel();
+            model.NumProcesso = _numero;
+            model.AnoProcesso = _ano;
+            model.Numero_Processo = _numero.ToString() + "-" + Functions.RetornaDvProcesso(_numero) + "/" + _ano.ToString();
+            model.Complemento = _proc.Complemento;
+            model.Assunto_Codigo = (int)_proc.CodigoAssunto;
+            model.Assunto_Nome = _assunto;
+            model.Observacao = _proc.Observacao;
+            if (_proc.Interno) {
+                model.Centro_Custo_Codigo = (int)_proc.CentroCusto;
+                model.Centro_Custo_Nome = _proc.CentroCustoNome;
+            } else {
+                model.Centro_Custo_Codigo = (int)_proc.CodigoCidadao;
+                model.Centro_Custo_Nome = _proc.NomeCidadao;
+            }
+            model.Interno = _proc.Interno ? "Sim" : "Não";
+            model.Fisico_Nome = _proc.Fisico ? "Sim" : "Não";
+            model.Lista_Documento = processoRepository.Lista_Processo_Documento(_ano, _numero);
+            model.Lista_Endereco = processoRepository.Lista_Processo_Endereco((short)_ano, _numero);
+
+            return View(model);
+        }
+
+        [Route("Processo_edit")]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult Processo_edit(Processo2ViewModel model, string action) {
+            if (Request.Cookies["2lG1H*"] == null) {
+                return RedirectToAction("Login", "Home");
+            }
+            if (action == "btnGravar") {
+            }
+
+            if (action == "btnCancelar") {
+                string _numero = model.Numero_Processo;
+                string _p = Functions.Encrypt(_numero);
+                TempData["p"] = _p;
+                return RedirectToAction("Processo_vw");
+            }
+
+            return View(model);
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Cadastro de novo processo";
+    ViewBag.Title = "Alteração de processo";
 }
 
 <style>
@@ -120,7 +120,7 @@
 }
 
 <div class="center" style="width:700px">
-    @using (Html.BeginForm("Processo_vw", "Processo", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @using (Html.BeginForm("Processo_edit", "Processo", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
 
         <input type="hidden" id="End_Cod">
@@ -157,12 +157,12 @@
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px">Complemento:</td>
-                            <td style="width:80%; font-size: 14px">@Html.TextBoxFor(m => m.Complemento, new { @id = "complemento", @style = "width:500px;color:darkblue", @readonly = true })</td>
+                            <td style="width:80%; font-size: 14px">@Html.TextBoxFor(m => m.Complemento, new { @id = "complemento", @style = "width:500px" })</td>
                         </tr>
                         <tr><td style="height:10px"></td></tr>
                         <tr>
                             <td style="width:20%;font-size:14px;vertical-align:top">Observação:</td>
-                            <td style="width:80%; font-size: 14px">@Html.TextAreaFor(m => m.Observacao, new { @id = "observacao", @maxlength = "5000", @cols = 86, @rows = 5, @style = "resize:none;width:500px;color:darkblue", @readonly = true })</td>
+                            <td style="width:80%; font-size: 14px">@Html.TextAreaFor(m => m.Observacao, new { @id = "observacao", @maxlength = "5000", @cols = 86, @rows = 5, @style = "resize:none;width:500px" })</td>
                         </tr>
                     </table>
                 </div>
@@ -174,18 +174,22 @@
                                 <th class="titulo" style="width:0px;display:none">Código</th>
                                 <th class="titulo" style="width:490px">Endereço</th>
                                 <th class="titulo" style="width:70px">Número</th>
+                                <th class="titulo" style="width:40px" ></th>
                             </tr>
                         </thead>
                         <tbody id="mainTableBodyEnd">
                             @foreach (GTI_Models.Models.ProcessoEndStruct itemD in Model.Lista_Endereco) {
-                                <tr style="font-size: 14px;color:darkblue">
-                                    <td style="display:none">@itemD.CodigoLogradouro</td>
-                                    <td style="width:490px">@itemD.NomeLogradouro</td>
-                                    <td style="width:70px">@itemD.Numero</td>
-                                </tr>
+                            <tr style="font-size: 14px;color:darkblue">
+                                <td style="display:none">@itemD.CodigoLogradouro</td>
+                                <td style="width:490px">@itemD.NomeLogradouro</td>
+                                <td style="width:70px">@itemD.Numero</td>
+                                <td><input type="button" id="btnDelEnd" class="btnimage" title="Remover" onclick="delRowEnd(this)" /> </td>
+                            </tr>
                             }
                         </tbody>
                     </table>
+                    <br /><br />
+                    <button type="button" id="btnCallModalEnd" class="btn btn-info" onclick="OpenModalEnd()" style="height:32px"> <i class="fas fa-plus"></i>&nbsp;Adicionar</button>
 
                 </div>
                 <div class="card-header">Documento(s) Necessário(s)</div>
@@ -196,25 +200,28 @@
                                 <td style="width: 0px; font-size: 14px;display:none">Código</td>
                                 <td style="width: 470px; font-size: 14px">Documento</td>
                                 <td style="width: 90px; font-size: 14px;text-align:center">Entregue em</td>
+                                <td style="width: 40px; font-size: 14px"></td>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (GTI_Models.Models.ProcessoDocStruct itemD in Model.Lista_Documento) {
                                 <tr style="font-size: 14px;color:darkblue">
                                     <td style="display:none">@itemD.CodigoDocumento</td>
-                                    <td style="width:500px">@itemD.NomeDocumento</td>
+                                    <td style="width:450px">@itemD.NomeDocumento</td>
                                     @if (itemD.DataEntrega != null) {
                                         <td style="text-align:center;width:100px">@Convert.ToDateTime(itemD.DataEntrega).ToString("dd/MM/yyyy")</td>
                                     } else {
                                         <td style="text-align:center;width:100px"></td>
                                     }
+                                    <td style="width:50px">  <input type="button" id="btnEditDoc" class="btnimage2" title="Marcar como entregue" onclick="editRowDoc(this)" />&nbsp;<input type="button" id="btnDelDoc" class="btnimage" title="Remover data" onclick="delDataDoc(this)" /> </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
-                    <br /><br />
+                    <br />
 
-                    <button type="submit" id="btnEditar" class="btn btn-primary" name="action" value="btnEditar" title="Alterar o processo" style="height:32px;width:110px;vertical-align:baseline"> Alterar</button>
+                    <button type="submit" id="btnSave" class="btn btn-primary" name="action" value="btnEditar" title="Gravar as alterações" style="height:32px;width:110px;vertical-align:baseline"> Gravar</button>&nbsp;&nbsp;
+                    <button type="submit" id="btnCancel" class="btn btn-danger" name="action" value="btnCancelar" title="Descartar as alterações" style="height:32px;width:110px;vertical-align:baseline"> Cancelar</button>
                 </div>
 
                 <div class="card-footer">
@@ -226,11 +233,108 @@
     }
 </div>
 
+<div class="modal fade" id="ModalEndereco" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 590px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Informe o Endereço</span>
 
+            </div>
+            <div class="container"></div>
+            <div class="modal-body">
+                <span style="font-size:13px">Endereço:&nbsp;&nbsp;</span><input type="text" id="searchEndInput" style="width: 390px;font-size:13px " placeholder="Digite ao menos 3 caracteres..." /><span style="font-size:13px;padding-left:10px">
+                    <span style="font-size:13px">Nº&nbsp;&nbsp;</span>
+                </span><input type="text" id="searchNumInput" style="width: 60px;font-size:13px" onKeyPress="return formata(this, '§§§§', event)" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSelectEnd">  <i class="fas fa-check"></i>&nbsp;Selecionar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section scripts{
     <script type="text/javascript">
-       
+        function OpenModalEnd() {
+            document.getElementById("searchEndInput").value = '';
+            document.getElementById("searchNumInput").value = '';
+            $('#ModalEndereco').modal({ backdrop: 'static', keyboard: false });
+        }
+
+        $("#btnSelectEnd").click(function () {
+            var tr = $('<tr style="font-size: 14px" />');
+            var _cod = document.getElementById("End_Cod").value;
+            var _nome = document.getElementById("End_Nome").value;
+            var _num = document.getElementById("searchNumInput").value;
+            if (_num == "") {
+                _num = 0;
+            }
+            if (_cod == "" || parseInt(_cod) == 0) {
+                alert("Selecione um endereço válido!");
+            } else {
+                tr.append($('<td style="display:none">' + _cod + '</td>'));
+                tr.append($('<td>' + _nome + '</td>'));
+                tr.append($('<td>' + _num + '</td>'));
+                tr.append($('<td>  <input type="button" id="btnDelEnd" class="btnimage" title="Remover" onclick="delRowEnd(this)"/> </td>'));
+                $('#mainTableEnd').append(tr);
+                $('#ModalEndereco').modal('hide');
+            }
+        });
+
+        function delRowEnd(x) {
+            document.getElementById("mainTableEnd").deleteRow(x.parentElement.parentElement.rowIndex);
+        }
+
+         $("#searchEndInput").autocomplete({
+            minLength:3,
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("Lista_Endereco","Shared")',
+                    dataType: "json",
+                    data: { search: $("#searchEndInput").val() },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Endereco, value: item.Endereco, cod: item.Codlogradouro };
+                        }));
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Error");
+                    }
+                });
+            }
+        }).data("ui-autocomplete")._renderItem = function (ul, item) {
+            var regx = new RegExp('(' + this.term + ')', 'ig');
+            var label = item.value.replace(regx, "<span class='highlight'>" + this.term + "</span>");
+            return $("<li/>").data("ui-autocomplete-item", item).append($("<a>").html(label)).appendTo(ul);
+        };;
+
+        $('#searchEndInput').on('autocompleteselect', function (e, ui) {
+            document.getElementById("End_Cod").value = ui.item.cod;
+            document.getElementById("End_Nome").value = ui.item.label;
+        });
+
+        function delDataDoc(x) {
+            var table = document.getElementById("mainTableDoc");
+            var rows = table.getElementsByTagName('tr');
+            table.rows[x.parentElement.parentElement.rowIndex].cells[2].textContent = "";
+        }
+
+        function editRowDoc(x) {
+            var table = document.getElementById("mainTableDoc");
+            var rows = table.getElementsByTagName('tr');
+            table.rows[x.parentElement.parentElement.rowIndex].cells[2].textContent = DataAtualFormatada();
+        }
+
+        function DataAtualFormatada() {
+            var data = new Date(),
+                dia = data.getDate().toString(),
+                diaF = (dia.length == 1) ? '0' + dia : dia,
+                mes = (data.getMonth() + 1).toString(), //+1 pois no getMonth Janeiro começa com zero.
+                mesF = (mes.length == 1) ? '0' + mes : mes,
+                anoF = data.getFullYear();
+            return diaF + "/" + mesF + "/" + anoF;
+        }
     </script>
 }
 
