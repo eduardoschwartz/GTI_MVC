@@ -163,13 +163,14 @@
     @using (Html.BeginForm("Processo_trm", "Processo", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.Numero_Ano, new { @id = "Numero_Processo" })
+        @Html.HiddenFor(m=>m.Seq,new {@id="Seq"})
 
         <div class="card">
             <div class="card-header">Trâmite de Processo nº&nbsp;<span style="font-weight:bold">@Model.Numero_Ano</span>&nbsp;de&nbsp;<span style="font-weight:bold">@Model.Data_Processo</span></div>
             <div class="card-body">
                 <table title="Dados do Processo" style="font-size:12px;background-color:White;border-color:#CCCCCC; ">
                     <tr>
-                        <td >
+                        <td>
                             Requerente:
                         </td>
                         <td style="font-weight:bold">
@@ -177,7 +178,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td >
+                        <td>
                             Assunto:
                         </td>
                         <td style="font-weight:bold">
@@ -186,7 +187,7 @@
                     </tr>
                     <tr style="height:10px"></tr>
                 </table>
-             
+
                 <div id="table-container" style="overflow-x: scroll; max-height: 360px; height: auto; overflow: auto; width: 830px">
                     <table id="mainTable" style="width:1020px;" class="tbl table-bordered table-condensed">
                         <thead style="background-color:darkblue;color:white;font-weight:normal;font-size:11px">
@@ -253,7 +254,7 @@
                 <div style="text-align:center">
                     <button type="button" id="btnReceber" class="smallbtn" title="Receber o processo selecionado"> Receber</button>&nbsp;
                     <button type="button" id="btnEnviar" class="smallbtn" title="Enviar o processo selecionado"> Enviar</button>&nbsp;
-                    <button type="button" id="btnAcima" class="smallbtn" title="Mover trâmite selecionado para cima"> Acima</button>&nbsp;
+                    <button type="button" id="btnAcima" class="smallbtn" title="Mover trâmite selecionado para cima" onclick="MoveUp(@Model.Ano,@Model.Numero)"> Acima</button>&nbsp;
                     <button type="button" id="btnAbaixo" class="smallbtn" title="Mover trâmite selecionado para baixo"> Abaixo</button>&nbsp;
                     <button type="button" id="btnIncluir" class="smallbtn" title="Incluir tramitação"> Incluir</button>&nbsp;
                     <button type="button" id="btnRemover" class="smallbtn" title="Remover tramitação"> Remover</button>&nbsp;
@@ -352,15 +353,50 @@
                 return $(this).text();
             }).get();
 
-            document.getElementById('Numero_Processo').value = $.trim(tableData[0]);
-
             $('#mainTable tr').click(function (e) {
                 $('#mainTable tr').removeClass('highlighted');
                 $(this).addClass('highlighted');
             });
         });
 
+        $('#mainTable').find('tr').click(function () {//Retorna a linha clicada
+            document.getElementById('Seq').value= ($(this).index() + 1);
+        });
 
+        function elementIsEmpty(el) {
+            return (/^(\s|&nbsp;)*$/.test(el));
+        }
+
+        function MoveUp(Ano, Numero) {
+            var _seq = document.getElementById("Seq").value;
+            var tbl = document.getElementById("mainTable");
+            var _texto = tbl.rows[_seq - 1].cells[2].innerHTML.trim();
+            if (_seq == 1) {
+                $('#msgBoxWait').dialog('close');
+                document.getElementById('lblMsg').innerHTML = "Não é possível mover para cima o primeiro local.";
+                $('#msgBox1').dialog('open');
+            } else {
+                if (elementIsEmpty(_texto) == false) {
+                    $('#msgBoxWait').dialog('close');
+                    document.getElementById('lblMsg').innerHTML = "O local acima já foi tramitado.";
+                    $('#msgBox1').dialog('open');
+                } else {
+                    $.ajax({
+                        type: "Post",
+                    url: "/Processo/MoveUp",
+                    dataType: 'json',
+                    success: function (data) {
+                        window.location.href = data;
+                    },
+                    data: {
+                        Ano: @Model.Ano,
+                        Numero: @Model.Numero,
+                        Seq: _seq
+                    }
+                });
+                }
+            }
+        }
 
     </script>
 }

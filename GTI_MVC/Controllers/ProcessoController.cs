@@ -14,7 +14,7 @@ using System.Web.UI.WebControls;
 
 namespace GTI_MVC.Controllers {
     public class ProcessoController : Controller    {
-        private readonly string _connection = "GTIconnection";
+        private readonly string _connection = "GTIconnectionTeste";
         [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
         public class ValidateJsonAntiForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter {
             public void OnAuthorization(AuthorizationContext filterContext) {
@@ -564,13 +564,17 @@ namespace GTI_MVC.Controllers {
 
         [Route("Processo_trm")]
         [HttpGet]
-        public ActionResult Processo_trm() {
-            if (TempData["p"] == null)
-                return RedirectToAction("sysMenu", "Home");
+        public ActionResult Processo_trm(string p) {
+            string _processo;
+            if (TempData["p"] == null) {
+                if (p == null)
+                    return RedirectToAction("sysMenu", "Home");
+                else
+                    _processo = Functions.Decrypt(p);
+            }else
+                _processo = Functions.Decrypt(TempData["p"].ToString());
 
-            string _processo =Functions.Decrypt( TempData["p"].ToString());
             Processo_bll processoRepository = new Processo_bll(_connection);
-
             ProcessoNumero processoNumero = Functions.Split_Processo_Numero(_processo);
             int _ano = processoNumero.Ano;
             int _numero = processoNumero.Numero;
@@ -581,12 +585,11 @@ namespace GTI_MVC.Controllers {
             if (_ano == 0)
                 RedirectToAction("Login", "Home");
 
-            string Numero_Ano = _numero.ToString() + "-" + Functions.RetornaDvProcesso(_numero) + "/" + _ano.ToString();
-            ProcessoViewModel modelt = Exibe_Tramite(Numero_Ano, 0);
-            if (modelt.Lista_Tramite == null)
-                return View("Tramite_Processo");
-            else
+            ProcessoViewModel modelt = Exibe_Tramite(_processo, 0);
+            if (modelt.Lista_Tramite != null)
                 return View(modelt);
+            else
+                return RedirectToAction("sysMenu", "Home");
         }
 
         private ProcessoViewModel Exibe_Tramite(string Numero_Ano, int Seq = 0) {
@@ -616,7 +619,6 @@ namespace GTI_MVC.Controllers {
                     }
                     TramiteStruct TramiteAtual = protocoloRepository.Dados_Tramite(processoNumero.Ano, processoNumero.Numero, Seq);
 
-
                     processoViewModel.Despacho_Codigo = TramiteAtual.DespachoCodigo;
                     processoViewModel.Ano = processoNumero.Ano;
                     processoViewModel.Numero = processoNumero.Numero;
@@ -636,7 +638,19 @@ namespace GTI_MVC.Controllers {
             return processoViewModel;
         }
 
+        public ActionResult MoveUp(int Ano, int Numero, int Seq) {
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
+            Exception ex = protocoloRepository.Move_Sequencia_Tramite_Acima(Numero, Ano, Seq);
+            if (ex != null)
+                ViewBag.Result = "Ocorreu um erro ao mover o trâmite";
 
+            ProcessoViewModel processoViewModel = new ProcessoViewModel {
+                Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString()
+            };
+
+            TempData["p"] = Functions.Encrypt( processoViewModel.Numero_Ano);
+            return Json(Url.Action("Processo_trm", "Processo", new { p = Functions.Encrypt(processoViewModel.Numero_Ano) }));
+        }
 
     }
 }
