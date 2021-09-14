@@ -475,7 +475,8 @@ namespace GTI_MVC.Controllers {
                     } else {
                         if (action == "btnValida" || action == "Cidadao_edt" ) {
                             Grava_Cidadao(model,false);
-                            return RedirectToAction("Cidadao_menu");
+                            TempData["cod"] = model.Codigo;
+                            return RedirectToAction("Cidadao_vw");
                         }
 
                     }

@@ -140,6 +140,7 @@
         border-radius: .2rem;
     }
 
+
     /*****DropDownMenu****/
     .dropbtn {
         background-color: darkred;
@@ -185,7 +186,7 @@
     .show {
         display: block;
     }
-    }
+
     /*******************/
 </style>
 
@@ -256,7 +257,7 @@
                     </div>
                     <br />
                     <div id="table-container" style="overflow-x: scroll; max-height: 360px; height: auto; overflow: auto; width: 700px">
-                        <table id="mainTable" style="width:700px;" class="table-bordered table-condensed">
+                        <table id="mainTable" style="width:700px;" class="tbl table-bordered table-condensed">
                             <thead>
                                 <tr style="background-color:darkblue;color:white">
                                     <td style="width: 100px; font-size: 13px; text-align: center">Nº Processo</td>
@@ -268,7 +269,6 @@
                             <tbody>
                             </tbody>
                         </table>
-                        <div id="bottom_anchor"></div>
                     </div>
 
                     <br />
@@ -367,7 +367,6 @@
         $(document).ready(function () {
             $(".maskData").inputmask("99/99/9999");
             $(".maskAno").inputmask("9999");
-            /*$('.dropdown-submenu > a').submenupicker();*/
 
             $('#msgBox1').dialog({
                 autoOpen: false,
