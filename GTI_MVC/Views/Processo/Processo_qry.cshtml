@@ -188,6 +188,27 @@
     }
 
     /*******************/
+
+    .smallbtn {
+        background-color: Highlight;
+        border: solid;
+        border-width: .3px;
+        border-color: black;
+        color: whitesmoke;
+        width: 100px;
+        height: 28px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+        .smallbtn:hover {
+            background-color: darkred;
+            color: whitesmoke;
+        }
 </style>
 
 @{ var res = @ViewBag.Result;}
@@ -250,7 +271,7 @@
                             </div>
 
                             <div style="display: table-cell;">
-                                <button type="button" id="btnGravar" class="btn btn-primary" name="action" value="btnGravar" style="height:32px;width:110px;vertical-align:baseline" onclick="Validar()"><i class="fas fa-search"></i>&nbsp; Pesquisar</button>
+                                <button type="button" id="btnGravar" class="smallbtn" name="action" value="btnGravar" style="height:32px;width:110px;vertical-align:baseline" onclick="Validar()"><i class="fas fa-search"></i>&nbsp; Pesquisar</button>
                             </div>
                         </div>
 
@@ -272,8 +293,8 @@
                     </div>
 
                     <br />
-                    <button type="button" id="btnDetalhe" class="btn btn-primary" name="action" value="btnDetalhe" title="Exibir os detalhes do processo" style="height:32px;width:110px;" onclick="Exibir_Detalhe()"> Detalhes</button>&nbsp;&nbsp;
-                    <button type="button" id="btnTramite" class="btn btn-primary" name="action" value="btnTramite" title="Exibir a tramitação do processo" style="height:32px;width:110px" onclick="Exibir_Tramite()"> Trâmite</button>
+                    <button type="button" id="btnDetalhe" class="smallbtn" name="action" value="btnDetalhe" title="Exibir os detalhes do processo" style="height:32px;width:110px;" onclick="Exibir_Detalhe()"> Detalhes</button>&nbsp;&nbsp;
+                    <button type="button" id="btnTramite" class="smallbtn" name="action" value="btnTramite" title="Exibir a tramitação do processo" style="height:32px;width:110px" onclick="Exibir_Tramite()"> Trâmite</button>
                 </div>
                 <div class="card-footer">
                     @Html.ActionLink("Retornar ao menu de opções", "Processo_menu", "Processo", null, new { @class = "actionlink" })<br />

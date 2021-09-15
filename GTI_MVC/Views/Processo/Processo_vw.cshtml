@@ -113,6 +113,26 @@
         width: 16px;
         height: 16px;
     }
+    .smallbtn {
+        background-color: Highlight;
+        border: solid;
+        border-width: .3px;
+        border-color: black;
+        color: whitesmoke;
+        width: 100px;
+        height: 28px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+        .smallbtn:hover {
+            background-color: darkred;
+            color: whitesmoke;
+        }
 </style>
 
 @{
@@ -214,7 +234,7 @@
                     </table>
                     <br /><br />
 
-                    <button type="submit" id="btnEditar" class="btn btn-primary" name="action" value="btnEditar" title="Alterar o processo" style="height:32px;width:110px;vertical-align:baseline"> Alterar</button>
+                    <button type="submit" id="btnEditar" class="smallbtn" name="action" value="btnEditar" title="Alterar o processo" style="height:32px;width:110px;vertical-align:baseline"> Alterar</button>
                 </div>
 
                 <div class="card-footer">

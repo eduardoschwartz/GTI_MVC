@@ -219,16 +219,21 @@ namespace GTI_MVC.Controllers {
 
         [Route("Processo_vw")]
         [HttpGet]
-        public ActionResult Processo_vw() {
+        public ActionResult Processo_vw(string p) {
             if (Request.Cookies["2lG1H*"] == null) {
                 return RedirectToAction("Login", "Home");
             }
 
-            if(TempData["p"]==null)
-                return RedirectToAction("sysMenu", "Home");
+            string _processo;
+            if (TempData["p"] == null) {
+                if (p == null)
+                    return RedirectToAction("sysMenu", "Home");
+                else
+                    _processo = Functions.Decrypt(p);
+            } else
+                _processo = Functions.Decrypt(TempData["p"].ToString());
 
-            string _processo = Functions.Decrypt(TempData["p"].ToString());
-            if(_processo=="")
+            if (_processo=="")
                 return RedirectToAction("Processo_menu", "Processo");
 
             Processo_bll processoRepository = new Processo_bll(_connection);
@@ -395,10 +400,8 @@ namespace GTI_MVC.Controllers {
                 return new JsonResult { Data = Lista_Proc, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             }
 
-
             List<ProcessoStruct> Lista = processoRepository.Lista_Processos_Web(_filter);
 
-            int _pos = 0;
             foreach (ProcessoStruct item in Lista) {
                 Processo2ViewModel reg = new Processo2ViewModel() {
                     Numero_Processo = item.Numero.ToString("00000") + "-" + Functions.RetornaDvProcesso(item.Numero) + "/" + item.Ano.ToString(),
@@ -412,8 +415,7 @@ namespace GTI_MVC.Controllers {
                     reg.Centro_Custo_Nome = item.NomeCidadao ?? "";
                 reg.Centro_Custo_Nome = Functions.TruncateTo(reg.Centro_Custo_Nome, 35);
 
-
-                bool _existe = false;
+                bool _existe = false;//Avoid duplicate regs
                 foreach (Processo2ViewModel t in Lista_Proc) {
                     if (t.Numero_Processo == reg.Numero_Processo) {
                         _existe = true;
@@ -422,8 +424,6 @@ namespace GTI_MVC.Controllers {
                 }
                 if(!_existe)
                     Lista_Proc.Add(reg);
-                //if (_pos == 100) break;
-                _pos++;
             };
         
             return new JsonResult { Data = Lista_Proc, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -556,9 +556,10 @@ namespace GTI_MVC.Controllers {
                 ex = processoRepository.Incluir_Processo_Documento(_listaD, _ano, _numero);
             }
 
-            string _p = Functions.Encrypt(_numero_processo);
-            TempData["p"] = _p;
-            return RedirectToAction("Processo_vw");
+            //string _p = Functions.Encrypt(_numero_processo);
+            //TempData["p"] = _p;
+            //return RedirectToAction("Processo_vw");
+            return Json(Url.Action("Processo_vw", "Processo", new { p = Functions.Encrypt(_numero_processo) }));
 
         }
 
@@ -585,11 +586,23 @@ namespace GTI_MVC.Controllers {
             if (_ano == 0)
                 RedirectToAction("Login", "Home");
 
-            ProcessoViewModel modelt = Exibe_Tramite(_processo, 0);
-            if (modelt.Lista_Tramite != null)
-                return View(modelt);
-            else
-                return RedirectToAction("sysMenu", "Home");
+            Processo2ViewModel model = new Processo2ViewModel();
+            ProcessoStruct _dados = processoRepository.Dados_Processo(processoNumero.Ano, processoNumero.Numero);
+            model.Numero_Processo = _processo;
+            model.AnoProcesso = _ano;
+            model.NumProcesso = _numero;
+            model.Data_Entrada = Convert.ToDateTime(_dados.DataEntrada).ToString("dd/MM/yyyy");
+            model.Centro_Custo_Nome = _dados.CentroCustoNome == null ? _dados.NomeCidadao ?? "" : _dados.CentroCustoNome;
+            model.Assunto_Codigo =(int) _dados.CodigoAssunto;
+            model.Assunto_Nome = _dados.Assunto;
+            model.Complemento = _dados.Complemento ?? "";
+            return View(model);
+
+            //            ProcessoViewModel modelt = Exibe_Tramite(_processo, 0);
+            //            if (modelt.Lista_Tramite != null)
+            //                return View(modelt);
+            //            else
+            //                return RedirectToAction("sysMenu", "Home");
         }
 
         private ProcessoViewModel Exibe_Tramite(string Numero_Ano, int Seq = 0) {
@@ -650,6 +663,26 @@ namespace GTI_MVC.Controllers {
 
             TempData["p"] = Functions.Encrypt( processoViewModel.Numero_Ano);
             return Json(Url.Action("Processo_trm", "Processo", new { p = Functions.Encrypt(processoViewModel.Numero_Ano) }));
+        }
+
+        public ActionResult MoveDown(int Ano, int Numero, int Seq) {
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
+            Exception ex = protocoloRepository.Move_Sequencia_Tramite_Abaixo(Numero, Ano, Seq);
+            if (ex != null)
+                ViewBag.Result = "Ocorreu um erro ao mover o trâmite";
+
+            ProcessoViewModel processoViewModel = new ProcessoViewModel {
+                Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString()
+            };
+            return Json(Url.Action("Processo_trm", "Processo", new { p = Functions.Encrypt(processoViewModel.Numero_Ano) }));
+        }
+
+        public JsonResult Carrega_Tramite(string processo,int assunto) {
+            Processo_bll processoRepository = new Processo_bll(_connection);
+            ProcessoNumero processoNumero = Functions.Split_Processo_Numero(processo);
+            List<TramiteStruct> Lista_Tramite = processoRepository.DadosTramite((short)processoNumero.Ano, processoNumero.Numero, assunto);
+
+            return new JsonResult { Data = Lista_Tramite, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
     }

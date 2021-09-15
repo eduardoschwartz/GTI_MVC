@@ -113,6 +113,47 @@
         width: 16px;
         height: 16px;
     }
+    .smallbtn {
+        background-color: Highlight;
+        border: solid;
+        border-width: .3px;
+        border-color: black;
+        color: whitesmoke;
+        width: 100px;
+        height: 28px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+        .smallbtn:hover {
+            background-color: darkred;
+            color: whitesmoke;
+        }
+
+    .smallbtnred {
+        background-color: red;
+        border: solid;
+        border-width: .3px;
+        border-color: black;
+        color: whitesmoke;
+        width: 100px;
+        height: 28px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+        .smallbtnred:hover {
+            background-color: darkred;
+            color: whitesmoke;
+        }
 </style>
 
 @{
@@ -220,8 +261,8 @@
                     </table>
                     <br />
 
-                    <button type="button" id="btnGravar" class="btn btn-primary" name="action" value="btnGravar" title="Gravar as alterações" style="height:32px;width:110px;vertical-align:baseline"> Gravar</button>&nbsp;&nbsp;
-                    <button type="submit" id="btnCancel" class="btn btn-danger" name="action" value="btnCancelar" title="Descartar as alterações" style="height:32px;width:110px;vertical-align:baseline"> Cancelar</button>
+                    <button type="button" id="btnGravar" class="smallbtn" name="action" value="btnGravar" title="Gravar as alterações" style="height:32px;width:110px;vertical-align:baseline"> Gravar</button>&nbsp;&nbsp;
+                    <button type="submit" id="btnCancel" class="smallbtnred" name="action" value="btnCancelar" title="Descartar as alterações" style="height:32px;width:110px;vertical-align:baseline"> Cancelar</button>
                 </div>
 
                 <div class="card-footer">
@@ -387,22 +428,10 @@
                 contentType: 'application/json',
                 data: JSON.stringify({ Dados: dados}),
                 dataType: "json",
-                success: function (response) {
-                    if (response.success) {
-                        alert( "Processo gravado com sucesso!");
-                        window.location.href = '@Url.Action("Processo_vw", "Processo")' ;
-                    } else {
-                        document.getElementById('lblMsg').innerHTML = response.responseText;
-                        $('#msgBox1').dialog('open');
-                        $("#btnGravar").attr("disabled", false);
-                    }
+                success: function (data) {
+                    window.location.href = data ;
                 },
-                error: function (xhr, status, error) {
-                    if (xhr.status != 200) {
-                        alert(error);
-                    }
-                }
-
+    
             });
         }
 

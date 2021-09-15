@@ -1,4 +1,4 @@
-﻿@model GTI_Mvc.ViewModels.Processo2ViewModel
+﻿@model GTI_Mvc.ViewModels.ProcessoViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -186,38 +186,29 @@
 <div class="center container" style="width:900px">
     @using (Html.BeginForm("Processo_trm", "Processo", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
-        @Html.HiddenFor(m => m.Numero_Processo, new { @id = "Numero_Processo" })
-        @Html.HiddenFor(m => m.AnoProcesso, new { @id = "Ano" })
-        @Html.HiddenFor(m => m.NumProcesso, new { @id = "Numero" })
+        @Html.HiddenFor(m => m.Numero_Ano, new { @id = "Numero_Processo" })
+        @Html.HiddenFor(m => m.Ano, new { @id = "Ano" })
+        @Html.HiddenFor(m => m.Numero, new { @id = "Numero" })
         @Html.HiddenFor(m => m.Seq, new { @id = "Seq" })
-        @Html.HiddenFor(m => m.Assunto_Codigo, new { @id = "Assunto" })
 
         <div class="card">
-            <div class="card-header">Trâmite de Processo nº&nbsp;<span style="font-weight:bold">@Model.Numero_Processo</span>&nbsp;de&nbsp;<span style="font-weight:bold">@Model.Data_Entrada</span></div>
+            <div class="card-header">Trâmite de Processo nº&nbsp;<span style="font-weight:bold">@Model.Numero_Ano</span>&nbsp;de&nbsp;<span style="font-weight:bold">@Model.Data_Processo</span></div>
             <div class="card-body">
                 <table title="Dados do Processo" style="font-size:12px;background-color:White;border-color:#CCCCCC; ">
                     <tr>
                         <td>
                             Requerente:
                         </td>
-                        <td style="color: maroon">
-                            @Model.Centro_Custo_Nome
+                        <td style="font-weight:bold">
+                            @Model.Requerente
                         </td>
                     </tr>
                     <tr>
                         <td>
                             Assunto:
                         </td>
-                        <td style="color: maroon">
+                        <td style="font-weight:bold">
                             @Model.Assunto_Nome
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Complemento:
-                        </td>
-                        <td style="color:maroon">
-                            @Model.Complemento
                         </td>
                     </tr>
                     <tr style="height:10px"></tr>
@@ -254,6 +245,34 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach (var item in Model.Lista_Tramite) {
+                                <tr style="height: 12px; font-weight: normal; font-size: 11px; white-space: nowrap; cursor: pointer">
+                                    <td style="width:20px">
+                                        @Html.DisplayFor(modelItem => item.Seq)
+                                    </td>
+                                    <td style="width:280px">
+                                        @Html.DisplayFor(modelItem => item.CentroCustoNome)
+                                    </td>
+                                    <td style="width:60px;text-align:center">
+                                        @Html.DisplayFor(modelItem => item.DataEntrada)
+                                    </td>
+                                    <td style="width:50px;text-align:center">
+                                        @Html.DisplayFor(modelItem => item.HoraEntrada)
+                                    </td>
+                                    <td style="min-width:200px">
+                                        @Html.DisplayFor(modelItem => item.Usuario1)
+                                    </td>
+                                    <td style="width:150px">
+                                        @Html.DisplayFor(modelItem => item.DespachoNome)
+                                    </td>
+                                    <td style="width:60px;text-align:center">
+                                        @Html.DisplayFor(modelItem => item.DataEnvio)
+                                    </td>
+                                    <td style="min-width:200px">
+                                        @Html.DisplayFor(modelItem => item.Usuario2)
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -261,9 +280,9 @@
                 <div style="text-align:center">
                     <button type="button" id="btnReceber" class="smallbtn" title="Receber o processo selecionado"> Receber</button>&nbsp;
                     <button type="button" id="btnEnviar" class="smallbtn" title="Enviar o processo selecionado"> Enviar</button>&nbsp;
-                    <button type="button" id="btnAcima" class="smallbtn" title="Mover trâmite selecionado para cima" onclick="MoveUp(@Model.AnoProcesso,@Model.NumProcesso)">Acima</button>&nbsp;
-                    <button type="button" id="btnAbaixo" class="smallbtn" title="Mover trâmite selecionado para baixo" onclick="MoveDown(@Model.AnoProcesso,@Model.NumProcesso)">Abaixo</button>&nbsp;
-                    <button type="button" id="btnIncluir" class="smallbtn" title="Incluir tramitação" onclick="AddPlace(@Model.AnoProcesso,@Model.NumProcesso)">Incluir</button>&nbsp;
+                    <button type="button" id="btnAcima" class="smallbtn" title="Mover trâmite selecionado para cima" onclick="MoveUp(@Model.Ano,@Model.Numero)">Acima</button>&nbsp;
+                    <button type="button" id="btnAbaixo" class="smallbtn" title="Mover trâmite selecionado para baixo" onclick="MoveDown(@Model.Ano,@Model.Numero)">Abaixo</button>&nbsp;
+                    <button type="button" id="btnIncluir" class="smallbtn" title="Incluir tramitação" onclick="AddPlace(@Model.Ano,@Model.Numero)">Incluir</button>&nbsp;
                     <button type="button" id="btnRemover" class="smallbtn" title="Remover tramitação">Remover</button>&nbsp;
                     <button type="button" id="btnObs" class="smallbtn" title="Observação do trâmite"> Observação</button>
                 </div>
@@ -298,7 +317,10 @@
             <div class="modal-header"> <span>Inserir Local</span> </div>
             <div class="modal-body">
                 <form id="formInserir">
-                    @*@Html.DropDownListFor(m => m.Centro_Custo_Codigo, ViewBag.Lista_CentroCusto as SelectList, "-Selecione um Local-", new { @id = "InserirDropDown", style = "width:450px;height:25px;font-size:13px", rows = 10 })*@
+                    @Html.HiddenFor(m => m.Ano)
+                    @Html.HiddenFor(m => m.Numero)
+                    @Html.HiddenFor(m => m.Seq)
+                    @Html.DropDownListFor(m => m.CCusto_Codigo, ViewBag.Lista_CentroCusto as SelectList, "-Selecione um Local-", new { @id = "InserirDropDown", style = "width:450px;height:25px;font-size:13px", rows = 10 })
                     <br />
                     <br />
                         <button type="submit" class="smallbtn" id="Inserir_Save">Gravar</button>&nbsp;
@@ -360,8 +382,10 @@
             $(".foo .ui-dialog-title").css("font-size", "13px");
             $(".foo .ui-widget-content").css("font-size", "13px");
 
-            Carrega_Lista();
-             
+            var firstTr = $('#mainTable>tbody>tr:first');
+            firstTr.addClass('highlighted');
+            $('#mainTable>tbody>tr:first').trigger('click');
+
             var _res = '@res';
             if (_res != "") {
                 $('#msgBoxBag').dialog('open');
@@ -372,7 +396,7 @@
 
         });
 
-        $("#mainTable").delegate('tr', 'click', function () {
+        $("#mainTable tbody").delegate('tr', 'click', function () {
             var tableData = $(this).children("td").map(function () {
                 return $(this).text();
             }).get();
@@ -384,13 +408,8 @@
         });
 
         $('#mainTable').find('tr').click(function () {//Retorna a linha clicada
-            selectLine = ($(this).index() + 1);
-            //document.getElementById('Seq').value= ($(this).index() + 1);
+            document.getElementById('Seq').value= ($(this).index() + 1);
         });
-
-        function selectLine(seq) {
-            document.getElementById('Seq').value = seq;
-        }
 
         function elementIsEmpty(el) {
             return (/^(\s|&nbsp;)*$/.test(el));
@@ -399,15 +418,13 @@
         function MoveUp(Ano, Numero) {
             var _seq = document.getElementById("Seq").value;
             var tbl = document.getElementById("mainTable");
-            var rows = document.getElementById("mainTable").getElementsByTagName("tr").length;
-            
+            var _texto = tbl.rows[_seq - 1].cells[2].innerHTML.trim();
             $('#msgBoxWait').dialog('open');
             if (_seq == 1) {
                 $('#msgBoxWait').dialog('close');
                 document.getElementById('lblMsg').innerHTML = "Não é possível mover para cima o primeiro local.";
                 $('#msgBox1').dialog('open');
             } else {
-                var _texto = tbl.rows[_seq - 1].cells[2].innerHTML.trim();
                 if (elementIsEmpty(_texto) == false) {
                     $('#msgBoxWait').dialog('close');
                     document.getElementById('lblMsg').innerHTML = "O local acima já foi tramitado.";
@@ -421,8 +438,8 @@
                         window.location.href = data;
                     },
                     data: {
-                        Ano: @Model.AnoProcesso,
-                        Numero: @Model.NumProcesso,
+                        Ano: @Model.Ano,
+                        Numero: @Model.Numero,
                         Seq: _seq
                     }
                 });
@@ -433,15 +450,14 @@
         function MoveDown(Ano, Numero) {
             var _seq = document.getElementById("Seq").value;
             var tbl = document.getElementById("mainTable");
+            var _texto = tbl.rows[_seq ].cells[2].innerHTML.trim();
             var rows = document.getElementById("mainTable").getElementsByTagName("tr").length;
-            
             $('#msgBoxWait').dialog('open');
-            if (_seq == rows ) {
+            if (_seq == rows - 1) {
                 $('#msgBoxWait').dialog('close');
                 document.getElementById('lblMsg').innerHTML = "Não é possível mover para baixo o último local.";
                 $('#msgBox1').dialog('open');
             } else {
-                var _texto = tbl.rows[_seq].cells[2].innerHTML.trim();
                 if (elementIsEmpty(_texto) == false) {
                     $('#msgBoxWait').dialog('close');
                     document.getElementById('lblMsg').innerHTML = "Este local já foi tramitado.";
@@ -452,13 +468,12 @@
                         url: "/Processo/MoveDown",
                         dataType: 'json',
                         success: function (data) {
-                            Carrega_Lista();
-                            selectLine(_seq);
+                            window.location.href = data;
                         },
                         data: {
-                            Ano: @Model.AnoProcesso,
-                            Numero: @Model.NumProcesso,
-                            Seq: _seq-1
+                            Ano: @Model.Ano,
+                            Numero: @Model.Numero,
+                            Seq: _seq
                         }
                     });
                 }
@@ -481,49 +496,7 @@
             $('#InserirModal').modal({ backdrop: 'static', keyboard: false });
             return true;
         }
-
-        function Carrega_Lista() {
-            clearTable();
-            $('#msgBoxWait').dialog('open');
-            var _processo = document.getElementById("Numero_Processo").value;
-            var _assunto = document.getElementById("Assunto").value;
-            $.getJSON("Carrega_Tramite",
-                { processo: _processo, assunto: _assunto },
-                function (json) {
-                    var tr;
-                    for (var i = 0; i < json.length; i++) {
-                        if (i == 0) {
-                            tr = $('<tr class="highlighted" style="height: 12px; font-weight: normal; font-size: 11px; white-space: nowrap; cursor: pointer" onclick="selectLine(' + json[i].Seq + ')" />');
-                        } else {
-                            tr = $('<tr style="height: 12px; font-weight: normal; font-size: 11px; white-space: nowrap; cursor: pointer" onclick="selectLine(' + json[i].Seq  + ')" />');
-                        }
-                        tr.append("<td style='width:20px'>" + json[i].Seq + "</td>");
-                        tr.append("<td style='width:280px'>" + json[i].CentroCustoNome + "</td>");
-                        tr.append("<td style='width:60px;text-align:center'>" + subNull(json[i].DataEntrada) + "</td>");
-                        tr.append("<td style='width:50px;text-align:center'>" + subNull(json[i].HoraEntrada) + "</td>");
-                        tr.append("<td style='width:200px'>" + subNull(json[i].Usuario1) + "</td>");
-                        tr.append("<td style='width:150px'>" + subNull(json[i].DespachoNome) + "</td>");
-                        tr.append("<td style='width:60px'>" + subNull(json[i].DataEnvio) + "</td>");
-                        tr.append("<td style='width:200px'>" + subNull(json[i].Usuario2) + "</td>");
-                        $("#mainTable").find('tbody').append(tr);
-                    }
-                }).done(function () {
-                    selectLine(1);
-                });
-            
-            
-            
-            $('#msgBoxWait').dialog('close');
-        }
         
-        function subNull (value) {
-            return (value === null) ? "" : value;
-        }
-
-        function clearTable() {
-            $("#mainTable tbody tr").remove(); //Clear tbody rows
-        }
-
 
     </script>
 }
