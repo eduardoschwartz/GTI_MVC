@@ -180,6 +180,8 @@
             background-color: darkred;
             color: whitesmoke;
         }
+
+    
 </style>
 
 @{var res = ViewBag.Result;}
@@ -226,7 +228,7 @@
                 <div id="table-container" style="overflow-x: scroll; max-height: 360px; height: auto; overflow: auto; width: 830px">
                     <table id="mainTable" style="width:1020px;" class="tbl table-bordered table-condensed">
                         <thead style="background-color:darkblue;color:white;font-weight:normal;font-size:11px">
-                            <tr style="height:12px">
+                            <tr style="height:12px" >
                                 <th style="width:20px">
                                     Seq
                                 </th>
@@ -298,10 +300,11 @@
             <div class="modal-header"> <span>Inserir Local</span> </div>
             <div class="modal-body">
                 <form id="formInserir">
-                    @*@Html.DropDownListFor(m => m.Centro_Custo_Codigo, ViewBag.Lista_CentroCusto as SelectList, "-Selecione um Local-", new { @id = "InserirDropDown", style = "width:450px;height:25px;font-size:13px", rows = 10 })*@
+
+                    @Html.DropDownListFor(m => m.Centro_Custo_Codigo, ViewBag.Lista_CentroCusto as SelectList, "-Selecione um Local-", new { @id = "InserirDropDown", style = "width:450px;height:25px;font-size:13px", rows = 10 })
                     <br />
                     <br />
-                        <button type="submit" class="smallbtn" id="Inserir_Save">Gravar</button>&nbsp;
+                        <button type="button" class="smallbtn" id="Inserir_Save" onclick="InsertPlace()">Gravar</button>&nbsp;
                         <button type="button" class="smallbtnred" data-dismiss="modal" >Cancelar</button>
                 </form>
             </div>
@@ -361,7 +364,7 @@
             $(".foo .ui-widget-content").css("font-size", "13px");
 
             Carrega_Lista();
-             
+
             var _res = '@res';
             if (_res != "") {
                 $('#msgBoxBag').dialog('open');
@@ -373,9 +376,6 @@
         });
 
         $("#mainTable").delegate('tr', 'click', function () {
-            var tableData = $(this).children("td").map(function () {
-                return $(this).text();
-            }).get();
 
             $('#mainTable tr').click(function (e) {
                 $('#mainTable tr').removeClass('highlighted');
@@ -385,11 +385,11 @@
 
         $('#mainTable').find('tr').click(function () {//Retorna a linha clicada
             selectLine = ($(this).index() + 1);
-            //document.getElementById('Seq').value= ($(this).index() + 1);
         });
 
         function selectLine(seq) {
             document.getElementById('Seq').value = seq;
+            $("#mainTable>tr:first").trigger('click');
         }
 
         function elementIsEmpty(el) {
@@ -400,7 +400,7 @@
             var _seq = document.getElementById("Seq").value;
             var tbl = document.getElementById("mainTable");
             var rows = document.getElementById("mainTable").getElementsByTagName("tr").length;
-            
+
             $('#msgBoxWait').dialog('open');
             if (_seq == 1) {
                 $('#msgBoxWait').dialog('close');
@@ -434,9 +434,9 @@
             var _seq = document.getElementById("Seq").value;
             var tbl = document.getElementById("mainTable");
             var rows = document.getElementById("mainTable").getElementsByTagName("tr").length;
-            
+
             $('#msgBoxWait').dialog('open');
-            if (_seq == rows ) {
+            if (_seq == rows -1) {
                 $('#msgBoxWait').dialog('close');
                 document.getElementById('lblMsg').innerHTML = "Não é possível mover para baixo o último local.";
                 $('#msgBox1').dialog('open');
@@ -458,7 +458,7 @@
                         data: {
                             Ano: @Model.AnoProcesso,
                             Numero: @Model.NumProcesso,
-                            Seq: _seq-1
+                            Seq: _seq
                         }
                     });
                 }
@@ -476,9 +476,39 @@
                 if (elementIsEmpty(_texto) == false) {
                     document.getElementById('lblMsg').innerHTML = "O local abaixo já foi tramitado.";
                     $('#msgBox1').dialog('open');
+                    return false;
                 }
             }
             $('#InserirModal').modal({ backdrop: 'static', keyboard: false });
+            return true;
+        }
+
+        function InsertPlace() {
+            var _seq = document.getElementById("Seq").value;
+            var ccValue = $("#InserirDropDown option:selected").val();
+            if (ccValue=="" || parseInt(ccValue) == 0) {
+                alert("Selecione um local!");
+                return false;
+            }
+            $("#Inserir_Save").attr("disabled", true);
+            $.ajax({
+                type: "Post",
+                url: "/Processo/AddPlace",
+                dataType: 'json',
+                success: function (data) {
+                    $("#Inserir_Save").attr("disabled", false);
+                    $('#InserirModal').modal('hide');
+                    Carrega_Lista();
+                    selectLine(_seq);
+                },
+                data: {
+                    Ano: @Model.AnoProcesso,
+                    Numero: @Model.NumProcesso,
+                    Seq: _seq,
+                    CCusto: ccValue
+                }
+            });
+            
             return true;
         }
 
@@ -510,12 +540,9 @@
                 }).done(function () {
                     selectLine(1);
                 });
-            
-            
-            
             $('#msgBoxWait').dialog('close');
         }
-        
+
         function subNull (value) {
             return (value === null) ? "" : value;
         }
