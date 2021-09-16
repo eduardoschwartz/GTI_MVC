@@ -261,12 +261,12 @@
                 </div>
                 <br />
                 <div style="text-align:center">
-                    <button type="button" id="btnReceber" class="smallbtn" title="Receber o processo selecionado"> Receber</button>&nbsp;
+                    <button type="button" id="btnReceber" class="smallbtn" title="Receber o processo selecionado" onclick="Receber(@Model.AnoProcesso,@Model.NumProcesso)"> Receber</button>&nbsp;
                     <button type="button" id="btnEnviar" class="smallbtn" title="Enviar o processo selecionado"> Enviar</button>&nbsp;
                     <button type="button" id="btnAcima" class="smallbtn" title="Mover trâmite selecionado para cima" onclick="MoveUp(@Model.AnoProcesso,@Model.NumProcesso)">Acima</button>&nbsp;
                     <button type="button" id="btnAbaixo" class="smallbtn" title="Mover trâmite selecionado para baixo" onclick="MoveDown(@Model.AnoProcesso,@Model.NumProcesso)">Abaixo</button>&nbsp;
                     <button type="button" id="btnIncluir" class="smallbtn" title="Incluir tramitação" onclick="AddPlace(@Model.AnoProcesso,@Model.NumProcesso)">Incluir</button>&nbsp;
-                    <button type="button" id="btnRemover" class="smallbtn" title="Remover tramitação">Remover</button>&nbsp;
+                    <button type="button" id="btnRemover" class="smallbtn" title="Remover tramitação" onclick="RemovePlace(@Model.AnoProcesso,@Model.NumProcesso)">Remover</button>&nbsp;
                     <button type="button" id="btnObs" class="smallbtn" title="Observação do trâmite"> Observação</button>
                 </div>
             </div>
@@ -291,16 +291,12 @@
     <p>@ViewBag.Result</p>
 </div>
 
-<!--##########################-->
-<!--Formulário Inserir Local  -->
-<!--##########################-->
 <div class="modal" tabindex="-1" role="dialog" id="InserirModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header"> <span>Inserir Local</span> </div>
             <div class="modal-body">
                 <form id="formInserir">
-
                     @Html.DropDownListFor(m => m.Centro_Custo_Codigo, ViewBag.Lista_CentroCusto as SelectList, "-Selecione um Local-", new { @id = "InserirDropDown", style = "width:450px;height:25px;font-size:13px", rows = 10 })
                     <br />
                     <br />
@@ -460,7 +456,7 @@
             var rows = document.getElementById("mainTable").getElementsByTagName("tr").length;
             if (_seq < rows) {
                 _seq += 1;
-                var _texto = $("#mainTable tr:eq(" + _seq + ") td:eq(" + 2 + ")").text().trim();
+                var _texto = $("#mainTable tr:eq(" + _seq + ") td:eq(2)").text().trim();
                 if (elementIsEmpty(_texto) == false) {
                     document.getElementById('lblMsg').innerHTML = "O local abaixo já foi tramitado.";
                     $('#msgBox1').dialog('open');
@@ -478,7 +474,7 @@
                 alert("Selecione um local!");
                 return false;
             }
-            $("#Inserir_Save").attr("disabled", true);
+            
             $.ajax({
                 type: "Post",
                 url: "/Processo/AddPlace",
@@ -495,7 +491,7 @@
                     CCusto: ccValue
                 }
             });
-            
+
             return true;
         }
 
@@ -504,6 +500,7 @@
             $('#msgBoxWait').dialog('open');
             var _processo = document.getElementById("Numero_Processo").value;
             var _assunto = document.getElementById("Assunto").value;
+            document.getElementById('Seq').value = 1;
             $.getJSON("Carrega_Tramite",
                 { processo: _processo, assunto: _assunto },
                 function (json) {
@@ -536,6 +533,54 @@
             $("#mainTable tbody tr").remove(); //Clear tbody rows
         }
 
+        function RemovePlace(Ano, Numero) {
+            var _seq = parseInt(document.getElementById("Seq").value);
+            var tbl = document.getElementById("mainTable");
+            var rows = document.getElementById("mainTable").getElementsByTagName("tr").length;
+            var _texto = tbl.rows[_seq - 1].cells[2].innerHTML.trim();
+            if (rows > 2) {
+                if (elementIsEmpty(_texto) == false) {
+                    document.getElementById('lblMsg').innerHTML = "Este local já foi tramitado.";
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
+            } else {
+                document.getElementById('lblMsg').innerHTML = "Não é possível remover o último local.";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+            $("#btnRemover").attr("disabled", true);
+            $.ajax({
+                type: "Post",
+                url: "/Processo/RemovePlace",
+                dataType: 'json',
+                success: function (data) {
+                    Carrega_Lista();
+                    $("#btnRemover").attr("disabled", false);
+                },
+                data: {
+                    Ano: @Model.AnoProcesso,
+                    Numero: @Model.NumProcesso,
+                    Seq: _seq
+                }
+            });
+            return true;
+        }
+
+        function Receber(Ano, Numero) {
+            var _seq = parseInt(document.getElementById("Seq").value);
+            var tbl = document.getElementById("mainTable");
+            var rows = document.getElementById("mainTable").getElementsByTagName("tr").length;
+            var _texto = $("#mainTable tr:eq(" + _seq + ") td:eq(2)").text().trim();
+            if (elementIsEmpty(_texto) == false) {
+                document.getElementById('lblMsg').innerHTML = "Já houve recebimento neste local.";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+            alert("Recebendo Seq:" + _seq);
+            //$('#InserirModal').modal({ backdrop: 'static', keyboard: false });
+            return true;
+        }
 
     </script>
 }

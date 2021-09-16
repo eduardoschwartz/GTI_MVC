@@ -602,27 +602,7 @@ namespace GTI_MVC.Controllers {
             return View(model);
         }
 
-        public ActionResult MoveUp(int Ano, int Numero, int Seq) {
-            Processo_bll protocoloRepository = new Processo_bll(_connection);
-            Exception ex = protocoloRepository.Move_Sequencia_Tramite_Acima(Numero, Ano, Seq);
-            if (ex != null)
-                ViewBag.Result = "Ocorreu um erro ao mover o trâmite";
-
-            string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
-            return Json(Url.Action("Processo_trm", "Processo", new { p = Functions.Encrypt(Numero_Ano) }));
-        }
-
-        public ActionResult MoveDown(int Ano, int Numero, int Seq) {
-            Processo_bll protocoloRepository = new Processo_bll(_connection);
-            Exception ex = protocoloRepository.Move_Sequencia_Tramite_Abaixo(Numero, Ano, Seq);
-            if (ex != null)
-                ViewBag.Result = "Ocorreu um erro ao mover o trâmite";
-
-            string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
-            return Json(Url.Action("Processo_trm", "Processo", new { p = Functions.Encrypt(Numero_Ano) }));
-        }
-
-        public JsonResult Carrega_Tramite(string processo,int assunto) {
+        public JsonResult Carrega_Tramite(string processo, int assunto) {
             int _user = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
 
             Processo_bll processoRepository = new Processo_bll(_connection);
@@ -635,13 +615,34 @@ namespace GTI_MVC.Controllers {
             return new JsonResult { Data = Lista_Tramite, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        public JsonResult AddPlace(int Ano, int Numero, int Seq, int CCusto) {
+        public ActionResult MoveUp(int Ano, int Numero, int Seq) {
             Processo_bll protocoloRepository = new Processo_bll(_connection);
-            Exception ex = protocoloRepository.Inserir_Local(Numero, Ano, Seq, CCusto);
-
+            Exception ex = protocoloRepository.Move_Sequencia_Tramite_Acima(Numero, Ano, Seq);
             string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
             return Json(Url.Action("Processo_trm", "Processo", new { p = Functions.Encrypt(Numero_Ano) }));
         }
+
+        public ActionResult MoveDown(int Ano, int Numero, int Seq) {
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
+            Exception ex = protocoloRepository.Move_Sequencia_Tramite_Abaixo(Numero, Ano, Seq);
+            string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
+            return Json(Url.Action("Processo_trm", "Processo", new { p = Functions.Encrypt(Numero_Ano) }));
+        }
+
+        public JsonResult AddPlace(int Ano, int Numero, int Seq, int CCusto) {
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
+            Exception ex = protocoloRepository.Inserir_Local(Numero, Ano, Seq, CCusto);
+            string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
+            return Json(Url.Action("Processo_trm", "Processo", new { p = Functions.Encrypt(Numero_Ano) }));
+        }
+
+        public ActionResult RemovePlace(int Ano, int Numero, int Seq) {
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
+            Exception ex = protocoloRepository.Remover_Local(Numero, Ano, Seq);
+            string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
+            return Json(Url.Action("Processo_trm", "Processo", new { p = Functions.Encrypt(Numero_Ano) }));
+        }
+
 
 
     }
