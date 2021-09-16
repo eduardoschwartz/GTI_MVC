@@ -375,22 +375,11 @@
 
         });
 
-        $("#mainTable").delegate('tr', 'click', function () {
-
-            $('#mainTable tr').click(function (e) {
-                $('#mainTable tr').removeClass('highlighted');
-                $(this).addClass('highlighted');
-            });
+        $("#mainTable").on('click', 'tr', function (e) {
+            $('#mainTable tr').removeClass('highlighted');
+            $(this).addClass('highlighted');
+            document.getElementById('Seq').value = $(this).attr('id');
         });
-
-        $('#mainTable').find('tr').click(function () {//Retorna a linha clicada
-            selectLine = ($(this).index() + 1);
-        });
-
-        function selectLine(seq) {
-            document.getElementById('Seq').value = seq;
-            $("#mainTable>tr:first").trigger('click');
-        }
 
         function elementIsEmpty(el) {
             return (/^(\s|&nbsp;)*$/.test(el));
@@ -453,7 +442,6 @@
                         dataType: 'json',
                         success: function (data) {
                             Carrega_Lista();
-                            selectLine(_seq);
                         },
                         data: {
                             Ano: @Model.AnoProcesso,
@@ -499,7 +487,6 @@
                     $("#Inserir_Save").attr("disabled", false);
                     $('#InserirModal').modal('hide');
                     Carrega_Lista();
-                    selectLine(_seq);
                 },
                 data: {
                     Ano: @Model.AnoProcesso,
@@ -523,9 +510,9 @@
                     var tr;
                     for (var i = 0; i < json.length; i++) {
                         if (i == 0) {
-                            tr = $('<tr class="highlighted" style="height: 12px; font-weight: normal; font-size: 11px; white-space: nowrap; cursor: pointer" onclick="selectLine(' + json[i].Seq + ')" />');
+                            tr = $('<tr id="' + json[i].Seq +  '" class="highlighted" style="height: 12px; font-weight: normal; font-size: 11px; white-space: nowrap; cursor: pointer"  />');
                         } else {
-                            tr = $('<tr style="height: 12px; font-weight: normal; font-size: 11px; white-space: nowrap; cursor: pointer" onclick="selectLine(' + json[i].Seq  + ')" />');
+                            tr = $('<tr id="' + json[i].Seq +  '" style="height: 12px; font-weight: normal; font-size: 11px; white-space: nowrap; cursor: pointer"  />');
                         }
                         tr.append("<td style='width:20px'>" + json[i].Seq + "</td>");
                         tr.append("<td style='width:280px'>" + json[i].CentroCustoNome + "</td>");
@@ -537,8 +524,6 @@
                         tr.append("<td style='width:200px'>" + subNull(json[i].Usuario2) + "</td>");
                         $("#mainTable").find('tbody').append(tr);
                     }
-                }).done(function () {
-                    selectLine(1);
                 });
             $('#msgBoxWait').dialog('close');
         }
