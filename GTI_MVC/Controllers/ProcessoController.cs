@@ -608,10 +608,6 @@ namespace GTI_MVC.Controllers {
             Processo_bll processoRepository = new Processo_bll(_connection);
             ProcessoNumero processoNumero = Functions.Split_Processo_Numero(processo);
             List<TramiteStruct> Lista_Tramite = processoRepository.DadosTramite((short)processoNumero.Ano, processoNumero.Numero, assunto);
-
-            List<Centrocusto> Lista_CentroCusto = processoRepository.Lista_Local(true, false);
-            ViewBag.Lista_CentroCusto = new SelectList(Lista_CentroCusto, "Codigo", "Descricao");
-
             return new JsonResult { Data = Lista_Tramite, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
@@ -643,7 +639,34 @@ namespace GTI_MVC.Controllers {
             return Json(Url.Action("Processo_trm", "Processo", new { p = Functions.Encrypt(Numero_Ano) }));
         }
 
+        public JsonResult Lista_CCusto() {
+            Processo_bll processoRepository = new Processo_bll(_connection);
+            List<Centrocusto> Lista = processoRepository.Lista_Local(true,false);
+            return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
 
+        public JsonResult Lista_Despacho() {
+            Processo_bll processoRepository = new Processo_bll(_connection);
+            List<Despacho> Lista = processoRepository.Lista_Despacho();
+            return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
 
+        public JsonResult Receber(int Ano, int Numero, int Seq, int Despacho,int CentroCusto) {
+            Processo_bll protocoloRepository = new Processo_bll(_connection);
+            int _user = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
+            Tramitacao reg = new Tramitacao() {
+                Ano = (short)Ano,
+                Numero = Numero,
+                Seq = (byte)Seq,
+                Despacho = (short)Despacho,
+                Userid = _user,
+                Datahora = DateTime.Now,
+                Ccusto = (short)CentroCusto
+            };
+
+            Exception ex = protocoloRepository.Receber_Processo(reg);
+            string Numero_Ano = Numero.ToString() + "-" + Functions.RetornaDvProcesso(Numero) + "/" + Ano.ToString();
+            return Json(Url.Action("Processo_trm", "Processo", new { p = Functions.Encrypt(Numero_Ano) }));
+        }
     }
 }

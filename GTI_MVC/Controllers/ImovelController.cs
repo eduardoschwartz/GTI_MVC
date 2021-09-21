@@ -1246,10 +1246,6 @@ namespace GTI_Mvc.Controllers {
         [Route("Carne_Cip")]
         [HttpGet]
         public ActionResult Carne_Cip() {
-            Session["hashform"] = "3";
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
-
             CertidaoViewModel model = new CertidaoViewModel();
             return View(model);
         }
@@ -1280,26 +1276,24 @@ namespace GTI_Mvc.Controllers {
                 _codigo = Convert.ToInt32(model.Inscricao);
                 if (_codigo < 50000) {
                     _existeCod = imovelRepository.Existe_Imovel(_codigo);
+                }
+                if (!_existeCod) {
+                    model.ErrorMessage = "Imóvel não cadastrado.";
+                    return View(model);
                 } else {
-                    if (model.CnpjValue != null) {
-                        string _cnpj = model.CnpjValue;
-                        bool _valida = Functions.ValidaCNPJ(_cnpj); //CNPJ válido?
-                        if (_valida) {
-                            _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo, _cnpj);
-                        } else {
-                            imovelDetailsViewModel.ErrorMessage = "Cnpj inválido.";
-                            return View(imovelDetailsViewModel);
+                    bool _bCpf = model.CpfValue.Length == 14 ? true : false;
+                    string _cpf = Functions.RetornaNumero(model.CpfValue);
+                    if (!_bCpf) {
+                        _existeCod = imovelRepository.Existe_Imovel_Cnpj(_codigo, _cpf);
+                        if (!_existeCod) {
+                            model.ErrorMessage = "Este Cnpj não pertence ao imóvel.";
+                            return View(model);
                         }
                     } else {
-                        if (model.CpfValue != null) {
-                            string _cpf = model.CpfValue;
-                            bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
-                            if (_valida) {
-                                _existeCod = imovelRepository.Existe_Imovel_Cpf(_codigo, _cpf);
-                            } else {
-                                imovelDetailsViewModel.ErrorMessage = "Cpf inválido.";
-                                return View(imovelDetailsViewModel);
-                            }
+                        _existeCod = imovelRepository.Existe_Imovel_Cpf(_codigo, _cpf);
+                        if (!_existeCod) {
+                            model.ErrorMessage = "Este Cpf não pertence ao imóvel.";
+                            return View(model);
                         }
                     }
                 }
@@ -1307,11 +1301,6 @@ namespace GTI_Mvc.Controllers {
                 model.ErrorMessage = "Digite o código do imóvel.";
                 return View(model);
             }
-
-            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-            //    imovelDetailsViewModel.ErrorMessage = "Código de verificação inválido.";
-            //    return View(imovelDetailsViewModel);
-            //}
 
             Tributario_bll tributario_Class = new Tributario_bll(_connection);
             List<AreaStruct> areas = imovelRepository.Lista_Area(_codigo);
@@ -1416,8 +1405,6 @@ namespace GTI_Mvc.Controllers {
                 viewer.LocalReport.Refresh();
                 viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Carne_CIP.rdlc"); ;
                 viewer.LocalReport.DataSources.Add(rdsAct); // Add  datasource here       
-
-
 
                 byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
                 Response.Buffer = true;

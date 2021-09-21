@@ -193,6 +193,8 @@
         @Html.HiddenFor(m => m.NumProcesso, new { @id = "Numero" })
         @Html.HiddenFor(m => m.Seq, new { @id = "Seq" })
         @Html.HiddenFor(m => m.Assunto_Codigo, new { @id = "Assunto" })
+        @Html.HiddenFor(m => m.Centro_Custo_Codigo, new { @id = "CCusto" })
+        @Html.HiddenFor(m => m.Despacho_Codigo, new { @id = "Despacho" })
 
         <div class="card">
             <div class="card-header">Trâmite de Processo nº&nbsp;<span style="font-weight:bold">@Model.Numero_Processo</span>&nbsp;de&nbsp;<span style="font-weight:bold">@Model.Data_Entrada</span></div>
@@ -228,9 +230,12 @@
                 <div id="table-container" style="overflow-x: scroll; max-height: 360px; height: auto; overflow: auto; width: 830px">
                     <table id="mainTable" style="width:1020px;" class="tbl table-bordered table-condensed">
                         <thead style="background-color:darkblue;color:white;font-weight:normal;font-size:11px">
-                            <tr style="height:12px" >
+                            <tr style="height:12px">
                                 <th style="width:20px">
                                     Seq
+                                </th>
+                                <th style="display:none">
+                                    CCustoCod
                                 </th>
                                 <th style="width:280px">
                                     Centro de Custos
@@ -296,13 +301,27 @@
         <div class="modal-content">
             <div class="modal-header"> <span>Inserir Local</span> </div>
             <div class="modal-body">
-                <form id="formInserir">
-                    @Html.DropDownListFor(m => m.Centro_Custo_Codigo, ViewBag.Lista_CentroCusto as SelectList, "-Selecione um Local-", new { @id = "InserirDropDown", style = "width:450px;height:25px;font-size:13px", rows = 10 })
-                    <br />
-                    <br />
-                        <button type="button" class="smallbtn" id="Inserir_Save" onclick="InsertPlace()">Gravar</button>&nbsp;
-                        <button type="button" class="smallbtnred" data-dismiss="modal" >Cancelar</button>
-                </form>
+                @Html.DropDownListFor(x => x.Centro_Custo_Codigo, new SelectList(Enumerable.Empty<SelectListItem>()), "-Selecione um Local-", new { @id = "InserirDropDown", style = "width:450px;height:25px;font-size:13px", rows = 10 })
+                <br />
+                <br />
+                <button type="button" class="smallbtn" id="Inserir_Save" onclick="InsertPlace()">Gravar</button>&nbsp;
+                <button type="button" class="smallbtnred" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="ReceberModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header"> <span>Receber Processo</span> </div>
+            <div class="modal-body">
+                <span style="font-size:13px;color:maroon;text-decoration:underline">Selecione o Despacho</span><br />
+                @Html.DropDownListFor(x => x.Despacho_Codigo, new SelectList(Enumerable.Empty<SelectListItem>()), "-Selecione um Local-", new { @id = "DespachoDropDown", style = "width:450px;height:25px;font-size:13px;margin-top:10px", rows = 10 })
+                <br />
+                <br />
+                <button type="button" class="smallbtn" id="Receber_Save" onclick="ReceberSave()">Gravar</button>&nbsp;
+                <button type="button" class="smallbtnred" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>
@@ -375,11 +394,8 @@
             $('#mainTable tr').removeClass('highlighted');
             $(this).addClass('highlighted');
             document.getElementById('Seq').value = $(this).attr('id');
+            document.getElementById('CCusto').value = $(this).closest('tr').find('td:eq(1)').text();
         });
-
-        function elementIsEmpty(el) {
-            return (/^(\s|&nbsp;)*$/.test(el));
-        }
 
         function MoveUp(Ano, Numero) {
             var _seq = document.getElementById("Seq").value;
@@ -392,7 +408,7 @@
                 document.getElementById('lblMsg').innerHTML = "Não é possível mover para cima o primeiro local.";
                 $('#msgBox1').dialog('open');
             } else {
-                var _texto = tbl.rows[_seq - 1].cells[2].innerHTML.trim();
+                var _texto = tbl.rows[_seq - 1].cells[3].innerHTML.trim();
                 if (elementIsEmpty(_texto) == false) {
                     $('#msgBoxWait').dialog('close');
                     document.getElementById('lblMsg').innerHTML = "O local acima já foi tramitado.";
@@ -426,7 +442,7 @@
                 document.getElementById('lblMsg').innerHTML = "Não é possível mover para baixo o último local.";
                 $('#msgBox1').dialog('open');
             } else {
-                var _texto = tbl.rows[_seq].cells[2].innerHTML.trim();
+                var _texto = tbl.rows[_seq].cells[3].innerHTML.trim();
                 if (elementIsEmpty(_texto) == false) {
                     $('#msgBoxWait').dialog('close');
                     document.getElementById('lblMsg').innerHTML = "Este local já foi tramitado.";
@@ -456,13 +472,24 @@
             var rows = document.getElementById("mainTable").getElementsByTagName("tr").length;
             if (_seq < rows) {
                 _seq += 1;
-                var _texto = $("#mainTable tr:eq(" + _seq + ") td:eq(2)").text().trim();
+                var _texto = $("#mainTable tr:eq(" + _seq + ") td:eq(3)").text().trim();
                 if (elementIsEmpty(_texto) == false) {
                     document.getElementById('lblMsg').innerHTML = "O local abaixo já foi tramitado.";
                     $('#msgBox1').dialog('open');
                     return false;
                 }
             }
+
+            removeOptions(document.getElementById('InserirDropDown'));
+            $.getJSON('@Url.Action("Lista_CCusto", "Processo")', function (result) {
+                var dropdown = $('#InserirDropDown');
+                $.each(result, function() {
+                    dropdown.append(
+                    $("<option></option>").text(this.Descricao).val(this.Codigo)
+                );
+                });
+            });
+
             $('#InserirModal').modal({ backdrop: 'static', keyboard: false });
             return true;
         }
@@ -474,7 +501,7 @@
                 alert("Selecione um local!");
                 return false;
             }
-            
+            $("#Inserir_Save").attr("disabled", true);
             $.ajax({
                 type: "Post",
                 url: "/Processo/AddPlace",
@@ -512,6 +539,7 @@
                             tr = $('<tr id="' + json[i].Seq +  '" style="height: 12px; font-weight: normal; font-size: 11px; white-space: nowrap; cursor: pointer"  />');
                         }
                         tr.append("<td style='width:20px'>" + json[i].Seq + "</td>");
+                        tr.append("<td style='display:none'>" + json[i].CentroCustoCodigo + "</td>");
                         tr.append("<td style='width:280px'>" + json[i].CentroCustoNome + "</td>");
                         tr.append("<td style='width:60px;text-align:center'>" + subNull(json[i].DataEntrada) + "</td>");
                         tr.append("<td style='width:50px;text-align:center'>" + subNull(json[i].HoraEntrada) + "</td>");
@@ -525,19 +553,11 @@
             $('#msgBoxWait').dialog('close');
         }
 
-        function subNull (value) {
-            return (value === null) ? "" : value;
-        }
-
-        function clearTable() {
-            $("#mainTable tbody tr").remove(); //Clear tbody rows
-        }
-
         function RemovePlace(Ano, Numero) {
             var _seq = parseInt(document.getElementById("Seq").value);
             var tbl = document.getElementById("mainTable");
             var rows = document.getElementById("mainTable").getElementsByTagName("tr").length;
-            var _texto = tbl.rows[_seq - 1].cells[2].innerHTML.trim();
+            var _texto = tbl.rows[_seq - 1].cells[3].innerHTML.trim();
             if (rows > 2) {
                 if (elementIsEmpty(_texto) == false) {
                     document.getElementById('lblMsg').innerHTML = "Este local já foi tramitado.";
@@ -571,16 +591,78 @@
             var _seq = parseInt(document.getElementById("Seq").value);
             var tbl = document.getElementById("mainTable");
             var rows = document.getElementById("mainTable").getElementsByTagName("tr").length;
-            var _texto = $("#mainTable tr:eq(" + _seq + ") td:eq(2)").text().trim();
+            var _texto = $("#mainTable tr:eq(" + _seq + ") td:eq(3)").text().trim();
             if (elementIsEmpty(_texto) == false) {
                 document.getElementById('lblMsg').innerHTML = "Já houve recebimento neste local.";
                 $('#msgBox1').dialog('open');
                 return false;
             }
-            alert("Recebendo Seq:" + _seq);
-            //$('#InserirModal').modal({ backdrop: 'static', keyboard: false });
+
+            removeOptions(document.getElementById('DespachoDropDown'));
+            $.getJSON('@Url.Action("Lista_Despacho", "Processo")', function (result) {
+                var dropdown = $('#DespachoDropDown');
+                $.each(result, function() {
+                    dropdown.append(
+                    $("<option></option>").text(this.Descricao).val(this.Codigo)
+                );
+                });
+            });
+
+            $('#ReceberModal').modal({ backdrop: 'static', keyboard: false });
             return true;
         }
+
+        function ReceberSave() {
+            var _seq = document.getElementById("Seq").value;
+            var _ccusto = document.getElementById("CCusto").value;
+            var ccValue = $("#DespachoDropDown option:selected").val();
+            if (ccValue=="" || parseInt(ccValue) == 0) {
+                alert("Selecione um despacho!");
+                return false;
+            }
+            $("#Receber_Save").attr("disabled", true);
+            $.ajax({
+                type: "Post",
+                url: "/Processo/Receber",
+                dataType: 'json',
+                success: function (data) {
+                    $("#Receber_Save").attr("disabled", false);
+                    $('#ReceberModal').modal('hide');
+                    Carrega_Lista();
+                },
+                data: {
+                    Ano: @Model.AnoProcesso,
+                    Numero: @Model.NumProcesso,
+                    Seq: _seq,
+                    Despacho: ccValue,
+                    CentroCusto: _ccusto
+                }
+            });
+
+            return true;
+        }
+
+        //#### Funções Genéricas #####
+        function removeOptions(selectElement) {
+            var i, L = selectElement.options.length - 1;
+            for (i = L; i >= 0; i--) {
+                selectElement.remove(i);
+            }
+        }
+
+        function subNull(value) {
+            return (value === null) ? "" : value;
+        }
+
+        function clearTable() {
+            $("#mainTable tbody tr").remove(); //Clear tbody rows
+        }
+
+        function elementIsEmpty(el) {
+            return (/^(\s|&nbsp;)*$/.test(el));
+        }
+
+        //############################
 
     </script>
 }
