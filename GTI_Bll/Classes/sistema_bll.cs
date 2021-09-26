@@ -303,6 +303,9 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Usuario_Web(e);
         }
 
-        
+        public bool Existe_UsuarioWeb_Foto(int idUser) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            return obj.Existe_UsuarioWeb_Foto(idUser);
+        }
     }
 }

@@ -13,5 +13,6 @@ namespace GTI_Models.Models {
         public bool Ativo { get; set; }
         public DateTime Data_Cadastro { get; set; }
         public bool Bloqueado { get; set; }
+        public bool Foto { get; set; }
     }
 }

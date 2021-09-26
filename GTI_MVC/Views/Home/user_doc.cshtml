@@ -1,0 +1,151 @@
+﻿@model GTI_Mvc.ViewModels.LoginViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Identificação do Usuário";
+}
+
+<style>
+
+    .center {
+        margin: auto;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+    
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
+</style>
+
+@{var res = @ViewBag.Result;}
+<div class="center">
+
+    @using (Html.BeginForm("User_doc", "Home", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor( m=>m.UserId)
+        @Html.HiddenFor(m=>m.Usuario)
+        @Html.HiddenFor(m=>m.CpfCnpjLabel)
+        <div class="container" style="width:800px">
+            <div class="card">
+                <div class="card-header">Identificação do Usuário</div>
+                <div class="card-body">
+                    
+                    <article style="font-size:13px;color:black;text-align:justify">Para maior segurança, o serviço que você esta tentando acessar requer uma<b> confirmação de sua identidade</b> . Por favor anexar abaixo os documentos solicitados.
+                    Após o envio, os documentos serão analisados, e se aprovados, o serviço será liberado. Qualquer dúvida entrar em contato através do email <a href="mailto:pad@jaboticabal.sp.gov.br">pad@jaboticabal.sp.gov.br</a> </article>
+                    <br />
+
+
+                </div>
+            </div>
+
+            <div class="card-footer">
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
+        </div>
+    }
+</div>
+
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+        function ValidateForm() {
+            return true;
+        }
+
+
+
+    </script>
+   
+}
+

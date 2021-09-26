@@ -745,7 +745,24 @@ namespace GTI_Mvc.Controllers {
             return View(model);
         }
 
+        [Route("User_doc")]
+        [HttpGet]
+        public ActionResult User_doc() {
+            LoginViewModel model = new LoginViewModel();
+            if (Request.Cookies["2lG1H*"] == null)
+                return RedirectToAction("Login");
 
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            int _userId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
+
+            Usuario_web reg = sistemaRepository.Retorna_Usuario_Web(_userId);
+
+            model.UserId = _userId;
+            model.Usuario = reg.Nome;
+            model.CpfCnpjLabel = Functions.FormatarCpfCnpj(reg.Cpf_Cnpj);
+
+            return View(model);
+        }
 
     }
 }

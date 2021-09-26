@@ -6,7 +6,6 @@ using GTI_Mvc;
 using GTI_Mvc.ViewModels;
 using GTI_Mvc.Views.Parcelamento.EditorTemplates;
 using Microsoft.Reporting.WebForms;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -15,12 +14,6 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Web;
 using System.Web.Mvc;
 
 namespace GTI_MVC.Controllers {
@@ -29,16 +22,23 @@ namespace GTI_MVC.Controllers {
         [Route("Parc_index")]
         [HttpGet]
         public ActionResult Parc_index() {
-            if(Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
 
-            return View();
+            int _userid = Convert.ToInt32(Functions.Decrypt( Request.Cookies["2uC*"].Value));
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            bool _existeFoto = sistemaRepository.Existe_UsuarioWeb_Foto(_userid);
+
+            if (!_existeFoto)
+                return RedirectToAction("user_doc", "Home");
+            else
+                return View();
         }
 
         [Route("Parc_req")]
         [HttpGet]
         public ActionResult Parc_req() {
-            if(Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
 
             Sistema_bll sistemaRepository = new Sistema_bll(_connection);
@@ -47,7 +47,7 @@ namespace GTI_MVC.Controllers {
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             Empresa_bll empresaRepository = new Empresa_bll(_connection);
 
-            int _user_id = Convert.ToInt32(Session["hashid"]);
+            int _user_id = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
             Usuario_web _user = sistemaRepository.Retorna_Usuario_Web(_user_id);
 
             string _cpfcnpj = _user.Cpf_Cnpj;
@@ -447,7 +447,7 @@ namespace GTI_MVC.Controllers {
         [Route("Parc_reqb")]
         [HttpGet]
         public ActionResult Parc_reqb(string p) {
-            if(Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
@@ -503,7 +503,7 @@ namespace GTI_MVC.Controllers {
         [Route("Parc_reqc")]
         [HttpGet]
         public ActionResult Parc_reqc(string p) {
-            if(Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
@@ -815,7 +815,7 @@ namespace GTI_MVC.Controllers {
         [Route("Parc_reqd")]
         [HttpGet]
         public ActionResult Parc_reqd(string p) {
-            if(Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
@@ -1060,7 +1060,7 @@ Fim:;
         [Route("Parc_reqe")]
         [HttpGet]
         public ActionResult Parc_reqe(string p) {
-            if(Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
@@ -1201,7 +1201,7 @@ Fim:;
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Parc_reqe(ParcelamentoViewModel model,string action,string value) {
-            if(Session["hashid"] == null) {
+            if (Request.Cookies["2lG1H*"] == null) {
                 return RedirectToAction("Login","Home");
             }
 
@@ -1243,7 +1243,7 @@ Fim:;
         [Route("Parc_tan")]
         [HttpGet]
         public ActionResult Parc_tan(string p) {
-            if(Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
@@ -1288,7 +1288,7 @@ Fim:;
             string _guid = model.Guid;
 
             if(action == "Parc_tan" || action=="btnOK") {
-                int _userId = Convert.ToInt32(Session["hashid"]);
+                int _userId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
                 bool _userWeb = Session["hashfunc"].ToString() == "S" ? false : true;
                 Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(_guid);
                 List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(_guid);
@@ -1530,7 +1530,7 @@ Fim:;
         [Route("Parc_tcd")]
         [HttpGet]
         public ActionResult Parc_tcd(string p) {
-            if(Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
 
             string _guid = p;
@@ -1574,7 +1574,7 @@ Fim:;
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Parc_tcd(ParcelamentoViewModel model,string action) {
-            if(Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
 
             if(action == "btnPrintTermo") {
@@ -1630,7 +1630,7 @@ Fim:;
         [Route("Parc_reqf")]
         [HttpGet]
         public ActionResult Parc_reqf(string p) {
-            if(Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
@@ -1753,7 +1753,7 @@ Fim:;
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Parc_reqf(ParcelamentoViewModel model,string action) {
-            if(Session["hashid"] == null) {
+            if (Request.Cookies["2lG1H*"] == null) {
                 return RedirectToAction("Login","Home");
             }
             if(action == "btnVoltar")
@@ -1806,9 +1806,9 @@ Fim:;
         [Route("Parc_query")]
         [HttpGet]
         public ActionResult Parc_query() {
-            if(Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
-            int _userId = Convert.ToInt32(Session["hashid"]);
+            int _userId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
 
             List<Parc_Processos> _listaProc = parcelamentoRepository.Lista_Parcelamento_Processos(_userId);
@@ -1821,9 +1821,9 @@ Fim:;
         [Route("Parc_bk")]
         [HttpGet]
         public ActionResult Parc_bk(string p) {
-            if(Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
-            int _userId = Convert.ToInt32(Session["hashid"]);
+            int _userId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
 
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
@@ -1958,7 +1958,7 @@ Fim:;
         [Route("Parc_cid")]
         [HttpGet]
         public ActionResult Parc_cid(string p) {
-            if(Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
@@ -2180,7 +2180,7 @@ Fim:;
                     Exception ex = cidadaoRepository.Alterar_cidadao(_cidadao);
 
                     //Atualiza Master
-                    int _user_id = Convert.ToInt32(Session["hashid"]);
+                    int _user_id = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
                     Sistema_bll sistemaRepository = new Sistema_bll(_connection);
                     Usuario_web _user = sistemaRepository.Retorna_Usuario_Web(_user_id);
 
@@ -2240,7 +2240,7 @@ Fim:;
         [Route("Parc_rel")]
         [HttpGet]
         public ActionResult Parc_rel() {
-            if(Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
 
             ParcelamentoViewModel model = new ParcelamentoViewModel();
@@ -2251,7 +2251,7 @@ Fim:;
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Parc_rel(ParcelamentoViewModel model) {
-            if(Session["hashid"] == null)
+            if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
 
             bool _isDate1 = Functions.IsDate(model.DataDe);
@@ -2323,113 +2323,12 @@ Fim:;
             //return View(model);
         }
 
-
-        public void Parc_reqe_old(string p) {
-
-            Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
-
-            //Load Master
-            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
-
-            ParcelamentoViewModel model = new ParcelamentoViewModel() {
-                Guid = p,
-                Plano_Nome = _master.Plano_Nome,
-                Data_Vencimento = Convert.ToDateTime(_master.Data_Vencimento).ToString("dd/MM/yyyy"),
-                Plano_Codigo = _master.Plano_Codigo,
-                Valor_Minimo = _master.Valor_minimo,
-                Perc_desconto = _master.Perc_Desconto
-            };
-
-
-            //Load Origem
-            decimal _SomaP = 0, _SomaM = 0, _SomaJ = 0, _SomaC = 0, _SomaT = 0, _SomaE = 0;
-            List<SpParcelamentoOrigem> ListaOrigem = parcelamentoRepository.Lista_Parcelamento_Selected(p);
-            bool _bAjuizado = ListaOrigem[0].Ajuizado == "S";
-            List<SelectDebitoParcelamentoEditorViewModel> _listaP = new List<SelectDebitoParcelamentoEditorViewModel>();
-            foreach(SpParcelamentoOrigem item in ListaOrigem) {
-                SelectDebitoParcelamentoEditorViewModel d = new SelectDebitoParcelamentoEditorViewModel() {
-                    Ajuizado = item.Ajuizado,
-                    Complemento = item.Complemento,
-                    Data_vencimento = item.Data_vencimento,
-                    Exercicio = item.Exercicio,
-                    Idx = item.Idx,
-                    Lancamento = item.Lancamento,
-                    Nome_lancamento = Functions.TruncateTo(item.Nome_lancamento,16),
-                    Parcela = item.Parcela,
-                    Perc_penalidade = item.Perc_penalidade,
-                    Qtde_parcelamento = item.Qtde_parcelamento,
-                    Selected = item.Selected,
-                    Sequencia = item.Sequencia,
-                    Valor_correcao = item.Valor_correcao,
-                    Valor_juros = item.Valor_juros,
-                    Valor_multa = item.Valor_multa,
-                    Valor_penalidade = item.Valor_penalidade,
-                    Valor_principal = item.Valor_principal,
-                    Valor_total = item.Valor_total,
-                    Execucao_Fiscal = item.Execucao_Fiscal,
-                    Protesto = item.Protesto
-                };
-                _listaP.Add(d);
-                _SomaP += item.Valor_principal;
-                _SomaM += item.Valor_multa;
-                _SomaJ += item.Valor_juros;
-                _SomaC += item.Valor_correcao;
-                _SomaE += item.Valor_penalidade;
-                _SomaT += Math.Round(item.Valor_principal,2,MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros,2,MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa,2,MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao,2,MidpointRounding.AwayFromZero);
-            }
-            model.Soma_Principal = _SomaP;
-            model.Soma_Multa = _SomaM;
-            model.Soma_Juros = _SomaJ;
-            model.Soma_Correcao = _SomaC;
-            model.Soma_Penalidade = _SomaE;
-            model.Soma_Total = _SomaT;
-            model.Lista_Origem_Selected = _listaP;
-
-            //Carrega Simulado
-            model.Lista_Simulado = parcelamentoRepository.Retorna_Parcelamento_Web_Simulado(model.Guid,_master.Qtde_Parcela);
-
-            //Atualiza Totais
-            decimal _SomaH = 0, _SomaJapl = 0, _SomaL = 0;
-            _SomaP = 0; _SomaC = 0; _SomaJ = 0; _SomaM = 0; _SomaT = 0;
-
-            foreach(Parcelamento_Web_Simulado item in model.Lista_Simulado) {
-                _SomaL += item.Valor_Liquido;
-                _SomaJ += item.Valor_Juros;
-                _SomaM += item.Valor_Multa;
-                _SomaC += item.Valor_Correcao;
-                _SomaP += item.Valor_Principal;
-                _SomaT += item.Valor_Total;
-                _SomaH += item.Valor_Honorario;
-                _SomaJapl += item.Juros_Apl;
-            }
-
-            Parcelamento_web_master reg = new Parcelamento_web_master() {
-                Guid = model.Guid,
-                Sim_Correcao = _SomaC,
-                Sim_Honorario = _SomaH,
-                Sim_Juros = _SomaJ,
-                Sim_Juros_apl = _SomaJapl,
-                Sim_Liquido = _SomaL,
-                Sim_Multa = _SomaM,
-                Sim_Perc_Correcao = _SomaC * 100 / _SomaT,
-                Sim_Perc_Honorario = _SomaH * 100 / _SomaT,
-                Sim_Perc_Juros = _SomaJ * 100 / _SomaT,
-                Sim_Perc_Juros_Apl = _SomaJapl * 100 / _SomaT,
-                Sim_Perc_Liquido = _SomaL * 100 / _SomaT,
-                Sim_Perc_Multa = _SomaM * 100 / _SomaT,
-                Sim_Principal = _SomaP,
-                Sim_Total = _SomaT
-            };
-            Exception ex = parcelamentoRepository.Atualizar_Simulado_Master(reg);
-
-        }
-
         public ActionResult bank_Method(string p) {
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             Tributario_bll tributarioRepositoryTmp = new Tributario_bll("GTIconnection");
 
             string _ret;
-            int _userId = Convert.ToInt32(Session["hashid"]);
+            int _userId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
             int nSid = Functions.GetRandomNumber();
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
 
@@ -2605,276 +2504,106 @@ Fim:;
 
         }
 
+        public void Parc_reqe_old(string p) {
 
-        public JsonResult bank_Method_Old(string p) {
-            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
-            Tributario_bll tributarioRepositoryTmp = new Tributario_bll("GTIconnection");
-
-            string _ret;
-            int _userId = Convert.ToInt32(Session["hashid"]);
-            int nSid = Functions.GetRandomNumber();
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
 
+            //Load Master
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
-            int _codigo = _master.Contribuinte_Codigo;
-            string _nome = _master.Contribuinte_nome;
-            string _cpfcnpj = _master.Contribuinte_cpfcnpj;
-            string _endereco = _master.Contribuinte_endereco + " " + _master.Contribuinte_bairro;
-            string _bairro = _master.Contribuinte_bairro ?? "";
-            string _cidade = _master.Contribuinte_cidade;
-            string _uf = _master.Contribuinte_uf;
-            string _cep = _master.Contribuinte_cep.ToString();
-            string _proc = _master.Processo_Extenso;
+
+            ParcelamentoViewModel model = new ParcelamentoViewModel() {
+                Guid = p,
+                Plano_Nome = _master.Plano_Nome,
+                Data_Vencimento = Convert.ToDateTime(_master.Data_Vencimento).ToString("dd/MM/yyyy"),
+                Plano_Codigo = _master.Plano_Codigo,
+                Valor_Minimo = _master.Valor_minimo,
+                Perc_desconto = _master.Perc_Desconto
+            };
 
 
-            //Dados das parcelas do parcelamento do exercício
-            List<Destinoreparc> _listaD = parcelamentoRepository.Lista_Destino_Parcelamento(_master.Processo_Ano,_master.Processo_Numero);
-            List<DebitoStructure> ListaDebito = parcelamentoRepository.Lista_Parcelas_Parcelamento_Ano_Web(_codigo,2021,_listaD[0].Numsequencia);
-            short _index = 0;
-            string _convenio = "2873532";
-            List<Boletoguia> ListaBoleto = new List<Boletoguia>();
-
-            foreach(DebitoStructure _parc in ListaDebito) {
-                short _ano = (short)_parc.Ano_Exercicio;
-                short _lanc = 20;
-                short _seq = (short)_parc.Sequencia_Lancamento;
-                byte _parcela = (byte)_parc.Numero_Parcela;
-                byte _compl = (byte)_parc.Complemento;
-                DateTime _dataVencto = (DateTime)_parc.Data_Vencimento;
-
-                List<Debitotributo> _listaT = parcelamentoRepository.Lista_Debito_Tributo(_codigo,_ano,_lanc,_seq,_parcela,_compl);
-                decimal? _soma = _listaT.Sum(m => m.Valortributo);
-                decimal _somaT = Math.Round((decimal)_soma,2);
-
-                //Criar o documento para ela
-                Numdocumento regDoc = new Numdocumento {
-                    Valorguia = _somaT,
-                    Emissor = "Parc/Web",
-                    Datadocumento = DateTime.Now,
-                    Registrado = true,
-                    Percisencao = 0
+            //Load Origem
+            decimal _SomaP = 0, _SomaM = 0, _SomaJ = 0, _SomaC = 0, _SomaT = 0, _SomaE = 0;
+            List<SpParcelamentoOrigem> ListaOrigem = parcelamentoRepository.Lista_Parcelamento_Selected(p);
+            bool _bAjuizado = ListaOrigem[0].Ajuizado == "S";
+            List<SelectDebitoParcelamentoEditorViewModel> _listaP = new List<SelectDebitoParcelamentoEditorViewModel>();
+            foreach (SpParcelamentoOrigem item in ListaOrigem) {
+                SelectDebitoParcelamentoEditorViewModel d = new SelectDebitoParcelamentoEditorViewModel() {
+                    Ajuizado = item.Ajuizado,
+                    Complemento = item.Complemento,
+                    Data_vencimento = item.Data_vencimento,
+                    Exercicio = item.Exercicio,
+                    Idx = item.Idx,
+                    Lancamento = item.Lancamento,
+                    Nome_lancamento = Functions.TruncateTo(item.Nome_lancamento, 16),
+                    Parcela = item.Parcela,
+                    Perc_penalidade = item.Perc_penalidade,
+                    Qtde_parcelamento = item.Qtde_parcelamento,
+                    Selected = item.Selected,
+                    Sequencia = item.Sequencia,
+                    Valor_correcao = item.Valor_correcao,
+                    Valor_juros = item.Valor_juros,
+                    Valor_multa = item.Valor_multa,
+                    Valor_penalidade = item.Valor_penalidade,
+                    Valor_principal = item.Valor_principal,
+                    Valor_total = item.Valor_total,
+                    Execucao_Fiscal = item.Execucao_Fiscal,
+                    Protesto = item.Protesto
                 };
-                regDoc.Percisencao = 0;
-                int _novo_documento = tributarioRepository.Insert_Documento(regDoc);
-
-                Parceladocumento pd = new Parceladocumento() {
-                    Codreduzido = _codigo,
-                    Anoexercicio = _ano,
-                    Codlancamento = _lanc,
-                    Seqlancamento = _seq,
-                    Numparcela = _parcela,
-                    Codcomplemento = _compl,
-                    Numdocumento = _novo_documento
-                };
-                Exception ex = tributarioRepository.Insert_Parcela_Documento(pd);
-
-                string _refTran = "287353200" + _novo_documento.ToString();
-                if(_parcela == 1) {
-                    //1ª parcela registrar por webservice
-
-                    DebitoListViewModel model = new DebitoListViewModel() {
-                        Nome = _nome,
-                        Inscricao = _codigo,
-                        CpfCnpjLabel = _cpfcnpj,
-                        Endereco = _endereco,
-                        Cidade = _cidade,
-                        UF = _uf,
-                        Cep = _cep,
-                        RefTran = _refTran,
-                        Valor_Boleto = Functions.RetornaNumero(_somaT.ToString()),
-                        Data_Vencimento_String = Convert.ToDateTime(_dataVencto.ToString()).ToString("ddMMyyyy"),
-                        Data_Vencimento = _dataVencto,
-                        Numero_Processo = _proc
-                    };
-
-                    //***Enviar para registro ***
-                    using(var client = new HttpClient()) {
-                        var values = new {
-                            msgLoja = " RECEBER SOMENTE ATE O VENCIMENTO, APOS ATUALIZAR O BOLETO NO SITE www.jaboticabal.sp.gov.br, referente ao parcelamento: " + model.Numero_Processo,
-                            cep = Convert.ToInt64(Regex.Replace(model.Cep," [^.0-9]","")),
-                            uf = model.UF,
-                            cidade = model.Cidade,
-                            endereco = model.Endereco,
-                            nome = model.Nome,
-                            urlInforma = "sistemas.jaboticabal.sp.gov.br/gti",
-                            urlRetorno = "sistemas.jaboticabal.sp.gov.br/gti",
-                            tpDuplicata = "DS",
-                            dataLimiteDesconto = "0",
-                            valorDesconto = "0",
-                            indicadorPessoa = model.CpfCnpjLabel.Length == 14 ? "2" : "1",
-                            cpfCnpj = Regex.Replace(model.CpfCnpjLabel," [^0-9]",""),
-                            tpPagamento = "2",
-                            dtVenc = model.Data_Vencimento_String,
-                            qtdPontos = "0",
-                            valor = Convert.ToInt64(model.Valor_Boleto).ToString(),
-                            refTran = string.IsNullOrEmpty(model.RefTran) ? "0" : Convert.ToInt64(model.RefTran).ToString(),
-                            idConv = "317203"
-                        };
-
-                        string URLAuth = "https://mpag.bb.com.br/site/mpag/";
-                        string postString = string.Format("msgLoja={0}&cep={1}&uf={2}&cidade={3}&endereco={4}&nome={5}&urlInforma={6}&urlRetorno={7}&tpDuplicata={8}&dataLimiteDesconto={9}&valorDesconto={10}" +
-                            "&indicadorPessoa={11}&cpfCnpj={12}&tpPagamento={13}&dtVenc={14}&qtdPontos={15}&valor={16}&refTran={17}&idConv={18}",values.msgLoja,values.cep,values.uf,values.cidade,values.endereco,
-                            values.nome,values.urlInforma,values.urlRetorno,values.tpDuplicata,values.dataLimiteDesconto,values.valorDesconto,values.indicadorPessoa,values.cpfCnpj,values.tpPagamento,values.dtVenc,
-                            values.qtdPontos,values.valor,values.refTran,values.idConv);
-
-                        const string contentType = "application/x-www-form-urlencoded";
-                        ServicePointManager.Expect100Continue = false;
-
-                        CookieContainer cookies = new CookieContainer();
-                        HttpWebRequest webRequest = WebRequest.Create(URLAuth) as HttpWebRequest;
-                        webRequest.Method = "POST";
-                        webRequest.ContentType = contentType;
-                        webRequest.CookieContainer = cookies;
-                        webRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.1) Gecko/2008070208 Firefox/3.0.1";
-                        webRequest.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-                        webRequest.Referer = "https://mpag.bb.com.br/site/mpag/";
-
-                        StreamWriter requestWriter = new StreamWriter(webRequest.GetRequestStream());
-                        requestWriter.Write(postString);
-                        requestWriter.Close();
-
-                        StreamReader responseReader = new StreamReader(webRequest.GetResponse().GetResponseStream());
-                        string responseData = responseReader.ReadToEnd();
-                        responseReader.Close();
-                        webRequest.GetResponse().Close();
-
-                        if(responseData.Contains("seguintes problemas")) {
-                            _ret = "Erro ao registrar o documento" + _novo_documento.ToString();
-                            return Json(new { success = false,msg = _ret,dados = responseData },JsonRequestBehavior.AllowGet);
-                        }
-                    }
-                } else {
-                    //Demais parcelas enviar para registrar por arquivo
-                    Ficha_compensacao_documento ficha = new Ficha_compensacao_documento {
-                        Nome = _nome.Length > 40 ? _nome.Substring(0,40) : _nome,
-                        Endereco = _endereco.Length > 40 ? _endereco.Substring(0,40) : _endereco,
-                        Bairro = _bairro.Length > 15 ? _bairro.Substring(0,15) : _bairro,
-                        Cidade = _cidade.Length > 30 ? _cidade.Substring(0,30) : _cidade,
-                        Cep = _cep ?? "14870000",
-                        Cpf = _cpfcnpj,
-                        Numero_documento = _novo_documento,
-                        Data_vencimento = _dataVencto,
-                        Valor_documento = Convert.ToDecimal(_somaT),
-                        Uf = _uf
-                    };
-                    ex = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
-                    if(ex == null)
-                        ex = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
-                }
-
-                //Gera Boletos para impressão
-                Boletoguia reg = new Boletoguia {
-                    Usuario = "Gti.Web/LibParc",
-                    Computer = "web",
-                    Sid = nSid,
-                    Seq = _index,
-                    Codreduzido = _codigo.ToString("000000"),
-                    Nome = _nome,
-                    Cpf = _cpfcnpj,
-                    Numimovel = 0,
-                    Endereco = _endereco,
-                    Complemento = "",
-                    Bairro = _bairro,
-                    Cidade = _cidade,
-                    Uf = _uf,
-                    Cep = _cep,
-                    Desclanc = "PARCELAMENTO",
-                    Fulllanc = "PARCELAMENTO",
-                    Numdoc = _novo_documento.ToString(),
-                    Numparcela = (short)_parc.Numero_Parcela,
-                    Datadoc = DateTime.Now,
-                    Datavencto = _parc.Data_Vencimento,
-                    Numdoc2 = _novo_documento.ToString(),
-                    Valorguia = _parc.Soma_Principal,
-                    Valor_ISS = 0,
-                    Valor_Taxa = 0,
-                    Totparcela = (short)_master.Qtde_Parcela,
-                    Obs = "Referente ao parcelamento de débitos: processo nº " + _master.Processo_Extenso,
-                    Numproc = _master.Processo_Extenso
-                };
-
-                //***** GERA CÓDIGO DE BARRAS BOLETO REGISTRADO*****
-                DateTime _data_base = Convert.ToDateTime("07/10/1997");
-                TimeSpan ts = Convert.ToDateTime(_parc.Data_Vencimento) - _data_base;
-                int _fator_vencto = ts.Days;
-                string _quinto_grupo = String.Format("{0:D4}",_fator_vencto);
-                string _valor_boleto_str = string.Format("{0:0.00}",reg.Valorguia);
-                _quinto_grupo += string.Format("{0:D10}",Convert.ToInt64(Functions.RetornaNumero(_valor_boleto_str)));
-                string _barra = "0019" + _quinto_grupo + String.Format("{0:D13}",Convert.ToInt32(_convenio));
-                _barra += String.Format("{0:D10}",Convert.ToInt64(reg.Numdoc)) + "17";
-                string _campo1 = "0019" + _barra.Substring(19,5);
-                string _digitavel = _campo1 + Functions.Calculo_DV10(_campo1).ToString();
-                string _campo2 = _barra.Substring(23,10);
-                _digitavel += _campo2 + Functions.Calculo_DV10(_campo2).ToString();
-                string _campo3 = _barra.Substring(33,10);
-                _digitavel += _campo3 + Functions.Calculo_DV10(_campo3).ToString();
-                string _campo5 = _quinto_grupo;
-                string _campo4 = Functions.Calculo_DV11(_barra).ToString();
-                _digitavel += _campo4 + _campo5;
-                _barra = _barra.Substring(0,4) + _campo4 + _barra.Substring(4,_barra.Length - 4);
-                //**Resultado final**
-                string _linha_digitavel = _digitavel.Substring(0,5) + "." + _digitavel.Substring(5,5) + " " + _digitavel.Substring(10,5) + "." + _digitavel.Substring(15,6) + " ";
-                _linha_digitavel += _digitavel.Substring(21,5) + "." + _digitavel.Substring(26,6) + " " + _digitavel.Substring(32,1) + " " + Functions.StringRight(_digitavel,14);
-                string _codigo_barra = Functions.Gera2of5Str(_barra);
-                //**************************************************
-                reg.Totparcela = (short)_master.Qtde_Parcela;
-                reg.Parcela = reg.Numparcela.ToString("00") + "/" + _master.Qtde_Parcela.ToString("00");
-
-                reg.Digitavel = _linha_digitavel;
-                reg.Codbarra = _codigo_barra;
-                reg.Nossonumero = _convenio + String.Format("{0:D10}",Convert.ToInt64(reg.Numdoc));
-                ListaBoleto.Add(reg);
-
+                _listaP.Add(d);
+                _SomaP += item.Valor_principal;
+                _SomaM += item.Valor_multa;
+                _SomaJ += item.Valor_juros;
+                _SomaC += item.Valor_correcao;
+                _SomaE += item.Valor_penalidade;
+                _SomaT += Math.Round(item.Valor_principal, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa, 2, MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao, 2, MidpointRounding.AwayFromZero);
             }
-            string mimeType = string.Empty;
-            string encoding = string.Empty;
-            string extension = string.Empty;
+            model.Soma_Principal = _SomaP;
+            model.Soma_Multa = _SomaM;
+            model.Soma_Juros = _SomaJ;
+            model.Soma_Correcao = _SomaC;
+            model.Soma_Penalidade = _SomaE;
+            model.Soma_Total = _SomaT;
+            model.Lista_Origem_Selected = _listaP;
 
-            if(ListaBoleto.Count > 0) {
-                Exception ex = tributarioRepository.Insert_Carne_Web(Convert.ToInt32(ListaBoleto[0].Codreduzido),DateTime.Now.Year);
-                DataSet Ds = Functions.ToDataSet(ListaBoleto);
-                ReportDataSource rdsAct = new ReportDataSource("dsBoletoGuia",Ds.Tables[0]);
-                ReportViewer viewer = new ReportViewer();
-                viewer.LocalReport.Refresh();
-                viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Carne_Parcelamento.rdlc"); ;
-                viewer.LocalReport.DataSources.Add(rdsAct);
+            //Carrega Simulado
+            model.Lista_Simulado = parcelamentoRepository.Retorna_Parcelamento_Web_Simulado(model.Guid, _master.Qtde_Parcela);
 
-                string strAttachment = Server.MapPath(@"/Reports/haha.pdf");
-                byte[] renderdByte = viewer.LocalReport.Render("Pdf","",out mimeType,out encoding,out extension,out string[] streamIds,out Warning[] warnings);
-                string base64EncodedPDF = Convert.ToBase64String(renderdByte);
-                return Json(base64EncodedPDF,JsonRequestBehavior.AllowGet);
-            } else {
-                return Json(new { success = true,msg = "Sucesso" },JsonRequestBehavior.AllowGet);
+            //Atualiza Totais
+            decimal _SomaH = 0, _SomaJapl = 0, _SomaL = 0;
+            _SomaP = 0; _SomaC = 0; _SomaJ = 0; _SomaM = 0; _SomaT = 0;
+
+            foreach (Parcelamento_Web_Simulado item in model.Lista_Simulado) {
+                _SomaL += item.Valor_Liquido;
+                _SomaJ += item.Valor_Juros;
+                _SomaM += item.Valor_Multa;
+                _SomaC += item.Valor_Correcao;
+                _SomaP += item.Valor_Principal;
+                _SomaT += item.Valor_Total;
+                _SomaH += item.Valor_Honorario;
+                _SomaJapl += item.Juros_Apl;
             }
 
-
+            Parcelamento_web_master reg = new Parcelamento_web_master() {
+                Guid = model.Guid,
+                Sim_Correcao = _SomaC,
+                Sim_Honorario = _SomaH,
+                Sim_Juros = _SomaJ,
+                Sim_Juros_apl = _SomaJapl,
+                Sim_Liquido = _SomaL,
+                Sim_Multa = _SomaM,
+                Sim_Perc_Correcao = _SomaC * 100 / _SomaT,
+                Sim_Perc_Honorario = _SomaH * 100 / _SomaT,
+                Sim_Perc_Juros = _SomaJ * 100 / _SomaT,
+                Sim_Perc_Juros_Apl = _SomaJapl * 100 / _SomaT,
+                Sim_Perc_Liquido = _SomaL * 100 / _SomaT,
+                Sim_Perc_Multa = _SomaM * 100 / _SomaT,
+                Sim_Principal = _SomaP,
+                Sim_Total = _SomaT
+            };
+            Exception ex = parcelamentoRepository.Atualizar_Simulado_Master(reg);
 
         }
 
-  
-
-
-
-
-
-
-
-
-
-
-
-        //[ChildActionOnly]
-        //public ActionResult Parc_simulado(string p) {
-
-        //    Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
-        //    //Load Master
-        //    Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
-        //    SelectDebitoParcelamentoEditorViewModel model = new SelectDebitoParcelamentoEditorViewModel() {
-
-        //    };
-
-        //    return PartialView("Parc_simulado", model);
-        //}
 
     }
-    }
+}

@@ -384,6 +384,13 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public bool Existe_UsuarioWeb_Foto(int idUser) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                return (from u in db.Usuario_Web where u.Id == idUser select u.Foto).FirstOrDefault();
+            }
+        }
+
+
         public string Retorna_User_Password_New(string login) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 string Sql = (from u in db.Usuario where u.Nomelogin == login select u.Senha2).FirstOrDefault();
@@ -669,11 +676,12 @@ namespace GTI_Dal.Classes {
                         new SqlParameter("@cpf_cnpj", reg.Cpf_Cnpj),
                         new SqlParameter("@ativo", reg.Ativo),
                         new SqlParameter("@data_cadastro", reg.Data_Cadastro),
-                        new SqlParameter("@bloqueado", reg.Bloqueado)
+                        new SqlParameter("@bloqueado", reg.Bloqueado),
+                        new SqlParameter("@foto", 0)
                     };
 
-                    db.Database.ExecuteSqlCommand("INSERT INTO usuario_web(id,nome,email,senha,telefone,cpf_cnpj,ativo,data_cadastro,bloqueado)" +
-                                                  " VALUES(@id,@nome,@email,@senha,@telefone,@cpf_cnpj,@ativo,@data_cadastro,@bloqueado)", parameters.ToArray());
+                    db.Database.ExecuteSqlCommand("INSERT INTO usuario_web(id,nome,email,senha,telefone,cpf_cnpj,ativo,data_cadastro,bloqueado,foto)" +
+                                                  " VALUES(@id,@nome,@email,@senha,@telefone,@cpf_cnpj,@ativo,@data_cadastro,@bloqueado,@foto)", parameters.ToArray());
                 } catch  {
                     throw;
                 }
@@ -706,7 +714,6 @@ namespace GTI_Dal.Classes {
                 return Sql.ToList();
             }
         }
-
 
 
         public Usuario_web Retorna_Usuario_Web(string Email) {
