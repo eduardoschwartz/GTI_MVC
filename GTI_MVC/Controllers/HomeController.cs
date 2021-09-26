@@ -760,6 +760,13 @@ namespace GTI_Mvc.Controllers {
             model.UserId = _userId;
             model.Usuario = reg.Nome;
             model.CpfCnpjLabel = Functions.FormatarCpfCnpj(reg.Cpf_Cnpj);
+            bool _fisica = reg.Cpf_Cnpj.Length == 11 ? true : false;
+
+            bool _existeAnexo = sistemaRepository.Existe_Usuario_Web_Anexo(_userId);
+            if(_existeAnexo)
+                model.Lista_Usuario_Web_Anexo = sistemaRepository.Lista_Usuario_Web_Anexo(_userId, _fisica);
+            else
+                model.Lista_Usuario_Web_Anexo = sistemaRepository.Lista_Usuario_Web_Tipo_Anexo(_userId, _fisica);
 
             return View(model);
         }

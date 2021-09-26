@@ -774,7 +774,58 @@ namespace GTI_Dal.Classes {
             }
         }
 
-       
+        public List<Usuario_Web_Anexo_Struct> Lista_Usuario_Web_Anexo(int UserId,bool Fisica) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from t in db.Usuario_Web_Tipo_Anexo
+                           join a in db.Usuario_Web_Anexo on t.Codigo equals a.Tipo into ta from a in ta.DefaultIfEmpty()
+                           where  t.Fisica==Fisica
+                           orderby t.Codigo select new { t.Codigo, t.Descricao, Fisica, a.Arquivo, a.Tipo, UserId }).ToList();
+                List<Usuario_Web_Anexo_Struct> Lista = new List<Usuario_Web_Anexo_Struct>();
+                foreach (var item in reg) {
+                    Usuario_Web_Anexo_Struct Linha = new Usuario_Web_Anexo_Struct {
+                        Arquivo=item.Arquivo??"(Não anexado)",
+                        Codigo=item.Codigo,
+                        Descricao=item.Descricao??"",
+                        Fisica=item.Fisica,
+                        Tipo=item.Tipo,
+                        UserId=item.UserId
+                    };
+                    Lista.Add(Linha);
+                }
+                return Lista;
+            }
+        }
+
+        public List<Usuario_Web_Anexo_Struct> Lista_Usuario_Web_Tipo_Anexo(int UserId, bool Fisica) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from t in db.Usuario_Web_Tipo_Anexo
+                           where t.Fisica == Fisica
+                           orderby t.Codigo select new { t.Codigo, t.Descricao, Fisica }).ToList();
+                List<Usuario_Web_Anexo_Struct> Lista = new List<Usuario_Web_Anexo_Struct>();
+                foreach (var item in reg) {
+                    Usuario_Web_Anexo_Struct Linha = new Usuario_Web_Anexo_Struct {
+                        Arquivo =  "(Não anexado)",
+                        Codigo = item.Codigo,
+                        Descricao = item.Descricao ?? "",
+                        Fisica = Fisica,
+                        UserId = UserId
+                    };
+                    Lista.Add(Linha);
+                }
+                return Lista;
+            }
+        }
+
+        public bool Existe_Usuario_Web_Anexo(int UserId) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                bool _ret = false;
+                var Sql = (from t in db.Usuario_Web_Anexo where t.Userid == UserId select t).FirstOrDefault();
+                if (Sql != null)
+                    _ret = true;
+                return _ret;
+            }
+        }
+
 
     }
 }

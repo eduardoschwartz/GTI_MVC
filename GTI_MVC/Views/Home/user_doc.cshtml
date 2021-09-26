@@ -57,15 +57,59 @@
         @Html.HiddenFor( m=>m.UserId)
         @Html.HiddenFor(m=>m.Usuario)
         @Html.HiddenFor(m=>m.CpfCnpjLabel)
-        <div class="container" style="width:800px">
+        <div class="container" style="width:720px">
             <div class="card">
                 <div class="card-header">Identificação do Usuário</div>
                 <div class="card-body">
-                    
-                    <article style="font-size:13px;color:black;text-align:justify">Para maior segurança, o serviço que você esta tentando acessar requer uma<b> confirmação de sua identidade</b> . Por favor anexar abaixo os documentos solicitados.
-                    Após o envio, os documentos serão analisados, e se aprovados, o serviço será liberado. Qualquer dúvida entrar em contato através do email <a href="mailto:pad@jaboticabal.sp.gov.br">pad@jaboticabal.sp.gov.br</a> </article>
+
+                    <article style="font-size:13px;color:black;text-align:justify">
+                        Para maior segurança, o serviço que você esta tentando acessar requer a<b> confirmação de sua identidade</b>. Por favor anexar abaixo os documentos solicitados e clicar em enviar.
+                        Após o envio, os documentos serão analisados pelo setor de dívida ativa, e se aprovados, o serviço será liberado. Qualquer dúvida entrar em contato através do email <a href="mailto:pad@jaboticabal.sp.gov.br">pad@jaboticabal.sp.gov.br</a>. <br />Obs: Os anexos deverão ser enviados no formato PDF com tamanho máximo de 4Mb.
+                    </article>
                     <br />
 
+                    <div id="AnexoTable" style="max-height: 247px; overflow: auto;width:650px;padding-top:7px">
+                        <table id="tblAnexo" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                            <thead style="background-color:brown;color:white;font-size:13px;font-weight:normal">
+                                <tr style="height:12px;">
+                                    <th style="display:none;font-weight:normal">
+                                        #
+                                    </th>
+                                    <th style="width:350px;font-weight:normal">
+                                        Descrição do documento
+                                    </th>
+                                    <th style="width:250px;font-weight:normal">
+                                        Nome do Arquivo
+                                    </th>
+                                    <th style="width:50px;text-align:left">
+
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Lista_Usuario_Web_Anexo) {
+                                    <tr>
+                                        <td style="display:none; font-weight:normal;color:darkblue">
+                                            @Html.DisplayFor(modelItem => item.Codigo)
+                                            @Html.HiddenFor(modelItem => item.Codigo)
+                                        </td>
+                                        <td style="font-weight:normal;color:darkblue">
+                                            @Html.DisplayFor(modelItem => item.Descricao)
+                                            @Html.HiddenFor(modelItem => item.Descricao)
+                                        </td>
+                                        <td style="font-weight:normal;color:darkblue">
+                                            @Html.DisplayFor(modelItem => item.Arquivo)
+                                            @Html.HiddenFor(modelItem => item.Arquivo)
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("Itbi_urbano", "Itbi", new { @a = "ia", @s = "s", @guid = "g" })" title="Anexar arquivo"> <img src="@Url.Content("~/images/save.png")" /></a>
+                                            <a href="@Url.Action("Itbi_urbano", "Itbi", new { @a = "ra", @s = "s", @guid = "g" })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
             </div>

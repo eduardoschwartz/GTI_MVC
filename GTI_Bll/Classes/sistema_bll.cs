@@ -307,5 +307,22 @@ namespace GTI_Bll.Classes {
             Sistema_Data obj = new Sistema_Data(_connection);
             return obj.Existe_UsuarioWeb_Foto(idUser);
         }
+
+        public List<Usuario_Web_Anexo_Struct> Lista_Usuario_Web_Anexo(int UserId, bool Fisica) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            return obj.Lista_Usuario_Web_Anexo(UserId,Fisica);
+        }
+
+        public List<Usuario_Web_Anexo_Struct> Lista_Usuario_Web_Tipo_Anexo(int UserId, bool Fisica) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            return obj.Lista_Usuario_Web_Tipo_Anexo(UserId, Fisica);
+        }
+
+
+        public bool Existe_Usuario_Web_Anexo(int UserId) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            return obj.Existe_Usuario_Web_Anexo(UserId);
+        }
+
     }
 }

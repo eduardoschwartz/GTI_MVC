@@ -216,5 +216,7 @@ namespace GTI_Dal {
         public DbSet<Dam_header> Dam_Header { get; set; }
         public DbSet<Dam_data> Dam_Data { get; set; }
         public DbSet<Lista_devedor> Lista_Devedor { get; set; }
+        public DbSet<Usuario_web_tipo_anexo> Usuario_Web_Tipo_Anexo { get; set; }
+        public DbSet<Usuario_web_anexo> Usuario_Web_Anexo { get; set; }
     }
 }
