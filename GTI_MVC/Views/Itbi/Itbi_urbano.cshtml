@@ -1263,7 +1263,7 @@
                     var extArray = new Array("dll", "exe");
                     var ext = f.name.replace(/^.*?\.([a-zA-Z0-9]+)$/, "$1");
                     if (ext == extArray[0] || ext == extArray[1]) {
-                        alert("O sistema não permite anexar arquivos com extensão(.exe,.dll). Tente anexar outroa rquivo.");
+                        alert("O sistema não permite anexar arquivos com extensão(.exe,.dll). Tente anexar outro arquivo.");
                         //reset file upload control
                         $("#" + this.id).replaceWith($("#" + this.id).clone(true));
                         this.value = null;

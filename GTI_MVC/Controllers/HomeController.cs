@@ -771,5 +771,18 @@ namespace GTI_Mvc.Controllers {
             return View(model);
         }
 
+
+        public JsonResult UploadFile(string Seq,string Id) {
+            if (Request.Files.Count > 0) {
+                foreach (string file in Request.Files) {
+                    var _file = Request.Files[file];
+                }
+            }
+            return null;
+        }
+
+
+
+
     }
 }

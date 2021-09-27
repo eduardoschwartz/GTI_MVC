@@ -1,6 +1,7 @@
 ﻿using GTI_Models.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace GTI_Mvc.ViewModels {
     public class LoginViewModel {
@@ -28,5 +29,6 @@ namespace GTI_Mvc.ViewModels {
         public List<Usuario_web> Lista_Usuario_Web { get; set; }
         public string Filter { get; set; }
         public List<Usuario_Web_Anexo_Struct> Lista_Usuario_Web_Anexo { get; set; }
+        public IEnumerable<HttpPostedFileBase> Files { get; set; }
     }
 }

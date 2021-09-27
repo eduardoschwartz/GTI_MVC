@@ -47,6 +47,47 @@
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
+    .smallbtn {
+        background-color: Highlight;
+        border: solid;
+        border-width: .3px;
+        border-color: black;
+        color: whitesmoke;
+        width: 100px;
+        height: 28px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+        .smallbtn:hover {
+            background-color: darkred;
+            color: whitesmoke;
+        }
+
+    .smallbtnred {
+        background-color: red;
+        border: solid;
+        border-width: .3px;
+        border-color: black;
+        color: whitesmoke;
+        width: 100px;
+        height: 28px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+        .smallbtnred:hover {
+            background-color: darkred;
+            color: whitesmoke;
+        }
 </style>
 
 @{var res = @ViewBag.Result;}
@@ -54,9 +95,11 @@
 
     @using (Html.BeginForm("User_doc", "Home", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
-        @Html.HiddenFor( m=>m.UserId)
-        @Html.HiddenFor(m=>m.Usuario)
-        @Html.HiddenFor(m=>m.CpfCnpjLabel)
+        @Html.HiddenFor(m => m.UserId)
+        @Html.HiddenFor(m => m.Usuario)
+        @Html.HiddenFor(m => m.CpfCnpjLabel)
+        <input type="hidden" id="Seq_Anexo">
+
         <div class="container" style="width:720px">
             <div class="card">
                 <div class="card-header">Identificação do Usuário</div>
@@ -87,6 +130,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+
                                 @foreach (var item in Model.Lista_Usuario_Web_Anexo) {
                                     <tr>
                                         <td style="display:none; font-weight:normal;color:darkblue">
@@ -102,7 +146,7 @@
                                             @Html.HiddenFor(modelItem => item.Arquivo)
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("Itbi_urbano", "Itbi", new { @a = "ia", @s = "s", @guid = "g" })" title="Anexar arquivo"> <img src="@Url.Content("~/images/save.png")" /></a>
+                                            <img src="~/Images/save.png" id="btnAnexo" style="cursor:pointer" width="16" height="16" title="Anexar Arquivo" onclick="Anexar(@item.Codigo)" />
                                             <a href="@Url.Action("Itbi_urbano", "Itbi", new { @a = "ra", @s = "s", @guid = "g" })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                         </td>
                                     </tr>
@@ -121,74 +165,85 @@
     }
 </div>
 
-<div id="msgBox1" title="Atenção" style='display: none;'>
-    <br />
-    <label id="lblMsg"></label>
+<div class="modal" tabindex="-1" role="dialog" id="AnexoModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header"> <span>Inserir Anexo</span> </div>
+            <div class="modal-body">
+                <input style="width:610px;font-size:12px" type="file" name="file" id="file" accept="application/pdf" />
+                <br />
+                <br />
+                <button type="button" class="smallbtn" id="Inserir_Anexo" onclick="Inserir_Anexo()">Anexar</button>&nbsp;
+                <button type="button" class="smallbtnred" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
 </div>
-<div id="msgBoxBag" title="Atenção" style='display: none;'>
-    <br />
-    <p>@ViewBag.Result</p>
-</div>
+
 
 @section scripts{
 
     <script type="text/javascript">
-
-        $(document).ready(function () {
-            $("#MainForm").submit(function () {
-                return ValidateForm();
-            });
-
-            $('#msgBox1').dialog({
-                autoOpen: false,
-                resizable: false,
-                draggable: false,
-                position: { my: 'top', at: 'top+300' },
-                height: "auto",
-                width: 340,
-                modal: true,
-                dialogClass: "foo",
-                buttons: {
-                    "OK": function () {
-                        $(this).dialog("close");
-                    }
-                }
-            });
-
-            $('#msgBoxBag').dialog({
-                autoOpen: false,
-                resizable: false,
-                draggable: false,
-                position: { my: 'top', at: 'top+300' },
-                height: "auto",
-                width: 340,
-                modal: true,
-                dialogClass: "foo",
-                buttons: {
-                    "OK": function () {
-                        $(this).dialog("close");
-                    }
-                }
-            });
-
-            $(".foo .ui-dialog-title").css("font-size", "13px");
-            $(".foo .ui-widget-content").css("font-size", "13px");
-
-            var _res = '@res';
-            if (_res != "") {
-                $('#msgBoxBag').dialog('open');
-                return false;
-            } else {
-                return true;
-            }
-        });
-
-        function ValidateForm() {
-            return true;
+ 
+        function Anexar(id) {
+            document.getElementById("Seq_Anexo").value = id;
+            $("#seq").text(id);
+            $('#AnexoModal').modal({ backdrop: 'static', keyboard: false });
         }
 
+        function Inserir_Anexo() {
+            var $file = document.getElementById('file'),
+                $formData = new FormData();
 
+            if ($file.files.length > 0) {
+                for (var i = 0; i < $file.files.length; i++) {
+                    $formData.append('file-' + i, $file.files[i]);
+                }
+                $formData.append('Seq', document.getElementById("Seq_Anexo").value);
+                $formData.append('Id', document.getElementById("UserId").value);
 
+                $.ajax({
+                    url: '/Home/UploadFile',
+                    type: 'POST',
+                    data: $formData,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function ($data) {
+
+                    }
+                });
+            } else {
+                alert("Selecione um anexo válido!");
+            }
+        }
+
+        $(function () {
+            $("#fileUpload").change(function () {
+                if (undefined != this.files) {
+                    var f = this.files[0]
+                    var id = this.id;
+                    var extArray = new Array("dll", "exe");
+                    var ext = f.name.replace(/^.*?\.([a-zA-Z0-9]+)$/, "$1");
+                    if (ext == extArray[0] || ext == extArray[1]) {
+                        alert("O sistema não permite anexar arquivos com extensão(.exe,.dll). Tente anexar outroa rquivo.");
+                        //reset file upload control
+                        $("#" + this.id).replaceWith($("#" + this.id).clone(true));
+                        this.value = null;
+                        return false;
+                    }
+                    //here I CHECK if the FILE SIZE is bigger than 5 MB (numbers below are in bytes)
+                    else if (f.size > 4194304 || f.fileSize > 4194304) {
+                        //show an alert to the user
+                        alert("Tamanho máximo excedido. (Max. 4 MB)");
+                        this.value = null;
+                        //reset file upload control
+                        $("#" + this.id).replaceWith($("#" + this.id).clone(true));
+                        return false;
+                    }
+                }
+            })
+        });
     </script>
    
 }
