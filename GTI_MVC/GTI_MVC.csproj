@@ -690,6 +690,7 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Files\UserDocTemplate.htm" />
     <Content Include="Images\cancel2.png" />
     <Content Include="Images\help.png" />
     <Content Include="Images\OK.gif" />

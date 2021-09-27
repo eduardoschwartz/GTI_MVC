@@ -48,6 +48,11 @@
         visibility: hidden;
     }
 
+
+    .no-titlebar .ui-dialog-titlebar {
+        display: none;
+    }
+
     .smallbtn {
         background-color: Highlight;
         border: solid;
@@ -153,10 +158,10 @@
                                                 @Html.HiddenFor(modelItem => item.Arquivo)
                                             </td>
                                         }
-                                        <td>
-                                            <img src="~/Images/save.png" id="btnAnexo" style="cursor:pointer" width="16" height="16" title="Anexar Arquivo" onclick="Anexar(@item.Codigo)" />
-                                            <a href="@Url.Action("Itbi_urbano", "Itbi", new { @a = "ra", @style="cursor:pointer" })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
-                                        </td>
+                                    <td>
+                                        <img src="~/Images/save.png" id="btnAnexo" style="cursor:pointer" width="16" height="16" title="Anexar Arquivo" onclick="Anexar(@item.Codigo)" />
+                                        <img src="~/Images/cancelar.gif" id="btnDelAnexo" style="cursor:pointer" width="16" height="16" title="Remover Anexo" onclick="Remover_Anexo(@item.Codigo)" />
+                                    </td>
                                     </tr>
                                 }
                             </tbody>
@@ -200,6 +205,10 @@
     <br />
     <label id="lblMsg2"></label>
 </div>
+<div id="msgBoxWait" style='display: none;text-align:center'>
+    <img src="~/Images/ajax-loader.gif"><br />
+    <p>Processando, aguarde . . . </p>
+</div>
 
 @section scripts{
 
@@ -237,7 +246,16 @@
                     }
                 }
             });
-
+            $('#msgBoxWait').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "no-titlebar"
+            });
 
             $(".foo .ui-dialog-title").css("font-size", "13px");
             $(".foo .ui-widget-content").css("font-size", "13px");
@@ -262,7 +280,7 @@
                 $formData.append('Id', document.getElementById("UserId").value);
 
                 $.ajax({
-                    url: '/Home/UploadFile',
+                    url: '/Home/Inserir_Anexo',
                     type: 'POST',
                     data: $formData,
                     dataType: 'json',
@@ -275,6 +293,25 @@
             } else {
                 alert("Selecione um anexo válido!");
             }
+        }
+
+        function Remover_Anexo(id) {
+            var $formData = new FormData();
+
+            $formData.append('Seq', id);
+            $formData.append('Id', document.getElementById("UserId").value);
+
+            $.ajax({
+                url: '/Home/Remove_Anexo',
+                type: 'POST',
+                data: $formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function ($data) {
+                    location.reload();
+                }
+            });
         }
 
         $(function () {
@@ -324,8 +361,25 @@
                 document.getElementById('lblMsg').innerHTML = "É obrigatório anexar todos os documentos antes de enviar para análise.";
                 $('#msgBox1').dialog('open');
             } else {
-                document.getElementById('lblMsg2').innerHTML = "Os documentos foram enviados para análise!";
-                $('#msgBox2').dialog('open');
+                $('#msgBoxWait').dialog('open');
+                var $formData = new FormData();
+                $formData.append('Id', document.getElementById("UserId").value);
+                $formData.append('Nome', document.getElementById("Usuario").value);
+                $formData.append('Cpf', document.getElementById("CpfCnpjLabel").value);
+                
+                $.ajax({
+                    url: '/Home/Enviar_Analise',
+                    type: 'POST',
+                    data: $formData,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function ($data) {
+                        $('#msgBoxWait').dialog('close');
+                        document.getElementById('lblMsg2').innerHTML = "Os documentos foram enviados para análise!";
+                        $('#msgBox2').dialog('open');
+                    }
+                });
             }
         }
 

@@ -335,5 +335,17 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Excluir_Usuario_Web_Anexo(int UserId, short Tipo) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            Exception ex = obj.Excluir_Usuario_Web_Anexo(UserId,Tipo);
+            return ex;
+        }
+
+        public Exception Ativar_Usuario_Web_Doc(int UserId, bool Ativo) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            Exception ex = obj.Ativar_Usuario_Web_Doc(UserId, Ativo);
+            return ex;
+        }
+
     }
 }

@@ -852,6 +852,30 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Excluir_Usuario_Web_Anexo(int UserId,short Tipo) {
+            object[] Parametros = new object[2];
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Parametros[0] = new SqlParameter { ParameterName = "@userid", SqlDbType = SqlDbType.VarChar, SqlValue = UserId };
+                Parametros[1] = new SqlParameter { ParameterName = "@tipo", SqlDbType = SqlDbType.TinyInt, SqlValue = Tipo };
+
+                db.Database.ExecuteSqlCommand("DELETE FROM usuario_web_anexo WHERE userid=@userid AND tipo=@tipo", Parametros);
+                return null;
+            }
+        }
+
+        public Exception Ativar_Usuario_Web_Doc(int UserId,bool Ativo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Usuario_web b = db.Usuario_Web.First(i => i.Id == UserId);
+                b.Foto = Ativo;
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
 
     }
 }

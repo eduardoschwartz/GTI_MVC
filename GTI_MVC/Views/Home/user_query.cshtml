@@ -52,7 +52,8 @@
 @{var res = @ViewBag.Result;}
 <div class="center">
 
-    @using (Html.BeginForm("User_Query", "Home", FormMethod.Post, new { @id = "MainForm" , enctype = "multipart/form-data" })) {
+    @using (Html.BeginForm("User_Query", "Home", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+        @Html.AntiForgeryToken()
         @*<input type='hidden' id='p' name='p' value='' />*@
         @*@Html.HiddenFor(m => m.UserId, new { @id = "UserId" })*@
         <div class="container" style="width:800px">

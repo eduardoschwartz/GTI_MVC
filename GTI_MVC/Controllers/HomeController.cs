@@ -721,6 +721,7 @@ namespace GTI_Mvc.Controllers {
 
 
         [Route("User_Query")]
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult User_Query(LoginViewModel model,int? ide,string action) {
 
@@ -757,7 +758,7 @@ namespace GTI_Mvc.Controllers {
             int _userId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
 
             Usuario_web reg = sistemaRepository.Retorna_Usuario_Web(_userId);
-
+           
             model.UserId = _userId;
             model.Usuario = reg.Nome;
             model.CpfCnpjLabel = Functions.FormatarCpfCnpj(reg.Cpf_Cnpj);
@@ -776,7 +777,7 @@ namespace GTI_Mvc.Controllers {
             return View(model);
         }
 
-        public JsonResult UploadFile(string Seq,string Id) {
+        public JsonResult Inserir_Anexo(string Seq,string Id) {
             if (Request.Files.Count > 0) {
                 Sistema_bll sistemaRepository = new Sistema_bll(_connection);
                 foreach (string file in Request.Files) {
@@ -800,6 +801,41 @@ namespace GTI_Mvc.Controllers {
                 }
             }
             return Json(new { success = true, responseText = "Arquivo anexado com sucesso." }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult Remove_Anexo(string Seq, string Id) {
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            Exception ex = sistemaRepository.Excluir_Usuario_Web_Anexo(Convert.ToInt32(Id), Convert.ToInt16(Seq));
+            return Json(new { success = true, responseText = "Arquivo removido com sucesso." }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult Enviar_Analise(string Id,string Nome,string Cpf) {
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            int _userId = Convert.ToInt32(Id);
+            Usuario_web _user = sistemaRepository.Retorna_Usuario_Web(_userId);
+
+            string Body = System.IO.File.ReadAllText(System.Web.HttpContext.Current.Server.MapPath("~/Files/UserDocTemplate.htm"));
+            Body = Body.Replace("#N#", Nome);
+            Body = Body.Replace("#C#", Cpf);
+            Body = Body.Replace("#E#", _user.Email);
+            Body = Body.Replace("#F#", _user.Telefone);
+            using (MailMessage emailMessage = new MailMessage()) {
+                emailMessage.From = new MailAddress("gti@jaboticabal.sp.gov.br", "Prefeitura de Jaboticabal");
+                emailMessage.To.Add(new MailAddress("eduardo.schwartz@gmail.com"));
+                emailMessage.Subject = "Prefeitura Municipal de Jaboticabal - Acesso aos serviços online (G.T.I.)";
+                emailMessage.Body = Body;
+                emailMessage.Priority = MailPriority.Normal;
+                emailMessage.IsBodyHtml = true;
+
+                using (SmtpClient MailClient = new SmtpClient("smtp.gmail.com", 587)) {
+                    MailClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    MailClient.EnableSsl = true;
+                    MailClient.Credentials = new NetworkCredential("gti.jaboticabal@gmail.com", "esnssgzxxjcdjrpk");
+                    MailClient.Send(emailMessage);
+                }
+            }
+
+            return Json(new { success = true, responseText = "Analise enviada com sucesso." }, JsonRequestBehavior.AllowGet);
         }
 
 
