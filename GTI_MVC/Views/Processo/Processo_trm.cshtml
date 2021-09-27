@@ -180,11 +180,11 @@
             background-color: darkred;
             color: whitesmoke;
         }
-
-    
 </style>
+@{
+    var res = ViewBag.Result;
+}
 
-@{var res = ViewBag.Result;}
 <div class="center container" style="width:900px">
     @using (Html.BeginForm("Processo_trm", "Processo", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
@@ -416,7 +416,7 @@
                 } else {
                     $.ajax({
                         type: "Post",
-                    url: "/Processo/MoveUp",
+                        url: location.hostname == "localhost" ?"/Processo/MoveUp":"/gti/Processo/MoveUp",
                     dataType: 'json',
                     success: function (data) {
                         window.location.href = data;
@@ -450,7 +450,7 @@
                 } else {
                     $.ajax({
                         type: "Post",
-                        url: "/Processo/MoveDown",
+                        url: location.hostname == "localhost" ? "/Processo/MoveDown" : "/gti/Processo/MoveDown",
                         dataType: 'json',
                         success: function (data) {
                             Carrega_Lista();
@@ -504,7 +504,7 @@
             $("#Inserir_Save").attr("disabled", true);
             $.ajax({
                 type: "Post",
-                url: "/Processo/AddPlace",
+                url: location.hostname == "localhost" ? "/Processo/AddPlace" : "/gti/Processo/AddPlace",
                 dataType: 'json',
                 success: function (data) {
                     $("#Inserir_Save").attr("disabled", false);
@@ -554,7 +554,7 @@
         }
 
         function RemovePlace(Ano, Numero) {
-            var _seq = parseInt(document.getElementById("Seq").value);
+            var _seq = parseInt(document.getElememachinetById("Seq").value);
             var tbl = document.getElementById("mainTable");
             var rows = document.getElementById("mainTable").getElementsByTagName("tr").length;
             var _texto = tbl.rows[_seq - 1].cells[3].innerHTML.trim();
@@ -572,7 +572,7 @@
             $("#btnRemover").attr("disabled", true);
             $.ajax({
                 type: "Post",
-                url: "/Processo/RemovePlace",
+                url: location.hostname == "localhost" ? "/Processo/RemovePlace" : "/gti/Processo/RemovePlace",
                 dataType: 'json',
                 success: function (data) {
                     Carrega_Lista();
@@ -623,7 +623,7 @@
             $("#Receber_Save").attr("disabled", true);
             $.ajax({
                 type: "Post",
-                url: "/Processo/Receber",
+                url: location.hostname == "localhost" ? "/Processo/Receber" : "/gti/Processo/Receber",
                 dataType: 'json',
                 success: function (data) {
                     $("#Receber_Save").attr("disabled", false);

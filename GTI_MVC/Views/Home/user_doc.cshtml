@@ -280,7 +280,7 @@
                 $formData.append('Id', document.getElementById("UserId").value);
 
                 $.ajax({
-                    url: '/Home/Inserir_Anexo',
+                    url: location.hostname == "localhost" ? "/Home/Inserir_Anexo" : "/gti/Home/Inserir_Anexo",
                     type: 'POST',
                     data: $formData,
                     dataType: 'json',
@@ -302,7 +302,7 @@
             $formData.append('Id', document.getElementById("UserId").value);
 
             $.ajax({
-                url: '/Home/Remove_Anexo',
+                url: location.hostname == "localhost" ? "/Home/Remove_Anexo" : "/gti/Home/Remove_Anexo",
                 type: 'POST',
                 data: $formData,
                 dataType: 'json',
@@ -368,7 +368,7 @@
                 $formData.append('Cpf', document.getElementById("CpfCnpjLabel").value);
                 
                 $.ajax({
-                    url: '/Home/Enviar_Analise',
+                    url: location.hostname == "localhost" ? "/Home/Enviar_Analise" : "/gti/Home/Enviar_Analise",
                     type: 'POST',
                     data: $formData,
                     dataType: 'json',
