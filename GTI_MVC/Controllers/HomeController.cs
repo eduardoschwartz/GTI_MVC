@@ -762,23 +762,36 @@ namespace GTI_Mvc.Controllers {
             model.CpfCnpjLabel = Functions.FormatarCpfCnpj(reg.Cpf_Cnpj);
             bool _fisica = reg.Cpf_Cnpj.Length == 11 ? true : false;
 
-            bool _existeAnexo = sistemaRepository.Existe_Usuario_Web_Anexo(_userId);
-            if(_existeAnexo)
-                model.Lista_Usuario_Web_Anexo = sistemaRepository.Lista_Usuario_Web_Anexo(_userId, _fisica);
-            else
-                model.Lista_Usuario_Web_Anexo = sistemaRepository.Lista_Usuario_Web_Tipo_Anexo(_userId, _fisica);
+            model.Lista_Usuario_Web_Anexo = sistemaRepository.Lista_Usuario_Web_Tipo_Anexo(_userId, _fisica);
+            int _pos = 0;
+            foreach (Usuario_Web_Anexo_Struct _anexo in model.Lista_Usuario_Web_Anexo) {
+                Usuario_web_anexo _reg = sistemaRepository.Retorna_Web_Anexo(_userId, _anexo.Codigo);
+                if (_reg != null) {
+                    model.Lista_Usuario_Web_Anexo[_pos].Arquivo = _reg.Arquivo;
+                }
+                _pos++;
+            }
 
             return View(model);
         }
 
-
         public JsonResult UploadFile(string Seq,string Id) {
             if (Request.Files.Count > 0) {
+                Sistema_bll sistemaRepository = new Sistema_bll(_connection);
                 foreach (string file in Request.Files) {
                     var _file = Request.Files[file];
+                    Usuario_web_anexo reg = new Usuario_web_anexo() {
+                        Userid = Convert.ToInt32(Id),
+                        Tipo = Convert.ToInt16(Seq),
+                        Arquivo = _file.FileName
+                    };
+
+                    Exception ex = sistemaRepository.Incluir_Usuario_Web_Anexo(reg);
+                    break;
+
                 }
             }
-            return null;
+            return Json(new { success = true, responseText = "Arquivo anexado com sucesso." }, JsonRequestBehavior.AllowGet);
         }
 
 

@@ -1799,7 +1799,7 @@
             <DataSetName>dsBoletoGuia</DataSetName>
             <Top>9.58647cm</Top>
             <Left>0.21901cm</Left>
-            <Height>9.87782cm</Height>
+            <Height>9.87773cm</Height>
             <Width>3.45521cm</Width>
             <Style>
               <Border>
@@ -4425,7 +4425,6 @@
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="codbarra">
-                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
@@ -4580,7 +4579,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.24cm</Height>
+                  <Height>0.48449cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -4678,7 +4677,7 @@
             <DataSetName>dsBoletoGuia</DataSetName>
             <Top>9.58647cm</Top>
             <Left>3.91591cm</Left>
-            <Height>9.63324cm</Height>
+            <Height>9.87773cm</Height>
             <Width>16.85996cm</Width>
             <ZIndex>1</ZIndex>
             <Style>

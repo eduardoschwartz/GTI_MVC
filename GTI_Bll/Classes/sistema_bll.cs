@@ -324,5 +324,16 @@ namespace GTI_Bll.Classes {
             return obj.Existe_Usuario_Web_Anexo(UserId);
         }
 
+        public Usuario_web_anexo Retorna_Web_Anexo(int UserId, int Tipo) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            return obj.Retorna_Web_Anexo(UserId,Tipo);
+        }
+
+        public Exception Incluir_Usuario_Web_Anexo(Usuario_web_anexo reg) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            Exception ex = obj.Incluir_Usuario_Web_Anexo(reg);
+            return ex;
+        }
+
     }
 }

@@ -1225,7 +1225,7 @@ namespace GTI_Mvc.Controllers {
                 parameters.Add(new ReportParameter("VVI", Convert.ToDecimal(RegIPTU.Vvi).ToString("#0.00")));
                 parameters.Add(new ReportParameter("IPTU", Convert.ToDecimal(RegIPTU.Impostopredial).ToString("#0.00")));
                 parameters.Add(new ReportParameter("ITU", Convert.ToDecimal(RegIPTU.Impostoterritorial).ToString("#0.00")));
-                parameters.Add(new ReportParameter("TOTALPARC", Convert.ToDecimal((ListaBoleto.Count - 3) * ListaBoleto[3].Valorguia).ToString("#0.00")));
+                parameters.Add(new ReportParameter("TOTALPARC", Convert.ToDecimal((_calc.Qtdeparc) * ListaBoleto[ListaBoleto.Count-1].Valorguia).ToString("#0.00")));
                 parameters.Add(new ReportParameter("UNICA1", Convert.ToDecimal(ListaBoleto[0].Valorguia).ToString("#0.00")));
                 parameters.Add(new ReportParameter("UNICA2", Convert.ToDecimal(ListaBoleto[1].Valorguia).ToString("#0.00")));
                 parameters.Add(new ReportParameter("UNICA3", Convert.ToDecimal(ListaBoleto[2].Valorguia).ToString("#0.00")));

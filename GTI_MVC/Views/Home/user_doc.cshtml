@@ -147,7 +147,7 @@
                                         </td>
                                         <td>
                                             <img src="~/Images/save.png" id="btnAnexo" style="cursor:pointer" width="16" height="16" title="Anexar Arquivo" onclick="Anexar(@item.Codigo)" />
-                                            <a href="@Url.Action("Itbi_urbano", "Itbi", new { @a = "ra", @s = "s", @guid = "g" })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                            <a href="@Url.Action("Itbi_urbano", "Itbi", new { @a = "ra", @style="cursor:pointer" })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
                                         </td>
                                     </tr>
                                 }
@@ -210,7 +210,7 @@
                     contentType: false,
                     processData: false,
                     success: function ($data) {
-
+                        location.reload();
                     }
                 });
             } else {
@@ -219,12 +219,17 @@
         }
 
         $(function () {
-            $("#fileUpload").change(function () {
+            $("#file").change(function () {
                 if (undefined != this.files) {
                     var f = this.files[0]
                     var id = this.id;
                     var extArray = new Array("dll", "exe");
                     var ext = f.name.replace(/^.*?\.([a-zA-Z0-9]+)$/, "$1");
+                    if (ext.toUpperCase() != "PDF") {
+                        alert("Apenas arquivos do tipo PDF podem ser anexados!");
+                        return false;
+                    }
+
                     if (ext == extArray[0] || ext == extArray[1]) {
                         alert("O sistema não permite anexar arquivos com extensão(.exe,.dll). Tente anexar outroa rquivo.");
                         //reset file upload control

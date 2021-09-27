@@ -715,7 +715,6 @@ namespace GTI_Dal.Classes {
             }
         }
 
-
         public Usuario_web Retorna_Usuario_Web(string Email) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 Usuario_web Sql = (from t in db.Usuario_Web where t.Email == Email select t).FirstOrDefault();
@@ -823,6 +822,33 @@ namespace GTI_Dal.Classes {
                 if (Sql != null)
                     _ret = true;
                 return _ret;
+            }
+        }
+
+        public Usuario_web_anexo Retorna_Web_Anexo(int UserId,int Tipo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Usuario_Web_Anexo where t.Userid == UserId && t.Tipo==Tipo select t).FirstOrDefault();
+                return Sql;
+            }
+        }
+
+        public Exception Incluir_Usuario_Web_Anexo(Usuario_web_anexo reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                db.Database.ExecuteSqlCommand("DELETE FROM usuario_web_anexo WHERE userid=@userid and tipo=@tipo", new SqlParameter("@userid", reg.Userid), new SqlParameter("@tipo", reg.Tipo));
+
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                try {
+                    parameters.Add(new SqlParameter("@userid", reg.Userid));
+                    parameters.Add(new SqlParameter("@tipo",reg.Tipo));
+                    parameters.Add(new SqlParameter("@arquivo", reg.Arquivo));
+
+                    db.Database.ExecuteSqlCommand("INSERT INTO usuario_web_anexo(userid,tipo,arquivo) VALUES(@userid,@tipo,@arquivo)", parameters.ToArray());
+                    parameters.Clear();
+                } catch (Exception ex) {
+                    return ex;
+                }
+
+                return null;
             }
         }
 
