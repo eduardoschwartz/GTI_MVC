@@ -24,7 +24,7 @@
         color: brown;
         font-size: 14px
     }
-    
+
     .card {
         font-family: Arial, Helvetica, sans-serif;
         font-size: 14px;
@@ -47,6 +47,7 @@
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
+
     .smallbtn {
         background-color: Highlight;
         border: solid;
@@ -141,10 +142,17 @@
                                             @Html.DisplayFor(modelItem => item.Descricao)
                                             @Html.HiddenFor(modelItem => item.Descricao)
                                         </td>
-                                        <td style="font-weight:normal;color:darkblue">
-                                            @Html.DisplayFor(modelItem => item.Arquivo)
-                                            @Html.HiddenFor(modelItem => item.Arquivo)
-                                        </td>
+                                        @if (item.Arquivo == "(Não anexado)") {
+                                            <td style="font-weight:normal;color:red">
+                                                @Html.DisplayFor(modelItem => item.Arquivo)
+                                                @Html.HiddenFor(modelItem => item.Arquivo)
+                                            </td>
+                                        } else {
+                                            <td style="font-weight:normal;color:darkblue">
+                                                @Html.DisplayFor(modelItem => item.Arquivo)
+                                                @Html.HiddenFor(modelItem => item.Arquivo)
+                                            </td>
+                                        }
                                         <td>
                                             <img src="~/Images/save.png" id="btnAnexo" style="cursor:pointer" width="16" height="16" title="Anexar Arquivo" onclick="Anexar(@item.Codigo)" />
                                             <a href="@Url.Action("Itbi_urbano", "Itbi", new { @a = "ra", @style="cursor:pointer" })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
@@ -154,8 +162,12 @@
                             </tbody>
                         </table>
                     </div>
-
+                    <br />
+                    <div style="text-align:center">
+                        <button type="button" id="btnGravar" class="btn btn-primary" name="action" value="btnGravar" style="height:32px" onclick="Enviar()">Enviar para Análise</button>
+                    </div>
                 </div>
+
             </div>
 
             <div class="card-footer">
@@ -180,11 +192,58 @@
     </div>
 </div>
 
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBox2" title="Informação" style='display: none;'>
+    <br />
+    <label id="lblMsg2"></label>
+</div>
 
 @section scripts{
 
     <script type="text/javascript">
- 
+        $(document).ready(function () {
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBox2').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        window.location.href = "SysMenu";
+                    }
+                }
+            });
+
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+        });
+
         function Anexar(id) {
             document.getElementById("Seq_Anexo").value = id;
             $("#seq").text(id);
@@ -197,7 +256,7 @@
 
             if ($file.files.length > 0) {
                 for (var i = 0; i < $file.files.length; i++) {
-                    $formData.append('file-' + i, $file.files[i]);
+                    $formData.append('Arquivo', $file.files[i]);
                 }
                 $formData.append('Seq', document.getElementById("Seq_Anexo").value);
                 $formData.append('Id', document.getElementById("UserId").value);
@@ -249,7 +308,29 @@
                 }
             })
         });
+
+        function Enviar() {
+            var tbl = document.getElementById("tblAnexo");
+            var rows = tbl.getElementsByTagName("tr").length;
+            var _semAnexo = false;
+            for (var i = 1; i < rows; i++) {
+                var _texto = $("#tblAnexo tr:eq(" + i + ") td:eq(2)").text().trim();
+                if (_texto == "(Não anexado)") {
+                    _semAnexo = true;
+                    break;
+                }
+            }
+            if (_semAnexo) {
+                document.getElementById('lblMsg').innerHTML = "É obrigatório anexar todos os documentos antes de enviar para análise.";
+                $('#msgBox1').dialog('open');
+            } else {
+                document.getElementById('lblMsg2').innerHTML = "Os documentos foram enviados para análise!";
+                $('#msgBox2').dialog('open');
+            }
+        }
+
+
     </script>
-   
+
 }
 

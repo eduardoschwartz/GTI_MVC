@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using static GTI_Models.modelCore;
 using Newtonsoft.Json.Linq;
 using System.Web;
+using System.IO;
 
 namespace GTI_Mvc.Controllers {
     public class HomeController : Controller {
@@ -785,16 +786,21 @@ namespace GTI_Mvc.Controllers {
                         Tipo = Convert.ToInt16(Seq),
                         Arquivo = _file.FileName
                     };
-
                     Exception ex = sistemaRepository.Incluir_Usuario_Web_Anexo(reg);
-                    break;
 
+                    //Salva cópia do Anexo
+                    string fileName = "";
+                    string _cod = Convert.ToInt32(Id).ToString("00000");
+                    string _path = "~/Files/UserDoc/" + _cod;
+                    Directory.CreateDirectory(Server.MapPath(_path));
+                    fileName = _file.FileName;
+                    var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path), fileName);
+                    _file.SaveAs(path);
+                    break;
                 }
             }
             return Json(new { success = true, responseText = "Arquivo anexado com sucesso." }, JsonRequestBehavior.AllowGet);
         }
-
-
 
 
     }
