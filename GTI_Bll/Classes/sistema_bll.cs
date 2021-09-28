@@ -347,5 +347,16 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Incluir_Usuario_Web_Analise(Usuario_Web_Analise reg) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            Exception ex = obj.Incluir_Usuario_Web_Analise(reg);
+            return ex;
+        }
+
+        public List<Usuario_Web_Analise_Struct> Lista_Usuario_Web_Analise() {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            return obj.Lista_Usuario_Web_Analise();
+        }
+
     }
 }

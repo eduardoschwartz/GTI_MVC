@@ -1130,6 +1130,7 @@
     <Content Include="Views\Processo\Processo_trm.cshtml" />
     <Content Include="Views\Processo\Processo_trm - Copy.cshtml" />
     <Content Include="Views\Home\user_doc.cshtml" />
+    <Content Include="Views\Home\user_query_doc.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

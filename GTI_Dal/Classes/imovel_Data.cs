@@ -1933,7 +1933,7 @@ namespace GTI_Dal.Classes {
 
                 var Sql = (from t in db.Itbi_Main
                            join c in db.Itbi_Status on t.Situacao_itbi equals c.Codigo into tc from c in tc.DefaultIfEmpty()
-                           orderby new { t.Itbi_Ano, t.Itbi_Numero } where t.Itbi_Ano == ano && t.Itbi_Numero > 0 select new { Ano = t.Itbi_Ano, Numero = t.Itbi_Numero, Guid = t.Guid, UserId = t.Userid,
+                           orderby  t.Itbi_Ano, t.Itbi_Numero, t.Situacao_itbi descending where t.Itbi_Ano == ano && t.Itbi_Numero > 0 select new { Ano = t.Itbi_Ano, Numero = t.Itbi_Numero, Guid = t.Guid, UserId = t.Userid,
                                DataCadastro = t.Data_cadastro, ImovelCodigo = t.Imovel_codigo, NomeComprador = t.Comprador_nome, SituacaoCodigo = t.Situacao_itbi, SituacaoNome = c.Descricao });
                 if (status > 0)
                     Sql = Sql.Where(m => m.SituacaoCodigo == status);

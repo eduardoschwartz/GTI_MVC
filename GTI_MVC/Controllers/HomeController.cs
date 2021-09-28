@@ -769,7 +769,7 @@ namespace GTI_Mvc.Controllers {
             foreach (Usuario_Web_Anexo_Struct _anexo in model.Lista_Usuario_Web_Anexo) {
                 Usuario_web_anexo _reg = sistemaRepository.Retorna_Web_Anexo(_userId, _anexo.Codigo);
                 if (_reg != null) {
-                    model.Lista_Usuario_Web_Anexo[_pos].Arquivo = _reg.Arquivo;
+                    model.Lista_Usuario_Web_Anexo[_pos].Arquivo = Functions.TruncateTo( _reg.Arquivo,32);
                 }
                 _pos++;
             }
@@ -835,9 +835,37 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
+            Usuario_Web_Analise _aut = new Usuario_Web_Analise() {
+                Id=_userId,
+                Data_envio=DateTime.Now,
+                Autorizado=false,
+                Autorizado_por=0
+            };
+            Exception ex = sistemaRepository.Incluir_Usuario_Web_Analise(_aut);
+
             return Json(new { success = true, responseText = "Analise enviada com sucesso." }, JsonRequestBehavior.AllowGet);
         }
 
+        [Route("User_query_doc")]
+        [HttpGet]
+        public ActionResult User_query_doc() {
+            LoginViewModel model = new LoginViewModel();
+            if (Request.Cookies["2lG1H*"] == null)
+                return RedirectToAction("Login");
+
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            int _fiscal = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
+
+            usuarioStruct reg = sistemaRepository.Retorna_Usuario(_fiscal);
+
+            List<Usuario_Web_Analise_Struct> Lista = sistemaRepository.Lista_Usuario_Web_Analise();
+            model.Lista_Usuario_Web_Analise = Lista;
+
+
+
+
+            return View(model);
+        }
 
     }
 }

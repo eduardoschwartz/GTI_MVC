@@ -876,6 +876,59 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Incluir_Usuario_Web_Analise(Usuario_Web_Analise reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[5];
+                Parametros[0] = new SqlParameter { ParameterName = "@id", SqlDbType = SqlDbType.Int, SqlValue = reg.Id };
+                Parametros[1] = new SqlParameter { ParameterName = "@data_envio", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_envio };
+                Parametros[2] = new SqlParameter { ParameterName = "@autorizado", SqlDbType = SqlDbType.Bit, SqlValue = reg.Autorizado };
+                if(reg.Data_autorizado==null)
+                    Parametros[3] = new SqlParameter { ParameterName = "@data_autorizado",  SqlValue = DBNull.Value };
+                else
+                    Parametros[3] = new SqlParameter { ParameterName = "@data_autorizado", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_autorizado };
+                Parametros[4] = new SqlParameter { ParameterName = "@autorizado_por", SqlDbType = SqlDbType.Int, SqlValue = reg.Autorizado_por };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO usuario_web_analise(id,data_envio,autorizado,data_autorizado,autorizado_por) " +
+                    "VALUES(@id,@data_envio,@autorizado,@data_autorizado,@autorizado_por)", Parametros);
+
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public List<Usuario_Web_Analise_Struct> Lista_Usuario_Web_Analise() {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from t in db.Usuario_Web_Analise
+                           join a in db.Usuario_Web on t.Id equals a.Id into ta from a in ta.DefaultIfEmpty()
+                           orderby t.Id select new {UserId= t.Id,Nome=a.Nome,CpfCnpj=a.Cpf_Cnpj,Data_Envio=t.Data_envio,Autorizado=t.Autorizado,
+                           Fiscal_Codigo=t.Autorizado_por,Data_Autorizado=t.Data_autorizado,Email=a.Email}).ToList();
+                List<Usuario_Web_Analise_Struct> Lista = new List<Usuario_Web_Analise_Struct>();
+                foreach (var item in reg) {
+                    Usuario_Web_Analise_Struct Linha = new Usuario_Web_Analise_Struct {
+                        Id = item.UserId,
+                        Nome=item.Nome,
+                        CpfCnpj= item.CpfCnpj,
+                        Email=item.Email,
+                        Data_envio=item.Data_Envio,
+                        Autorizado=item.Autorizado,
+                        Fiscal_Codigo=item.Fiscal_Codigo,
+                        Data_autorizado=item.Data_Autorizado,
+                        Fiscal_Nome=""
+                    };
+                    if (item.Fiscal_Codigo > 0) {
+                        Usuario_web _fiscal = Retorna_Usuario_Web(item.Fiscal_Codigo);
+                        Linha.Fiscal_Nome = _fiscal.Nome;
+                    }
+
+                    Lista.Add(Linha);
+                }
+                return Lista;
+            }
+        }
 
     }
 }

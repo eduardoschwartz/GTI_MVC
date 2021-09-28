@@ -287,6 +287,7 @@
     <Compile Include="Models\usuariocc.cs" />
     <Compile Include="Models\usuariofunc.cs" />
     <Compile Include="Models\usuario_web.cs" />
+    <Compile Include="Models\usuario_web_analise.cs" />
     <Compile Include="Models\usuario_web_anexo.cs" />
     <Compile Include="Models\usuario_web_tipo_anexo.cs" />
     <Compile Include="Models\vre_atividade.cs" />

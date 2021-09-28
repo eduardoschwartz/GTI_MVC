@@ -1,0 +1,177 @@
+﻿@model GTI_Mvc.ViewModels.LoginViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Liberação de Acesso de usuários";
+}
+
+<style>
+
+    .center {
+        margin: auto;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+    
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
+</style>
+
+@{var res = @ViewBag.Result;}
+<div class="center">
+
+    @using (Html.BeginForm("User_query_doc", "Home", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+        @Html.AntiForgeryToken()
+        <div class="container" style="width:900px">
+            <div class="card">
+                <div class="card-header">
+                    Liberação de Acesso de usuários cadastrados
+                </div>
+                <div class="card-body">
+                  
+                    <table id="tblMain" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                        <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal; white-space: nowrap;">
+                            <tr style="height:14px;">
+                                <td style="display:none">Id</td>
+                                <td style="width:250px">Nome do Usuário</td>
+                                <td style="width:140px;font-weight:normal">Cpf/Cnpj</td>
+                                <td style="width:250px">Email</td>
+                                <td style="width: 130px; font-weight: normal; text-align: center">Enviado em</td>
+                                <td style="width: 50px; font-weight: normal; text-align: center">Liberado</td>
+                                <td style="width:30px;text-align:right">
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
+                            @foreach (var item in Model.Lista_Usuario_Web_Analise) {
+
+                            <tr style="height:20px;">
+                                <td style="display:none">@item.Id</td>
+                                <td style="width:250px;font-weight:normal">@Functions.TruncateTo(item.Nome, 30)</td>
+                                <td style="width:140px;font-weight:normal">@Functions.FormatarCpfCnpj(item.CpfCnpj)</td>
+                                <td style="width:250px;font-weight:normal">@Functions.TruncateTo(item.Email, 30)</td>
+                                <td style="width:130px;font-weight:normal;text-align:center">@item.Data_envio.ToString("dd/MM/yyyy hh:mm")</td>
+                                @if (item.Autorizado) {
+                                    <td style="width: 50px; font-weight: normal; text-align: center;color:darkgreen">Sim</td>
+                                } else {
+                                    <td style="width: 50px; font-weight: normal; text-align: center;color:red">Não</td>
+                                }
+                                <td style="width:30px;text-align:right">
+                                    <a href="@Url.Action("Userweb_det", "Home", new { p = item.Id })" title="Dados do usuário"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
+                                </td>
+                            </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
+        </div>
+    }
+</div>
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#MainForm").submit(function () {
+                return ValidateForm();
+            });
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+       
+
+
+    </script>
+   
+}
+

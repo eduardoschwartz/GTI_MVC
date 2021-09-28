@@ -30,5 +30,6 @@ namespace GTI_Mvc.ViewModels {
         public string Filter { get; set; }
         public List<Usuario_Web_Anexo_Struct> Lista_Usuario_Web_Anexo { get; set; }
         public IEnumerable<HttpPostedFileBase> Files { get; set; }
+        public List<Usuario_Web_Analise_Struct> Lista_Usuario_Web_Analise { get; set; }
     }
 }
