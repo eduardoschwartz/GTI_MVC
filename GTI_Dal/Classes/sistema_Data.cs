@@ -666,22 +666,24 @@ namespace GTI_Dal.Classes {
                 var Sql = (from c in db.Usuario_Web orderby c.Id descending select c.Id).FirstOrDefault();
                 _id=++Sql;
 
-                try {
-                    List<SqlParameter> parameters = new List<SqlParameter> {
-                        new SqlParameter("@id", _id),
-                        new SqlParameter("@nome", reg.Nome),
-                        new SqlParameter("@email", reg.Email),
-                        new SqlParameter("@senha", reg.Senha),
-                        new SqlParameter("@telefone", reg.Telefone),
-                        new SqlParameter("@cpf_cnpj", reg.Cpf_Cnpj),
-                        new SqlParameter("@ativo", reg.Ativo),
-                        new SqlParameter("@data_cadastro", reg.Data_Cadastro),
-                        new SqlParameter("@bloqueado", reg.Bloqueado),
-                        new SqlParameter("@foto", 0)
-                    };
 
-                    db.Database.ExecuteSqlCommand("INSERT INTO usuario_web(id,nome,email,senha,telefone,cpf_cnpj,ativo,data_cadastro,bloqueado,foto)" +
-                                                  " VALUES(@id,@nome,@email,@senha,@telefone,@cpf_cnpj,@ativo,@data_cadastro,@bloqueado,@foto)", parameters.ToArray());
+                object[] Parametros = new object[10];
+                Parametros[0] = new SqlParameter { ParameterName = "@id", SqlDbType = SqlDbType.Int, SqlValue =_id };
+                Parametros[1] = new SqlParameter { ParameterName = "@nome", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Nome };
+                Parametros[2] = new SqlParameter { ParameterName = "@email", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Email };
+                Parametros[3] = new SqlParameter { ParameterName = "@senha", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Senha };
+                Parametros[4] = new SqlParameter { ParameterName = "@telefone", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Telefone };
+                Parametros[5] = new SqlParameter { ParameterName = "@cpf_cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Cpf_Cnpj };
+                Parametros[6] = new SqlParameter { ParameterName = "@ativo", SqlDbType = SqlDbType.Bit, SqlValue = reg.Ativo };
+                Parametros[7] = new SqlParameter { ParameterName = "@data_cadastro", SqlDbType = SqlDbType.SmallDateTime, SqlValue = reg.Data_Cadastro };
+                Parametros[8] = new SqlParameter { ParameterName = "@bloqueado", SqlDbType = SqlDbType.Bit, SqlValue = reg.Bloqueado };
+                Parametros[9] = new SqlParameter { ParameterName = "@foto", SqlDbType = SqlDbType.Bit, SqlValue = false };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO usuario_web(id,nome,email,senha,telefone,cpf_cnpj,ativo,data_cadastro,bloqueado,foto) " +
+                    "VALUES(@id,@nome,@email,@senha,@telefone,@cpf_cnpj,@ativo,@data_cadastro,@bloqueado,@foto)", Parametros);
+
+                try {
+                    db.SaveChanges();
                 } catch  {
                     throw;
                 }

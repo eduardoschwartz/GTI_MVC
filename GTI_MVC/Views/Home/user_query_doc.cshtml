@@ -24,7 +24,7 @@
         color: brown;
         font-size: 14px
     }
-    
+
     .card {
         font-family: Arial, Helvetica, sans-serif;
         font-size: 14px;
@@ -55,13 +55,15 @@
 
     @using (Html.BeginForm("User_query_doc", "Home", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
+        <input type="hidden" id="userId">
+
         <div class="container" style="width:900px">
             <div class="card">
                 <div class="card-header">
                     Liberação de Acesso de usuários cadastrados
                 </div>
                 <div class="card-body">
-                  
+
                     <table id="tblMain" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
                         <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal; white-space: nowrap;">
                             <tr style="height:14px;">
@@ -76,23 +78,23 @@
                             </tr>
                         </thead>
                         <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
-                            @foreach (var item in Model.Lista_Usuario_Web_Analise) {
-
-                            <tr style="height:20px;">
-                                <td style="display:none">@item.Id</td>
-                                <td style="width:250px;font-weight:normal">@Functions.TruncateTo(item.Nome, 30)</td>
-                                <td style="width:140px;font-weight:normal">@Functions.FormatarCpfCnpj(item.CpfCnpj)</td>
-                                <td style="width:250px;font-weight:normal">@Functions.TruncateTo(item.Email, 30)</td>
-                                <td style="width:130px;font-weight:normal;text-align:center">@item.Data_envio.ToString("dd/MM/yyyy hh:mm")</td>
-                                @if (item.Autorizado) {
-                                    <td style="width: 50px; font-weight: normal; text-align: center;color:darkgreen">Sim</td>
-                                } else {
-                                    <td style="width: 50px; font-weight: normal; text-align: center;color:red">Não</td>
-                                }
-                                <td style="width:30px;text-align:right">
-                                    <a href="@Url.Action("Userweb_det", "Home", new { p = item.Id })" title="Dados do usuário"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
-                                </td>
-                            </tr>
+                            
+                            @for (int i = 0; i < Model.Lista_Usuario_Web_Analise.Count; i++) {
+                                <tr style="height:20px;">
+                                    <td style="display:none">@Model.Lista_Usuario_Web_Analise[i].Id</td>
+                                    <td style="width:250px;font-weight:normal">@Functions.TruncateTo(Model.Lista_Usuario_Web_Analise[i].Nome, 30)</td>
+                                    <td style="width:140px;font-weight:normal">@Functions.FormatarCpfCnpj(Model.Lista_Usuario_Web_Analise[i].CpfCnpj)</td>
+                                    <td style="width:250px;font-weight:normal">@Functions.TruncateTo(Model.Lista_Usuario_Web_Analise[i].Email, 30)</td>
+                                    <td style="width:130px;font-weight:normal;text-align:center">@Model.Lista_Usuario_Web_Analise[i].Data_envio.ToString("dd/MM/yyyy hh:mm")</td>
+                                    @if (Model.Lista_Usuario_Web_Analise[i].Autorizado) {
+                                        <td style="width: 50px; font-weight: normal; text-align: center;color:darkgreen">Sim</td>
+                                    } else {
+                                        <td style="width: 50px; font-weight: normal; text-align: center;color:red">Não</td>
+                                    }
+                                    <td style="width:30px;text-align:right">
+                                        <img src="~/Images/Consultar.gif" id="btnDetalhe" style="cursor:pointer" width="16" height="16" title="Dados do usuário"  onclick="Detalhe(@i)" />
+                                    </td>
+                                </tr>
 
                             }
                         </tbody>
@@ -115,15 +117,66 @@
     <p>@ViewBag.Result</p>
 </div>
 
+
+<div class="modal fade" id="AnexoModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content" style="font-family: Arial, Helvetica, sans-serif;width:680px">
+            <div class="modal-header">
+                <h5 class="modal-title">Liberar acesso do usuário</h5>
+            </div>
+            <div class="modal-body">
+                <div id="AnexoTable" style="max-height: 247px; overflow: auto;width:650px;padding-top:7px">
+                    <table id="tblHeader" style="font-size:13px">
+                        <tr>
+                            <td style="width:80px">Nome</td>
+                            <td style="font-weight:bold"></td>
+                        <tr>
+                            <td style="width:80px">Cpf:Cnpj</td>
+                            <td style="font-weight:bold"></td>
+                        </tr>
+                        <tr>
+                            <td style="width:80px">Email</td>
+                            <td style="font-weight:bold"></td>
+                        </tr>
+                    </table>
+                    <br />
+                    <span style="text-decoration: underline; color: maroon; font-size: 13px">Documentos</span><br />
+                    <table id="tblAnexo" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                        <thead style="background-color:brown;color:white;font-size:13px;font-weight:normal">
+                            <tr style="height:12px;">
+                                <th style="display:none;font-weight:normal">
+                                    #
+                                </th>
+                                <th style="width:350px;font-weight:normal">
+                                    Descrição do documento
+                                </th>
+                                <th style="width:250px;font-weight:normal">
+                                    Nome do Arquivo
+                                </th>
+                                <th style="width:50px;text-align:left">
+
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnOK" onclick="Liberar()"><i class="fas fa-save"></i>&nbsp;Liberar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-ban"></i>&nbsp;Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts{
 
     <script type="text/javascript">
 
         $(document).ready(function () {
-            $("#MainForm").submit(function () {
-                return ValidateForm();
-            });
-
+    
             $('#msgBox1').dialog({
                 autoOpen: false,
                 resizable: false,
@@ -168,10 +221,20 @@
             }
         });
 
-       
+        function Detalhe(row) {
+            row++;
+            document.getElementById("userId").value = $("#tblMain tr:eq(" + row + ") td:eq(0)").text().trim();
+            $("#tblHeader tr:eq(0) td:eq(1)").text($("#tblMain tr:eq(" + row + ") td:eq(1)").text().trim());
+            $("#tblHeader tr:eq(1) td:eq(1)").text($("#tblMain tr:eq(" + row + ") td:eq(2)").text().trim());
+            $("#tblHeader tr:eq(2) td:eq(1)").text($("#tblMain tr:eq(" + row + ") td:eq(3)").text().trim());
+            $('#AnexoModal').modal({ backdrop: 'static', keyboard: false });
+        }
 
+        function Liberar() {
+
+        }
 
     </script>
-   
+
 }
 
