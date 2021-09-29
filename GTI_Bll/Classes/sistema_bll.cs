@@ -341,9 +341,9 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
-        public Exception Ativar_Usuario_Web_Doc(int UserId, bool Ativo) {
+        public Exception Ativar_Usuario_Web_Doc(int UserId, int _fiscal, DateTime _data_Envio) {
             Sistema_Data obj = new Sistema_Data(_connection);
-            Exception ex = obj.Ativar_Usuario_Web_Doc(UserId, Ativo);
+            Exception ex = obj.Ativar_Usuario_Web_Doc(UserId, _fiscal,_data_Envio);
             return ex;
         }
 
@@ -356,6 +356,11 @@ namespace GTI_Bll.Classes {
         public List<Usuario_Web_Analise_Struct> Lista_Usuario_Web_Analise() {
             Sistema_Data obj = new Sistema_Data(_connection);
             return obj.Lista_Usuario_Web_Analise();
+        }
+
+        public Usuario_web_anexo Retorna_Usuario_Web_Anexo(int userId, short tipo) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            return obj.Retorna_Usuario_Web_Anexo(userId,tipo);
         }
 
     }

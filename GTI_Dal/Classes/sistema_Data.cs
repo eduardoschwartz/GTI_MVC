@@ -865,10 +865,12 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public Exception Ativar_Usuario_Web_Doc(int UserId,bool Ativo) {
+        public Exception Ativar_Usuario_Web_Doc(int UserId,int _fiscal,DateTime _data_Envio) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                Usuario_web b = db.Usuario_Web.First(i => i.Id == UserId);
-                b.Foto = Ativo;
+                Usuario_Web_Analise b = db.Usuario_Web_Analise.First(i => i.Id == UserId && i.Data_envio==_data_Envio) ;
+                b.Autorizado = true;
+                b.Autorizado_por = _fiscal;
+                b.Data_autorizado = DateTime.Now;
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -931,6 +933,14 @@ namespace GTI_Dal.Classes {
                 return Lista;
             }
         }
+
+        public Usuario_web_anexo Retorna_Usuario_Web_Anexo(int userId,short tipo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Usuario_web_anexo Sql = (from a in db.Usuario_Web_Anexo where a.Userid == userId && a.Tipo==tipo  select a).FirstOrDefault();
+                return Sql;
+            }
+        }
+
 
     }
 }

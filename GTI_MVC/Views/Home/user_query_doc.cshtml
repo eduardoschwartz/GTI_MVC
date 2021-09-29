@@ -55,7 +55,9 @@
 
     @using (Html.BeginForm("User_query_doc", "Home", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
-        <input type="hidden" id="userId">
+        <input type="hidden" id="userId" value="@Model.UserId">
+        <input type="hidden" id="status">
+        <input type="hidden" id="dataenvio">
 
         <div class="container" style="width:900px">
             <div class="card">
@@ -78,7 +80,7 @@
                             </tr>
                         </thead>
                         <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
-                            
+
                             @for (int i = 0; i < Model.Lista_Usuario_Web_Analise.Count; i++) {
                                 <tr style="height:20px;">
                                     <td style="display:none">@Model.Lista_Usuario_Web_Analise[i].Id</td>
@@ -92,7 +94,7 @@
                                         <td style="width: 50px; font-weight: normal; text-align: center;color:red">Não</td>
                                     }
                                     <td style="width:30px;text-align:right">
-                                        <img src="~/Images/Consultar.gif" id="btnDetalhe" style="cursor:pointer" width="16" height="16" title="Dados do usuário"  onclick="Detalhe(@i)" />
+                                        <img src="~/Images/Consultar.gif" id="btnDetalhe" style="cursor:pointer" width="16" height="16" title="Dados do usuário" onclick="Detalhe(@i)" />
                                     </td>
                                 </tr>
 
@@ -140,7 +142,7 @@
                         </tr>
                     </table>
                     <br />
-                    <span style="text-decoration: underline; color: maroon; font-size: 13px">Documentos</span><br />
+                    <span style="text-decoration: underline; color: maroon; font-size: 13px">Relação de documentos enviados</span><br />
                     <table id="tblAnexo" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
                         <thead style="background-color:brown;color:white;font-size:13px;font-weight:normal">
                             <tr style="height:12px;">
@@ -176,7 +178,7 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-    
+
             $('#msgBox1').dialog({
                 autoOpen: false,
                 resizable: false,
@@ -223,15 +225,66 @@
 
         function Detalhe(row) {
             row++;
-            document.getElementById("userId").value = $("#tblMain tr:eq(" + row + ") td:eq(0)").text().trim();
+            var _userId = $("#tblMain tr:eq(" + row + ") td:eq(0)").text().trim();
+            document.getElementById("userId").value =_userId;
+            var _status = $("#tblMain tr:eq(" + row + ") td:eq(5)").text().trim();
+            document.getElementById("status").value = _status;
+            var _status = $("#tblMain tr:eq(" + row + ") td:eq(4)").text().trim();
+            document.getElementById("dataenvio").value = _status;
             $("#tblHeader tr:eq(0) td:eq(1)").text($("#tblMain tr:eq(" + row + ") td:eq(1)").text().trim());
             $("#tblHeader tr:eq(1) td:eq(1)").text($("#tblMain tr:eq(" + row + ") td:eq(2)").text().trim());
             $("#tblHeader tr:eq(2) td:eq(1)").text($("#tblMain tr:eq(" + row + ") td:eq(3)").text().trim());
+
+            $.getJSON("Carrega_User_Doc",
+                { userId: _userId },
+                function (json) {
+                    var tr;
+                    $("#tblAnexo tbody tr").remove();
+                    for (var i = 0; i < json.length; i++) {
+                        tr = $('<tr id="' + json[i].Seq + '" style="height: 12px; font-weight: normal; font-size: 13px; white-space: nowrap"  />');
+                        tr.append("<td style='display:none'>" + json[i].Codigo + "</td>");
+                        tr.append("<td style='width:350px'>" + json[i].Descricao + "</td>");
+                        tr.append("<td style='width:250px'>" + json[i].Arquivo + "</td>");
+                        tr.append("<td style='width:50px'><a href=/Home/Anexo_Download?userid=" + _userId + "&tipo=" + json[i].Codigo + " class='actionlink'>download</a> </td>");
+                        $("#tblAnexo").find('tbody').append(tr);
+                    }
+                });
+
+
+
             $('#AnexoModal').modal({ backdrop: 'static', keyboard: false });
         }
 
         function Liberar() {
+            var _id = document.getElementById("userId").value;
+            var _status = document.getElementById("status").value;
+            var _dataenvio = document.getElementById("dataenvio").value;
+            if (_status == "Sim") {
+                alert("Este acesso já foi liberado!");
+                return false;
+            }
+            var retVal = confirm("Deseja liberar o acesso a este usuário?");
+            if (retVal == true) {
 
+                var $formData = new FormData();
+                $formData.append('userId', _id);
+                $formData.append('dataenvio', _dataenvio);
+
+                $.ajax({
+                    url: location.hostname == "localhost" ? "/Home/Libera_Acesso" : "/gti/Home/Libera_Acesso",
+                    type: 'POST',
+                    data: $formData,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function ($data) {
+                        location.reload();
+                    }
+                });
+
+                $('#AnexoModal').hide();
+                Alert("O acesso foi liberado.");
+            } 
         }
 
     </script>

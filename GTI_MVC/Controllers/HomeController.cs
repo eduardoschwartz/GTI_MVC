@@ -10,6 +10,7 @@ using static GTI_Models.modelCore;
 using Newtonsoft.Json.Linq;
 using System.Web;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace GTI_Mvc.Controllers {
     public class HomeController : Controller {
@@ -861,10 +862,59 @@ namespace GTI_Mvc.Controllers {
             List<Usuario_Web_Analise_Struct> Lista = sistemaRepository.Lista_Usuario_Web_Analise();
             model.Lista_Usuario_Web_Analise = Lista;
 
-
-
-
             return View(model);
+        }
+
+        public JsonResult Carrega_User_Doc(string userId) {
+            int _user = Convert.ToInt32(userId);
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            Usuario_web _userWeb = sistemaRepository.Retorna_Usuario_Web(_user);
+            bool _fisica = _userWeb.Cpf_Cnpj.Length == 11 ? true : false;
+
+            List<Usuario_Web_Anexo_Struct>Lista = sistemaRepository.Lista_Usuario_Web_Tipo_Anexo(_user, _fisica);
+            int _pos = 0;
+            foreach (Usuario_Web_Anexo_Struct _anexo in Lista) {
+                Usuario_web_anexo _reg = sistemaRepository.Retorna_Web_Anexo(_user, _anexo.Codigo);
+                if (_reg != null) {
+                    Lista[_pos].Arquivo = Functions.TruncateTo(_reg.Arquivo, 32);
+                }
+                _pos++;
+            }
+            return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        public FileResult Anexo_Download(string userid, string tipo) {
+            int _id = Convert.ToInt32(userid);
+            short _tipo = Convert.ToInt16(tipo);
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            Usuario_web_anexo _anexo = sistemaRepository.Retorna_Usuario_Web_Anexo(_id, _tipo);
+            string _file = _anexo.Arquivo;
+
+            string fullName = Server.MapPath("~");
+            fullName = Path.Combine(fullName, "Files");
+            fullName = Path.Combine(fullName, "UserDoc");
+            fullName = Path.Combine(fullName, _id.ToString("00000"));
+            fullName = Path.Combine(fullName, _file);
+            fullName = fullName.Replace("\\", "/");
+            byte[] fileBytes = GetFile(fullName);
+            return File(
+                fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, _file);
+        }
+
+        byte[] GetFile(string s) {
+            FileStream fs = System.IO.File.OpenRead(s);
+            byte[] data = new byte[fs.Length];
+            int br = fs.Read(data, 0, data.Length);
+            if (br != fs.Length)
+                throw new IOException(s);
+            return data;
+        }
+
+        public JsonResult Libera_Acesso(string userId,string dataenvio) {
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            int _fiscal = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
+            Exception ex = sistemaRepository.Ativar_Usuario_Web_Doc(Convert.ToInt32(userId),_fiscal,Convert.ToDateTime(dataenvio));
+            return Json(new { success = true, responseText = "Acesso liberado com sucesso." }, JsonRequestBehavior.AllowGet);
         }
 
     }
