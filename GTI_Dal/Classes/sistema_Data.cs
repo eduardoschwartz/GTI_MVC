@@ -941,6 +941,18 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public bool Retorna_Usuario_Web_Liberado(int userId) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                bool _ret = false;
+                var Sql = (from a in db.Usuario_Web_Analise orderby a.Data_envio descending where a.Id == userId select a).FirstOrDefault();
+                if (Sql != null) {
+                    _ret = Sql.Autorizado;
+                }
+
+                return _ret;
+            }
+        }
+
 
     }
 }

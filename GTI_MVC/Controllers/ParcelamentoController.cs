@@ -26,10 +26,10 @@ namespace GTI_MVC.Controllers {
                 return RedirectToAction("Login","Home");
 
             int _userid = Convert.ToInt32(Functions.Decrypt( Request.Cookies["2uC*"].Value));
-            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
-            bool _existeFoto = sistemaRepository.Existe_UsuarioWeb_Foto(_userid);
+            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
+            bool _liberado = sistemaRepository.Retorna_Usuario_Web_Liberado(_userid);
 
-            if (!_existeFoto)
+            if (!_liberado)
                 return RedirectToAction("user_doc", "Home");
             else
                 return View();

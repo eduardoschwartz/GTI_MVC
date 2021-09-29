@@ -363,5 +363,10 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Usuario_Web_Anexo(userId,tipo);
         }
 
+        public bool Retorna_Usuario_Web_Liberado(int userId) {
+            Sistema_Data obj = new Sistema_Data(_connection);
+            return obj.Retorna_Usuario_Web_Liberado(userId);
+        }
+
     }
 }

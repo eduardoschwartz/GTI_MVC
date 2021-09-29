@@ -851,7 +851,14 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ActionResult User_query_doc() {
             LoginViewModel model = new LoginViewModel();
-            if (Request.Cookies["2lG1H*"] == null)
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login");
+
+            bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
+            if (!_func)
+                return RedirectToAction("Login");
+            int _id = Convert.ToInt32(Session["hashid"].ToString());
+            if(_id!=392 && _id!=270 && _id!=118 && _id!=433)//392-renata,270-joseane,118-elivaine ,433-schwartz
                 return RedirectToAction("Login");
 
             Sistema_bll sistemaRepository = new Sistema_bll(_connection);

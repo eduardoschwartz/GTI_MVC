@@ -239,18 +239,21 @@
                 { userId: _userId },
                 function (json) {
                     var tr;
+                    var _host =  location.hostname;
                     $("#tblAnexo tbody tr").remove();
                     for (var i = 0; i < json.length; i++) {
                         tr = $('<tr id="' + json[i].Seq + '" style="height: 12px; font-weight: normal; font-size: 13px; white-space: nowrap"  />');
                         tr.append("<td style='display:none'>" + json[i].Codigo + "</td>");
                         tr.append("<td style='width:350px'>" + json[i].Descricao + "</td>");
                         tr.append("<td style='width:250px'>" + json[i].Arquivo + "</td>");
-                        tr.append("<td style='width:50px'><a href=/Home/Anexo_Download?userid=" + _userId + "&tipo=" + json[i].Codigo + " class='actionlink'>download</a> </td>");
+                        if (_host == "localhost"){
+                            tr.append("<td style='width:50px'><a href=/Home/Anexo_Download?userid=" + _userId + "&tipo=" + json[i].Codigo + " class='actionlink'>download</a> </td>");
+                        }else {
+                            tr.append("<td style='width:50px'><a href=/gti/Home/Anexo_Download?userid=" + _userId + "&tipo=" + json[i].Codigo + " class='actionlink'>download</a> </td>");
+                        }
                         $("#tblAnexo").find('tbody').append(tr);
                     }
                 });
-
-
 
             $('#AnexoModal').modal({ backdrop: 'static', keyboard: false });
         }
@@ -278,12 +281,13 @@
                     contentType: false,
                     processData: false,
                     success: function ($data) {
+                        alert("O acesso foi liberado.");
                         location.reload();
                     }
                 });
 
                 $('#AnexoModal').hide();
-                Alert("O acesso foi liberado.");
+                
             } 
         }
 
