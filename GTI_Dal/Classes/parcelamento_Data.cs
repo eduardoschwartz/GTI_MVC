@@ -1058,6 +1058,28 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<Parc_Processos> Lista_Parcelamento_Processos() {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from t in db.Parcelamento_Web_Master where t.Processo_Numero > 0  orderby t.Data_Geracao select t).ToList();
+                List<Parc_Processos> Lista = new List<Parc_Processos>();
+                foreach (var item in reg) {
+                    Parc_Processos Linha = new Parc_Processos {
+                        Guid = item.Guid,
+                        Codigo_Contribuinte = item.Contribuinte_Codigo,
+                        Data_Parcelamento = item.Data_Geracao,
+                        Nome_Contribuinte = dalCore.TruncateTo(item.Contribuinte_nome, 37),
+                        Numero_Processo = item.Processo_Extenso,
+                        Situacao = "ATIVO"
+                    };
+                    Linha.Tipo = item.Contribuinte_Codigo < 50000 ? "Imóvel" : item.Contribuinte_Codigo >= 500000 ? "Outros" : "Empresa";
+                    Lista.Add(Linha);
+                }
+                return Lista;
+            }
+        }
+
+
+
         public List<Destinoreparc> Lista_Destino_Parcelamento(short AnoProcesso,int NumProcesso) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 db.Database.CommandTimeout = 3 * 60;

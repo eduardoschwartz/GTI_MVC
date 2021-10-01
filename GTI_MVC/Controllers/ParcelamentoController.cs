@@ -25,9 +25,15 @@ namespace GTI_MVC.Controllers {
             if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
 
+            bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
+            if(_func)
+                return View();
+
             int _userid = Convert.ToInt32(Functions.Decrypt( Request.Cookies["2uC*"].Value));
             Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
             bool _liberado = sistemaRepository.Retorna_Usuario_Web_Liberado(_userid);
+
+
 
             if (!_liberado)
                 return RedirectToAction("user_doc", "Home");
@@ -40,6 +46,7 @@ namespace GTI_MVC.Controllers {
         public ActionResult Parc_req() {
             if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
+
 
             Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
@@ -1799,6 +1806,9 @@ Fim:;
             if(action == "btnPrintBoleto2") {
                 return RedirectToAction("bank_Method",new { p = model.Guid });
             }
+            if (action == "btnPrintTermo") {
+                return Termo_confissao_divida(model.Guid);
+            }
 
             return View(model);
         }
@@ -1811,7 +1821,13 @@ Fim:;
             int _userId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
 
-            List<Parc_Processos> _listaProc = parcelamentoRepository.Lista_Parcelamento_Processos(_userId);
+            bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
+            List<Parc_Processos> _listaProc;
+            if (_func)
+                _listaProc = parcelamentoRepository.Lista_Parcelamento_Processos();
+            else
+                _listaProc = parcelamentoRepository.Lista_Parcelamento_Processos(_userId);
+
             ParcelamentoViewModel model = new ParcelamentoViewModel();
             model.Lista_Processo = _listaProc;
 

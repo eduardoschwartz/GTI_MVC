@@ -867,7 +867,7 @@ namespace GTI_Dal.Classes {
 
         public Exception Ativar_Usuario_Web_Doc(int UserId,int _fiscal,DateTime _data_Envio) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                Usuario_Web_Analise b = db.Usuario_Web_Analise.First(i => i.Id == UserId && i.Data_envio==_data_Envio) ;
+                Usuario_Web_Analise b = db.Usuario_Web_Analise.FirstOrDefault(i => i.Id == UserId && i.Data_envio==_data_Envio) ;
                 b.Autorizado = true;
                 b.Autorizado_por = _fiscal;
                 b.Data_autorizado = DateTime.Now;

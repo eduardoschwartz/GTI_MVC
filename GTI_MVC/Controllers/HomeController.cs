@@ -822,7 +822,7 @@ namespace GTI_Mvc.Controllers {
             Body = Body.Replace("#F#", _user.Telefone);
             using (MailMessage emailMessage = new MailMessage()) {
                 emailMessage.From = new MailAddress("gti@jaboticabal.sp.gov.br", "Prefeitura de Jaboticabal");
-                emailMessage.To.Add(new MailAddress("eduardo.schwartz@gmail.com"));
+                emailMessage.To.Add(new MailAddress("pad@jaboticabal.sp.gov.br"));
                 emailMessage.Subject = "Prefeitura Municipal de Jaboticabal - Acesso aos serviços online (G.T.I.)";
                 emailMessage.Body = Body;
                 emailMessage.Priority = MailPriority.Normal;
@@ -920,7 +920,8 @@ namespace GTI_Mvc.Controllers {
         public JsonResult Libera_Acesso(string userId,string dataenvio) {
             Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             int _fiscal = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
-            Exception ex = sistemaRepository.Ativar_Usuario_Web_Doc(Convert.ToInt32(userId),_fiscal,Convert.ToDateTime(dataenvio));
+            string _dataenvio = Convert.ToDateTime(dataenvio).ToString("dd/MM/yyyy HH:mm");
+            Exception ex = sistemaRepository.Ativar_Usuario_Web_Doc(Convert.ToInt32(userId),_fiscal,Convert.ToDateTime(_dataenvio));
             return Json(new { success = true, responseText = "Acesso liberado com sucesso." }, JsonRequestBehavior.AllowGet);
         }
 

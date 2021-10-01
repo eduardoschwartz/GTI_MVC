@@ -87,7 +87,7 @@
                                     <td style="width:250px;font-weight:normal">@Functions.TruncateTo(Model.Lista_Usuario_Web_Analise[i].Nome, 30)</td>
                                     <td style="width:140px;font-weight:normal">@Functions.FormatarCpfCnpj(Model.Lista_Usuario_Web_Analise[i].CpfCnpj)</td>
                                     <td style="width:250px;font-weight:normal">@Functions.TruncateTo(Model.Lista_Usuario_Web_Analise[i].Email, 30)</td>
-                                    <td style="width:130px;font-weight:normal;text-align:center">@Model.Lista_Usuario_Web_Analise[i].Data_envio.ToString("dd/MM/yyyy hh:mm")</td>
+                                    <td style="width:130px;font-weight:normal;text-align:center">@Model.Lista_Usuario_Web_Analise[i].Data_envio.ToString("dd/MM/yyyy HH:mm")</td>
                                     @if (Model.Lista_Usuario_Web_Analise[i].Autorizado) {
                                         <td style="width: 50px; font-weight: normal; text-align: center;color:darkgreen">Sim</td>
                                     } else {

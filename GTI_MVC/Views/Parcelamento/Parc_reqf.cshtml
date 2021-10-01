@@ -501,7 +501,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        @for(int i = 0;i < Model.Lista_Simulado.Count;i++) {
+                        @for (int i = 0; i < Model.Lista_Simulado.Count; i++) {
                             <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
                                 <td style="width:20px;text-align:right">
                                     @Html.DisplayFor(model => model.Lista_Simulado[i].Numero_Parcela)
@@ -597,7 +597,8 @@
                 <button type="submit" class="btn btn-secondary" name="action" value="btnPrintBoleto2">Imprimir restante do exercício</button><span style="padding-left:5px"></span>
                 @*<button type="button" class="btn btn-success" id="btnPrintBoleto" data-prop=@Model.Guid>Boleto</button><span style="padding-left:5px"></span>*@
                 <button type="submit" class="btn btn-info" name="action" value="btnPrintResumo">Imprimir Resumo do Parcelamento</button><span style="padding-left:5px"></span>
-                <button type="submit" class="btn btn-info" name="action" value="btnVoltar">Consultar Processos</button>&nbsp;&nbsp;
+                <button type="submit" class="btn btn-secondary" name="action" value="btnPrintTermo">Imprimir Termo</button><span style="padding-left:5px"></span>
+                <button type="submit" class="btn btn-info" name="action" value="btnVoltar">Voltar</button>&nbsp;&nbsp;
             </div>
 
             <div class="card-footer">
