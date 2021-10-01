@@ -229,6 +229,9 @@ namespace GTI_MVC.Controllers {
 
 
             model.Lista_Codigos = _listaCodigos;
+            bool _func = false;
+            if(Session["hashfunc"]!=null)
+                _func = Session["hashfunc"].ToString() == "S" ? true : false;
 
             //Antes de retornar gravamos os dados
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
@@ -250,7 +253,8 @@ namespace GTI_MVC.Controllers {
                     Requerente_Numero = _req.Numero,
                     Requerente_Telefone = _req.Telefone ?? "",
                     Requerente_Uf = _req.UF ?? "",
-                    Requerente_Email = _req.Email ?? ""
+                    Requerente_Email = _req.Email ?? "",
+                    User_interno=_func
                 };
                 Exception ex = parcelamentoRepository.Incluir_Parcelamento_Web_Master(reg);
                 if(ex != null)

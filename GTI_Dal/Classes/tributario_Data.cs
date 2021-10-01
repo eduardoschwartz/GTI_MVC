@@ -1678,6 +1678,8 @@ namespace GTI_Dal.Classes {
             ArrayList alArraySuspenso = new ArrayList();
             ArrayList alArrayResult = new ArrayList();
 
+            List<ParcelamentosStatus> _parcelamentoStatus = new List<ParcelamentosStatus>();
+
             string _descricao_lancamento = "";
             string sDescTmp="";
 
@@ -1686,7 +1688,7 @@ namespace GTI_Dal.Classes {
                 bool bParceladoAVencer = false;
                 bool bSuspenso = false;
 
-                foreach (var item in ListaTributo) { 
+                foreach (var item in ListaTributo) {
                     bool bFind = false;
                     sDescTmp = item.Abrevtributo;
                     if (item.Codlancamento==29)
@@ -1791,9 +1793,12 @@ namespace GTI_Dal.Classes {
                         Certidao.Tipo_Retorno = RetornoCertidaoDebito.NegativaPositiva;
                     else {
                         //Verifica se tem parcelamento
-                        if(bParceladoAVencer)
+                        if (bParceladoAVencer) {
+
+
+
                             Certidao.Tipo_Retorno = RetornoCertidaoDebito.NegativaPositiva;
-                        else
+                        } else
                             Certidao.Tipo_Retorno = RetornoCertidaoDebito.Negativa;
                     }
                 }

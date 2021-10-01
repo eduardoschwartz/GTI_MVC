@@ -68,6 +68,7 @@ namespace GTI_Models.Models {
         public short Processo_Ano { get; set; }
         public int Processo_Numero { get; set; }
         public string Processo_Extenso { get; set; }
+        public bool User_interno { get; set; }
     }
 
     public class Parc_Processos {

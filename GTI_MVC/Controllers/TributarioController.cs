@@ -87,11 +87,6 @@ namespace GTI_Mvc.Controllers {
                 return View(model);
             }
 
-            //if (!Captcha.ValidateCaptchaCode(model.CaptchaCode, Session["CaptchaCode"].ToString())) {
-            //    ViewBag.Result = "Código de verificação inválido.";
-            //    return View(certidaoViewModel);
-            //}
-
             if (!_existeCod) {
                 ViewBag.Result = "Inscrição não cadastrada.";
                 return View(certidaoViewModel);
@@ -479,8 +474,11 @@ namespace GTI_Mvc.Controllers {
 
             string _tributo = "";
             foreach (Certidao_debito_documento item in _lista_certidao) {
-                if (item._Tributo != "")
-                    _tributo += item._Tributo + " (IM:" + item._Codigo + ")" + ",";
+                if (nRet == item._Ret) {
+
+                    if (item._Tributo != "")
+                        _tributo += item._Tributo + " (IM:" + item._Codigo + ")" + ",";
+                }
             }
             if (_tributo.Length > 0)
                 _tributo = _tributo.Substring(0, _tributo.Length - 1);

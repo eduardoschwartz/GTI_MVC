@@ -64,6 +64,10 @@ namespace GTI_Models.Models {
         public string Usuario_Nome { get; set; }
     }
 
-
+    public class ParcelamentosStatus {
+        public string Numero_Processo { get; set; }
+        public bool _existePago { get; set; }
+        public bool _existeNPago { get; set; }
+    }
 
 }
