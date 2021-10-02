@@ -190,7 +190,7 @@ namespace GTI_Dal.Classes {
                     CidadaoStruct _cidadao = cidadao_Class.Dados_Cidadao(_codigo);
                     _nome = _cidadao.Nome;
                     _inscricao = _codigo.ToString();
-                    _cpf_cnpj = _cidadao.Cpf;
+                    _cpf_cnpj = _cidadao.Cnpj==null?_cidadao.Cpf:_cidadao.Cnpj;
                     _rg = _cidadao.Rg;
                     _ativo = true;
                     Endereco_Data endereco_Class = new Endereco_Data(_connection);

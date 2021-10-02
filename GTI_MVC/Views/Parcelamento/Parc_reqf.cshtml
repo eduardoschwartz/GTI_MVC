@@ -314,6 +314,9 @@
                                     <th style="width:70px;text-align:right">
                                         Correção
                                     </th>
+                                    <th style="width:70px;text-align:right">
+                                        Total
+                                    </th>
                                     <th style="width:40px;text-align:right">
                                         Qtde
                                     </th>
@@ -323,9 +326,6 @@
                                     <th style="width:60px;text-align:right">
                                         Vl.Adian.
                                     </th>
-                                    <th style="width:70px;text-align:right">
-                                        Total
-                                    </th>
                                     <th style="width:190px;text-align:left">
                                         &nbsp;&nbsp; Execução Fiscal
                                     </th>
@@ -333,47 +333,47 @@
                             </thead>
                             <tbody class="item-model-number">
                                 @foreach(var item in Model.Lista_Origem_Selected) {
-                                    <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                                        <td style="width:50px;text-align:center">
-                                            @item.Exercicio
-                                        </td>
-                                        <td style="width:158px">
-                                            @item.Nome_lancamento
-                                        </td>
-                                        <td style="width:80px" align="center">
-                                            @item.Data_vencimento.ToString("dd/MM/yyyy")
-                                        </td>
-                                        <td style="width:26px" align="center">
-                                            @item.Ajuizado
-                                        </td>
-                                        <td style="width:70px" align="right">
-                                            @item.Valor_principal
-                                        </td>
-                                        <td style="width:70px" align="right">
-                                            @item.Valor_juros
-                                        </td>
-                                        <td style="width:70px" align="right">
-                                            @item.Valor_multa
-                                        </td>
-                                        <td style="width:70px" align="right">
-                                            @item.Valor_correcao
-                                        </td>
-                                        <td style="width:40px" align="right">
-                                            @item.Qtde_parcelamento
-                                        </td>
-                                        <td style="width:50px" align="right">
-                                            @item.Perc_penalidade
-                                        </td>
-                                        <td style="width:60px" align="right">
-                                            @item.Valor_penalidade
-                                        </td>
-                                        <td style="width:70px" align="right">
-                                            @item.Valor_total
-                                        </td>
-                                        <td style="width:190px" align="left">
-                                            &nbsp;&nbsp;@item.Execucao_Fiscal
-                                        </td>
-                                    </tr>
+                                <tr style="height:15px;border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                                    <td style="width:50px;text-align:center">
+                                        @item.Exercicio
+                                    </td>
+                                    <td style="width:158px">
+                                        @item.Nome_lancamento
+                                    </td>
+                                    <td style="width:80px" align="center">
+                                        @item.Data_vencimento.ToString("dd/MM/yyyy")
+                                    </td>
+                                    <td style="width:26px" align="center">
+                                        @item.Ajuizado
+                                    </td>
+                                    <td style="width:70px" align="right">
+                                        @item.Valor_principal
+                                    </td>
+                                    <td style="width:70px" align="right">
+                                        @item.Valor_juros
+                                    </td>
+                                    <td style="width:70px" align="right">
+                                        @item.Valor_multa
+                                    </td>
+                                    <td style="width:70px" align="right">
+                                        @item.Valor_correcao
+                                    </td>
+                                    <td style="width:70px" align="right">
+                                        @item.Valor_total
+                                    </td>
+                                    <td style="width:40px" align="right">
+                                        @item.Qtde_parcelamento
+                                    </td>
+                                    <td style="width:50px" align="right">
+                                        @item.Perc_penalidade
+                                    </td>
+                                    <td style="width:60px" align="right">
+                                        @item.Valor_penalidade
+                                    </td>
+                                    <td style="width:190px" align="left">
+                                        &nbsp;&nbsp;@item.Execucao_Fiscal
+                                    </td>
+                                </tr>
                                 }
                             </tbody>
                         </table>
@@ -593,12 +593,14 @@
 
 
                 <br />
-                <button type="submit" class="btn btn-success" name="action" value="btnPrintBoleto">Imprimir 1ª parcela</button><span style="padding-left:5px"></span>
-                <button type="submit" class="btn btn-secondary" name="action" value="btnPrintBoleto2">Imprimir restante do exercício</button><span style="padding-left:5px"></span>
-                @*<button type="button" class="btn btn-success" id="btnPrintBoleto" data-prop=@Model.Guid>Boleto</button><span style="padding-left:5px"></span>*@
-                <button type="submit" class="btn btn-info" name="action" value="btnPrintResumo">Imprimir Resumo do Parcelamento</button><span style="padding-left:5px"></span>
                 <button type="submit" class="btn btn-secondary" name="action" value="btnPrintTermo">Imprimir Termo</button><span style="padding-left:5px"></span>
-                <button type="submit" class="btn btn-info" name="action" value="btnVoltar">Voltar</button>&nbsp;&nbsp;
+                <button type="submit" class="btn btn-secondary" name="action" value="btnPrintResumo">Imprimir Resumo do Parcelamento</button><span style="padding-left:5px"></span>
+                <button type="submit" class="btn btn-success" name="action" value="btnPrintBoleto">Imprimir 1ª parcela</button><span style="padding-left:5px"></span>
+                <button type="submit" class="btn btn-info" name="action" value="btnPrintBoleto2">Imprimir restante do exercício</button><span style="padding-left:5px"></span>
+                @*<button type="button" class="btn btn-success" id="btnPrintBoleto" data-prop=@Model.Guid>Boleto</button><span style="padding-left:5px"></span>*@
+
+
+                <button type="submit" class="btn btn-primary" name="action" value="btnVoltar">Voltar</button>&nbsp;&nbsp;
             </div>
 
             <div class="card-footer">

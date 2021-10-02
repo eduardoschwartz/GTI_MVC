@@ -57,6 +57,10 @@
         @Html.DisplayFor(model => model.Valor_correcao)
         @Html.HiddenFor(model => model.Valor_correcao)
     </td>
+    <td style="width:70px" align="right">
+        @Html.DisplayFor(model => model.Valor_total)
+        @Html.HiddenFor(model => model.Valor_total)
+    </td>
     <td style="width:40px" align="right">
         @Html.DisplayFor(model => model.Qtde_parcelamento)
         @Html.HiddenFor(model => model.Qtde_parcelamento)
@@ -68,10 +72,6 @@
     <td style="width:60px" align="right">
         @Html.DisplayFor(model => model.Valor_penalidade)
         @Html.HiddenFor(model => model.Valor_penalidade)
-    </td>
-    <td style="width:70px" align="right">
-        @Html.DisplayFor(model => model.Valor_total)
-        @Html.HiddenFor(model => model.Valor_total)
     </td>
     <td style="width:240px" align="left">
         &nbsp;&nbsp; @Model.Execucao_Fiscal
