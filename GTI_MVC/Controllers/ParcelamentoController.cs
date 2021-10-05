@@ -1541,7 +1541,7 @@ Fim:;
         [Route("Parc_tcd")]
         [HttpGet]
         public ActionResult Parc_tcd(string p) {
-            if (Request.Cookies["2lG1H*"] == null)
+            if (Request.Cookies["2lG1H*"] == null || p==null)
                 return RedirectToAction("Login","Home");
 
             string _guid = p;
