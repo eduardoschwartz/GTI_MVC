@@ -467,7 +467,7 @@
                                     Dt.Vencto
                                 </th>
                                 <th style="width:70px;text-align:right">
-                                    Vl.Líq.
+                                    Vl.Prin.
                                 </th>
                                 <th style="width:70px;text-align:right">
                                     Vl.Juros
@@ -479,7 +479,7 @@
                                     Vl.Corr.
                                 </th>
                                 <th style="width:70px;text-align:right">
-                                    Vl.Princ.
+                                    Vl.Parc.
                                 </th>
                                 <th style="width:70px;text-align:right">
                                     Saldo
@@ -556,7 +556,7 @@
                             <td style="width:100px;color:white;" align="right">Valor R$</td>
                         </tr>
                         <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                            <td>Total Líquido:</td>
+                            <td>Total Principal:</td>
                             <td style="width:100px;color:red" align="right">@Model.Sim_Liquido.ToString("#0.00")</td>
                         </tr>
                         <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
@@ -571,14 +571,14 @@
                             <td>Total Correção:</td>
                             <td style="width:100px;color:red" align="right">@Model.Sim_Correcao.ToString("#0.00")</td>
                         </tr>
-                        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                        @*<tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
                             <td>Total Geral:</td>
                             <td style="width:100px;color:red" align="right">@Model.Sim_Total.ToString("#0.00")</td>
-                        </tr>
-                        <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
-                            <td>Total Principal:</td>
+                        </tr>*@
+                        @*<tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
+                            <td>Total Parcela:</td>
                             <td style="width:100px;color:red" align="right">@Model.Sim_Principal.ToString("#0.00")</td>
-                        </tr>
+                        </tr>*@
                         <tr style="border-bottom-color:cadetblue;border-bottom-style:solid;border-bottom-width:1px;border-top-color:cadetblue;border-top-style:solid;border-top-width:1px">
                             <td>Total Juros Apl:</td>
                             <td style="width:100px;color:red" align="right">@Model.Sim_Juros_apl.ToString("#0.00")</td>
