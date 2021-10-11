@@ -57,8 +57,9 @@
                     @Html.ActionLink("Alvará de Funcionamento", "Alvara", "Empresa", null, new { @class = "actionlink" })<br />
 
                 }
-                @Html.ActionLink("Requerimentos (Alteração cadastral, baixa de atividade, etc..)", "mobreq_menu", "MobReq", null, new { @class = "actionlink" })<br />
+
             }
+            @Html.ActionLink("Requerimentos (Alteração cadastral, baixa de atividade, etc..)", "mobreq_menu", "MobReq", null, new { @class = "actionlink" })<br />
             @if (ViewBag.UsoPlataforma == "S") {
                 @Html.ActionLink("Uso de Plataforma (terminal Rodoviário)", "Rod_menu", "Plataforma", null, new { @class = "actionlink" })<br />
             }

@@ -4810,28 +4810,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Notificação de Lançamento de Imposto  Nº:  </Value>
-                    <Style>
-                      <FontSize>9pt</FontSize>
-                      <FontWeight>Bold</FontWeight>
-                    </Style>
-                  </TextRun>
-                  <TextRun>
-                    <Value>=Parameters!NumeroNot.Value</Value>
-                    <Style>
-                      <FontSize>9pt</FontSize>
-                      <FontWeight>Bold</FontWeight>
-                    </Style>
-                  </TextRun>
-                  <TextRun>
-                    <Value>   Processo nº: </Value>
-                    <Style>
-                      <FontSize>9pt</FontSize>
-                      <FontWeight>Bold</FontWeight>
-                    </Style>
-                  </TextRun>
-                  <TextRun>
-                    <Value>=Parameters!Processo.Value</Value>
+                    <Value />
                     <Style>
                       <FontSize>9pt</FontSize>
                       <FontWeight>Bold</FontWeight>
@@ -5084,7 +5063,7 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>dsNotificacaoISS</DataSetName>
-            <Top>3.11457cm</Top>
+            <Top>3.64374cm</Top>
             <Left>0.55245cm</Left>
             <Height>2.54938cm</Height>
             <Width>19.8462cm</Width>
@@ -5107,7 +5086,7 @@
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>1.94938cm</Height>
+                  <Height>1.34536cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -5120,7 +5099,7 @@
                                 <TextRun>
                                   <Value>Cálculo do ISS Construção Civil</Value>
                                   <Style>
-                                    <FontSize>16pt</FontSize>
+                                    <FontSize>14pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <TextDecoration>None</TextDecoration>
                                   </Style>
@@ -5895,9 +5874,9 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>dsNotificacaoISS</DataSetName>
-            <Top>5.82587cm</Top>
+            <Top>6.40153cm</Top>
             <Left>0.52869cm</Left>
-            <Height>6.74938cm</Height>
+            <Height>6.14536cm</Height>
             <Width>11.1703cm</Width>
             <ZIndex>5</ZIndex>
             <Style>
@@ -5944,7 +5923,7 @@
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>1.94938cm</Height>
+                  <Height>1.34938cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -5957,7 +5936,6 @@
                                 <TextRun>
                                   <Value>="Tabela de referência de " + Fields!Ano_notificacao.Value.ToString + System.Environment.NewLine + "(Decreto nº " + Fields!Decreto.Value + ")" + System.Environment.NewLine + "Residencial"</Value>
                                   <Style>
-                                    <FontSize>12pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <TextDecoration>None</TextDecoration>
                                   </Style>
@@ -7181,9 +7159,9 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>dsNotificacaoISS</DataSetName>
-            <Top>5.82185cm</Top>
+            <Top>6.39751cm</Top>
             <Left>11.89934cm</Left>
-            <Height>6.74938cm</Height>
+            <Height>6.14938cm</Height>
             <Width>8.46188cm</Width>
             <ZIndex>6</ZIndex>
             <Style>
@@ -7566,6 +7544,62 @@
               </Border>
             </Style>
           </Tablix>
+          <Textbox Name="Textbox4">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Notificação de Lançamento de Imposto  Nº:  </Value>
+                    <Style>
+                      <FontSize>14pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>=Parameters!NumeroNot.Value</Value>
+                    <Style>
+                      <FontSize>14pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>   Processo nº: </Value>
+                    <Style>
+                      <FontSize>14pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>=Parameters!Processo.Value</Value>
+                    <Style>
+                      <FontSize>14pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox4</rd:DefaultName>
+            <Top>2.47929cm</Top>
+            <Left>0.55245cm</Left>
+            <Height>0.78521cm</Height>
+            <Width>19.80877cm</Width>
+            <ZIndex>11</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
         <Height>11.35804in</Height>
         <Style />

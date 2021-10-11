@@ -18,7 +18,7 @@ using System.Web.Mvc;
 
 namespace GTI_MVC.Controllers {
     public class ParcelamentoController:Controller {
-        private readonly string _connection = "GTIconnectionTeste";
+        private readonly string _connection = "GTIconnection";
         [Route("Parc_index")]
         [HttpGet]
         public ActionResult Parc_index() {
