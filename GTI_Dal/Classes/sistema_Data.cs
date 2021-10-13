@@ -801,7 +801,7 @@ namespace GTI_Dal.Classes {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var reg = (from t in db.Usuario_Web_Tipo_Anexo
                            where t.Fisica == Fisica
-                           orderby t.Codigo select new { t.Codigo, t.Descricao, Fisica }).ToList();
+                           orderby t.Codigo select new { t.Codigo, t.Descricao, Fisica,t.Obrigatorio }).ToList();
                 List<Usuario_Web_Anexo_Struct> Lista = new List<Usuario_Web_Anexo_Struct>();
                 foreach (var item in reg) {
                     Usuario_Web_Anexo_Struct Linha = new Usuario_Web_Anexo_Struct {
@@ -809,7 +809,8 @@ namespace GTI_Dal.Classes {
                         Codigo = item.Codigo,
                         Descricao = item.Descricao ?? "",
                         Fisica = Fisica,
-                        UserId = UserId
+                        UserId = UserId,
+                        Obrigatorio=item.Obrigatorio
                     };
                     Lista.Add(Linha);
                 }

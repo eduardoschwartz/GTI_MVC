@@ -107,7 +107,7 @@
         @Html.HiddenFor(m => m.CpfCnpjLabel)
         <input type="hidden" id="Seq_Anexo">
 
-        <div class="container" style="width:720px">
+        <div class="container" style="width:790px">
             <div class="card">
                 <div class="card-header">Identificação do Usuário</div>
                 <div class="card-body">
@@ -118,7 +118,7 @@
                     </article>
                     <br />
 
-                    <div id="AnexoTable" style="max-height: 247px; overflow: auto;width:650px;padding-top:7px">
+                    <div id="AnexoTable" style="max-height: 247px; overflow: auto;width:720px;padding-top:7px">
                         <table id="tblAnexo" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
                             <thead style="background-color:brown;color:white;font-size:13px;font-weight:normal">
                                 <tr style="height:12px;">
@@ -131,6 +131,9 @@
                                     <th style="width:250px;font-weight:normal">
                                         Nome do Arquivo
                                     </th>
+                                    <th style="width:80px;font-weight:normal">
+                                        Obrigatório
+                                    </th>
                                     <th style="width:50px;text-align:left">
 
                                     </th>
@@ -139,31 +142,37 @@
                             <tbody>
 
                                 @foreach (var item in Model.Lista_Usuario_Web_Anexo) {
-                                    <tr>
-                                        <td style="display:none; font-weight:normal;color:darkblue">
-                                            @Html.DisplayFor(modelItem => item.Codigo)
-                                            @Html.HiddenFor(modelItem => item.Codigo)
+                                <tr>
+                                    <td style="display:none; font-weight:normal;color:darkblue">
+                                        @Html.DisplayFor(modelItem => item.Codigo)
+                                        @Html.HiddenFor(modelItem => item.Codigo)
+                                    </td>
+                                    <td style="font-weight:normal;color:darkblue">
+                                        @Html.DisplayFor(modelItem => item.Descricao)
+                                        @Html.HiddenFor(modelItem => item.Descricao)
+                                    </td>
+                                    @if (item.Arquivo == "(Não anexado)") {
+                                        <td style="font-weight:normal;color:red;">
+                                            @Html.DisplayFor(modelItem => item.Arquivo)
+                                            @Html.HiddenFor(modelItem => item.Arquivo)
                                         </td>
+                                    } else {
                                         <td style="font-weight:normal;color:darkblue">
-                                            @Html.DisplayFor(modelItem => item.Descricao)
-                                            @Html.HiddenFor(modelItem => item.Descricao)
+                                            @Html.DisplayFor(modelItem => item.Arquivo)
+                                            @Html.HiddenFor(modelItem => item.Arquivo)
                                         </td>
-                                        @if (item.Arquivo == "(Não anexado)") {
-                                            <td style="font-weight:normal;color:red;">
-                                                @Html.DisplayFor(modelItem => item.Arquivo)
-                                                @Html.HiddenFor(modelItem => item.Arquivo)
-                                            </td>
-                                        } else {
-                                            <td style="font-weight:normal;color:darkblue">
-                                                @Html.DisplayFor(modelItem => item.Arquivo)
-                                                @Html.HiddenFor(modelItem => item.Arquivo)
-                                            </td>
-                                        }
+                                    }
+                                    @if (item.Obrigatorio) {
+                                        <td style="font-weight:normal;color:green;text-align:center">Sim </td>
+                                    } else {
+                                        <td style="font-weight: normal; color: red; text-align: center">Não </td>
+                                    }
+                                    @Html.HiddenFor(modelItem => item.Arquivo)
                                     <td>
                                         <img src="~/Images/save.png" id="btnAnexo" style="cursor:pointer" width="16" height="16" title="Anexar Arquivo" onclick="Anexar(@item.Codigo)" />
                                         <img src="~/Images/cancelar.gif" id="btnDelAnexo" style="cursor:pointer" width="16" height="16" title="Remover Anexo" onclick="Remover_Anexo(@item.Codigo)" />
                                     </td>
-                                    </tr>
+                                </tr>
                                 }
                             </tbody>
                         </table>
@@ -354,8 +363,8 @@
             for (var i = 1; i < rows; i++) {
                 var _texto = $("#tblAnexo tr:eq(" + i + ") td:eq(2)").text().trim();
                 if (_texto == "(Não anexado)") {
-                    var _titulo = $("#tblAnexo tr:eq(" + i + ") td:eq(1)").text().trim();
-                    if (_titulo != "Ata de Constituição da empresa") {
+                    var _obrig = $("#tblAnexo tr:eq(" + i + ") td:eq(3)").text().trim();
+                    if (_obrig == "Sim") {
                         _semAnexo = true;
                         break;
                     }
@@ -363,7 +372,7 @@
                 }
             }
             if (_semAnexo) {
-                document.getElementById('lblMsg').innerHTML = "É obrigatório anexar todos os documentos antes de enviar para análise.";
+                document.getElementById('lblMsg').innerHTML = "Anexar todos os documentos  obrigatórios antes de enviar para análise.";
                 $('#msgBox1').dialog('open');
             } else {
                 $('#msgBoxWait').dialog('open');

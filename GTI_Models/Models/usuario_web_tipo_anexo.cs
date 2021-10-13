@@ -6,5 +6,6 @@ namespace GTI_Models.Models {
         public short Codigo { get; set; }
         public bool Fisica { get; set; }
         public string Descricao { get; set; }
+        public bool Obrigatorio { get; set; }
     }
 }

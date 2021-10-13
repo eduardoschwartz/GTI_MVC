@@ -19,6 +19,7 @@ namespace GTI_Models.Models {
         public short Tipo { get; set; }
         public string Descricao { get; set; }
         public string Arquivo { get; set; }
+        public bool Obrigatorio { get; set; }
     }
 
 
