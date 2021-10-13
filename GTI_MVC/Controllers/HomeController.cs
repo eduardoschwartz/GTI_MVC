@@ -643,6 +643,9 @@ namespace GTI_Mvc.Controllers {
                 case "itbi":
                     _fr.Controller = "Itbi"; _fr.Action = "Itbi_menu";
                     break;
+                case "parc":
+                    _fr.Controller = "Parcelamento"; _fr.Action = "Parc_index";
+                    break;
                 case "2":
                     _fr.Controller = "Imovel"; _fr.Action = "Carne_Iptu";
                     break;

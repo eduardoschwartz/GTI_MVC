@@ -44,12 +44,10 @@
         border-radius: 4px;
     }
 
-  
+
     .ui-dialog-titlebar-close {
         visibility: hidden;
     }
-
-
 </style>
 
 @{var res = ViewBag.Result;}
@@ -90,25 +88,25 @@
             </div>
 
             <div class="card-footer">
-                @Html.ActionLink("Criar uma conta","Login_create","Home",null,new { @class = "actionlink" })<br />
-                @Html.ActionLink("Esqueci minha senha","Login_resend_pwd","Home",null,new { @class = "actionlink" })<br />
-                @Html.ActionLink("Reenviar email para ativação da conta","Login_resend","Home",null,new { @class = "actionlink" })<br />
-                @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
+                @Html.ActionLink("Criar uma conta", "Login_create", "Home", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Esqueci minha senha", "Login_resend_pwd", "Home", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Reenviar email para ativação da conta", "Login_resend", "Home", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
             </div>
 
         </div>
 
-        }
+    }
 
 </div>
 
 
-<div id="msgBox1" title="Atenção" style='display: none;' >
+<div id="msgBox1" title="Atenção" style='display: none;'>
     <br />
     <label id="lblMsg"></label>
 </div>
 
-<div id="msgBoxBag" title="Atenção" style='display: none;' >
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
     <br />
     <p>@ViewBag.Result</p>
 </div>
@@ -117,7 +115,7 @@
 @section scripts{
 
     <script type="text/javascript">
-        
+
 
         $(document).ready(function () {
             $(function () {
@@ -193,7 +191,7 @@
 
         });
 
-   
+
 
     </script>
 }

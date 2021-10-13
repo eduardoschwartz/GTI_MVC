@@ -354,8 +354,12 @@
             for (var i = 1; i < rows; i++) {
                 var _texto = $("#tblAnexo tr:eq(" + i + ") td:eq(2)").text().trim();
                 if (_texto == "(Não anexado)") {
-                    _semAnexo = true;
-                    break;
+                    var _titulo = $("#tblAnexo tr:eq(" + i + ") td:eq(1)").text().trim();
+                    if (_titulo != "Ata de Constituição da empresa") {
+                        _semAnexo = true;
+                        break;
+                    }
+                    
                 }
             }
             if (_semAnexo) {

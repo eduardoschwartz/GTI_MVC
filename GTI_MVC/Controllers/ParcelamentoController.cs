@@ -22,9 +22,14 @@ namespace GTI_MVC.Controllers {
         [Route("Parc_index")]
         [HttpGet]
         public ActionResult Parc_index() {
+            Session["hashform"] = "parc";
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
             if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
 
+            
             bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
             if(_func)
                 return View();
@@ -33,7 +38,25 @@ namespace GTI_MVC.Controllers {
             Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
             bool _liberado = sistemaRepository.Retorna_Usuario_Web_Liberado(_userid);
 
+            int _user_id = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
+            Usuario_web _user = sistemaRepository.Retorna_Usuario_Web(_user_id);
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+            string _cpfcnpj = _user.Cpf_Cnpj;
+            int _codigo;
+            bool _bCpf = false;
+            if (_cpfcnpj.Length == 11) {
+                _codigo = cidadaoRepository.Existe_Cidadao_Cpf(_cpfcnpj);
+                _bCpf = true;
+            } else {
+                _codigo = cidadaoRepository.Existe_Cidadao_Cnpj(_cpfcnpj);
+            }
 
+            if (_codigo == 0) {
+                ViewBag.Result = "CPF/CNPJ sem cadastro na Prefeitura!";
+                return View();
+            } else {
+                ViewBag.Result = "";
+            }
 
             if (!_liberado)
                 return RedirectToAction("user_doc", "Home");
@@ -65,6 +88,11 @@ namespace GTI_MVC.Controllers {
                 _bCpf = true;
             } else {
                 _codigo = cidadaoRepository.Existe_Cidadao_Cnpj(_cpfcnpj);
+            }
+
+            if (_codigo == 0) {
+                ViewBag.Result = "CPF/CNPJ sem cadastro na Prefeitura!";
+                return RedirectToAction("Parc_index");
             }
 
             CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(_codigo);
