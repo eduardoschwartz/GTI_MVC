@@ -76,9 +76,9 @@
 
             @Html.ActionLink("Inclusão de Cep não cadastrado", "Cep_inc", "Shared", null, new { @class = "actionlink" })<br />
             @Html.ActionLink("Imposto sobre Transmissão de Bens Imóveis (ITBI)", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })<br />
-            @if (Session["hashid"].ToString() == "582" || Session["hashid"].ToString() == "433" || Session["hashid"].ToString() == "1" || Session["hashid"].ToString() == "1114") {
-                @Html.ActionLink("Parcelamento de débitos", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<span style="padding-left:5px;color:red">(** Somente para testes **)</span><br />
-            }
+            @*@if (Session["hashid"].ToString() == "582" || Session["hashid"].ToString() == "433" || Session["hashid"].ToString() == "1" || Session["hashid"].ToString() == "1114") {*@
+                @Html.ActionLink("Parcelamento de débitos", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<br />
+            @*}*@
             @if (Session["hashfunc"].ToString() == "S") {
                 if (Session["hashid"].ToString() == "392" || Session["hashid"].ToString() == "270" || Session["hashid"].ToString() == "118" || Session["hashid"].ToString() == "433") {
                     @Html.ActionLink("Liberação de Acesso de usuários", "User_query_doc", "Home", null, new { @class = "actionlink" })<br />
