@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System.Web;
 using System.IO;
 using System.Runtime.InteropServices;
+using static GTI_MVC.Controllers.ProcessoController;
 
 namespace GTI_Mvc.Controllers {
     public class HomeController : Controller {
@@ -725,9 +726,8 @@ namespace GTI_Mvc.Controllers {
 
 
         [Route("User_Query")]
-        [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult User_Query(LoginViewModel model,int? ide,string action) {
+        public ActionResult User_Query(LoginViewModel model,int? ide,string tp,  string action) {
 
             List<Usuario_web> Lista = new List<Usuario_web>();
             Sistema_bll sistemaRepository = new Sistema_bll(_connection);
@@ -742,12 +742,16 @@ namespace GTI_Mvc.Controllers {
                     Exception ex = sistemaRepository.Alterar_Usuario_Web_Senha((int)ide, Functions.Encrypt("123456"));
                 //    ViewBag.Result = "A senha foi reseta com sucesso";
                 //}
+                model.Lista_Usuario_Web = Lista;
+                return Json(new { success = true, data = model }, JsonRequestBehavior.AllowGet);
+
             }
 
             if (!string.IsNullOrEmpty(model.Filter))
                 Lista = sistemaRepository.Lista_Usuario_Web(model.Filter);
 
             model.Lista_Usuario_Web = Lista;
+//            return Json(new { success = true, data = model }, JsonRequestBehavior.AllowGet);
             return View(model);
         }
 

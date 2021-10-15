@@ -276,7 +276,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             rd.SetParameterValue("Guid",p);
-            rd.SetParameterValue("Razao",_req.Razao_Social);
+            rd.SetParameterValue("Razao",_dados.Razao_social);
             rd.SetParameterValue("CpfCnpj",Functions.FormatarCpfCnpj( _req.CpfCnpj));
             rd.SetParameterValue("RgIe",_rgie);
             rd.SetParameterValue("DataCadastro",_req.Data_Evento);

@@ -117,6 +117,10 @@
                         Após o envio, os documentos serão analisados pelo setor de dívida ativa, e se aprovados, o serviço será liberado. Qualquer dúvida entrar em contato através do email <a href="mailto:pad@jaboticabal.sp.gov.br">pad@jaboticabal.sp.gov.br</a>. <br />Obs: Os anexos deverão ser enviados no formato PDF com tamanho máximo de 4Mb.
                     </article>
                     <br />
+                    <article style="font-size:13px;color:darkred;text-align:justify">
+                        A obrigatoriedade do Contrato Social caso proprietário da empresa ou Ata de Constituição da Empresa quando sócio da mesma.
+                    </article>
+                    <br />
 
                     <div id="AnexoTable" style="max-height: 247px; overflow: auto;width:720px;padding-top:7px">
                         <table id="tblAnexo" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
@@ -142,37 +146,37 @@
                             <tbody>
 
                                 @foreach (var item in Model.Lista_Usuario_Web_Anexo) {
-                                <tr>
-                                    <td style="display:none; font-weight:normal;color:darkblue">
-                                        @Html.DisplayFor(modelItem => item.Codigo)
-                                        @Html.HiddenFor(modelItem => item.Codigo)
-                                    </td>
-                                    <td style="font-weight:normal;color:darkblue">
-                                        @Html.DisplayFor(modelItem => item.Descricao)
-                                        @Html.HiddenFor(modelItem => item.Descricao)
-                                    </td>
-                                    @if (item.Arquivo == "(Não anexado)") {
-                                        <td style="font-weight:normal;color:red;">
-                                            @Html.DisplayFor(modelItem => item.Arquivo)
-                                            @Html.HiddenFor(modelItem => item.Arquivo)
+                                    <tr>
+                                        <td style="display:none; font-weight:normal;color:darkblue">
+                                            @Html.DisplayFor(modelItem => item.Codigo)
+                                            @Html.HiddenFor(modelItem => item.Codigo)
                                         </td>
-                                    } else {
                                         <td style="font-weight:normal;color:darkblue">
-                                            @Html.DisplayFor(modelItem => item.Arquivo)
-                                            @Html.HiddenFor(modelItem => item.Arquivo)
+                                            @Html.DisplayFor(modelItem => item.Descricao)
+                                            @Html.HiddenFor(modelItem => item.Descricao)
                                         </td>
-                                    }
-                                    @if (item.Obrigatorio) {
-                                        <td style="font-weight:normal;color:green;text-align:center">Sim </td>
-                                    } else {
-                                        <td style="font-weight: normal; color: red; text-align: center">Não </td>
-                                    }
-                                    @Html.HiddenFor(modelItem => item.Arquivo)
-                                    <td>
-                                        <img src="~/Images/save.png" id="btnAnexo" style="cursor:pointer" width="16" height="16" title="Anexar Arquivo" onclick="Anexar(@item.Codigo)" />
-                                        <img src="~/Images/cancelar.gif" id="btnDelAnexo" style="cursor:pointer" width="16" height="16" title="Remover Anexo" onclick="Remover_Anexo(@item.Codigo)" />
-                                    </td>
-                                </tr>
+                                        @if (item.Arquivo == "(Não anexado)") {
+                                            <td style="font-weight:normal;color:red;">
+                                                @Html.DisplayFor(modelItem => item.Arquivo)
+                                                @Html.HiddenFor(modelItem => item.Arquivo)
+                                            </td>
+                                        } else {
+                                            <td style="font-weight:normal;color:darkblue">
+                                                @Html.DisplayFor(modelItem => item.Arquivo)
+                                                @Html.HiddenFor(modelItem => item.Arquivo)
+                                            </td>
+                                        }
+                                        @if (item.Obrigatorio) {
+                                            <td style="font-weight:normal;color:green;text-align:center">Sim </td>
+                                        } else {
+                                            <td style="font-weight: normal; color: red; text-align: center">Não </td>
+                                        }
+                                        @Html.HiddenFor(modelItem => item.Arquivo)
+                                        <td>
+                                            <img src="~/Images/save.png" id="btnAnexo" style="cursor:pointer" width="16" height="16" title="Anexar Arquivo" onclick="Anexar(@item.Codigo)" />
+                                            <img src="~/Images/cancelar.gif" id="btnDelAnexo" style="cursor:pointer" width="16" height="16" title="Remover Anexo" onclick="Remover_Anexo(@item.Codigo)" />
+                                        </td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>

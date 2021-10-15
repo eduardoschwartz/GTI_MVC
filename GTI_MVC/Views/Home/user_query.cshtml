@@ -53,7 +53,7 @@
 <div class="center">
 
     @using (Html.BeginForm("User_Query", "Home", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
-        @Html.AntiForgeryToken()
+        @*@Html.AntiForgeryToken()*@
         @*<input type='hidden' id='p' name='p' value='' />*@
         @*@Html.HiddenFor(m => m.UserId, new { @id = "UserId" })*@
         <div class="container" style="width:800px">
@@ -93,7 +93,7 @@
                                     <td style="width:400px;font-weight:normal">@Html.DisplayFor(modelItem => item.Email)</td>
                                     <td style="width:30px;font-weight:normal">@Html.DisplayFor(modelItem => item.Ativo)</td>
                                     <td style="width:50px;text-align:right">
-                                        <a href="#" class="actionlink" onclick="Enviar(@item.Id)">Resetar</a>
+                                        <a href="" class="actionlink" onclick="Enviar(@item.Id)">Resetar</a>
                                     </td>
                                 </tr>
 
@@ -138,7 +138,8 @@
                 dialogClass: "foo",
                 buttons: {
                     "OK": function () {
-                        $(this).dialog("close");
+                        //alert("Senha resetada com sucesso.");
+                        location.reload();
                     }
                 }
             });
@@ -184,15 +185,22 @@
 
         function Enviar(id) {
             if (confirm('Você deseja resetar a senha deste email para 123456?')) {
+
                 $.ajax({
                     type: "Post",
-                    url: "/Home/User_Query",
-                    data: { "ide" : id,"action":'rs' },
+                    url: location.hostname == "localhost" ? "/Home/User_Query" : "/gti/Home/User_Query",
+                    data: {
+                        ide: id,
+                        tp: 'rs',
+                        action: 'rs'},
                     dataType: "json",
+                    success: function ($data) {
+                       alert( "Senha resetada com sucesso.");
+                        $('#msgBox1').dialog('open');
+                        //location.reload();
+                    }
                 });
-                document.getElementById('lblMsg').innerHTML = "Senha resetada com sucesso.";
-                $('#msgBox1').dialog('open');
-            } 
+            }
         }
 
 

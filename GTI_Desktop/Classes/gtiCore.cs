@@ -257,7 +257,7 @@ namespace GTI_Desktop.Classes {
             Main f1 = (Main)Application.OpenForms["Main"];
             try {
                 BaseDados = DataBase_Name;
-                connString = CreateConnectionString("SKYNET", BaseDados, Ul, Up); //Base de testes por enquanto
+                connString = CreateConnectionString("200.232.123.115", BaseDados, Ul, Up); //Base de testes por enquanto
             } catch (Exception) {
             }
             return connString;

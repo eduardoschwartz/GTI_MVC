@@ -11,8 +11,9 @@ using System.Windows.Forms;
 namespace GTI_Desktop.Forms {
     public partial class Calculo_Imposto : Form {
         string _connection = gtiCore.Connection_Name();
+        string _connectionTeste = gtiCore.Connection_Name("TributacaoTeste");
         string _path = @"c:\cadastro\bin\";
-        int _ano = 2021;
+        int _ano = 2022;
         int _documento = 19126490;
         decimal _ipca = (decimal)3.1352;
  
@@ -627,7 +628,9 @@ namespace GTI_Desktop.Forms {
 
         private void ExportarButton_Click(object sender, EventArgs e) {
             if (MessageBox.Show("Exportar para o banco de dados?", "Confimação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No) return;
-            Tributario_bll tributario_Class = new Tributario_bll(_connection);
+            string _exportConnection = _connectionTeste;
+
+            Tributario_bll tributario_Class = new Tributario_bll(_exportConnection);
 
             #region DEBITOPARCELA
             MsgToolStrip.Text = "Inserindo parcelas";
@@ -662,7 +665,7 @@ namespace GTI_Desktop.Forms {
                 dt.Rows.Add(_row);
             }
 
-            SqlBulkCopy sbc = new SqlBulkCopy(_connection);
+            SqlBulkCopy sbc = new SqlBulkCopy(_exportConnection);
             sbc.BulkCopyTimeout = 0;
             sbc.DestinationTableName = "DEBITOPARCELA";
             sbc.WriteToServer(dt);
@@ -704,7 +707,7 @@ namespace GTI_Desktop.Forms {
                 dt.Rows.Add(_row);
             }
 
-            sbc = new SqlBulkCopy(_connection);
+            sbc = new SqlBulkCopy(_exportConnection);
             sbc.BulkCopyTimeout = 0;
             sbc.DestinationTableName = "DEBITOTRIBUTO";
             sbc.WriteToServer(dt);
@@ -742,7 +745,7 @@ namespace GTI_Desktop.Forms {
                 dt.Rows.Add(_row);
             }
 
-            sbc = new SqlBulkCopy(_connection);
+            sbc = new SqlBulkCopy(_exportConnection);
             sbc.BulkCopyTimeout = 0;
             sbc.DestinationTableName = "PARCELADOCUMENTO";
             sbc.WriteToServer(dt);
@@ -770,7 +773,7 @@ namespace GTI_Desktop.Forms {
                 dt.Rows.Add(_row);
             }
 
-            sbc = new SqlBulkCopy(_connection);
+            sbc = new SqlBulkCopy(_exportConnection);
             sbc.BulkCopyTimeout = 0;
             sbc.DestinationTableName = "NUMDOCUMENTO";
             sbc.WriteToServer(dt);
@@ -888,7 +891,7 @@ namespace GTI_Desktop.Forms {
                 dt.Rows.Add(_row);
             }
 
-            sbc = new SqlBulkCopy(_connection);
+            sbc = new SqlBulkCopy(_exportConnection);
             sbc.BulkCopyTimeout = 0;
             sbc.DestinationTableName = "CALCULO_RESUMO";
             sbc.WriteToServer(dt);
@@ -970,7 +973,7 @@ namespace GTI_Desktop.Forms {
                     dt.Rows.Add(_row);
                 }
 
-                sbc = new SqlBulkCopy(_connection);
+                sbc = new SqlBulkCopy(_exportConnection);
                 sbc.BulkCopyTimeout = 0;
                 sbc.DestinationTableName = "LASERIPTU";
                 sbc.WriteToServer(dt);
