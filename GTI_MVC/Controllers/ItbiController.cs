@@ -1936,10 +1936,12 @@ namespace GTI_Mvc.Controllers {
             ItbiViewModel gravado = Retorna_Itbi_Gravado(p);
             List<Itbi_forum> lista = imovelRepository.Retorna_Itbi_Forum(p);
             List<Itbi_Forum> model = new List<Itbi_Forum>();
+            
             if (lista.Count == 0) {
                 Itbi_Forum item = new Itbi_Forum() {
                     Guid = gravado.Guid,
                     User_id = gravado.UserId,
+                    User_id_Declara=gravado.UserId,
                     Tipo_Itbi = gravado.Tipo_Imovel,
                     Data_Itbi = gravado.Data_cadastro,
                     Comprador_Nome = gravado.Comprador.Nome,
@@ -1948,6 +1950,7 @@ namespace GTI_Mvc.Controllers {
                 if (gravado.Funcionario)
                     item.User_Name = sistemaRepository.Retorna_User_FullName(gravado.UserId);
                 else {
+
                     Usuario_web uw = sistemaRepository.Retorna_Usuario_Web(gravado.UserId);
                     item.User_Name = uw.Nome;
                     item.User_Email = uw.Email;
@@ -1961,6 +1964,7 @@ namespace GTI_Mvc.Controllers {
                         Seq = reg.Seq,
                         Datahora = reg.Datahora,
                         User_id = reg.Userid,
+                        User_id_Declara=reg.Userid,
                         Mensagem = reg.Mensagem,
                         Tipo_Itbi = gravado.Tipo_Imovel,
                         Data_Itbi = gravado.Data_cadastro,
@@ -1972,7 +1976,13 @@ namespace GTI_Mvc.Controllers {
                     else {
                         Usuario_web uw = sistemaRepository.Retorna_Usuario_Web(reg.Userid);
                         item.User_Name = uw.Nome;
+                        item.User_Email = uw.Email;
+                        item.User_Fone = uw.Telefone;
                     }
+                    Usuario_web uwd = sistemaRepository.Retorna_Usuario_Web(gravado.UserId);
+                    item.User_Name_Decalara = uwd.Nome;
+                    item.User_Email_Declara = uwd.Email;
+                    item.User_Fone_Declara = uwd.Telefone;
                     model.Add(item);
                 }
             }
