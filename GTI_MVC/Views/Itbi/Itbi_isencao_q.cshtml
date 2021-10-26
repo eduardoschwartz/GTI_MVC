@@ -125,12 +125,89 @@
                     <Label style="font-size:14px">Natureza:&nbsp;@Model.Natureza_Nome  </Label>
 
                 </div>
-                <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
-                @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo == 1) {
-                    <div style="text-align:center">
-                        <span style="padding-left:5px"><button type="submit" class="btn btn-primary" , name="button" value="guia">Liberar Certidão</button></span>
+
+                <div class="card-header">Documentação comprobatória anexada</div>
+                <div class="card-body">
+
+                    <div id="AnexoTable" style="max-height: 247px; overflow: auto;width:640px;padding-top:7px">
+                        <table id="tblAnexo" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                            <thead style="background-color:brown;color:white;font-size:13px;font-weight:normal">
+                                <tr style="height:12px;">
+                                    <th style="width:20px;font-weight:normal">
+                                        #
+                                    </th>
+                                    <th style="width:350px;font-weight:normal">
+                                        Descrição do anexo
+                                    </th>
+                                    <th style="width:230px;font-weight:normal">
+                                        Nome do Arquivo
+                                    </th>
+                                    <th style="width:20px;text-align:left">
+
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div style="display:none">@Html.EditorFor(model => model.Lista_Vendedor)</div>
+                        <table id="tblAnexo" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px">
+                            @if (Model.Lista_Anexo != null) {
+                                foreach (var item in Model.Lista_Anexo) {
+                                    <tr>
+                                        <td style="width:20px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Seq)
+                                            @Html.HiddenFor(modelItem => item.Seq)
+                                        </td>
+                                        <td style="width:340px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Nome)
+                                            @Html.HiddenFor(modelItem => item.Nome)
+                                        </td>
+                                        <td style="width:270px;font-weight:normal;color:blue">
+                                            @Html.DisplayFor(modelItem => item.Arquivo)
+                                            @Html.HiddenFor(modelItem => item.Arquivo)
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("Itbi_download", "Itbi", new { @p = Model.Guid, @f = item.Arquivo ,@a=Model.Itbi_Ano})" title="Download"> <img src="@Url.Content("~/images/downarrow.gif")" /></a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </table>
                     </div>
-                }
+                    @*<br />*@
+
+                    @*<input style="width:610px;font-size:14px" id="fileUpload" type="file" name="file" accept="application/pdf" /><br />
+                    <table>
+                        <tr>
+                            <td style="font-size:13px;width:200px">
+                                Digite a descrição do arquivo:
+                            </td>
+                            <td style="width:450px">
+                                <label style="font-weight:normal">@Html.TextBoxFor(m => m.Anexo_Desc_tmp, new { style = "width:440px;height:25px", @maxlength = "100", @Value = "" })</label>
+                            </td>
+                        </tr>
+                    </table>
+                    <table>
+                        <tr>
+                            <td style="color:brown;font-size:12px">
+                                Anexar ITR,Matrícula, Minuta Escritura, Contrato Venda e Compra, Outros.<br />
+                                ** Enviar somente arquivos no formato Pdf com tamanho máximo de 4Mb
+                            </td>
+
+                        </tr>
+                    </table>
+                    <div style="padding-top:7px;"><button type="submit" class="btn btn-info" name="action" value="btnAnexoAdd">Incluir anexo</button></div>*@
+
+
+                    <br /><br />
+                    <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+                    @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo == 1) {
+                        <div style="text-align:center">
+                            <span style="padding-left:5px;text-align:center"><button type="submit" class="btn btn-primary" , name="button" value="guia">Liberar Certidão</button></span>
+                        </div>
+                    }
+                </div>
+
+       
                 <br />
                 <div class="card-footer">
                     @Html.ActionLink("Consultar outra certidão", "Itbi_query_isencao", "Itbi", null, new { @class = "actionlink" })<br />
