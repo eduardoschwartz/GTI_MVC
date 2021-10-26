@@ -1,5 +1,6 @@
 ﻿using GTI_Bll.Classes;
 using GTI_Models.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +22,9 @@ namespace GTI_Api.Controllers {
             if (!_existe)
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Imóvel não cadastrado.");
             else {
-                ImovelStruct _imovel = imovelRepository.Dados_Imovel(id);
-                return Request.CreateResponse(HttpStatusCode.OK, _imovel);
+                Imovel_Full _imovel = imovelRepository.Dados_Imovel_Full(id);
+                string jsonString = JsonConvert.SerializeObject(_imovel);
+                return Request.CreateResponse(HttpStatusCode.OK, jsonString);
             }
         }
 

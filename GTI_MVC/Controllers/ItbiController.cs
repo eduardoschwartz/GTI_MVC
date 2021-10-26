@@ -1955,6 +1955,9 @@ namespace GTI_Mvc.Controllers {
                     item.User_Name = uw.Nome;
                     item.User_Email = uw.Email;
                     item.User_Fone = uw.Telefone;
+                    item.User_Name_Decalara = uw.Nome;
+                    item.User_Email_Declara = uw.Email;
+                    item.User_Fone_Declara = uw.Telefone;
                 }
                 model.Add(item);
             } else {

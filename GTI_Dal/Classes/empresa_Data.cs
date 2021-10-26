@@ -461,7 +461,7 @@ namespace GTI_Dal.Classes {
                 row.Prof_responsavel_registro = reg.Prof_responsavel_registro;
                 row.Prof_responsavel_conselho = reg.Prof_responsavel_conselho;
                 row.Responsavel_contabil_codigo = reg.Responsavel_contabil_codigo;
-
+                row.Mei = Empresa_Mei(Codigo) ? (byte)1 : (byte)0;
                 return row;
             }
         }

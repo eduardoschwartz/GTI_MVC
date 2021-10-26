@@ -2120,7 +2120,7 @@ namespace GTI_Dal.Classes {
                 Parametros[16] = new SqlParameter { ParameterName = "@comprador_numero", SqlDbType = SqlDbType.Int, SqlValue = Reg.Comprador_Numero };
                 Parametros[17] = new SqlParameter { ParameterName = "@comprador_complemento", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Comprador_Complemento };
                 Parametros[18] = new SqlParameter { ParameterName = "@comprador_cep", SqlDbType = SqlDbType.Int, SqlValue = Reg.Comprador_Cep };
-                Parametros[19] = new SqlParameter { ParameterName = "@comprador_bairro", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Comprador_Bairro };
+                Parametros[19] = new SqlParameter { ParameterName = "@comprador_bairro", SqlDbType = SqlDbType.VarChar, SqlValue =  dalCore.TruncateTo( Reg.Comprador_Bairro,40) };
                 Parametros[20] = new SqlParameter { ParameterName = "@comprador_cidade", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Comprador_Cidade };
                 Parametros[21] = new SqlParameter { ParameterName = "@comprador_uf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Comprador_Uf };
                 Parametros[22] = new SqlParameter { ParameterName = "@tipo_instrumento", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Tipo_Instrumento };
@@ -3155,6 +3155,81 @@ namespace GTI_Dal.Classes {
                 return Lista;
             }
         }
+
+        public Imovel_Full Dados_Imovel_Full(int nCodigo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from i in db.Cadimob
+                           join c in db.Condominio on i.Codcondominio equals c.Cd_codigo into ic from c in ic.DefaultIfEmpty()
+                           join b in db.Benfeitoria on i.Dt_codbenf equals b.Codbenfeitoria into ib from b in ib.DefaultIfEmpty()
+                           join p in db.Pedologia on i.Dt_codpedol equals p.Codpedologia into ip from p in ip.DefaultIfEmpty()
+                           join t in db.Topografia on i.Dt_codtopog equals t.Codtopografia into it from t in it.DefaultIfEmpty()
+                           join s in db.Situacao on i.Dt_codsituacao equals s.Codsituacao into ist from s in ist.DefaultIfEmpty()
+                           join cp in db.Categprop on i.Dt_codcategprop equals cp.Codcategprop into icp from cp in icp.DefaultIfEmpty()
+                           join u in db.Usoterreno on i.Dt_codusoterreno equals u.Codusoterreno into iu from u in iu.DefaultIfEmpty()
+                           where i.Codreduzido == nCodigo
+                           select new ImovelStruct {
+                               Codigo = i.Codreduzido, Distrito = i.Distrito, Setor = i.Setor, Quadra = i.Quadra, Lote = i.Lote, Seq = i.Seq,
+                               Unidade = i.Unidade, SubUnidade = i.Subunidade, NomeCondominio = c.Cd_nomecond, Imunidade = i.Imune, TipoMat = i.Tipomat, NumMatricula = i.Nummat,
+                               Numero = i.Li_num, Complemento = i.Li_compl, QuadraOriginal = i.Li_quadras, LoteOriginal = i.Li_lotes, ResideImovel = i.Resideimovel, Inativo = i.Inativo,
+                               FracaoIdeal = i.Dt_fracaoideal, Area_Terreno = i.Dt_areaterreno, Benfeitoria = i.Dt_codbenf, Categoria = i.Dt_codcategprop, Pedologia = i.Dt_codpedol, Topografia = i.Dt_codtopog,
+                               Uso_terreno = i.Dt_codusoterreno, Situacao = i.Dt_codsituacao, EE_TipoEndereco = i.Ee_tipoend, Benfeitoria_Nome = b.Descbenfeitoria, Pedologia_Nome = p.Descpedologia,
+                               Topografia_Nome = t.Desctopografia, Situacao_Nome = s.Descsituacao, Categoria_Nome = cp.Desccategprop, Uso_terreno_Nome = u.Descusoterreno, CodigoCondominio = c.Cd_codigo
+                           }).FirstOrDefault();
+
+                Imovel_Full row = new Imovel_Full();
+                if (reg == null)
+                    return row;
+                row.Codigo = nCodigo;
+                row.Inscricao = reg.Distrito.ToString() + "." + reg.Setor.ToString("00") + "." + reg.Quadra.ToString("0000") + "." + reg.Lote.ToString("00000") + "." + reg.Seq.ToString("00") + "." + reg.Unidade.ToString("00") + "." + reg.SubUnidade.ToString("000");
+                row.Condominio_Codigo = reg.CodigoCondominio == null ? 999 : (int)reg.CodigoCondominio;
+                row.Condominio_Nome = reg.CodigoCondominio==null || reg.CodigoCondominio==999 ? "N/A": row.Condominio_Nome;
+                row.Imunidade = reg.Imunidade == null ? false : Convert.ToBoolean(reg.Imunidade);
+                row.Cip = reg.Cip == null ? false : Convert.ToBoolean(reg.Cip);
+                row.ResideImovel = reg.ResideImovel == null ? false : Convert.ToBoolean(reg.ResideImovel);
+                row.Inativo = reg.Inativo == null ? false : Convert.ToBoolean(reg.Inativo);
+                if (reg.TipoMat == null || reg.TipoMat == "M")
+                    row.TipoMat = "M";
+                else
+                    row.TipoMat = "T";
+                row.NumMatricula = reg.NumMatricula==null?0:(long)reg.NumMatricula;
+                row.QuadraOriginal = reg.QuadraOriginal == null ? "N/D" : reg.QuadraOriginal.ToString();
+                row.LoteOriginal = reg.LoteOriginal == null ? "N/D" : reg.LoteOriginal.ToString();
+                row.FracaoIdeal = reg.FracaoIdeal;
+                row.Area_Terreno = reg.Area_Terreno;
+                row.Benfeitoria =(short) reg.Benfeitoria;
+                row.Benfeitoria_Nome = reg.Benfeitoria_Nome;
+                row.Categoria =(short) reg.Categoria;
+                row.Categoria_Nome = reg.Categoria_Nome;
+                row.Pedologia = (short)reg.Pedologia;
+                row.Pedologia_Nome = reg.Pedologia_Nome;
+                row.Situacao = (short)reg.Situacao;
+                row.Situacao_Nome = reg.Situacao_Nome;
+                row.Topografia = (short)reg.Topografia;
+                row.Topografia_Nome = reg.Topografia_Nome;
+                row.Uso_terreno = (short)reg.Uso_terreno;
+                row.Uso_terreno_Nome = reg.Uso_terreno_Nome;
+                row.EE_TipoEndereco = (short)reg.EE_TipoEndereco;
+
+                row.Endereco_Imovel = Dados_Endereco(nCodigo, TipoEndereco.Local);
+                if (reg.EE_TipoEndereco == 0)
+                    row.Endereco_Entrega = row.Endereco_Imovel;
+                else {
+                    if (reg.EE_TipoEndereco == 1) {
+                        row.Endereco_Entrega = Dados_Endereco(nCodigo, TipoEndereco.Proprietario);
+                    } else {
+                        row.Endereco_Entrega = Dados_Endereco(nCodigo, TipoEndereco.Entrega);
+                    }
+                }
+
+                row.Lista_Proprietario = Lista_Proprietario(nCodigo);
+                row.Lista_Testada = Lista_Testada(nCodigo);
+                row.Lista_Area = Lista_Area(nCodigo);
+
+
+                return row;
+            }
+        }
+
 
     }//end class
 }

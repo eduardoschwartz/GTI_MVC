@@ -154,5 +154,42 @@ namespace GTI_Models.Models {
         public bool? Conjugado { get; set; }
     }
 
+    public class Imovel_Full {
+        public int Codigo { get; set; }
+        public string Inscricao { get; set; }
+        public int Condominio_Codigo { get; set; }
+        public string Condominio_Nome { get; set; }
+        public List<ProprietarioStruct> Lista_Proprietario { get; set; }
+        public EnderecoStruct Endereco_Imovel { get; set; }
+        public string QuadraOriginal { get; set; }
+        public string LoteOriginal { get; set; }
+        public string TipoMat { get; set; }
+        public long NumMatricula { get; set; }
+        public bool ResideImovel { get; set; }
+        public short EE_TipoEndereco { get; set; }
+        public EnderecoStruct Endereco_Entrega { get; set; }
+        public List<Testada> Lista_Testada { get; set; }
+        public decimal Area_Terreno { get; set; }
+        public short Uso_terreno { get; set; }
+        public short Benfeitoria { get; set; }
+        public short Topografia { get; set; }
+        public short Categoria { get; set; }
+        public short Situacao { get; set; }
+        public short Pedologia { get; set; }
+        public string Uso_terreno_Nome { get; set; }
+        public string Benfeitoria_Nome { get; set; }
+        public string Topografia_Nome { get; set; }
+        public string Categoria_Nome { get; set; }
+        public string Situacao_Nome { get; set; }
+        public string Pedologia_Nome { get; set; }
+        public decimal FracaoIdeal { get; set; }
+        public List<AreaStruct> Lista_Area { get; set; }
+        public bool? Inativo { get; set; }
+        public bool? Imunidade { get; set; }
+        public bool? Cip { get; set; }
+        public bool? Conjugado { get; set; }
+    }
+
+
 
 }

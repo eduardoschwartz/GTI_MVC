@@ -979,6 +979,10 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Terrenos_Cip();
         }
 
+        public Imovel_Full Dados_Imovel_Full(int Codigo) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Dados_Imovel_Full(Codigo);
+        }
 
         #endregion
 
