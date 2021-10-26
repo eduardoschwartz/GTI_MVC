@@ -2962,19 +2962,81 @@ namespace GTI_Mvc.Controllers {
                 model = Retorna_Itbi_Isencao_Gravado(guid);
                 model.Lista_Natureza_Isencao = Lista_Natureza_Isencao(natureza);
             }
+            model.Lista_Anexo = new List<ListAnexoEditorViewModel>();
             return View(model);
         }
 
         [Route("Itbi_isencao")]
         [HttpPost]
-        public ActionResult Itbi_isencao(ItbiViewModel model, string natureza, string action) {
+        public ActionResult Itbi_isencao(ItbiViewModel model, string natureza, HttpPostedFileBase file, string action, int seq = 0) {
+            if (model.Lista_Anexo == null)
+                model.Lista_Anexo = new List<ListAnexoEditorViewModel>();
+
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             if (action == "btnValida") {
                 Exception ex2 = imovelRepository.Alterar_Itbi_Isencao_Natureza(model.Guid, Convert.ToInt32(natureza));
                 goto ActionPos;
+            } else {
+                if (action == "btnAnexoAdd") {
+                    if (file != null){
+                        if (string.IsNullOrWhiteSpace(model.Anexo_Desc_tmp)) {
+                            ViewBag.Result = "* Digite uma descrição para o anexo (é necessário selecionar novamente o anexo).";
+                            return View(model);
+                        } else {
+                            if (file.ContentType != "application/pdf") {
+                                ViewBag.Result = "* Este tipo de arquivo não pode ser enviado como anexo.";
+                                return View(model);
+                            } else {
+                                string _ano = model.Itbi_Ano == 0 ? DateTime.Now.Year.ToString() : model.Itbi_Ano.ToString();
+                                string _path = "~/Files/Itbi/" + _ano + "/";
+                                var fileName = Path.GetFileName(file.FileName);
+                                fileName = fileName.RemoveDiacritics();
+                                Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath(_path) + model.Guid);
+                                var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path + model.Guid), fileName);
+                                file.SaveAs(path);
+                                byte seqA = imovelRepository.Retorna_Itbi_Anexo_Disponivel(model.Guid);
+                                Itbi_anexo regA = new Itbi_anexo() {
+                                    Guid = model.Guid,
+                                    Seq = seqA,
+                                    Descricao = model.Anexo_Desc_tmp,
+                                    Arquivo = fileName
+                                };
+                                Exception ex2 = imovelRepository.Incluir_Itbi_Anexo(regA);
+                                ListAnexoEditorViewModel Anexo = new ListAnexoEditorViewModel() {
+                                    Seq = model.Lista_Anexo.Count,
+                                    Arquivo = fileName,
+                                    Nome = model.Anexo_Desc_tmp
+                                };
+                                model.Lista_Anexo.Add(Anexo);
+
+                                Itbi_Save(model);
+                                goto ActionPos;
+                                //return View(model);
+
+                            }
+                        }
+                    } else {
+                        ViewBag.Result = "* Nenhum arquivo selecionado.";
+                        goto ActionPos;
+                        //return View(model);
+                    }
+                }
+
+            }
+
+            List<Itbi_anexo> Lista_Anexo = imovelRepository.Retorna_Itbi_Anexo(model.Guid);
+            model.Lista_Anexo.Clear();
+            foreach (Itbi_anexo itemA in Lista_Anexo) {
+                ListAnexoEditorViewModel regA = new ListAnexoEditorViewModel() {
+                    Seq = itemA.Seq,
+                    Nome = itemA.Descricao,
+                    Arquivo = itemA.Arquivo
+                };
+                model.Lista_Anexo.Add(regA);
             }
 
             int _codigo = Convert.ToInt32(model.Vendedor_Cpf_cnpj_tmp);
+            
             model.Tipo_Imovel = _codigo == 0 ? "Rural" : "Urbano";
             bool _urbano = model.Tipo_Imovel == "Urbano";
             List<Itbi_isencao_imovel> Lista = imovelRepository.Retorna_Itbi_Isencao_Imovel(model.Guid);

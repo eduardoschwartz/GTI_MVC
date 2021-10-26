@@ -66,7 +66,7 @@
 
 <div class="center container" style="width:700px">
 
-    @using (Html.BeginForm("Itbi_isencao", "Itbi", FormMethod.Post, new { @id = "MainForm" })) {
+    @using (Html.BeginForm("Itbi_isencao", "Itbi", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
     @Html.AntiForgeryToken()
 
     <div class="card">
@@ -138,12 +138,12 @@
             <br /><br />
 
             <Label style="font-size:14px">Selecione a natureza </Label>
-            <select name="natureza" id="natureza"  >
+            <select name="natureza" id="natureza">
                 <optgroup label="Artigo 3">
                     @foreach (var item in Model.Lista_Natureza_Isencao) {
 
                         if (item.Group.Name == "Artigo 3") {
-                            <option value=@item.Value selected="@item.Selected" >@item.Text</option>
+                            <option value=@item.Value selected="@item.Selected">@item.Text</option>
                         }
 
                     }
@@ -153,7 +153,7 @@
                     @foreach (var item in Model.Lista_Natureza_Isencao) {
 
                         if (item.Group.Name == "Artigo 110") {
-                            <option value=@item.Value selected="@item.Selected" >@item.Text</option>
+                            <option value=@item.Value selected="@item.Selected">@item.Text</option>
                         }
 
                     }
@@ -186,9 +186,84 @@
                     }
                 </optgroup>
             </select>
-            <button type="submit" class="btn btn-primary" name="action" value="btnValida">Enviar solicitação</button>&nbsp;&nbsp;
+
         </div>
-        <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+        <div class="card-header">Anexar documentação comprobatória </div>
+        <div class="card-body">
+
+            <div id="AnexoTable" style="max-height: 247px; overflow: auto;width:640px;padding-top:7px">
+                <table id="tblAnexo" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                    <thead style="background-color:brown;color:white;font-size:13px;font-weight:normal">
+                        <tr style="height:12px;">
+                            <th style="width:20px;font-weight:normal">
+                                #
+                            </th>
+                            <th style="width:350px;font-weight:normal">
+                                Descrição do anexo
+                            </th>
+                            <th style="width:230px;font-weight:normal">
+                                Nome do Arquivo
+                            </th>
+                            <th style="width:20px;text-align:left">
+
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+                <div style="display:none">@Html.EditorFor(model => model.Lista_Vendedor)</div>
+                <table id="tblAnexo" class="tableContainer" style="font-size:13px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px">
+                    @if (Model.Lista_Anexo != null) {
+                        foreach (var item in Model.Lista_Anexo) {
+                            <tr>
+                                <td style="width:20px;font-weight:normal;color:blue">
+                                    @Html.DisplayFor(modelItem => item.Seq)
+                                    @Html.HiddenFor(modelItem => item.Seq)
+                                </td>
+                                <td style="width:350px;font-weight:normal;color:blue">
+                                    @Html.DisplayFor(modelItem => item.Nome)
+                                    @Html.HiddenFor(modelItem => item.Nome)
+                                </td>
+                                <td style="width:230px;font-weight:normal;color:blue">
+                                    @Html.DisplayFor(modelItem => item.Arquivo)
+                                    @Html.HiddenFor(modelItem => item.Arquivo)
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("Itbi_isencao", "Itbi", new { @a = "ra", @s = item.Seq, @guid = Model.Guid })" title="Remover anexo"> <img src="@Url.Content("~/images/cancelar.gif")" /></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+            <br />
+
+            <input style="width:610px;font-size:14px" id="fileUpload" type="file" name="file" accept="application/pdf"  /><br />
+            <table>
+                <tr>
+                    <td style="font-size:13px;width:200px">
+                        Digite a descrição do arquivo:
+                    </td>
+                    <td style="width:450px">
+                        <label style="font-weight:normal">@Html.TextBoxFor(m => m.Anexo_Desc_tmp, new { style = "width:440px;height:25px", @maxlength = "100", @Value = "" })</label>
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td style="color:brown;font-size:12px">
+                        Anexar ITR,Matrícula, Minuta Escritura, Contrato Venda e Compra, Outros.<br />
+                        ** Enviar somente arquivos no formato Pdf com tamanho máximo de 4Mb
+                    </td>
+
+                </tr>
+            </table>
+            <div style="padding-top:7px;"><button type="submit" class="btn btn-info" name="action" value="btnAnexoAdd">Incluir anexo</button></div>
+
+
+            <br /><br />
+            <button type="submit" style="text-align:center" class="btn btn-primary" name="action" value="btnValida">Enviar solicitação</button>&nbsp;&nbsp;
+            <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+        </div>
         <div class="card-footer">
             @Html.ActionLink("Retornar ao menu de opções", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })<br />
             @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
@@ -333,7 +408,32 @@
             return true;
         }
 
-        
+        $(function () {
+            $("#fileUpload").change(function () {
+                if (undefined != this.files) {
+                    var f = this.files[0]
+                    var id = this.id;
+                    var extArray = new Array("dll", "exe");
+                    var ext = f.name.replace(/^.*?\.([a-zA-Z0-9]+)$/, "$1");
+                    if (ext == extArray[0] || ext == extArray[1]) {
+                        alert("O sistema não permite anexar arquivos com extensão(.exe,.dll). Tente anexar outro arquivo.");
+                        //reset file upload control
+                        $("#" + this.id).replaceWith($("#" + this.id).clone(true));
+                        this.value = null;
+                        return false;
+                    }
+                    //here I CHECK if the FILE SIZE is bigger than 5 MB (numbers below are in bytes)
+                    else if (f.size > 4194304 || f.fileSize > 4194304) {
+                        //show an alert to the user
+                        alert("Tamanho máximo excedido. (Max. 4 MB)");
+                        this.value = null;
+                        //reset file upload control
+                        $("#" + this.id).replaceWith($("#" + this.id).clone(true));
+                        return false;
+                    }
+                }
+            })
+        });
 
     </script>
 }
