@@ -1,0 +1,163 @@
+﻿
+<html style="background-image: url('http://sistemas.jaboticabal.sp.gov.br/gti/Images/bege.jpg')">
+<head>
+
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/all.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/jmenu.css" rel="stylesheet" />
+    <link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.4/themes/blitzer/jquery-ui.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Content/all.css" rel="stylesheet" />
+    @*<script src="~/Scripts/jquery-3.4.1.js"></script>*@
+    <script src="~/Scripts/jquery-3.6.0.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.2.6/jquery.inputmask.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="@Url.Content("~/Scripts/gti.js")" type="text/javascript"></script>
+    <script src="~/Scripts/popper.min.js"></script>
+    <script src="~/Scripts/show-hide-password.js"></script>
+    <script src="https://rawgit.com/RobinHerbots/Inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+
+    @*<script src="@Url.Content("~/Scripts/gti.js")" type="text/javascript"></script>*@
+    @*@Styles.Render("~/webfonts")*@
+    <title>@ViewBag.Title</title>
+
+    <style>
+        .center {
+            margin: auto;
+        }
+
+        body:lang(en) {
+            margin-top: 1em;
+        }
+
+        body {
+            margin: 1em 8% 1em 8%;
+            margin-top: 2em;
+            min-width: 1000px;
+            position: relative;
+            box-shadow: 0 .3em 1em #000;
+            border-radius: 13px;
+        }
+
+        #header {
+            position: relative;
+            z-index: 9;
+            height: 60px;
+            top: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            display: block;
+            border-radius: 13px 13px 0px 0px;
+            background: linear-gradient(to bottom,darkred,black);
+            display: flex;
+            justify-content: center;
+        }
+
+        #footer {
+            position: fixed;
+            height: 30px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            display: block;
+            background: #222222;
+            padding-top: 5px;
+        }
+
+        #container {
+            margin: 0 auto;
+            overflow: auto;
+            padding: 80px 0;
+            width: 940px;
+        }
+
+        #content {
+        }
+
+        .footer {
+            background: red;
+            position: relative;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 50px;
+        }
+
+        #table {
+            align-self: center;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div id="header" style="text-align:center">
+        <table id="table">
+            <tr>
+                <td>
+                    <a href="http://www.jaboticabal.sp.gov.br">
+                        <img src="~/Images/brasaocor.png" style="height:60px;width:50px;padding-top:4px" />
+                    </a>
+                </td>
+                <td style="text-align:center">
+                    <span style="font-family: Arial, Helvetica, sans-serif;font-size: 18px;font-weight: normal;color:white">Prefeitura Municipal de Jaboticabal</span>
+                    <br /><span style="font-family: Arial, Helvetica, sans-serif;font-size: 14px;font-weight: normal;color:white">Serviços Disponíveis Online</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+    <nav class="jmenu">
+        <label for="menu-btn" class="jm-menu-btn jm-icon-menu"></label>
+        <input type="checkbox" id="menu-btn" class="jm-menu-btn">
+        <ul class="jm-collapse">
+            <li><a href="javascript:void(0)">Home</a></li>
+            <li class="jm-dropdown">
+                <a href="javascript:void(0)">Categories</a>
+                <ul>
+                    <li><a href="javascript:void(0)">Apples</a></li>
+                    <li><a href="javascript:void(0)">Bananas and Pears</a></li>
+                    <li><a href="javascript:void(0)">Oranges</a></li>
+                </ul>
+            </li>
+            <li><a href="javascript:void(0)">About</a></li>
+            <li><a href="javascript:void(0)">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div id="container" style="background-color: white">
+        <div id="content">
+            @RenderBody()
+        </div>
+    </div>
+    @RenderSection("scripts", required: false)
+
+    <div id="footer">
+        <span style="font-family: Arial, Helvetica, sans-serif;font-size: 12px;font-weight: bold;color:white">&copy;2003-2021 - Gestão Tributária Integrada (G.T.I.)</span>
+        <span style="font-family: Arial, Helvetica, sans-serif;font-size: 11px;font-weight: bold;color:moccasin">
+            @if (Session["hashid"] == null) {
+                <span>&nbsp;-&nbsp;Logado como Visitante</span>
+            } else {
+                <span>
+                    &nbsp;-&nbsp;Logado como&nbsp;  @Session["hashfname"]
+                    @Html.ActionLink("Sair do sistema", "Logout", "Home")
+                </span>
+            }
+
+
+        </span>
+    </div>
+
+</body>
+
+</html>
+
+

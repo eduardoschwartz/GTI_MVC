@@ -932,5 +932,14 @@ namespace GTI_Mvc.Controllers {
             return Json(new { success = true, responseText = "Acesso liberado com sucesso." }, JsonRequestBehavior.AllowGet);
         }
 
+        [Route("GtiMenu")]
+        [HttpGet]
+        public ActionResult GtiMenu() {
+
+
+            return View();
+        }
+
+
     }
 }

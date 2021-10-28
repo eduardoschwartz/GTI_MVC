@@ -649,6 +649,7 @@
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\giantdropdown.css" />
     <Content Include="Content\gti.css" />
+    <Content Include="Content\jmenu.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -1131,6 +1132,8 @@
     <Content Include="Views\Processo\Processo_trm - Copy.cshtml" />
     <Content Include="Views\Home\user_doc.cshtml" />
     <Content Include="Views\Home\user_query_doc.cshtml" />
+    <Content Include="Views\Shared\_Layoutgti.cshtml" />
+    <Content Include="Views\Home\GtiMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
