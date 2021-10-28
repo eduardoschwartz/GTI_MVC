@@ -1,163 +1,103 @@
-/* JMenu 1.0 RC1 | MIT License | https://github.com/jamesjohnson280/JMenu */
-
-
-/* Menu bar and fonts */
-.jmenu {
-  background: black; /* Dark gray */
-  box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, .5);
-  box-sizing: border-box;
-  font-size:14px;
-  line-height: 0.6;
+/* Menu General Styles */
+.menuBackground {
+    background: black;
+    
 }
 
-/* Menu Button */
-input.jm-menu-btn {
-  display: none; /* Hide the checkbox */
+.dropDownMenu a {
+    color: white;
+    font-size: 14px;
+    border-radius: 5px 5px 5px 5px;
 }
 
-input[type='checkbox'].jm-menu-btn ~ .jm-collapse {
-  display: none; /* Hide menu on load */
+.dropDownMenu,
+.dropDownMenu ul {
+    list-style: none;
+    margin-left: 10px;
+    padding: 0;
 }
 
-input[type='checkbox']:checked.jm-menu-btn ~ .jm-collapse {
-  display: block; /* Open when menu button is clicked */
-}
+    .dropDownMenu li {
+        position: relative;
+    }
 
-label.jm-menu-btn {
-  color: #959595; /* Light gray */
-  cursor: pointer;
-  display: block;
-  padding: 16px 32px;
-}
+    .dropDownMenu a {
+        padding: 3px 20px;
+        display: block;
+        text-decoration: none;
+    }
 
-label.jm-menu-btn:hover {
-  color: #fff;
-}
-
-.jm-collapse {
-  /* Add border between menu and menu button when it's open */
-  border-top: 1px black solid; /* Light Gray */
-}
+        .dropDownMenu a:hover {
+            background: #761212;
+            box-shadow: 2px 2px 4px 0 rgb(0, 0, 0); 
+            color: white;
+        }
 
 
-/* Menu Items */
-.jmenu ul,
-.jmenu li {
-  list-style: none;
-/*  background-color:lightgoldenrodyellow;*/
-  margin: 0;
-  padding: 0;
-}
+    /* Level 1 Drop Down Menu */
+    .dropDownMenu > li {
+        display: inline-block;
+        vertical-align: top;
+        margin-left: -4px; /* solve the 4 pixels spacing between list-items */
+    }
 
-/* Links */
-.jmenu a {
-  color: white; /* Light gray */
-  display: inline-block;
-  padding: 16px 32px;
-  text-decoration: none;
-}
+        .dropDownMenu > li:first-child {
+            margin-left: 0;
+        }
 
-.jmenu a:hover {
-  color: lightgoldenrodyellow; /* White */
-}
+        .dropDownMenu > li > a {
+        }
 
-/* Submenu Items */
-.jmenu ul ul {
-  display: none; /* Hidden by default */
-}
+            .dropDownMenu > li > a:hover {
+            }
 
-/* Dropdowns */
+        /* Level 2 */
+        .dropDownMenu > li > ul {
+            text-align: left;
+            width: 200px; /* change auto value with 200px if you want a bigger menu */
+            display: none;
+            background: #2c1a14;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            box-shadow: 3px 3px 5px 0 rgb(0, 0, 0);
+           /* box-sizing: border-box;*/
+            z-index: 9999999; /* if you have YouTube iframes, is good to have a bigger z-index so the video can appear above the video */
+        }
 
-.jm-dropdown:hover ul {
-  display: block;
-}
+        .dropDownMenu > li:hover > ul {
+            display: block;
+        }
 
-.jm-dropdown:hover a {
-  /* Make top-level menu item stay highlighted when hovering over children */
-  color: lightgoldenrodyellow; 
-}
+    .dropDownMenu ul li a {
+    }
 
-.jm-dropdown ul {
-  background: #fff; /* White */
-  padding: 0;
-}
+        .dropDownMenu ul li a:hover {
+        }
 
-.jm-dropdown ul a,
-.jm-dropdown:hover ul a {
-  color: #0072bc; /* Blue */
-}
+    /* Level 3 */
+    .dropDownMenu > li > ul > li > ul {
+        text-align: left;
+        display: none;
+        width: 200px;
+        background: #523b33;
+        box-shadow: 3px 3px 5px 0 rgb(0, 0, 0);
+        box-sizing: border-box;
+        position: absolute;
+        left: 90%;
+        top: 0;
+        z-index: 9999999;
+    }
 
-.jm-dropdown ul a:hover,
-.jm-dropdown:hover ul a:hover {
-  color: #000; /* Black*/
-}
+    .dropDownMenu > li > ul > li:hover > ul {
+        display: block;
+    }
 
-/* Tertiary+ Menu Items */
-.jm-dropdown ul ul {
-  border-bottom: 1px #ccc solid; /* Light gray */
-  border-top: 1px #ccc solid;
-  box-shadow: none;
-  margin-bottom: 16px;
-  max-width: 100%;
-  position: relative;
-}
+    .dropDownMenu ul ul li {
+    }
 
-/* Icons */
-.jm-icon-dropdown {
-    border: solid #959595; /* Light gray */
-    border-width: 0 2px 2px 0;
-    display: inline-block;
-    margin: 0 0 3px 8px;
-    padding: 3px;
-    transform: rotate(45deg);
-} 
+        .dropDownMenu ul ul li a {
+        }
 
-li:hover .jm-icon-dropdown {
-    border-color: #fff; /* White */
-} 
-
-.jm-icon-menu::before {
-  content: '\2630';
-}
-
-@media (min-width: 768px) {
-  
-  /* Menu items */
-  .jmenu li {
-    display: inline-block;
-  }
-  
-  .jmenu a {
-    padding: 16px;
-  }
-  
-  /* Dropdowns */
-  .jm-dropdown {
-    position: relative;
-  }
-  
-  .jm-dropdown li a {
-    display: block;
-    padding: 8px 16px;
-    white-space: nowrap;
-  }
-  
-  .jm-dropdown ul {
-    box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, .5);
-    padding: 8px 0;
-    position: absolute;
-    min-width: 100%;
-  }
-  
-  /* Menu Button */
-  input.jm-menu-btn,
-  label.jm-menu-btn {
-    display: none; /* Hide menu button */
-  }
-  
-  input[type='checkbox'].jm-menu-btn ~ .jm-collapse,
-  .jm-collapse {
-    display: block; /* Show menu */
-  }
-
-}
+            .dropDownMenu ul ul li a:hover {
+            }

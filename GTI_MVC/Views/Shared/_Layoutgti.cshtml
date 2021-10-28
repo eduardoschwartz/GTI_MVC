@@ -90,8 +90,10 @@
             height: 50px;
         }
 
-        #table {
-            align-self: center;
+        .divider {
+            border-block-start: 1px solid gray;
+            margin-top:3px;
+            height:6px;
         }
     </style>
 
@@ -114,24 +116,46 @@
         </table>
     </div>
 
-
-    <nav class="jmenu">
-        <label for="menu-btn" class="jm-menu-btn jm-icon-menu"></label>
-        <input type="checkbox" id="menu-btn" class="jm-menu-btn">
-        <ul class="jm-collapse">
-            <li><a href="javascript:void(0)">Home</a></li>
-            <li class="jm-dropdown">
-                <a href="javascript:void(0)">Categories</a>
+    <div class="menuBackground">
+        <ul class="dropDownMenu">
+            <li><a href="#">Parâmetros</a></li>
+            <li>
+                <a href="#">Imobiliário</a>
                 <ul>
-                    <li><a href="javascript:void(0)">Apples</a></li>
-                    <li><a href="javascript:void(0)">Bananas and Pears</a></li>
-                    <li><a href="javascript:void(0)">Oranges</a></li>
+                    <li><a href="#">HTML</a></li>
+                    <li><a href="#">CSS</a></li>
+                    <li class="divider" style="color:white">&nbsp</li>
+                    <li><a href="#">JS</a></li>
                 </ul>
             </li>
-            <li><a href="javascript:void(0)">About</a></li>
-            <li><a href="javascript:void(0)">Contact</a></li>
+            <li>
+                <a href="#">Mobiliário</a>
+                <ul>
+                    <li><a href="#">C++</a></li>
+                    <li>
+                        <a href="#">WordPress</a>
+                        <ul>
+                            <li><a href="#">Hacks</a></li>
+                            <li><a href="#">Plugins</a></li>
+                            <li><a href="#">Shortcodes</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">PHP</a></li>
+                    <li><a href="#">jQuery</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">Tributário</a>
+                <ul>
+                    <li><a href="#">Icons</a></li>
+                    <li><a href="#">Fonts</a></li>
+                    <li><a href="#">Wallpapers</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Protocolo</a></li>
         </ul>
-    </nav>
+    </div>
+
 
     <div id="container" style="background-color: white">
         <div id="content">
