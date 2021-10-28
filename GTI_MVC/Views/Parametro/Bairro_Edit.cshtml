@@ -1,4 +1,4 @@
-﻿@model GTI_Mvc.ViewModels.Processo2ViewModel
+﻿@model GTI_Mvc.ViewModels.BairroViewModel
 
 @{
     Layout = "~/Views/Shared/_Layoutgti.cshtml";
@@ -120,23 +120,31 @@
    
 } 
 
-<div class="center" style="width:700px">
+<div class="center" style="width:370px">
     @using (Html.BeginForm("Bairro_Edit", "Parametro", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
 
 
-
-        <div class="container" style="width:670px">
+        <div class="container" >
             <div class="card">
-                <div class="card-header">Abrir um novo processo</div>
+                <div class="card-header">Cadastro de Bairros</div>
                 <div class="card-body">
+                    <span style="font-size:12px;color:maroon">Estado</span><br />
+                    @Html.DropDownListFor(m => Model.UF_Sigla, ViewBag.ListaUF as SelectList, null, new { @id = "UFDropDown", @style = "font-weight:normal;width:220px", onchange = "Carrega_Cidade(this)" })<br />
+                    <div style="padding-top:8px">
+                        <span style=" font-size:12px;color:maroon;">Cidade</span><br />
+                        @Html.DropDownListFor(m => Model.Cidade_Codigo, new SelectList(Enumerable.Empty<SelectListItem>()), null, new { @id = "CidadeDropDown", @style = "font-weight:normal;width:300px" })
+                    </div>
+
+
+
+
                 </div>
                 <div class="card-footer" style="text-align:center;background-color:white">
-                    <button type="button" id="btnGravar" class="btn btn-primary" name="action" value="btnGravar" style="height:32px" onclick="Gravar()">Gravar o processo</button>
+                    <button type="button" id="btnGravar" class="btn btn-primary" style="height:32px" onclick="Gravar()">Gravar o Bairro</button>
                 </div>
 
                 <div class="card-footer">
-                    @Html.ActionLink("Retornar ao menu de opções", "Processo_menu", "Processo", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
                 </div>
             </div>
@@ -152,12 +160,26 @@
     <br />
     <p>@ViewBag.Result</p>
 </div>
-
+<div id="msgBoxWait" style='display: none;text-align:center'>
+    <img src="~/Images/ajax-loader.gif"><br />
+    <p>Processando, aguarde . . . </p>
+</div>
 
 @section scripts{
 
     <script type="text/javascript">
         $(document).ready(function () {
+             var url = '@Url.Action("Lista_Cidade", "Parametro")';
+                $.getJSON(url, { uf: 'AC' }, function (data) {  /*$.getJSON(url, { uf: $(obj.value).val(), otherProperty: anotherValue }, function (data) {*/
+                var dropdown = $('#CidadeDropDown');
+                $.each(data, function() {
+                    dropdown.append(
+                        $("<option></option>").text(this.Desccidade).val(this.Codcidade)
+                    );
+                });
+                $('#msgBoxWait').dialog('close');
+                });
+
             $('#msgBox1').dialog({
                 autoOpen: false,
                 resizable: false,
@@ -188,7 +210,16 @@
                     }
                 }
             });
-
+            $('#msgBoxWait').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "no-titlebar"
+            });
 
             $(".foo .ui-dialog-title").css("font-size", "13px");
             $(".foo .ui-widget-content").css("font-size", "13px");
@@ -202,6 +233,40 @@
             }
         });
 
+        function Carrega_Cidade(obj) {
+            $('#msgBoxWait').dialog('open');
+            removeOptions(document.getElementById('CidadeDropDown'));
+            var url = '@Url.Action("Lista_Cidade", "Parametro")';
+                $.getJSON(url, { uf: obj.value }, function (data) {  /*$.getJSON(url, { uf: $(obj.value).val(), otherProperty: anotherValue }, function (data) {*/
+                var dropdown = $('#CidadeDropDown');
+                $.each(data, function() {
+                    dropdown.append(
+                        $("<option></option>").text(this.Desccidade).val(this.Codcidade)
+                    );
+                });
+                $('#msgBoxWait').dialog('close');
+            });
+        }
 
+
+
+
+        //######## Funções Genéricas #########
+        function removeOptions(selectElement) {
+            var i, L = selectElement.options.length - 1;
+            for (i = L; i >= 0; i--) {
+                selectElement.remove(i);
+            }
+        }
+
+        function subNull(value) {
+            return (value === null) ? "" : value;
+        }
+
+        function elementIsEmpty(el) {
+            return (/^(\s|&nbsp;)*$/.test(el));
+        }
+
+        //####################################
     </script>
 }
