@@ -25,6 +25,9 @@ namespace GTI_Mvc.Controllers
         [Route("Bairro_Edit")]
         [HttpPost]
         public ActionResult Bairro_Edit(BairroViewModel model) {
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+            List<Uf> listaUf = enderecoRepository.Lista_UF();
+            ViewBag.ListaUF = new SelectList(listaUf, "siglauf", "descuf");
             return View(model);
         }
 
@@ -33,5 +36,14 @@ namespace GTI_Mvc.Controllers
             List<Cidade> Lista = enderecoRepository.Lista_Cidade(uf);
             return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+
+        public JsonResult Lista_Bairro(string uf,string cidade) {
+            if (cidade == "") return null;
+            int _cidade = Convert.ToInt32(cidade);
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+            List<Bairro> Lista = enderecoRepository.Lista_Bairro(uf,_cidade);
+            return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
     }
 }

@@ -611,6 +611,7 @@
     <Compile Include="Classes\TAcesso.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="ViewModels\AlvaraViewModel.cs" />
+    <Compile Include="ViewModels\BairroViewModel.cs" />
     <Compile Include="ViewModels\BoletoViewModel.cs" />
     <Compile Include="ViewModels\CepViewModel.cs" />
     <Compile Include="ViewModels\CertidaoViewModel.cs" />
@@ -1367,6 +1368,10 @@
     <ProjectReference Include="..\GTI_Bll\GTI_Bll.csproj">
       <Project>{9b7b83db-4417-4143-b465-52fe4870d2e0}</Project>
       <Name>GTI_Bll</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GTI_Dal\GTI_Dal.csproj">
+      <Project>{4405EA88-83F9-4D7A-8D77-CBC8CF85E205}</Project>
+      <Name>GTI_Dal</Name>
     </ProjectReference>
     <ProjectReference Include="..\GTI_Models\GTI_Models.csproj">
       <Project>{859b188d-0d59-418e-af77-5235b79087f4}</Project>

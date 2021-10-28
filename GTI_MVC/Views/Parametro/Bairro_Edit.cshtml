@@ -91,6 +91,16 @@
         z-index: 1100;
     }
 
+    .tbl tbody tr:hover {
+        background-color: red;
+        color: white;
+    }
+
+    tr.highlighted td {
+        background: maroon;
+        color: white;
+    }
+
     .titulo {
         background: maroon;
         color: white;
@@ -123,9 +133,9 @@
 <div class="center" style="width:370px">
     @using (Html.BeginForm("Bairro_Edit", "Parametro", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Bairro_Codigo, new { @id = "Bairro" })
 
-
-        <div class="container" >
+        <div class="container">
             <div class="card">
                 <div class="card-header">Cadastro de Bairros</div>
                 <div class="card-body">
@@ -133,15 +143,24 @@
                     @Html.DropDownListFor(m => Model.UF_Sigla, ViewBag.ListaUF as SelectList, null, new { @id = "UFDropDown", @style = "font-weight:normal;width:220px", onchange = "Carrega_Cidade(this)" })<br />
                     <div style="padding-top:8px">
                         <span style=" font-size:12px;color:maroon;">Cidade</span><br />
-                        @Html.DropDownListFor(m => Model.Cidade_Codigo, new SelectList(Enumerable.Empty<SelectListItem>()), null, new { @id = "CidadeDropDown", @style = "font-weight:normal;width:300px" })
+                        @Html.DropDownListFor(m => Model.Cidade_Codigo, new SelectList(Enumerable.Empty<SelectListItem>()), null, new { @id = "CidadeDropDown", @style = "font-weight:normal;width:300px", onchange = "Carrega_Bairro()" })
                     </div>
 
+                    <div style="padding-top:8px;">
+                        <span style=" font-size: 12px; color: maroon">Lista de Bairros</span><br />
+                        <div id="table-container" style="overflow-x: auto; height: 290px; overflow: auto;border:solid;border-width:1px">
 
-
+                            <table id="bairroTable" style="width:290px;" class="tbl table-bordered table-condensed">
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
                 </div>
                 <div class="card-footer" style="text-align:center;background-color:white">
-                    <button type="button" id="btnGravar" class="btn btn-primary" style="height:32px" onclick="Gravar()">Gravar o Bairro</button>
+                    <button type="submit" id="btnNovo" class="btn btn-primary" style="height:32px;width:80px" title="Cadastrar um novo bairro" onclick="Novo()">Novo</button>
+                    <button type="submit" id="btnAlterar" class="btn btn-info" style="height: 32px; margin-left: 10px; width: 80px" title="Alterar o bairro selecionado" onclick="Alterar()">Alterar</button>
                 </div>
 
                 <div class="card-footer">
@@ -168,9 +187,10 @@
 @section scripts{
 
     <script type="text/javascript">
+
         $(document).ready(function () {
              var url = '@Url.Action("Lista_Cidade", "Parametro")';
-                $.getJSON(url, { uf: 'AC' }, function (data) {  /*$.getJSON(url, { uf: $(obj.value).val(), otherProperty: anotherValue }, function (data) {*/
+                $.getJSON(url, { uf: 'AC' }, function (data) {  
                 var dropdown = $('#CidadeDropDown');
                 $.each(data, function() {
                     dropdown.append(
@@ -224,6 +244,7 @@
             $(".foo .ui-dialog-title").css("font-size", "13px");
             $(".foo .ui-widget-content").css("font-size", "13px");
 
+
             var _res = '@res';
             if (_res != "") {
                 $('#msgBoxBag').dialog('open');
@@ -233,11 +254,17 @@
             }
         });
 
+        $("#bairroTable").on('click', 'tr', function (e) {
+            $('#bairroTable tr').removeClass('highlighted');
+            $(this).addClass('highlighted');
+            document.getElementById('Bairro').value = $(this).attr('id');
+        });
+
         function Carrega_Cidade(obj) {
             $('#msgBoxWait').dialog('open');
             removeOptions(document.getElementById('CidadeDropDown'));
             var url = '@Url.Action("Lista_Cidade", "Parametro")';
-                $.getJSON(url, { uf: obj.value }, function (data) {  /*$.getJSON(url, { uf: $(obj.value).val(), otherProperty: anotherValue }, function (data) {*/
+            $.getJSON(url, { uf: obj.value }, function (data) { 
                 var dropdown = $('#CidadeDropDown');
                 $.each(data, function() {
                     dropdown.append(
@@ -246,8 +273,26 @@
                 });
                 $('#msgBoxWait').dialog('close');
             });
+            Carrega_Bairro();
         }
 
+        function Carrega_Bairro() {
+            $("#bairroTable tbody tr").remove();
+            var _uf = document.getElementById("UFDropDown").value;
+            var _cidade = document.getElementById("CidadeDropDown").value;
+            var i = 0;
+            var url = '@Url.Action("Lista_Bairro", "Parametro")';
+            $.getJSON(url, { uf: _uf, cidade: _cidade }, function (data) {
+                $.each(data, function () {
+                    var tr;
+                        tr = $('<tr id="' + data[i].Codbairro + '" style="height: 12px; font-weight: normal; font-size: 12px; white-space: nowrap; cursor: pointer"  />');
+                        tr.append("<td style='display:none'>" + data[i].Codbairro + "</td>");
+                        tr.append("<td style='width:100px'>" + data[i].Descbairro + "</td>");
+                        $("#bairroTable").find('tbody').append(tr);
+                        i++;
+                });
+            });
+        }
 
 
 
