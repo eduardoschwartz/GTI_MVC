@@ -1,0 +1,207 @@
+﻿@model GTI_Mvc.ViewModels.Processo2ViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layoutgti.cshtml";
+    ViewBag.Title = "Cadastro de Bairros";
+}
+
+<style>
+    .center {
+        margin: auto;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .modal-header {
+        padding: 9px 15px;
+        border-bottom: 1px solid #eee;
+        background-color: darkslategrey;
+        color: whitesmoke;
+        -webkit-border-top-left-radius: 5px;
+        -webkit-border-top-right-radius: 5px;
+        -moz-border-radius-topleft: 5px;
+        -moz-border-radius-topright: 5px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
+
+    .no-titlebar .ui-dialog-titlebar {
+        display: none;
+    }
+
+    .uppercase {
+        text-transform: uppercase
+    }
+
+    .ui-autocomplete {
+        font-size: 13px;
+        border-radius: 0px;
+        border-color: maroon;
+    }
+
+    .highlight {
+        background-color: #FFFFAF;
+        color: Red;
+        font-weight: bold;
+        text-transform: uppercase
+    }
+
+    .ui-menu-item .ui-menu-item-wrapper.ui-state-active {
+        background: darkred !important;
+        font-weight: bold !important;
+        color: #ffffff !important;
+    }
+
+    ul.ui-autocomplete {
+        z-index: 1100;
+    }
+
+    .titulo {
+        background: maroon;
+        color: white;
+        font-weight: normal;
+        font-size: 13px;
+    }
+
+    .btnimage {
+        border: 0 none;
+        background: none;
+        background-image: url('../../Images/cancelar.gif');
+        width: 16px;
+        height: 16px;
+    }
+
+    .btnimage2 {
+        border: 0 none;
+        background: none;
+        background-image: url('../../Images/ok.png');
+        width: 16px;
+        height: 16px;
+    }
+</style>
+
+@{
+    var res = @ViewBag.Result;
+   
+} 
+
+<div class="center" style="width:700px">
+    @using (Html.BeginForm("Bairro_Edit", "Parametro", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+        @Html.AntiForgeryToken()
+
+
+
+        <div class="container" style="width:670px">
+            <div class="card">
+                <div class="card-header">Abrir um novo processo</div>
+                <div class="card-body">
+                </div>
+                <div class="card-footer" style="text-align:center;background-color:white">
+                    <button type="button" id="btnGravar" class="btn btn-primary" name="action" value="btnGravar" style="height:32px" onclick="Gravar()">Gravar o processo</button>
+                </div>
+
+                <div class="card-footer">
+                    @Html.ActionLink("Retornar ao menu de opções", "Processo_menu", "Processo", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
+
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+             $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+
+    </script>
+}

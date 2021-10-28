@@ -248,6 +248,7 @@
     <Compile Include="Controllers\MiscController.cs" />
     <Compile Include="Controllers\MobReqController.cs" />
     <Compile Include="Controllers\NotificacaoController.cs" />
+    <Compile Include="Controllers\ParametroController.cs" />
     <Compile Include="Controllers\ParcelamentoController.cs" />
     <Compile Include="Controllers\PlataformaController.cs" />
     <Compile Include="Controllers\ProcessoController.cs" />
@@ -1133,7 +1134,8 @@
     <Content Include="Views\Home\user_doc.cshtml" />
     <Content Include="Views\Home\user_query_doc.cshtml" />
     <Content Include="Views\Shared\_Layoutgti.cshtml" />
-    <Content Include="Views\Home\GtiMenu.cshtml" />
+    <Content Include="Views\Home\GtiSys.cshtml" />
+    <Content Include="Views\Parametro\Bairro_Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
