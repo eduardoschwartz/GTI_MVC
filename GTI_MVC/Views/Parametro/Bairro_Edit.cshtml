@@ -144,7 +144,7 @@
 
 @using (Html.BeginForm("Bairro_Edit", "Parametro", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(m => m.Bairro_Codigo, new { @id = "Bairro" })
+    @Html.HiddenFor(m => m.Bairro_Codigo, new { @id = "CodBairro" })
 
     <div class="center shadow" style="width:350px">
         <div class="card">
@@ -154,7 +154,7 @@
                 @Html.DropDownListFor(m => Model.UF_Sigla, ViewBag.ListaUF as SelectList, null, new { @id = "UFDropDown", @style = "font-weight:normal;width:220px", onchange = "Carrega_Cidade()" })<br />
                 <div style="padding-top:8px">
                     <span style=" font-size:12px;color:maroon;">Cidade</span><br />
-                    @Html.DropDownListFor(m => Model.Cidade_Codigo, new SelectList(Enumerable.Empty<SelectListItem>()), null, new { @id = "CidadeDropDown", @style = "font-weight:normal;width:300px", onchange = "Carrega_Bairro()" })
+                    @Html.DropDownListFor(m => Model.Cidade_Codigo, new SelectList(Enumerable.Empty<SelectListItem>()), null, new { @id = "CidadeDropDown", @style = "font-weight:normal;width:300px", onchange = "Carrega_Bairro()"  })
                 </div>
 
                 <div style="padding-top:8px;">
@@ -196,28 +196,13 @@
 </div>
 
 
-@*<div class="modal " tabindex="-1" role="dialog" id="addModal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-dialog modal-sm modal-dialog-centered">
-            <div class="modal-header"> <span>Cadastrar nova cidade</span> </div>
-            <div class="modal-body">
-                <input id="nomeTxt" placeholder="Digite o nome da cidade" style="text-transform:uppercase;font-size:13px;width:270px" />
-                <br />
-                <br />
-                <button type="button" class="smallbtn" id="Inserir_Save" onclick="Inserir_Cidade()">Gravar</button>&nbsp;
-                <button type="button" class="smallbtnred" data-dismiss="modal">Cancelar</button>
-            </div>
-        </div>
-    </div>
-</div>*@
-
 <div class="modal" id="addModal">
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <span>Cadastrar novo bairro</span> </div>
             <div class="modal-body">
-                <input id="nomeTxt" placeholder="Digite o nome do bairro" style="text-transform:uppercase;font-size:13px;width:270px" />
+                <input id="nomeTxt" placeholder="Digite o nome do bairro" style="font-size:13px;width:270px" />
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary" id="Inserir_Save" >Gravar</button>&nbsp;
@@ -228,8 +213,23 @@
     </div>
 </div>
 
+<div class="modal" id="editModal">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Alterar nome do bairro</span>
+            </div>
+            <div class="modal-body">
+                <input id="nome2Txt" placeholder="Digite o nome do bairro" style="font-size:13px;width:270px" />
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" id="Alterar_Save">Gravar</button>&nbsp;
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
 
-
+        </div>
+    </div>
+</div>
 
 @section scripts{
 
@@ -296,26 +296,85 @@
         $("#bairroTable").on('click', 'tr', function (e) {
             $('#bairroTable tr').removeClass('highlighted');
             $(this).addClass('highlighted');
-            document.getElementById('Bairro').value = $(this).attr('id');
+            document.getElementById('CodBairro').value = $(this).attr('id');
         });
 
         $('#btnNovo').click(function () {
             $('#addModal').modal({ backdrop: 'static', keyboard: false });
         });
+
+        $('#btnAlterar').click(function () {
+            $('#editModal').modal({ backdrop: 'static', keyboard: false });
+        });
+
+        $('#Alterar_Save').click(function () {
+            var _uf = document.getElementById("UFDropDown").value;
+            var _cidade = document.getElementById("CidadeDropDown").value;
+            var _bairro = document.getElementById("CodBairro").value;
+            var _nome = document.getElementById("nome2Txt").value;
+
+            $.ajax({
+                type: "Post",
+                url: location.hostname == "localhost" ? "/Parametro/Alterar_Bairro" : "/gti/Parametro/Alterar_Bairro",
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Success == "True") {
+                        Carrega_Bairro();
+                        $('#editModal').modal('hide');
+                    } else {
+                        document.getElementById('lblMsg').innerHTML = "Ocorreu um erro ao gravar!";
+                        $('#msgBox1').dialog('open');
+                    }
+                },
+                data: {
+                    uf: _uf,
+                    cidade: _cidade,
+                    bairro: _bairro,
+                    novo_nome: _nome
+                }
+            });
+
+        });
+
         $('#Inserir_Save').click(function () {
             var _nome = document.getElementById("nomeTxt").value;
+            var _uf = document.getElementById("UFDropDown").value;
+            var _cidade = document.getElementById("CidadeDropDown").value;
+
             if (_nome=='') {
                 document.getElementById('lblMsg').innerHTML = "Digite o nome do novo bairro!";
                 $('#msgBox1').dialog('open');
                 return false;
             }
 
-
-
-            $('#InserirModal').modal('hide');
+             $.ajax({
+                type: "Post",
+                url: location.hostname == "localhost" ? "/Parametro/Incluir_Bairro" : "/gti/Parametro/Incluir_Bairro",
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Success == "True") {
+                        Carrega_Bairro();
+                        
+                        $('#addModal').modal('hide');
+                    } else {
+                        document.getElementById('lblMsg').innerHTML = data.Msg;
+                        $('#msgBox1').dialog('open');
+                    }
+                },
+                data: {
+                    uf: _uf,
+                    cidade: _cidade,
+                    bairro: _nome
+                }
+            });
         });
 
- 
+        $('#addModal').on('hidden.bs.modal', function (e) {
+            $(this)
+                .find("input,textarea,select")
+                .val('')
+                .end()
+        })
 
         function Carrega_Cidade() {
             var _uf = document.getElementById("UFDropDown").value;
@@ -332,10 +391,10 @@
                 $('#msgBoxWait').dialog('close');
                 if (_uf == 'SP') {
                     $("#CidadeDropDown").val("413");
-                    Carrega_Bairro();
-                }
+                } 
+                Carrega_Bairro();
             });
-            Carrega_Bairro();
+            
         }
 
         function Carrega_Bairro() {
@@ -357,45 +416,10 @@
             });
         }
 
-
-
         function Fechar() {
             var url = '@Url.Action("GtiSys", "Home")';
             window.location.href = url;
         }
-
-
-
-        function Inserir_Cidade() {
-            
-            /*var _seq = document.getElementById("Seq").value;*/
-
-            @*$.ajax({
-                type: "Post",
-                url: location.hostname == "localhost" ? "/Processo/AddPlace" : "/gti/Processo/AddPlace",
-                dataType: 'json',
-                success: function (data) {
-                    $("#Inserir_Save").attr("disabled", false);
-                    $('#InserirModal').modal('hide');
-                    Carrega_Lista();
-                },
-                data: {
-                    Ano: @Model.AnoProcesso,
-                    Numero: @Model.NumProcesso,
-                    Seq: _seq,
-                    CCusto: ccValue
-                }
-            });*@
-
-
-            return true;
-        }
-
-
-        function Alterar() {
-
-        }
-
 
 
         //######## Funções Genéricas #########

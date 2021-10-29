@@ -45,5 +45,47 @@ namespace GTI_Mvc.Controllers
             return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        public JsonResult Incluir_Bairro(string uf,string cidade,string bairro) {
+            short _cidade = Convert.ToInt16(cidade);
+            bairro = bairro.ToUpper();
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+
+            bool existeBairro = enderecoRepository.Existe_Bairro(uf, _cidade, bairro);
+            if (existeBairro) {
+                var result = new { Bairro_Codigo = 0, Success = "False",Msg="Bairro já cadastrado!" };
+                return new JsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+
+            Bairro reg = new Bairro() {
+                Siglauf=uf,
+                Codcidade=_cidade,
+                Descbairro=bairro
+            };
+            int _codigo = enderecoRepository.Incluir_bairro(reg);
+
+            var result2 = new  { Bairro_Codigo=(short)_codigo, Success = "True" };
+            return new JsonResult { Data = result2, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            
+        }
+
+        public JsonResult Alterar_Bairro(string uf, string cidade, string bairro,string novo_nome) {
+            short _cidade = Convert.ToInt16(cidade);
+            short _bairro = Convert.ToInt16(cidade);
+            novo_nome =novo_nome.ToUpper();
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+
+            Bairro reg = new Bairro() {
+                Siglauf = uf,
+                Codcidade = _cidade,
+                Codbairro=_bairro,
+                Descbairro = novo_nome
+            };
+            Exception ex = enderecoRepository.Alterar_Bairro(reg);
+
+            var result2 = new { Success = "True" };
+            return new JsonResult { Data = result2, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+
     }
 }
