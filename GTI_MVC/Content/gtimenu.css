@@ -1,0 +1,103 @@
+﻿/* Menu General Styles */
+.menuBackground {
+    background: black;
+}
+
+.dropDownMenu a {
+    color: white;
+    font-size: 14px;
+    text-decoration: none;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.dropDownMenu,
+.dropDownMenu ul {
+    list-style: none;
+    margin-left: 10px;
+    padding: 0;
+}
+
+    .dropDownMenu li {
+        position: relative;
+    }
+
+    .dropDownMenu a {
+        padding: 3px 20px;
+        display: block;
+        text-decoration: none;
+    }
+
+        .dropDownMenu a:hover {
+            background: #761212;
+            box-shadow: 2px 2px 4px 0 rgb(0, 0, 0);
+            color: white;
+        }
+
+
+    /* Level 1 Drop Down Menu */
+    .dropDownMenu > li {
+        display: inline-block;
+        vertical-align: top;
+        margin-left: -4px; /* solve the 4 pixels spacing between list-items */
+    }
+
+        .dropDownMenu > li:first-child {
+            margin-left: 0;
+        }
+
+        .dropDownMenu > li > a {
+        }
+
+            .dropDownMenu > li > a:hover {
+            }
+
+        /* Level 2 */
+        .dropDownMenu > li > ul {
+            text-align: left;
+            width: 200px; /* change auto value with 200px if you want a bigger menu */
+            display: none;
+            background: #2c1a14;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            box-shadow: 3px 3px 5px 0 rgb(0, 0, 0);
+            /* box-sizing: border-box;*/
+            z-index: 9999999; /* if you have YouTube iframes, is good to have a bigger z-index so the video can appear above the video */
+        }
+
+        .dropDownMenu > li:hover > ul {
+            display: block;
+        }
+
+    .dropDownMenu ul li a {
+    }
+
+        .dropDownMenu ul li a:hover {
+        }
+
+    /* Level 3 */
+    .dropDownMenu > li > ul > li > ul {
+        text-align: left;
+        display: none;
+        width: 200px;
+        background: #523b33;
+        box-shadow: 3px 3px 5px 0 rgb(0, 0, 0);
+        box-sizing: border-box;
+        position: absolute;
+        left: 90%;
+        top: 0;
+        z-index: 9999999;
+    }
+
+    .dropDownMenu > li > ul > li:hover > ul {
+        display: block;
+    }
+
+    .dropDownMenu ul ul li {
+    }
+
+        .dropDownMenu ul ul li a {
+        }
+
+            .dropDownMenu ul ul li a:hover {
+            }

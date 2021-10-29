@@ -932,9 +932,9 @@ namespace GTI_Mvc.Controllers {
             return Json(new { success = true, responseText = "Acesso liberado com sucesso." }, JsonRequestBehavior.AllowGet);
         }
 
-        [Route("GtiSys")]
+        [Route("gtiSys")]
         [HttpGet]
-        public ActionResult GtiSys() {
+        public ActionResult gtiSys() {
 
 
             return View();

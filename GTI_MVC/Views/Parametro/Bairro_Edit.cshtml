@@ -123,6 +123,13 @@
         width: 16px;
         height: 16px;
     }
+
+    .shadow {
+        -webkit-box-shadow: 3px 3px 5px 6px #ccc; /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+        -moz-box-shadow: 3px 3px 5px 6px #ccc; /* Firefox 3.5 - 3.6 */
+        box-shadow: 3px 3px 5px 6px #ccc; /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+    }
+
 </style>
 
 @{
@@ -130,17 +137,17 @@
    
 } 
 
-<div class="center" style="width:370px">
+@*<div class="center shadow" style="width:350px">*@
     @using (Html.BeginForm("Bairro_Edit", "Parametro", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.Bairro_Codigo, new { @id = "Bairro" })
 
-        <div class="container">
+        <div class="center shadow" style="width:350px">
             <div class="card">
                 <div class="card-header">Cadastro de Bairros</div>
                 <div class="card-body">
                     <span style="font-size:12px;color:maroon">Estado</span><br />
-                    @Html.DropDownListFor(m => Model.UF_Sigla, ViewBag.ListaUF as SelectList, null, new { @id = "UFDropDown", @style = "font-weight:normal;width:220px", onchange = "Carrega_Cidade(this)" })<br />
+                    @Html.DropDownListFor(m => Model.UF_Sigla, ViewBag.ListaUF as SelectList, null, new { @id = "UFDropDown", @style = "font-weight:normal;width:220px", onchange = "Carrega_Cidade()" })<br />
                     <div style="padding-top:8px">
                         <span style=" font-size:12px;color:maroon;">Cidade</span><br />
                         @Html.DropDownListFor(m => Model.Cidade_Codigo, new SelectList(Enumerable.Empty<SelectListItem>()), null, new { @id = "CidadeDropDown", @style = "font-weight:normal;width:300px", onchange = "Carrega_Bairro()" })
@@ -161,6 +168,7 @@
                 <div class="card-footer" style="text-align:center;background-color:white">
                     <button type="submit" id="btnNovo" class="btn btn-primary" style="height:32px;width:80px" title="Cadastrar um novo bairro" onclick="Novo()">Novo</button>
                     <button type="submit" id="btnAlterar" class="btn btn-info" style="height: 32px; margin-left: 10px; width: 80px" title="Alterar o bairro selecionado" onclick="Alterar()">Alterar</button>
+                    <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Fechar" onclick="Fechar()">Fechar</button>
                 </div>
 
                 <div class="card-footer">
@@ -169,7 +177,7 @@
             </div>
         </div>
     }
-</div>
+@*</div>*@
 
 <div id="msgBox1" title="Atenção" style='display: none;'>
     <br />
@@ -189,16 +197,6 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-             var url = '@Url.Action("Lista_Cidade", "Parametro")';
-                $.getJSON(url, { uf: 'AC' }, function (data) {  
-                var dropdown = $('#CidadeDropDown');
-                $.each(data, function() {
-                    dropdown.append(
-                        $("<option></option>").text(this.Desccidade).val(this.Codcidade)
-                    );
-                });
-                $('#msgBoxWait').dialog('close');
-                });
 
             $('#msgBox1').dialog({
                 autoOpen: false,
@@ -244,7 +242,9 @@
             $(".foo .ui-dialog-title").css("font-size", "13px");
             $(".foo .ui-widget-content").css("font-size", "13px");
 
-
+            $("#UFDropDown").val("SP");
+            Carrega_Cidade();
+            Carrega_Bairro();
             var _res = '@res';
             if (_res != "") {
                 $('#msgBoxBag').dialog('open');
@@ -260,11 +260,12 @@
             document.getElementById('Bairro').value = $(this).attr('id');
         });
 
-        function Carrega_Cidade(obj) {
+        function Carrega_Cidade() {
+            var _uf = document.getElementById("UFDropDown").value;
             $('#msgBoxWait').dialog('open');
             removeOptions(document.getElementById('CidadeDropDown'));
             var url = '@Url.Action("Lista_Cidade", "Parametro")';
-            $.getJSON(url, { uf: obj.value }, function (data) { 
+            $.getJSON(url, { uf: _uf }, function (data) {
                 var dropdown = $('#CidadeDropDown');
                 $.each(data, function() {
                     dropdown.append(
@@ -272,6 +273,10 @@
                     );
                 });
                 $('#msgBoxWait').dialog('close');
+                if (_uf == 'SP') {
+                    $("#CidadeDropDown").val("413");
+                    Carrega_Bairro();
+                }
             });
             Carrega_Bairro();
         }
@@ -280,6 +285,7 @@
             $("#bairroTable tbody tr").remove();
             var _uf = document.getElementById("UFDropDown").value;
             var _cidade = document.getElementById("CidadeDropDown").value;
+                
             var i = 0;
             var url = '@Url.Action("Lista_Bairro", "Parametro")';
             $.getJSON(url, { uf: _uf, cidade: _cidade }, function (data) {
@@ -294,6 +300,10 @@
             });
         }
 
+        function Fechar() {
+            var url = '@Url.Action("GtiSys", "Home")';
+            window.location.href = url;
+        }
 
 
         //######## Funções Genéricas #########
