@@ -1,24 +1,123 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿.center {
+    margin: auto;
 }
 
-/* Set padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+.actionlink:hover {
+    color: darkgreen;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
-.dl-horizontal dt {
-    white-space: normal;
+.actionlink {
+    color: darkslateblue;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+.card-header {
+    background-color: mistyrose;
+    color: brown;
+    font-size: 14px
+}
+
+.card {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+.card-footer {
+    background-color: whitesmoke;
+    font-size: 14px
+}
+
+.btn-primary {
+    background-color: steelblue;
+}
+
+.btn {
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+.modal-header {
+    padding: 9px 15px;
+    border-bottom: 1px solid #eee;
+    background-color: darkslategrey;
+    color: whitesmoke;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.ui-dialog-titlebar-close {
+    visibility: hidden;
+}
+
+.no-titlebar .ui-dialog-titlebar {
+    display: none;
+}
+
+.uppercase {
+    text-transform: uppercase
+}
+
+.ui-autocomplete {
+    font-size: 13px;
+    border-radius: 0px;
+    border-color: maroon;
+}
+
+.highlight {
+    background-color: #FFFFAF;
+    color: Red;
+    font-weight: bold;
+    text-transform: uppercase
+}
+
+.ui-menu-item .ui-menu-item-wrapper.ui-state-active {
+    background: darkred !important;
+    font-weight: bold !important;
+    color: #ffffff !important;
+}
+
+ul.ui-autocomplete {
+    z-index: 1100;
+}
+
+.tbl tbody tr:hover {
+    background-color: red;
+    color: white;
+}
+
+tr.highlighted td {
+    background: maroon;
+    color: white;
+}
+
+.titulo {
+    background: maroon;
+    color: white;
+    font-weight: normal;
+    font-size: 13px;
+}
+
+.btnimage {
+    border: 0 none;
+    background: none;
+    background-image: url('../../Images/cancelar.gif');
+    width: 16px;
+    height: 16px;
+}
+
+.btnimage2 {
+    border: 0 none;
+    background: none;
+    background-image: url('../../Images/ok.png');
+    width: 16px;
+    height: 16px;
+}
+
+.shadow {
+    -webkit-box-shadow: 3px 3px 5px 6px #ccc; /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    -moz-box-shadow: 3px 3px 5px 6px #ccc; /* Firefox 3.5 - 3.6 */
+    box-shadow: 3px 3px 5px 6px #ccc; /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
 }

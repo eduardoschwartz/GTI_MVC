@@ -6,6 +6,7 @@
 }
 
 <style>
+
     .center {
         margin: auto;
     }
@@ -54,6 +55,10 @@
         -moz-border-radius-topright: 5px;
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
+    }
+
+    .ui-dialog {
+        z-index: 1060 !important;
     }
 
     .ui-dialog-titlebar-close {
@@ -130,54 +135,52 @@
         box-shadow: 3px 3px 5px 6px #ccc; /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
     }
 
+   
 </style>
 
-@{
-    var res = @ViewBag.Result;
-   
-} 
 
-@*<div class="center shadow" style="width:350px">*@
-    @using (Html.BeginForm("Bairro_Edit", "Parametro", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
-        @Html.AntiForgeryToken()
-        @Html.HiddenFor(m => m.Bairro_Codigo, new { @id = "Bairro" })
 
-        <div class="center shadow" style="width:350px">
-            <div class="card">
-                <div class="card-header">Cadastro de Bairros</div>
-                <div class="card-body">
-                    <span style="font-size:12px;color:maroon">Estado</span><br />
-                    @Html.DropDownListFor(m => Model.UF_Sigla, ViewBag.ListaUF as SelectList, null, new { @id = "UFDropDown", @style = "font-weight:normal;width:220px", onchange = "Carrega_Cidade()" })<br />
-                    <div style="padding-top:8px">
-                        <span style=" font-size:12px;color:maroon;">Cidade</span><br />
-                        @Html.DropDownListFor(m => Model.Cidade_Codigo, new SelectList(Enumerable.Empty<SelectListItem>()), null, new { @id = "CidadeDropDown", @style = "font-weight:normal;width:300px", onchange = "Carrega_Bairro()" })
+@{var res = @ViewBag.Result; }
+
+@using (Html.BeginForm("Bairro_Edit", "Parametro", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Bairro_Codigo, new { @id = "Bairro" })
+
+    <div class="center shadow" style="width:350px">
+        <div class="card">
+            <div class="card-header">Cadastro de Bairros</div>
+            <div class="card-body">
+                <span style="font-size:12px;color:maroon">Estado</span><br />
+                @Html.DropDownListFor(m => Model.UF_Sigla, ViewBag.ListaUF as SelectList, null, new { @id = "UFDropDown", @style = "font-weight:normal;width:220px", onchange = "Carrega_Cidade()" })<br />
+                <div style="padding-top:8px">
+                    <span style=" font-size:12px;color:maroon;">Cidade</span><br />
+                    @Html.DropDownListFor(m => Model.Cidade_Codigo, new SelectList(Enumerable.Empty<SelectListItem>()), null, new { @id = "CidadeDropDown", @style = "font-weight:normal;width:300px", onchange = "Carrega_Bairro()" })
+                </div>
+
+                <div style="padding-top:8px;">
+                    <span style=" font-size: 12px; color: maroon">Lista de Bairros</span><br />
+                    <div id="table-container" style="overflow-x: auto; height: 290px; overflow: auto;border:solid;border-width:1px">
+
+                        <table id="bairroTable" style="width:290px;" class="tbl table-bordered table-condensed">
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
-
-                    <div style="padding-top:8px;">
-                        <span style=" font-size: 12px; color: maroon">Lista de Bairros</span><br />
-                        <div id="table-container" style="overflow-x: auto; height: 290px; overflow: auto;border:solid;border-width:1px">
-
-                            <table id="bairroTable" style="width:290px;" class="tbl table-bordered table-condensed">
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="card-footer" style="text-align:center;background-color:white">
-                    <button type="submit" id="btnNovo" class="btn btn-primary" style="height:32px;width:80px" title="Cadastrar um novo bairro" onclick="Novo()">Novo</button>
-                    <button type="submit" id="btnAlterar" class="btn btn-info" style="height: 32px; margin-left: 10px; width: 80px" title="Alterar o bairro selecionado" onclick="Alterar()">Alterar</button>
-                    <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Fechar" onclick="Fechar()">Fechar</button>
                 </div>
 
-                <div class="card-footer">
-                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
-                </div>
+            </div>
+            <div class="card-footer" style="text-align:center;background-color:white">
+                <button type="button" id="btnNovo" class="btn btn-primary" style="height:32px;width:80px" title="Cadastrar um novo bairro">Novo</button>
+                <button type="button" id="btnAlterar" class="btn btn-info" style="height: 32px; margin-left: 10px; width: 80px" title="Alterar o bairro selecionado">Alterar</button>
+                <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Fechar" onclick="Fechar()">Fechar</button>
+            </div>
+
+            <div class="card-footer">
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
             </div>
         </div>
-    }
-@*</div>*@
+    </div>
+}
 
 <div id="msgBox1" title="Atenção" style='display: none;'>
     <br />
@@ -191,6 +194,42 @@
     <img src="~/Images/ajax-loader.gif"><br />
     <p>Processando, aguarde . . . </p>
 </div>
+
+
+@*<div class="modal " tabindex="-1" role="dialog" id="addModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-header"> <span>Cadastrar nova cidade</span> </div>
+            <div class="modal-body">
+                <input id="nomeTxt" placeholder="Digite o nome da cidade" style="text-transform:uppercase;font-size:13px;width:270px" />
+                <br />
+                <br />
+                <button type="button" class="smallbtn" id="Inserir_Save" onclick="Inserir_Cidade()">Gravar</button>&nbsp;
+                <button type="button" class="smallbtnred" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+<div class="modal" id="addModal">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Cadastrar novo bairro</span> </div>
+            <div class="modal-body">
+                <input id="nomeTxt" placeholder="Digite o nome do bairro" style="text-transform:uppercase;font-size:13px;width:270px" />
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" id="Inserir_Save" >Gravar</button>&nbsp;
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
 
 @section scripts{
 
@@ -241,7 +280,7 @@
 
             $(".foo .ui-dialog-title").css("font-size", "13px");
             $(".foo .ui-widget-content").css("font-size", "13px");
-
+           
             $("#UFDropDown").val("SP");
             Carrega_Cidade();
             Carrega_Bairro();
@@ -259,6 +298,24 @@
             $(this).addClass('highlighted');
             document.getElementById('Bairro').value = $(this).attr('id');
         });
+
+        $('#btnNovo').click(function () {
+            $('#addModal').modal({ backdrop: 'static', keyboard: false });
+        });
+        $('#Inserir_Save').click(function () {
+            var _nome = document.getElementById("nomeTxt").value;
+            if (_nome=='') {
+                document.getElementById('lblMsg').innerHTML = "Digite o nome do novo bairro!";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+
+
+
+            $('#InserirModal').modal('hide');
+        });
+
+ 
 
         function Carrega_Cidade() {
             var _uf = document.getElementById("UFDropDown").value;
@@ -285,7 +342,7 @@
             $("#bairroTable tbody tr").remove();
             var _uf = document.getElementById("UFDropDown").value;
             var _cidade = document.getElementById("CidadeDropDown").value;
-                
+
             var i = 0;
             var url = '@Url.Action("Lista_Bairro", "Parametro")';
             $.getJSON(url, { uf: _uf, cidade: _cidade }, function (data) {
@@ -300,10 +357,45 @@
             });
         }
 
+
+
         function Fechar() {
             var url = '@Url.Action("GtiSys", "Home")';
             window.location.href = url;
         }
+
+
+
+        function Inserir_Cidade() {
+            
+            /*var _seq = document.getElementById("Seq").value;*/
+
+            @*$.ajax({
+                type: "Post",
+                url: location.hostname == "localhost" ? "/Processo/AddPlace" : "/gti/Processo/AddPlace",
+                dataType: 'json',
+                success: function (data) {
+                    $("#Inserir_Save").attr("disabled", false);
+                    $('#InserirModal').modal('hide');
+                    Carrega_Lista();
+                },
+                data: {
+                    Ano: @Model.AnoProcesso,
+                    Numero: @Model.NumProcesso,
+                    Seq: _seq,
+                    CCusto: ccValue
+                }
+            });*@
+
+
+            return true;
+        }
+
+
+        function Alterar() {
+
+        }
+
 
 
         //######## Funções Genéricas #########

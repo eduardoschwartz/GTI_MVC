@@ -19,6 +19,7 @@
 
     .dropDownMenu li {
         position: relative;
+        text-decoration: none;
     }
 
     .dropDownMenu a {
@@ -38,17 +39,21 @@
     .dropDownMenu > li {
         display: inline-block;
         vertical-align: top;
+        text-decoration: none;
         margin-left: -4px; /* solve the 4 pixels spacing between list-items */
     }
 
         .dropDownMenu > li:first-child {
+            text-decoration: none;
             margin-left: 0;
         }
 
         .dropDownMenu > li > a {
+            text-decoration:none;
         }
 
             .dropDownMenu > li > a:hover {
+                text-decoration: none;
             }
 
         /* Level 2 */
@@ -57,6 +62,7 @@
             width: 200px; /* change auto value with 200px if you want a bigger menu */
             display: none;
             background: #2c1a14;
+            text-decoration: none;
             position: absolute;
             top: 100%;
             left: 0;
@@ -80,6 +86,7 @@
         text-align: left;
         display: none;
         width: 200px;
+        text-decoration: none;
         background: #523b33;
         box-shadow: 3px 3px 5px 0 rgb(0, 0, 0);
         box-sizing: border-box;
