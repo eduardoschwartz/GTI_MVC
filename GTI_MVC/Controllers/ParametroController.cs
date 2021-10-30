@@ -125,7 +125,22 @@ namespace GTI_Mvc.Controllers
         }
         #endregion
 
+        #region Cadastro de Lançamentos e Tributos
 
+        [Route("Lancamento_Edit")]
+        [HttpGet]
+        public ActionResult Lancamento_Edit() {
+            LancTribViewModel model = new LancTribViewModel();
+            return View(model);
+        }
+
+        public JsonResult Lista_Lancamento() {
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            List<Lancamento> Lista = tributarioRepository.Lista_Lancamento();
+            return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        #endregion
 
     }
 }
