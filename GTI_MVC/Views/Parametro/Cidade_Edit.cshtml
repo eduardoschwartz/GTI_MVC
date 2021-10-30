@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_Layoutgti.cshtml";
-    ViewBag.Title = "Cadastro de Bairros";
+    ViewBag.Title = "Cadastro de Cidades";
 }
 
 <style>
@@ -140,27 +140,23 @@
 
 @{var res = @ViewBag.Result; }
 
-@using (Html.BeginForm("Bairro_Edit", "Parametro", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+@using (Html.BeginForm("Cidade_Edit", "Parametro", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(m => m.Bairro_Codigo, new { @id = "CodBairro" })
-    @Html.HiddenFor(m => m.Bairro_Nome, new { @id = "NomeBairro" })
+    @Html.HiddenFor(m => m.Cidade_Codigo, new { @id = "CodCidade" })
+    @Html.HiddenFor(m => m.Cidade_Nome, new { @id = "NomeCidade" })
 
     <div class="center shadow" style="width:350px">
         <div class="card">
-            <div class="card-header">Cadastro de Bairros</div>
+            <div class="card-header">Cadastro de Cidades</div>
             <div class="card-body">
                 <span style="font-size:12px;color:maroon">Estado</span><br />
                 @Html.DropDownListFor(m => Model.UF_Sigla, ViewBag.ListaUF as SelectList, null, new { @id = "UFDropDown", @style = "font-weight:normal;width:220px", onchange = "Carrega_Cidade()" })<br />
-                <div style="padding-top:8px">
-                    <span style=" font-size:12px;color:maroon;">Cidade</span><br />
-                    @Html.DropDownListFor(m => Model.Cidade_Codigo, new SelectList(Enumerable.Empty<SelectListItem>()), null, new { @id = "CidadeDropDown", @style = "font-weight:normal;width:300px", onchange = "Carrega_Bairro()" })
-                </div>
 
                 <div style="padding-top:8px;">
-                    <span style=" font-size: 12px; color: maroon">Lista de Bairros</span><br />
+                    <span style=" font-size: 12px; color: maroon">Lista de Cidades</span><br />
                     <div id="table-container" style="overflow-x: auto; height: 290px; overflow: auto;border:solid;border-width:1px">
 
-                        <table id="bairroTable" style="width:290px;" class="tbl table-bordered table-condensed">
+                        <table id="mainTable" style="width:290px;" class="tbl table-bordered table-condensed">
                             <tbody>
                             </tbody>
                         </table>
@@ -169,8 +165,8 @@
 
             </div>
             <div class="card-footer" style="text-align:center;background-color:white">
-                <button type="button" id="btnNovo" class="btn btn-primary" style="height:32px;width:80px" title="Cadastrar um novo bairro">Novo</button>
-                <button type="button" id="btnAlterar" class="btn btn-info" style="height: 32px; margin-left: 10px; width: 80px" title="Alterar o bairro selecionado">Alterar</button>
+                <button type="button" id="btnNovo" class="btn btn-primary" style="height:32px;width:80px" title="Cadastrar uma nova cidade">Novo</button>
+                <button type="button" id="btnAlterar" class="btn btn-info" style="height: 32px; margin-left: 10px; width: 80px" title="Alterar a cidade selecionada">Alterar</button>
                 <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Fechar" onclick="Fechar()">Fechar</button>
             </div>
 
@@ -199,10 +195,10 @@
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <span>Cadastrar novo bairro</span>
+                <span>Cadastrar nova cidade</span>
             </div>
             <div class="modal-body">
-                <input id="nomeTxt" placeholder="Digite o nome do bairro" style="font-size:13px;width:270px" />
+                <input id="nomeTxt" placeholder="Digite o nome da cidade" style="font-size:13px;width:270px" />
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary" id="Inserir_Save">Gravar</button>&nbsp;
@@ -217,10 +213,10 @@
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <span>Alterar nome do bairro</span>
+                <span>Alterar nome da cidade</span>
             </div>
             <div class="modal-body">
-                <input id="nome2Txt" placeholder="Digite o nome do bairro" style="font-size:13px;width:270px" />
+                <input id="nome2Txt" placeholder="Digite o nome da cidade" style="font-size:13px;width:270px" />
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary" id="Alterar_Save">Gravar</button>&nbsp;
@@ -283,7 +279,6 @@
 
             $("#UFDropDown").val("SP");
             Carrega_Cidade();
-            Carrega_Bairro();
             var _res = '@res';
             if (_res != "") {
                 $('#msgBoxBag').dialog('open');
@@ -293,11 +288,11 @@
             }
         });
 
-        $("#bairroTable").on('click', 'tr', function (e) {
-            $('#bairroTable tr').removeClass('highlighted');
+        $("#mainTable").on('click', 'tr', function (e) {
+            $('#mainTable tr').removeClass('highlighted');
             $(this).addClass('highlighted');
-            document.getElementById('CodBairro').value = $(this).closest('tr').find('td:eq(0)').text();
-            document.getElementById('NomeBairro').value = $(this).closest('tr').find('td:eq(1)').text();
+            document.getElementById('CodCidade').value = $(this).closest('tr').find('td:eq(0)').text();
+            document.getElementById('NomeCidade').value = $(this).closest('tr').find('td:eq(1)').text();
         });
 
         $('#btnNovo').click(function () {
@@ -305,30 +300,29 @@
         });
 
         $('#btnAlterar').click(function () {
-            var _nome = document.getElementById("NomeBairro").value;
+            var _nome = document.getElementById("NomeCidade").value;
             if (_nome == '') {
-                document.getElementById('lblMsg').innerHTML = "Selecione um Bairro!";
+                document.getElementById('lblMsg').innerHTML = "Selecione uma Cidade!";
                 $('#msgBox1').dialog('open');
             } else {
                 $("#editModal #nome2Txt").val(_nome);
-                document.getElementById('NomeBairro').value = '';
+                document.getElementById('NomeCidade').value = '';
                 $('#editModal').modal({ backdrop: 'static', keyboard: false });
             }
         });
 
         $('#Alterar_Save').click(function () {
             var _uf = document.getElementById("UFDropDown").value;
-            var _cidade = document.getElementById("CidadeDropDown").value;
-            var _bairro = document.getElementById("CodBairro").value;
+            var _cidade = document.getElementById("CodCidade").value;
             var _nome = document.getElementById("nome2Txt").value;
 
             $.ajax({
                 type: "Post",
-                url: location.hostname == "localhost" ? "/Parametro/Alterar_Bairro" : "/gti/Parametro/Alterar_Bairro",
+                url: location.hostname == "localhost" ? "/Parametro/Alterar_Cidade" : "/gti/Parametro/Alterar_Cidade",
                 dataType: 'json',
                 success: function (data) {
                     if (data.Success == "True") {
-                        Carrega_Bairro();
+                        Carrega_Cidade();
                         $('#editModal').modal('hide');
                     } else {
                         document.getElementById('lblMsg').innerHTML = "Ocorreu um erro ao gravar!";
@@ -338,7 +332,6 @@
                 data: {
                     uf: _uf,
                     cidade: _cidade,
-                    bairro: _bairro,
                     novo_nome: _nome
                 }
             });
@@ -348,22 +341,20 @@
         $('#Inserir_Save').click(function () {
             var _nome = document.getElementById("nomeTxt").value;
             var _uf = document.getElementById("UFDropDown").value;
-            var _cidade = document.getElementById("CidadeDropDown").value;
 
             if (_nome=='') {
-                document.getElementById('lblMsg').innerHTML = "Digite o nome do novo bairro!";
+                document.getElementById('lblMsg').innerHTML = "Digite o nome da nova cidade!";
                 $('#msgBox1').dialog('open');
                 return false;
             }
 
              $.ajax({
                 type: "Post",
-                url: location.hostname == "localhost" ? "/Parametro/Incluir_Bairro" : "/gti/Parametro/Incluir_Bairro",
+                url: location.hostname == "localhost" ? "/Parametro/Incluir_Cidade" : "/gti/Parametro/Incluir_Cidade",
                 dataType: 'json',
                 success: function (data) {
                     if (data.Success == "True") {
-                        Carrega_Bairro();
-
+                        Carrega_Cidade();
                         $('#addModal').modal('hide');
                     } else {
                         document.getElementById('lblMsg').innerHTML = data.Msg;
@@ -372,8 +363,7 @@
                 },
                 data: {
                     uf: _uf,
-                    cidade: _cidade,
-                    bairro: _nome
+                    cidade: _nome
                 }
             });
         });
@@ -394,40 +384,18 @@
 
 
         function Carrega_Cidade() {
+             $("#mainTable tbody tr").remove();
             var _uf = document.getElementById("UFDropDown").value;
-            $('#msgBoxWait').dialog('open');
-            removeOptions(document.getElementById('CidadeDropDown'));
-            var url = '@Url.Action("Lista_Cidade", "Parametro")';
-            $.getJSON(url, { uf: _uf }, function (data) {
-                var dropdown = $('#CidadeDropDown');
-                $.each(data, function() {
-                    dropdown.append(
-                        $("<option></option>").text(this.Desccidade).val(this.Codcidade)
-                    );
-                });
-                $('#msgBoxWait').dialog('close');
-                if (_uf == 'SP') {
-                    $("#CidadeDropDown").val("413");
-                }
-                Carrega_Bairro();
-            });
-
-        }
-
-        function Carrega_Bairro() {
-            $("#bairroTable tbody tr").remove();
-            var _uf = document.getElementById("UFDropDown").value;
-            var _cidade = document.getElementById("CidadeDropDown").value;
 
             var i = 0;
-            var url = '@Url.Action("Lista_Bairro", "Parametro")';
-            $.getJSON(url, { uf: _uf, cidade: _cidade }, function (data) {
+            var url = '@Url.Action("Lista_Cidade", "Parametro")';
+            $.getJSON(url, { uf: _uf }, function (data) {
                 $.each(data, function () {
                     var tr;
-                        tr = $('<tr id="' + data[i].Codbairro + '" style="height: 12px; font-weight: normal; font-size: 12px; white-space: nowrap; cursor: pointer"  />');
-                        tr.append("<td style='display:none'>" + data[i].Codbairro + "</td>");
-                        tr.append("<td style='width:100px'>" + data[i].Descbairro + "</td>");
-                        $("#bairroTable").find('tbody').append(tr);
+                        tr = $('<tr id="' + data[i].CodCidade + '" style="height: 12px; font-weight: normal; font-size: 12px; white-space: nowrap; cursor: pointer"  />');
+                        tr.append("<td style='display:none'>" + data[i].Codcidade + "</td>");
+                        tr.append("<td style='width:100px'>" + data[i].Desccidade + "</td>");
+                        $("#mainTable").find('tbody').append(tr);
                         i++;
                 });
             });

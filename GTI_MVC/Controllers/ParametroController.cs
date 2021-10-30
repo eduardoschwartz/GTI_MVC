@@ -12,6 +12,7 @@ namespace GTI_Mvc.Controllers
     public class ParametroController : Controller    {
         private readonly string _connection = "GTIconnection";
 
+        #region Cadastro de Bairros e Cidades
         [Route("Bairro_Edit")]
         [HttpGet]
         public ActionResult Bairro_Edit()
@@ -22,13 +23,13 @@ namespace GTI_Mvc.Controllers
             return View();
         }
 
-        [Route("Bairro_Edit")]
-        [HttpPost]
-        public ActionResult Bairro_Edit(BairroViewModel model) {
+        [Route("Cidade_Edit")]
+        [HttpGet]
+        public ActionResult Cidade_Edit() {
             Endereco_bll enderecoRepository = new Endereco_bll(_connection);
             List<Uf> listaUf = enderecoRepository.Lista_UF();
             ViewBag.ListaUF = new SelectList(listaUf, "siglauf", "descuf");
-            return View(model);
+            return View();
         }
 
         public JsonResult Lista_Cidade(string uf) {
@@ -70,7 +71,7 @@ namespace GTI_Mvc.Controllers
 
         public JsonResult Alterar_Bairro(string uf, string cidade, string bairro,string novo_nome) {
             short _cidade = Convert.ToInt16(cidade);
-            short _bairro = Convert.ToInt16(cidade);
+            short _bairro = Convert.ToInt16(bairro);
             novo_nome =novo_nome.ToUpper();
             Endereco_bll enderecoRepository = new Endereco_bll(_connection);
 
@@ -85,6 +86,45 @@ namespace GTI_Mvc.Controllers
             var result2 = new { Success = "True" };
             return new JsonResult { Data = result2, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+
+        public JsonResult Incluir_Cidade(string uf, string cidade) {
+            cidade = cidade.ToUpper();
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+
+            bool existeCidade = enderecoRepository.Existe_Cidade(uf, cidade);
+            if (existeCidade) {
+                var result = new { Cidade_Codigo = 0, Success = "False", Msg = "Cidade já cadastrada!" };
+                return new JsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+
+            Cidade reg = new Cidade() {
+                Siglauf = uf,
+                Desccidade = cidade
+            };
+            int _codigo = enderecoRepository.Incluir_cidade(reg);
+
+            var result2 = new { Cidade_Codigo = (short)_codigo, Success = "True" };
+            return new JsonResult { Data = result2, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+
+        }
+
+        public JsonResult Alterar_Cidade(string uf, string cidade, string novo_nome) {
+            short _cidade = Convert.ToInt16(cidade);
+            novo_nome = novo_nome.ToUpper();
+            Endereco_bll enderecoRepository = new Endereco_bll(_connection);
+
+            Cidade reg = new Cidade() {
+                Siglauf = uf,
+                Codcidade = _cidade,
+                Desccidade = novo_nome
+            };
+            Exception ex = enderecoRepository.Alterar_Cidade(reg);
+
+            var result2 = new { Success = "True" };
+            return new JsonResult { Data = result2, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        #endregion
+
 
 
     }

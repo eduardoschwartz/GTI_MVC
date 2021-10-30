@@ -36,6 +36,11 @@ namespace GTI_Bll.Classes {
             return obj.Incluir_bairro(reg);
         }
 
+        public int Incluir_cidade(Cidade reg) {
+            Endereco_Data obj = new Endereco_Data(_connection);
+            return obj.Incluir_cidade(reg);
+        }
+
         public string Retorna_UfNome(string UF) {
             Endereco_Data obj = new Endereco_Data(_connection);
             return obj.Retorna_UfNome(UF);
@@ -44,6 +49,12 @@ namespace GTI_Bll.Classes {
         public Exception Alterar_Bairro(Bairro reg) {
             Endereco_Data obj = new Endereco_Data(_connection);
             Exception ex= obj.Alterar_Bairro(reg);
+            return ex;
+        }
+
+        public Exception Alterar_Cidade(Cidade reg) {
+            Endereco_Data obj = new Endereco_Data(_connection);
+            Exception ex = obj.Alterar_Cidade(reg);
             return ex;
         }
 
@@ -156,6 +167,11 @@ namespace GTI_Bll.Classes {
         public bool Existe_Bairro(string uf, int cidade, string bairro) {
             Endereco_Data obj = new Endereco_Data(_connection);
             return obj.Existe_Bairro(uf, cidade,bairro);
+        }
+
+        public bool Existe_Cidade(string uf, string cidade) {
+            Endereco_Data obj = new Endereco_Data(_connection);
+            return obj.Existe_Cidade(uf, cidade);
         }
 
         public Cepdb Retorna_CepDB(int Cep) {

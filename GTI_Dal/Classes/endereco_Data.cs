@@ -68,6 +68,25 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public int Incluir_cidade(Cidade reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var cntCod = (from c in db.Cidade where c.Siglauf == reg.Siglauf  select c.Codcidade).Count();
+                int maxCod = 1;
+                if (cntCod > 0)
+                    maxCod = (from c in db.Cidade where c.Siglauf == reg.Siglauf  select c.Codcidade).Max() + 1;
+                reg.Codcidade = Convert.ToInt16(maxCod);
+                db.Cidade.Add(reg);
+                try {
+                    db.SaveChanges();
+                } catch {
+                    maxCod = 0;
+                }
+                return maxCod;
+            }
+        }
+
+
+
         public Exception Alterar_Bairro(Bairro reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 string sUF = reg.Siglauf;
@@ -83,6 +102,23 @@ namespace GTI_Dal.Classes {
                 return null;
             }
         }
+
+        public Exception Alterar_Cidade(Cidade reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                string sUF = reg.Siglauf;
+                int nCodCidade = reg.Codcidade;
+                Cidade b = db.Cidade.First(i => i.Siglauf == sUF && i.Codcidade == nCodCidade );
+                b.Desccidade = reg.Desccidade;
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+
 
         public Exception Excluir_Bairro(Bairro reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
@@ -333,6 +369,17 @@ namespace GTI_Dal.Classes {
                 var reg = (from i in db.Bairro
                            where i.Siglauf == uf && i.Codcidade==cidade && i.Descbairro==bairro select i.Codbairro).FirstOrDefault();
                 if (reg==0)
+                    return false;
+                else
+                    return true;
+            }
+        }
+
+        public bool Existe_Cidade(string uf,  string cidade) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from c in db.Cidade
+                           where c.Siglauf == uf && c.Desccidade == cidade select c.Codcidade).FirstOrDefault();
+                if (reg == 0)
                     return false;
                 else
                     return true;
