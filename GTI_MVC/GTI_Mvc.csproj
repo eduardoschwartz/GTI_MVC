@@ -622,6 +622,7 @@
     <Compile Include="ViewModels\EmpresaDetailsViewModel.cs" />
     <Compile Include="ViewModels\ImovelDetailsViewModel.cs" />
     <Compile Include="ViewModels\ItbiViewModel.cs" />
+    <Compile Include="ViewModels\LancTribViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MemoryViewModel.cs" />
     <Compile Include="ViewModels\MobReqViewModel.cs" />
@@ -1138,6 +1139,7 @@
     <Content Include="Views\Home\gtiSys.cshtml" />
     <Content Include="Views\Parametro\Bairro_Edit.cshtml" />
     <Content Include="Views\Parametro\Cidade_Edit.cshtml" />
+    <Content Include="Views\Parametro\Lancamento_Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
