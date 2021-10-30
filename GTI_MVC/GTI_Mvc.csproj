@@ -1137,6 +1137,7 @@
     <Content Include="Views\Shared\_Layoutgti.cshtml" />
     <Content Include="Views\Home\gtiSys.cshtml" />
     <Content Include="Views\Parametro\Bairro_Edit.cshtml" />
+    <Content Include="Views\Parametro\Cidade_Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
