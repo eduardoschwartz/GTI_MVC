@@ -220,5 +220,6 @@ namespace GTI_Dal {
         public DbSet<Usuario_web_anexo> Usuario_Web_Anexo { get; set; }
         public DbSet<Usuario_Web_Analise> Usuario_Web_Analise { get; set; }
         public DbSet<Tributoartigo> Tributo_Artigo { get; set; }
+        public DbSet<Ufir> Ufir { get; set; }
     }
 }

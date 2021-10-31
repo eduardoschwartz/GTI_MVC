@@ -3360,6 +3360,35 @@ Proximo:;
 
         }
 
+        public bool Existe_Tributo_Artigo(int Codigo) {
+            bool bValido = false;
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                    var existingReg = db.Tributo_Artigo.Count(a => a.Codtributo == Codigo);
+                    if (existingReg > 0)
+                        bValido = true;
+            }
+            return bValido;
+        }
+
+        public Exception Insert_Tributo_Artigo(Tributoartigo reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                try {
+                    db.Database.ExecuteSqlCommand("INSERT INTO tributoartigo(codtributo,artigo) VALUES(@codtributo,@artigo)",
+                        new SqlParameter("@codtributo", reg.Codtributo),
+                        new SqlParameter("@artigo", reg.Artigo));
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public List<Ufir> Lista_IPCA() {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                List<Ufir>Sql = (from u in db.Ufir orderby u.Anoufir select u).ToList() ;
+                return Sql;
+            }
+        }
 
     }//end class
 }

@@ -230,7 +230,13 @@ namespace GTI_Mvc.Controllers
                 Artigo = artigo
             };
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
-            Exception ex = tributarioRepository.Alterar_TributoArtigo(reg);
+            bool _existe = tributarioRepository.Existe_Tributo_Artigo(_codigo);
+
+            Exception ex;
+            if(_existe)
+                ex = tributarioRepository.Alterar_TributoArtigo(reg);
+            else
+                ex = tributarioRepository.Insert_Tributo_Artigo(reg);
 
             var result = new { Success = "True" };
             return new JsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -239,5 +245,19 @@ namespace GTI_Mvc.Controllers
 
         #endregion
 
+        #region Tabela de IPCA e Preços Públicos
+
+        [Route("IPCA_Edit")]
+        public ActionResult IPCA_Edit() {
+            return View();
+        }
+
+        public JsonResult Lista_IPCA() {
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            List<Ufir> Lista = tributarioRepository.Lista_IPCA();
+            return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        #endregion
     }
 }

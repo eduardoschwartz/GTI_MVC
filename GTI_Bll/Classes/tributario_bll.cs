@@ -1627,6 +1627,23 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public bool Existe_Tributo_Artigo(int Codigo) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Existe_Tributo_Artigo(Codigo);
+        }
+
+        public Exception Insert_Tributo_Artigo(Tributoartigo reg) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            Exception ex = obj.Insert_Tributo_Artigo(reg);
+            return ex;
+        }
+
+        public List<Ufir> Lista_IPCA() {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Lista_IPCA();
+
+        }
+
     }//end class
 }
 

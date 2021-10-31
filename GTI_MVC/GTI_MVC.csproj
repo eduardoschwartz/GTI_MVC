@@ -1142,6 +1142,7 @@
     <Content Include="Views\Parametro\Lancamento_Edit.cshtml" />
     <Content Include="Views\Parametro\Tributo_Edit.cshtml" />
     <Content Include="Views\Parametro\TributoArtigo_Edit.cshtml" />
+    <Content Include="Views\Parametro\IPCA_Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

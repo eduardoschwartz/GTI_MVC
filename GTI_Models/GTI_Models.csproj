@@ -270,6 +270,7 @@
     <Compile Include="Models\tributoaliquota.cs" />
     <Compile Include="Models\tributoartigo.cs" />
     <Compile Include="Models\tributolancamento.cs" />
+    <Compile Include="Models\ufir.cs" />
     <Compile Include="Models\usoconstr.cs" />
     <Compile Include="Models\usoterreno.cs" />
     <Compile Include="Models\mobiliarioatividadeiss.cs" />
