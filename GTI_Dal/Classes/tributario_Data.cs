@@ -66,11 +66,10 @@ namespace GTI_Dal.Classes {
                     maxCod = (from c in db.Lancamento select c.Codlancamento).Max() + 1;
 
                 try {
-                    db.Database.ExecuteSqlCommand("INSERT INTO lancamento(codlancamento,descfull,descreduz,tipolivro) VALUES(@codlancamento,@descfull,@descreduz,@tipolivro)",
+                    db.Database.ExecuteSqlCommand("INSERT INTO lancamento(codlancamento,descfull,descreduz) VALUES(@codlancamento,@descfull,@descreduz)",
                         new SqlParameter("@codlancamento", Convert.ToInt16(maxCod)),
                         new SqlParameter("@descfull", reg.Descfull),
-                        new SqlParameter("@descreduz", reg.Descreduz),
-                        new SqlParameter("@tipolivro", reg.Tipolivro));
+                        new SqlParameter("@descreduz", reg.Descreduz));
                 } catch (Exception ex) {
                     return ex;
                 }
@@ -88,11 +87,10 @@ namespace GTI_Dal.Classes {
                 reg.Codtributo = Convert.ToInt16(maxCod);
 //                db.Tributo.Add(reg);
                 try {
-                    db.Database.ExecuteSqlCommand("INSERT INTO tributo(codtributo,desctributo,abrevtributo,da) VALUES(@codtributo,@desctributo,@abrevtributo,@da)",
+                    db.Database.ExecuteSqlCommand("INSERT INTO tributo(codtributo,desctributo,abrevtributo) VALUES(@codtributo,@desctributo,@abrevtributo)",
                         new SqlParameter("@codtributo", Convert.ToInt16(maxCod)),
                         new SqlParameter("@desctributo", reg.Desctributo),
-                        new SqlParameter("@abrevtributo", reg.Abrevtributo),
-                        new SqlParameter("@da", reg.Da));
+                        new SqlParameter("@abrevtributo", reg.Abrevtributo));
                 } catch (Exception ex) {
                     return ex;
                 }
@@ -106,7 +104,7 @@ namespace GTI_Dal.Classes {
                 Lancamento b = db.Lancamento.First(i => i.Codlancamento == nCodLanc);
                 b.Descfull = reg.Descfull;
                 b.Descreduz = reg.Descreduz;
-                b.Tipolivro = reg.Tipolivro;
+//                b.Tipolivro = reg.Tipolivro;
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {

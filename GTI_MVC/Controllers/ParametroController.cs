@@ -140,6 +140,76 @@ namespace GTI_Mvc.Controllers
             return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        public JsonResult Incluir_Lancamento(string nomeC,string nomeR) {
+            Lancamento reg = new Lancamento() {
+                Descfull = nomeC.ToUpper(),
+                Descreduz=nomeR.ToUpper()
+            };
+            
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            Exception ex = tributarioRepository.Insert_Lancamento(reg);
+
+            var result = new {  Success = "True" };
+            return new JsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+
+        }
+
+        public JsonResult Alterar_Lancamento(string codigo, string nomeC, string nomeR) {
+            short _codigo = Convert.ToInt16(codigo);
+            Lancamento reg = new Lancamento() {
+                Codlancamento=_codigo,
+                Descfull = nomeC.ToUpper(),
+                Descreduz = nomeR.ToUpper()
+            };
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            Exception ex = tributarioRepository.Alterar_Lancamento(reg);
+
+            var result = new { Success = "True" };
+            return new JsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [Route("Tributo_Edit")]
+        [HttpGet]
+        public ActionResult Tributo_Edit() {
+            LancTribViewModel model = new LancTribViewModel();
+            return View(model);
+        }
+
+        public JsonResult Lista_Tributo() {
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            List<Tributo> Lista = tributarioRepository.Lista_Tributo();
+            return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        public JsonResult Incluir_Tributo(string nomeC, string nomeR) {
+            Tributo reg = new Tributo() {
+                Desctributo = nomeC.ToUpper(),
+                Abrevtributo = nomeR.ToUpper()
+            };
+
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            Exception ex = tributarioRepository.Insert_Tributo(reg);
+
+            var result = new { Success = "True" };
+            return new JsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+
+        }
+
+        public JsonResult Alterar_Tributo(string codigo, string nomeC, string nomeR) {
+            short _codigo = Convert.ToInt16(codigo);
+            Tributo reg = new Tributo() {
+                Codtributo = _codigo,
+                Desctributo = nomeC.ToUpper(),
+                Abrevtributo = nomeR.ToUpper()
+            };
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            Exception ex = tributarioRepository.Alterar_Tributo(reg);
+
+            var result = new { Success = "True" };
+            return new JsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+
         #endregion
 
     }

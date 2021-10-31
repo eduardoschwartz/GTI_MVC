@@ -56,23 +56,23 @@ namespace GTI_Bll.Classes {
         ///<summary> Incluir lancamento na tela de cadastro de lançamentos.
         ///</summary>
         public Exception Insert_Lancamento(Lancamento reg) {
-            Exception AppEx ;
-            if (String.IsNullOrWhiteSpace(reg.Descfull)) {
-                AppEx = new Exception("Digite a descrição completa");
-                return AppEx;
-            }
-            if (String.IsNullOrWhiteSpace(reg.Descreduz)) {
-                AppEx = new Exception("Digite a descrição resumida");
-                return AppEx;
-            }
-            if (reg.Tipolivro==null||reg.Tipolivro==0|| reg.Tipolivro==-1) {
-                AppEx = new Exception("Selecione o tipo de livro.");
-                return AppEx;
-            }
-            if (Existe_Lancamento(reg)) {
-                AppEx = new Exception("Já existe um lançamento com esta descrição.");
-                return AppEx;
-            }
+           // Exception AppEx ;
+            //if (String.IsNullOrWhiteSpace(reg.Descfull)) {
+            //    AppEx = new Exception("Digite a descrição completa");
+            //    return AppEx;
+            //}
+            //if (String.IsNullOrWhiteSpace(reg.Descreduz)) {
+            //    AppEx = new Exception("Digite a descrição resumida");
+            //    return AppEx;
+            //}
+            //if (reg.Tipolivro==null||reg.Tipolivro==0|| reg.Tipolivro==-1) {
+            //    AppEx = new Exception("Selecione o tipo de livro.");
+            //    return AppEx;
+            //}
+            //if (Existe_Lancamento(reg)) {
+            //    AppEx = new Exception("Já existe um lançamento com esta descrição.");
+            //    return AppEx;
+            //}
 
             Tributario_Data obj = new Tributario_Data(_connection);
             Exception ex = obj.Insert_Lancamento(reg);
@@ -82,19 +82,19 @@ namespace GTI_Bll.Classes {
         ///<summary> Incluir tributo na tela de cadastro de tributos.
         ///</summary>
         public Exception Insert_Tributo(Tributo reg) {
-            Exception AppEx;
-            if (String.IsNullOrWhiteSpace(reg.Desctributo)) {
-                AppEx = new Exception("Digite a descrição completa");
-                return AppEx;
-            }
-            if (String.IsNullOrWhiteSpace(reg.Abrevtributo)) {
-                AppEx = new Exception("Digite a descrição resumida");
-                return AppEx;
-            }
-            if (Existe_Tributo(reg)) {
-                AppEx = new Exception("Já existe um tributo com esta descrição.");
-                return AppEx;
-            }
+            //Exception AppEx;
+            //if (String.IsNullOrWhiteSpace(reg.Desctributo)) {
+            //    AppEx = new Exception("Digite a descrição completa");
+            //    return AppEx;
+            //}
+            //if (String.IsNullOrWhiteSpace(reg.Abrevtributo)) {
+            //    AppEx = new Exception("Digite a descrição resumida");
+            //    return AppEx;
+            //}
+            //if (Existe_Tributo(reg)) {
+            //    AppEx = new Exception("Já existe um tributo com esta descrição.");
+            //    return AppEx;
+            //}
 
             Tributario_Data obj = new Tributario_Data(_connection);
             Exception ex = obj.Insert_Tributo(reg);
@@ -104,23 +104,23 @@ namespace GTI_Bll.Classes {
         ///<summary> Alterar lancamento na tela de cadastro de lançamentos.
         ///</summary>
         public Exception Alterar_Lancamento(Lancamento reg) {
-            Exception AppEx;
-            if (String.IsNullOrWhiteSpace(reg.Descfull)) {
-                AppEx = new Exception("Digite a descrição completa");
-                return AppEx;
-            }
-            if (String.IsNullOrWhiteSpace(reg.Descreduz)) {
-                AppEx = new Exception("Digite a descrição resumida");
-                return AppEx;
-            }
-            if (reg.Tipolivro == null || reg.Tipolivro == 0 || reg.Tipolivro == -1) {
-                AppEx = new Exception("Selecione o tipo de livro.");
-                return AppEx;
-            }
-            if (Existe_Lancamento(reg,false)) {
-                AppEx = new Exception("Já existe um lançamento com esta descrição.");
-                return AppEx;
-            }
+            //Exception AppEx;
+            //if (String.IsNullOrWhiteSpace(reg.Descfull)) {
+            //    AppEx = new Exception("Digite a descrição completa");
+            //    return AppEx;
+            //}
+            //if (String.IsNullOrWhiteSpace(reg.Descreduz)) {
+            //    AppEx = new Exception("Digite a descrição resumida");
+            //    return AppEx;
+            //}
+            //if (reg.Tipolivro == null || reg.Tipolivro == 0 || reg.Tipolivro == -1) {
+            //    AppEx = new Exception("Selecione o tipo de livro.");
+            //    return AppEx;
+            //}
+            //if (Existe_Lancamento(reg,false)) {
+            //    AppEx = new Exception("Já existe um lançamento com esta descrição.");
+            //    return AppEx;
+            //}
 
             Tributario_Data obj = new Tributario_Data(_connection);
             Exception ex = obj.Alterar_Lancamento(reg);

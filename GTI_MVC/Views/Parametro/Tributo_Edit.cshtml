@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_Layoutgti.cshtml";
-    ViewBag.Title = "Cadastro de Lançamentos";
+    ViewBag.Title = "Cadastro de Tributos";
 }
 
 <style>
@@ -176,15 +176,15 @@
 
 @{var res = @ViewBag.Result; }
 
-@using (Html.BeginForm("Lancamento_Edit", "Parametro", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+@using (Html.BeginForm("Tributo_Edit", "Parametro", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(m => m.Lancamento_Codigo, new { @id = "CodLanc" })
-    @Html.HiddenFor(m => m.Lancamento_Nome_Completo, new { @id = "NomeLancC" })
-    @Html.HiddenFor(m => m.Lancamento_Nome_Reduzido, new { @id = "NomeLancR" })
+    @Html.HiddenFor(m => m.Lancamento_Codigo, new { @id = "CodTributo" })
+    @Html.HiddenFor(m => m.Lancamento_Nome_Completo, new { @id = "NomeTributoC" })
+    @Html.HiddenFor(m => m.Lancamento_Nome_Reduzido, new { @id = "NomeTributoR" })
 
     <div class="center shadow" style="width:500px">
         <div class="card">
-            <div class="card-header">Cadastro de Lançamentos</div>
+            <div class="card-header">Cadastro de Tributos</div>
             <div class="card-body">
                     <div id="table-container" style=" height: 296px; overflow: auto;border:solid;border-width:1px">
 
@@ -210,8 +210,8 @@
 
             </div>
             <div class="card-footer" style="text-align:center;background-color:white">
-                <button type="button" id="btnNovo" class="btn btn-primary" style="height:32px;width:80px" title="Cadastrar um novo lançamento">Novo</button>
-                <button type="button" id="btnAlterar" class="btn btn-info" style="height: 32px; margin-left: 10px; width: 80px" title="Alterar o lançamento selecionado">Alterar</button>
+                <button type="button" id="btnNovo" class="btn btn-primary" style="height:32px;width:80px" title="Cadastrar um novo tributo">Novo</button>
+                <button type="button" id="btnAlterar" class="btn btn-info" style="height: 32px; margin-left: 10px; width: 80px" title="Alterar o tributo selecionado">Alterar</button>
                 <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Fechar" onclick="Fechar()">Fechar</button>
             </div>
 
@@ -325,7 +325,7 @@
             $(".foo .ui-widget-content").css("font-size", "13px");
 
             $("#UFDropDown").val("SP");
-            Carrega_Lancamento();
+            Carrega_Tributo();
 
             var _res = '@res';
             if (_res != "") {
@@ -339,9 +339,9 @@
         $("#mainTable").on('click', 'tr', function (e) {
             $('#mainTable tr').removeClass('highlighted');
             $(this).addClass('highlighted');
-            document.getElementById('CodLanc').value = $(this).closest('tr').find('td:eq(0)').text();
-            document.getElementById('NomeLancC').value = $(this).closest('tr').find('td:eq(1)').text();
-            document.getElementById('NomeLancR').value = $(this).closest('tr').find('td:eq(2)').text();
+            document.getElementById('CodTributo').value = $(this).closest('tr').find('td:eq(0)').text();
+            document.getElementById('NomeTributoC').value = $(this).closest('tr').find('td:eq(1)').text();
+            document.getElementById('NomeTributoR').value = $(this).closest('tr').find('td:eq(2)').text();
         });
 
         $('#btnNovo').click(function () {
@@ -349,10 +349,10 @@
         });
 
         $('#btnAlterar').click(function () {
-            var _nomeC = document.getElementById("NomeLancC").value;
-            var _nomeR = document.getElementById("NomeLancR").value;
+            var _nomeC = document.getElementById("NomeTributoC").value;
+            var _nomeR = document.getElementById("NomeTributoR").value;
             if (_nomeC == '' || _nomeR=='') {
-                document.getElementById('lblMsg').innerHTML = "Selecione um lançamento!";
+                document.getElementById('lblMsg').innerHTML = "Selecione um tributo!";
                 $('#msgBox1').dialog('open');
             } else {
                 $("#editModal #nomeC2Txt").val(_nomeC);
@@ -364,18 +364,18 @@
         $('#Alterar_Save').click(function () {
             var _nomeC = document.getElementById("nomeC2Txt").value;
             var _nomeR = document.getElementById("nomeR2Txt").value;
-            var _codigo = document.getElementById('CodLanc').value;
+            var _codigo = document.getElementById('CodTributo').value;
 
             $.ajax({
                 type: "Post",
-                url: location.hostname == "localhost" ? "/Parametro/Alterar_Lancamento" : "/gti/Parametro/Alterar_Lancamento",
+                url: location.hostname == "localhost" ? "/Parametro/Alterar_Tributo" : "/gti/Parametro/Alterar_Tributo",
                 dataType: 'json',
                 success: function (data) {
                     if (data.Success == "True") {
-                        Carrega_Lancamento();
-                        document.getElementById('CodLanc').value = '';
-                        document.getElementById('NomeLancC').value = '';
-                        document.getElementById('NomeLancR').value = '';
+                        Carrega_Tributo();
+                        document.getElementById('CodTributo').value = '';
+                        document.getElementById('NomeTributoC').value = '';
+                        document.getElementById('NomeTributoR').value = '';
 
                         $('#editModal').modal('hide');
                     } else {
@@ -404,11 +404,11 @@
 
              $.ajax({
                 type: "Post",
-                url: location.hostname == "localhost" ? "/Parametro/Incluir_Lancamento" : "/gti/Parametro/Incluir_Lancamento",
+                url: location.hostname == "localhost" ? "/Parametro/Incluir_Tributo" : "/gti/Parametro/Incluir_Tributo",
                 dataType: 'json',
                 success: function (data) {
                     if (data.Success == "True") {
-                        Carrega_Lancamento();
+                        Carrega_Tributo();
                         $('#addModal').modal('hide');
                     } else {
                         document.getElementById('lblMsg').innerHTML = data.Msg;
@@ -436,18 +436,18 @@
                 .end()
         })
 
-        function Carrega_Lancamento() {
+        function Carrega_Tributo() {
             $("#mainTable tbody tr").remove();
             $('#msgBoxWait').dialog('open');
             var i = 0;
-            var url = '@Url.Action("Lista_Lancamento", "Parametro")';
+            var url = '@Url.Action("Lista_Tributo", "Parametro")';
             $.getJSON(url,  function (data) {
                 $.each(data, function () {
                     var tr;
                     tr = $('<tr id="' + data[i].Codbairro + '" style="font-weight: normal; font-size: 12px; cursor: pointer"  />');
-                    tr.append("<td style='text-align:center;width: 40px'  >" + pad( data[i].Codlancamento,2) + "</td>");
-                    tr.append("<td style='width: 195px' class='ellipsis'><span>" + data[i].Descfull + "</span></td>");
-                    tr.append("<td style='width: 195px' class='ellipsis'><span>" + data[i].Descreduz + "</span></td>");
+                    tr.append("<td style='text-align:center;width: 40px'  >" + pad( data[i].Codtributo,2) + "</td>");
+                    tr.append("<td style='width: 195px' class='ellipsis'><span>" + data[i].Desctributo + "</span></td>");
+                    tr.append("<td style='width: 195px' class='ellipsis'><span>" + data[i].Abrevtributo + "</span></td>");
                     $("#mainTable").find('tbody').append(tr);
                     i++;
                 });
