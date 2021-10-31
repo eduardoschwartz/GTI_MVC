@@ -1616,6 +1616,16 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Extrato_Tributo_Devedor(Codigo, Ano1,Ano2,Data_Atualizacao,Usuario);
         }
 
+        public List<TributoArtigoStruct> Lista_TributoArtigo() {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Lista_TributoArtigo();
+        }
+
+        public Exception Alterar_TributoArtigo(Tributoartigo reg) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            Exception ex = obj.Alterar_TributoArtigo(reg);
+            return ex;
+        }
 
     }//end class
 }

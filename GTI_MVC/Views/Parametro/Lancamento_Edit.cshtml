@@ -444,7 +444,7 @@
             $.getJSON(url,  function (data) {
                 $.each(data, function () {
                     var tr;
-                    tr = $('<tr id="' + data[i].Codbairro + '" style="font-weight: normal; font-size: 12px; cursor: pointer"  />');
+                    tr = $('<tr id="' + data[i].Codlancamento + '" style="font-weight: normal; font-size: 12px; cursor: pointer"  />');
                     tr.append("<td style='text-align:center;width: 40px'  >" + pad( data[i].Codlancamento,2) + "</td>");
                     tr.append("<td style='width: 195px' class='ellipsis'><span>" + data[i].Descfull + "</span></td>");
                     tr.append("<td style='width: 195px' class='ellipsis'><span>" + data[i].Descreduz + "</span></td>");

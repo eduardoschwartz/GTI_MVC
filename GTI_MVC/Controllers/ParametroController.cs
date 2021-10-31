@@ -209,6 +209,33 @@ namespace GTI_Mvc.Controllers
             return new JsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        [Route("TributoArtigo_Edit")]
+        [HttpGet]
+        public ActionResult TributoArtigo_Edit() {
+            LancTribViewModel model = new LancTribViewModel();
+            return View(model);
+        }
+
+        public JsonResult Lista_TributoArtigo() {
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            List<TributoArtigoStruct> Lista = tributarioRepository.Lista_TributoArtigo();
+            return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+
+        public JsonResult Alterar_TributoArtigo(string codigo, string artigo) {
+            short _codigo = Convert.ToInt16(codigo);
+            Tributoartigo reg = new Tributoartigo() {
+                Codtributo = _codigo,
+                Artigo = artigo
+            };
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            Exception ex = tributarioRepository.Alterar_TributoArtigo(reg);
+
+            var result = new { Success = "True" };
+            return new JsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
 
         #endregion
 

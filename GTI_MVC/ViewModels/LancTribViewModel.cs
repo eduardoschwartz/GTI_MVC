@@ -7,5 +7,6 @@ namespace GTI_Mvc.ViewModels {
         public string Lancamento_Nome_Reduzido { get; set; }
         public int Tributo_Codigo { get; set; }
         public string Tributo_Nome { get; set; }
+        public string Artigo { get; set; }
     }
 }

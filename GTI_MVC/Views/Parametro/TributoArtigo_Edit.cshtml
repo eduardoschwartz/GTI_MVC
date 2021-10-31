@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_Layoutgti.cshtml";
-    ViewBag.Title = "Cadastro de Tributos";
+    ViewBag.Title = "Cadastro de Artigo por Tributo";
 }
 
 <style>
@@ -176,15 +176,15 @@
 
 @{var res = @ViewBag.Result; }
 
-@using (Html.BeginForm("Tributo_Edit", "Parametro", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+@using (Html.BeginForm("TributoArtigo_Edit", "Parametro", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(m => m.Lancamento_Codigo, new { @id = "CodTributo" })
-    @Html.HiddenFor(m => m.Lancamento_Nome_Completo, new { @id = "NomeTributoC" })
-    @Html.HiddenFor(m => m.Lancamento_Nome_Reduzido, new { @id = "NomeTributoR" })
+    @Html.HiddenFor(m => m.Tributo_Codigo, new { @id = "CodTributo" })
+    @Html.HiddenFor(m => m.Tributo_Nome, new { @id = "NomeTributo" })
+    @Html.HiddenFor(m => m.Artigo, new { @id = "Artigo" })
 
     <div class="center shadow" style="width:500px">
         <div class="card">
-            <div class="card-header">Cadastro de Tributos</div>
+            <div class="card-header">Cadastro de Artigo por Tributo</div>
             <div class="card-body">
                     <div id="table-container" style=" height: 296px; overflow: auto;border:solid;border-width:1px">
 
@@ -195,10 +195,10 @@
                                         Cód
                                     </th>
                                     <th style="width:195px">
-                                        Descrição resumida
+                                        Descrição do Tributo
                                     </th>
                                     <th style="width:195px">
-                                        Descrição completa
+                                        Artigo
                                     </th>
                                 </tr>
                             </thead>
@@ -210,7 +210,6 @@
 
             </div>
             <div class="card-footer" style="text-align:center;background-color:white">
-                <button type="button" id="btnNovo" class="btn btn-primary" style="height:32px;width:80px" title="Cadastrar um novo tributo">Novo</button>
                 <button type="button" id="btnAlterar" class="btn btn-info" style="height: 32px; margin-left: 10px; width: 80px" title="Alterar o tributo selecionado">Alterar</button>
                 <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Fechar" onclick="Fechar()">Fechar</button>
             </div>
@@ -236,34 +235,14 @@
 </div>
 
 
-<div class="modal" id="addModal">
-    <div class="modal-dialog modal-dialog-centered " role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span>Cadastrar novo lançamento</span>
-            </div>
-            <div class="modal-body">
-                <span style="font-size:13px">Descrição completa:&nbsp;&nbsp;</span><input id="nomeCTxt" style="font-size: 13px; width: 270px; margin-bottom: 10px" /><br />
-                <span style="font-size:13px">Descrição resumida:&nbsp;&nbsp;</span><input id="nomeRTxt" style="font-size:13px;width:270px" />
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" id="Inserir_Save">Gravar</button>&nbsp;
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-            </div>
-
-        </div>
-    </div>
-</div>
-
 <div class="modal" id="editModal">
     <div class="modal-dialog modal-dialog-centered " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <span>Alterar nome do lançamento</span>
+                <span>Alterar o artigo do tributo</span>
             </div>
             <div class="modal-body">
-                <span style="font-size:13px">Descrição completa:&nbsp;&nbsp;</span><input id="nomeC2Txt" style="font-size: 13px; width: 270px; margin-bottom: 10px" /><br />
-                <span style="font-size:13px">Descrição resumida:&nbsp;&nbsp;</span><input id="nomeR2Txt" style="font-size:13px;width:270px" />
+                <textarea id="artigoTxt" style="font-size:13px;width:400px;height:200px"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary" id="Alterar_Save">Gravar</button>&nbsp;
@@ -340,42 +319,32 @@
             $('#mainTable tr').removeClass('highlighted');
             $(this).addClass('highlighted');
             document.getElementById('CodTributo').value = $(this).closest('tr').find('td:eq(0)').text();
-            document.getElementById('NomeTributoC').value = $(this).closest('tr').find('td:eq(1)').text();
-            document.getElementById('NomeTributoR').value = $(this).closest('tr').find('td:eq(2)').text();
+            document.getElementById('NomeTributo').value = $(this).closest('tr').find('td:eq(1)').text();
+            document.getElementById('Artigo').value = $(this).closest('tr').find('td:eq(2)').text();
         });
 
-        $('#btnNovo').click(function () {
-            $('#addModal').modal({ backdrop: 'static', keyboard: false });
-        });
-
+       
         $('#btnAlterar').click(function () {
-            var _nomeC = document.getElementById("NomeTributoC").value;
-            var _nomeR = document.getElementById("NomeTributoR").value;
-            if (_nomeC == '' || _nomeR=='') {
-                document.getElementById('lblMsg').innerHTML = "Selecione um tributo!";
-                $('#msgBox1').dialog('open');
-            } else {
-                $("#editModal #nomeC2Txt").val(_nomeC);
-                $("#editModal #nomeR2Txt").val(_nomeR);
-                $('#editModal').modal({ backdrop: 'static', keyboard: false });
-            }
+            var _artigo = document.getElementById("Artigo").value;
+            $("#editModal #artigoTxt").val(_artigo);
+            $('#editModal').modal({ backdrop: 'static', keyboard: false });
+
         });
 
         $('#Alterar_Save').click(function () {
-            var _nomeC = document.getElementById("nomeC2Txt").value;
-            var _nomeR = document.getElementById("nomeR2Txt").value;
+            var _artigo = document.getElementById("artigoTxt").value;
             var _codigo = document.getElementById('CodTributo').value;
 
             $.ajax({
                 type: "Post",
-                url: location.hostname == "localhost" ? "/Parametro/Alterar_Tributo" : "/gti/Parametro/Alterar_Tributo",
+                url: location.hostname == "localhost" ? "/Parametro/Alterar_TributoArtigo" : "/gti/Parametro/Alterar_TributoArtigo",
                 dataType: 'json',
                 success: function (data) {
                     if (data.Success == "True") {
                         Carrega_Tributo();
                         document.getElementById('CodTributo').value = '';
-                        document.getElementById('NomeTributoC').value = '';
-                        document.getElementById('NomeTributoR').value = '';
+                        document.getElementById('NomeTributo').value = '';
+                        document.getElementById('Artigo').value = '';
 
                         $('#editModal').modal('hide');
                     } else {
@@ -385,49 +354,12 @@
                 },
                 data: {
                     codigo:_codigo,
-                    nomeC: _nomeC,
-                    nomeR: _nomeR
+                    artigo: _artigo
                 }
             });
 
         });
-
-        $('#Inserir_Save').click(function () {
-            var _nomeC = document.getElementById("nomeCTxt").value;
-            var _nomeR = document.getElementById("nomeRTxt").value;
-
-            if (_nomeC=='' || _nomeR=='') {
-                document.getElementById('lblMsg').innerHTML = "Preencha os dois campos de nomes!";
-                $('#msgBox1').dialog('open');
-                return false;
-            }
-
-             $.ajax({
-                type: "Post",
-                url: location.hostname == "localhost" ? "/Parametro/Incluir_Tributo" : "/gti/Parametro/Incluir_Tributo",
-                dataType: 'json',
-                success: function (data) {
-                    if (data.Success == "True") {
-                        Carrega_Tributo();
-                        $('#addModal').modal('hide');
-                    } else {
-                        document.getElementById('lblMsg').innerHTML = data.Msg;
-                        $('#msgBox1').dialog('open');
-                    }
-                },
-                data: {
-                    nomeC: _nomeC,
-                    nomeR: _nomeR
-                }
-            });
-        });
-
-        $('#addModal').on('hidden.bs.modal', function (e) {
-            $(this)
-                .find("input,textarea,select")
-                .val('')
-                .end()
-        })
+    
 
         $('#editModal').on('hidden.bs.modal', function (e) {
             $(this)
@@ -440,14 +372,14 @@
             $("#mainTable tbody tr").remove();
             $('#msgBoxWait').dialog('open');
             var i = 0;
-            var url = '@Url.Action("Lista_Tributo", "Parametro")';
+            var url = '@Url.Action("Lista_TributoArtigo", "Parametro")';
             $.getJSON(url,  function (data) {
                 $.each(data, function () {
                     var tr;
                     tr = $('<tr id="' + data[i].Codtributo + '" style="font-weight: normal; font-size: 12px; cursor: pointer"  />');
-                    tr.append("<td style='text-align:center;width: 40px'  >" + pad( data[i].Codtributo,3) + "</td>");
-                    tr.append("<td style='width: 195px' class='ellipsis'><span>" + data[i].Desctributo + "</span></td>");
-                    tr.append("<td style='width: 195px' class='ellipsis'><span>" + data[i].Abrevtributo + "</span></td>");
+                    tr.append("<td style='text-align:center;width: 40px'  >" + pad( data[i].Tributo_Codigo,3) + "</td>");
+                    tr.append("<td style='width: 195px' class='ellipsis'><span>" + data[i].Tributo_Nome + "</span></td>");
+                    tr.append("<td style='width: 195px' class='ellipsis'><span>" + subNull(data[i].Artigo) + "</span></td>");
                     $("#mainTable").find('tbody').append(tr);
                     i++;
                 });
@@ -470,8 +402,9 @@
         }
 
         function subNull(value) {
-            return (value === null) ? "" : value;
+            return (value === null || value==='null') ? "" : value;
         }
+
 
         function elementIsEmpty(el) {
             return (/^(\s|&nbsp;)*$/.test(el));

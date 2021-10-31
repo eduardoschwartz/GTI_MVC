@@ -44,6 +44,16 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<TributoArtigoStruct> Lista_TributoArtigo() {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from l in db.Tributo 
+                            join a in db.Tributo_Artigo on l.Codtributo equals a.Codtributo into la from a in la.DefaultIfEmpty()
+                            orderby l.Desctributo 
+                            select new TributoArtigoStruct {Tributo_Codigo=l.Codtributo,Tributo_Nome=l.Desctributo,Artigo=a.Artigo }).ToList();
+                return Sql;
+            }
+        }
+
         public List<Tipolivro> Lista_Tipo_Livro() {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var Sql = from t in db.Tipolivro orderby t.Desctipo select t;
@@ -120,6 +130,19 @@ namespace GTI_Dal.Classes {
                 Tributo b = db.Tributo.First(i => i.Codtributo == nCodTrib);
                 b.Desctributo = reg.Desctributo;
                 b.Abrevtributo = reg.Abrevtributo;
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Alterar_TributoArtigo(Tributoartigo reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Tributoartigo b = db.Tributo_Artigo.First(i => i.Codtributo == reg.Codtributo);
+                b.Artigo = reg.Artigo;
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
