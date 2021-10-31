@@ -153,7 +153,22 @@
             text-overflow: ellipsis;
         }
 
-   
+
+    #mainTable thead {
+        position: absolute  ;
+        background-color: white;
+    }
+    #mainTable tbody{
+       position:absolute;
+       height:270px;
+       top:88px;
+       overflow:auto;
+    }
+
+    .modal-dialog {
+        max-width: 430px; /* New width for default modal */
+    }
+
 
 </style>
 
@@ -171,7 +186,7 @@
         <div class="card">
             <div class="card-header">Cadastro de Lançamentos</div>
             <div class="card-body">
-                    <div id="table-container" style="overflow-x: auto; height: 293px; overflow: auto;border:solid;border-width:1px">
+                    <div id="table-container" style=" height: 296px; overflow: auto;border:solid;border-width:1px">
 
                         <table id="mainTable"  class="tbl table-bordered table-condensed" style="width:430px">
                             <thead style="background-color:darkblue;color:white;font-weight:normal;font-size:12px">
@@ -222,14 +237,14 @@
 
 
 <div class="modal" id="addModal">
-    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+    <div class="modal-dialog modal-dialog-centered " role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <span>Cadastrar novo lançamento</span>
             </div>
             <div class="modal-body">
-                <input id="nomeCTxt" placeholder="Digite o nome completo" style="font-size:13px;width:270px" /><br />
-                <input id="nomeRTxt" placeholder="Digite o nome resumido" style="font-size:13px;width:270px" />
+                <span style="font-size:13px">Descrição completa:&nbsp;&nbsp;</span><input id="nomeCTxt" style="font-size: 13px; width: 270px; margin-bottom: 10px" /><br />
+                <span style="font-size:13px">Descrição resumida:&nbsp;&nbsp;</span><input id="nomeRTxt" style="font-size:13px;width:270px" />
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary" id="Inserir_Save">Gravar</button>&nbsp;
@@ -241,14 +256,14 @@
 </div>
 
 <div class="modal" id="editModal">
-    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+    <div class="modal-dialog modal-dialog-centered " role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <span>Alterar nome do lançamento</span>
             </div>
             <div class="modal-body">
-                <input id="nomeC2Txt" placeholder="Digite o nome completo" style="font-size:13px;width:270px" /><br />
-                <input id="nomeR2Txt" placeholder="Digite o nome resumido" style="font-size:13px;width:270px" />
+                <span style="font-size:13px">Descrição completa:&nbsp;&nbsp;</span><input id="nomeC2Txt" style="font-size: 13px; width: 270px; margin-bottom: 10px" /><br />
+                <span style="font-size:13px">Descrição resumida:&nbsp;&nbsp;</span><input id="nomeR2Txt" style="font-size:13px;width:270px" />
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary" id="Alterar_Save">Gravar</button>&nbsp;
@@ -337,13 +352,11 @@
             var _nomeC = document.getElementById("NomeLancC").value;
             var _nomeR = document.getElementById("NomeLancR").value;
             if (_nomeC == '' || _nomeR=='') {
-                document.getElementById('lblMsg').innerHTML = "Preencha os dois campos!";
+                document.getElementById('lblMsg').innerHTML = "Selecione um lançamento!";
                 $('#msgBox1').dialog('open');
             } else {
                 $("#editModal #nomeC2Txt").val(_nomeC);
                 $("#editModal #nomeR2Txt").val(_nomeR);
-                document.getElementById('nomeC2Txt').value = '';
-                document.getElementById('nomeR2Txt').value = '';
                 $('#editModal').modal({ backdrop: 'static', keyboard: false });
             }
         });
