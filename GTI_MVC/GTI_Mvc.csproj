@@ -1140,6 +1140,7 @@
     <Content Include="Views\Parametro\Bairro_Edit.cshtml" />
     <Content Include="Views\Parametro\Cidade_Edit.cshtml" />
     <Content Include="Views\Parametro\Lancamento_Edit.cshtml" />
+    <Content Include="Views\Parametro\Tributo_Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
