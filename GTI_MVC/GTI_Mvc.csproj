@@ -255,6 +255,7 @@
     <Compile Include="Controllers\ProtocoloController.cs" />
     <Compile Include="Controllers\RedeSimController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
+    <Compile Include="Controllers\sysImobController.cs" />
     <Compile Include="Controllers\TributarioController.cs" />
     <Compile Include="Datasets\dsBoletoGuia.cs">
       <DependentUpon>dsBoletoGuia.xsd</DependentUpon>
@@ -1144,6 +1145,8 @@
     <Content Include="Views\Parametro\TributoArtigo_Edit.cshtml" />
     <Content Include="Views\Parametro\IPCA_Edit.cshtml" />
     <Content Include="Views\Parametro\Preco_Edit.cshtml" />
+    <Content Include="Views\Parametro\Logradouro_Edit.cshtml" />
+    <Content Include="Views\sysImob\imovel_data.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
