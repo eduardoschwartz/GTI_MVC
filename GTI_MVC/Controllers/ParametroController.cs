@@ -299,5 +299,16 @@ namespace GTI_Mvc.Controllers
         }
 
         #endregion
+
+        #region Logradouro e Cep
+        
+        [Route("Logradouro_Edit")]
+        public ActionResult Logradouro_Edit() {
+            return View();
+        }
+
+
+        #endregion
+
     }
 }

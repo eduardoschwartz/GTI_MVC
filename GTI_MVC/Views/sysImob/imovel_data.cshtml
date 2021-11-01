@@ -1,0 +1,314 @@
+﻿@model GTI_Mvc.ViewModels.ImovelDetailsViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layoutgti.cshtml";
+    ViewBag.Title = "Cadastro de imóvel";
+}
+
+<style>
+
+    .center {
+        margin: auto;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .modal-header {
+        padding: 9px 15px;
+        border-bottom: 1px solid #eee;
+        background-color: darkslategrey;
+        color: whitesmoke;
+        -webkit-border-top-left-radius: 5px;
+        -webkit-border-top-right-radius: 5px;
+        -moz-border-radius-topleft: 5px;
+        -moz-border-radius-topright: 5px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .ui-dialog {
+        z-index: 1060 !important;
+    }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
+
+    .no-titlebar .ui-dialog-titlebar {
+        display: none;
+    }
+
+    .uppercase {
+        text-transform: uppercase
+    }
+
+    .ui-autocomplete {
+        font-size: 13px;
+        border-radius: 0px;
+        border-color: maroon;
+    }
+
+    .highlight {
+        background-color: #FFFFAF;
+        color: Red;
+        font-weight: bold;
+        text-transform: uppercase
+    }
+
+    .ui-menu-item .ui-menu-item-wrapper.ui-state-active {
+        background: darkred !important;
+        font-weight: bold !important;
+        color: #ffffff !important;
+    }
+
+    ul.ui-autocomplete {
+        z-index: 1100;
+    }
+
+    .tbl tbody tr:hover {
+        background-color: red;
+        color: white;
+    }
+
+    tr.highlighted td {
+        background: maroon;
+        color: white;
+    }
+
+    .titulo {
+        background: maroon;
+        color: white;
+        font-weight: normal;
+        font-size: 13px;
+    }
+
+    .btnimage {
+        border: 0 none;
+        background: none;
+        background-image: url('../../Images/cancelar.gif');
+        width: 16px;
+        height: 16px;
+    }
+
+    .btnimage2 {
+        border: 0 none;
+        background: none;
+        background-image: url('../../Images/ok.png');
+        width: 16px;
+        height: 16px;
+    }
+
+    .shadow {
+        -webkit-box-shadow: 3px 3px 5px 6px #ccc; /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+        -moz-box-shadow: 3px 3px 5px 6px #ccc; /* Firefox 3.5 - 3.6 */
+        box-shadow: 3px 3px 5px 6px #ccc; /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+    }
+
+    .ellipsis {
+        position: relative;
+    }
+
+        .ellipsis:before {
+            content: '&nbsp;';
+            visibility: hidden;
+        }
+
+        .ellipsis span {
+            position: absolute;
+            left: 0;
+            right: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+    #mainTable thead {
+        position: absolute;
+        background-color: white;
+    }
+
+    #mainTable tbody {
+        position: absolute;
+        height: 270px;
+        top: 88px;
+        overflow: auto;
+    }
+
+    .modal-dialog {
+        max-width: 430px; /* New width for default modal */
+    }
+</style>
+
+
+
+@{var res = @ViewBag.Result; }
+
+@using (Html.BeginForm("imovel_data", "sysImob", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+
+
+    <div class="center shadow" style="width:500px">
+        <div class="card">
+            <div class="card-header">Dados do imóvel</div>
+            <div class="card-body">
+                <table style="font-size:13px">
+                    <tr>
+                        <td>Código:&nbsp; <span style="color: brown">@Model.ImovelStruct.Codigo.ToString("00000")</span> &nbsp;&nbsp;Inscrição:&nbsp; <span style="color: brown">@Model.ImovelStruct.Inscricao</span>       </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="card-footer" style="text-align:center;background-color:white">
+                <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Fechar" onclick="Fechar()">Fechar</button>
+            </div>
+
+            <div class="card-footer">
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
+        </div>
+    </div>
+}
+
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
+<div id="msgBoxWait" style='display: none;text-align:center'>
+    <img src="~/Images/ajax-loader.gif"><br />
+    <p>Processando, aguarde . . . </p>
+</div>
+
+
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+             $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+            $('#msgBoxWait').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "no-titlebar"
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            // Jquery draggable
+            $('.modal-dialog').draggable({
+                handle: ".modal-header"
+            });
+
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+
+
+        function Fechar() {
+            var url = '@Url.Action("GtiSys", "Home")';
+            window.location.href = url;
+        }
+
+
+        //######## Funções Genéricas #########
+        function removeOptions(selectElement) {
+            var i, L = selectElement.options.length - 1;
+            for (i = L; i >= 0; i--) {
+                selectElement.remove(i);
+            }
+        }
+
+        function subNull(value) {
+            return (value === null) ? "" : value;
+        }
+
+        function elementIsEmpty(el) {
+            return (/^(\s|&nbsp;)*$/.test(el));
+        }
+
+        function pad(num, size) {
+            num = num.toString();
+            while (num.length < size) num = "0" + num;
+            return num;
+        }
+
+        //####################################
+    </script>
+}

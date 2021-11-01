@@ -1,0 +1,433 @@
+﻿@model GTI_Mvc.ViewModels.BairroViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layoutgti.cshtml";
+    ViewBag.Title = "Cadastro de Cidades";
+}
+
+<style>
+
+    .center {
+        margin: auto;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .modal-header {
+        padding: 9px 15px;
+        border-bottom: 1px solid #eee;
+        background-color: darkslategrey;
+        color: whitesmoke;
+        -webkit-border-top-left-radius: 5px;
+        -webkit-border-top-right-radius: 5px;
+        -moz-border-radius-topleft: 5px;
+        -moz-border-radius-topright: 5px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .ui-dialog {
+        z-index: 1060 !important;
+    }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
+
+    .no-titlebar .ui-dialog-titlebar {
+        display: none;
+    }
+
+    .uppercase {
+        text-transform: uppercase
+    }
+
+    .ui-autocomplete {
+        font-size: 13px;
+        border-radius: 0px;
+        border-color: maroon;
+    }
+
+    .highlight {
+        background-color: #FFFFAF;
+        color: Red;
+        font-weight: bold;
+        text-transform: uppercase
+    }
+
+    .ui-menu-item .ui-menu-item-wrapper.ui-state-active {
+        background: darkred !important;
+        font-weight: bold !important;
+        color: #ffffff !important;
+    }
+
+    ul.ui-autocomplete {
+        z-index: 1100;
+    }
+
+    .tbl tbody tr:hover {
+        background-color: red;
+        color: white;
+    }
+
+    tr.highlighted td {
+        background: maroon;
+        color: white;
+    }
+
+    .titulo {
+        background: maroon;
+        color: white;
+        font-weight: normal;
+        font-size: 13px;
+    }
+
+    .btnimage {
+        border: 0 none;
+        background: none;
+        background-image: url('../../Images/cancelar.gif');
+        width: 16px;
+        height: 16px;
+    }
+
+    .btnimage2 {
+        border: 0 none;
+        background: none;
+        background-image: url('../../Images/ok.png');
+        width: 16px;
+        height: 16px;
+    }
+
+    .shadow {
+        -webkit-box-shadow: 3px 3px 5px 6px #ccc; /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+        -moz-box-shadow: 3px 3px 5px 6px #ccc; /* Firefox 3.5 - 3.6 */
+        box-shadow: 3px 3px 5px 6px #ccc; /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+    }
+</style>
+
+
+
+@{var res = @ViewBag.Result; }
+
+@using (Html.BeginForm("Cidade_Edit", "Parametro", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Cidade_Codigo, new { @id = "CodCidade" })
+    @Html.HiddenFor(m => m.Cidade_Nome, new { @id = "NomeCidade" })
+
+    <div class="center shadow" style="width:350px">
+        <div class="card">
+            <div class="card-header">Cadastro de Cidades</div>
+            <div class="card-body">
+                <span style="font-size:12px;color:maroon">Estado</span><br />
+                @Html.DropDownListFor(m => Model.UF_Sigla, ViewBag.ListaUF as SelectList, null, new { @id = "UFDropDown", @style = "font-weight:normal;width:220px", onchange = "Carrega_Cidade()" })<br />
+
+                <div style="padding-top:8px;">
+                    <span style=" font-size: 12px; color: maroon">Lista de Cidades</span><br />
+                    <div id="table-container" style="overflow-x: auto; height: 290px; overflow: auto;border:solid;border-width:1px">
+
+                        <table id="mainTable" style="width:290px;" class="tbl table-bordered table-condensed">
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-footer" style="text-align:center;background-color:white">
+                <button type="button" id="btnNovo" class="btn btn-primary" style="height:32px;width:80px" title="Cadastrar uma nova cidade">Novo</button>
+                <button type="button" id="btnAlterar" class="btn btn-info" style="height: 32px; margin-left: 10px; width: 80px" title="Alterar a cidade selecionada">Alterar</button>
+                <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Fechar" onclick="Fechar()">Fechar</button>
+            </div>
+
+            <div class="card-footer">
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+            </div>
+        </div>
+    </div>
+}
+
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
+</div>
+<div id="msgBoxBag" title="Atenção" style='display: none;'>
+    <br />
+    <p>@ViewBag.Result</p>
+</div>
+<div id="msgBoxWait" style='display: none;text-align:center'>
+    <img src="~/Images/ajax-loader.gif"><br />
+    <p>Processando, aguarde . . . </p>
+</div>
+
+
+<div class="modal" id="addModal">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Cadastrar nova cidade</span>
+            </div>
+            <div class="modal-body">
+                <input id="nomeTxt" placeholder="Digite o nome da cidade" style="font-size:13px;width:270px" />
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" id="Inserir_Save">Gravar</button>&nbsp;
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="editModal">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Alterar nome da cidade</span>
+            </div>
+            <div class="modal-body">
+                <input id="nome2Txt" placeholder="Digite o nome da cidade" style="font-size:13px;width:270px" />
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" id="Alterar_Save">Gravar</button>&nbsp;
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('#msgBox1').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+             $('#msgBoxBag').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "foo",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+            $('#msgBoxWait').dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                position: { my: 'top', at: 'top+300' },
+                height: "auto",
+                width: 340,
+                modal: true,
+                dialogClass: "no-titlebar"
+            });
+
+            $(".foo .ui-dialog-title").css("font-size", "13px");
+            $(".foo .ui-widget-content").css("font-size", "13px");
+
+            // Jquery draggable
+            $('.modal-dialog').draggable({
+                handle: ".modal-header"
+            });
+
+            $("#UFDropDown").val("SP");
+            Carrega_Cidade();
+            var _res = '@res';
+            if (_res != "") {
+                $('#msgBoxBag').dialog('open');
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+        $("#mainTable").on('click', 'tr', function (e) {
+            $('#mainTable tr').removeClass('highlighted');
+            $(this).addClass('highlighted');
+            document.getElementById('CodCidade').value = $(this).closest('tr').find('td:eq(0)').text();
+            document.getElementById('NomeCidade').value = $(this).closest('tr').find('td:eq(1)').text();
+        });
+
+        $('#btnNovo').click(function () {
+            $('#addModal').modal({ backdrop: 'static', keyboard: false });
+        });
+
+        $('#btnAlterar').click(function () {
+            var _nome = document.getElementById("NomeCidade").value;
+            if (_nome == '') {
+                document.getElementById('lblMsg').innerHTML = "Selecione uma Cidade!";
+                $('#msgBox1').dialog('open');
+            } else {
+                $("#editModal #nome2Txt").val(_nome);
+                document.getElementById('NomeCidade').value = '';
+                $('#editModal').modal({ backdrop: 'static', keyboard: false });
+            }
+        });
+
+        $('#Alterar_Save').click(function () {
+            var _uf = document.getElementById("UFDropDown").value;
+            var _cidade = document.getElementById("CodCidade").value;
+            var _nome = document.getElementById("nome2Txt").value;
+
+            $.ajax({
+                type: "Post",
+                url: location.hostname == "localhost" ? "/Parametro/Alterar_Cidade" : "/gti/Parametro/Alterar_Cidade",
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Success == "True") {
+                        Carrega_Cidade();
+                        $('#editModal').modal('hide');
+                    } else {
+                        document.getElementById('lblMsg').innerHTML = "Ocorreu um erro ao gravar!";
+                        $('#msgBox1').dialog('open');
+                    }
+                },
+                data: {
+                    uf: _uf,
+                    cidade: _cidade,
+                    novo_nome: _nome
+                }
+            });
+
+        });
+
+        $('#Inserir_Save').click(function () {
+            var _nome = document.getElementById("nomeTxt").value;
+            var _uf = document.getElementById("UFDropDown").value;
+
+            if (_nome=='') {
+                document.getElementById('lblMsg').innerHTML = "Digite o nome da nova cidade!";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+
+             $.ajax({
+                type: "Post",
+                url: location.hostname == "localhost" ? "/Parametro/Incluir_Cidade" : "/gti/Parametro/Incluir_Cidade",
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Success == "True") {
+                        Carrega_Cidade();
+                        $('#addModal').modal('hide');
+                    } else {
+                        document.getElementById('lblMsg').innerHTML = data.Msg;
+                        $('#msgBox1').dialog('open');
+                    }
+                },
+                data: {
+                    uf: _uf,
+                    cidade: _nome
+                }
+            });
+        });
+
+        $('#addModal').on('hidden.bs.modal', function (e) {
+            $(this)
+                .find("input,textarea,select")
+                .val('')
+                .end()
+        })
+
+        $('#editModal').on('hidden.bs.modal', function (e) {
+            $(this)
+                .find("input,textarea,select")
+                .val('')
+                .end()
+        })
+
+
+        function Carrega_Cidade() {
+             $("#mainTable tbody tr").remove();
+            var _uf = document.getElementById("UFDropDown").value;
+
+            var i = 0;
+            var url = '@Url.Action("Lista_Cidade", "Parametro")';
+            $.getJSON(url, { uf: _uf }, function (data) {
+                $.each(data, function () {
+                    var tr;
+                        tr = $('<tr id="' + data[i].CodCidade + '" style="height: 12px; font-weight: normal; font-size: 12px; white-space: nowrap; cursor: pointer"  />');
+                        tr.append("<td style='display:none'>" + data[i].Codcidade + "</td>");
+                        tr.append("<td style='width:100px'>" + data[i].Desccidade + "</td>");
+                        $("#mainTable").find('tbody').append(tr);
+                        i++;
+                });
+            });
+        }
+
+        function Fechar() {
+            var url = '@Url.Action("GtiSys", "Home")';
+            window.location.href = url;
+        }
+
+
+        //######## Funções Genéricas #########
+        function removeOptions(selectElement) {
+            var i, L = selectElement.options.length - 1;
+            for (i = L; i >= 0; i--) {
+                selectElement.remove(i);
+            }
+        }
+
+        function subNull(value) {
+            return (value === null) ? "" : value;
+        }
+
+        function elementIsEmpty(el) {
+            return (/^(\s|&nbsp;)*$/.test(el));
+        }
+
+        //####################################
+    </script>
+}
