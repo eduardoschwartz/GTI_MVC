@@ -134,6 +134,8 @@
         -moz-box-shadow: 3px 3px 5px 6px #ccc; /* Firefox 3.5 - 3.6 */
         box-shadow: 3px 3px 5px 6px #ccc; /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
     }
+
+
 </style>
 
 
@@ -146,9 +148,9 @@
     @Html.HiddenFor(m => m.Bairro_Nome, new { @id = "NomeBairro" })
 
     <div class="center shadow" style="width:350px">
-        <div class="card">
+        <div class="card" >
             <div class="card-header">Cadastro de Bairros</div>
-            <div class="card-body">
+            <div class="card-body"  >
                 <span style="font-size:12px;color:maroon">Estado</span><br />
                 @Html.DropDownListFor(m => Model.UF_Sigla, ViewBag.ListaUF as SelectList, null, new { @id = "UFDropDown", @style = "font-weight:normal;width:220px", onchange = "Carrega_Cidade()" })<br />
                 <div style="padding-top:8px">
@@ -280,6 +282,13 @@
 
             $(".foo .ui-dialog-title").css("font-size", "13px");
             $(".foo .ui-widget-content").css("font-size", "13px");
+
+            // Jquery draggable
+            $('.modal-dialog').draggable({
+                handle: ".modal-header"
+            });
+
+//            dragElement(document.getElementById("mainDiv"));
 
             $("#UFDropDown").val("SP");
             Carrega_Cidade();
@@ -439,6 +448,8 @@
         }
 
 
+
+
         //######## Funções Genéricas #########
         function removeOptions(selectElement) {
             var i, L = selectElement.options.length - 1;
@@ -453,6 +464,47 @@
 
         function elementIsEmpty(el) {
             return (/^(\s|&nbsp;)*$/.test(el));
+        }
+
+        function dragElement(elmnt) {
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            if (document.getElementById(elmnt.id + "header")) {
+                /* if present, the header is where you move the DIV from:*/
+                document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+            } else {
+                /* otherwise, move the DIV from anywhere inside the DIV:*/
+                elmnt.onmousedown = dragMouseDown;
+            }
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // get the mouse cursor position at startup:
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                // call a function whenever the cursor moves:
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // calculate the new cursor position:
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                // set the element's new position:
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                /* stop moving when mouse button is released:*/
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
         }
 
         //####################################

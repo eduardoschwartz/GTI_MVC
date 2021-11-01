@@ -222,7 +222,6 @@ namespace GTI_Mvc.Controllers
             return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-
         public JsonResult Alterar_TributoArtigo(string codigo, string artigo) {
             short _codigo = Convert.ToInt16(codigo);
             Tributoartigo reg = new Tributoartigo() {
@@ -255,6 +254,31 @@ namespace GTI_Mvc.Controllers
         public JsonResult Lista_IPCA() {
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             List<Ufir> Lista = tributarioRepository.Lista_IPCA();
+            return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [Route("Preco_Edit")]
+        public ActionResult Preco_Edit() {
+            List<AnoList> ListaAno = new List<AnoList>();
+            
+            for (int i = DateTime.Now.Year; i >= 2003; i--) {
+                AnoList _reg = new AnoList() {
+                    Codigo = i,
+                    Descricao = i.ToString()
+                };
+                ListaAno.Add(_reg);
+            }
+
+            ViewBag.ListaAno = new SelectList(ListaAno, "Codigo", "Descricao", ListaAno[ListaAno.Count - 1].Codigo);
+            LancTribViewModel model = new LancTribViewModel();
+            model.Ano = DateTime.Now.Year;
+            return View(model);
+        }
+
+        public JsonResult Lista_PrecoTabela(string ano) {
+            short _ano = Convert.ToInt16(ano);
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            List<TributoAliquotaStruct> Lista = tributarioRepository.Lista_TributoAliquota(_ano);
             return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 

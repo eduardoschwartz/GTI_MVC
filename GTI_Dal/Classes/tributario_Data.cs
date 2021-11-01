@@ -3390,5 +3390,17 @@ Proximo:;
             }
         }
 
+        public List<TributoAliquotaStruct> Lista_TributoAliquota(short Ano) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from l in db.Tributo
+                           join a in db.Tributoaliquota on l.Codtributo equals a.Codtributo into la from a in la.DefaultIfEmpty()
+                           where a.Ano==Ano
+                           orderby l.Desctributo
+                           select new TributoAliquotaStruct { Tributo_Codigo = l.Codtributo, Tributo_Nome = l.Desctributo, Valor_Aliquota = a.Valoraliq }).ToList();
+                return Sql;
+            }
+        }
+
+
     }//end class
 }

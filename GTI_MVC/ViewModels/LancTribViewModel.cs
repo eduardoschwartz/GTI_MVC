@@ -8,5 +8,7 @@ namespace GTI_Mvc.ViewModels {
         public int Tributo_Codigo { get; set; }
         public string Tributo_Nome { get; set; }
         public string Artigo { get; set; }
+        public decimal Valor { get; set; }
+        public int Ano { get; set; }
     }
 }

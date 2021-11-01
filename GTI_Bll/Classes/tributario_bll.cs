@@ -1644,6 +1644,11 @@ namespace GTI_Bll.Classes {
 
         }
 
+        public List<TributoAliquotaStruct> Lista_TributoAliquota(short Ano) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Lista_TributoAliquota(Ano);
+        }
+
     }//end class
 }
 

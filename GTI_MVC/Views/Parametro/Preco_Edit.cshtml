@@ -1,6 +1,8 @@
-﻿@{
+﻿@model GTI_Mvc.ViewModels.LancTribViewModel
+
+@{
     Layout = "~/Views/Shared/_Layoutgti.cshtml";
-    ViewBag.Title = "Tabela de IPCA";
+    ViewBag.Title = "Tabela de preços públicos";
 }
 
 <style>
@@ -160,7 +162,7 @@
     #mainTable tbody {
         position: absolute;
         height: 270px;
-        top: 88px;
+        top: 146px;
         overflow: auto;
     }
 
@@ -173,26 +175,33 @@
 
 @{var res = @ViewBag.Result; }
 
-@using (Html.BeginForm("IPCA_Edit", "Parametro", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+@using (Html.BeginForm("Preco_Edit", "Parametro", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Tributo_Codigo, new { @id = "CodTributo" })
+    @Html.HiddenFor(m => m.Tributo_Nome, new { @id = "NomeTributo" })
+    @Html.HiddenFor(m => m.Ano, new { @id = "Ano" })
 
-    
-    <div class="center shadow" style="width:260px">
+
+    <div class="center shadow" style="width:470px">
         <div class="card">
-            <div class="card-header">Tabela IPCA</div>
+            <div class="card-header">Tabela de preços públicos</div>
             <div class="card-body">
-                <div id="table-container" style=" height: 296px; overflow: auto;border:solid;border-width:1px">
+                <span style="font-size:12px;color:maroon;">Ano Tabela</span><br />
+                @Html.DropDownListFor(m => Model.Ano, ViewBag.ListaAno as SelectList, null, new { @id = "AnoDropDown", @style = "font-weight:normal;width:80px", onchange = "Carrega_Tributo()" })<br />
+                <br />
+                <div id="table-container" style=" height: 316px; overflow: auto;border:solid;border-width:1px">
 
-                    <table id="mainTable" class="tbl table-bordered table-condensed" style="width:190px">
+                    <table id="mainTable" class="tbl table-bordered table-condensed" style="width:430px">
                         <thead style="background-color:darkblue;color:white;font-weight:normal;font-size:12px">
                             <tr style="height:13px">
-                                <th style="width:50px;text-align:center">
-                                    Ano
+                                <th style="width:40px;text-align:center">
+                                    Cód
                                 </th>
-                                <th style="width: 70px; text-align: right ">
-                                    IPCA
+                                <th style="width:270px">
+                                    Descrição do Tributo
                                 </th>
-                                <th style="width: 70px; text-align: right">
-                                    UFIR
+                                <th style="width:90px;text-align:right">
+                                    Valor
                                 </th>
                             </tr>
                         </thead>
@@ -200,10 +209,10 @@
                         </tbody>
                     </table>
                 </div>
-
-
             </div>
             <div class="card-footer" style="text-align:center;background-color:white">
+                <button type="button" id="btnNovo" class="btn btn-primary" style="height:32px;width:80px" title="Cadastrar uma nova cidade">Novo</button>
+                <button type="button" id="btnAlterar" class="btn btn-info" style="height: 32px; margin-left: 10px; width: 80px" title="Alterar a cidade selecionada">Alterar</button>
                 <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Fechar" onclick="Fechar()">Fechar</button>
             </div>
 
@@ -228,6 +237,41 @@
 </div>
 
 
+<div class="modal" id="addModal">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Cadastrar nova cidade</span>
+            </div>
+            <div class="modal-body">
+                <input id="nomeTxt" placeholder="Digite o nome da cidade" style="font-size:13px;width:270px" />
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" id="Inserir_Save">Gravar</button>&nbsp;
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="editModal">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Alterar nome da cidade</span>
+            </div>
+            <div class="modal-body">
+                <input id="nome2Txt" placeholder="Digite o nome da cidade" style="font-size:13px;width:270px" />
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" id="Alterar_Save">Gravar</button>&nbsp;
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 @section scripts{
 
@@ -284,7 +328,7 @@
                 handle: ".modal-header"
             });
 
-            Carrega_IPCA();
+            Carrega_Tributo();
             var _res = '@res';
             if (_res != "") {
                 $('#msgBoxBag').dialog('open');
@@ -294,26 +338,118 @@
             }
         });
 
+        $("#mainTable").on('click', 'tr', function (e) {
+            $('#mainTable tr').removeClass('highlighted');
+            $(this).addClass('highlighted');
+            document.getElementById('CodCidade').value = $(this).closest('tr').find('td:eq(0)').text();
+            document.getElementById('NomeCidade').value = $(this).closest('tr').find('td:eq(1)').text();
+        });
+
+        $('#btnNovo').click(function () {
+            $('#addModal').modal({ backdrop: 'static', keyboard: false });
+        });
+
+        $('#btnAlterar').click(function () {
+            var _nome = document.getElementById("NomeCidade").value;
+            if (_nome == '') {
+                document.getElementById('lblMsg').innerHTML = "Selecione uma Cidade!";
+                $('#msgBox1').dialog('open');
+            } else {
+                $("#editModal #nome2Txt").val(_nome);
+                document.getElementById('NomeCidade').value = '';
+                $('#editModal').modal({ backdrop: 'static', keyboard: false });
+            }
+        });
+
+        $('#Alterar_Save').click(function () {
+            var _uf = document.getElementById("UFDropDown").value;
+            var _cidade = document.getElementById("CodCidade").value;
+            var _nome = document.getElementById("nome2Txt").value;
+
+            $.ajax({
+                type: "Post",
+                url: location.hostname == "localhost" ? "/Parametro/Alterar_Cidade" : "/gti/Parametro/Alterar_Cidade",
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Success == "True") {
+                        Carrega_Cidade();
+                        $('#editModal').modal('hide');
+                    } else {
+                        document.getElementById('lblMsg').innerHTML = "Ocorreu um erro ao gravar!";
+                        $('#msgBox1').dialog('open');
+                    }
+                },
+                data: {
+                    uf: _uf,
+                    cidade: _cidade,
+                    novo_nome: _nome
+                }
+            });
+
+        });
+
+        $('#Inserir_Save').click(function () {
+            var _nome = document.getElementById("nomeTxt").value;
+            var _uf = document.getElementById("UFDropDown").value;
+
+            if (_nome=='') {
+                document.getElementById('lblMsg').innerHTML = "Digite o nome da nova cidade!";
+                $('#msgBox1').dialog('open');
+                return false;
+            }
+
+             $.ajax({
+                type: "Post",
+                url: location.hostname == "localhost" ? "/Parametro/Incluir_Cidade" : "/gti/Parametro/Incluir_Cidade",
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Success == "True") {
+                        Carrega_Cidade();
+                        $('#addModal').modal('hide');
+                    } else {
+                        document.getElementById('lblMsg').innerHTML = data.Msg;
+                        $('#msgBox1').dialog('open');
+                    }
+                },
+                data: {
+                    uf: _uf,
+                    cidade: _nome
+                }
+            });
+        });
+
+        $('#addModal').on('hidden.bs.modal', function (e) {
+            $(this)
+                .find("input,textarea,select")
+                .val('')
+                .end()
+        })
+
+        $('#editModal').on('hidden.bs.modal', function (e) {
+            $(this)
+                .find("input,textarea,select")
+                .val('')
+                .end()
+        })
 
 
+        function Carrega_Tributo() {
+             $("#mainTable tbody tr").remove();
+            var _ano = document.getElementById("AnoDropDown").value;
 
-        function Carrega_IPCA() {
-            $("#mainTable tbody tr").remove();
-            $('#msgBoxWait').dialog('open');
-            var i = 0;
-            var url = '@Url.Action("Lista_IPCA", "Parametro")';
-            $.getJSON(url,  function (data) {
+           var i = 0;
+            var url = '@Url.Action("Lista_PrecoTabela", "Parametro")';
+            $.getJSON(url, { ano: _ano },function (data) {
                 $.each(data, function () {
                     var tr;
-                    tr = $('<tr id="' + data[i].Anoufir + '" style="font-weight: normal; font-size: 12px; cursor: pointer"  />');
-                    tr.append("<td style='text-align:center;width: 50px'  >" +  data[i].Anoufir + "</td>");
-                    tr.append("<td style='text-align:right;width: 70px' class='ellipsis'><span>" + parseFloat(data[i].Ipca).toFixed(4) + "</span></td>");
-                    tr.append("<td style='text-align:right;width: 70px' class='ellipsis'><span>" + parseFloat(data[i].Valorufir).toFixed(4) + "</span></td>");
+                    tr = $('<tr id="' + data[i].Tributo_Codigo + '" style="font-weight: normal; font-size: 12px; cursor: pointer"  />');
+                    tr.append("<td style='text-align:center;width: 40px'  >" + pad(data[i].Tributo_Codigo,3) + "</td>");
+                    tr.append("<td style='width: 270px' class='ellipsis'><span>" + data[i].Tributo_Nome + "</span></td>");
+                    tr.append("<td style='width: 90px;text-align:right' class='ellipsis'><span>" + parseFloat(data[i].Valor_Aliquota).toFixed(4) + "</span></td>");
                     $("#mainTable").find('tbody').append(tr);
                     i++;
                 });
             });
-            $('#msgBoxWait').dialog('close');
         }
 
         function Fechar() {
@@ -343,7 +479,6 @@
             while (num.length < size) num = "0" + num;
             return num;
         }
-
         //####################################
     </script>
 }

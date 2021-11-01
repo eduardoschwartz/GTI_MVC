@@ -12,4 +12,12 @@ namespace GTI_Models.Models {
         public  short Codtributo { get; set; }
         public decimal Valoraliq { get; set; }
     }
+
+    public class TributoAliquotaStruct {
+        public short Ano { get; set; }
+        public short Tributo_Codigo { get; set; }
+        public string Tributo_Nome { get; set; }
+        public decimal Valor_Aliquota { get; set; }
+    }
+
 }
