@@ -1627,6 +1627,12 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Alterar_TributoAliquota(Tributoaliquota reg) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            Exception ex = obj.Alterar_TributoAliquota(reg);
+            return ex;
+        }
+
         public bool Existe_Tributo_Artigo(int Codigo) {
             Tributario_Data obj = new Tributario_Data(_connection);
             return obj.Existe_Tributo_Artigo(Codigo);

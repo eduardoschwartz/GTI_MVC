@@ -152,6 +152,20 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Alterar_TributoAliquota(Tributoaliquota reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Tributoaliquota b = db.Tributoaliquota.First(i =>  i.Ano==reg.Ano &&  i.Codtributo == reg.Codtributo);
+                b.Valoraliq = reg.Valoraliq;
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+
         public bool Existe_Lancamento(Lancamento reg,bool novo=true) {
             bool bValido = false;
             using (GTI_Context db = new GTI_Context(_connection)) {

@@ -282,6 +282,22 @@ namespace GTI_Mvc.Controllers
             return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        public JsonResult Alterar_PrecoTabela(string ano, string codigo, string valor) {
+            decimal _valor = Convert.ToDecimal(valor);
+            short _ano = Convert.ToInt16(ano);
+            short _codigo = Convert.ToInt16(codigo);
+            Tributoaliquota reg = new Tributoaliquota() {
+                Codtributo = _codigo,
+                Valoraliq = _valor,
+                Ano=_ano
+            };
+            Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+            Exception ex = tributarioRepository.Alterar_TributoAliquota(reg);
+
+            var result = new { Success = "True" };
+            return new JsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
         #endregion
     }
 }
