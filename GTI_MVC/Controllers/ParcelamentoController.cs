@@ -230,6 +230,14 @@ namespace GTI_MVC.Controllers {
                 List<CidadaoHeader> _listaSocio = cidadaoRepository.Lista_Cidadao_Socio(cod.Codcidadao);
                 foreach(CidadaoHeader head in _listaSocio) {
                     string _cnpj = head.Cnpj;
+                    Contribuinte_Header_Struct _header2 = sistemaRepository.Contribuinte_Header(head.Codigo);
+                    Parc_Codigos item2 = new Parc_Codigos() {
+                        Codigo = _header2.Codigo,
+                        Tipo = "Empresa",
+                        Cpf_Cnpj = Functions.FormatarCpfCnpj(_header2.Cpf_cnpj),
+                        Descricao = _header2.Nome
+                    };
+                    _listaCodigos.Add(item2);
                     List<int> _lista_imovel_socio = imovelRepository.Lista_Imovel_Socio(head.Codigo);
                     foreach(int imovel in _lista_imovel_socio) {
                         if(_lista_imovel_socio.Count > 0) {

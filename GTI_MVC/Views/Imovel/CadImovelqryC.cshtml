@@ -94,7 +94,6 @@
 
 </style>
 
-
 <div class="center">
 
     @using (Html.BeginForm("CadImovelqryC", "Imovel", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
@@ -185,15 +184,9 @@
                             </thead>
                             @foreach (GTI_Models.Models.ImovelLista item in Model.Lista_Imovel) {
                                 <tr style="height:20px;">
-                                    @*<td style="width:50px;text-align:center;font-weight:normal">@Html.DisplayFor(modelItem => item.Codigo)</td>*@
                                     <td style="width:50px;text-align:center;font-weight:normal"><a href="@Url.Action("CadImovelqryC", "Imovel", new { id = Functions.Encrypt(item.Codigo).Replace('/', '-') })" title="Consultar">@Html.DisplayFor(modelItem => item.Codigo) </a></td>
-                                    @*<td style="width:260px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome)</td>
-                                        <td style="width:370px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Endereco)</td>*@
                                     <td style="width:260px;text-align:left;font-weight:normal"><a href="@Url.Action("CadImovelqryC", "Imovel", new { id = Functions.Encrypt(item.Codigo).Replace('/', '-') })" title="Consultar">@Html.DisplayFor(modelItem => item.Nome) </a></td>
                                     <td style="width:370px;text-align:left;font-weight:normal"><a href="@Url.Action("CadImovelqryC", "Imovel", new { id = Functions.Encrypt(item.Codigo).Replace('/', '-') })" title="Consultar">@Html.DisplayFor(modelItem => item.Endereco) </a></td>
-                                    @*<td style="width:50px;text-align:right">
-                                            <a href="@Url.Action("CadImovelqryC", "Imovel", new { id = Functions.Encrypt(item.Codigo).Replace('/', '-') })" title="Consultar"> <img src="@Url.Content("~/images/Consultar.gif")"></a>
-                                        </td>*@
                                 </tr>
                             }
                         </table>
