@@ -15,15 +15,19 @@ namespace GTI_Mvc.Controllers
 
         [HttpGet]
         [Route("imovel_data")]
-        public ActionResult imovel_data(string c="3") {
+        public ActionResult imovel_data(string cod) {
             ImovelDetailsViewModel model = new ImovelDetailsViewModel();
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
-            int _codigo = Convert.ToInt32(c);
+            cod = Functions.RetornaNumero(cod);
+            if (cod == "")  {
+                ViewBag.Result = "Código inválido.";
+                return View(model);
+            }
+            int _codigo = Convert.ToInt32(cod);
             bool existe = imovelRepository.Existe_Imovel(_codigo);
-
-            if (existe) {
-                TempData["cod"] = _codigo.ToString();
-                model.ImovelStruct = imovelRepository   .Dados_Imovel(_codigo);
+            if (existe)
+            {
+                model.ImovelStruct = imovelRepository.Dados_Imovel(_codigo);
                 model.Lista_Proprietario = imovelRepository.Lista_Proprietario(_codigo, false);
                 model.Lista_Areas = imovelRepository.Lista_Area(_codigo);
                 model.Lista_Testada = imovelRepository.Lista_Testada(_codigo);
@@ -38,11 +42,14 @@ namespace GTI_Mvc.Controllers
                             model.Endereco_Entrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Entrega);
                     }
                 }
-            }else
-                TempData["cod"] = "0";
+            }
+            else
+                ViewBag.Result = "Imóvel não cadastrado.";
 
             return View(model);
+
         }
+
 
         [Route("imovel_query")]
         [HttpGet]
@@ -120,7 +127,14 @@ namespace GTI_Mvc.Controllers
 
         }
 
+        //public JsonResult Consulta_Imovel(string cod)
+        //{
+        //    int _codigo = Convert.ToInt32(cod);
 
+            
+        //    var result = new { Success = "True" };
+        //    return new JsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        //}
 
     }
 }

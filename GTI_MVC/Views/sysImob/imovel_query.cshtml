@@ -177,12 +177,15 @@
 
 
 
-@using (Html.BeginForm("imovel_query", "sysImob", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+@using (Html.BeginForm("imovel_query", "sysImob", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" }))
+{
     @Html.AntiForgeryToken()
     @*if (Model.ImovelStruct==null) {
-        @Url.Action("gtiSys", "Home");
-        return;
-    }*@
+            @Url.Action("gtiSys", "Home");
+            return;
+        }*@
+
+    <input type="hidden" id="codTmp" >
 
     <div class="center shadow" style="width:760px">
         <div class="card">
@@ -193,9 +196,12 @@
                         <table style="font-weight:normal;font-size:12px">
                             <tr>
                                 <td>
-                                    @if (Model.Codigo > 0) {
+                                    @if (Model.Codigo > 0)
+                                    {
                                         @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)", @placeholder = "Código" })
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         @Html.TextBoxFor(m => m.Codigo, new { @id = "codigo", @style = "width:100px;height:25px", @onKeyPress = "return formata(this, '§§§§§', event)", @Value = "", @placeholder = "Código" })
                                     }
                                 </td>
@@ -225,9 +231,12 @@
                                 </td>
                                 <td style="width:10px"></td>
                                 <td>
-                                    @if (!string.IsNullOrEmpty(Model.Numero)) {
+                                    @if (!string.IsNullOrEmpty(Model.Numero))
+                                    {
                                         @Html.TextBoxFor(m => m.Numero, new { @id = "numero", @style = "width:80px;height:25px", @onKeyPress = "return formata(this, '§§§§', event)", @placeholder = "Número" })
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         @Html.TextBoxFor(m => m.Numero, new { @id = "numero", @style = "width:80px;height:25px", @onKeyPress = "return formata(this, '§§§§', event)", @Value = "", @placeholder = "Número" })
                                     }
 
@@ -243,7 +252,7 @@
             <div id="table-container" style=" height: 290px; overflow: auto;border:solid;border-width:1px;width:720px;margin:auto">
 
                 <table id="mainTable" class="tbl table-bordered table-condensed" style="width:680px;font-size:12px">
-                    <thead style="background-color:darkred;color:whitesmoke">
+                    <thead style="background-color:darkblue;color:whitesmoke">
                         <tr style="height:10px">
                             <td style="width:50px;text-align:center">Código</td>
                             <td style="width:260px" ;text-align:left">Proprietário</td>
@@ -251,8 +260,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (GTI_Models.Models.ImovelLista item in Model.Lista_Imovel) {
-                            <tr style="height:20px;">
+                        @foreach (GTI_Models.Models.ImovelLista item in Model.Lista_Imovel)
+                        {
+                            <tr style="height: 20px; cursor: pointer">
                                 <td style="width:50px;text-align:center;font-weight:normal">@Html.DisplayFor(modelItem => item.Codigo) </td>
                                 <td style="width:260px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome) </td>
                                 <td style="width:370px;text-align:left;font-weight:normal">@Html.DisplayFor(modelItem => item.Endereco) </td>
@@ -263,6 +273,7 @@
             </div>
             <br />
             <div class="card-footer" style="text-align:center;background-color:white">
+                <button type="button" id="btValidar" class="btn btn-primary" style="height: 32px; margin-left: 10px;" title="Abrir o cadastro do imóvel selecionado " onclick="Abrir()">Abrir cadastro</button>&nbsp;&nbsp;
                 <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Fechar" onclick="Fechar()">Fechar</button>
             </div>
 
@@ -353,14 +364,28 @@
             }
         });
 
-
+        $("#mainTable").on('click', 'tr', function (e) {
+            $('#mainTable tr').removeClass('highlighted');
+            $(this).addClass('highlighted');
+            document.getElementById('codTmp').value = $(this).closest('tr').find('td:eq(0)').text();
+        });
 
         function Fechar() {
             var url = '@Url.Action("GtiSys", "Home")';
             window.location.href = url;
         }
 
-        
+        function Abrir() {
+            var _cod = document.getElementById('codTmp').value;
+            if (_cod == "" || parseInt(_cod) == 0) {
+                document.getElementById('lblMsg').innerHTML = "Selecione um imóvel!";
+                $('#msgBox1').dialog('open');
+            } else {
+                window.location.href = "localhost" ? "/sysImob/imovel_data?cod=" + _cod : "/gti/sysImob/imovel_data?cod=" + _cod;
+            }
+        }
+
+
         //######## Funções Genéricas #########
         function removeOptions(selectElement) {
             var i, L = selectElement.options.length - 1;

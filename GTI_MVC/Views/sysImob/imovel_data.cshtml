@@ -177,12 +177,10 @@
 
 
 
-@using (Html.BeginForm("imovel_data", "sysImob", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+@using (Html.BeginForm("imovel_data", "sysImob", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" }))
+{
+    if (Model.ImovelStruct != null)  {
 
-    if (Model.ImovelStruct==null) {
-        @Url.Action("gtiSys", "Home");
-        return;
-    }
 
     <div class="center shadow" style="width:570px">
         <div class="card">
@@ -202,9 +200,12 @@
                             Imóvel possui imunidade:
                         </td>
                         <td style="color: brown">
-                            @if (Model.ImovelStruct.Imunidade == true) {
+                            @if (Model.ImovelStruct.Imunidade == true)
+                            {
                                 @Html.Raw("Sim")
-                            } else {
+                            }
+                            else
+                            {
                                 @Html.Raw("Não")
                             }
                         </td>
@@ -214,9 +215,12 @@
                             Imóvel isento da CIP:
                         </td>
                         <td style="color: brown">
-                            @if (Model.ImovelStruct.ResideImovel == true) {
+                            @if (Model.ImovelStruct.ResideImovel == true)
+                            {
                                 @Html.Raw("Sim")
-                            } else {
+                            }
+                            else
+                            {
                                 @Html.Raw("Não")
                             }
                         </td>
@@ -226,9 +230,12 @@
                             Imóvel conjugado:
                         </td>
                         <td style="color:brown">
-                            @if (Model.ImovelStruct.Conjugado == true) {
+                            @if (Model.ImovelStruct.Conjugado == true)
+                            {
                                 @Html.Raw("Sim")
-                            } else {
+                            }
+                            else
+                            {
                                 @Html.Raw("Não")
                             }
                         </td>
@@ -239,11 +246,15 @@
             <div class="card-header">Proprietário(s) </div>
             <div class="card-body ">
                 <table style="font-size:13px;color:brown">
-                    @foreach (GTI_Models.Models.ProprietarioStruct prop in Model.Lista_Proprietario) {
+                    @foreach (GTI_Models.Models.ProprietarioStruct prop in Model.Lista_Proprietario)
+                    {
                         @Html.Raw(" <tr><td>")
-                        if (@prop.Principal) {
+                        if (@prop.Principal)
+                        {
                             @prop.Nome @Html.Raw(" (Principal)");
-                        } else {
+                        }
+                        else
+                        {
                             @prop.Nome;
                         }
                         @Html.Raw("</td></tr>")
@@ -251,9 +262,12 @@
                 </table>
                 <label style="padding-top:7px;font-size:13px">Proprietário reside no imóvel:</label>
                 <label style="font-size:13px;color:brown">
-                    @if (Model.ImovelStruct.ResideImovel == true) {
+                    @if (Model.ImovelStruct.ResideImovel == true)
+                    {
                         @Html.Raw("Sim")
-                    } else {
+                    }
+                    else
+                    {
                         @Html.Raw("Não")
                     }
                 </label>
@@ -280,12 +294,18 @@
                     <tr>
                         <td>
                             Tipo de Endereço:&nbsp; <span style="color: brown">
-                                @if (Model.ImovelStruct.EE_TipoEndereco == 0) {
+                                @if (Model.ImovelStruct.EE_TipoEndereco == 0)
+                                {
                                     @Html.Raw("Endereço de Localização")
-                                } else {
-                                    if (Model.ImovelStruct.EE_TipoEndereco == 1) {
+                                }
+                                else
+                                {
+                                    if (Model.ImovelStruct.EE_TipoEndereco == 1)
+                                    {
                                         @Html.Raw("Endereço do Proprietário")
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         @Html.Raw("Endereço de Entrega")
                                     }
                                 }
@@ -331,7 +351,8 @@
                             <td style="width:70px;text-align:right">Metros</td>
                         </tr>
                     </thead>
-                    @foreach (GTI_Models.Models.Testada testada in Model.Lista_Testada) {
+                    @foreach (GTI_Models.Models.Testada testada in Model.Lista_Testada)
+                    {
                         @Html.Raw(" <tr>")
                         @Html.Raw("<td style=" + "width:20px;text-align:right" + " >")
                         @testada.Numface.ToString("00") ;
@@ -358,7 +379,8 @@
                         </tr>
                     </thead>
                     @{decimal _total = 0; }
-                    @foreach (GTI_Models.Models.AreaStruct area in Model.Lista_Areas) {
+                    @foreach (GTI_Models.Models.AreaStruct area in Model.Lista_Areas)
+                    {
                         { _total += area.Area; };
                         @Html.Raw(" <tr>")
                         @Html.Raw("<td style=" + "width:20px;text-align:center" + " >")
@@ -401,7 +423,7 @@
         </div>
     </div>
 }
-
+}
 <div id="msgBox1" title="Atenção" style='display: none;'>
     <br />
     <label id="lblMsg"></label>

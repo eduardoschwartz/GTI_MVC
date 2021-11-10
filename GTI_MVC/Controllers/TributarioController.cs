@@ -2317,10 +2317,10 @@ namespace GTI_Mvc.Controllers {
 
                 //Gravar histórico no imóvel
                 //Incluir a observação da parcela
-                _seq = imovelRepository.Retorna_Proxima_Seq_Historico(model.Codigo_Imovel);
+                short _seq2 = imovelRepository.Retorna_Proxima_Seq_Historico(model.Codigo_Imovel);
                 Historico ObsImovel = new Historico() {
                     Codreduzido = model.Codigo_Imovel,
-                    Seq = _seq,
+                    Seq = _seq2,
                     Datahist2 = DateTime.Now,
                     Deschist = sHist,
                     Userid = _fiscal,
