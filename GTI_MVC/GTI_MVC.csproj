@@ -1148,6 +1148,7 @@
     <Content Include="Views\Parametro\Logradouro_Edit.cshtml" />
     <Content Include="Views\sysImob\imovel_data.cshtml" />
     <Content Include="Views\sysImob\imovel_query.cshtml" />
+    <Content Include="Views\sysImob\imovel_edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

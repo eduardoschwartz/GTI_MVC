@@ -173,7 +173,10 @@
 
 
 
-@{var res = @ViewBag.Result; }
+@{
+    var res = @ViewBag.Result;
+    var cod = ViewBag.Codigo;
+}
 
 
 
@@ -181,12 +184,11 @@
 {
     if (Model.ImovelStruct != null)  {
 
-
-    <div class="center shadow" style="width:570px">
+      <div class="center shadow" style="width:570px">
         <div class="card">
             <div class="card-header">Dados do imóvel</div>
             <div class="card-body">
-                <table style="font-size:13px">
+                <table id="headerTable" style="font-size:13px">
                     <tr>
                         <td>Código:&nbsp; <span style="color: brown">@Model.ImovelStruct.Codigo.ToString("00000")</span>&nbsp;&nbsp;Inscrição:&nbsp; <span style="color: brown">@Model.ImovelStruct.Inscricao</span>       </td>
                     </tr>
@@ -200,12 +202,9 @@
                             Imóvel possui imunidade:
                         </td>
                         <td style="color: brown">
-                            @if (Model.ImovelStruct.Imunidade == true)
-                            {
+                            @if (Model.ImovelStruct.Imunidade == true) {
                                 @Html.Raw("Sim")
-                            }
-                            else
-                            {
+                            } else {
                                 @Html.Raw("Não")
                             }
                         </td>
@@ -215,12 +214,21 @@
                             Imóvel isento da CIP:
                         </td>
                         <td style="color: brown">
-                            @if (Model.ImovelStruct.ResideImovel == true)
-                            {
+                            @if (Model.ImovelStruct.Cip == true) {
                                 @Html.Raw("Sim")
+                            } else {
+                                @Html.Raw("Não")
                             }
-                            else
-                            {
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:normal;width:165px">
+                            Reside no imóvel:
+                        </td>
+                        <td style="color: brown">
+                            @if (Model.ImovelStruct.ResideImovel == true) {
+                                @Html.Raw("Sim")
+                            } else {
                                 @Html.Raw("Não")
                             }
                         </td>
@@ -230,12 +238,9 @@
                             Imóvel conjugado:
                         </td>
                         <td style="color:brown">
-                            @if (Model.ImovelStruct.Conjugado == true)
-                            {
+                            @if (Model.ImovelStruct.Conjugado == true) {
                                 @Html.Raw("Sim")
-                            }
-                            else
-                            {
+                            } else {
                                 @Html.Raw("Não")
                             }
                         </td>
@@ -414,6 +419,7 @@
             </div>
 
             <div class="card-footer" style="text-align:center;background-color:white">
+                <button type="button" id="btnEditar" class="btn btn-primary" style="height: 32px; margin-left: 10px;" title="Alterar os dados cadastrais" onclick="Editar()">Alterar</button>&nbsp;&nbsp;
                 <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Fechar" onclick="Fechar()">Fechar</button>
             </div>
 
@@ -511,11 +517,11 @@
             window.location.href = url;
         }
 
-        function Codigo_Invalido(){
-            alert("Código Inválido!");
-            var url = '@Url.Action("GtiSys", "Home")';
-            window.location.href = url;
+        function Editar() {
+            var _cod = '@cod';
+            window.location.href = "localhost" ? "/sysImob/imovel_edit?cod=" + _cod : "/gti/sysImob/imovel_edit?cod=" + _cod;
         }
+
 
         //######## Funções Genéricas #########
         function removeOptions(selectElement) {
