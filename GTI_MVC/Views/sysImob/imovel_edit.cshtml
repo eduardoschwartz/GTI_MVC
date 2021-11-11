@@ -172,7 +172,6 @@
 </style>
 
 
-
 @{
     var res = @ViewBag.Result;
     var cod = ViewBag.Codigo;
@@ -180,7 +179,6 @@
 
 @using (Html.BeginForm("imovel_edit", "sysImob", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
     if (Model.ImovelStruct != null) {
-
 
         <div class="center shadow" style="width:570px">
             <div class="card">
@@ -190,7 +188,7 @@
                         <tr>
                             <td>Código:&nbsp; <span style="color: brown">@Model.ImovelStruct.Codigo.ToString("00000")</span>&nbsp;&nbsp;Inscrição:&nbsp; <span style="color: brown">@Model.ImovelStruct.Inscricao</span>       </td>
                         </tr>
-                        <tr>
+                        <tr style="height:25px">
                             <td>Condomínio:&nbsp; <span style="color: brown">@Model.ImovelStruct.NomeCondominio</span> </td>
                         </tr>
                     </table>
@@ -229,22 +227,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <td style="padding-bottom:3px">Prop. Reside no Imóvel:</td>
-                            <td>
-                                @if (Model.ImovelStruct.ResideImovel == true) {
-                                    <input type="radio" id="resSimOpt" name="resopt" value="S" checked="checked">
-                                    <span style="font-size:13px;color:darkgreen">Sim&nbsp;&nbsp;</span>
-                                    <input type="radio" id="resNaoOpt" name="resopt" value="N">
-                                    <span style="font-size:13px;color:darkred">Não&nbsp;&nbsp;</span>
-                                } else {
-                                    <input type="radio" id="resSimOpt" name="resopt" value="S">
-                                    <span style="font-size:13px;color:darkgreen">Sim&nbsp;&nbsp;</span>
-                                    <input type="radio" id="resNaoOpt" name="resopt" value="N" checked="checked">
-                                    <span style="font-size:13px;color:darkred">Não&nbsp;&nbsp;</span>
-                                }
-                            </td>
-                        </tr>
-                        <tr>
                             <td style="padding-bottom:3px">Imóvel conjugado:</td>
                             <td>
                                 @if (Model.ImovelStruct.Conjugado == true) {
@@ -261,22 +243,28 @@
                             </td>
                         </tr>
                     </table>
-
-
                 </div>
+
                 <div class="card-header">Proprietário(s) </div>
                 <div class="card-body ">
-                    <table style="font-size:13px;color:brown">
-                        @foreach (GTI_Models.Models.ProprietarioStruct prop in Model.Lista_Proprietario) {
-                            @Html.Raw(" <tr><td>")
-                            if (@prop.Principal) {
-                                @prop.Nome @Html.Raw(" (Principal)");
-                            } else {
-                                @prop.Nome;
-                            }
-                            @Html.Raw("</td></tr>")
-                        }
+                    <table id="propTable" style="font-size:13px;color:brown" class="tbl table-bordered table-condensed">
+                        <thead style="background-color:darkred;color:white;font-weight:normal;font-size:12px">
+                            <tr style="height:13px">
+                                <th style="width:60px;text-align:center">
+                                    Código
+                                </th>
+                                <th style="width: 360px; ">
+                                    Nome do Proprietário
+                                </th>
+                                <th style="width: 50px; text-align: center">
+                                    Princ.
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
                     </table>
+                    <br />
                     <label style="padding-top:7px;font-size:13px">Proprietário reside no imóvel:</label>
                     <label style="font-size:13px;color:brown">
                         @if (Model.ImovelStruct.ResideImovel == true) {
@@ -286,6 +274,7 @@
                         }
                     </label>
                 </div>
+
                 <div class="card-header">Localização </div>
                 <div class="card-body ">
                     <table style="font-size:13px">
@@ -331,25 +320,52 @@
                         </tr>
                     </table>
                 </div>
+
                 <div class="card-header">Dados Territoriais </div>
                 <div class="card-body ">
-
                     <table style="font-size:13px">
-                        <tr>
-                            <td>Área do Terreno:&nbsp; <span style="color: brown">@Model.ImovelStruct.Area_Terreno.ToString("#0.00")  m²</span> &nbsp;&nbsp;Fração Ideal: <span style="color: brown">&nbsp;@Model.ImovelStruct.FracaoIdeal.ToString("#0.00") m²</span></td>
+                        <tr style="height:27px">
+                            <td>
+                                Área do Terreno:&nbsp;@Html.TextBoxFor(m => m.ImovelStruct.Area_Terreno, new { @id = "areaTerrenoTxt", @class = "real", @style = "width:80px;text-align:right", @Value = Model.ImovelStruct.Area_Terreno.ToString("#0.00") })&nbsp;m² &nbsp;&nbsp;
+                                Fração Ideal: &nbsp;@Html.TextBoxFor(m => m.ImovelStruct.FracaoIdeal, new { @id = "fracaoTxt", @class = "real", @style = "width:80px;text-align:right", @Value = Model.ImovelStruct.FracaoIdeal.ToString("#0.00") })&nbsp;m²
+                            </td>
                         </tr>
-                        <tr>
-                            <td>Topografia:&nbsp; <span style="color: brown">@Model.ImovelStruct.Topografia_Nome</span>&nbsp;&nbsp;Situação:&nbsp; <span style="color: brown">@Model.ImovelStruct.Situacao_Nome</span></td>
+                     </table>
+                    <table style="font-size:13px">
+                        <tr style="height:25px">
+                            <td style="width:100px">Topografia:</td>
+                            <td style="width:200px">
+                                 @Html.DropDownListFor(m => Model.ImovelStruct.Topografia, ViewBag.ListaTop as SelectList, null, new { @id = "TopDropDown", @style = "font-weight:normal;width:150px" })
+                            </td>
+                            <td style="width:100px">Situação:</td>
+                            <td style="width:200px">
+                                @Html.DropDownListFor(m => Model.ImovelStruct.Situacao, ViewBag.ListaSit as SelectList, null, new { @id = "SitDropDown", @style = "font-weight:normal;width:150px" })
+                            </td>
                         </tr>
-                        <tr>
-                            <td>Categoria:&nbsp; <span style="color: brown">@Model.ImovelStruct.Categoria_Nome</span>&nbsp;&nbsp;Pedologia:&nbsp; <span style="color: brown">@Model.ImovelStruct.Pedologia_Nome</span></td>
+                        <tr style="height:25px">
+                            <td style="width:100px">Categoria:</td>
+                            <td>
+                                @Html.DropDownListFor(m => Model.ImovelStruct.Categoria, ViewBag.ListaCat as SelectList, null, new { @id = "CatDropDown", @style = "font-weight:normal;width:150px" })
+                            </td>
+                            <td style="width:100px">Pedologia:</td>
+                            <td>
+                                @Html.DropDownListFor(m => Model.ImovelStruct.Pedologia, ViewBag.ListaPed as SelectList, null, new { @id = "PedDropDown", @style = "font-weight:normal;width:150px" })
+                            </td>
                         </tr>
-                        <tr>
-                            <td>Benfeitoria:&nbsp; <span style="color: brown">@Model.ImovelStruct.Benfeitoria_Nome</span>&nbsp;&nbsp;Uso Construção:&nbsp; <span style="color: brown">@Model.ImovelStruct.Uso_terreno_Nome</span></td>
+                        <tr style="height:25px">
+                            <td style="width:100px">Benfeitoria:</td>
+                            <td>
+                               @Html.DropDownListFor(m => Model.ImovelStruct.Benfeitoria, ViewBag.ListaBen as SelectList, null, new { @id = "BenDropDown", @style = "font-weight:normal;width:150px" })
+                            </td>
+                            <td style="width:100px">Terreno:</td>
+                            <td>
+                                @Html.DropDownListFor(m => Model.ImovelStruct.Uso_terreno, ViewBag.ListaUso as SelectList, null, new { @id = "UsoDropDown", @style = "font-weight:normal;width:150px" })
+                            </td>
                         </tr>
 
                     </table>
                 </div>
+
                 <div class="card-header">Testadas do imóvel</div>
                 <div class="card-body ">
                     <table style="font-size:13px;width:90px">
@@ -451,8 +467,8 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-
-
+            $(".real").mask('#.##0,#0', { reverse: true });
+            $(".maskValor").mask("99999999,00", { reverse: true });
             $('#msgBox1').dialog({
                 autoOpen: false,
                 resizable: false,

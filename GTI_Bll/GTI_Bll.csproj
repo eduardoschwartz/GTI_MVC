@@ -89,6 +89,7 @@
     <Compile Include="Classes\employee_bll.cs" />
     <Compile Include="Classes\sistema_bll.cs" />
     <Compile Include="Classes\tributario_bll.cs" />
+    <Compile Include="Classes\w_imovel_bll.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -11,7 +11,7 @@ namespace GTI_Dal.Classes {
 
         private readonly string _connection;
 
-        public Imovel_Data(string sConnection) {
+        public Imovel_Data( string sConnection) {
             _connection = sConnection;
             }
 
@@ -89,7 +89,7 @@ namespace GTI_Dal.Classes {
                 }
             }//End LoadReg
 
-        public decimal Soma_Area(int Codigo) {
+        public decimal Soma_Area( int Codigo) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var sum = db.Areas.Where(x => x.Codreduzido == Codigo).Sum(x => x.Areaconstr);
                 return Convert.ToDecimal(sum);

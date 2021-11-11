@@ -192,7 +192,7 @@
                     <tr>
                         <td>Código:&nbsp; <span style="color: brown">@Model.ImovelStruct.Codigo.ToString("00000")</span>&nbsp;&nbsp;Inscrição:&nbsp; <span style="color: brown">@Model.ImovelStruct.Inscricao</span>       </td>
                     </tr>
-                    <tr>
+                    <tr style="height:25px">
                         <td>Condomínio:&nbsp; <span style="color: brown">@Model.ImovelStruct.NomeCondominio</span> </td>
                     </tr>
                 </table>
@@ -215,18 +215,6 @@
                         </td>
                         <td style="color: brown">
                             @if (Model.ImovelStruct.Cip == true) {
-                                @Html.Raw("Sim")
-                            } else {
-                                @Html.Raw("Não")
-                            }
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight:normal;width:165px">
-                            Reside no imóvel:
-                        </td>
-                        <td style="color: brown">
-                            @if (Model.ImovelStruct.ResideImovel == true) {
                                 @Html.Raw("Sim")
                             } else {
                                 @Html.Raw("Não")
@@ -330,22 +318,48 @@
             </div>
             <div class="card-header">Dados Territoriais </div>
             <div class="card-body ">
-
                 <table style="font-size:13px">
-                    <tr>
-                        <td>Área do Terreno:&nbsp; <span style="color: brown">@Model.ImovelStruct.Area_Terreno.ToString("#0.00")  m²</span> &nbsp;&nbsp;Fração Ideal: <span style="color: brown">&nbsp;@Model.ImovelStruct.FracaoIdeal.ToString("#0.00") m²</span></td>
+                    <tr style="height:21px">
+                        <td>
+                            Área do Terreno:&nbsp;<span style="color: brown">@Model.ImovelStruct.Area_Terreno.ToString("#0.00")  m²</span>&nbsp;&nbsp;
+                            Fração Ideal: &nbsp;<span style="color: brown">&nbsp;@Model.ImovelStruct.FracaoIdeal.ToString("#0.00") m²</span>
+                        </td>
                     </tr>
-                    <tr>
-                        <td>Topografia:&nbsp; <span style="color: brown">@Model.ImovelStruct.Topografia_Nome</span>&nbsp;&nbsp;Situação:&nbsp; <span style="color: brown">@Model.ImovelStruct.Situacao_Nome</span></td>
+                </table>
+                <table style="font-size:13px">
+                    <tr style="height:19px">
+                        <td style="width:100px">Topografia:</td>
+                        <td style="width:200px">
+                            <span style="color: brown">@Model.ImovelStruct.Topografia_Nome</span>
+                        </td>
+                        <td style="width:100px">Situação:</td>
+                        <td style="width:200px">
+                            <span style="color: brown">@Model.ImovelStruct.Situacao_Nome</span>
+                        </td>
                     </tr>
-                    <tr>
-                        <td>Categoria:&nbsp; <span style="color: brown">@Model.ImovelStruct.Categoria_Nome</span>&nbsp;&nbsp;Pedologia:&nbsp; <span style="color: brown">@Model.ImovelStruct.Pedologia_Nome</span></td>
+                    <tr style="height:19px">
+                        <td style="width:100px">Categoria:</td>
+                        <td>
+                            <span style="color: brown">@Model.ImovelStruct.Categoria_Nome</span>
+                        </td>
+                        <td style="width:100px">Pedologia:</td>
+                        <td>
+                            <span style="color: brown">@Model.ImovelStruct.Pedologia_Nome</span>
+                        </td>
                     </tr>
-                    <tr>
-                        <td>Benfeitoria:&nbsp; <span style="color: brown">@Model.ImovelStruct.Benfeitoria_Nome</span>&nbsp;&nbsp;Uso Construção:&nbsp; <span style="color: brown">@Model.ImovelStruct.Uso_terreno_Nome</span></td>
+                    <tr style="height:19px">
+                        <td style="width:100px">Benfeitoria:</td>
+                        <td>
+                            <span style="color: brown">@Model.ImovelStruct.Benfeitoria_Nome</span>
+                        </td>
+                        <td style="width:100px">Terreno:</td>
+                        <td>
+                            <span style="color: brown">@Model.ImovelStruct.Uso_terreno_Nome</span>
+                        </td>
                     </tr>
 
                 </table>
+
             </div>
             <div class="card-header">Testadas do imóvel</div>
             <div class="card-body ">

@@ -180,11 +180,6 @@
 @using (Html.BeginForm("imovel_query", "sysImob", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    @*if (Model.ImovelStruct==null) {
-            @Url.Action("gtiSys", "Home");
-            return;
-        }*@
-
     <input type="hidden" id="codTmp" >
 
     <div class="center shadow" style="width:760px">
