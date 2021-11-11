@@ -19,7 +19,14 @@ namespace GTI_Models.Models {
         public short Situacao { get; set; }
         public int Userid { get; set; }
         public string Inscricao { get; set; }
-        public string Condominio { get; set; }
+        public int Condominio { get; set; }
         public DateTime Data_Alteracao { get; set; }
+        public string Condominio_Nome { get; set; }
+        public string Topografia_Nome { get; set; }
+        public string Pedologia_Nome { get; set; }
+        public string Benfeitoria_Nome { get; set; }
+        public string Categoria_Nome { get; set; }
+        public string Usoterreno_Nome { get; set; }
+        public string Situacao_Nome { get; set; }
     }
 }

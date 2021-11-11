@@ -1564,9 +1564,9 @@ namespace GTI_Dal.Classes {
                 try {
                     db.Itbi_Comprador.RemoveRange(db.Itbi_Comprador.Where(i => i.Guid == Reg.Guid));
                     db.SaveChanges();
-                    } catch (Exception ex) {
+                } catch (Exception ex) {
                     return ex;
-                    }
+                }
 
                 try {
                     db.Itbi_Vendedor.RemoveRange(db.Itbi_Vendedor.Where(i => i.Guid == Reg.Guid));

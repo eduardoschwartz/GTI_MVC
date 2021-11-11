@@ -13,43 +13,6 @@ namespace GTI_Mvc.Controllers
     public class sysImobController : Controller   {
         private readonly string _connection = "GTIconnection";
 
-        [HttpGet]
-        [Route("imovel_data")]
-        public ActionResult imovel_data(string cod) {
-            ImovelDetailsViewModel model = new ImovelDetailsViewModel();
-            Imovel_bll imovelRepository = new Imovel_bll(_connection);
-            ViewBag.Codigo = cod;
-            cod = Functions.RetornaNumero(cod);
-            if (cod == "")  {
-                ViewBag.Result = "Código inválido.";
-                return View(model);
-            }
-            int _codigo = Convert.ToInt32(cod);
-            bool existe = imovelRepository.Existe_Imovel(_codigo);
-            if (existe) {
-                model.ImovelStruct = imovelRepository.Dados_Imovel(_codigo);
-                model.Lista_Proprietario = imovelRepository.Lista_Proprietario(_codigo, false);
-                model.Lista_Areas = imovelRepository.Lista_Area(_codigo);
-                model.Lista_Testada = imovelRepository.Lista_Testada(_codigo);
-                if (model.ImovelStruct.EE_TipoEndereco != null) {
-                    short _tipoEE = (short)model.ImovelStruct.EE_TipoEndereco;
-                    if (_tipoEE == 0)
-                        model.Endereco_Entrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Local);
-                    else {
-                        if (_tipoEE == 1)
-                            model.Endereco_Entrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Proprietario);
-                        else
-                            model.Endereco_Entrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Entrega);
-                    }
-                }
-            }
-            else
-                ViewBag.Result = "Imóvel não cadastrado.";
-
-            return View(model);
-
-        }
-
         [Route("imovel_query")]
         [HttpGet]
         public ActionResult imovel_query(string id) {
@@ -127,78 +90,48 @@ namespace GTI_Mvc.Controllers
         }
 
         [HttpGet]
-        [Route("imovel_edit")]
-        public ActionResult imovel_edit(string cod)
-        {
+        [Route("imovel_data")]
+        public ActionResult imovel_data(string cod) {
             ImovelDetailsViewModel model = new ImovelDetailsViewModel();
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            string _guid = Guid.NewGuid().ToString("N");
             ViewBag.Codigo = cod;
+            ViewBag.Guid = _guid;
             cod = Functions.RetornaNumero(cod);
-            if (cod == "")   {
+            if (cod == "")  {
                 ViewBag.Result = "Código inválido.";
                 return View(model);
             }
             int _codigo = Convert.ToInt32(cod);
             bool existe = imovelRepository.Existe_Imovel(_codigo);
-            if (existe)
-            {
+            if (existe) {
                 model.ImovelStruct = imovelRepository.Dados_Imovel(_codigo);
                 model.Lista_Proprietario = imovelRepository.Lista_Proprietario(_codigo, false);
                 model.Lista_Areas = imovelRepository.Lista_Area(_codigo);
                 model.Lista_Testada = imovelRepository.Lista_Testada(_codigo);
-                if (model.ImovelStruct.EE_TipoEndereco != null)
-                {
+                if (model.ImovelStruct.EE_TipoEndereco != null) {
                     short _tipoEE = (short)model.ImovelStruct.EE_TipoEndereco;
                     if (_tipoEE == 0)
                         model.Endereco_Entrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Local);
-                    else
-                    {
+                    else {
                         if (_tipoEE == 1)
                             model.Endereco_Entrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Proprietario);
                         else
                             model.Endereco_Entrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Entrega);
                     }
                 }
-
-                List<Topografia> listaTop = imovelRepository.Lista_Topografia();
-                ViewBag.ListaTop = new SelectList(listaTop, "Codtopografia", "Desctopografia");
-                List<Situacao> listaSit = imovelRepository.Lista_Situacao();
-                ViewBag.ListaSit = new SelectList(listaSit, "Codsituacao", "Descsituacao");
-                List<Categprop> listaCat = imovelRepository.Lista_Categoria_Propriedade();
-                ViewBag.ListaCat = new SelectList(listaCat, "Codcategprop", "Desccategprop");
-                List<Benfeitoria> listaBen = imovelRepository.Lista_Benfeitoria();
-                ViewBag.ListaBen = new SelectList(listaBen, "Codbenfeitoria", "Descbenfeitoria");
-                List<Pedologia> listaPed = imovelRepository.Lista_Pedologia();
-                ViewBag.ListaPed = new SelectList(listaPed, "Codpedologia", "Descpedologia");
-                List<Usoterreno> listaUso = imovelRepository.Lista_uso_terreno();
-                ViewBag.ListaUso = new SelectList(listaUso, "Codusoterreno", "Descusoterreno");
-
                 //Save W_Imovel data
-                int _user_id = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
-                string _guid =  Guid.NewGuid().ToString("N");
+                int _user_id = 413;
+                if (Request.Cookies["2uC*"] != null)
+                    _user_id = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
+
                 W_Imovel_bll w_imovelRepository = new W_Imovel_bll(_connection);
+                Exception ex = w_imovelRepository.Excluir_W_Imovel_Codigo(_codigo);
                 W_Imovel_Main _mainR = new W_Imovel_Main() {
                     Guid = _guid,
-                    Codigo = _codigo,
-                    Area_Terreno = model.ImovelStruct.Area_Terreno,
-                    Cip = model.ImovelStruct.Cip == null ? false : (bool)model.ImovelStruct.Cip,
-                    Imune = model.ImovelStruct.Imunidade == null ? false : (bool)model.ImovelStruct.Imunidade,
-                    Conjugado = model.ImovelStruct.Conjugado == null ? false : (bool)model.ImovelStruct.Conjugado,
-                    Reside = model.ImovelStruct.ResideImovel == null ? false : (bool)model.ImovelStruct.ResideImovel,
-                    Userid = _user_id,
-                    Topografia = (short)model.ImovelStruct.Topografia,
-                    Pedologia = (short)model.ImovelStruct.Pedologia,
-                    Situacao = (short)model.ImovelStruct.Situacao,
-                    Usoterreno = (short)model.ImovelStruct.Uso_terreno,
-                    Benfeitoria = (short)model.ImovelStruct.Benfeitoria,
-                    Categoria = (short)model.ImovelStruct.Categoria,
-                    Inscricao = model.ImovelStruct.Inscricao,
-                    Condominio = model.ImovelStruct.NomeCondominio,
-                    Data_Alteracao = DateTime.Now
+                    Codigo = _codigo
                 };
-                Exception ex = w_imovelRepository.Insert_W_Imovel_Main(_mainR);
-
-
+                ex = w_imovelRepository.Insert_W_Imovel_Main(_guid,_codigo,_user_id);
             } else
                 ViewBag.Result = "Imóvel não cadastrado.";
 
@@ -206,6 +139,84 @@ namespace GTI_Mvc.Controllers
 
         }
 
+
+        [HttpGet]
+        [Route("imovel_edit")]
+        public ActionResult imovel_edit(string c)
+        {
+            ImovelDetailsViewModel model = new ImovelDetailsViewModel();
+            W_Imovel_bll w_imovelRepository = new W_Imovel_bll(_connection);
+            W_Imovel_Main w_main = w_imovelRepository.Retorna_Imovel_Main(c);
+            if (w_main == null)
+                return RedirectToAction("imovel_query");
+
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            int _codigo = w_main.Codigo;
+            ViewBag.Codigo = _codigo;
+            
+             model.ImovelStruct = imovelRepository.Dados_Imovel(_codigo);
+            //model.Lista_Proprietario = imovelRepository.Lista_Proprietario(_codigo, false);
+            //model.Lista_Areas = imovelRepository.Lista_Area(_codigo);
+            //model.Lista_Testada = imovelRepository.Lista_Testada(_codigo);
+            //if (model.ImovelStruct.EE_TipoEndereco != null)
+            //{
+            //    short _tipoEE = (short)model.ImovelStruct.EE_TipoEndereco;
+            //    if (_tipoEE == 0)
+            //        model.Endereco_Entrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Local);
+            //    else
+            //    {
+            //        if (_tipoEE == 1)
+            //            model.Endereco_Entrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Proprietario);
+            //        else
+            //            model.Endereco_Entrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Entrega);
+            //    }
+
+            List<Topografia> listaTop = imovelRepository.Lista_Topografia();
+            ViewBag.ListaTop = new SelectList(listaTop, "Codtopografia", "Desctopografia");
+            List<Situacao> listaSit = imovelRepository.Lista_Situacao();
+            ViewBag.ListaSit = new SelectList(listaSit, "Codsituacao", "Descsituacao");
+            List<Categprop> listaCat = imovelRepository.Lista_Categoria_Propriedade();
+            ViewBag.ListaCat = new SelectList(listaCat, "Codcategprop", "Desccategprop");
+            List<Benfeitoria> listaBen = imovelRepository.Lista_Benfeitoria();
+            ViewBag.ListaBen = new SelectList(listaBen, "Codbenfeitoria", "Descbenfeitoria");
+            List<Pedologia> listaPed = imovelRepository.Lista_Pedologia();
+            ViewBag.ListaPed = new SelectList(listaPed, "Codpedologia", "Descpedologia");
+            List<Usoterreno> listaUso = imovelRepository.Lista_uso_terreno();
+            ViewBag.ListaUso = new SelectList(listaUso, "Codusoterreno", "Descusoterreno");
+
+            //Save W_Imovel_Main
+            W_Imovel_Main _mainR = new W_Imovel_Main() {
+                Guid = w_main.Guid,
+                Codigo = _codigo,
+                Area_Terreno = model.ImovelStruct.Area_Terreno,
+                Cip = model.ImovelStruct.Cip == null ? false : (bool)model.ImovelStruct.Cip,
+                Imune = model.ImovelStruct.Imunidade == null ? false : (bool)model.ImovelStruct.Imunidade,
+                Conjugado = model.ImovelStruct.Conjugado == null ? false : (bool)model.ImovelStruct.Conjugado,
+                Reside = model.ImovelStruct.ResideImovel == null ? false : (bool)model.ImovelStruct.ResideImovel,
+                Topografia = (short)model.ImovelStruct.Topografia,
+                Pedologia = (short)model.ImovelStruct.Pedologia,
+                Situacao = (short)model.ImovelStruct.Situacao,
+                Usoterreno = (short)model.ImovelStruct.Uso_terreno,
+                Benfeitoria = (short)model.ImovelStruct.Benfeitoria,
+                Categoria = (short)model.ImovelStruct.Categoria,
+                Inscricao = model.ImovelStruct.Inscricao,
+                Condominio = (int)model.ImovelStruct.CodigoCondominio,
+                Data_Alteracao = DateTime.Now,
+                Condominio_Nome = model.ImovelStruct.NomeCondominio,
+                Benfeitoria_Nome = model.ImovelStruct.Benfeitoria_Nome,
+                Categoria_Nome = model.ImovelStruct.Categoria_Nome,
+                Pedologia_Nome = model.ImovelStruct.Pedologia_Nome,
+                Situacao_Nome = model.ImovelStruct.Situacao_Nome,
+                Topografia_Nome = model.ImovelStruct.Topografia_Nome,
+                Usoterreno_Nome = model.ImovelStruct.Uso_terreno_Nome
+            };
+            Exception ex = w_imovelRepository.Update_W_Imovel_Main(_mainR);
+
+            //Save W_Imovel_Prop
+
+
+            return View(model);
+        }
 
     }
 }

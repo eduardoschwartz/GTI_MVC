@@ -174,8 +174,9 @@
 
 
 @{
-    var res = @ViewBag.Result;
+    var res = ViewBag.Result;
     var cod = ViewBag.Codigo;
+    var guid = ViewBag.Guid;
 }
 
 
@@ -532,8 +533,8 @@
         }
 
         function Editar() {
-            var _cod = '@cod';
-            window.location.href = "localhost" ? "/sysImob/imovel_edit?cod=" + _cod : "/gti/sysImob/imovel_edit?cod=" + _cod;
+            var _guid = '@guid';
+            window.location.href = "localhost" ? "/sysImob/imovel_edit?c=" + _guid : "/gti/sysImob/imovel_edit?cod=" + _guid;
         }
 
 
