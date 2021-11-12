@@ -297,6 +297,7 @@
     <Compile Include="Models\vre_licenciamento.cs" />
     <Compile Include="Models\vre_socio.cs" />
     <Compile Include="Models\vwproprietarioduplicado.cs" />
+    <Compile Include="Models\wimovel_main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportModels\Boleto.cs" />
     <Compile Include="ReportModels\Certidao.cs" />

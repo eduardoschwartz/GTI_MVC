@@ -107,6 +107,7 @@
     <Compile Include="Classes\parcelamento_Data.cs" />
     <Compile Include="Classes\redesim_Data.cs" />
     <Compile Include="Classes\employee_Data.cs" />
+    <Compile Include="Classes\w_imovel_Data.cs" />
     <Compile Include="Integrativa_Context.cs" />
     <Compile Include="Classes\sistema_Data.cs" />
     <Compile Include="Classes\tributario_Data.cs" />
