@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GTI_Models.Models {
-    public class W_Imovel_Prop {
+    public class WImovel_Prop {
         [Key]
         [Column(Order=1)]
         public string Guid { get; set; }
