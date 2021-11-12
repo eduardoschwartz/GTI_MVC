@@ -82,12 +82,6 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="GTI_Bll">
-      <HintPath>..\GTI_Bll\bin\Debug\GTI_Bll.dll</HintPath>
-    </Reference>
-    <Reference Include="GTI_Models">
-      <HintPath>..\GTI_Models\bin\Debug\GTI_Models.dll</HintPath>
-    </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.11.33.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.11.33\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
@@ -1383,6 +1377,20 @@
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GTI_Bll\GTI_Bll.csproj">
+      <Project>{9b7b83db-4417-4143-b465-52fe4870d2e0}</Project>
+      <Name>GTI_Bll</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GTI_Dal\GTI_Dal.csproj">
+      <Project>{4405EA88-83F9-4D7A-8D77-CBC8CF85E205}</Project>
+      <Name>GTI_Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GTI_Models\GTI_Models.csproj">
+      <Project>{859b188d-0d59-418e-af77-5235b79087f4}</Project>
+      <Name>GTI_Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
@@ -1427,10 +1435,6 @@
   </Target>
   <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <PropertyGroup>
-    <PreBuildEvent>if exist "$(TargetPath).locked" del "$(TargetPath).locked"
-if exist "$(TargetPath)" if not exist "$(TargetPath).locked" move "$(TargetPath)" "$(TargetPath).locked"</PreBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

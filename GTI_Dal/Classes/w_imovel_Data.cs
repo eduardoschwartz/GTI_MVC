@@ -33,7 +33,7 @@ namespace GTI_Dal.Classes {
         //    }
         //}
 
-<<<<<<< HEAD
+
 
         //public Exception Insert_W_Imovel_Main2(W_Imovel_Main Reg) {
         //    using (var db = new GTI_Context(_connection)) {
@@ -63,7 +63,7 @@ namespace GTI_Dal.Classes {
         //        Parametros[21] = new SqlParameter { ParameterName = "@categoria_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Categoria_Nome };
         //        Parametros[22] = new SqlParameter { ParameterName = "@usoterreno_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Usoterreno_Nome };
         //        Parametros[23] = new SqlParameter { ParameterName = "@situacao_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Situacao_Nome };
-=======
+
         public Exception Insert_W_Imovel_Main2(W_Imovel_Main Reg) {
             using (var db = new GTI_Context(_connection)) {
                 db.Database.CommandTimeout = 180;
@@ -92,7 +92,7 @@ namespace GTI_Dal.Classes {
                 Parametros[21] = new SqlParameter { ParameterName = "@categoria_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Categoria_Nome };
                 Parametros[22] = new SqlParameter { ParameterName = "@usoterreno_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Usoterreno_Nome };
                 Parametros[23] = new SqlParameter { ParameterName = "@situacao_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Situacao_Nome };
->>>>>>> 71873a3fd5fd2ad102187a7a5431149fe3e3b8b3
+
 
         //        db.Database.ExecuteSqlCommand("INSERT INTO w_imovel_main(guid,codigo,cip,imune,conjugado,reside,area_terreno,topografia,pedologia,benfeitoria,categoria,usoterreno,situacao,userid," +
         //            "inscricao,condominio,data_alteracao,condominio_nome,topografia_nome,pedologia_nome,benfeitoria_nome,categoria_nome,usoterreno_nome,situacao_nome) " +
@@ -148,7 +148,7 @@ namespace GTI_Dal.Classes {
         //    }
         //}
 
-<<<<<<< HEAD
+
 
         //public W_Imovel_Main Retorna_Imovel_Main(string p) {
         //    using (GTI_Context db = new GTI_Context(_connection)) {
@@ -156,14 +156,14 @@ namespace GTI_Dal.Classes {
         //        return Sql;
         //    }
         //}
-=======
+
         public W_Imovel_Main Retorna_Imovel_Main(string p) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 W_Imovel_Main Sql = (from t in db.W_Imovel_Main where t.Guid == p select t).FirstOrDefault();
                 return Sql;
             }
         }
->>>>>>> 71873a3fd5fd2ad102187a7a5431149fe3e3b8b3
+
 
         //public Exception Excluir_W_Imovel_Codigo(int Codigo) {
         //    using (GTI_Context db = new GTI_Context(_connection)) {
