@@ -221,12 +221,9 @@ namespace GTI_Dal {
         public DbSet<Usuario_Web_Analise> Usuario_Web_Analise { get; set; }
         public DbSet<Tributoartigo> Tributo_Artigo { get; set; }
         public DbSet<Ufir> Ufir { get; set; }
-<<<<<<< HEAD
        // public DbSet<WImovel_Main> W_Imovel_Main { get; set; }
-=======
-        public DbSet<W_Imovel_Main> W_Imovel_Main { get; set; }
+//        public DbSet<W_Imovel_Main> W_Imovel_Main { get; set; }
         public DbSet<W_Imovel_Prop> W_Imovel_Prop { get; set; }
->>>>>>> 71873a3fd5fd2ad102187a7a5431149fe3e3b8b3
 
     }
 }
