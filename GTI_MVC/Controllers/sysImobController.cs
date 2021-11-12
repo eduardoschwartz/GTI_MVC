@@ -120,18 +120,6 @@ namespace GTI_Mvc.Controllers
                             model.Endereco_Entrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Entrega);
                     }
                 }
-                //Save W_Imovel data
-                int _user_id = 413;
-                if (Request.Cookies["2uC*"] != null)
-                    _user_id = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
-
-                W_Imovel_bll w_imovelRepository = new W_Imovel_bll(_connection);
-                Exception ex = w_imovelRepository.Excluir_W_Imovel_Codigo(_codigo);
-                W_Imovel_Main _mainR = new W_Imovel_Main() {
-                    Guid = _guid,
-                    Codigo = _codigo
-                };
-                ex = w_imovelRepository.Insert_W_Imovel_Main(_guid,_codigo,_user_id);
             } else
                 ViewBag.Result = "Imóvel não cadastrado.";
 
@@ -139,6 +127,27 @@ namespace GTI_Mvc.Controllers
 
         }
 
+        public JsonResult wImovelnew(string guid, string cod) {
+            int _user_id = 413;
+            if (Request.Cookies["2uC*"] != null)
+                _user_id = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
+
+            int _codigo = Convert.ToInt32(cod);
+            W_Imovel_bll w_imovelRepository = new W_Imovel_bll(_connection);
+
+            Exception ex = w_imovelRepository.Excluir_W_Imovel_Codigo(_codigo);
+            ex = w_imovelRepository.Excluir_W_Imovel_Prop_Guid(guid);
+
+            W_Imovel_Main _mainR = new W_Imovel_Main() {
+                Guid = guid,
+                Codigo = _codigo
+            };
+            ex = w_imovelRepository.Insert_W_Imovel_Main(guid, _codigo, _user_id);
+
+            var result2 = new { Bairro_Codigo = (short)_codigo, Success = "True" };
+            return new JsonResult { Data = result2, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+
+        }
 
         [HttpGet]
         [Route("imovel_edit")]
@@ -213,10 +222,25 @@ namespace GTI_Mvc.Controllers
             Exception ex = w_imovelRepository.Update_W_Imovel_Main(_mainR);
 
             //Save W_Imovel_Prop
+            List<ProprietarioStruct> listaProp = imovelRepository.Lista_Proprietario(_codigo, false);
+            foreach (ProprietarioStruct item in listaProp) {
+                W_Imovel_Prop mainP = new W_Imovel_Prop {
+                    Guid = w_main.Guid,
+                    Codigo = item.Codigo,
+                    Nome = item.Nome,
+                    Tipo = item.Tipo == "P" ? "Proprietário" : "Solidário",
+                    Principal = item.Principal
+                };
+                ex = w_imovelRepository.Insert_W_Imovel_Prop(mainP);
+            }
 
 
             return View(model);
         }
+
+       
+
+
 
     }
 }

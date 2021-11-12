@@ -222,6 +222,7 @@ namespace GTI_Dal {
         public DbSet<Tributoartigo> Tributo_Artigo { get; set; }
         public DbSet<Ufir> Ufir { get; set; }
         public DbSet<W_Imovel_Main> W_Imovel_Main { get; set; }
+        public DbSet<W_Imovel_Prop> W_Imovel_Prop { get; set; }
 
     }
 }

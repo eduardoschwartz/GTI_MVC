@@ -33,7 +33,6 @@ namespace GTI_Dal.Classes {
             }
         }
 
-
         public Exception Insert_W_Imovel_Main2(W_Imovel_Main Reg) {
             using (var db = new GTI_Context(_connection)) {
                 db.Database.CommandTimeout = 180;
@@ -117,7 +116,6 @@ namespace GTI_Dal.Classes {
             }
         }
 
-
         public W_Imovel_Main Retorna_Imovel_Main(string p) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 W_Imovel_Main Sql = (from t in db.W_Imovel_Main where t.Guid == p select t).FirstOrDefault();
@@ -137,5 +135,50 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Insert_W_Imovel_Prop(W_Imovel_Prop Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+                object[] Parametros = new object[5];
+
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
+                Parametros[2] = new SqlParameter { ParameterName = "@nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nome };
+                Parametros[3] = new SqlParameter { ParameterName = "@tipo", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Tipo };
+                Parametros[4] = new SqlParameter { ParameterName = "@principal", SqlDbType = SqlDbType.Bit, SqlValue = Reg.Principal };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO w_imovel_prop(guid,codigo,nome,tipo,principal) VALUES(@guid,@codigo,@nome,@tipo,@principal)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Excluir_W_Imovel_Prop_Codigo(string guid, int codigo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                try {
+                    W_Imovel_Prop b= db.W_Imovel_Prop.Find(db.W_Imovel_Prop.Where(i =>i.Guid==guid && i.Codigo == codigo));
+                    db.W_Imovel_Prop.Remove(b);
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Excluir_W_Imovel_Prop_Guid(string guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                try {
+                    db.W_Imovel_Prop.RemoveRange(db.W_Imovel_Prop.Where(i => i.Guid == guid));
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
     }
 }

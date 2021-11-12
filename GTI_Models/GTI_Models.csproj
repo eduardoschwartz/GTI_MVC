@@ -297,6 +297,9 @@
     <Compile Include="Models\vre_licenciamento.cs" />
     <Compile Include="Models\vre_socio.cs" />
     <Compile Include="Models\vwproprietarioduplicado.cs" />
+    <Compile Include="Models\w_imovel_main.cs" />
+    <Compile Include="Models\w_imovel_main.cs" />
+    <Compile Include="Models\w_imovel_prop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportModels\Boleto.cs" />
     <Compile Include="ReportModels\Certidao.cs" />
@@ -306,6 +309,7 @@
     <Compile Include="ReportModels\Imovel_Detalhe.cs" />
     <Compile Include="ReportModels\NotificacaoIssReport.cs" />
     <Compile Include="ReportModels\UsoPlataformaReport.cs" />
+    <Compile Include="w_imovel_main.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

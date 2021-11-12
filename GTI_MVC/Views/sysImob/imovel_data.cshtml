@@ -174,9 +174,9 @@
 
 
 @{
-    var res = ViewBag.Result;
-    var cod = ViewBag.Codigo;
-    var guid = ViewBag.Guid;
+    var res = @ViewBag.Result;
+    var cod = @ViewBag.Codigo;
+    var guid = @ViewBag.Guid;
 }
 
 
@@ -435,7 +435,7 @@
 
             <div class="card-footer" style="text-align:center;background-color:white">
                 <button type="button" id="btnEditar" class="btn btn-primary" style="height: 32px; margin-left: 10px;" title="Alterar os dados cadastrais" onclick="Editar()">Alterar</button>&nbsp;&nbsp;
-                <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Fechar" onclick="Fechar()">Fechar</button>
+                <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Fechar" onclick="javascript:history.back()">Fechar</button>
             </div>
 
             <div class="card-footer">
@@ -534,7 +534,25 @@
 
         function Editar() {
             var _guid = '@guid';
-            window.location.href = "localhost" ? "/sysImob/imovel_edit?c=" + _guid : "/gti/sysImob/imovel_edit?cod=" + _guid;
+            var _cod = '@cod';
+
+            $.ajax({
+                type: "Post",
+                url: location.hostname == "localhost" ? "/sysImob/wImovelnew" : "/gti/sysImob/wImovelnew",
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Success == "True") {
+                        window.location.href = "localhost" ? "/sysImob/imovel_edit?c=" + _guid : "/gti/sysImob/imovel_edit?cod=" + _guid;
+                    } else {
+                        document.getElementById('lblMsg').innerHTML = data.Msg;
+                        $('#msgBox1').dialog('open');
+                    }
+                },
+                data: {
+                    guid: _guid,
+                    cod: _cod
+                }
+            });
         }
 
 
