@@ -171,11 +171,15 @@
     }
 </style>
 
-
 @{
-    var res = @ViewBag.Result;
-    var cod = @ViewBag.Codigo;
+    var res = ViewBag.Result;
+    var cod = ViewBag.Codigo;
     var guid = ViewBag.Guid;
+    var tipoend = ViewBag.TipoEnd;
+    var imune = ViewBag.Imune;
+    var cip = ViewBag.Cip;
+    var conjugado = ViewBag.Conjugado;
+    var reside = ViewBag.Reside;
 }
 
 @using (Html.BeginForm("imovel_edit", "sysImob", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
@@ -202,49 +206,28 @@
                         <tr>
                             <td style="padding-bottom:3px"><span style="font-size:13px">Imóvel possui Imunidade:&nbsp;&nbsp;</span></td>
                             <td>
-                                @if (Model.ImovelStruct.Imunidade == true) {
-                                    <input type="radio" id="imuneSimOpt" name="imopt" value="S" checked="checked">
-                                    <span style="font-size:13px;color:darkgreen">Sim&nbsp;&nbsp;</span>
-                                    <input type="radio" id="imuneNaoOpt" name="imopt" value="N">
-                                    <span style="font-size:13px;color:darkred">Não&nbsp;&nbsp;</span>
-                                } else {
-                                    <input type="radio" id="imuneSimOpt" name="imopt" value="S">
-                                    <span style="font-size:13px;color:darkgreen">Sim&nbsp;&nbsp;</span>
-                                    <input type="radio" id="imuneNaoOpt" name="imopt" value="N" checked="checked">
-                                    <span style="font-size:13px;color:darkred">Não&nbsp;&nbsp;</span>
-                                }
+                                <input type="radio" id="imuneSimOpt" name="imopt" value="S">
+                                <span style="font-size:13px;color:darkgreen">Sim&nbsp;&nbsp;</span>
+                                <input type="radio" id="imuneNaoOpt" name="imopt" value="N">
+                                <span style="font-size:13px;color:darkred">Não</span>
                             </td>
                         </tr>
                         <tr>
                             <td style="padding-bottom:3px"><span style="font-size:13px">Imóvel isento da CIP:&nbsp;&nbsp;</span></td>
                             <td>
-                                @if (Model.ImovelStruct.Cip == true) {
-                                    <input type="radio" id="cipSimOpt" name="cipopt" value="S" checked="checked">
-                                    <span style="font-size:13px;color:darkgreen">Sim&nbsp;&nbsp;</span>
-                                    <input type="radio" id="cipNaoOpt" name="cipopt" value="N">
-                                    <span style="font-size:13px;color:darkred">Não&nbsp;&nbsp;</span>
-                                } else {
-                                    <input type="radio" id="cipSimOpt" name="cipopt" value="S">
-                                    <span style="font-size:13px;color:darkgreen">Sim&nbsp;&nbsp;</span>
-                                    <input type="radio" id="cipNaoOpt" name="cipopt" value="N" checked="checked">
-                                    <span style="font-size:13px;color:darkred">Não&nbsp;&nbsp;</span>
-                                }
+                                <input type="radio" id="cipSimOpt" name="cipopt" value="S">
+                                <span style="font-size:13px;color:darkgreen">Sim&nbsp;&nbsp;</span>
+                                <input type="radio" id="cipNaoOpt" name="cipopt" value="N">
+                                <span style="font-size:13px;color:darkred">Não&nbsp;&nbsp;</span>
                             </td>
                         </tr>
                         <tr>
                             <td style="padding-bottom:3px">Imóvel conjugado:</td>
                             <td>
-                                @if (Model.ImovelStruct.Conjugado == true) {
-                                    <input type="radio" id="cjSimOpt" name="cjopt" value="S" checked="checked">
-                                    <span style="font-size:13px;color:darkgreen">Sim&nbsp;&nbsp;</span>
-                                    <input type="radio" id="cjNaoOpt" name="cjopt" value="N">
-                                    <span style="font-size:13px;color:darkred">Não&nbsp;&nbsp;</span>
-                                } else {
-                                    <input type="radio" id="cjSimOpt" name="cjopt" value="S">
-                                    <span style="font-size:13px;color:darkgreen">Sim&nbsp;&nbsp;</span>
-                                    <input type="radio" id="cjNaoOpt" name="cjopt" value="N" checked="checked">
-                                    <span style="font-size:13px;color:darkred">Não&nbsp;&nbsp;</span>
-                                }
+                                <input type="radio" id="cjSimOpt" name="cjopt" value="S" checked="checked">
+                                <span style="font-size:13px;color:darkgreen">Sim&nbsp;&nbsp;</span>
+                                <input type="radio" id="cjNaoOpt" name="cjopt" value="N">
+                                <span style="font-size:13px;color:darkred">Não&nbsp;&nbsp;</span>
                             </td>
                         </tr>
                     </table>
@@ -274,61 +257,46 @@
                     </table>
                     <br />
 
-                    <div style="text-align:center">
-                        <button type="button" id="btnPropNew" class="btn btn-primary" style="height: 32px; margin-left: 10px;width: 80px" " title="Incluir proprietário" onclick="Prop_Add()">Novo</button>&nbsp;
-                        <button type="button" id="btnPropEdit" class="btn btn-info" style="height: 32px; margin-left: 10px;width: 80px" " title="Alterar o tipo de proprietário" onclick="Prop_Edit()">Alterar</button>&nbsp;
+                    <div style="text-align:left">
+                        <button type="button" id="btnPropNew" class="btn btn-primary" style="height: 32px; margin-left: 10px;width: 80px" " title="Incluir proprietário" onclick="Prop_Add()">Novo</button>
+                        <button type="button" id="btnPropEdit" class="btn btn-info" style="height: 32px; margin-left: 10px;width: 80px" " title="Alterar o tipo de proprietário" onclick="Prop_Edit()">Alterar</button>
                         <button type="button" id="btnPropDel" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Remover proprietário" onclick="Prop_Delete()">Excluir</button>
                     </div>
                     <br />
-                    @if (Model.ImovelStruct.ResideImovel == true) {
-                        <span style="font-size:13px">Proprietário reside no imóvel:&nbsp;</span>
-                        <input type="radio" id="resideSimOpt" name="resopt" value="S" checked="checked">
-                        <span style="font-size:13px;color:darkgreen">Sim&nbsp;&nbsp;</span>
-                        <input type="radio" id="resideNaoOpt" name="resopt" value="N">
-                        <span style="font-size:13px;color:darkred">Não</span>
-                    } else {
-                        <span style="font-size:13px">Proprietário reside no imóvel:&nbsp;</span>
-                        <input type="radio" id="resideSimOpt" name="resopt" value="S">
-                        <span style="font-size:13px;color:darkgreen">Sim&nbsp;&nbsp;</span>
-                        <input type="radio" id="resideNaoOpt" name="resopt" value="N" checked="checked">
-                        <span style="font-size:13px;color:darkred">Não</span>
-                    }
+                    <span style="font-size:13px">Proprietário reside no imóvel:&nbsp;</span>
+                    <input type="radio" id="resideSimOpt" name="resopt" value="S" checked="checked">
+                    <span style="font-size:13px;color:darkgreen">Sim&nbsp;&nbsp;</span>
+                    <input type="radio" id="resideNaoOpt" name="resopt" value="N">
+                    <span style="font-size:13px;color:darkred">Não</span>
                 </div>
 
                 <div class="card-header">Localização </div>
                 <div class="card-body ">
                     <table style="font-size:13px">
-                        <tr>
+                        <tr style="height:25px">
                             <td>Endereço:&nbsp; <span style="color: brown">@Model.ImovelStruct.NomeLogradouro @Html.Raw(", ") @Model.ImovelStruct.Numero.ToString() @Html.Raw(" ") @Model.ImovelStruct.Complemento</span></td>
 
                         </tr>
-                        <tr>
+                        <tr style="height:25px">
                             <td>Bairro:&nbsp; <span style="color: brown">@Model.ImovelStruct.NomeBairro</span>&nbsp;&nbsp;CEP:&nbsp; <span style="color: brown">@Model.ImovelStruct.Cep</span></td>
                         </tr>
-                        <tr>
-                            <td style="a">Lote:&nbsp; <span style="color: brown">@Model.ImovelStruct.LoteOriginal</span>&nbsp;&nbsp;Quadra:&nbsp; <span style="color: brown">@Model.ImovelStruct.QuadraOriginal</span></td>
+                        <tr style="height:25px">
+                            <td style="a">Lote:&nbsp; <span style="color: brown">@Html.TextBoxFor(m => m.ImovelStruct.LoteOriginal, new { @style = "width:130px;font-size:13px", @maxlength = "25" })</span>&nbsp;&nbsp;Quadra:&nbsp; <span style="color: brown">@Html.TextBoxFor(m => m.ImovelStruct.QuadraOriginal, new { @style = "width:130px;font-size:13px", @maxlength = "25" })</span></td>
                         </tr>
                     </table>
 
 
                     <label style="font-size:13px;text-decoration:underline;font-weight:bold;padding-top:5px">Endereço de Entrega</label>
                     <br />
+
+                    <input type="radio" id="endImOpt" name="endopt" value="I">
+                    <span style="font-size:13px">Endereço do imóvel&nbsp;&nbsp;</span>
+                    <input type="radio" id="endPrOpt" name="endopt" value="P">
+                    <span style="font-size:13px">Endereço do Proprietário&nbsp;&nbsp;</span>
+                    <input type="radio" id="endEnOpt" name="endopt" value="E">
+                    <span style="font-size:13px">Endereço de Entrega</span>
+                    <br /><br />
                     <table style="font-size:13px">
-                        <tr>
-                            <td>
-                                Tipo de Endereço:&nbsp; <span style="color: brown">
-                                    @if (Model.ImovelStruct.EE_TipoEndereco == 0) {
-                                        @Html.Raw("Endereço de Localização")
-                                    } else {
-                                        if (Model.ImovelStruct.EE_TipoEndereco == 1) {
-                                            @Html.Raw("Endereço do Proprietário")
-                                        } else {
-                                            @Html.Raw("Endereço de Entrega")
-                                        }
-                                    }
-                                </span>
-                            </td>
-                        </tr>
                         <tr>
                             <td>Endereço:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.Endereco @Html.Raw(", ") @Model.Endereco_Entrega.Numero.ToString() @Html.Raw(" ") @Model.Endereco_Entrega.Complemento</span></td>
                         </tr>
@@ -339,75 +307,80 @@
                             <td>Cidade:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.NomeCidade</span>&nbsp;&nbsp;UF:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.UF</span></td>
                         </tr>
                     </table>
+                    <br />
+                    <button type="button" id="btnEnderecoEdit" class="btn btn-info" style="height: 32px; width: 80px" title="Alterar o endereço de entrega" onclick="Endereco_Edit()">Alterar</button>
                 </div>
 
-                @*<div class="card-header">Dados Territoriais </div>
-        <div class="card-body ">
-            <table style="font-size:13px">
-                <tr style="height:27px">
-                    <td>
-                        Área do Terreno:&nbsp;@Html.TextBoxFor(m => m.ImovelStruct.Area_Terreno, new { @id = "areaTerrenoTxt", @class = "real", @style = "width:80px;text-align:right", @Value = Model.ImovelStruct.Area_Terreno.ToString("#0.00") })&nbsp;m² &nbsp;&nbsp;
-                        Fração Ideal: &nbsp;@Html.TextBoxFor(m => m.ImovelStruct.FracaoIdeal, new { @id = "fracaoTxt", @class = "real", @style = "width:80px;text-align:right", @Value = Model.ImovelStruct.FracaoIdeal.ToString("#0.00") })&nbsp;m²
-                    </td>
-                </tr>
-             </table>
-            <table style="font-size:13px">
-                <tr style="height:25px">
-                    <td style="width:100px">Topografia:</td>
-                    <td style="width:200px">
-                         @Html.DropDownListFor(m => Model.ImovelStruct.Topografia, ViewBag.ListaTop as SelectList, null, new { @id = "TopDropDown", @style = "font-weight:normal;width:150px" })
-                    </td>
-                    <td style="width:100px">Situação:</td>
-                    <td style="width:200px">
-                        @Html.DropDownListFor(m => Model.ImovelStruct.Situacao, ViewBag.ListaSit as SelectList, null, new { @id = "SitDropDown", @style = "font-weight:normal;width:150px" })
-                    </td>
-                </tr>
-                <tr style="height:25px">
-                    <td style="width:100px">Categoria:</td>
-                    <td>
-                        @Html.DropDownListFor(m => Model.ImovelStruct.Categoria, ViewBag.ListaCat as SelectList, null, new { @id = "CatDropDown", @style = "font-weight:normal;width:150px" })
-                    </td>
-                    <td style="width:100px">Pedologia:</td>
-                    <td>
-                        @Html.DropDownListFor(m => Model.ImovelStruct.Pedologia, ViewBag.ListaPed as SelectList, null, new { @id = "PedDropDown", @style = "font-weight:normal;width:150px" })
-                    </td>
-                </tr>
-                <tr style="height:25px">
-                    <td style="width:100px">Benfeitoria:</td>
-                    <td>
-                       @Html.DropDownListFor(m => Model.ImovelStruct.Benfeitoria, ViewBag.ListaBen as SelectList, null, new { @id = "BenDropDown", @style = "font-weight:normal;width:150px" })
-                    </td>
-                    <td style="width:100px">Terreno:</td>
-                    <td>
-                        @Html.DropDownListFor(m => Model.ImovelStruct.Uso_terreno, ViewBag.ListaUso as SelectList, null, new { @id = "UsoDropDown", @style = "font-weight:normal;width:150px" })
-                    </td>
-                </tr>
+                <div class="card-header">Dados Territoriais </div>
+                <div class="card-body ">
+                    <table style="font-size:13px">
+                        <tr style="height:27px">
+                            <td>
+                                Área do Terreno:&nbsp;@Html.TextBoxFor(m => m.ImovelStruct.Area_Terreno, new { @id = "areaTerrenoTxt", @class = "real", @style = "width:80px;text-align:right", @Value = Model.ImovelStruct.Area_Terreno.ToString("#0.00") })&nbsp;m² &nbsp;&nbsp;
+                                Fração Ideal: &nbsp;@Html.TextBoxFor(m => m.ImovelStruct.FracaoIdeal, new { @id = "fracaoTxt", @class = "real", @style = "width:80px;text-align:right", @Value = Model.ImovelStruct.FracaoIdeal.ToString("#0.00") })&nbsp;m²
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="font-size:13px">
+                        <tr style="height:25px">
+                            <td style="width:100px">Topografia:</td>
+                            <td style="width:200px">
+                                @Html.DropDownListFor(m => Model.ImovelStruct.Topografia, ViewBag.ListaTop as SelectList, null, new { @id = "TopDropDown", @style = "font-weight:normal;width:150px" })
+                            </td>
+                            <td style="width:100px">Situação:</td>
+                            <td style="width:200px">
+                                @Html.DropDownListFor(m => Model.ImovelStruct.Situacao, ViewBag.ListaSit as SelectList, null, new { @id = "SitDropDown", @style = "font-weight:normal;width:150px" })
+                            </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:100px">Categoria:</td>
+                            <td>
+                                @Html.DropDownListFor(m => Model.ImovelStruct.Categoria, ViewBag.ListaCat as SelectList, null, new { @id = "CatDropDown", @style = "font-weight:normal;width:150px" })
+                            </td>
+                            <td style="width:100px">Pedologia:</td>
+                            <td>
+                                @Html.DropDownListFor(m => Model.ImovelStruct.Pedologia, ViewBag.ListaPed as SelectList, null, new { @id = "PedDropDown", @style = "font-weight:normal;width:150px" })
+                            </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td style="width:100px">Benfeitoria:</td>
+                            <td>
+                                @Html.DropDownListFor(m => Model.ImovelStruct.Benfeitoria, ViewBag.ListaBen as SelectList, null, new { @id = "BenDropDown", @style = "font-weight:normal;width:150px" })
+                            </td>
+                            <td style="width:100px">Terreno:</td>
+                            <td>
+                                @Html.DropDownListFor(m => Model.ImovelStruct.Uso_terreno, ViewBag.ListaUso as SelectList, null, new { @id = "UsoDropDown", @style = "font-weight:normal;width:150px" })
+                            </td>
+                        </tr>
 
-            </table>
-        </div>
+                    </table>
+                </div>
 
-        <div class="card-header">Testadas do imóvel</div>
-        <div class="card-body ">
-            <table style="font-size:13px;width:90px">
-                <thead style="background-color:darkred;color:whitesmoke">
-                    <tr style="height:10px">
-                        <td style="width:20px;text-align:right">Face</td>
-                        <td style="width:70px;text-align:right">Metros</td>
-                    </tr>
-                </thead>
-                @foreach (GTI_Models.Models.Testada testada in Model.Lista_Testada) {
-                    @Html.Raw(" <tr>")
-                    @Html.Raw("<td style=" + "width:20px;text-align:right" + " >")
-                    @testada.Numface.ToString("00") ;
-                    @Html.Raw("</td>")
-                    @Html.Raw(" <td style=" + "width:70px;text-align:right" + " >")
-                    @testada.Areatestada.ToString("#0.00") ;
-                    @Html.Raw("</td>")
-                    @Html.Raw("</tr>")
-                }
-            </table>
-        </div>
-        <div class="card-header">Áreas Construidas</div>
+                <div class="card-header">Testadas do imóvel</div>
+                <div class="card-body ">
+                    <table style="font-size:13px;width:90px">
+                        <thead style="background-color:darkred;color:whitesmoke">
+                            <tr style="height:10px">
+                                <td style="width:20px;text-align:right">Face</td>
+                                <td style="width:70px;text-align:right">Metros</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                        @*@foreach (GTI_Models.Models.Testada testada in Model.Lista_Testada) {
+                            @Html.Raw(" <tr>")
+                            @Html.Raw("<td style=" + "width:20px;text-align:right" + " >")
+                            @testada.Numface.ToString("00") ;
+                            @Html.Raw("</td>")
+                            @Html.Raw(" <td style=" + "width:70px;text-align:right" + " >")
+                            @testada.Areatestada.ToString("#0.00") ;
+                            @Html.Raw("</td>")
+                            @Html.Raw("</tr>")
+                        }*@
+                    </table>
+                </div>
+               <div class="card-header">Áreas Construidas</div>
         <div class="card-body ">
             <table style="font-size:13px;width:530px">
                 <thead style="background-color:darkred;color:whitesmoke">
@@ -421,7 +394,8 @@
                         <td style="width:40px;text-align:center">Pav.</td>
                     </tr>
                 </thead>
-                @{decimal _total = 0; }
+                <tbody></tbody>
+                @*@{decimal _total = 0; }
                 @foreach (GTI_Models.Models.AreaStruct area in Model.Lista_Areas) {
                     { _total += area.Area; };
                     @Html.Raw(" <tr>")
@@ -447,17 +421,17 @@
                     @area.Pavimentos;
                     @Html.Raw("</td>")
                     @Html.Raw("</tr>")
-                }
+                }*@
             </table>
             <label style="padding-top:7px;font-size:13px">Área total construida:</label>
             <label style="font-size:13px;color:brown">
-                @_total@Html.Raw(" m²")
+                @*@_total@Html.Raw(" m²")*@
             </label>
-        </div>*@
+        </div>
 
                 <div class="card-footer" style="text-align:center;background-color:white">
-                    <button type="button" id="btnEditar" class="btn btn-primary" style="height: 32px; margin-left: 10px;width   : 80px" title="Alterar os dados cadastrais" onclick="Editar()">Alterar</button>&nbsp;&nbsp;
-                    <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Fechar" onclick="javascript:history.back()">Fechar</button>
+                    <button type="button" id="btnEditar" class="btn btn-success" style="height: 32px; margin-left: 10px;width   : 90px" title="Gravar as alterações" onclick="Gravar()">Gravar</button>&nbsp;&nbsp;
+                    <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 90px" title="Cancelar alterações" onclick="javascript:history.back()">Cancelar</button>
                 </div>
 
                 <div class="card-footer">
@@ -539,7 +513,7 @@
                 handle: ".modal-header"
             });
 
-            Carrega_Prop();
+            Init();
 
             var _res = '@res';
             if (_res != "") {
@@ -550,9 +524,57 @@
             }
         });
 
+        function Init() {
+            Carrega_Prop();
+
+            var _tipoend = '@tipoend';
+            if (_tipoend == '0') {
+                $("#endImOpt").prop("checked", true);
+            }
+            else {
+                if (_tipoend == '1') {
+                    $("#endPrOpt").prop("checked", true);
+                }
+                else {
+                    $("#endEnOpt").prop("checked", true);
+                }
+            }
+
+            var _imune = '@imune';
+            if (_imune == 'True')
+                $("#imuneSimOpt").prop("checked", true);
+            else
+                $("#imuneNaoOpt").prop("checked", true);
+
+            var _cip = '@cip';
+            if (_cip == 'True')
+                $("#cipSimOpt").prop("checked", true);
+            else
+                $("#cipNaoOpt").prop("checked", true);
+
+
+            var _conjugado = '@conjugado';
+            if (_conjugado == 'True')
+                $("#cjSimOpt").prop("checked", true);
+            else
+                $("#cjNaoOpt").prop("checked", true);
+
+
+            var _reside = '@reside';
+            if (_reside == 'True')
+                $("#resideSimOpt").prop("checked", true);
+            else
+                $("#resideNaoOpt").prop("checked", true);
+
+        }
+
         function Fechar() {
             var _cod = '@cod';
             window.location.href = "localhost" ? "/sysImob/imovel_data?cod=" + _cod : "/gti/sysImob/imovel_data?cod=" + _cod;
+        }
+
+        function Gravar() {
+            //To do
         }
 
         //####### Proprietário #######

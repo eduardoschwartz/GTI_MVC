@@ -152,10 +152,16 @@ namespace GTI_Mvc.Controllers
 
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             int _codigo = w_main.Codigo;
+            model.ImovelStruct = imovelRepository.Dados_Imovel(_codigo);
+
             ViewBag.Codigo = _codigo;
             ViewBag.Guid = w_main.Guid;
+            ViewBag.TipoEnd = model.ImovelStruct.EE_TipoEndereco;
+            ViewBag.Imune = model.ImovelStruct.Imunidade==null?false:model.ImovelStruct.Imunidade;
+            ViewBag.Cip = model.ImovelStruct.Cip==null?false:model.ImovelStruct.Cip;
+            ViewBag.Conjugado = model.ImovelStruct.Conjugado == null ? false : model.ImovelStruct.Conjugado;
+            ViewBag.Reside = model.ImovelStruct.ResideImovel == null ? false : model.ImovelStruct.ResideImovel;
 
-            model.ImovelStruct = imovelRepository.Dados_Imovel(_codigo);
             //model.Lista_Proprietario = imovelRepository.Lista_Proprietario(_codigo, false);
             //model.Lista_Areas = imovelRepository.Lista_Area(_codigo);
             //model.Lista_Testada = imovelRepository.Lista_Testada(_codigo);

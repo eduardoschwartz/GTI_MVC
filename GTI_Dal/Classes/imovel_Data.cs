@@ -27,7 +27,7 @@ namespace GTI_Dal.Classes {
                            join u in db.Usoterreno on i.Dt_codusoterreno equals u.Codusoterreno into iu from u in iu.DefaultIfEmpty()
                            where i.Codreduzido == nCodigo
                            select new ImovelStruct { Codigo = i.Codreduzido, Distrito = i.Distrito, Setor = i.Setor, Quadra = i.Quadra, Lote = i.Lote, Seq = i.Seq,
-                               Unidade = i.Unidade, SubUnidade = i.Subunidade, NomeCondominio = c.Cd_nomecond, Imunidade = i.Imune, TipoMat = i.Tipomat, NumMatricula = i.Nummat,
+                               Unidade = i.Unidade, SubUnidade = i.Subunidade, NomeCondominio = c.Cd_nomecond, Imunidade = i.Imune, TipoMat = i.Tipomat, NumMatricula = i.Nummat,Cip = i.Cip, Conjugado=i.Conjugado,
                                Numero = i.Li_num, Complemento = i.Li_compl, QuadraOriginal = i.Li_quadras, LoteOriginal = i.Li_lotes, ResideImovel = i.Resideimovel, Inativo = i.Inativo,
                                FracaoIdeal = i.Dt_fracaoideal, Area_Terreno = i.Dt_areaterreno, Benfeitoria = i.Dt_codbenf, Categoria = i.Dt_codcategprop, Pedologia = i.Dt_codpedol, Topografia = i.Dt_codtopog,
                                Uso_terreno = i.Dt_codusoterreno, Situacao = i.Dt_codsituacao, EE_TipoEndereco = i.Ee_tipoend, Benfeitoria_Nome = b.Descbenfeitoria, Pedologia_Nome = p.Descpedologia,
@@ -50,6 +50,7 @@ namespace GTI_Dal.Classes {
                 row.NomeCondominio = reg.NomeCondominio ?? "";
                 row.Imunidade = reg.Imunidade == null ? false : Convert.ToBoolean(reg.Imunidade);
                 row.Cip = reg.Cip == null ? false : Convert.ToBoolean(reg.Cip);
+                row.Conjugado= reg.Conjugado == null ? false : Convert.ToBoolean(reg.Conjugado);
                 row.ResideImovel = reg.ResideImovel == null ? false : Convert.ToBoolean(reg.ResideImovel);
                 row.Inativo = reg.Inativo == null ? false : Convert.ToBoolean(reg.Inativo);
                 if (reg.TipoMat == null || reg.TipoMat == "M")
