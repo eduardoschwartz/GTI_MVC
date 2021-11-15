@@ -78,7 +78,7 @@ namespace GTI_Dal.Classes {
         public Exception Update_wimovel_main(WImovel_Main Reg) {
             using (var db = new GTI_Context(_connection)) {
                 db.Database.CommandTimeout = 180;
-                object[] Parametros = new object[24];
+                object[] Parametros = new object[28];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
                 Parametros[2] = new SqlParameter { ParameterName = "@cip", SqlDbType = SqlDbType.Bit, SqlValue = Reg.Cip };
@@ -103,10 +103,21 @@ namespace GTI_Dal.Classes {
                 Parametros[21] = new SqlParameter { ParameterName = "@categoria_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Categoria_Nome };
                 Parametros[22] = new SqlParameter { ParameterName = "@usoterreno_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Usoterreno_Nome };
                 Parametros[23] = new SqlParameter { ParameterName = "@situacao_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Situacao_Nome };
+                if(Reg.Lote_Original!=null)
+                    Parametros[24] = new SqlParameter { ParameterName = "@lote_original", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Lote_Original };
+                else
+                    Parametros[24] = new SqlParameter { ParameterName = "@lote_original", SqlValue =DBNull.Value };
+                if(Reg.Quadra_Original!=null)
+                    Parametros[25] = new SqlParameter { ParameterName = "@quadra_original", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Quadra_Original };
+                else
+                    Parametros[25] = new SqlParameter { ParameterName = "@quadra_original", SqlValue = DBNull.Value};
+                Parametros[26] = new SqlParameter { ParameterName = "@tipo_matricula", SqlDbType = SqlDbType.Char, SqlValue = Reg.Tipo_Matricula };
+                Parametros[27] = new SqlParameter { ParameterName = "@tipo_endereco", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Tipo_Endereco };
 
                 db.Database.ExecuteSqlCommand("update wimovel_main set cip=@cip,imune=@imune,conjugado=@conjugado,reside=@reside,area_terreno=@area_terreno,topografia=@topografia,pedologia=@pedologia," +
                     "benfeitoria=@benfeitoria,categoria=@categoria,usoterreno=@usoterreno,situacao=@situacao,topografia_nome=@topografia_nome,pedologia_nome=@pedologia_nome,benfeitoria_nome=@benfeitoria_nome," +
-                    "categoria_nome=@categoria_nome,usoterreno_nome=@usoterreno_nome,situacao_nome=@situacao_nome,condominio_nome=@condominio_nome,inscricao=@inscricao where guid=@guid ", Parametros);
+                    "categoria_nome=@categoria_nome,usoterreno_nome=@usoterreno_nome,situacao_nome=@situacao_nome,condominio_nome=@condominio_nome,inscricao=@inscricao,lote_original=@lote_original," +
+                    "quadra_original=@quadra_original,tipo_matricula=@tipo_matricula,tipo_endereco=@tipo_endereco where guid=@guid ", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -187,5 +198,52 @@ namespace GTI_Dal.Classes {
                 return Sql;
             }
         }
+
+        public Exception Insert_W_Imovel_Endereco(WImovel_Endereco Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+                object[] Parametros = new object[8];
+
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@logradouro_codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Logradouro_codigo };
+                Parametros[2] = new SqlParameter { ParameterName = "@logradouro_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Logradouro_nome };
+                Parametros[3] = new SqlParameter { ParameterName = "@numero", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Numero };
+                if(Reg.Complemento!=null)
+                    Parametros[4] = new SqlParameter { ParameterName = "@complemento", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Complemento };
+                else
+                    Parametros[4] = new SqlParameter { ParameterName = "@complemento",  SqlValue = DBNull.Value};
+                Parametros[5] = new SqlParameter { ParameterName = "@bairro_codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Bairro_codigo };
+                Parametros[6] = new SqlParameter { ParameterName = "@bairro_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Bairro_nome };
+                Parametros[7] = new SqlParameter { ParameterName = "@cep", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cep };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO wimovel_endereco(guid,logradouro_codigo,logradouro_nome,numero,complemento,bairro_codigo,bairro_nome,cep) VALUES(@guid,@logradouro_codigo,@logradouro_nome,@numero,@complemento,@bairro_codigo,@bairro_nome,@cep)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public WImovel_Endereco Retorna_Imovel_Endereco(string p) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                WImovel_Endereco Sql = (from t in db.WImovel_Endereco where t.Guid == p select t).FirstOrDefault();
+                return Sql;
+            }
+        }
+
+        public Exception Excluir_W_Imovel_Endereco(string guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                try {
+                    db.WImovel_Endereco.RemoveRange(db.WImovel_Endereco.Where(i => i.Guid == guid));
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
     }
 }

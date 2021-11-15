@@ -28,5 +28,10 @@ namespace GTI_Models.Models {
         public string Categoria_Nome { get; set; }
         public string Usoterreno_Nome { get; set; }
         public string Situacao_Nome { get; set; }
+        public string Quadra_Original { get; set; }
+        public string Lote_Original { get; set; }
+        public char Tipo_Matricula { get; set; }
+        public Int64 Numero_Matricula { get; set; }
+        public short Tipo_Endereco { get; set; }
     }
 }

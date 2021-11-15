@@ -65,5 +65,22 @@ namespace GTI_Bll.Classes {
             return obj.Lista_WImovel_Prop(p);
         }
 
+        public Exception Insert_W_Imovel_Endereco(WImovel_Endereco Reg) {
+            w_imovel_Data obj = new w_imovel_Data(_connection);
+            Exception ex = obj.Insert_W_Imovel_Endereco(Reg);
+            return ex;
+        }
+
+        public WImovel_Endereco Retorna_Imovel_Endereco(string p) {
+            w_imovel_Data obj = new w_imovel_Data(_connection);
+            return obj.Retorna_Imovel_Endereco(p);
+        }
+
+        public Exception Excluir_W_Imovel_Endereco(string guid) {
+            w_imovel_Data obj = new w_imovel_Data(_connection);
+            Exception ex = obj.Excluir_W_Imovel_Endereco(guid);
+            return ex;
+        }
+
     }
 }

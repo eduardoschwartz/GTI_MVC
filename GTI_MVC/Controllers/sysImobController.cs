@@ -122,24 +122,23 @@ namespace GTI_Mvc.Controllers
                     }
                 }
                 //Save W_Imovel data
-                int _user_id = 413;
-                if (Request.Cookies["2uC*"] != null)
-                    _user_id = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
+                //int _user_id = 413;
+                //if (Request.Cookies["2uC*"] != null)
+                //    _user_id = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
 
-                W_Imovel_bll w_imovelRepository = new W_Imovel_bll(_connection);
-                Exception ex = w_imovelRepository.Excluir_W_Imovel_Codigo(_codigo);
-                WImovel_Main _mainR = new WImovel_Main() {
-                    Guid = _guid,
-                    Codigo = _codigo
-                };
-                ex = w_imovelRepository.Insert_W_Imovel_Main(_guid, _codigo, _user_id);
+                //W_Imovel_bll w_imovelRepository = new W_Imovel_bll(_connection);
+                //Exception ex = w_imovelRepository.Excluir_W_Imovel_Codigo(_codigo);
+                //WImovel_Main _mainR = new WImovel_Main() {
+                //    Guid = _guid,
+                //    Codigo = _codigo
+                //};
+                //ex = w_imovelRepository.Insert_W_Imovel_Main(_guid, _codigo, _user_id);
             } else
                 ViewBag.Result = "Imóvel não cadastrado.";
 
             return View(model);
 
         }
-
 
         [HttpGet]
         [Route("imovel_edit")]
@@ -189,7 +188,7 @@ namespace GTI_Mvc.Controllers
             List<Usoterreno> listaUso = imovelRepository.Lista_uso_terreno();
             ViewBag.ListaUso = new SelectList(listaUso, "Codusoterreno", "Descusoterreno");
 
-            //Save W_Imovel_Main
+            //Save WImovel_Main
             WImovel_Main _mainR = new WImovel_Main() {
                 Guid = w_main.Guid,
                 Codigo = _codigo,
@@ -213,11 +212,15 @@ namespace GTI_Mvc.Controllers
                 Pedologia_Nome = model.ImovelStruct.Pedologia_Nome,
                 Situacao_Nome = model.ImovelStruct.Situacao_Nome,
                 Topografia_Nome = model.ImovelStruct.Topografia_Nome,
-                Usoterreno_Nome = model.ImovelStruct.Uso_terreno_Nome
+                Usoterreno_Nome = model.ImovelStruct.Uso_terreno_Nome,
+                Lote_Original=model.ImovelStruct.LoteOriginal,
+                Quadra_Original=model.ImovelStruct.QuadraOriginal,
+                Tipo_Matricula=model.ImovelStruct.TipoMat==null?'M': Convert.ToChar( model.ImovelStruct.TipoMat),
+                Tipo_Endereco=(short)model.ImovelStruct.EE_TipoEndereco
             };
             Exception ex = w_imovelRepository.Update_W_Imovel_Main(_mainR);
 
-            //Save W_Imovel_Prop
+            //Save WImovel_Prop
             ex = w_imovelRepository.Excluir_W_Imovel_Prop_Guid(w_main.Guid);
             List<ProprietarioStruct>ListaP= imovelRepository.Lista_Proprietario(_codigo);
             foreach (ProprietarioStruct item in ListaP) {
@@ -230,6 +233,23 @@ namespace GTI_Mvc.Controllers
                 };
                 ex = w_imovelRepository.Insert_W_Imovel_Prop(_mainP);
             }
+
+            //Save WImovel_Endereco
+            ex = w_imovelRepository.Excluir_W_Imovel_Endereco(w_main.Guid);
+            if (model.ImovelStruct.EE_TipoEndereco == 2) {
+                WImovel_Endereco _mainE = new WImovel_Endereco() {
+                    Guid=w_main.Guid,
+                    Logradouro_codigo=(int)model.Endereco_Entrega.CodLogradouro,
+                    Logradouro_nome=model.Endereco_Entrega.Endereco_Abreviado,
+                    Numero=(short)model.Endereco_Entrega.Numero,
+                    Complemento=model.Endereco_Entrega.Complemento,
+                    Bairro_codigo=(int)model.Endereco_Entrega.CodigoBairro,
+                    Bairro_nome=model.Endereco_Entrega.NomeBairro,
+                    Cep=model.Endereco_Entrega.Cep
+                };
+                ex = w_imovelRepository.Insert_W_Imovel_Endereco(_mainE);
+            }
+
 
             return View(model);
         }
@@ -257,6 +277,12 @@ namespace GTI_Mvc.Controllers
         }
 
         public JsonResult Lista_WImovel_Prop(string guid) {
+            W_Imovel_bll wimovelRepository = new W_Imovel_bll(_connection);
+            List<WImovel_Prop> Lista = wimovelRepository.Lista_WImovel_Prop(guid);
+            return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        public JsonResult Lista_WImovel_Testada(string guid) {
             W_Imovel_bll wimovelRepository = new W_Imovel_bll(_connection);
             List<WImovel_Prop> Lista = wimovelRepository.Lista_WImovel_Prop(guid);
             return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };

@@ -223,6 +223,7 @@ namespace GTI_Dal {
         public DbSet<Ufir> Ufir { get; set; }
         public DbSet<WImovel_Main> WImovel_Main { get; set; }
         public DbSet<WImovel_Prop> WImovel_Prop { get; set; }
+        public DbSet<WImovel_Endereco> WImovel_Endereco { get; set; }
 
     }
 }

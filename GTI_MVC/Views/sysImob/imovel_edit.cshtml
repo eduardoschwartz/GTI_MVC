@@ -275,7 +275,7 @@
                     <table style="font-size:13px">
                         <tr style="height:25px">
                             <td>Endereço:&nbsp; <span style="color: brown">@Model.ImovelStruct.NomeLogradouro @Html.Raw(", ") @Model.ImovelStruct.Numero.ToString() @Html.Raw(" ") @Model.ImovelStruct.Complemento</span></td>
-
+                            <td></td>
                         </tr>
                         <tr style="height:25px">
                             <td>Bairro:&nbsp; <span style="color: brown">@Model.ImovelStruct.NomeBairro</span>&nbsp;&nbsp;CEP:&nbsp; <span style="color: brown">@Model.ImovelStruct.Cep</span></td>
@@ -298,13 +298,16 @@
                     <br /><br />
                     <table style="font-size:13px">
                         <tr>
-                            <td>Endereço:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.Endereco @Html.Raw(", ") @Model.Endereco_Entrega.Numero.ToString() @Html.Raw(" ") @Model.Endereco_Entrega.Complemento</span></td>
+                            <td style="width:22%">Endereço:</td>
+                            <td> <span style="color: brown;width:78%">@Model.Endereco_Entrega.Endereco @Html.Raw(", ") @Model.Endereco_Entrega.Numero.ToString() @Html.Raw(" ") @Model.Endereco_Entrega.Complemento</span></td>
                         </tr>
                         <tr>
-                            <td>Bairro:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.NomeBairro</span>&nbsp;&nbsp;CEP:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.Cep</span></td>
+                            <td style="width:22%">Bairro:</td>
+                            <td><span style="color: brown;width:78%">@Model.Endereco_Entrega.NomeBairro</span>&nbsp;&nbsp;CEP:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.Cep</span></td>
                         </tr>
                         <tr>
-                            <td>Cidade:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.NomeCidade</span>&nbsp;&nbsp;UF:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.UF</span></td>
+                            <td style="width:22%">Cidade:</td>
+                            <td><span style="color: brown;width:78%">@Model.Endereco_Entrega.NomeCidade</span>&nbsp;&nbsp;UF:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.UF</span></td>
                         </tr>
                     </table>
                     <br />
@@ -580,9 +583,7 @@
         //####### Proprietário #######
         function Carrega_Prop() {
             var _guid = '@guid';
-
             $("#propTable tbody tr").remove();
-
             var i = 0;
             var url = '@Url.Action("Lista_WImovel_Prop", "sysImob")';
             $.getJSON(url, { guid: _guid }, function (data) {
