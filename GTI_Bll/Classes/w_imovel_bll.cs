@@ -82,5 +82,29 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Insert_W_Imovel_Testada(WImovel_Testada Reg) {
+            w_imovel_Data obj = new w_imovel_Data(_connection);
+            Exception ex = obj.Insert_W_Imovel_Testada(Reg);
+            return ex;
+        }
+
+        public List<WImovel_Testada> Lista_WImovel_Testada(string p) {
+            w_imovel_Data obj = new w_imovel_Data(_connection);
+            return obj.Lista_WImovel_Testada(p);
+        }
+
+        public Exception Excluir_W_Imovel_Testada_Guid(string guid) {
+            w_imovel_Data obj = new w_imovel_Data(_connection);
+            Exception ex = obj.Excluir_W_Imovel_Testada_Guid(guid);
+            return ex;
+        }
+
+        public Exception Excluir_W_Imovel_Testada_Codigo(string guid, int codigo) {
+            w_imovel_Data obj = new w_imovel_Data(_connection);
+            Exception ex = obj.Excluir_W_Imovel_Testada_Codigo(guid,codigo);
+            return ex;
+        }
+
+
     }
 }

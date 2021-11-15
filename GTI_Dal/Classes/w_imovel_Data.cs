@@ -245,5 +245,56 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Insert_W_Imovel_Testada(WImovel_Testada Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+                object[] Parametros = new object[3];
+
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@face", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Face  };
+                Parametros[2] = new SqlParameter { ParameterName = "@comprimento", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Comprimento};
+
+                db.Database.ExecuteSqlCommand("INSERT INTO wimovel_testada(guid,face,comprimento) VALUES(@guid,@face,@comprimento)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public List<WImovel_Testada > Lista_WImovel_Testada(string p) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                List<WImovel_Testada> Sql = (from t in db.WImovel_Testada where t.Guid == p select t).ToList();
+                return Sql;
+            }
+        }
+
+        public Exception Excluir_W_Imovel_Testada_Guid(string guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                try {
+                    db.WImovel_Testada.RemoveRange(db.WImovel_Testada.Where(i => i.Guid == guid));
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Excluir_W_Imovel_Testada_Codigo(string guid, int codigo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                try {
+                    WImovel_Testada b = db.WImovel_Testada.Find(db.WImovel_Testada.Where(i => i.Guid == guid && i.Face == codigo));
+                    db.WImovel_Testada.Remove(b);
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
     }
 }

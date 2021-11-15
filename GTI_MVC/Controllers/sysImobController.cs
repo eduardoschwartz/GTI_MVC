@@ -13,7 +13,6 @@ namespace GTI_Mvc.Controllers
     public class sysImobController : Controller   {
         private readonly string _connection = "GTIconnection";
 
-
         [Route("imovel_query")]
         [HttpGet]
         public ActionResult imovel_query(string id) {
@@ -250,6 +249,17 @@ namespace GTI_Mvc.Controllers
                 ex = w_imovelRepository.Insert_W_Imovel_Endereco(_mainE);
             }
 
+            //Save WImovel_Testada
+            ex = w_imovelRepository.Excluir_W_Imovel_Testada_Guid(w_main.Guid);
+            List<Testada> ListaT = imovelRepository.Lista_Testada(_codigo);
+            foreach (Testada item in ListaT) {
+                WImovel_Testada _mainT = new WImovel_Testada() {
+                    Guid = w_main.Guid,
+                    Face = item.Numface,
+                    Comprimento = item.Areatestada
+                };
+                ex = w_imovelRepository.Insert_W_Imovel_Testada(_mainT);
+            }
 
             return View(model);
         }
@@ -284,7 +294,7 @@ namespace GTI_Mvc.Controllers
 
         public JsonResult Lista_WImovel_Testada(string guid) {
             W_Imovel_bll wimovelRepository = new W_Imovel_bll(_connection);
-            List<WImovel_Prop> Lista = wimovelRepository.Lista_WImovel_Prop(guid);
+            List<WImovel_Testada> Lista = wimovelRepository.Lista_WImovel_Testada(guid);
             return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
