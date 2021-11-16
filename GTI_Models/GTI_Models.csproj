@@ -297,6 +297,7 @@
     <Compile Include="Models\vre_licenciamento.cs" />
     <Compile Include="Models\vre_socio.cs" />
     <Compile Include="Models\vwproprietarioduplicado.cs" />
+    <Compile Include="Models\wimovel_area.cs" />
     <Compile Include="Models\wimovel_endereco.cs" />
     <Compile Include="Models\wimovel_main.cs" />
     <Compile Include="Models\wimovel_prop.cs" />

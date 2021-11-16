@@ -264,7 +264,7 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public List<WImovel_Testada > Lista_WImovel_Testada(string p) {
+        public List<WImovel_Testada> Lista_WImovel_Testada(string p) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 List<WImovel_Testada> Sql = (from t in db.WImovel_Testada where t.Guid == p select t).ToList();
                 return Sql;
@@ -295,6 +295,80 @@ namespace GTI_Dal.Classes {
                 return null;
             }
         }
+
+        public Exception Insert_W_Imovel_Area(WImovel_Area Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+                object[] Parametros = new object[13];
+
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@seq", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Seq };
+                Parametros[2] = new SqlParameter { ParameterName = "@area", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Area };
+                Parametros[3] = new SqlParameter { ParameterName = "@uso_codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Uso_codigo };
+                Parametros[4] = new SqlParameter { ParameterName = "@uso_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Uso_nome };
+                Parametros[5] = new SqlParameter { ParameterName = "@tipo_codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Tipo_codigo };
+                Parametros[6] = new SqlParameter { ParameterName = "@tipo_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Tipo_nome };
+                Parametros[7] = new SqlParameter { ParameterName = "@categoria_codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Categoria_codigo };
+                Parametros[8] = new SqlParameter { ParameterName = "@categoria_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Categoria_nome };
+                if (Reg.Data_Aprovacao == null || Reg.Data_Aprovacao == DateTime.MinValue)
+                    Parametros[9] = new SqlParameter { ParameterName = "@data_aprovacao", SqlValue = DBNull.Value };
+                else
+                    Parametros[9] = new SqlParameter { ParameterName = "@data_aprovacao", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_Aprovacao };
+                if (Reg.Processo_Data == null || Reg.Processo_Data == DateTime.MinValue)
+                    Parametros[10] = new SqlParameter { ParameterName = "@processo_data", SqlValue = DBNull.Value };
+                else
+                    Parametros[10] = new SqlParameter { ParameterName = "@processo_data", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Processo_Data };
+                if(Reg.Processo_Numero==null)
+                    Parametros[11] = new SqlParameter { ParameterName = "@processo_numero",  SqlValue = DBNull.Value};
+                else
+                    Parametros[11] = new SqlParameter { ParameterName = "@processo_numero", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Processo_Numero };
+                Parametros[12] = new SqlParameter { ParameterName = "@pavimentos", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Pavimentos };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO wimovel_area(guid,seq,area,uso_codigo,uso_nome,tipo_codigo,tipo_nome,categoria_codigo,categoria_nome,data_aprovacao,processo_data,processo_numero," +
+                    "pavimentos) VALUES(@guid,@seq,@area,@uso_codigo,@uso_nome,@tipo_codigo,@tipo_nome,@categoria_codigo,@categoria_nome,@data_aprovacao,@processo_data,@processo_numero,@pavimentos)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public List<WImovel_Area> Lista_WImovel_Area(string p) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                List<WImovel_Area> Sql = (from t in db.WImovel_Area where t.Guid == p select t).ToList();
+                return Sql;
+            }
+        }
+
+        public Exception Excluir_W_Imovel_Area_Guid(string guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                try {
+                    db.WImovel_Area.RemoveRange(db.WImovel_Area.Where(i => i.Guid == guid));
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Excluir_W_Imovel_Area_Codigo(string guid, int seq) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                try {
+                    WImovel_Area b = db.WImovel_Area.Find(db.WImovel_Area.Where(i => i.Guid == guid && i.Seq == seq));
+                    db.WImovel_Area.Remove(b);
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+
+
 
     }
 }

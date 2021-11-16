@@ -225,6 +225,7 @@ namespace GTI_Dal {
         public DbSet<WImovel_Prop> WImovel_Prop { get; set; }
         public DbSet<WImovel_Endereco> WImovel_Endereco { get; set; }
         public DbSet<WImovel_Testada> WImovel_Testada { get; set; }
+        public DbSet<WImovel_Area> WImovel_Area { get; set; }
 
     }
 }
