@@ -201,6 +201,10 @@ namespace GTI_Mvc.Controllers
                 Tipo_Matricula=model.ImovelStruct.TipoMat==null?'M': Convert.ToChar( model.ImovelStruct.TipoMat),
                 Tipo_Endereco=(short)model.ImovelStruct.EE_TipoEndereco
             };
+            if (model.ImovelStruct.NumMatricula != null && (long)model.ImovelStruct.NumMatricula != 0)
+                _mainR.Numero_Matricula = (long)model.ImovelStruct.NumMatricula;
+            else
+                _mainR.Numero_Matricula = 0;
             Exception ex = w_imovelRepository.Update_W_Imovel_Main(_mainR);
 
             //Save WImovel_Prop
@@ -253,7 +257,6 @@ namespace GTI_Mvc.Controllers
                     Guid = w_main.Guid,
                     Seq=item.Seq,
                     Area=item.Area,
-                    Data_Aprovacao=item.Data_Aprovacao,
                     Uso_codigo=item.Uso_Codigo,
                     Uso_nome=item.Uso_Nome,
                     Tipo_codigo=item.Tipo_Codigo,
@@ -261,12 +264,30 @@ namespace GTI_Mvc.Controllers
                     Categoria_codigo=item.Categoria_Codigo,
                     Categoria_nome=item.Categoria_Nome,
                     Processo_Numero=item.Numero_Processo,
-                    Processo_Data=item.Data_Processo,
                     Pavimentos=item.Pavimentos
                 };
+                if (item.Data_Aprovacao != null && item.Data_Aprovacao != DateTime.MinValue)
+                    _mainA.Data_Aprovacao = Convert.ToDateTime(item.Data_Aprovacao).ToString("dd/MM/yyyy");
+                if (item.Data_Processo != null && item.Data_Processo != DateTime.MinValue)
+                    _mainA.Processo_Data = Convert.ToDateTime(item.Data_Processo).ToString("dd/MM/yyyy");
                 ex = w_imovelRepository.Insert_W_Imovel_Area(_mainA);
             }
 
+            //Save WImovel_Historico
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            ex = w_imovelRepository.Excluir_W_Imovel_Historico_Guid(w_main.Guid);
+            List<HistoricoStruct> ListaH = imovelRepository.Lista_Historico(_codigo);
+            foreach (HistoricoStruct item in ListaH) {
+                WImovel_Historico _mainH = new WImovel_Historico() {
+                    Guid = w_main.Guid,
+                    Seq = item.Seq,
+                    Data_Alteracao = Convert.ToDateTime( item.Data).ToString("dd/MM/yyyy"),
+                    Historico = item.Descricao,
+                    Usuario_Codigo = (int)item.Usuario_Codigo,
+                    Usuario_Nome = sistemaRepository.Retorna_User_LoginName((int)item.Usuario_Codigo)
+                };
+                ex = w_imovelRepository.Insert_W_Imovel_Historico(_mainH);
+            }
 
             return View(model);
         }
@@ -308,6 +329,23 @@ namespace GTI_Mvc.Controllers
         public JsonResult Lista_WImovel_Area(string guid) {
             W_Imovel_bll wimovelRepository = new W_Imovel_bll(_connection);
             List<WImovel_Area> Lista = wimovelRepository.Lista_WImovel_Area(guid);
+            return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        public JsonResult Lista_WImovel_Historico(string guid) {
+            W_Imovel_bll wimovelRepository = new W_Imovel_bll(_connection);
+            List<WImovel_Historico> Lista = wimovelRepository.Lista_WImovel_Historico(guid);
+            //List<WImovel_Historico> Lista2 = new List<WImovel_Historico>();
+            //foreach (WImovel_Historico item in Lista) {
+            //    WImovel_Historico item2 = new WImovel_Historico() {
+            //        Guid=item.Guid,
+            //        Seq =item.Seq,
+            //        Historico=Functions.TruncateTo(item.Historico,30),
+            //        Data_Alteracao=item.Data_Alteracao,
+            //    };
+            //}
+
+
             return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 

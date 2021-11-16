@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GTI_Models.Models {
@@ -17,9 +16,9 @@ namespace GTI_Models.Models {
         public string Tipo_nome { get; set; }
         public short Categoria_codigo { get; set; }
         public string Categoria_nome { get; set; }
-        public DateTime? Data_Aprovacao { get; set; }
+        public string Data_Aprovacao { get; set; }
         public string Processo_Numero { get; set; }
-        public DateTime? Processo_Data { get; set; }
+        public string Processo_Data { get; set; }
         public short Pavimentos { get; set; }
 
     }

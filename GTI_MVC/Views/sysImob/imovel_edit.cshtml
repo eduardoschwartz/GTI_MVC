@@ -135,24 +135,6 @@
         box-shadow: 3px 3px 5px 6px #ccc; /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
     }
 
-    .ellipsis {
-        position: relative;
-    }
-
-        .ellipsis:before {
-            content: '&nbsp;';
-            visibility: hidden;
-        }
-
-        .ellipsis span {
-            position: absolute;
-            left: 0;
-            right: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
 
     #mainTable thead {
         position: absolute;
@@ -187,6 +169,8 @@
         <input type="hidden" id="codTmp">
         <input type="hidden" id="faceTmp">
         <input type="hidden" id="seqTmp">
+        <input type="hidden" id="seqhTmp">
+
         <div class="center shadow" style="width:570px">
             <div class="card">
                 <div class="card-header">Dados do imóvel</div>
@@ -379,7 +363,7 @@
                         <button type="button" id="btnTestadaDel" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Remover testada" onclick="Testada_Delete()">Excluir</button>
                     </div>
                 </div>
-              
+
                 <div class="card-header">Áreas Construidas</div>
                 <div class="card-body ">
                     <table id="areaTable" style="font-size:13px;width:450px" class="tbl table-bordered table-condensed">
@@ -394,7 +378,7 @@
                             </tr>
                         </thead>
                         <tbody></tbody>
-   
+
                     </table>
                     <br />
                     <div style="text-align:left">
@@ -404,9 +388,28 @@
                     </div>
                     <br />
                     <label style="padding-top:7px;font-size:13px">Área total construida:</label>
-                    <label id="AreaTotalLabel" style="font-size:13px;color:brown">
-                        @*@_total@Html.Raw(" m²")*@
-                    </label>
+                    <label id="AreaTotalLabel" style="font-size:13px;color:brown"> </label>
+                </div>
+
+                <div class="card-header">Histórico do imóvel</div>
+                <div class="card-body ">
+                    <table id="historicoTable" style="font-size:13px;width:520px" class="tbl table-bordered table-condensed">
+                        <thead style="background-color:darkblue;color:whitesmoke">
+                            <tr style="height:10px">
+                                <td style="width:20px;text-align:center">Seq</td>
+                                <td style="width:420px;text-align:left">Descrição</td>
+                                <td style="width:80px;text-align:center">Data</td>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+
+                    </table>
+                    <br />
+                    <div style="text-align:left">
+                        <button type="button" id="btnHistNew" class="btn btn-primary" style="height: 32px; width: 80px" " title="Incluir área" onclick="Hist_Add()">Novo</button>
+                        <button type="button" id="btnHistEdit" class="btn btn-info" style="height: 32px; margin-left: 10px;width: 80px" " title="Alterar área selecionada" onclick="Hist_Edit()">Alterar</button>
+                        <button type="button" id="btnHistDel" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Remover área selecionada" onclick="Hist_Delete()">Excluir</button>
+                    </div>
                 </div>
 
                 <div class="card-footer" style="text-align:center;background-color:white">
@@ -414,7 +417,6 @@
                     <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 90px" title="Cancelar alterações" onclick="javascript:history.back()">Cancelar</button>
                 </div>
 
-               
             </div>
         </div>
     }
@@ -506,7 +508,8 @@
             Carrega_Prop();
             Carrega_Testada();
             Carrega_Area();
-            
+            Carrega_Historico();
+
             var _tipoend = '@tipoend';
             if (_tipoend == '0') {
                 $("#endImOpt").prop("checked", true);
@@ -673,10 +676,8 @@
                     i++;
                 });
             });
-            
+
         }
-
-
 
         $("#areaTable").on('click', 'tr', function (e) {
             $('#areaTable tr').removeClass('highlighted');
@@ -717,6 +718,56 @@
             $('#AreaTotalLabel').text(sum.toFixed(2));
         }
 
+        //####### Histórico #######
+        function Carrega_Historico() {
+            var _guid = '@guid';
+            $("#historicoTable tbody tr").remove();
+            var i = 0;
+            var url = '@Url.Action("Lista_WImovel_Historico", "sysImob")';
+            $.getJSON(url, { guid: _guid }, function (data) {
+                $.each(data, function () {
+                    var tr;
+                    tr = $('<tr id="' + data[i].Seq + '" style="height: 12px; font-weight: normal; font-size: 12px;  cursor: pointer"  />');
+                    tr.append("<td style='width:20px;text-align:center'>" + pad(data[i].Seq,3) + "</td>");
+                    tr.append("<td style='width:420px;text-align:justify;font-size:11px' >" + data[i].Historico + "</td>");
+                    tr.append("<td style='width:80px;text-align:center'>" + data[i].Data_Alteracao + "</td>");
+                    $("#historicoTable").find('tbody').append(tr);
+                    i++;
+                });
+            });
+        }
+
+        $("#historicoTable").on('click', 'tr', function (e) {
+            $('#historicoTable tr').removeClass('highlighted');
+            $(this).addClass('highlighted');
+            document.getElementById('seqhTmp').value = $(this).closest('tr').find('td:eq(0)').text();
+        });
+
+        function Hist_Add() {
+            var _cod = '@cod';
+             alert(_cod);
+        }
+
+        function Hist_Edit() {
+            var _cod = document.getElementById('seqhTmp').value;
+            if (_cod == "" || parseInt(_cod) == 0) {
+                document.getElementById('lblMsg').innerHTML = "Selecione um histórico!";
+                $('#msgBox1').dialog('open');
+            } else {
+                alert(_cod);
+            }
+        }
+
+        function Hist_Delete() {
+            var _cod = document.getElementById('seqhTmp').value;
+            if (_cod == "" || parseInt(_cod) == 0) {
+                document.getElementById('lblMsg').innerHTML = "Selecione um histórico!";
+                $('#msgBox1').dialog('open');
+            } else {
+                alert(_cod);
+            }
+        }
+        
         //#############################
 
         //######## Funções Genéricas #########

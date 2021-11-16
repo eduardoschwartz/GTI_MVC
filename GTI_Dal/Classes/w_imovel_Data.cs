@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using static GTI_Models.modelCore;
 
 namespace GTI_Dal.Classes {
     public class w_imovel_Data {
@@ -78,7 +77,7 @@ namespace GTI_Dal.Classes {
         public Exception Update_wimovel_main(WImovel_Main Reg) {
             using (var db = new GTI_Context(_connection)) {
                 db.Database.CommandTimeout = 180;
-                object[] Parametros = new object[28];
+                object[] Parametros = new object[29];
                 Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
                 Parametros[1] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
                 Parametros[2] = new SqlParameter { ParameterName = "@cip", SqlDbType = SqlDbType.Bit, SqlValue = Reg.Cip };
@@ -112,12 +111,13 @@ namespace GTI_Dal.Classes {
                 else
                     Parametros[25] = new SqlParameter { ParameterName = "@quadra_original", SqlValue = DBNull.Value};
                 Parametros[26] = new SqlParameter { ParameterName = "@tipo_matricula", SqlDbType = SqlDbType.Char, SqlValue = Reg.Tipo_Matricula };
-                Parametros[27] = new SqlParameter { ParameterName = "@tipo_endereco", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Tipo_Endereco };
+                Parametros[27] = new SqlParameter { ParameterName = "@numero_matricula", SqlDbType = SqlDbType.BigInt, SqlValue = Reg.Numero_Matricula };
+                Parametros[28] = new SqlParameter { ParameterName = "@tipo_endereco", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Tipo_Endereco };
 
                 db.Database.ExecuteSqlCommand("update wimovel_main set cip=@cip,imune=@imune,conjugado=@conjugado,reside=@reside,area_terreno=@area_terreno,topografia=@topografia,pedologia=@pedologia," +
                     "benfeitoria=@benfeitoria,categoria=@categoria,usoterreno=@usoterreno,situacao=@situacao,topografia_nome=@topografia_nome,pedologia_nome=@pedologia_nome,benfeitoria_nome=@benfeitoria_nome," +
                     "categoria_nome=@categoria_nome,usoterreno_nome=@usoterreno_nome,situacao_nome=@situacao_nome,condominio_nome=@condominio_nome,inscricao=@inscricao,lote_original=@lote_original," +
-                    "quadra_original=@quadra_original,tipo_matricula=@tipo_matricula,tipo_endereco=@tipo_endereco where guid=@guid ", Parametros);
+                    "quadra_original=@quadra_original,tipo_matricula=@tipo_matricula,tipo_endereco=@tipo_endereco,numero_matricula=@numero_matricula where guid=@guid ", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -310,14 +310,14 @@ namespace GTI_Dal.Classes {
                 Parametros[6] = new SqlParameter { ParameterName = "@tipo_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Tipo_nome };
                 Parametros[7] = new SqlParameter { ParameterName = "@categoria_codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Categoria_codigo };
                 Parametros[8] = new SqlParameter { ParameterName = "@categoria_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Categoria_nome };
-                if (Reg.Data_Aprovacao == null || Reg.Data_Aprovacao == DateTime.MinValue)
+                if (Reg.Data_Aprovacao == null )
                     Parametros[9] = new SqlParameter { ParameterName = "@data_aprovacao", SqlValue = DBNull.Value };
                 else
-                    Parametros[9] = new SqlParameter { ParameterName = "@data_aprovacao", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_Aprovacao };
-                if (Reg.Processo_Data == null || Reg.Processo_Data == DateTime.MinValue)
+                    Parametros[9] = new SqlParameter { ParameterName = "@data_aprovacao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Data_Aprovacao };
+                if (Reg.Processo_Data == null )
                     Parametros[10] = new SqlParameter { ParameterName = "@processo_data", SqlValue = DBNull.Value };
                 else
-                    Parametros[10] = new SqlParameter { ParameterName = "@processo_data", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Processo_Data };
+                    Parametros[10] = new SqlParameter { ParameterName = "@processo_data", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Processo_Data };
                 if(Reg.Processo_Numero==null)
                     Parametros[11] = new SqlParameter { ParameterName = "@processo_numero",  SqlValue = DBNull.Value};
                 else
@@ -367,7 +367,62 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Insert_W_Imovel_Historico(WImovel_Historico Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+                object[] Parametros = new object[6];
 
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@seq", SqlDbType = SqlDbType.SmallInt, SqlValue = Reg.Seq };
+                Parametros[2] = new SqlParameter { ParameterName = "@data_alteracao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Data_Alteracao };
+                Parametros[3] = new SqlParameter { ParameterName = "@historico", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Historico };
+                Parametros[4] = new SqlParameter { ParameterName = "@usuario_codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Usuario_Codigo };
+                if(Reg.Usuario_Codigo==0)
+                    Parametros[5] = new SqlParameter { ParameterName = "@usuario_nome",  SqlValue = DBNull.Value };
+                else
+                    Parametros[5] = new SqlParameter { ParameterName = "@usuario_nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Usuario_Nome };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO wimovel_historico(guid,seq,data_alteracao,historico,usuario_codigo,usuario_nome) VALUES(@guid,@seq,@data_alteracao,@historico,@usuario_codigo,@usuario_nome)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public List<WImovel_Historico> Lista_WImovel_Historico(string p) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                List<WImovel_Historico> Sql = (from t in db.WImovel_Historico where t.Guid == p select t).ToList();
+                return Sql;
+            }
+        }
+
+        public Exception Excluir_W_Imovel_Historico_Guid(string guid) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                try {
+                    db.WImovel_Historico.RemoveRange(db.WImovel_Historico.Where(i => i.Guid == guid));
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Excluir_W_Imovel_Historico_Seq(string guid, int seq) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                try {
+                    WImovel_Historico b = db.WImovel_Historico.Find(db.WImovel_Historico.Where(i => i.Guid == guid && i.Seq == seq));
+                    db.WImovel_Historico.Remove(b);
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
 
 
     }
