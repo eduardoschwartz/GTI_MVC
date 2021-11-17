@@ -112,6 +112,7 @@ namespace GTI_Dal.Classes {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 List<EmpresaStruct> ListaFinal = new List<EmpresaStruct>();
                 var ListaGeral = (from m in db.Mobiliario join a in db.Atividade on m.Codatividade equals a.Codatividade into ma from a in ma.DefaultIfEmpty()
+                                  where m.Codigomob>0
                                   orderby m.Codigomob
                                   select new EmpresaStruct { Codigo=m.Codigomob,Area=m.Areatl,Codigo_aliquota=m.Codigoaliq,Valor_aliquota1=(float)a.Valoraliq1,
                                   Valor_aliquota2= (float)a.Valoraliq2,Valor_aliquota3= (float)a.Valoraliq3,Isento_taxa=m.Isentotaxa,Vistoria=m.Vistoria});

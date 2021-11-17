@@ -289,7 +289,7 @@ namespace GTI_Desktop.Forms {
 
         private void Calculo_IssTLL() {
 
-            _ipca = (decimal)3.6216;
+            _ipca = (decimal)3.9928;
             FileStream fsDP = new FileStream(_path + "DEBITOPARCELA.TXT", FileMode.Create, FileAccess.Write);
             StreamWriter fs1 = new StreamWriter(fsDP, System.Text.Encoding.Default);
             FileStream fsDT = new FileStream(_path + "DEBITOTRIBUTO.TXT", FileMode.Create, FileAccess.Write);

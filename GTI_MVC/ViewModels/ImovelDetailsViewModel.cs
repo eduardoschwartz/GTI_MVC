@@ -23,5 +23,6 @@ namespace GTI_Mvc.ViewModels {
         public string NomeEndereco { get; set; }
         public string Numero { get; set; }
         public List<ImovelLista> Lista_Imovel { get; set; }
+        public string Tipo_Matricula { get; set; }
     }
 }

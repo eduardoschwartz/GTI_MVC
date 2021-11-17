@@ -191,12 +191,21 @@
             <div class="card-body">
                 <table id="headerTable" style="font-size:13px">
                     <tr>
-                        <td>Código:&nbsp; <span style="color: brown">@Model.ImovelStruct.Codigo.ToString("00000")</span>&nbsp;&nbsp;Inscrição:&nbsp; <span style="color: brown">@Model.ImovelStruct.Inscricao</span>       </td>
+                        <td>
+                            Código:&nbsp; <span style="color: brown">@Model.ImovelStruct.Codigo.ToString("00000")</span>&nbsp;&nbsp;Inscrição:&nbsp; <span style="color: brown">@Model.ImovelStruct.Inscricao</span>
+                            <span style="margin-left:10px"><input style="width:100px;height:20px" readonly="readonly" type="text" value=@Model.Tipo_Matricula /></span>
+                            <span style="margin-left:10px;width:75px"><input type="text" style="width: 70px; height: 20px" readonly="readonly" value=@Model.ImovelStruct.NumMatricula /></span>
+                        </td>
                     </tr>
                     <tr style="height:25px">
-                        <td>Condomínio:&nbsp; <span style="color: brown">@Model.ImovelStruct.NomeCondominio</span> </td>
+                        @if (Model.ImovelStruct.CodigoCondominio == 999) {
+                            <td>Condomínio:&nbsp; <span style="color: brown">Não se aplica</span> </td>
+                        } else {
+                            <td> Condomínio:&nbsp;<span style="color: brown">@Model.ImovelStruct.NomeCondominio</span> </td>
+                        }
                     </tr>
                 </table>
+    
                 <table style="font-size:13px">
                     <tr>
                         <td style="font-weight:normal;width:165px">

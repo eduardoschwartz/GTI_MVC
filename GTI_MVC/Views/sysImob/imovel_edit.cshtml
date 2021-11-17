@@ -136,15 +136,15 @@
     }
 
 
-    #mainTable thead {
+    #historicoTable thead {
         position: absolute;
         background-color: white;
     }
 
-    #mainTable tbody {
+    #historicoTable tbody {
         position: absolute;
-        height: 270px;
-        top: 88px;
+        height: 200px;
+       margin-top:20px;
         overflow: auto;
     }
 
@@ -177,7 +177,9 @@
                 <div class="card-body">
                     <table id="headerTable" style="font-size:13px">
                         <tr>
-                            <td>Código:&nbsp; <span style="color: brown">@Model.ImovelStruct.Codigo.ToString("00000")</span>&nbsp;&nbsp;Inscrição:&nbsp; <span style="color: brown">@Model.ImovelStruct.Inscricao</span>       </td>
+                            <td>Código:&nbsp; <span style="color: brown">@Model.ImovelStruct.Codigo.ToString("00000")</span>&nbsp;&nbsp;Inscrição:&nbsp; <span style="color: brown">@Model.ImovelStruct.Inscricao</span> 
+                            <span style="margin-left:10px;">@Html.DropDownListFor(m => m.Tipo_Matricula, (SelectList)ViewBag.Lista_Matricula)</span>
+                            <span style="margin-left:10px">@Html.TextBoxFor(m=>m.ImovelStruct.NumMatricula,new  { @style="width:75px;height:20px", @onKeyPress = "return formata(this, '§§§§§§§§', event)" })</span></td>
                         </tr>
                         <tr style="height:25px">
                             @if (Model.ImovelStruct.CodigoCondominio == 999) {
@@ -393,27 +395,29 @@
 
                 <div class="card-header">Histórico do imóvel</div>
                 <div class="card-body ">
-                    <table id="historicoTable" style="font-size:13px;width:520px" class="tbl table-bordered table-condensed">
-                        <thead style="background-color:darkblue;color:whitesmoke">
-                            <tr style="height:10px">
-                                <td style="width:20px;text-align:center">Seq</td>
-                                <td style="width:420px;text-align:left">Descrição</td>
-                                <td style="width:80px;text-align:center">Data</td>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
+                    <div id="table-container" style=" height: 226px; overflow: auto;border:solid;border-width:1px">
+                        <table id="historicoTable" style="font-size:13px;width:500px;" class="tbl table-bordered table-condensed">
+                            <thead style="background-color:darkblue;color:whitesmoke">
+                                <tr style="height:10px">
+                                    <td style="width:30px;text-align:center">Seq</td>
+                                    <td style="width:400px;text-align:left">Descrição</td>
+                                    <td style="width:70px;text-align:center">Data</td>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
 
-                    </table>
+                        </table>
+                    </div>
                     <br />
                     <div style="text-align:left">
-                        <button type="button" id="btnHistNew" class="btn btn-primary" style="height: 32px; width: 80px" " title="Incluir área" onclick="Hist_Add()">Novo</button>
-                        <button type="button" id="btnHistEdit" class="btn btn-info" style="height: 32px; margin-left: 10px;width: 80px" " title="Alterar área selecionada" onclick="Hist_Edit()">Alterar</button>
-                        <button type="button" id="btnHistDel" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Remover área selecionada" onclick="Hist_Delete()">Excluir</button>
+                        <button type="button" id="btnHistNew" class="btn btn-primary" style="height: 32px; width: 80px"  title="Incluir área" onclick="Hist_Add()">Novo</button>
+                        <button type="button" id="btnHistEdit" class="btn btn-info" style="height: 32px; margin-left: 10px;width: 80px"  title="Alterar histórico selecionado" onclick="Hist_Edit()">Alterar</button>
+                        <button type="button" id="btnHistDel" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Remover histórico selecionado" onclick="Hist_Delete()">Excluir</button>
                     </div>
                 </div>
 
                 <div class="card-footer" style="text-align:center;background-color:white">
-                    <button type="button" id="btnEditar" class="btn btn-success" style="height: 32px; margin-left: 10px;width   : 90px" title="Gravar as alterações" onclick="Gravar()">Gravar</button>&nbsp;&nbsp;
+                    <button type="button" id="btnEditar" class="btn btn-success" style="height: 32px; margin-left: 10px;width:90px" title="Gravar as alterações" onclick="Gravar()">Gravar</button>&nbsp;&nbsp;
                     <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 90px" title="Cancelar alterações" onclick="javascript:history.back()">Cancelar</button>
                 </div>
 
@@ -728,9 +732,9 @@
                 $.each(data, function () {
                     var tr;
                     tr = $('<tr id="' + data[i].Seq + '" style="height: 12px; font-weight: normal; font-size: 12px;  cursor: pointer"  />');
-                    tr.append("<td style='width:20px;text-align:center'>" + pad(data[i].Seq,3) + "</td>");
-                    tr.append("<td style='width:420px;text-align:justify;font-size:11px' >" + data[i].Historico + "</td>");
-                    tr.append("<td style='width:80px;text-align:center'>" + data[i].Data_Alteracao + "</td>");
+                    tr.append("<td style='width:30px;text-align:center'>" + pad(data[i].Seq,3) + "</td>");
+                    tr.append("<td style='width:400px;text-align:justify;font-size:11px' >" + data[i].Historico + "</td>");
+                    tr.append("<td style='width:70px;text-align:center'>" + data[i].Data_Alteracao + "</td>");
                     $("#historicoTable").find('tbody').append(tr);
                     i++;
                 });

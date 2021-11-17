@@ -109,6 +109,7 @@ namespace GTI_Mvc.Controllers
                 model.Lista_Proprietario = imovelRepository.Lista_Proprietario(_codigo, false);
                 model.Lista_Areas = imovelRepository.Lista_Area(_codigo);
                 model.Lista_Testada = imovelRepository.Lista_Testada(_codigo);
+                model.Tipo_Matricula = model.ImovelStruct.TipoMat == "T" ? "Transcrição" : "Matrícula";
                 if (model.ImovelStruct.EE_TipoEndereco != null) {
                     short _tipoEE = (short)model.ImovelStruct.EE_TipoEndereco;
                     if (_tipoEE == 0)
@@ -170,7 +171,16 @@ namespace GTI_Mvc.Controllers
             ViewBag.ListaPed = new SelectList(listaPed, "Codpedologia", "Descpedologia");
             List<Usoterreno> listaUso = imovelRepository.Lista_uso_terreno();
             ViewBag.ListaUso = new SelectList(listaUso, "Codusoterreno", "Descusoterreno");
-
+            List<SelectListItem> ListaMat = new List<SelectListItem>();
+            List<string> Lista_Mat = new List<string>();
+            Lista_Mat.Add("Matrícula");
+            Lista_Mat.Add("Transcrição");
+            ViewBag.Lista_Matricula = new SelectList(Lista_Mat);
+            if(model.ImovelStruct.TipoMat==null || model.ImovelStruct.TipoMat=="M")
+                model.Tipo_Matricula = "Matrícula";
+            else
+                model.Tipo_Matricula = "Transcrição";
+            
             //Save WImovel_Main
             WImovel_Main _mainR = new WImovel_Main() {
                 Guid = w_main.Guid,
