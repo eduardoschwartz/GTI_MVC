@@ -330,6 +330,13 @@ namespace GTI_Mvc.Controllers
             return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        public JsonResult Lista_Imovel_Prop(string cod) {
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            List<ProprietarioStruct> Lista = imovelRepository.Lista_Proprietario(Convert.ToInt32(cod));
+            return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+
         public JsonResult Lista_WImovel_Testada(string guid) {
             W_Imovel_bll wimovelRepository = new W_Imovel_bll(_connection);
             List<WImovel_Testada> Lista = wimovelRepository.Lista_WImovel_Testada(guid);
@@ -359,6 +366,11 @@ namespace GTI_Mvc.Controllers
             return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        public JsonResult Lista_Imovel_Historico(string cod) {
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            List<HistoricoStruct> Lista = imovelRepository.Lista_Historico(Convert.ToInt32(cod));
+            return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
 
     }
 }

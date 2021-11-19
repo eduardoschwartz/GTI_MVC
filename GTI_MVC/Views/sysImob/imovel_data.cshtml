@@ -96,10 +96,7 @@
         z-index: 1100;
     }
 
-    .tbl tbody tr:hover {
-        background-color: red;
-        color: white;
-    }
+   
 
     tr.highlighted td {
         background: maroon;
@@ -186,271 +183,290 @@
     if (Model.ImovelStruct != null)  {
 
       <div class="center shadow" style="width:570px">
-        <div class="card">
-            <div class="card-header">Dados do imóvel</div>
-            <div class="card-body">
-                <table id="headerTable" style="font-size:13px">
-                    <tr>
-                        <td>
-                            Código:&nbsp; <span style="color: brown">@Model.ImovelStruct.Codigo.ToString("00000")</span>&nbsp;&nbsp;Inscrição:&nbsp; <span style="color: brown">@Model.ImovelStruct.Inscricao</span>
-                            <span style="margin-left:10px"><input style="width:100px;height:20px" readonly="readonly" type="text" value=@Model.Tipo_Matricula /></span>
-                            <span style="margin-left:10px;width:75px"><input type="text" style="width: 70px; height: 20px" readonly="readonly" value=@Model.ImovelStruct.NumMatricula /></span>
-                        </td>
-                    </tr>
-                    <tr style="height:25px">
-                        @if (Model.ImovelStruct.CodigoCondominio == 999) {
-                            <td>Condomínio:&nbsp; <span style="color: brown">Não se aplica</span> </td>
-                        } else {
-                            <td> Condomínio:&nbsp;<span style="color: brown">@Model.ImovelStruct.NomeCondominio</span> </td>
-                        }
-                    </tr>
-                </table>
-    
-                <table style="font-size:13px">
-                    <tr>
-                        <td style="font-weight:normal;width:165px">
-                            Imóvel possui imunidade:
-                        </td>
-                        <td style="color: brown">
-                            @if (Model.ImovelStruct.Imunidade == true) {
-                                @Html.Raw("Sim")
-                            } else {
-                                @Html.Raw("Não")
-                            }
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight:normal;width:165px">
-                            Imóvel isento da CIP:
-                        </td>
-                        <td style="color: brown">
-                            @if (Model.ImovelStruct.Cip == true) {
-                                @Html.Raw("Sim")
-                            } else {
-                                @Html.Raw("Não")
-                            }
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight:normal;width:165px">
-                            Imóvel conjugado:
-                        </td>
-                        <td style="color:brown">
-                            @if (Model.ImovelStruct.Conjugado == true) {
-                                @Html.Raw("Sim")
-                            } else {
-                                @Html.Raw("Não")
-                            }
-                        </td>
-                    </tr>
+          <div class="card">
+              <div class="card-header">Dados do imóvel</div>
+              <div class="card-body">
+                  <table id="headerTable" style="font-size:13px">
+                      <tr>
+                          <td>
+                              Código:&nbsp; <span style="color: brown">@Model.ImovelStruct.Codigo.ToString("00000")</span>&nbsp;&nbsp;Inscrição:&nbsp; <span style="color: brown">@Model.ImovelStruct.Inscricao</span>
+                              <span style="margin-left:10px"><input style="width:100px;height:20px" readonly="readonly" type="text" value=@Model.Tipo_Matricula /></span>
+                              <span style="margin-left:10px;width:75px"><input type="text" style="width: 70px; height: 20px" readonly="readonly" value=@Model.ImovelStruct.NumMatricula /></span>
+                          </td>
+                      </tr>
+                      <tr style="height:25px">
+                          @if (Model.ImovelStruct.CodigoCondominio == 999) {
+                              <td>Condomínio:&nbsp; <span style="color: brown">Não se aplica</span> </td>
+                          } else {
+                              <td> Condomínio:&nbsp;<span style="color: brown">@Model.ImovelStruct.NomeCondominio</span> </td>
+                          }
+                      </tr>
+                  </table>
 
-                </table>
-            </div>
-            <div class="card-header">Proprietário(s) </div>
-            <div class="card-body ">
-                <table style="font-size:13px;color:brown">
-                    @foreach (GTI_Models.Models.ProprietarioStruct prop in Model.Lista_Proprietario)
-                    {
-                        @Html.Raw(" <tr><td>")
-                        if (@prop.Principal)
-                        {
-                            @prop.Nome @Html.Raw(" (Principal)");
-                        }
-                        else
-                        {
-                            @prop.Nome;
-                        }
-                        @Html.Raw("</td></tr>")
-                    }
-                </table>
-                <label style="padding-top:7px;font-size:13px">Proprietário reside no imóvel:</label>
-                <label style="font-size:13px;color:brown">
-                    @if (Model.ImovelStruct.ResideImovel == true)
-                    {
-                        @Html.Raw("Sim")
-                    }
-                    else
-                    {
-                        @Html.Raw("Não")
-                    }
-                </label>
-            </div>
-            <div class="card-header">Localização </div>
-            <div class="card-body ">
-                <table style="font-size:13px">
-                    <tr>
-                        <td>Endereço:&nbsp; <span style="color: brown">@Model.ImovelStruct.NomeLogradouro @Html.Raw(", ") @Model.ImovelStruct.Numero.ToString() @Html.Raw(" ") @Model.ImovelStruct.Complemento</span></td>
+                  <table style="font-size:13px">
+                      <tr>
+                          <td style="font-weight:normal;width:165px">
+                              Imóvel possui imunidade:
+                          </td>
+                          <td style="color: brown">
+                              @if (Model.ImovelStruct.Imunidade == true) {
+                                  @Html.Raw("Sim")
+                              } else {
+                                  @Html.Raw("Não")
+                              }
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="font-weight:normal;width:165px">
+                              Imóvel isento da CIP:
+                          </td>
+                          <td style="color: brown">
+                              @if (Model.ImovelStruct.Cip == true) {
+                                  @Html.Raw("Sim")
+                              } else {
+                                  @Html.Raw("Não")
+                              }
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="font-weight:normal;width:165px">
+                              Imóvel conjugado:
+                          </td>
+                          <td style="color:brown">
+                              @if (Model.ImovelStruct.Conjugado == true) {
+                                  @Html.Raw("Sim")
+                              } else {
+                                  @Html.Raw("Não")
+                              }
+                          </td>
+                      </tr>
 
-                    </tr>
-                    <tr>
-                        <td>Bairro:&nbsp; <span style="color: brown">@Model.ImovelStruct.NomeBairro</span>&nbsp;&nbsp;CEP:&nbsp; <span style="color: brown">@Model.ImovelStruct.Cep</span></td>
-                    </tr>
-                    <tr>
-                        <td style="a">Lote:&nbsp; <span style="color: brown">@Model.ImovelStruct.LoteOriginal</span>&nbsp;&nbsp;Quadra:&nbsp; <span style="color: brown">@Model.ImovelStruct.QuadraOriginal</span></td>
-                    </tr>
-                </table>
+                  </table>
+              </div>
+
+              <div class="card-header">Proprietário(s) </div>
+              <div class="card-body ">
+                  <table id="propTable" style="font-size:13px;color:brown" class="tbl table-bordered table-condensed">
+                      <thead style="background-color:darkblue;color:white;font-weight:normal;font-size:12px">
+                          <tr style="height:13px">
+                              <th style="width:60px;text-align:center">
+                                  Código
+                              </th>
+                              <th style="width: 330px; ">
+                                  Nome do Proprietário
+                              </th>
+                              <th style="width: 80px; ">
+                                  Tipo
+                              </th>
+                              <th style="width: 50px; text-align: center">
+                                  Princ
+                              </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                  </table>
 
 
-                <label style="font-size:13px;text-decoration:underline;font-weight:bold;padding-top:5px">Endereço de Entrega</label>
-                <br />
-                <table style="font-size:13px">
-                    <tr>
-                        <td>
-                            Tipo de Endereço:&nbsp; <span style="color: brown">
-                                @if (Model.ImovelStruct.EE_TipoEndereco == 0)
-                                {
-                                    @Html.Raw("Endereço de Localização")
-                                }
-                                else
-                                {
-                                    if (Model.ImovelStruct.EE_TipoEndereco == 1)
-                                    {
-                                        @Html.Raw("Endereço do Proprietário")
-                                    }
-                                    else
-                                    {
-                                        @Html.Raw("Endereço de Entrega")
-                                    }
-                                }
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Endereço:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.Endereco @Html.Raw(", ") @Model.Endereco_Entrega.Numero.ToString() @Html.Raw(" ") @Model.Endereco_Entrega.Complemento</span></td>
-                    </tr>
-                    <tr>
-                        <td>Bairro:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.NomeBairro</span>&nbsp;&nbsp;CEP:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.Cep</span></td>
-                    </tr>
-                    <tr>
-                        <td>Cidade:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.NomeCidade</span>&nbsp;&nbsp;UF:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.UF</span></td>
-                    </tr>
-                </table>
-            </div>
-            <div class="card-header">Dados Territoriais </div>
-            <div class="card-body ">
-                <table style="font-size:13px">
-                    <tr style="height:21px">
-                        <td>
-                            Área do Terreno:&nbsp;<span style="color: brown">@Model.ImovelStruct.Area_Terreno.ToString("#0.00")  m²</span>&nbsp;&nbsp;
-                            Fração Ideal: &nbsp;<span style="color: brown">&nbsp;@Model.ImovelStruct.FracaoIdeal.ToString("#0.00") m²</span>
-                        </td>
-                    </tr>
-                </table>
-                <table style="font-size:13px">
-                    <tr style="height:19px">
-                        <td style="width:100px">Topografia:</td>
-                        <td style="width:200px">
-                            <span style="color: brown">@Model.ImovelStruct.Topografia_Nome</span>
-                        </td>
-                        <td style="width:100px">Situação:</td>
-                        <td style="width:200px">
-                            <span style="color: brown">@Model.ImovelStruct.Situacao_Nome</span>
-                        </td>
-                    </tr>
-                    <tr style="height:19px">
-                        <td style="width:100px">Categoria:</td>
-                        <td>
-                            <span style="color: brown">@Model.ImovelStruct.Categoria_Nome</span>
-                        </td>
-                        <td style="width:100px">Pedologia:</td>
-                        <td>
-                            <span style="color: brown">@Model.ImovelStruct.Pedologia_Nome</span>
-                        </td>
-                    </tr>
-                    <tr style="height:19px">
-                        <td style="width:100px">Benfeitoria:</td>
-                        <td>
-                            <span style="color: brown">@Model.ImovelStruct.Benfeitoria_Nome</span>
-                        </td>
-                        <td style="width:100px">Terreno:</td>
-                        <td>
-                            <span style="color: brown">@Model.ImovelStruct.Uso_terreno_Nome</span>
-                        </td>
-                    </tr>
 
-                </table>
+                  <label style="padding-top:7px;font-size:13px">Proprietário reside no imóvel:</label>
+                  <label style="font-size:13px;color:brown">
+                      @if (Model.ImovelStruct.ResideImovel == true) {
+                          @Html.Raw("Sim")
+                      } else {
+                          @Html.Raw("Não")
+                      }
+                  </label>
+              </div>
 
-            </div>
-            <div class="card-header">Testadas do imóvel</div>
-            <div class="card-body ">
-                <table style="font-size:13px;width:90px">
-                    <thead style="background-color:darkred;color:whitesmoke">
-                        <tr style="height:10px">
-                            <td style="width:20px;text-align:right">Face</td>
-                            <td style="width:70px;text-align:right">Metros</td>
-                        </tr>
-                    </thead>
-                    @foreach (GTI_Models.Models.Testada testada in Model.Lista_Testada)
-                    {
-                        @Html.Raw(" <tr>")
-                        @Html.Raw("<td style=" + "width:20px;text-align:right" + " >")
-                        @testada.Numface.ToString("00") ;
-                        @Html.Raw("</td>")
-                        @Html.Raw(" <td style=" + "width:70px;text-align:right" + " >")
-                        @testada.Areatestada.ToString("#0.00") ;
-                        @Html.Raw("</td>")
-                        @Html.Raw("</tr>")
-                    }
-                </table>
-            </div>
-            <div class="card-header">Áreas Construidas</div>
-            <div class="card-body ">
-                <table style="font-size:13px;width:530px">
-                    <thead style="background-color:darkred;color:whitesmoke">
-                        <tr style="height:10px">
-                            <td style="width:20px;text-align:center">Seq</td>
-                            <td style="width:100px;text-align:left">Uso</td>
-                            <td style="width:100px;text-align:left">Tipo</td>
-                            <td style="width:90px;text-align:left">Categoria</td>
-                            <td style="width:100px;text-align:right">Área m²</td>
-                            <td style="width:80px;text-align:center">Data</td>
-                            <td style="width:40px;text-align:center">Pav.</td>
-                        </tr>
-                    </thead>
-                    @{decimal _total = 0; }
-                    @foreach (GTI_Models.Models.AreaStruct area in Model.Lista_Areas)
-                    {
-                        { _total += area.Area; };
-                        @Html.Raw(" <tr>")
-                        @Html.Raw("<td style=" + "width:20px;text-align:center" + " >")
-                        @area.Seq ;
-                        @Html.Raw("</td>")
-                        @Html.Raw(" <td style=" + "width:100px;text-align:left" + " >")
-                        @area.Uso_Nome ;
-                        @Html.Raw("</td>")
-                        @Html.Raw(" <td style=" + "width:100px;text-align:left" + " >")
-                        @area.Tipo_Nome ;
-                        @Html.Raw("</td>")
-                        @Html.Raw(" <td style=" + "width:100px;text-align:left" + " >")
-                        @area.Categoria_Nome ;
-                        @Html.Raw("</td>")
-                        @Html.Raw("<td style=" + "width:90px;text-align:right" + " >")
-                        @area.Area ;
-                        @Html.Raw("</td>")
-                        @Html.Raw("<td style=" + "width:80px;text-align:center" + " >")
-                        @Convert.ToDateTime(area.Data_Aprovacao).ToString("dd/MM/yyyy");
-                        @Html.Raw("</td>")
-                        @Html.Raw("<td style=" + "width:40px;text-align:center" + " >")
-                        @area.Pavimentos;
-                        @Html.Raw("</td>")
-                        @Html.Raw("</tr>")
-                    }
-                </table>
-                <label style="padding-top:7px;font-size:13px">Área total construida:</label>
-                <label style="font-size:13px;color:brown">
-                    @_total@Html.Raw(" m²")
-                </label>
-            </div>
 
-            <div class="card-footer" style="text-align:center;background-color:white">
-                <button type="button" id="btnEditar" class="btn btn-primary" style="height: 32px; margin-left: 10px;" title="Alterar os dados cadastrais" onclick="Editar()">Alterar</button>&nbsp;&nbsp;
-                <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Fechar" onclick="javascript:history.back()">Fechar</button>
-            </div>
 
-            <div class="card-footer">
-                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
-            </div>
-        </div>
+              <div class="card-header">Localização </div>
+              <div class="card-body ">
+                  <table style="font-size:13px">
+                      <tr>
+                          <td>Endereço:&nbsp; <span style="color: brown">@Model.ImovelStruct.NomeLogradouro @Html.Raw(", ") @Model.ImovelStruct.Numero.ToString() @Html.Raw(" ") @Model.ImovelStruct.Complemento</span></td>
+
+                      </tr>
+                      <tr>
+                          <td>Bairro:&nbsp; <span style="color: brown">@Model.ImovelStruct.NomeBairro</span>&nbsp;&nbsp;CEP:&nbsp; <span style="color: brown">@Model.ImovelStruct.Cep</span></td>
+                      </tr>
+                      <tr>
+                          <td>Lote:&nbsp; <span style="color: brown">@Model.ImovelStruct.LoteOriginal</span>&nbsp;&nbsp;Quadra:&nbsp; <span style="color: brown">@Model.ImovelStruct.QuadraOriginal</span></td>
+                      </tr>
+                  </table>
+
+
+                  <label style="font-size:13px;text-decoration:underline;font-weight:bold;padding-top:5px">Endereço de Entrega</label>
+                  <br />
+                  <table style="font-size:13px">
+                      <tr>
+                          <td>
+                              Tipo de Endereço:&nbsp; <span style="color: brown">
+                                  @if (Model.ImovelStruct.EE_TipoEndereco == 0) {
+                                      @Html.Raw("Endereço de Localização")
+                                  } else {
+                                      if (Model.ImovelStruct.EE_TipoEndereco == 1) {
+                                          @Html.Raw("Endereço do Proprietário")
+                                      } else {
+                                          @Html.Raw("Endereço de Entrega")
+                                      }
+                                  }
+                              </span>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>Endereço:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.Endereco @Html.Raw(", ") @Model.Endereco_Entrega.Numero.ToString() @Html.Raw(" ") @Model.Endereco_Entrega.Complemento</span></td>
+                      </tr>
+                      <tr>
+                          <td>Bairro:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.NomeBairro</span>&nbsp;&nbsp;CEP:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.Cep</span></td>
+                      </tr>
+                      <tr>
+                          <td>Cidade:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.NomeCidade</span>&nbsp;&nbsp;UF:&nbsp; <span style="color: brown">@Model.Endereco_Entrega.UF</span></td>
+                      </tr>
+                  </table>
+              </div>
+              <div class="card-header">Dados Territoriais </div>
+              <div class="card-body ">
+                  <table style="font-size:13px">
+                      <tr style="height:21px">
+                          <td>
+                              Área do Terreno:&nbsp;<span style="color: brown">@Model.ImovelStruct.Area_Terreno.ToString("#0.00")  m²</span>&nbsp;&nbsp;
+                              Fração Ideal: &nbsp;<span style="color: brown">&nbsp;@Model.ImovelStruct.FracaoIdeal.ToString("#0.00") m²</span>
+                          </td>
+                      </tr>
+                  </table>
+                  <table style="font-size:13px">
+                      <tr style="height:19px">
+                          <td style="width:100px">Topografia:</td>
+                          <td style="width:200px">
+                              <span style="color: brown">@Model.ImovelStruct.Topografia_Nome</span>
+                          </td>
+                          <td style="width:100px">Situação:</td>
+                          <td style="width:200px">
+                              <span style="color: brown">@Model.ImovelStruct.Situacao_Nome</span>
+                          </td>
+                      </tr>
+                      <tr style="height:19px">
+                          <td style="width:100px">Categoria:</td>
+                          <td>
+                              <span style="color: brown">@Model.ImovelStruct.Categoria_Nome</span>
+                          </td>
+                          <td style="width:100px">Pedologia:</td>
+                          <td>
+                              <span style="color: brown">@Model.ImovelStruct.Pedologia_Nome</span>
+                          </td>
+                      </tr>
+                      <tr style="height:19px">
+                          <td style="width:100px">Benfeitoria:</td>
+                          <td>
+                              <span style="color: brown">@Model.ImovelStruct.Benfeitoria_Nome</span>
+                          </td>
+                          <td style="width:100px">Terreno:</td>
+                          <td>
+                              <span style="color: brown">@Model.ImovelStruct.Uso_terreno_Nome</span>
+                          </td>
+                      </tr>
+
+                  </table>
+
+              </div>
+              <div class="card-header">Testadas do imóvel</div>
+              <div class="card-body ">
+                  <table style="font-size:13px;width:90px" class="tbl table-bordered table-condensed">
+                      <thead style="background-color:darkred;color:whitesmoke">
+                          <tr style="height:10px">
+                              <td style="width:20px;text-align:right">Face</td>
+                              <td style="width:70px;text-align:right">Metros</td>
+                          </tr>
+                      </thead>
+                      @foreach (GTI_Models.Models.Testada testada in Model.Lista_Testada) {
+                          @Html.Raw(" <tr>")
+                          @Html.Raw("<td style=" + "width:20px;text-align:right" + " >")
+                          @testada.Numface.ToString("00") ;
+                          @Html.Raw("</td>")
+                          @Html.Raw(" <td style=" + "width:70px;text-align:right" + " >")
+                          @testada.Areatestada.ToString("#0.00") ;
+                          @Html.Raw("</td>")
+                          @Html.Raw("</tr>")
+                      }
+                  </table>
+              </div>
+              <div class="card-header">Áreas Construidas</div>
+              <div class="card-body ">
+                  <table style="font-size:13px;width:530px" class="tbl table-bordered table-condensed">
+                      <thead style="background-color:darkred;color:whitesmoke">
+                          <tr style="height:10px">
+                              <td style="width:20px;text-align:center">Seq</td>
+                              <td style="width:100px;text-align:left">Uso</td>
+                              <td style="width:100px;text-align:left">Tipo</td>
+                              <td style="width:90px;text-align:left">Categoria</td>
+                              <td style="width:100px;text-align:right">Área m²</td>
+                              <td style="width:80px;text-align:center">Data</td>
+                              <td style="width:40px;text-align:center">Pav.</td>
+                          </tr>
+                      </thead>
+                      @{decimal _total = 0; }
+                      @foreach (GTI_Models.Models.AreaStruct area in Model.Lista_Areas) {
+                          { _total += area.Area; };
+                          @Html.Raw(" <tr>")
+                          @Html.Raw("<td style=" + "width:20px;text-align:center" + " >")
+                          @area.Seq ;
+                          @Html.Raw("</td>")
+                          @Html.Raw(" <td style=" + "width:100px;text-align:left" + " >")
+                          @area.Uso_Nome ;
+                          @Html.Raw("</td>")
+                          @Html.Raw(" <td style=" + "width:100px;text-align:left" + " >")
+                          @area.Tipo_Nome ;
+                          @Html.Raw("</td>")
+                          @Html.Raw(" <td style=" + "width:100px;text-align:left" + " >")
+                          @area.Categoria_Nome ;
+                          @Html.Raw("</td>")
+                          @Html.Raw("<td style=" + "width:90px;text-align:right" + " >")
+                          @area.Area ;
+                          @Html.Raw("</td>")
+                          @Html.Raw("<td style=" + "width:80px;text-align:center" + " >")
+                          @Convert.ToDateTime(area.Data_Aprovacao).ToString("dd/MM/yyyy");
+                          @Html.Raw("</td>")
+                          @Html.Raw("<td style=" + "width:40px;text-align:center" + " >")
+                          @area.Pavimentos;
+                          @Html.Raw("</td>")
+                          @Html.Raw("</tr>")
+                      }
+                  </table>
+                  <label style="padding-top:7px;font-size:13px">Área total construida:</label>
+                  <label style="font-size:13px;color:brown">
+                      @_total@Html.Raw(" m²")
+                  </label>
+              </div>
+
+              <div class="card-header">Histórico do imóvel</div>
+              <div class="card-body ">
+                  <div id="table-container" style=" height: 226px; overflow: auto;border:solid;border-width:1px">
+                      <table id="historicoTable" style="font-size:13px;width:500px;" class="tbl table-bordered table-condensed">
+                          <thead style="background-color:darkblue;color:whitesmoke">
+                              <tr style="height:10px">
+                                  <td style="width:30px;text-align:center">Seq</td>
+                                  <td style="width:400px;text-align:left">Descrição</td>
+                                  <td style="width:70px;text-align:center">Data</td>
+                              </tr>
+                          </thead>
+                          <tbody></tbody>
+
+                      </table>
+                  </div>
+              </div>
+
+
+              <div class="card-footer" style="text-align:center;background-color:white">
+                  <button type="button" id="btnEditar" class="btn btn-primary" style="height: 32px; margin-left: 10px;" title="Alterar os dados cadastrais" onclick="Editar()">Alterar</button>&nbsp;&nbsp;
+                  <button type="button" id="btnFechar" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Fechar" onclick="javascript:history.back()">Fechar</button>
+              </div>
+
+              <div class="card-footer">
+                  @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+              </div>
+          </div>
     </div>
 }
 }
@@ -525,6 +541,8 @@
                 handle: ".modal-header"
             });
 
+            Init();
+
             var _res = '@res';
             if (_res != "") {
                 $('#msgBoxBag').dialog('open');
@@ -534,7 +552,10 @@
             }
         });
 
-
+        function Init() {
+            Carrega_Prop();
+            Carrega_Historico();
+        }
 
         function Fechar() {
             var url = '@Url.Action("GtiSys", "Home")';
@@ -564,6 +585,47 @@
             });
         }
 
+        function Carrega_Prop() {
+            var _cod = '@cod';
+            $("#propTable tbody tr").remove();
+            var i = 0;
+            var url = '@Url.Action("Lista_Imovel_Prop", "sysImob")';
+            $.getJSON(url, { cod: _cod }, function (data) {
+                $.each(data, function () {
+                    var tr;
+                    tr = $('<tr id="' + data[i].Codigo + '" style="height: 12px; font-weight: normal; font-size: 12px; white-space: nowrap; "  />');
+                    tr.append("<td style='width:60px;text-align:center'>" + data[i].Codigo + "</td>");
+                    tr.append("<td style='width:330px'>" + data[i].Nome + "</td>");
+                    tr.append("<td style='width:80px'>" + data[i].Tipo + "</td>");
+                    if (data[i].Principal==true)
+                        tr.append("<td style='width:50px;text-align:center'>" + "Sim" + "</td>");
+                    else
+                        tr.append("<td style='width:50px;text-align:center'>" + "Não" + "</td>");
+                    $("#propTable").find('tbody').append(tr);
+                    i++;
+                });
+            });
+        }
+
+        function Carrega_Historico() {
+            var _cod = '@cod';
+            $("#historicoTable tbody tr").remove();
+            var i = 0;
+            var url = '@Url.Action("Lista_Imovel_Historico", "sysImob")';
+            $.getJSON(url, { cod: _cod }, function (data) {
+                $.each(data, function () {
+                    var tr;
+                    tr = $('<tr id="' + data[i].Seq + '" style="height: 12px; font-weight: normal; font-size: 12px; "  />');
+                    tr.append("<td style='width:30px;text-align:center'>" + pad(data[i].Seq,3) + "</td>");
+                    tr.append("<td style='width:400px;text-align:justify;font-size:11px' >" + data[i].Descricao + "</td>");
+                    var date = eval(data[i].Data.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"));
+                    var date2 = dataAtualFormatada(date);
+                    tr.append("<td style='width:70px;text-align:center'>" + date2 + "</td>");
+                    $("#historicoTable").find('tbody').append(tr);
+                    i++;
+                });
+            });
+        }
 
         //######## Funções Genéricas #########
         function removeOptions(selectElement) {
@@ -585,6 +647,15 @@
             num = num.toString();
             while (num.length < size) num = "0" + num;
             return num;
+        }
+
+        function dataAtualFormatada(data) {
+                dia = data.getDate().toString(),
+                diaF = (dia.length == 1) ? '0' + dia : dia,
+                mes = (data.getMonth() + 1).toString(), //+1 pois no getMonth Janeiro começa com zero.
+                mesF = (mes.length == 1) ? '0' + mes : mes,
+                anoF = data.getFullYear();
+            return diaF + "/" + mesF + "/" + anoF;
         }
 
         //####################################
