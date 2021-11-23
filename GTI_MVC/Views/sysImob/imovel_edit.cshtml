@@ -1,7 +1,7 @@
 ﻿@model GTI_Mvc.ViewModels.ImovelDetailsViewModel
 
 @{
-    Layout = "~/Views/Shared/_Layoutgti.cshtml";
+    //    Layout = "~/Views/Shared/_Layoutgti.cshtml";
     ViewBag.Title = "Alterar dados cadastrais";
 }
 
@@ -144,12 +144,20 @@
     #historicoTable tbody {
         position: absolute;
         height: 200px;
-       margin-top:20px;
+        margin-top: 20px;
         overflow: auto;
     }
 
     .modal-dialog {
         max-width: 430px; /* New width for default modal */
+    }
+
+    .modal:nth-of-type(even) {
+        z-index: 1052 !important;
+    }
+
+    .modal-backdrop.show:nth-of-type(even) {
+        z-index: 1051 !important;
     }
 </style>
 
@@ -165,11 +173,57 @@
 }
 
 @using (Html.BeginForm("imovel_edit", "sysImob", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+
+    @*<a data-toggle="modal" href="#myModal" class="btn btn-primary">Launch modal</a>
+
+        <div class="modal" id="myModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Modal title</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div><div class="container"></div>
+                    <div class="modal-body">
+                        Content for the dialog / modal goes here.
+                        <a data-toggle="modal" href="#myModal3" class="btn btn-primary">Launch modal</a>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" data-dismiss="modal" class="btn">Close</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal" id="myModal3" data-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">2nd Modal title</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div><div class="container"></div>
+                    <div class="modal-body">
+                        Content for the dialog / modal goes here.
+                        Content for the dialog / modal goes here.
+                        Content for the dialog / modal goes here.
+                        Content for the dialog / modal goes here.
+                        Content for the dialog / modal goes here.
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" data-dismiss="modal" class="btn">Close</a>
+                        <a href="#" class="btn btn-primary">Save changes</a>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+
     if (Model.ImovelStruct != null) {
         <input type="hidden" id="codTmp">
         <input type="hidden" id="faceTmp">
         <input type="hidden" id="seqTmp">
         <input type="hidden" id="seqhTmp">
+        <input type="hidden" id="cidadao_Codigo">
+        <input type="hidden" id="cidadao_Nome">
+        <input type="hidden" id="cidadao_CpfCnpj">
 
         <div class="center shadow" style="width:570px">
             <div class="card">
@@ -177,9 +231,11 @@
                 <div class="card-body">
                     <table id="headerTable" style="font-size:13px">
                         <tr>
-                            <td>Código:&nbsp; <span style="color: brown">@Model.ImovelStruct.Codigo.ToString("00000")</span>&nbsp;&nbsp;Inscrição:&nbsp; <span style="color: brown">@Model.ImovelStruct.Inscricao</span> 
-                            <span style="margin-left:10px;">@Html.DropDownListFor(m => m.Tipo_Matricula, (SelectList)ViewBag.Lista_Matricula)</span>
-                            <span style="margin-left:10px">@Html.TextBoxFor(m=>m.ImovelStruct.NumMatricula,new  { @style="width:75px;height:20px", @onKeyPress = "return formata(this, '§§§§§§§§', event)" })</span></td>
+                            <td>
+                                Código:&nbsp; <span style="color: brown">@Model.ImovelStruct.Codigo.ToString("00000")</span>&nbsp;&nbsp;Inscrição:&nbsp; <span style="color: brown">@Model.ImovelStruct.Inscricao</span>
+                                <span style="margin-left:10px;">@Html.DropDownListFor(m => m.Tipo_Matricula, (SelectList)ViewBag.Lista_Matricula)</span>
+                                <span style="margin-left:10px">@Html.TextBoxFor(m => m.ImovelStruct.NumMatricula, new { @style = "width:75px;height:20px", @onKeyPress = "return formata(this, '§§§§§§§§', event)" })</span>
+                            </td>
                         </tr>
                         <tr style="height:25px">
                             @if (Model.ImovelStruct.CodigoCondominio == 999) {
@@ -269,7 +325,7 @@
                             <td>Bairro:&nbsp; <span style="color: brown">@Model.ImovelStruct.NomeBairro</span>&nbsp;&nbsp;CEP:&nbsp; <span style="color: brown">@Model.ImovelStruct.Cep</span></td>
                         </tr>
                         <tr style="height:25px">
-                            <td >Lote:&nbsp; <span style="color: brown">@Html.TextBoxFor(m => m.ImovelStruct.LoteOriginal, new { @style = "width:130px;font-size:13px", @maxlength = "25" })</span>&nbsp;&nbsp;Quadra:&nbsp; <span style="color: brown">@Html.TextBoxFor(m => m.ImovelStruct.QuadraOriginal, new { @style = "width:130px;font-size:13px", @maxlength = "25" })</span></td>
+                            <td>Lote:&nbsp; <span style="color: brown">@Html.TextBoxFor(m => m.ImovelStruct.LoteOriginal, new { @style = "width:130px;font-size:13px", @maxlength = "25" })</span>&nbsp;&nbsp;Quadra:&nbsp; <span style="color: brown">@Html.TextBoxFor(m => m.ImovelStruct.QuadraOriginal, new { @style = "width:130px;font-size:13px", @maxlength = "25" })</span></td>
                         </tr>
                     </table>
 
@@ -410,8 +466,8 @@
                     </div>
                     <br />
                     <div style="text-align:left">
-                        <button type="button" id="btnHistNew" class="btn btn-primary" style="height: 32px; width: 80px"  title="Incluir área" onclick="Hist_Add()">Novo</button>
-                        <button type="button" id="btnHistEdit" class="btn btn-info" style="height: 32px; margin-left: 10px;width: 80px"  title="Alterar histórico selecionado" onclick="Hist_Edit()">Alterar</button>
+                        <button type="button" id="btnHistNew" class="btn btn-primary" style="height: 32px; width: 80px" title="Incluir área" onclick="Hist_Add()">Novo</button>
+                        <button type="button" id="btnHistEdit" class="btn btn-info" style="height: 32px; margin-left: 10px;width: 80px" title="Alterar histórico selecionado" onclick="Hist_Edit()">Alterar</button>
                         <button type="button" id="btnHistDel" class="btn btn-danger" style="height: 32px; margin-left: 10px; width: 80px" title="Remover histórico selecionado" onclick="Hist_Delete()">Excluir</button>
                     </div>
                 </div>
@@ -424,6 +480,69 @@
             </div>
         </div>
     }
+
+    <div class="modal fade" id="cidadaoModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 640px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span>Selecione o Contribuinte</span>
+
+                </div>
+                <div class="container"></div>
+                <div class="modal-body">
+                    <input type="text" id="cidadaoCodigo" style="width:70px;font-size:14px" placeholder="Código" />
+                    <input type="text" id="cidadaoNome" style="width:324px;font-size:14px" placeholder="Nome do contribuinte" />
+                    <input type="text" id="cidadaoCpf_Cnpj" style="width:160px;font-size:14px" placeholder="Cpf/Cnpj" />
+                    <button type="button" class="btn btn-info" id="btnCidadaoFind" style="height:30px;padding-bottom:10px" title="Filtrar"><i class="fas fa-search"></i></button>
+                    <br />
+                    <br />
+
+                    <table id="cidadaoTable" class="tbl table-bordered table-condensed table-hover ">
+                        <thead>
+                            <tr>
+                                <th class="titulo" style="width:80px">Código</th>
+                                <th class="titulo" style="width:364px">Nome do Contribuinte</th>
+                                <th class="titulo" style="width:160px">Cpf/Cnpj</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cidadaoTableBody"></tbody>
+                    </table>
+                    <br />
+                    <div id="dvMsg1" style="display:none">
+                        <span style="color:red;font-size:13px">***Apenas os 10 primeiros resultados serão exibidos***</span>
+                    </div>
+                    <div id="dvMsg2" style="display:none">
+                        <span style="color:red;font-size:13px">***Nenhum registro localizado com os critérios selecionados***</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnSelectCidadao"> Selecionar</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="proprietarioModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 500px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header"> <span>Cadastro de proprietários</span> </div>
+                <div class="container"></div>
+                <div class="modal-body">
+                    <span style="font-size:13px">Contribuinte:&nbsp;</span>
+                    @*<button type="button" class="btn btn-info" id="btnCidadaoModal" style="height:30px;padding-bottom:10px" title="Consultar" onclick="Prop_Search()"><i class="fas fa-search"></i></button>*@
+                    <a data-toggle="modal" href="#cidadaoModal" class="btn btn-primary"><i class="fas fa-search"></i></a>
+                    <span id="nomeProprietario" style="font-size:13px;color:brown;margin-left:10px"></span>
+                    <br />
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="btnSelectCidadao"> OK</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 
 <div id="msgBox1" title="Atenção" style='display: none;'>
@@ -442,11 +561,23 @@
 </div>
 
 
+
+
+
+
 @section scripts{
 
     <script type="text/javascript">
 
         $(document).ready(function () {
+            $("input[id*='cidadaoCpf_Cnpj']").inputmask({
+                mask: ['999.999.999-99', '99.999.999/9999-99'],
+                keepStatic: true
+            });
+            $("input[id*='cidadaoCodigo']").inputmask({
+                mask: ['999999'],
+                keepStatic: true
+            });
             $(".real").mask('#.##0,#0', { reverse: true });
             $(".maskValor").mask("99999999,00", { reverse: true });
             $('#msgBox1').dialog({
@@ -594,8 +725,9 @@
         });
 
         function Prop_Add() {
-            var _cod = '@cod';
-             alert(_cod);
+            //var _cod = '@cod';
+            //$('#cidadaoModal').modal({ backdrop: 'static', keyboard: false });
+            $('#proprietarioModal').modal({ backdrop: 'static', keyboard: false });
         }
 
         function Prop_Edit() {
@@ -617,6 +749,75 @@
                 alert(_cod);
             }
         }
+
+        function Prop_Search() {
+
+            $('#cidadaoModal').modal({ backdrop: 'static', keyboard: false });
+        }
+
+        $("#btnCidadaoFind").click(function () {
+            $("#cidadaoTableBody").empty();
+            var _codigo = document.getElementById('cidadaoCodigo').value;
+            var _nome = document.getElementById('cidadaoNome').value;
+            var _cpfcnpj = document.getElementById('cidadaoCpf_Cnpj').value;
+            if (_codigo == '' && _nome == '' && _cpfcnpj == '') {
+                alert('Selecione ao menos um dos critérios');
+                return false;
+            }
+
+            $("#dvMsg1").hide(); $("#dvMsg2").hide();
+            $.getJSON("Lista_Cidadao",
+                { codigo: _codigo, nome: _nome, cpfcnpj: _cpfcnpj },
+                function (json) {
+                    var tr;
+                    var _pos = 0;
+                    for (var i = 0; i < json.length; i++) {
+                        if (_pos < 10) {
+                            tr = $('<tr style="cursor:pointer"  />');
+                            tr.append("<td style='font-size:14px'>" + json[i].Codcidadao + "</td>");
+                            tr.append("<td style='font-size:14px'>" + json[i].Nomecidadao + "</td>");
+                            tr.append("<td style='font-size:14px'>" + json[i].Cpf + "</td>");
+                            $("#cidadaoTable").find('tbody').append(tr);
+                        }
+                        _pos++;
+                    }
+                    if (_pos >= 10) {
+                        $("#dvMsg1").show();
+                    } else {
+                        $("#dvMsg1").hide();
+                    }
+                    if (_pos == 0) {
+                        $("#dvMsg2").show();
+                    } else {
+                        $("#cidadaoTable>tbody>tr:first").trigger('click');
+                        $("#dvMsg2").hide();
+                    }
+
+                });
+        });
+
+        $('#cidadaoModal').on("click", '#cidadaoTable tbody tr', function () {
+            var tableData = $(this).children("td").map(function () {
+                return $(this).text();
+            }).get();
+
+            document.getElementById('cidadao_Codigo').value = $.trim(tableData[0]);
+            document.getElementById('cidadao_Nome').value = $.trim(tableData[1]);
+            document.getElementById('cidadao_CpfCnpj').value = $.trim(tableData[2]);
+
+            $('#cidadaoTable tr').click(function (e) {
+                $('#cidadaoTable tr').removeClass('highlighted');
+                $(this).addClass('highlighted');
+            });
+        });
+
+        $("#btnSelectCidadao").click(function () {
+            var ccText = document.getElementById('cidadao_Nome').value;
+            var ccValue = document.getElementById('cidadao_Codigo').value;
+            $('#cidadaoModal').modal('hide');
+            document.getElementById('nomeProprietario').innerHTML= ccValue + ' - ' + ccText;
+        });
+
 
          //####### Testada #######
         function Carrega_Testada() {
@@ -771,7 +972,7 @@
                 alert(_cod);
             }
         }
-        
+
         //#############################
 
         //######## Funções Genéricas #########

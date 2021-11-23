@@ -114,7 +114,7 @@
 
                     <article style="font-size:13px;color:black;text-align:justify">
                         Para maior segurança, o serviço que você esta tentando acessar requer a<b> confirmação de sua identidade</b>. Por favor anexar abaixo os documentos solicitados e clicar em enviar.
-                        Após o envio, os documentos serão analisados pelo setor de dívida ativa, e se aprovados, o serviço será liberado. Qualquer dúvida entrar em contato através do email <a href="mailto:pad@jaboticabal.sp.gov.br">pad@jaboticabal.sp.gov.br</a>. <br />Obs: Os anexos deverão ser enviados no formato PDF com tamanho máximo de 4Mb.
+                        Após o envio, os documentos serão analisados pelo setor de dívida ativa, e se aprovados, o serviço será liberado. Qualquer dúvida entrar em contato através do email <a href="mailto:pad@jaboticabal.sp.gov.br">pad@jaboticabal.sp.gov.br</a>. <br />Obs: Os anexos deverão ser enviados no formato PDF ou imagem com tamanho máximo de 4Mb.
                     </article>
                     <br />
                     <article style="font-size:13px;color:darkred;text-align:justify">
@@ -201,7 +201,7 @@
         <div class="modal-content">
             <div class="modal-header"> <span>Inserir Anexo</span> </div>
             <div class="modal-body">
-                <input style="width:610px;font-size:12px" type="file" name="file" id="file" accept="application/pdf" />
+                <input style="width:610px;font-size:12px" type="file" name="file" id="file" accept="application/pdf,image/jpeg,image/png" />
                 <br />
                 <br />
                 <button type="button" class="smallbtn" id="Inserir_Anexo" onclick="Inserir_Anexo()">Anexar</button>&nbsp;
@@ -335,10 +335,10 @@
                     var id = this.id;
                     var extArray = new Array("dll", "exe");
                     var ext = f.name.replace(/^.*?\.([a-zA-Z0-9]+)$/, "$1");
-                    if (ext.toUpperCase() != "PDF") {
-                        alert("Apenas arquivos do tipo PDF podem ser anexados!");
-                        return false;
-                    }
+                    //if (ext.toUpperCase() != "PDF" || ext.toUpperCase() != "JPG") {
+                    //    alert("Apenas arquivos do tipo PDF e JPG podem ser anexados!");
+                    //    return false;
+                    //}
 
                     if (ext == extArray[0] || ext == extArray[1]) {
                         alert("O sistema não permite anexar arquivos com extensão(.exe,.dll). Tente anexar outroa rquivo.");

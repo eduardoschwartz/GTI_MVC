@@ -1483,7 +1483,7 @@ namespace GTI_Dal.Classes {
                 if (string.IsNullOrEmpty(  reg.Cpf))
                     return false;
                 else {
-                    string _cpf = Convert.ToInt64(reg.Cpf).ToString();
+                    string _cpf = Convert.ToInt64(dalCore.RetornaNumero( reg.Cpf)).ToString();
                     _cpf = _cpf.PadLeft(11, '0');
                     if (_cpf == Cpf)
                         return true;

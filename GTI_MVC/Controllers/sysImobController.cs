@@ -336,7 +336,6 @@ namespace GTI_Mvc.Controllers
             return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-
         public JsonResult Lista_WImovel_Testada(string guid) {
             W_Imovel_bll wimovelRepository = new W_Imovel_bll(_connection);
             List<WImovel_Testada> Lista = wimovelRepository.Lista_WImovel_Testada(guid);
@@ -371,6 +370,34 @@ namespace GTI_Mvc.Controllers
             List<HistoricoStruct> Lista = imovelRepository.Lista_Historico(Convert.ToInt32(cod));
             return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+
+        public JsonResult Lista_Cidadao(string codigo, string nome, string cpfcnpj) {
+            if (string.IsNullOrEmpty(codigo)) codigo = "0";
+            int _cod = Convert.ToInt32(Functions.RetornaNumero(codigo));
+            string _nome = nome.Trim() ?? "";
+            string _cpfcnpj = Functions.RetornaNumero(cpfcnpj) ?? "";
+
+            Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
+            List<Cidadao> Lista = cidadaoRepository.Lista_Cidadao(_cod, _nome, _cpfcnpj, 15);
+
+            List<Cidadao> ObjCid = new List<Cidadao>();
+            foreach (Cidadao cid in Lista) {
+                if (string.IsNullOrEmpty(cid.Cnpj) && cid.Cnpj != "0")
+                    _cpfcnpj = cid.Cpf;
+                else
+                    _cpfcnpj = cid.Cnpj;
+
+                Cidadao reg = new Cidadao() {
+                    Codcidadao = cid.Codcidadao,
+                    Nomecidadao = Functions.TruncateTo(cid.Nomecidadao.ToUpper(), 45),
+                    Cpf = Functions.FormatarCpfCnpj(_cpfcnpj)
+                };
+                ObjCid.Add(reg);
+            }
+
+            return Json(ObjCid, JsonRequestBehavior.AllowGet);
+        }
+
 
     }
 }
