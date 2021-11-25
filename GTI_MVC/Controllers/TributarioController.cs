@@ -1087,16 +1087,30 @@ namespace GTI_Mvc.Controllers {
                     _cep = _empresa.Cep;
                 } else {
                     CidadaoStruct _cidadao = requerenteRepository.Dados_Cidadao(_codigo);
-                    _endereco = _cidadao.EnderecoR + ", " + _cidadao.NumeroR.ToString() + (_cidadao.ComplementoR == null ? "" : " " + _cidadao.ComplementoR) + " " + _cidadao.NomeBairroR;
-                    _endereco2 = _cidadao.EnderecoR + ", " + _cidadao.NumeroR.ToString() + (_cidadao.ComplementoR == null ? "" : " " + _cidadao.ComplementoR);
-                    _endereco2 = _endereco2 ?? "";
-                    _bairro = _cidadao.NomeBairroR ?? "";
-                    _cidade = _cidadao.NomeCidadeR ?? "";
-                    _uf = _cidadao.UfR ?? "";
-                    if (_cidadao.CodigoCidadeR == 413)
-                        _cep = (enderecoRepository.RetornaCep((int)_cidadao.CodigoLogradouroR, (short)_cidadao.NumeroR)).ToString();
-                    else {
-                        _cep = _cidadao.CepR.ToString();
+                    if (_cidadao.EtiquetaC == "S") {
+                        _endereco = _cidadao.EnderecoC + ", " + _cidadao.NumeroC.ToString() + (_cidadao.ComplementoC == null ? "" : " " + _cidadao.ComplementoC) + " " + _cidadao.NomeBairroC;
+                        _endereco2 = _cidadao.EnderecoC + ", " + _cidadao.NumeroC.ToString() + (_cidadao.ComplementoC == null ? "" : " " + _cidadao.ComplementoC);
+                        _endereco2 = _endereco2 ?? "";
+                        _bairro = _cidadao.NomeBairroC ?? "";
+                        _cidade = _cidadao.NomeCidadeC ?? "";
+                        _uf = _cidadao.UfC ?? "";
+                        if (_cidadao.CodigoCidadeC == 413)
+                            _cep = (enderecoRepository.RetornaCep((int)_cidadao.CodigoLogradouroC, (short)_cidadao.NumeroC)).ToString();
+                        else {
+                            _cep = _cidadao.CepC.ToString();
+                        }
+                    } else {
+                        _endereco = _cidadao.EnderecoR + ", " + _cidadao.NumeroR.ToString() + (_cidadao.ComplementoR == null ? "" : " " + _cidadao.ComplementoR) + " " + _cidadao.NomeBairroR;
+                        _endereco2 = _cidadao.EnderecoR + ", " + _cidadao.NumeroR.ToString() + (_cidadao.ComplementoR == null ? "" : " " + _cidadao.ComplementoR);
+                        _endereco2 = _endereco2 ?? "";
+                        _bairro = _cidadao.NomeBairroR ?? "";
+                        _cidade = _cidadao.NomeCidadeR ?? "";
+                        _uf = _cidadao.UfR ?? "";
+                        if (_cidadao.CodigoCidadeR == 413)
+                            _cep = (enderecoRepository.RetornaCep((int)_cidadao.CodigoLogradouroR, (short)_cidadao.NumeroR)).ToString();
+                        else {
+                            _cep = _cidadao.CepR.ToString();
+                        }
                     }
                     if (_cep == "0")
                         _cep = "14870000";
@@ -1120,7 +1134,7 @@ namespace GTI_Mvc.Controllers {
             };
             decimal _somaP = 0, _somaJ = 0, _somaM = 0, _somaC = 0, _somaT = 0, _somaH = 0;
 
-            bool IsRefis = true, DebitoAnoAtual = false, DebitoNoRefis = false;
+            bool IsRefis = false, DebitoAnoAtual = false, DebitoNoRefis = false;
             int nPlano = 0;
             decimal nPerc = 0;
 
