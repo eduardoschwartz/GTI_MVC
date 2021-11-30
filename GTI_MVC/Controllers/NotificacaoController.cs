@@ -105,7 +105,7 @@ namespace GTI_Mvc.Controllers {
                 model.Endereco_Local = _endLocal.Endereco + ", " + _endLocal.Numero.ToString() + _compl + " - " + _endLocal.NomeBairro.ToString() + " - " + _endLocal.NomeCidade + "/" + _endLocal.UF + " Cep:" + _endLocal.Cep;
 
                 Sistema_bll sistemaRepository = new Sistema_bll(_connection);
-                Contribuinte_Header_Struct _endProp = sistemaRepository.Contribuinte_Header(model.Codigo_Imovel);
+                Contribuinte_Header_Struct _endProp = sistemaRepository.Contribuinte_Header(model.Codigo_cidadao);
                 _compl = _endProp.Complemento == null ? "" : " " + _endProp.Complemento;
                 model.Endereco_Prop = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _compl + " - " + _endProp.Nome_bairro.ToString() + " - " + _endProp.Nome_cidade + "/" + _endProp.Nome_uf + " Cep:" + _endProp.Cep;
 

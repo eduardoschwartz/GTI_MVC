@@ -194,7 +194,7 @@ namespace GTI_Dal.Classes {
                     _rg = _cidadao.Rg;
                     _ativo = true;
                     Endereco_Data endereco_Class = new Endereco_Data(_connection);
-                    if (_cidadao.EtiquetaC == "S") {
+                    if (_cidadao.EtiquetaC == "S" && _cidadao.EtiquetaR!="S") {
                         if (_cidadao.CodigoCidadeC == 413) {
                             _endereco = _cidadao.EnderecoC.ToString();
                             if (_cidadao.NumeroC == null || _cidadao.NumeroC == 0 || _cidadao.CodigoLogradouroC == null || _cidadao.CodigoLogradouroC == 0)
