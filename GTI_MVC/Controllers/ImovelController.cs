@@ -914,7 +914,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Carne_Iptu(CertidaoViewModel model) {
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             int _codigo = 0;
-            int _ano = 2021;
+            int _ano = 2022;
             bool _existeCod = false;
             ImovelDetailsViewModel imovelDetailsViewModel = new ImovelDetailsViewModel();
 
@@ -1042,6 +1042,7 @@ namespace GTI_Mvc.Controllers {
             }
             //**************************************************
 
+
             //***  Novos Documento ******
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             int _idx2 = 0;
@@ -1082,18 +1083,18 @@ namespace GTI_Mvc.Controllers {
             foreach (DebitoStructure item in Extrato_Lista) {
                 if (item.Numero_Parcela > 0) {
                     _msg = "Após o vencimento tirar 2ª via no site da prefeitura www.jaboticabal.sp.gov.br";
-                    if(DateTime.Now.Year == 2021 && item.Numero_Parcela == 6) {
-                        _msg += Environment.NewLine + "Referente a parcela original 8/12";
-                    }
-                    if(DateTime.Now.Year == 2021 && item.Numero_Parcela == 7) {
-                        _msg += Environment.NewLine + "Referente a parcela original 9/12";
-                    }
-                    if(DateTime.Now.Year == 2021 && item.Numero_Parcela == 8) {
-                        _msg += Environment.NewLine + "Referente a parcela original 6/12";
-                    }
-                    if(DateTime.Now.Year == 2021 && item.Numero_Parcela == 9) {
-                        _msg += Environment.NewLine + "Referente a parcela original 7/12";
-                    }
+                    //if(DateTime.Now.Year == 2021 && item.Numero_Parcela == 6) {
+                    //    _msg += Environment.NewLine + "Referente a parcela original 8/12";
+                    //}
+                    //if(DateTime.Now.Year == 2021 && item.Numero_Parcela == 7) {
+                    //    _msg += Environment.NewLine + "Referente a parcela original 9/12";
+                    //}
+                    //if(DateTime.Now.Year == 2021 && item.Numero_Parcela == 8) {
+                    //    _msg += Environment.NewLine + "Referente a parcela original 6/12";
+                    //}
+                    //if(DateTime.Now.Year == 2021 && item.Numero_Parcela == 9) {
+                    //    _msg += Environment.NewLine + "Referente a parcela original 7/12";
+                    //}
 
                 }
 
