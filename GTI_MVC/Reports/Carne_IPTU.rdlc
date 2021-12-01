@@ -1704,50 +1704,6 @@
                     <TablixCell />
                   </TablixCells>
                 </TablixRow>
-                <TablixRow>
-                  <Height>0.2cm</Height>
-                  <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox44">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value />
-                                  <Style>
-                                    <FontSize>5pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox44</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <RightBorder>
-                              <Color>Black</Color>
-                            </RightBorder>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                        <ColSpan>2</ColSpan>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell />
-                  </TablixCells>
-                </TablixRow>
               </TablixRows>
             </TablixBody>
             <TablixColumnHierarchy>
@@ -1790,7 +1746,6 @@
                     <TablixMember />
                     <TablixMember />
                     <TablixMember />
-                    <TablixMember />
                   </TablixMembers>
                 </TablixMember>
               </TablixMembers>
@@ -1799,7 +1754,7 @@
             <DataSetName>dsBoletoGuia</DataSetName>
             <Top>9.58647cm</Top>
             <Left>0.21901cm</Left>
-            <Height>9.87773cm</Height>
+            <Height>9.67773cm</Height>
             <Width>3.45521cm</Width>
             <Style>
               <Border>
@@ -4579,7 +4534,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.48449cm</Height>
+                  <Height>0.34449cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -4677,7 +4632,7 @@
             <DataSetName>dsBoletoGuia</DataSetName>
             <Top>9.58647cm</Top>
             <Left>3.91591cm</Left>
-            <Height>9.87773cm</Height>
+            <Height>9.73773cm</Height>
             <Width>16.85996cm</Width>
             <ZIndex>1</ZIndex>
             <Style>

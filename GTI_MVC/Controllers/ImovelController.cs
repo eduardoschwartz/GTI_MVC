@@ -997,49 +997,49 @@ namespace GTI_Mvc.Controllers {
 
 
             //*** Renumera parcelas de 2021 ***
-            if (DateTime.Now.Year == 2021) {
-                int _seq = 0;
-                foreach(DebitoStructure item in Extrato_Lista) {
-                    Extrato_Lista[_seq].Numero_Parcela_Old = (short)item.Numero_Parcela ;
-                    if(item.Numero_Parcela == 6) {
-                        Extrato_Lista[_seq].Numero_Parcela = 96;
-                    } else {
-                        if(item.Numero_Parcela == 7) {
-                            Extrato_Lista[_seq].Numero_Parcela = 97;
-                        } else {
-                            if(item.Numero_Parcela == 8) {
-                                Extrato_Lista[_seq].Numero_Parcela = 98;
-                            } else {
-                                if(item.Numero_Parcela == 9) {
-                                    Extrato_Lista[_seq].Numero_Parcela = 99;
-                                }
-                            }
-                        }
-                    }
-                    _seq++;
-                }
-                int _idx = 0;
-                foreach(DebitoStructure item in Extrato_Lista) {
+            //if (DateTime.Now.Year == 2021) {
+            //    int _seq = 0;
+            //    foreach(DebitoStructure item in Extrato_Lista) {
+            //        Extrato_Lista[_seq].Numero_Parcela_Old = (short)item.Numero_Parcela ;
+            //        if(item.Numero_Parcela == 6) {
+            //            Extrato_Lista[_seq].Numero_Parcela = 96;
+            //        } else {
+            //            if(item.Numero_Parcela == 7) {
+            //                Extrato_Lista[_seq].Numero_Parcela = 97;
+            //            } else {
+            //                if(item.Numero_Parcela == 8) {
+            //                    Extrato_Lista[_seq].Numero_Parcela = 98;
+            //                } else {
+            //                    if(item.Numero_Parcela == 9) {
+            //                        Extrato_Lista[_seq].Numero_Parcela = 99;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //        _seq++;
+            //    }
+            //    int _idx = 0;
+            //    foreach(DebitoStructure item in Extrato_Lista) {
                     
-                    if(item.Numero_Parcela == 96) {
-                        Extrato_Lista[_idx].Numero_Parcela = 8;
-                    } else {
-                        if(item.Numero_Parcela == 97) {
-                            Extrato_Lista[_idx].Numero_Parcela = 9;
-                        } else {
-                            if(item.Numero_Parcela == 98) {
-                                Extrato_Lista[_idx].Numero_Parcela =6;
-                            } else {
-                                if(item.Numero_Parcela == 99) {
-                                    Extrato_Lista[_idx].Numero_Parcela = 7;
-                                }
-                            }
-                        }
-                    }
-                    _idx++;
-                }
-                Extrato_Lista = Extrato_Lista.OrderBy(o => o.Data_Vencimento).ThenBy(o => o.Numero_Parcela).ToList();
-            }
+            //        if(item.Numero_Parcela == 96) {
+            //            Extrato_Lista[_idx].Numero_Parcela = 8;
+            //        } else {
+            //            if(item.Numero_Parcela == 97) {
+            //                Extrato_Lista[_idx].Numero_Parcela = 9;
+            //            } else {
+            //                if(item.Numero_Parcela == 98) {
+            //                    Extrato_Lista[_idx].Numero_Parcela =6;
+            //                } else {
+            //                    if(item.Numero_Parcela == 99) {
+            //                        Extrato_Lista[_idx].Numero_Parcela = 7;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //        _idx++;
+            //    }
+            //    Extrato_Lista = Extrato_Lista.OrderBy(o => o.Data_Vencimento).ThenBy(o => o.Numero_Parcela).ToList();
+            //}
             //**************************************************
 
 
