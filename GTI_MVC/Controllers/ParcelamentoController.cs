@@ -18,7 +18,9 @@ using System.Web.Mvc;
 
 namespace GTI_MVC.Controllers {
     public class ParcelamentoController:Controller {
-        private readonly string _connection = "GTIconnection";
+        private static string _connection;
+        private static bool _RefisAtivo;
+
         [Route("Parc_index")]
         [HttpGet]
         public ActionResult Parc_index() {
@@ -29,24 +31,31 @@ namespace GTI_MVC.Controllers {
             if (Request.Cookies["2lG1H*"] == null)
                 return RedirectToAction("Login","Home");
 
-            
+
+            int _user_id = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
+            if (_user_id == 582) {
+                _connection = "gtiConnectionTeste";
+                _RefisAtivo = true;
+            } else {
+                _connection = "gtiConnection";
+                _RefisAtivo = false;
+            }
+
             bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
             if(_func)
                 return View();
 
-            int _userid = Convert.ToInt32(Functions.Decrypt( Request.Cookies["2uC*"].Value));
-            Sistema_bll sistemaRepository = new Sistema_bll("GTIconnection");
-            bool _liberado = sistemaRepository.Retorna_Usuario_Web_Liberado(_userid);
+      //      int _userid = Convert.ToInt32(Functions.Decrypt( Request.Cookies["2uC*"].Value));
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            bool _liberado = sistemaRepository.Retorna_Usuario_Web_Liberado(_user_id);
 
-            int _user_id = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
+          //  int _user_id = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
             Usuario_web _user = sistemaRepository.Retorna_Usuario_Web(_user_id);
             Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
             string _cpfcnpj = _user.Cpf_Cnpj;
             int _codigo;
-            bool _bCpf = false;
             if (_cpfcnpj.Length == 11) {
                 _codigo = cidadaoRepository.Existe_Cidadao_Cpf(_cpfcnpj);
-                _bCpf = true;
             } else {
                 _codigo = cidadaoRepository.Existe_Cidadao_Cnpj(_cpfcnpj);
             }
@@ -502,14 +511,43 @@ namespace GTI_MVC.Controllers {
             if(!_existe)
                 return RedirectToAction("Login_gti","Home");
 
+            int _plano_Codigo = 0;
+            int _plano_parcelas = 0;
+            double _plano_Desconto = 0;
+            string _plano_nome = "Sem Plano de desconto";
+
+            if (_RefisAtivo) {
+                DateTime _dataNow = _connection == "gtiConnection" ? DateTime.Now : Convert.ToDateTime("20/12/2021");
+
+                if(Functions.DateInRange(Convert.ToDateTime(_dataNow.ToString("dd/MM/yyyy")),  Convert.ToDateTime("13/12/2021"), Convert.ToDateTime("28/12/2021"))) {
+                    _plano_Codigo = 50;
+                } else {
+                    if (Functions.DateInRange(Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy")), Convert.ToDateTime("29/12/2022"), Convert.ToDateTime("14/01/2022"))) {
+                        _plano_Codigo = 51;
+                    } else {
+                        if (Functions.DateInRange(Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy")), Convert.ToDateTime("15/01/2022"), Convert.ToDateTime("31/01/2022"))) {
+                            _plano_Codigo = 52;
+                        }
+                    }
+                }
+                Plano _plano = parcelamentoRepository.Retorna_Plano_Desconto((short)_plano_Codigo);
+                _plano_nome = _plano.Nome;
+                _plano_Desconto =(double) _plano.Desconto;
+                _plano_parcelas = _plano.Qtde_Parcela;
+            }
+
             //Load Master
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
             ParcelamentoViewModel model = new ParcelamentoViewModel() {
                 Guid = p,
-                Plano_Codigo = _master.Plano_Codigo,
+                Plano_Codigo = _plano_Codigo,
+                Plano_Nome = _plano_nome,
+                Plano_Desconto=_plano_Desconto,
+                Plano_Qtde_Parcela=_plano_parcelas,
                 Valor_Minimo = _master.Valor_minimo,
                 Perc_desconto = _master.Perc_Desconto,
-                Data_Vencimento = DateTime.Now.ToString("dd/MM/yyyy")
+                Data_Vencimento = DateTime.Now.ToString("dd/MM/yyyy"),
+                Refis_Ativo=_RefisAtivo,
             };
             model.Requerente = new Parc_Requerente() {
                 Codigo = _master.Requerente_Codigo,
@@ -1906,7 +1944,7 @@ Fim:;
             decimal _somaT = Math.Round((decimal)_soma,2);
 
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
-            Tributario_bll tributarioRepositoryTmp = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepositoryTmp = new Tributario_bll(_connection);
             //Criar o documento para ela
             Numdocumento regDoc = new Numdocumento {
                 Valorguia = _somaT,
@@ -2381,7 +2419,7 @@ Fim:;
 
         public ActionResult bank_Method(string p) {
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
-            Tributario_bll tributarioRepositoryTmp = new Tributario_bll("GTIconnection");
+            Tributario_bll tributarioRepositoryTmp = new Tributario_bll(_connection);
 
             string _ret;
             int _userId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));

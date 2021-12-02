@@ -642,6 +642,10 @@ namespace GTI_Mvc {
             return newStr;
         }
 
+        public static bool DateInRange(this DateTime dateToCheck, DateTime startDate, DateTime endDate) {
+            return dateToCheck >= startDate && dateToCheck < endDate;
+        }
+
 
     }
 

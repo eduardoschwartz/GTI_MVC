@@ -17,8 +17,11 @@ namespace GTI_Mvc.ViewModels {
         public Parc_Contribuinte Contribuinte { get; set; }
         public  List<Parc_Codigos> Lista_Codigos { get; set; }
         public string Data_Vencimento { get; set; }
+        public bool Refis_Ativo { get; set; }
         public int Plano_Codigo { get; set; }
         public string Plano_Nome { get; set; } = "Nenhum";
+        public double Plano_Desconto { get; set; }
+        public int Plano_Qtde_Parcela { get; set; }
         public string[] Lista_Plano_Desconto = new[] { "Nenhum", "Refis" };
         public List<SelectDebitoParcelamentoEditorViewModel> Lista_Origem { get; set; }
         public List<SelectDebitoParcelamentoEditorViewModel> Lista_Origem_Selected { get; set; }
