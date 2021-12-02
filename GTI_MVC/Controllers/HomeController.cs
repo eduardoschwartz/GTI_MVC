@@ -865,7 +865,7 @@ namespace GTI_Mvc.Controllers {
             if (!_func)
                 return RedirectToAction("Login");
             int _id = Convert.ToInt32(Session["hashid"].ToString());
-            if(_id!=392 && _id!=270 && _id!=118 && _id!=433)//392-renata,270-joseane,118-elivaine ,433-schwartz
+            if(_id!=392 && _id!=270 && _id!=118 && _id!=433 && _id!=427)//392-renata,270-joseane,118-elivaine ,433-schwartz, 427-rose
                 return RedirectToAction("Login");
 
             Sistema_bll sistemaRepository = new Sistema_bll(_connection);
