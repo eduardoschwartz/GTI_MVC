@@ -17,7 +17,7 @@ using System.Linq;
 using System.Web.Mvc;
 
 namespace GTI_MVC.Controllers {
-    public class ParcelamentoController:Controller {
+    public class ParcelamentoController : Controller {
         private static string _connection;
         private static bool _RefisAtivo;
 
@@ -29,7 +29,7 @@ namespace GTI_MVC.Controllers {
                 return RedirectToAction("Login", "Home");
 
             if (Request.Cookies["2lG1H*"] == null)
-                return RedirectToAction("Login","Home");
+                return RedirectToAction("Login", "Home");
 
 
             int _user_id = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
@@ -42,14 +42,14 @@ namespace GTI_MVC.Controllers {
             }
 
             bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
-            if(_func)
+            if (_func)
                 return View();
 
-      //      int _userid = Convert.ToInt32(Functions.Decrypt( Request.Cookies["2uC*"].Value));
+            //      int _userid = Convert.ToInt32(Functions.Decrypt( Request.Cookies["2uC*"].Value));
             Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             bool _liberado = sistemaRepository.Retorna_Usuario_Web_Liberado(_user_id);
 
-          //  int _user_id = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
+            //  int _user_id = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
             Usuario_web _user = sistemaRepository.Retorna_Usuario_Web(_user_id);
             Cidadao_bll cidadaoRepository = new Cidadao_bll(_connection);
             string _cpfcnpj = _user.Cpf_Cnpj;
@@ -77,7 +77,7 @@ namespace GTI_MVC.Controllers {
         [HttpGet]
         public ActionResult Parc_req() {
             if (Request.Cookies["2lG1H*"] == null)
-                return RedirectToAction("Login","Home");
+                return RedirectToAction("Login", "Home");
 
 
             Sistema_bll sistemaRepository = new Sistema_bll(_connection);
@@ -92,7 +92,7 @@ namespace GTI_MVC.Controllers {
             string _cpfcnpj = _user.Cpf_Cnpj;
             int _codigo;
             bool _bCpf = false;
-            if(_cpfcnpj.Length == 11) {
+            if (_cpfcnpj.Length == 11) {
                 _codigo = cidadaoRepository.Existe_Cidadao_Cpf(_cpfcnpj);
                 _bCpf = true;
             } else {
@@ -112,7 +112,7 @@ namespace GTI_MVC.Controllers {
             _req.Cpf_Cnpj = Functions.FormatarCpfCnpj(_cpfcnpj);
             string _tipoEnd = _cidadao.EnderecoC == "S" ? "C" : "R";
             _req.TipoEnd = _tipoEnd == "R" ? "RESIDENCIAL" : "COMERCIAL";
-            if(_tipoEnd == "R") {
+            if (_tipoEnd == "R") {
                 _req.Bairro_Nome = _cidadao.NomeBairroR;
                 _req.Bairro_Codigo = (int)_cidadao.CodigoBairroR;
                 _req.Cidade_Nome = _cidadao.NomeCidadeR;
@@ -139,13 +139,13 @@ namespace GTI_MVC.Controllers {
                 _req.Cep = _cidadao.CepC.ToString();
                 _req.Email = _cidadao.EmailC;
             }
-            if(_req.Logradouro_Codigo > 0) {
-                int nCep = enderecoRepository.RetornaCep(Convert.ToInt32(_req.Logradouro_Codigo),(short)_req.Numero);
+            if (_req.Logradouro_Codigo > 0) {
+                int nCep = enderecoRepository.RetornaCep(Convert.ToInt32(_req.Logradouro_Codigo), (short)_req.Numero);
                 _req.Cep = nCep.ToString("00000-000");
             }
 
-            if(_req.Bairro_Nome == null)
-                _req.Bairro_Nome = enderecoRepository.Retorna_Bairro(_req.UF,_req.Cidade_Codigo,_req.Bairro_Codigo);
+            if (_req.Bairro_Nome == null)
+                _req.Bairro_Nome = enderecoRepository.Retorna_Bairro(_req.UF, _req.Cidade_Codigo, _req.Bairro_Codigo);
 
             ParcelamentoViewModel model = new ParcelamentoViewModel {
                 Requerente = _req
@@ -154,20 +154,20 @@ namespace GTI_MVC.Controllers {
 
             //Lista de imóvel
             List<int> _listaImovel;
-            if(_bCpf)
+            if (_bCpf)
                 _listaImovel = imovelRepository.Lista_Imovel_Cpf(Functions.RetornaNumero(_req.Cpf_Cnpj));
             else
                 _listaImovel = imovelRepository.Lista_Imovel_Cnpj(Functions.RetornaNumero(_req.Cpf_Cnpj));
 
-            foreach(int cod in _listaImovel) {
+            foreach (int cod in _listaImovel) {
                 Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(cod);
                 string _desc = "Imóvel localizada na " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
-                if(!string.IsNullOrEmpty(_header.Complemento))
+                if (!string.IsNullOrEmpty(_header.Complemento))
                     _desc += " " + _header.Complemento;
                 _desc += ", " + _header.Nome_bairro;
-                if(!string.IsNullOrEmpty(_header.Quadra_original))
+                if (!string.IsNullOrEmpty(_header.Quadra_original))
                     _desc += " Quadra:" + _header.Quadra_original;
-                if(!string.IsNullOrEmpty(_header.Lote_original))
+                if (!string.IsNullOrEmpty(_header.Lote_original))
                     _desc += ", Lote:" + _header.Lote_original;
 
                 Parc_Codigos item = new Parc_Codigos() {
@@ -181,20 +181,20 @@ namespace GTI_MVC.Controllers {
 
             //Lista de empresas
             List<int> _listaEmpresa;
-            if(_bCpf)
+            if (_bCpf)
                 _listaEmpresa = empresaRepository.Lista_Empresa_Proprietario_Cpf(Functions.RetornaNumero(_req.Cpf_Cnpj));
             else
                 _listaEmpresa = empresaRepository.Lista_Empresa_Proprietario_Cnpj(Functions.RetornaNumero(_req.Cpf_Cnpj));
 
-            foreach(int cod in _listaEmpresa) {
+            foreach (int cod in _listaEmpresa) {
                 Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(cod);
                 string _desc = _header.Nome + ", localizada na(o): " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
-                if(!string.IsNullOrEmpty(_header.Complemento))
+                if (!string.IsNullOrEmpty(_header.Complemento))
                     _desc += " " + _header.Complemento;
                 _desc += ", " + _header.Nome_bairro;
-                if(!string.IsNullOrEmpty(_header.Quadra_original))
+                if (!string.IsNullOrEmpty(_header.Quadra_original))
                     _desc += " Quadra:" + _header.Quadra_original;
-                if(!string.IsNullOrEmpty(_header.Lote_original))
+                if (!string.IsNullOrEmpty(_header.Lote_original))
                     _desc += ", Lote:" + _header.Lote_original;
 
                 Parc_Codigos item = new Parc_Codigos() {
@@ -208,20 +208,20 @@ namespace GTI_MVC.Controllers {
 
             //Lista de cidadão
             List<Cidadao> _listaCidadao;
-            if(_bCpf)
-                _listaCidadao = cidadaoRepository.Lista_Cidadao(null,Functions.RetornaNumero(_req.Cpf_Cnpj),null);
+            if (_bCpf)
+                _listaCidadao = cidadaoRepository.Lista_Cidadao(null, Functions.RetornaNumero(_req.Cpf_Cnpj), null);
             else
-                _listaCidadao = cidadaoRepository.Lista_Cidadao(null,null,Functions.RetornaNumero(_req.Cpf_Cnpj));
+                _listaCidadao = cidadaoRepository.Lista_Cidadao(null, null, Functions.RetornaNumero(_req.Cpf_Cnpj));
 
-            foreach(Cidadao cod in _listaCidadao) {
+            foreach (Cidadao cod in _listaCidadao) {
                 Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(cod.Codcidadao);
                 string _desc = "Inscrição localizada na(o): " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
-                if(!string.IsNullOrEmpty(_header.Complemento))
+                if (!string.IsNullOrEmpty(_header.Complemento))
                     _desc += " " + _header.Complemento;
                 _desc += ", " + _header.Nome_bairro;
-                if(!string.IsNullOrEmpty(_header.Quadra_original))
+                if (!string.IsNullOrEmpty(_header.Quadra_original))
                     _desc += " Quadra:" + _header.Quadra_original;
-                if(!string.IsNullOrEmpty(_header.Lote_original))
+                if (!string.IsNullOrEmpty(_header.Lote_original))
                     _desc += ", Lote:" + _header.Lote_original;
 
                 Parc_Codigos item = new Parc_Codigos() {
@@ -235,9 +235,9 @@ namespace GTI_MVC.Controllers {
 
             //Lista de sócios de empresa de fora
             int y = 0;
-            foreach(Cidadao cod in _listaCidadao) {
+            foreach (Cidadao cod in _listaCidadao) {
                 List<CidadaoHeader> _listaSocio = cidadaoRepository.Lista_Cidadao_Socio(cod.Codcidadao);
-                foreach(CidadaoHeader head in _listaSocio) {
+                foreach (CidadaoHeader head in _listaSocio) {
                     string _cnpj = head.Cnpj;
                     Contribuinte_Header_Struct _header2 = sistemaRepository.Contribuinte_Header(head.Codigo);
                     Parc_Codigos item2 = new Parc_Codigos() {
@@ -248,16 +248,16 @@ namespace GTI_MVC.Controllers {
                     };
                     _listaCodigos.Add(item2);
                     List<int> _lista_imovel_socio = imovelRepository.Lista_Imovel_Socio(head.Codigo);
-                    foreach(int imovel in _lista_imovel_socio) {
-                        if(_lista_imovel_socio.Count > 0) {
+                    foreach (int imovel in _lista_imovel_socio) {
+                        if (_lista_imovel_socio.Count > 0) {
                             Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(imovel);
                             string _desc = "Imóvel localizado na: " + _header.Endereco_abreviado + ", " + _header.Numero.ToString();
-                            if(!string.IsNullOrEmpty(_header.Complemento))
+                            if (!string.IsNullOrEmpty(_header.Complemento))
                                 _desc += " " + _header.Complemento;
                             _desc += ", " + _header.Nome_bairro;
-                            if(!string.IsNullOrEmpty(_header.Quadra_original))
+                            if (!string.IsNullOrEmpty(_header.Quadra_original))
                                 _desc += " Quadra:" + _header.Quadra_original;
-                            if(!string.IsNullOrEmpty(_header.Lote_original))
+                            if (!string.IsNullOrEmpty(_header.Lote_original))
                                 _desc += ", Lote:" + _header.Lote_original;
 
                             Parc_Codigos item = new Parc_Codigos() {
@@ -275,12 +275,12 @@ namespace GTI_MVC.Controllers {
 
             model.Lista_Codigos = _listaCodigos;
             bool _func = false;
-            if(Session["hashfunc"]!=null)
+            if (Session["hashfunc"] != null)
                 _func = Session["hashfunc"].ToString() == "S" ? true : false;
 
             //Antes de retornar gravamos os dados
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
-            if(model.Guid == null) {
+            if (model.Guid == null) {
                 //Grava Master
                 model.Guid = Guid.NewGuid().ToString("N");
                 Parcelamento_web_master reg = new Parcelamento_web_master() {
@@ -299,22 +299,22 @@ namespace GTI_MVC.Controllers {
                     Requerente_Telefone = _req.Telefone ?? "",
                     Requerente_Uf = _req.UF ?? "",
                     Requerente_Email = _req.Email ?? "",
-                    User_interno=_func
+                    User_interno = _func
                 };
                 Exception ex = parcelamentoRepository.Incluir_Parcelamento_Web_Master(reg);
-                if(ex != null)
+                if (ex != null)
                     throw ex;
                 List<Parcelamento_web_lista_codigo> _listaCodigo = new List<Parcelamento_web_lista_codigo>();
-                foreach(Parc_Codigos item in _listaCodigos.OrderBy(m => m.Codigo)) {
+                foreach (Parc_Codigos item in _listaCodigos.OrderBy(m => m.Codigo)) {
                     bool _find = false;
-                    foreach(Parcelamento_web_lista_codigo tmp in _listaCodigo) {
-                        if(tmp.Codigo == item.Codigo) {
+                    foreach (Parcelamento_web_lista_codigo tmp in _listaCodigo) {
+                        if (tmp.Codigo == item.Codigo) {
                             _find = true;
                             break;
                         }
                     }
 
-                    if(!_find) {
+                    if (!_find) {
                         Parcelamento_web_lista_codigo _cod = new Parcelamento_web_lista_codigo() {
                             Guid = model.Guid,
                             Codigo = item.Codigo,
@@ -328,11 +328,11 @@ namespace GTI_MVC.Controllers {
                 }
 
                 ex = parcelamentoRepository.Incluir_Parcelamento_Web_Lista_Codigo(_listaCodigo);
-                if(ex != null)
+                if (ex != null)
                     throw ex;
 
                 _listaCodigos.Clear();
-                foreach(Parcelamento_web_lista_codigo item in _listaCodigo) {
+                foreach (Parcelamento_web_lista_codigo item in _listaCodigo) {
                     Parc_Codigos item2 = new Parc_Codigos() {
                         Codigo = item.Codigo,
                         Tipo = item.Tipo,
@@ -352,24 +352,24 @@ namespace GTI_MVC.Controllers {
         [Route("Parc_req")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Parc_req(ParcelamentoViewModel model,string listacod,string action) {
-            if(action == "btnAtualiza") {
-                return RedirectToAction("Parc_cid",new { p = model.Guid });
+        public ActionResult Parc_req(ParcelamentoViewModel model, string listacod, string action) {
+            if (action == "btnAtualiza") {
+                return RedirectToAction("Parc_cid", new { p = model.Guid });
             }
 
             int _codigo = 0;
-            for(int i = 0;i < model.Lista_Codigos.Count;i++) {
-                if(model.Lista_Codigos[i].Selected) {
+            for (int i = 0; i < model.Lista_Codigos.Count; i++) {
+                if (model.Lista_Codigos[i].Selected) {
                     _codigo = Convert.ToInt32(model.Lista_Codigos[i].Codigo);
                     break;
                 }
             }
-            if(_codigo == 0) {
+            if (_codigo == 0) {
                 ViewBag.Result = "Nenhuma inscrição foi selecionada.";
                 return View(model);
             }
 
-            if(string.IsNullOrEmpty(model.Requerente.Logradouro_Nome) || string.IsNullOrEmpty(model.Requerente.Bairro_Nome)) {
+            if (string.IsNullOrEmpty(model.Requerente.Logradouro_Nome) || string.IsNullOrEmpty(model.Requerente.Bairro_Nome)) {
                 ViewBag.Result = "Dados Cadastrais incompletos.";
                 return View(model);
             }
@@ -379,9 +379,9 @@ namespace GTI_MVC.Controllers {
             Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(_codigo);
-            if(_header.Cpf_cnpj == null) {
+            if (_header.Cpf_cnpj == null) {
                 _Lista_Codigos = parcelamentoRepository.Lista_Parcelamento_Lista_Codigo(model.Guid);
-                foreach(Parcelamento_web_lista_codigo item in _Lista_Codigos) {
+                foreach (Parcelamento_web_lista_codigo item in _Lista_Codigos) {
                     Parc_Codigos item2 = new Parc_Codigos() {
                         Codigo = item.Codigo,
                         Tipo = item.Tipo,
@@ -394,12 +394,12 @@ namespace GTI_MVC.Controllers {
                 model.Lista_Codigos = _listaCodigos;
                 return View(model);
             }
-            char _tipo = _header.Cpf_cnpj.Length == 11 ? 'F' : 'J';
+            char _tipo = Functions.RetornaNumero(_header.Cpf_cnpj).Length == 11 ? 'F' : 'J';
 
-            List<SpParcelamentoOrigem> Lista_Origem = parcelamentoRepository.Lista_Parcelamento_Origem(_codigo,_tipo);
+            List<SpParcelamentoOrigem> Lista_Origem = parcelamentoRepository.Lista_Parcelamento_Origem(_codigo, _tipo);
 
             _Lista_Codigos = parcelamentoRepository.Lista_Parcelamento_Lista_Codigo(model.Guid);
-            foreach(Parcelamento_web_lista_codigo item in _Lista_Codigos) {
+            foreach (Parcelamento_web_lista_codigo item in _Lista_Codigos) {
                 Parc_Codigos item2 = new Parc_Codigos() {
                     Codigo = item.Codigo,
                     Tipo = item.Tipo,
@@ -410,13 +410,13 @@ namespace GTI_MVC.Controllers {
             }
             model.Lista_Codigos = _listaCodigos;
 
-            if(Lista_Origem.Count == 0) {
+            if (Lista_Origem.Count == 0) {
                 ViewBag.Result = "Não existem débitos a serem parcelados para esta inscrição.";
                 return View(model);
             } else {
                 Exception ex = parcelamentoRepository.Excluir_parcelamento_Web_Origem(model.Guid);
                 List<Parcelamento_web_origem> _listaWebOrigem = new List<Parcelamento_web_origem>();
-                foreach(SpParcelamentoOrigem item in Lista_Origem) {
+                foreach (SpParcelamentoOrigem item in Lista_Origem) {
                     Parcelamento_web_origem reg = new Parcelamento_web_origem() {
                         Guid = model.Guid,
                         Idx = item.Idx,
@@ -432,7 +432,7 @@ namespace GTI_MVC.Controllers {
                         Valor_Juros = item.Valor_juros,
                         Valor_Multa = item.Valor_multa,
                         Valor_Correcao = item.Valor_correcao,
-                        Valor_Total = Math.Round(item.Valor_principal,2,MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros,2,MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa,2,MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao,2,MidpointRounding.AwayFromZero),
+                        Valor_Total = Math.Round(item.Valor_principal, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa, 2, MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao, 2, MidpointRounding.AwayFromZero),
                         Valor_Penalidade = item.Valor_penalidade,
                         Perc_Penalidade = item.Perc_penalidade,
                         Qtde_Parcelamento = item.Qtde_parcelamento,
@@ -442,7 +442,7 @@ namespace GTI_MVC.Controllers {
                     _listaWebOrigem.Add(reg);
                 }
                 ex = parcelamentoRepository.Incluir_Parcelamento_Web_Origem(_listaWebOrigem);
-                if(ex != null)
+                if (ex != null)
                     throw ex;
 
             }
@@ -450,24 +450,24 @@ namespace GTI_MVC.Controllers {
             _header = sistemaRepository.Contribuinte_Header(_codigo);
             bool _ativo = _header.Ativo;
             string _tipoDoc = "F";
-            if(_header.Cpf_cnpj.Length > 11) {
+            if (_header.Cpf_cnpj.Length > 11) {
                 _tipoDoc = "J";
-                if(_codigo > 100000 && _codigo < 300000) {
-                    if(!_ativo)
+                if (_codigo > 100000 && _codigo < 300000) {
+                    if (!_ativo)
                         _tipoDoc = "F"; //Empresas inativas são tratadas como Físicas
                     Empresa_bll empresaRepository = new Empresa_bll(_connection);
-                    if(empresaRepository.EmpresaSuspensa(_codigo))
+                    if (empresaRepository.EmpresaSuspensa(_codigo))
                         _tipoDoc = "F"; //Empresas suspensas são tratadas como Físicas
 
                 }
             }
 
             string _end = _header.Endereco + ", " + _header.Numero.ToString();
-            if(!string.IsNullOrEmpty(_header.Complemento))
+            if (!string.IsNullOrEmpty(_header.Complemento))
                 _end += " " + _header.Complemento;
-            if(!string.IsNullOrEmpty(_header.Quadra_original))
+            if (!string.IsNullOrEmpty(_header.Quadra_original))
                 _end += " Quadra:" + _header.Quadra_original;
-            if(!string.IsNullOrEmpty(_header.Lote_original))
+            if (!string.IsNullOrEmpty(_header.Lote_original))
                 _end += ", Lote:" + _header.Lote_original;
             Parcelamento_web_master regP = new Parcelamento_web_master() {
                 Guid = model.Guid,
@@ -490,13 +490,13 @@ namespace GTI_MVC.Controllers {
             regP.Plano_Codigo = _plano_codigo;
             regP.Plano_Nome = _plano.Nome;
 
-            decimal _valor_minimo = parcelamentoRepository.Retorna_Parcelamento_Valor_Minimo((short)DateTime.Now.Year,false,_tipoDoc);
+            decimal _valor_minimo = parcelamentoRepository.Retorna_Parcelamento_Valor_Minimo((short)DateTime.Now.Year, false, _tipoDoc);
             regP.Valor_minimo = _valor_minimo;
             Exception ex2 = parcelamentoRepository.Atualizar_Codigo_Master(regP);
-            if(ex2 != null)
+            if (ex2 != null)
                 throw ex2;
 
-            return RedirectToAction("Parc_reqb",new { p = model.Guid });
+            return RedirectToAction("Parc_reqb", new { p = model.Guid });
 
         }
 
@@ -504,22 +504,27 @@ namespace GTI_MVC.Controllers {
         [HttpGet]
         public ActionResult Parc_reqb(string p) {
             if (Request.Cookies["2lG1H*"] == null)
-                return RedirectToAction("Login","Home");
+                return RedirectToAction("Login", "Home");
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             bool _existe = parcelamentoRepository.Existe_Parcelamento_Web_Master(p);
-            if(!_existe)
-                return RedirectToAction("Login_gti","Home");
+            if (!_existe)
+                return RedirectToAction("Login_gti", "Home");
 
             int _plano_Codigo = 0;
             int _plano_parcelas = 0;
-            double _plano_Desconto = 0;
+            decimal _plano_Desconto = 0;
+            // decimal _plano_valor_minimo = 0;
             string _plano_nome = "Sem Plano de desconto";
+
+            //Load Master
+            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
+            char _tipoContribuinte = Functions.RetornaNumero(_master.Contribuinte_cpfcnpj).Length == 11 ? 'F' : 'J';
 
             if (_RefisAtivo) {
                 DateTime _dataNow = _connection == "gtiConnection" ? DateTime.Now : Convert.ToDateTime("20/12/2021");
 
-                if(Functions.DateInRange(Convert.ToDateTime(_dataNow.ToString("dd/MM/yyyy")),  Convert.ToDateTime("13/12/2021"), Convert.ToDateTime("28/12/2021"))) {
+                if (Functions.DateInRange(Convert.ToDateTime(_dataNow.ToString("dd/MM/yyyy")), Convert.ToDateTime("13/12/2021"), Convert.ToDateTime("28/12/2021"))) {
                     _plano_Codigo = 50;
                 } else {
                     if (Functions.DateInRange(Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy")), Convert.ToDateTime("29/12/2022"), Convert.ToDateTime("14/01/2022"))) {
@@ -532,22 +537,22 @@ namespace GTI_MVC.Controllers {
                 }
                 Plano _plano = parcelamentoRepository.Retorna_Plano_Desconto((short)_plano_Codigo);
                 _plano_nome = _plano.Nome;
-                _plano_Desconto =(double) _plano.Desconto;
+                _plano_Desconto = _plano.Desconto;
                 _plano_parcelas = _plano.Qtde_Parcela;
+
             }
 
-            //Load Master
-            Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
+
             ParcelamentoViewModel model = new ParcelamentoViewModel() {
                 Guid = p,
                 Plano_Codigo = _plano_Codigo,
                 Plano_Nome = _plano_nome,
-                Plano_Desconto=_plano_Desconto,
-                Plano_Qtde_Parcela=_plano_parcelas,
+                Plano_Desconto = _plano_Desconto,
+                Plano_Qtde_Parcela = _plano_parcelas,
                 Valor_Minimo = _master.Valor_minimo,
                 Perc_desconto = _master.Perc_Desconto,
                 Data_Vencimento = DateTime.Now.ToString("dd/MM/yyyy"),
-                Refis_Ativo=_RefisAtivo,
+                Refis_Ativo = _RefisAtivo,
             };
             model.Requerente = new Parc_Requerente() {
                 Codigo = _master.Requerente_Codigo,
@@ -581,20 +586,49 @@ namespace GTI_MVC.Controllers {
         [ValidateAntiForgeryToken]
         public ActionResult Parc_reqb(ParcelamentoViewModel model) {
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
+            decimal _plano_valor_minimo = model.Valor_Minimo;
+            char _tipoContribuinte = Functions.RetornaNumero(model.Contribuinte.Cpf_Cnpj).Length == 11 ? 'F' : 'J';
+            if (model.Plano_Selected == "Refis") {
+                model.Refis_Ativo = true;
+                if (_tipoContribuinte == 'F')
+                    _plano_valor_minimo = 100;
+                else
+                    _plano_valor_minimo = 250;
+            } else {
+                model.Refis_Ativo = false;
+                model.Plano_Codigo = 4;
+                model.Plano_Desconto = 0;
+                model.Plano_Nome = "(SEM PLANO)";
+            }
 
-            return RedirectToAction("Parc_reqc",new { p = model.Guid });
+            ////atualiza parcelamento_master
+            Parcelamento_web_master regP = new Parcelamento_web_master() {
+                Guid = model.Guid,
+                Perc_Desconto = model.Plano_Desconto,
+                Plano_Codigo = model.Plano_Codigo,
+                Plano_Nome = model.Plano_Nome,
+                Valor_minimo = _plano_valor_minimo,
+                Refis = model.Refis_Ativo
+            };
+
+
+            Exception ex2 = parcelamentoRepository.Atualizar_Refis_Master(regP);
+            if (ex2 != null)
+                throw ex2;
+
+            return RedirectToAction("Parc_reqc", new { p = model.Guid });
         }
 
         [Route("Parc_reqc")]
         [HttpGet]
         public ActionResult Parc_reqc(string p) {
             if (Request.Cookies["2lG1H*"] == null)
-                return RedirectToAction("Login","Home");
+                return RedirectToAction("Login", "Home");
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             bool _existe = parcelamentoRepository.Existe_Parcelamento_Web_Master(p);
-            if(!_existe)
-                return RedirectToAction("Login_gti","Home");
+            if (!_existe)
+                return RedirectToAction("Login_gti", "Home");
 
             //Load Master
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
@@ -634,7 +668,17 @@ namespace GTI_MVC.Controllers {
             decimal _SomaP = 0, _SomaM = 0, _SomaJ = 0, _SomaC = 0, _SomaT = 0;
             List<SpParcelamentoOrigem> ListaOrigem = parcelamentoRepository.Lista_Parcelamento_Origem(p);
             List<SelectDebitoParcelamentoEditorViewModel> _listaP = new List<SelectDebitoParcelamentoEditorViewModel>();
-            foreach(SpParcelamentoOrigem item in ListaOrigem) {
+            foreach (SpParcelamentoOrigem item in ListaOrigem) {
+                if (_master.Refis) {
+                    if (item.Data_vencimento > Convert.ToDateTime("30/11/2021"))
+                        goto nextparc;
+                    else {
+                        decimal _perc = _master.Perc_Desconto / 100;
+                        item.Valor_juros = item.Valor_juros - (item.Valor_juros * _perc);
+                        item.Valor_multa = item.Valor_multa - (item.Valor_multa * _perc);
+                        item.Valor_total = item.Valor_principal + item.Valor_juros + item.Valor_multa + item.Valor_correcao;
+                    }
+                }
                 SelectDebitoParcelamentoEditorViewModel d = new SelectDebitoParcelamentoEditorViewModel() {
                     Ajuizado = item.Ajuizado,
                     Complemento = item.Complemento,
@@ -642,7 +686,7 @@ namespace GTI_MVC.Controllers {
                     Exercicio = item.Exercicio,
                     Idx = item.Idx,
                     Lancamento = item.Lancamento,
-                    Nome_lancamento = Functions.TruncateTo(item.Nome_lancamento,16),
+                    Nome_lancamento = Functions.TruncateTo(item.Nome_lancamento, 16),
                     Parcela = item.Parcela,
                     Perc_penalidade = item.Perc_penalidade,
                     Qtde_parcelamento = item.Qtde_parcelamento,
@@ -662,7 +706,8 @@ namespace GTI_MVC.Controllers {
                 _SomaM += item.Valor_multa;
                 _SomaJ += item.Valor_juros;
                 _SomaC += item.Valor_correcao;
-                _SomaT += Math.Round(item.Valor_principal,2,MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros,2,MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa,2,MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao,2,MidpointRounding.AwayFromZero);
+                _SomaT += Math.Round(item.Valor_principal, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa, 2, MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao, 2, MidpointRounding.AwayFromZero);
+            nextparc:;
             }
             model.Soma_Principal = _SomaP;
             model.Soma_Multa = _SomaM;
@@ -694,8 +739,8 @@ namespace GTI_MVC.Controllers {
             int t = 1;
             decimal _totalSel = 0;
             List<SelectDebitoParcelamentoEditorViewModel> _listaOrigem = new List<SelectDebitoParcelamentoEditorViewModel>();
-            foreach(SelectDebitoParcelamentoEditorViewModel item in model.Lista_Origem) {
-                if(item.Selected) {
+            foreach (SelectDebitoParcelamentoEditorViewModel item in model.Lista_Origem) {
+                if (item.Selected) {
                     SelectDebitoParcelamentoEditorViewModel _r = new SelectDebitoParcelamentoEditorViewModel {
                         Ajuizado = item.Ajuizado,
                         Complemento = item.Complemento,
@@ -724,7 +769,7 @@ namespace GTI_MVC.Controllers {
                 }
             }
             model.Lista_Origem_Selected = _listaOrigem;
-            if(_totalSel / 2 < model.Valor_Minimo) {
+            if (_totalSel / 2 < model.Valor_Minimo) {
                 ViewBag.Result = "Valor mínimo da parcela deve ser de R$" + model.Valor_Minimo.ToString("#0.00");
                 return View(model);
             }
@@ -734,7 +779,7 @@ namespace GTI_MVC.Controllers {
             bool _ajuizado = false;
             decimal _somaP = 0, _somaJ = 0, _somaM = 0, _somaC = 0, _somaT = 0, _somaE = 0, _somaH = 0;
             List<Parcelamento_web_selected> _listaSelect = new List<Parcelamento_web_selected>();
-            foreach(SelectDebitoParcelamentoEditorViewModel item in _listaOrigem) {
+            foreach (SelectDebitoParcelamentoEditorViewModel item in _listaOrigem) {
                 _ajuizado = item.Ajuizado == "S" ? true : false;
                 Parcelamento_web_selected reg = new Parcelamento_web_selected() {
                     Ajuizado = item.Ajuizado,
@@ -758,7 +803,7 @@ namespace GTI_MVC.Controllers {
                     Execucao_Fiscal = item.Execucao_Fiscal,
                     Protesto = item.Protesto
                 };
-                if(item.Ajuizado == "S")
+                if (item.Ajuizado == "S")
                     reg.Valor_Honorario += item.Valor_total * (decimal)0.1;
 
                 _somaP += item.Valor_principal;
@@ -767,7 +812,7 @@ namespace GTI_MVC.Controllers {
                 _somaC += item.Valor_correcao;
                 _somaT += item.Valor_total;
                 _somaE += item.Valor_penalidade;
-                if(item.Ajuizado == "S")
+                if (item.Ajuizado == "S")
                     _somaH += item.Valor_total;
 
                 _listaSelect.Add(reg);
@@ -815,20 +860,20 @@ namespace GTI_MVC.Controllers {
             List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(model.Guid);
             List<Parcelamento_Web_Tributo> _listaTributo = new List<Parcelamento_Web_Tributo>();
             decimal _total = 0;
-            foreach(SpParcelamentoOrigem item in _listaSelected) {
-                List<SpExtrato> _listaExtrato = tributarioRepository.Lista_Extrato_Tributo(model.Contribuinte.Codigo,item.Exercicio,item.Exercicio,item.Lancamento,item.Lancamento,item.Sequencia,item.Sequencia,item.Parcela,item.Parcela,item.Complemento,item.Complemento);
-                foreach(SpExtrato _ext in _listaExtrato) {
+            foreach (SpParcelamentoOrigem item in _listaSelected) {
+                List<SpExtrato> _listaExtrato = tributarioRepository.Lista_Extrato_Tributo(model.Contribuinte.Codigo, item.Exercicio, item.Exercicio, item.Lancamento, item.Lancamento, item.Sequencia, item.Sequencia, item.Parcela, item.Parcela, item.Complemento, item.Complemento);
+                foreach (SpExtrato _ext in _listaExtrato) {
                     bool _find = false;
                     int _pos = 0;
-                    foreach(Parcelamento_Web_Tributo _trib in _listaTributo) {
-                        if(_trib.Tributo == _ext.Codtributo) {
+                    foreach (Parcelamento_Web_Tributo _trib in _listaTributo) {
+                        if (_trib.Tributo == _ext.Codtributo) {
                             _find = true;
                             break;
                         }
                         _pos++;
                     }
                     _total += _ext.Valortributo;
-                    if(!_find) {
+                    if (!_find) {
                         Parcelamento_Web_Tributo regT = new Parcelamento_Web_Tributo() {
                             Guid = model.Guid,
                             Tributo = _ext.Codtributo,
@@ -842,13 +887,13 @@ namespace GTI_MVC.Controllers {
                 }
             }
 
-            for(int i = 0;i < _listaTributo.Count;i++) {
+            for (int i = 0; i < _listaTributo.Count; i++) {
                 _listaTributo[i].Perc = _listaTributo[i].Valor * 100 / _total;
             }
 
             //Grava Honorario(90), Juros(113), Multa(112), Correcao(26) e Juros Apl(585)
             Parcelamento_Web_Tributo r = null;
-            if(_somaJ > 0) {
+            if (_somaJ > 0) {
                 r = new Parcelamento_Web_Tributo() {
                     Guid = model.Guid,
                     Tributo = 113,
@@ -858,7 +903,7 @@ namespace GTI_MVC.Controllers {
                 _listaTributo.Add(r);
             }
 
-            if(_somaH > 0) {
+            if (_somaH > 0) {
                 r = new Parcelamento_Web_Tributo() {
                     Guid = model.Guid,
                     Tributo = 90,
@@ -868,7 +913,7 @@ namespace GTI_MVC.Controllers {
                 _listaTributo.Add(r);
             }
 
-            if(_somaM > 0) {
+            if (_somaM > 0) {
                 r = new Parcelamento_Web_Tributo() {
                     Guid = model.Guid,
                     Tributo = 112,
@@ -878,7 +923,7 @@ namespace GTI_MVC.Controllers {
                 _listaTributo.Add(r);
             }
 
-            if(_somaC > 0) {
+            if (_somaC > 0) {
                 r = new Parcelamento_Web_Tributo() {
                     Guid = model.Guid,
                     Tributo = 26,
@@ -893,7 +938,7 @@ namespace GTI_MVC.Controllers {
 
             //###################
 
-            return RedirectToAction("Parc_reqd",new { p = model.Guid });
+            return RedirectToAction("Parc_reqd", new { p = model.Guid });
 
         }
 
@@ -901,12 +946,12 @@ namespace GTI_MVC.Controllers {
         [HttpGet]
         public ActionResult Parc_reqd(string p) {
             if (Request.Cookies["2lG1H*"] == null)
-                return RedirectToAction("Login","Home");
+                return RedirectToAction("Login", "Home");
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             bool _existe = parcelamentoRepository.Existe_Parcelamento_Web_Master(p);
-            if(!_existe)
-                return RedirectToAction("Login_gti","Home");
+            if (!_existe)
+                return RedirectToAction("Login_gti", "Home");
 
             //Load Master
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
@@ -947,7 +992,7 @@ namespace GTI_MVC.Controllers {
             List<SpParcelamentoOrigem> ListaOrigem = parcelamentoRepository.Lista_Parcelamento_Selected(p);
             bool _bAjuizado = ListaOrigem[0].Ajuizado == "S";
             List<SelectDebitoParcelamentoEditorViewModel> _listaP = new List<SelectDebitoParcelamentoEditorViewModel>();
-            foreach(SpParcelamentoOrigem item in ListaOrigem) {
+            foreach (SpParcelamentoOrigem item in ListaOrigem) {
                 SelectDebitoParcelamentoEditorViewModel d = new SelectDebitoParcelamentoEditorViewModel() {
                     Ajuizado = item.Ajuizado,
                     Complemento = item.Complemento,
@@ -955,7 +1000,7 @@ namespace GTI_MVC.Controllers {
                     Exercicio = item.Exercicio,
                     Idx = item.Idx,
                     Lancamento = item.Lancamento,
-                    Nome_lancamento = Functions.TruncateTo(item.Nome_lancamento,16),
+                    Nome_lancamento = Functions.TruncateTo(item.Nome_lancamento, 16),
                     Parcela = item.Parcela,
                     Perc_penalidade = item.Perc_penalidade,
                     Qtde_parcelamento = item.Qtde_parcelamento,
@@ -976,9 +1021,9 @@ namespace GTI_MVC.Controllers {
                 _SomaJ += item.Valor_juros;
                 _SomaC += item.Valor_correcao;
                 _SomaE += item.Valor_penalidade;
-                _SomaT += Math.Round(item.Valor_principal,2,MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros,2,MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa,2,MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao,2,MidpointRounding.AwayFromZero);
-                if(item.Ajuizado == "S")
-                    _SomaH += (Math.Round(item.Valor_principal,2,MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros,2,MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa,2,MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao,2,MidpointRounding.AwayFromZero)) * ((decimal)0.1);
+                _SomaT += Math.Round(item.Valor_principal, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa, 2, MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao, 2, MidpointRounding.AwayFromZero);
+                if (item.Ajuizado == "S")
+                    _SomaH += (Math.Round(item.Valor_principal, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa, 2, MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao, 2, MidpointRounding.AwayFromZero)) * ((decimal)0.1);
             }
             model.Soma_Principal = _SomaP;
             model.Soma_Multa = _SomaM;
@@ -991,15 +1036,15 @@ namespace GTI_MVC.Controllers {
             //Grava parcelamento_web_selected_name
             Exception ex = parcelamentoRepository.Excluir_parcelamento_Web_Selected_Name(p);
             List<Parcelamento_Web_Selected_Name> _listaName = new List<Parcelamento_Web_Selected_Name>();
-            foreach(SpParcelamentoOrigem item in ListaOrigem) {
+            foreach (SpParcelamentoOrigem item in ListaOrigem) {
                 bool _find = false;
-                foreach(Parcelamento_Web_Selected_Name s in _listaName) {
-                    if(s.Ano == item.Exercicio && s.Lancamento == item.Lancamento) {
+                foreach (Parcelamento_Web_Selected_Name s in _listaName) {
+                    if (s.Ano == item.Exercicio && s.Lancamento == item.Lancamento) {
                         _find = true;
                         break;
                     }
                 }
-                if(!_find) {
+                if (!_find) {
                     Parcelamento_Web_Selected_Name reg = new Parcelamento_Web_Selected_Name() {
                         Guid = p,
                         Ano = item.Exercicio,
@@ -1015,12 +1060,12 @@ namespace GTI_MVC.Controllers {
 
             ex = parcelamentoRepository.Excluir_parcelamento_Web_Simulado(model.Guid);
             ex = parcelamentoRepository.Excluir_parcelamento_Web_Simulado_Resumo(model.Guid);
-            List<Parcelamento_Web_Simulado> _listaSimulado = parcelamentoRepository.Lista_Parcelamento_Destino(model.Guid,(short)model.Plano_Codigo,DateTime.Now,_bAjuizado,_bAjuizado,_SomaP,_SomaJ,_SomaM,_SomaC,_SomaT,_SomaE,model.Valor_Minimo,_SomaH);
+            List<Parcelamento_Web_Simulado> _listaSimulado = parcelamentoRepository.Lista_Parcelamento_Destino(model.Guid, (short)model.Plano_Codigo, DateTime.Now, _bAjuizado, _bAjuizado, _SomaP, _SomaJ, _SomaM, _SomaC, _SomaT, _SomaE, model.Valor_Minimo, _SomaH);
 
             bool _issCCivilAVencer = false;
-            foreach(SpParcelamentoOrigem _d in ListaOrigem) {
-                if(_d.Lancamento == 65) {
-                    if(_d.Data_vencimento > DateTime.Now) {
+            foreach (SpParcelamentoOrigem _d in ListaOrigem) {
+                if (_d.Lancamento == 65) {
+                    if (_d.Data_vencimento > DateTime.Now) {
                         _issCCivilAVencer = true;
                         break;
                     }
@@ -1028,7 +1073,7 @@ namespace GTI_MVC.Controllers {
             }
 
             int _qtdeMaxParcela = 0;
-            if(_issCCivilAVencer) _qtdeMaxParcela = 12;
+            if (_issCCivilAVencer) _qtdeMaxParcela = 12;
 
 
             IEnumerable<int> _listaQtde = _listaSimulado.Select(o => o.Qtde_Parcela).Distinct();
@@ -1036,19 +1081,19 @@ namespace GTI_MVC.Controllers {
             decimal _valor1 = 0, _valorN = 0;
             List<Parc_Resumo> Lista_resumo = new List<Parc_Resumo>();
             List<Parcelamento_Web_Simulado_Resumo> _lista_Web_Simulado_Resumo = new List<Parcelamento_Web_Simulado_Resumo>();
-            foreach(int linha in _listaQtde) {
-                if(_qtdeMaxParcela > 0) {
-                    if(linha > _qtdeMaxParcela) {
+            foreach (int linha in _listaQtde) {
+                if (_qtdeMaxParcela > 0) {
+                    if (linha > _qtdeMaxParcela) {
                         goto Fim;
                     }
                 }
 
-                foreach(Parcelamento_Web_Simulado item in _listaSimulado) {
-                    if(item.Qtde_Parcela == linha && item.Numero_Parcela == 1) {
+                foreach (Parcelamento_Web_Simulado item in _listaSimulado) {
+                    if (item.Qtde_Parcela == linha && item.Numero_Parcela == 1) {
                         _valor1 = item.Valor_Total;
                     } else {
-                        if(item.Qtde_Parcela == linha && item.Numero_Parcela == 2) {
-                            if(item.Valor_Total < model.Valor_Minimo)
+                        if (item.Qtde_Parcela == linha && item.Numero_Parcela == 2) {
+                            if (item.Valor_Total < model.Valor_Minimo)
                                 goto Fim;
                             _valorN = item.Valor_Total;
                             break;
@@ -1069,11 +1114,11 @@ namespace GTI_MVC.Controllers {
                     Valor_N = "R$" + _valorN.ToString("#0.00"),
                     Valor_Total = "R$" + t.Valor_Total.ToString("#0.00"),
                 };
-                if(linha == 2)
+                if (linha == 2)
                     r.Selected = true;
                 Lista_resumo.Add(r);
             }
-Fim:;
+        Fim:;
             ex = parcelamentoRepository.Incluir_Parcelamento_Web_Simulado_Resumo(_lista_Web_Simulado_Resumo);
             model.Lista_Resumo = Lista_resumo;
 
@@ -1085,16 +1130,16 @@ Fim:;
         [Route("Parc_reqd")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Parc_reqd(ParcelamentoViewModel model,string action) {
+        public ActionResult Parc_reqd(ParcelamentoViewModel model, string action) {
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
-            if(action == "btPrint") {
+            if (action == "btPrint") {
                 List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(model.Guid);
                 string _anos = "";
                 IEnumerable<short> _listaAnos = _listaSelected.Select(o => o.Exercicio).Distinct();
-                foreach(short item in _listaAnos) {
+                foreach (short item in _listaAnos) {
                     _anos += item.ToString() + ", ";
                 }
-                _anos = _anos.Substring(0,_anos.Length - 2);
+                _anos = _anos.Substring(0, _anos.Length - 2);
 
                 ReportDocument rd = new ReportDocument();
                 rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Simulado_Parcelamento.rpt"));
@@ -1114,7 +1159,7 @@ Fim:;
                 crConnectionInfo.UserID = _userId;
                 crConnectionInfo.Password = _pwd;
                 CrTables = rd.Database.Tables;
-                foreach(Table CrTable in CrTables) {
+                foreach (Table CrTable in CrTables) {
                     crtableLogoninfo = CrTable.LogOnInfo;
                     crtableLogoninfo.ConnectionInfo = crConnectionInfo;
                     CrTable.ApplyLogOnInfo(crtableLogoninfo);
@@ -1122,22 +1167,22 @@ Fim:;
 
                 try {
                     rd.RecordSelectionFormula = "{Parcelamento_Web_Master.Guid}='" + model.Guid + "'";
-                    rd.SetParameterValue("EXERCICIO",_anos);
+                    rd.SetParameterValue("EXERCICIO", _anos);
                     Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
-                    return File(stream,"application/pdf","Simulado_Parcelamento.pdf");
+                    return File(stream, "application/pdf", "Simulado_Parcelamento.pdf");
                 } catch {
                     throw;
                 }
             } else {
-                foreach(Parc_Resumo item in model.Lista_Resumo) {
-                    if(item.Selected) {
-                        Exception ex = parcelamentoRepository.Atualizar_QtdeParcela_Master(model.Guid,item.Qtde_Parcela);
+                foreach (Parc_Resumo item in model.Lista_Resumo) {
+                    if (item.Selected) {
+                        Exception ex = parcelamentoRepository.Atualizar_QtdeParcela_Master(model.Guid, item.Qtde_Parcela);
                         break;
                     }
                 }
                 //return RedirectToAction("Parc_reqe", new { p = model.Guid });
                 Parc_reqe_old(model.Guid); //Executa o antigo get do parc_reqE
-                return RedirectToAction("Parc_tan",new { p = model.Guid });
+                return RedirectToAction("Parc_tan", new { p = model.Guid });
             }
 
         }
@@ -1146,16 +1191,16 @@ Fim:;
         [HttpGet]
         public ActionResult Parc_reqe(string p) {
             if (Request.Cookies["2lG1H*"] == null)
-                return RedirectToAction("Login","Home");
+                return RedirectToAction("Login", "Home");
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             bool _existe = parcelamentoRepository.Existe_Parcelamento_Web_Master(p);
-            if(!_existe)
-                return RedirectToAction("Login_gti","Home");
+            if (!_existe)
+                return RedirectToAction("Login_gti", "Home");
 
             //Load Master
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
-            if(_master.Processo_Numero > 0)
+            if (_master.Processo_Numero > 0)
                 return RedirectToAction("Parc_index");
 
             ParcelamentoViewModel model = new ParcelamentoViewModel() {
@@ -1195,7 +1240,7 @@ Fim:;
             List<SpParcelamentoOrigem> ListaOrigem = parcelamentoRepository.Lista_Parcelamento_Selected(p);
             bool _bAjuizado = ListaOrigem[0].Ajuizado == "S";
             List<SelectDebitoParcelamentoEditorViewModel> _listaP = new List<SelectDebitoParcelamentoEditorViewModel>();
-            foreach(SpParcelamentoOrigem item in ListaOrigem) {
+            foreach (SpParcelamentoOrigem item in ListaOrigem) {
                 SelectDebitoParcelamentoEditorViewModel d = new SelectDebitoParcelamentoEditorViewModel() {
                     Ajuizado = item.Ajuizado,
                     Complemento = item.Complemento,
@@ -1203,7 +1248,7 @@ Fim:;
                     Exercicio = item.Exercicio,
                     Idx = item.Idx,
                     Lancamento = item.Lancamento,
-                    Nome_lancamento = Functions.TruncateTo(item.Nome_lancamento,16),
+                    Nome_lancamento = Functions.TruncateTo(item.Nome_lancamento, 16),
                     Parcela = item.Parcela,
                     Perc_penalidade = item.Perc_penalidade,
                     Qtde_parcelamento = item.Qtde_parcelamento,
@@ -1224,7 +1269,7 @@ Fim:;
                 _SomaJ += item.Valor_juros;
                 _SomaC += item.Valor_correcao;
                 _SomaE += item.Valor_penalidade;
-                _SomaT += Math.Round(item.Valor_principal,2,MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros,2,MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa,2,MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao,2,MidpointRounding.AwayFromZero);
+                _SomaT += Math.Round(item.Valor_principal, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa, 2, MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao, 2, MidpointRounding.AwayFromZero);
             }
             model.Soma_Principal = _SomaP;
             model.Soma_Multa = _SomaM;
@@ -1235,13 +1280,13 @@ Fim:;
             model.Lista_Origem_Selected = _listaP;
 
             //Carrega Simulado
-            model.Lista_Simulado = parcelamentoRepository.Retorna_Parcelamento_Web_Simulado(model.Guid,_master.Qtde_Parcela);
+            model.Lista_Simulado = parcelamentoRepository.Retorna_Parcelamento_Web_Simulado(model.Guid, _master.Qtde_Parcela);
 
             //Atualiza Totais
             decimal _SomaH = 0, _SomaJapl = 0, _SomaL = 0;
             _SomaP = 0; _SomaC = 0; _SomaJ = 0; _SomaM = 0; _SomaT = 0;
 
-            foreach(Parcelamento_Web_Simulado item in model.Lista_Simulado) {
+            foreach (Parcelamento_Web_Simulado item in model.Lista_Simulado) {
                 _SomaL += item.Valor_Liquido;
                 _SomaJ += item.Valor_Juros;
                 _SomaM += item.Valor_Multa;
@@ -1285,12 +1330,12 @@ Fim:;
         [Route("Parc_reqe")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Parc_reqe(ParcelamentoViewModel model,string action,string value) {
+        public ActionResult Parc_reqe(ParcelamentoViewModel model, string action, string value) {
             if (Request.Cookies["2lG1H*"] == null) {
-                return RedirectToAction("Login","Home");
+                return RedirectToAction("Login", "Home");
             }
 
-            if(action == "btnResumo") {
+            if (action == "btnResumo") {
                 ReportDocument rd = new ReportDocument();
                 rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Resumo_Parcelamento_previa.rpt"));
                 TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
@@ -1308,7 +1353,7 @@ Fim:;
                 crConnectionInfo.UserID = _userId;
                 crConnectionInfo.Password = _pwd;
                 CrTables = rd.Database.Tables;
-                foreach(Table CrTable in CrTables) {
+                foreach (Table CrTable in CrTables) {
                     crtableLogoninfo = CrTable.LogOnInfo;
                     crtableLogoninfo.ConnectionInfo = crConnectionInfo;
                     CrTable.ApplyLogOnInfo(crtableLogoninfo);
@@ -1317,42 +1362,42 @@ Fim:;
                 try {
                     rd.RecordSelectionFormula = "{Parcelamento_Web_Master.Guid}='" + model.Guid + "'";
                     Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
-                    return File(stream,"application/pdf","Resumo_Parcelamento.pdf");
+                    return File(stream, "application/pdf", "Resumo_Parcelamento.pdf");
                 } catch {
                     throw;
                 }
             }
-            return RedirectToAction("Parc_tan",new { p = model.Guid });
+            return RedirectToAction("Parc_tan", new { p = model.Guid });
         }
 
         [Route("Parc_tan")]
         [HttpGet]
         public ActionResult Parc_tan(string p) {
             if (Request.Cookies["2lG1H*"] == null)
-                return RedirectToAction("Login","Home");
+                return RedirectToAction("Login", "Home");
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             //List <Parcelamento_Web_Simulado>_listaS = parcelamentoRepository.Retorna_Parcelamento_Web_Simulado(p,2);
             //if(_listaS.Count == 0) {
             //    return RedirectToAction("Parc_index");
             //}
-            
+
             bool _existe = parcelamentoRepository.Existe_Parcelamento_Web_Master(p);
-            if(!_existe)
-                return RedirectToAction("Login_gti","Home");
+            if (!_existe)
+                return RedirectToAction("Login_gti", "Home");
 
             //Load Master
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
-            if(_master.Processo_Numero > 0)
+            if (_master.Processo_Numero > 0)
                 return RedirectToAction("Parc_index");
 
 
             //Carrega Origem
             List<SpParcelamentoOrigem> _listaO = parcelamentoRepository.Lista_Parcelamento_Selected(p);
             string _ajuizado = _listaO[0].Ajuizado;
-            if(_ajuizado == "N") {
-                foreach(SpParcelamentoOrigem item in _listaO) {
-                    if(item.Protesto == "S") {
+            if (_ajuizado == "N") {
+                foreach (SpParcelamentoOrigem item in _listaO) {
+                    if (item.Protesto == "S") {
                         _ajuizado = "S";
                         break;
                     }
@@ -1367,12 +1412,12 @@ Fim:;
         [Route("Parc_tan")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Parc_tan(ParcelamentoViewModel model,string action) {
+        public ActionResult Parc_tan(ParcelamentoViewModel model, string action) {
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             string _guid = model.Guid;
 
-            if(action == "Parc_tan" || action=="btnOK") {
+            if (action == "Parc_tan" || action == "btnOK") {
                 int _userId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
                 bool _userWeb = Session["hashfunc"].ToString() == "S" ? false : true;
                 Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(_guid);
@@ -1392,14 +1437,14 @@ Fim:;
 
                 List<Parcelamento_Web_Selected_Name_Struct> _listaName = parcelamentoRepository.Lista_Parcelamento_Web_Selected_Name(_guid);
                 IEnumerable<string> _listaLanc = _listaName.Select(o => o.Lancamento_Nome).Distinct();
-                foreach(string _lanc in _listaLanc) {
+                foreach (string _lanc in _listaLanc) {
                     string _Exercicio = "";
-                    foreach(Parcelamento_Web_Selected_Name_Struct item in _listaName) {
-                        if(item.Lancamento_Nome == _lanc) {
+                    foreach (Parcelamento_Web_Selected_Name_Struct item in _listaName) {
+                        if (item.Lancamento_Nome == _lanc) {
                             _Exercicio += item.Ano.ToString() + ", ";
                         }
                     }
-                    _Exercicio = _Exercicio.Substring(0,_Exercicio.Length - 2);
+                    _Exercicio = _Exercicio.Substring(0, _Exercicio.Length - 2);
                     _obs += _lanc + ": " + _Exercicio + " ";
                 }
 
@@ -1424,14 +1469,14 @@ Fim:;
                     Userweb = _userWeb
                 };
                 Exception ex = protocoloRepository.Incluir_Processo(_p);
-                ex = parcelamentoRepository.Atualizar_Processo_Master(_guid,_ano,_numero);
+                ex = parcelamentoRepository.Atualizar_Processo_Master(_guid, _ano, _numero);
 
 
                 //Grava tabela web_destino com as parcelas do simulado
-                model.Lista_Simulado = parcelamentoRepository.Retorna_Parcelamento_Web_Simulado(model.Guid,_master.Qtde_Parcela);
+                model.Lista_Simulado = parcelamentoRepository.Retorna_Parcelamento_Web_Simulado(model.Guid, _master.Qtde_Parcela);
                 ex = parcelamentoRepository.Excluir_parcelamento_Web_Destino(model.Guid);
                 List<Parcelamento_Web_Destino> _lista_Parcelamento_Web_Destino = new List<Parcelamento_Web_Destino>();
-                foreach(Parcelamento_Web_Simulado _s in model.Lista_Simulado.Where(m => m.Qtde_Parcela == _qtdeParc)) {
+                foreach (Parcelamento_Web_Simulado _s in model.Lista_Simulado.Where(m => m.Qtde_Parcela == _qtdeParc)) {
                     Parcelamento_Web_Destino _d = new Parcelamento_Web_Destino() {
                         Data_Vencimento = _s.Data_Vencimento,
                         Guid = _s.Guid,
@@ -1488,7 +1533,7 @@ Fim:;
 
                 //grava tabela origemreparc
                 List<Origemreparc> _listaOrigem = new List<Origemreparc>();
-                foreach(SpParcelamentoOrigem item in _listaSelected) {
+                foreach (SpParcelamentoOrigem item in _listaSelected) {
                     Origemreparc _o = new Origemreparc() {
                         Numprocesso = _numProc,
                         Anoproc = _ano,
@@ -1526,7 +1571,7 @@ Fim:;
                 List<Destinoreparc> _listaDestinoReparc = new List<Destinoreparc>();
                 List<Debitoparcela> _listaDebitoParcela = new List<Debitoparcela>();
                 List<Debitotributo> _listaDebitoTributo = new List<Debitotributo>();
-                foreach(Parcelamento_Web_Destino item in _listaDestino) {
+                foreach (Parcelamento_Web_Destino item in _listaDestino) {
                     Destinoreparc _d = new Destinoreparc() {
                         Numprocesso = _numProc,
                         Anoproc = _ano,
@@ -1552,7 +1597,7 @@ Fim:;
                     _listaDestinoReparc.Add(_d);
 
                     byte _status;
-                    if(item.Data_Vencimento.Year == DateTime.Now.Year)
+                    if (item.Data_Vencimento.Year == DateTime.Now.Year)
                         _status = 3;
                     else
                         _status = 18;
@@ -1575,7 +1620,7 @@ Fim:;
                     decimal _PercN = _lista_Parcelamento_Web_Destino[1].Proporcao;
 
                     List<Parcelamento_Web_Tributo> _ListaTributo = parcelamentoRepository.Lista_Parcelamento_Tributo(model.Guid);
-                    foreach(Parcelamento_Web_Tributo trib in _ListaTributo) {
+                    foreach (Parcelamento_Web_Tributo trib in _ListaTributo) {
                         Debitotributo _dt = new Debitotributo() {
                             Codreduzido = dp.Codreduzido,
                             Anoexercicio = dp.Anoexercicio,
@@ -1586,12 +1631,12 @@ Fim:;
                             Codtributo = (short)trib.Tributo
 
                         };
-                        if(_dt.Numparcela == 1)
+                        if (_dt.Numparcela == 1)
                             _dt.Valortributo = trib.Valor * _Perc1 / 100;
                         else
                             _dt.Valortributo = trib.Valor * _PercN / 100;
 
-                        if(_dt.Codtributo == 585)
+                        if (_dt.Codtributo == 585)
                             _dt.Valortributo = trib.Valor;
                         _listaDebitoTributo.Add(_dt);
                     }
@@ -1600,23 +1645,23 @@ Fim:;
                 ex = parcelamentoRepository.Incluir_DestinoReparc(_listaDestinoReparc);
                 ex = parcelamentoRepository.Incluir_Debito_Parcela(_listaDebitoParcela);
                 ex = parcelamentoRepository.Incluir_Debito_Tributo(_listaDebitoTributo);
-                ex = parcelamentoRepository.Atualizar_Status_Origem(_codigoC,_listaSelected);
+                ex = parcelamentoRepository.Atualizar_Status_Origem(_codigoC, _listaSelected);
 
 
-                return RedirectToAction("Parc_tcd",new { p = model.Guid });
+                return RedirectToAction("Parc_tcd", new { p = model.Guid });
             } else {
-                if(action == "btPrint") {
+                if (action == "btPrint") {
                     return Termo_anuencia_print(model.Guid);
                 }
             }
-            return RedirectToAction("Login","Home");
+            return RedirectToAction("Login", "Home");
         }
 
         [Route("Parc_tcd")]
         [HttpGet]
         public ActionResult Parc_tcd(string p) {
-            if (Request.Cookies["2lG1H*"] == null || p==null)
-                return RedirectToAction("Login","Home");
+            if (Request.Cookies["2lG1H*"] == null || p == null)
+                return RedirectToAction("Login", "Home");
 
             string _guid = p;
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
@@ -1639,10 +1684,10 @@ Fim:;
             List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(p);
             IEnumerable<short> _listaAnos = _listaSelected.Select(o => o.Exercicio).Distinct();
             string _ano = "";
-            foreach(short item in _listaAnos) {
+            foreach (short item in _listaAnos) {
                 _ano += item.ToString() + ", ";
             }
-            _ano = _ano.Substring(0,_ano.Length - 2);
+            _ano = _ano.Substring(0, _ano.Length - 2);
 
             model.Contribuinte = pc;
             model.Requerente = pr;
@@ -1658,15 +1703,15 @@ Fim:;
         [Route("Parc_tcd")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Parc_tcd(ParcelamentoViewModel model,string action) {
+        public ActionResult Parc_tcd(ParcelamentoViewModel model, string action) {
             if (Request.Cookies["2lG1H*"] == null)
-                return RedirectToAction("Login","Home");
+                return RedirectToAction("Login", "Home");
 
-            if(action == "btnPrintTermo") {
+            if (action == "btnPrintTermo") {
                 return Termo_confissao_divida(model.Guid);
             }
 
-            if(action == "btnPrintResumo") {
+            if (action == "btnPrintResumo") {
                 ReportDocument rd = new ReportDocument();
                 rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Resumo_Parcelamento.rpt"));
                 TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
@@ -1684,7 +1729,7 @@ Fim:;
                 crConnectionInfo.UserID = _userId;
                 crConnectionInfo.Password = _pwd;
                 CrTables = rd.Database.Tables;
-                foreach(Table CrTable in CrTables) {
+                foreach (Table CrTable in CrTables) {
                     crtableLogoninfo = CrTable.LogOnInfo;
                     crtableLogoninfo.ConnectionInfo = crConnectionInfo;
                     CrTable.ApplyLogOnInfo(crtableLogoninfo);
@@ -1693,35 +1738,35 @@ Fim:;
                 try {
                     rd.RecordSelectionFormula = "{Parcelamento_Web_Master.Guid}='" + model.Guid + "'";
                     Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
-                    return File(stream,"application/pdf","Resumo_Parcelamento.pdf");
+                    return File(stream, "application/pdf", "Resumo_Parcelamento.pdf");
                 } catch {
                     throw;
                 }
 
             }
-            if(action == "btnPrintBoleto") {
-                return RedirectToAction("Parc_bk",new { p = model.Guid });
+            if (action == "btnPrintBoleto") {
+                return RedirectToAction("Parc_bk", new { p = model.Guid });
             }
-            if(action == "btnPrintBoleto2") {
-                return RedirectToAction("bank_Method",new { p = model.Guid });
+            if (action == "btnPrintBoleto2") {
+                return RedirectToAction("bank_Method", new { p = model.Guid });
             }
 
-            if(action == "btnFinalizar")
+            if (action == "btnFinalizar")
                 return RedirectToAction("Parc_query");
 
-            return RedirectToAction("Login","Home");
+            return RedirectToAction("Login", "Home");
         }
 
         [Route("Parc_reqf")]
         [HttpGet]
         public ActionResult Parc_reqf(string p) {
             if (Request.Cookies["2lG1H*"] == null)
-                return RedirectToAction("Login","Home");
+                return RedirectToAction("Login", "Home");
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             bool _existe = parcelamentoRepository.Existe_Parcelamento_Web_Master(p);
-            if(!_existe)
-                return RedirectToAction("Login_gti","Home");
+            if (!_existe)
+                return RedirectToAction("Login_gti", "Home");
 
             //Load Master
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
@@ -1778,7 +1823,7 @@ Fim:;
             List<SpParcelamentoOrigem> ListaOrigem = parcelamentoRepository.Lista_Parcelamento_Selected(p);
             bool _bAjuizado = ListaOrigem[0].Ajuizado == "S";
             List<SelectDebitoParcelamentoEditorViewModel> _listaP = new List<SelectDebitoParcelamentoEditorViewModel>();
-            foreach(SpParcelamentoOrigem item in ListaOrigem) {
+            foreach (SpParcelamentoOrigem item in ListaOrigem) {
                 SelectDebitoParcelamentoEditorViewModel d = new SelectDebitoParcelamentoEditorViewModel() {
                     Ajuizado = item.Ajuizado,
                     Complemento = item.Complemento,
@@ -1786,7 +1831,7 @@ Fim:;
                     Exercicio = item.Exercicio,
                     Idx = item.Idx,
                     Lancamento = item.Lancamento,
-                    Nome_lancamento = Functions.TruncateTo(item.Nome_lancamento,16),
+                    Nome_lancamento = Functions.TruncateTo(item.Nome_lancamento, 16),
                     Parcela = item.Parcela,
                     Perc_penalidade = item.Perc_penalidade,
                     Qtde_parcelamento = item.Qtde_parcelamento,
@@ -1808,7 +1853,7 @@ Fim:;
             //Carrega Destino
             List<Parcelamento_Web_Destino> _listaD = parcelamentoRepository.Lista_Parcelamento_Web_Destino(model.Guid);
             List<Parcelamento_Web_Simulado> _listaS = new List<Parcelamento_Web_Simulado>();
-            foreach(Parcelamento_Web_Destino item in _listaD) {
+            foreach (Parcelamento_Web_Destino item in _listaD) {
                 Parcelamento_Web_Simulado _s = new Parcelamento_Web_Simulado() {
                     Data_Vencimento = item.Data_Vencimento,
                     Guid = item.Guid,
@@ -1837,14 +1882,14 @@ Fim:;
         [Route("Parc_reqf")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Parc_reqf(ParcelamentoViewModel model,string action) {
+        public ActionResult Parc_reqf(ParcelamentoViewModel model, string action) {
             if (Request.Cookies["2lG1H*"] == null) {
-                return RedirectToAction("Login","Home");
+                return RedirectToAction("Login", "Home");
             }
-            if(action == "btnVoltar")
+            if (action == "btnVoltar")
                 return RedirectToAction("Parc_query");
 
-            if(action == "btnPrintResumo") {
+            if (action == "btnPrintResumo") {
                 ReportDocument rd = new ReportDocument();
                 rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Resumo_Parcelamento.rpt"));
                 TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
@@ -1862,7 +1907,7 @@ Fim:;
                 crConnectionInfo.UserID = _userId;
                 crConnectionInfo.Password = _pwd;
                 CrTables = rd.Database.Tables;
-                foreach(Table CrTable in CrTables) {
+                foreach (Table CrTable in CrTables) {
                     crtableLogoninfo = CrTable.LogOnInfo;
                     crtableLogoninfo.ConnectionInfo = crConnectionInfo;
                     CrTable.ApplyLogOnInfo(crtableLogoninfo);
@@ -1871,18 +1916,18 @@ Fim:;
                 try {
                     rd.RecordSelectionFormula = "{Parcelamento_Web_Master.Guid}='" + model.Guid + "'";
                     Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
-                    return File(stream,"application/pdf","Resumo_Parcelamento.pdf");
+                    return File(stream, "application/pdf", "Resumo_Parcelamento.pdf");
                 } catch {
                     throw;
                 }
 
             }
 
-            if(action == "btnPrintBoleto") {
-                return RedirectToAction("Parc_bk",new { p = model.Guid });
+            if (action == "btnPrintBoleto") {
+                return RedirectToAction("Parc_bk", new { p = model.Guid });
             }
-            if(action == "btnPrintBoleto2") {
-                return RedirectToAction("bank_Method",new { p = model.Guid });
+            if (action == "btnPrintBoleto2") {
+                return RedirectToAction("bank_Method", new { p = model.Guid });
             }
             if (action == "btnPrintTermo") {
                 return Termo_confissao_divida(model.Guid);
@@ -1895,7 +1940,7 @@ Fim:;
         [HttpGet]
         public ActionResult Parc_query() {
             if (Request.Cookies["2lG1H*"] == null)
-                return RedirectToAction("Login","Home");
+                return RedirectToAction("Login", "Home");
             int _userId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
 
@@ -1916,7 +1961,7 @@ Fim:;
         [HttpGet]
         public ActionResult Parc_bk(string p) {
             if (Request.Cookies["2lG1H*"] == null)
-                return RedirectToAction("Login","Home");
+                return RedirectToAction("Login", "Home");
             int _userId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
 
@@ -1931,7 +1976,7 @@ Fim:;
             string _proc = _master.Processo_Extenso;
 
             //Dados da 1º parcela do parcelamento
-            List<Destinoreparc> _listaD = parcelamentoRepository.Lista_Destino_Parcelamento(_master.Processo_Ano,_master.Processo_Numero);
+            List<Destinoreparc> _listaD = parcelamentoRepository.Lista_Destino_Parcelamento(_master.Processo_Ano, _master.Processo_Numero);
             short _ano = _listaD[0].Anoexercicio;
             short _lanc = 20;
             short _seq = _listaD[0].Numsequencia;
@@ -1939,9 +1984,9 @@ Fim:;
             byte _compl = 0;
             DateTime _dataVencto = (DateTime)_master.Data_Vencimento;
 
-            List<Debitotributo> _listaT = parcelamentoRepository.Lista_Debito_Tributo(_codigo,_ano,_lanc,_seq,_parcela,_compl);
+            List<Debitotributo> _listaT = parcelamentoRepository.Lista_Debito_Tributo(_codigo, _ano, _lanc, _seq, _parcela, _compl);
             decimal? _soma = _listaT.Sum(m => m.Valortributo);
-            decimal _somaT = Math.Round((decimal)_soma,2);
+            decimal _somaT = Math.Round((decimal)_soma, 2);
 
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             Tributario_bll tributarioRepositoryTmp = new Tributario_bll(_connection);
@@ -1994,8 +2039,8 @@ Fim:;
 
             try {
                 Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
-                return File(stream,"application/pdf","Termo_Anuencia.pdf");
-            } catch(Exception ex) {
+                return File(stream, "application/pdf", "Termo_Anuencia.pdf");
+            } catch (Exception ex) {
                 throw ex;
             }
         }
@@ -2020,31 +2065,31 @@ Fim:;
             List<SpParcelamentoOrigem> _listaSelected = parcelamentoRepository.Lista_Parcelamento_Selected(p);
             IEnumerable<short> _listaAnos = _listaSelected.Select(o => o.Exercicio).Distinct();
             string _ano = "";
-            foreach(short item in _listaAnos) {
+            foreach (short item in _listaAnos) {
                 _ano += item.ToString() + ", ";
             }
-            _ano = _ano.Substring(0,_ano.Length - 2);
+            _ano = _ano.Substring(0, _ano.Length - 2);
 
             ReportDocument rd = new ReportDocument();
             rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Termo_ConfDivida.rpt"));
 
             try {
-                rd.SetParameterValue("NOME",_nome);
-                rd.SetParameterValue("PROCESSO",_proc);
-                rd.SetParameterValue("DATACONF",_data);
-                rd.SetParameterValue("CODIGO",_cod);
-                rd.SetParameterValue("DOC",_doc);
-                rd.SetParameterValue("QTDEPARC",_qtdeParc);
-                rd.SetParameterValue("VALOR",_valor);
-                rd.SetParameterValue("ENDERECO",_end);
-                rd.SetParameterValue("EXERCICIO",_ano);
-                rd.SetParameterValue("DATAVENCTO",_vct);
-                rd.SetParameterValue("NOMER",_nomeR);
-                rd.SetParameterValue("DOCR",_docR);
+                rd.SetParameterValue("NOME", _nome);
+                rd.SetParameterValue("PROCESSO", _proc);
+                rd.SetParameterValue("DATACONF", _data);
+                rd.SetParameterValue("CODIGO", _cod);
+                rd.SetParameterValue("DOC", _doc);
+                rd.SetParameterValue("QTDEPARC", _qtdeParc);
+                rd.SetParameterValue("VALOR", _valor);
+                rd.SetParameterValue("ENDERECO", _end);
+                rd.SetParameterValue("EXERCICIO", _ano);
+                rd.SetParameterValue("DATAVENCTO", _vct);
+                rd.SetParameterValue("NOMER", _nomeR);
+                rd.SetParameterValue("DOCR", _docR);
 
                 Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
-                return File(stream,"application/pdf","Termo_ConfDivida.pdf");
-            } catch(Exception ex) {
+                return File(stream, "application/pdf", "Termo_ConfDivida.pdf");
+            } catch (Exception ex) {
                 throw ex;
             }
         }
@@ -2053,12 +2098,12 @@ Fim:;
         [HttpGet]
         public ActionResult Parc_cid(string p) {
             if (Request.Cookies["2lG1H*"] == null)
-                return RedirectToAction("Login","Home");
+                return RedirectToAction("Login", "Home");
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             bool _existe = parcelamentoRepository.Existe_Parcelamento_Web_Master(p);
-            if(!_existe)
-                return RedirectToAction("Login_gti","Home");
+            if (!_existe)
+                return RedirectToAction("Login_gti", "Home");
 
             //Load Master
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
@@ -2077,12 +2122,12 @@ Fim:;
             CidadaoStruct _cidadao = cidadaoRepository.Dados_Cidadao(_codigo);
             Endereco_bll enderecoRepository = new Endereco_bll(_connection);
 
-            if(_cidadao.EtiquetaC == "S") {
+            if (_cidadao.EtiquetaC == "S") {
                 Bairro _bairro = null;
-                if(_cidadao.CodigoLogradouroC == null) {
+                if (_cidadao.CodigoLogradouroC == null) {
                     model.Requerente.Bairro_Nome = _cidadao.NomeBairroR;
                 } else {
-                    _bairro = enderecoRepository.RetornaLogradouroBairro((int)_cidadao.CodigoLogradouroC,(short)_cidadao.NumeroC);
+                    _bairro = enderecoRepository.RetornaLogradouroBairro((int)_cidadao.CodigoLogradouroC, (short)_cidadao.NumeroC);
                     model.Requerente.Bairro_Nome = _bairro.Descbairro;
                 }
                 model.Requerente.Logradouro_Codigo = _cidadao.CodigoLogradouroC == null ? 0 : (int)_cidadao.CodigoLogradouroC;
@@ -2099,10 +2144,10 @@ Fim:;
                 model.Requerente.TipoEnd = "C";
             } else {
                 Bairro _bairro = null;
-                if(_cidadao.CodigoLogradouroR == null) {
+                if (_cidadao.CodigoLogradouroR == null) {
                     model.Requerente.Bairro_Nome = _cidadao.NomeBairroR;
                 } else {
-                    _bairro = enderecoRepository.RetornaLogradouroBairro((int)_cidadao.CodigoLogradouroR,(short)_cidadao.NumeroR);
+                    _bairro = enderecoRepository.RetornaLogradouroBairro((int)_cidadao.CodigoLogradouroR, (short)_cidadao.NumeroR);
                     model.Requerente.Bairro_Nome = _bairro.Descbairro;
                 }
                 model.Requerente.Logradouro_Codigo = _cidadao.CodigoLogradouroR == null ? 0 : (int)_cidadao.CodigoLogradouroR;
@@ -2118,8 +2163,8 @@ Fim:;
                 model.Requerente.Telefone = _cidadao.TelefoneR;
                 model.Requerente.TipoEnd = "R";
             }
-            if(model.Requerente.Bairro_Nome == null)
-                model.Requerente.Bairro_Nome = enderecoRepository.Retorna_Bairro(model.Requerente.UF,model.Requerente.Cidade_Codigo,model.Requerente.Bairro_Codigo);
+            if (model.Requerente.Bairro_Nome == null)
+                model.Requerente.Bairro_Nome = enderecoRepository.Retorna_Bairro(model.Requerente.UF, model.Requerente.Cidade_Codigo, model.Requerente.Bairro_Codigo);
 
             return View(model);
         }
@@ -2127,26 +2172,26 @@ Fim:;
         [Route("Parc_cid")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Parc_cid(ParcelamentoViewModel model,string action) {
+        public ActionResult Parc_cid(ParcelamentoViewModel model, string action) {
 
-            if(action == "btnCep") {
-                if(model.Requerente.Cep == null || model.Requerente.Cep.Length < 9) {
+            if (action == "btnCep") {
+                if (model.Requerente.Cep == null || model.Requerente.Cep.Length < 9) {
                     ViewBag.Error = "* Cep do Requerente inválido, utilize o formato 00000-000.";
-                    if(model.Requerente != null)
+                    if (model.Requerente != null)
                         model.Requerente.Cep = Convert.ToInt32(model.Requerente.Cep).ToString("00000-000");
                     return View(model);
                 }
 
                 var cepObj = GTI_Mvc.Classes.Cep.Busca_CepDB(Convert.ToInt32(Functions.RetornaNumero(model.Requerente.Cep)));
-                if(cepObj.Cidade != null) {
+                if (cepObj.Cidade != null) {
                     string rua = cepObj.Endereco;
-                    if(rua.IndexOf('-') > 0) {
-                        rua = rua.Substring(0,rua.IndexOf('-'));
+                    if (rua.IndexOf('-') > 0) {
+                        rua = rua.Substring(0, rua.IndexOf('-'));
                     }
 
                     Endereco_bll enderecoRepository = new Endereco_bll(_connection);
                     LogradouroStruct _log = enderecoRepository.Retorna_Logradouro_Cep(Convert.ToInt32(Functions.RetornaNumero(cepObj.CEP)));
-                    if(_log.Endereco != null) {
+                    if (_log.Endereco != null) {
                         model.Requerente.Logradouro_Codigo = (int)_log.CodLogradouro;
                         model.Requerente.Logradouro_Nome = _log.Endereco;
                     } else {
@@ -2154,21 +2199,21 @@ Fim:;
                         model.Requerente.Logradouro_Nome = rua.ToUpper();
                     }
 
-                    Bairro bairro = enderecoRepository.RetornaLogradouroBairro(model.Requerente.Logradouro_Codigo,(short)model.Requerente.Numero);
-                    if(bairro.Descbairro != null) {
+                    Bairro bairro = enderecoRepository.RetornaLogradouroBairro(model.Requerente.Logradouro_Codigo, (short)model.Requerente.Numero);
+                    if (bairro.Descbairro != null) {
                         model.Requerente.Bairro_Codigo = bairro.Codbairro;
                         model.Requerente.Bairro_Nome = bairro.Descbairro;
                     } else {
                         string _uf = cepObj.Estado;
                         string _cidade = cepObj.Cidade;
                         string _bairro = cepObj.Bairro;
-                        int _codcidade = enderecoRepository.Retorna_Cidade(_uf,_cidade);
-                        if(_codcidade > 0) {
+                        int _codcidade = enderecoRepository.Retorna_Cidade(_uf, _cidade);
+                        if (_codcidade > 0) {
                             model.Requerente.Cidade_Codigo = _codcidade;
-                            if(_codcidade != 413) {
+                            if (_codcidade != 413) {
                                 //verifica se bairro existe nesta cidade
-                                bool _existeBairro = enderecoRepository.Existe_Bairro(_uf,_codcidade,_bairro);
-                                if(!_existeBairro) {
+                                bool _existeBairro = enderecoRepository.Existe_Bairro(_uf, _codcidade, _bairro);
+                                if (!_existeBairro) {
                                     Bairro reg = new Bairro() {
                                         Siglauf = _uf,
                                         Codcidade = (short)_codcidade,
@@ -2178,7 +2223,7 @@ Fim:;
                                     model.Requerente.Bairro_Codigo = _codBairro;
                                 }
                             }
-                            model.Requerente.Bairro_Codigo = enderecoRepository.Retorna_Bairro(_uf,_codcidade,_bairro);
+                            model.Requerente.Bairro_Codigo = enderecoRepository.Retorna_Bairro(_uf, _codcidade, _bairro);
                             model.Requerente.Bairro_Nome = cepObj.Bairro.ToUpper();
                         } else {
                             model.Requerente.Cidade_Codigo = 0;
@@ -2202,11 +2247,11 @@ Fim:;
                 }
                 return View(model);
             } else {
-                if(action == "btnValida" || action == "Parc_cid") {
+                if (action == "btnValida" || action == "Parc_cid") {
                     Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
                     bool _existe = parcelamentoRepository.Existe_Parcelamento_Web_Master(model.Guid);
-                    if(!_existe)
-                        return RedirectToAction("Login_gti","Home");
+                    if (!_existe)
+                        return RedirectToAction("Login_gti", "Home");
 
                     //Load Master
                     Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(model.Guid);
@@ -2226,7 +2271,7 @@ Fim:;
                     };
 
                     string _doc = Functions.RetornaNumero(model.Requerente.Cpf_Cnpj);
-                    if(_doc.Length == 14) {
+                    if (_doc.Length == 14) {
                         _cidadao.Cpf = null;
                         _cidadao.Cnpj = _doc;
                         _cidadao.Juridica = true;
@@ -2236,7 +2281,7 @@ Fim:;
                         _cidadao.Juridica = false;
                     }
 
-                    if(model.Requerente.TipoEnd == "R") {
+                    if (model.Requerente.TipoEnd == "R") {
                         _cidadao.Cep = Convert.ToInt32(Functions.RetornaNumero(model.Requerente.Cep));
                         _cidadao.Codbairro = (short)model.Requerente.Bairro_Codigo;
                         _cidadao.Codcidade = (short)model.Requerente.Cidade_Codigo;
@@ -2250,7 +2295,7 @@ Fim:;
                         _cidadao.Temfone = string.IsNullOrEmpty(model.Requerente.Telefone) ? true : false;
                         _cidadao.Whatsapp = _cidOriginal.Whatsapp;
                         _cidadao.Codlogradouro = model.Requerente.Logradouro_Codigo;
-                        if(model.Requerente.Logradouro_Codigo == 0) {
+                        if (model.Requerente.Logradouro_Codigo == 0) {
                             _cidadao.Nomelogradouro = model.Requerente.Logradouro_Nome;
                         }
                     } else {
@@ -2267,7 +2312,7 @@ Fim:;
                         _cidadao.Temfone2 = string.IsNullOrEmpty(model.Requerente.Telefone) ? true : false;
                         _cidadao.Whatsapp2 = _cidOriginal.Whatsapp;
                         _cidadao.Codlogradouro2 = model.Requerente.Logradouro_Codigo;
-                        if(model.Requerente.Logradouro_Codigo == 0) {
+                        if (model.Requerente.Logradouro_Codigo == 0) {
                             _cidadao.Nomelogradouro2 = model.Requerente.Logradouro_Nome;
                         }
                     }
@@ -2286,7 +2331,7 @@ Fim:;
                     _req.Cpf_Cnpj = Functions.FormatarCpfCnpj(model.Requerente.Cpf_Cnpj);
                     string _tipoEnd = _cid.EnderecoC == "S" ? "C" : "R";
                     _req.TipoEnd = _tipoEnd == "R" ? "RESIDENCIAL" : "COMERCIAL";
-                    if(_tipoEnd == "R") {
+                    if (_tipoEnd == "R") {
                         _req.Bairro_Nome = _cid.NomeBairroR;
                         _req.Cidade_Nome = _cid.NomeCidadeR;
                         _req.UF = _cid.UfR;
@@ -2328,14 +2373,14 @@ Fim:;
             }
 
 
-            return RedirectToAction("Parc_req","Parcelamento");
+            return RedirectToAction("Parc_req", "Parcelamento");
         }
 
         [Route("Parc_rel")]
         [HttpGet]
         public ActionResult Parc_rel() {
             if (Request.Cookies["2lG1H*"] == null)
-                return RedirectToAction("Login","Home");
+                return RedirectToAction("Login", "Home");
 
             ParcelamentoViewModel model = new ParcelamentoViewModel();
             return View(model);
@@ -2346,34 +2391,34 @@ Fim:;
         [ValidateAntiForgeryToken]
         public ActionResult Parc_rel(ParcelamentoViewModel model) {
             if (Request.Cookies["2lG1H*"] == null)
-                return RedirectToAction("Login","Home");
+                return RedirectToAction("Login", "Home");
 
             bool _isDate1 = Functions.IsDate(model.DataDe);
             bool _isDate2 = Functions.IsDate(model.DataAte);
 
-            if(!_isDate1) {
+            if (!_isDate1) {
                 ViewBag.Result = "Data inicial inválida!";
                 return View(model);
             }
-            if(!_isDate2) {
+            if (!_isDate2) {
                 ViewBag.Result = "Data final inválida!";
                 return View(model);
             }
 
-            string _sData1 = DateTime.ParseExact(model.DataDe,"dd/MM/yyyy",CultureInfo.InvariantCulture).ToString("MM/dd/yyyy",CultureInfo.InvariantCulture);
-            string _sData2 = DateTime.ParseExact(model.DataAte,"dd/MM/yyyy",CultureInfo.InvariantCulture).ToString("MM/dd/yyyy",CultureInfo.InvariantCulture);
+            string _sData1 = DateTime.ParseExact(model.DataDe, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+            string _sData2 = DateTime.ParseExact(model.DataAte, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
 
-            DateTime _data1 = DateTime.Parse(_sData1,CultureInfo.InvariantCulture);
-            DateTime _data2 = DateTime.Parse(_sData2,CultureInfo.InvariantCulture);
+            DateTime _data1 = DateTime.Parse(_sData1, CultureInfo.InvariantCulture);
+            DateTime _data2 = DateTime.Parse(_sData2, CultureInfo.InvariantCulture);
 
-            if(_data1 > _data2) {
+            if (_data1 > _data2) {
                 ViewBag.Result = "Data inicial maior que data final!";
                 return View(model);
             }
 
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
-            List<Parcelamento_web_master> _listaMaster = parcelamentoRepository.Lista_Parcelamento_Web_Master(_sData1,_sData2);
-            if(_listaMaster.Count == 0) {
+            List<Parcelamento_web_master> _listaMaster = parcelamentoRepository.Lista_Parcelamento_Web_Master(_sData1, _sData2);
+            if (_listaMaster.Count == 0) {
                 ViewBag.Result = "Nenhum parcelamento foi gerado no período informado!";
                 return View(model);
             }
@@ -2396,7 +2441,7 @@ Fim:;
             crConnectionInfo.UserID = _userId;
             crConnectionInfo.Password = _pwd;
             CrTables = rd.Database.Tables;
-            foreach(Table CrTable in CrTables) {
+            foreach (Table CrTable in CrTables) {
                 crtableLogoninfo = CrTable.LogOnInfo;
                 crtableLogoninfo.ConnectionInfo = crConnectionInfo;
                 CrTable.ApplyLogOnInfo(crtableLogoninfo);
@@ -2404,10 +2449,10 @@ Fim:;
 
             try {
                 //      rd.RecordSelectionFormula = "{Parcelamento_Web_Master.data_geracao}>=#" + _data1 + "# and {Parcelamento_Web_Master.data_geracao}<=#" + _data2 + "#";
-                rd.SetParameterValue("DATA1",_data1);
-                rd.SetParameterValue("DATA2",_data2);
+                rd.SetParameterValue("DATA1", _data1);
+                rd.SetParameterValue("DATA2", _data2);
                 Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
-                return File(stream,"application/pdf","Lista_Parcelamento.pdf");
+                return File(stream, "application/pdf", "Lista_Parcelamento.pdf");
             } catch {
                 throw;
             }
@@ -2439,13 +2484,13 @@ Fim:;
 
 
             //Dados das parcelas do parcelamento do exercício
-            List<Destinoreparc> _listaD = parcelamentoRepository.Lista_Destino_Parcelamento(_master.Processo_Ano,_master.Processo_Numero);
-            List<DebitoStructure> ListaDebito = parcelamentoRepository.Lista_Parcelas_Parcelamento_Ano_Web(_codigo,2021,_listaD[0].Numsequencia);
+            List<Destinoreparc> _listaD = parcelamentoRepository.Lista_Destino_Parcelamento(_master.Processo_Ano, _master.Processo_Numero);
+            List<DebitoStructure> ListaDebito = parcelamentoRepository.Lista_Parcelas_Parcelamento_Ano_Web(_codigo, 2021, _listaD[0].Numsequencia);
             short _index = 0;
             string _convenio = "2873532";
             List<Boletoguia> ListaBoleto = new List<Boletoguia>();
 
-            foreach(DebitoStructure _parc in ListaDebito) {
+            foreach (DebitoStructure _parc in ListaDebito) {
                 short _ano = (short)_parc.Ano_Exercicio;
                 short _lanc = 20;
                 short _seq = (short)_parc.Sequencia_Lancamento;
@@ -2453,9 +2498,9 @@ Fim:;
                 byte _compl = (byte)_parc.Complemento;
                 DateTime _dataVencto = (DateTime)_parc.Data_Vencimento;
 
-                List<Debitotributo> _listaT = parcelamentoRepository.Lista_Debito_Tributo(_codigo,_ano,_lanc,_seq,_parcela,_compl);
+                List<Debitotributo> _listaT = parcelamentoRepository.Lista_Debito_Tributo(_codigo, _ano, _lanc, _seq, _parcela, _compl);
                 decimal? _soma = _listaT.Sum(m => m.Valortributo);
-                decimal _somaT = Math.Round((decimal)_soma,2);
+                decimal _somaT = Math.Round((decimal)_soma, 2);
 
                 //Criar o documento para ela
                 Numdocumento regDoc = new Numdocumento {
@@ -2480,13 +2525,13 @@ Fim:;
                 Exception ex = tributarioRepository.Insert_Parcela_Documento(pd);
 
                 string _refTran = "287353200" + _novo_documento.ToString();
-                if(_parcela > 1) {
+                if (_parcela > 1) {
                     //Demais parcelas enviar para registrar por arquivo
                     Ficha_compensacao_documento ficha = new Ficha_compensacao_documento {
-                        Nome = _nome.Length > 40 ? _nome.Substring(0,40) : _nome,
-                        Endereco = _endereco.Length > 40 ? _endereco.Substring(0,40) : _endereco,
-                        Bairro = _bairro.Length > 15 ? _bairro.Substring(0,15) : _bairro,
-                        Cidade = _cidade.Length > 30 ? _cidade.Substring(0,30) : _cidade,
+                        Nome = _nome.Length > 40 ? _nome.Substring(0, 40) : _nome,
+                        Endereco = _endereco.Length > 40 ? _endereco.Substring(0, 40) : _endereco,
+                        Bairro = _bairro.Length > 15 ? _bairro.Substring(0, 15) : _bairro,
+                        Cidade = _cidade.Length > 30 ? _cidade.Substring(0, 30) : _cidade,
                         Cep = _cep ?? "14870000",
                         Cpf = _cpfcnpj,
                         Numero_documento = _novo_documento,
@@ -2495,7 +2540,7 @@ Fim:;
                         Uf = _uf
                     };
                     ex = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
-                    if(ex == null)
+                    if (ex == null)
                         ex = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
 
 
@@ -2534,24 +2579,24 @@ Fim:;
                     DateTime _data_base = Convert.ToDateTime("07/10/1997");
                     TimeSpan ts = Convert.ToDateTime(_parc.Data_Vencimento) - _data_base;
                     int _fator_vencto = ts.Days;
-                    string _quinto_grupo = String.Format("{0:D4}",_fator_vencto);
-                    string _valor_boleto_str = string.Format("{0:0.00}",reg.Valorguia);
-                    _quinto_grupo += string.Format("{0:D10}",Convert.ToInt64(Functions.RetornaNumero(_valor_boleto_str)));
-                    string _barra = "0019" + _quinto_grupo + String.Format("{0:D13}",Convert.ToInt32(_convenio));
-                    _barra += String.Format("{0:D10}",Convert.ToInt64(reg.Numdoc)) + "17";
-                    string _campo1 = "0019" + _barra.Substring(19,5);
+                    string _quinto_grupo = String.Format("{0:D4}", _fator_vencto);
+                    string _valor_boleto_str = string.Format("{0:0.00}", reg.Valorguia);
+                    _quinto_grupo += string.Format("{0:D10}", Convert.ToInt64(Functions.RetornaNumero(_valor_boleto_str)));
+                    string _barra = "0019" + _quinto_grupo + String.Format("{0:D13}", Convert.ToInt32(_convenio));
+                    _barra += String.Format("{0:D10}", Convert.ToInt64(reg.Numdoc)) + "17";
+                    string _campo1 = "0019" + _barra.Substring(19, 5);
                     string _digitavel = _campo1 + Functions.Calculo_DV10(_campo1).ToString();
-                    string _campo2 = _barra.Substring(23,10);
+                    string _campo2 = _barra.Substring(23, 10);
                     _digitavel += _campo2 + Functions.Calculo_DV10(_campo2).ToString();
-                    string _campo3 = _barra.Substring(33,10);
+                    string _campo3 = _barra.Substring(33, 10);
                     _digitavel += _campo3 + Functions.Calculo_DV10(_campo3).ToString();
                     string _campo5 = _quinto_grupo;
                     string _campo4 = Functions.Calculo_DV11(_barra).ToString();
                     _digitavel += _campo4 + _campo5;
-                    _barra = _barra.Substring(0,4) + _campo4 + _barra.Substring(4,_barra.Length - 4);
+                    _barra = _barra.Substring(0, 4) + _campo4 + _barra.Substring(4, _barra.Length - 4);
                     //**Resultado final**
-                    string _linha_digitavel = _digitavel.Substring(0,5) + "." + _digitavel.Substring(5,5) + " " + _digitavel.Substring(10,5) + "." + _digitavel.Substring(15,6) + " ";
-                    _linha_digitavel += _digitavel.Substring(21,5) + "." + _digitavel.Substring(26,6) + " " + _digitavel.Substring(32,1) + " " + Functions.StringRight(_digitavel,14);
+                    string _linha_digitavel = _digitavel.Substring(0, 5) + "." + _digitavel.Substring(5, 5) + " " + _digitavel.Substring(10, 5) + "." + _digitavel.Substring(15, 6) + " ";
+                    _linha_digitavel += _digitavel.Substring(21, 5) + "." + _digitavel.Substring(26, 6) + " " + _digitavel.Substring(32, 1) + " " + Functions.StringRight(_digitavel, 14);
                     string _codigo_barra = Functions.Gera2of5Str(_barra);
                     //**************************************************
                     reg.Totparcela = (short)_master.Qtde_Parcela;
@@ -2559,7 +2604,7 @@ Fim:;
 
                     reg.Digitavel = _linha_digitavel;
                     reg.Codbarra = _codigo_barra;
-                    reg.Nossonumero = _convenio + String.Format("{0:D10}",Convert.ToInt64(reg.Numdoc));
+                    reg.Nossonumero = _convenio + String.Format("{0:D10}", Convert.ToInt64(reg.Numdoc));
                     ListaBoleto.Add(reg);
 
                 }
@@ -2568,10 +2613,10 @@ Fim:;
             string encoding = string.Empty;
             string extension = string.Empty;
 
-            if(ListaBoleto.Count > 0) {
-                Exception ex = tributarioRepository.Insert_Carne_Web(Convert.ToInt32(ListaBoleto[0].Codreduzido),DateTime.Now.Year);
+            if (ListaBoleto.Count > 0) {
+                Exception ex = tributarioRepository.Insert_Carne_Web(Convert.ToInt32(ListaBoleto[0].Codreduzido), DateTime.Now.Year);
                 DataSet Ds = Functions.ToDataSet(ListaBoleto);
-                ReportDataSource rdsAct = new ReportDataSource("dsBoletoGuia",Ds.Tables[0]);
+                ReportDataSource rdsAct = new ReportDataSource("dsBoletoGuia", Ds.Tables[0]);
                 ReportViewer viewer = new ReportViewer();
                 viewer.LocalReport.Refresh();
                 viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Carne_Parcelamento.rdlc"); ;
@@ -2582,13 +2627,13 @@ Fim:;
                 //string base64EncodedPDF = Convert.ToBase64String(renderdByte);
                 //return Json(base64EncodedPDF,JsonRequestBehavior.AllowGet);
 
-                byte[] bytes = viewer.LocalReport.Render("PDF",null,out mimeType,out encoding,out extension,out string[] streamIds,out Warning[] warnings);
+                byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out string[] streamIds, out Warning[] warnings);
 
                 Response.Buffer = true;
                 Response.Clear();
                 Response.ContentType = mimeType;
-                Response.AddHeader("content-disposition","attachment; filename= guia_pmj" + "." + extension);
-                Response.OutputStream.Write(bytes,0,bytes.Length);
+                Response.AddHeader("content-disposition", "attachment; filename= guia_pmj" + "." + extension);
+                Response.OutputStream.Write(bytes, 0, bytes.Length);
                 Response.Flush();
                 Response.End();
 

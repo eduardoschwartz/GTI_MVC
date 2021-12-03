@@ -273,6 +273,27 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Atualizar_Refis_Master(Parcelamento_web_master reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[7];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Guid };
+                Parametros[1] = new SqlParameter { ParameterName = "@Plano_Nome", SqlDbType = SqlDbType.VarChar, SqlValue = reg.Plano_Nome };
+                Parametros[2] = new SqlParameter { ParameterName = "@Plano_Codigo", SqlDbType = SqlDbType.Int, SqlValue = reg.Plano_Codigo };
+                Parametros[3] = new SqlParameter { ParameterName = "@Qtde_Maxima_Parcela", SqlDbType = SqlDbType.Int, SqlValue = reg.Qtde_Maxima_Parcela };
+                Parametros[4] = new SqlParameter { ParameterName = "@Perc_Desconto", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Perc_Desconto };
+                Parametros[5] = new SqlParameter { ParameterName = "@Valor_minimo", SqlDbType = SqlDbType.Decimal, SqlValue = reg.Valor_minimo };
+                Parametros[6] = new SqlParameter { ParameterName = "@refis", SqlDbType = SqlDbType.Bit, SqlValue = reg.Refis };
+                try {
+                    db.Database.ExecuteSqlCommand("UPDATE parcelamento_web_master set Plano_Nome=@Plano_Nome,Plano_Codigo=@Plano_Codigo,Qtde_Maxima_Parcela=@Qtde_Maxima_Parcela," +
+                        "Perc_Desconto=@Perc_Desconto,Valor_minimo=@Valor_minimo,refis=@refis WHERE guid=@guid", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+
         public Exception Atualizar_Totais_Master(Parcelamento_web_master reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 object[] Parametros = new object[15];

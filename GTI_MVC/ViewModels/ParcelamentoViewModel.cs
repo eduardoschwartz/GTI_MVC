@@ -20,7 +20,8 @@ namespace GTI_Mvc.ViewModels {
         public bool Refis_Ativo { get; set; }
         public int Plano_Codigo { get; set; }
         public string Plano_Nome { get; set; } = "Nenhum";
-        public double Plano_Desconto { get; set; }
+        public decimal Plano_Desconto { get; set; }
+        public string Plano_Selected { get; set; }
         public int Plano_Qtde_Parcela { get; set; }
         public string[] Lista_Plano_Desconto = new[] { "Nenhum", "Refis" };
         public List<SelectDebitoParcelamentoEditorViewModel> Lista_Origem { get; set; }
