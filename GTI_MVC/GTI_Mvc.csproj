@@ -368,6 +368,12 @@
       <DependentUpon>Resumo_Parcelamento_Previa.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Simulado_Parcelamento_teste.cs">
+      <DependentUpon>Simulado_Parcelamento_teste.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Reports\Simulado_Parcelamento.cs">
       <DependentUpon>Simulado_Parcelamento.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1200,6 +1206,10 @@
     <EmbeddedResource Include="Reports\Resumo_Parcelamento_Previa.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Resumo_Parcelamento_Previa.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Simulado_Parcelamento_teste.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Simulado_Parcelamento_teste.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Simulado_Parcelamento.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
