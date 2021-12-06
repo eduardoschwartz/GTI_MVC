@@ -1655,6 +1655,11 @@ namespace GTI_Bll.Classes {
             return obj.Lista_TributoAliquota(Ano);
         }
 
+        public decimal Retorna_IPCA(int Ano) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Retorna_IPCA(Ano);
+        }
+
     }//end class
 }
 

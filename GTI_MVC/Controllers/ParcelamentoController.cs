@@ -885,6 +885,7 @@ namespace GTI_MVC.Controllers {
                     } else {
                         _listaTributo[_pos].Valor += _ext.Valortributo;
                     }
+
                 }
             }
 
@@ -933,6 +934,7 @@ namespace GTI_MVC.Controllers {
                 };
                 _listaTributo.Add(r);
             }
+
 
 
             ex = parcelamentoRepository.Incluir_Parcelamento_Web_Tributo(_listaTributo);
@@ -1583,6 +1585,7 @@ namespace GTI_MVC.Controllers {
                 List<Destinoreparc> _listaDestinoReparc = new List<Destinoreparc>();
                 List<Debitoparcela> _listaDebitoParcela = new List<Debitoparcela>();
                 List<Debitotributo> _listaDebitoTributo = new List<Debitotributo>();
+
                 foreach (Parcelamento_Web_Destino item in _listaDestino) {
                     Destinoreparc _d = new Destinoreparc() {
                         Numprocesso = _numProc,
@@ -2509,7 +2512,7 @@ namespace GTI_MVC.Controllers {
 
             //Dados das parcelas do parcelamento do exercício
             List<Destinoreparc> _listaD = parcelamentoRepository.Lista_Destino_Parcelamento(_master.Processo_Ano, _master.Processo_Numero);
-            List<DebitoStructure> ListaDebito = parcelamentoRepository.Lista_Parcelas_Parcelamento_Ano_Web(_codigo, 2022, _listaD[0].Numsequencia);
+            List<DebitoStructure> ListaDebito = parcelamentoRepository.Lista_Parcelas_Parcelamento_Ano_Web(_codigo, DateTime.Now.Year, _listaD[0].Numsequencia);
             short _index = 0;
             string _convenio = "2873532";
             List<Boletoguia> ListaBoleto = new List<Boletoguia>();

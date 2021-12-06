@@ -1007,6 +1007,7 @@ namespace GTI_Dal.Classes {
                     };
                     Lista.Add(Linha);
                 }
+
                 return Lista;
             }
         }

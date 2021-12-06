@@ -3404,6 +3404,13 @@ Proximo:;
             }
         }
 
+        public decimal Retorna_IPCA(int Ano) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from u in db.Ufir where u.Anoufir==Ano select u.Valorufir).FirstOrDefault();
+                return (decimal)Sql;
+            }
+        }
+
         public List<TributoAliquotaStruct> Lista_TributoAliquota(short Ano) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var Sql = (from l in db.Tributo
