@@ -4,7 +4,7 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace GTI_Dal {
     public class GTI_Context :DbContext{
-        public GTI_Context(string Connection_Name) : base(Connection_Name) { }
+        public GTI_Context(string Connection_Name) : base(Connection_Name==null?"gtiConnection":Connection_Name) { }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             Database.SetInitializer<GTI_Context>(null);

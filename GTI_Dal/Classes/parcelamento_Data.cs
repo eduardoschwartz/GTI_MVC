@@ -1105,7 +1105,12 @@ namespace GTI_Dal.Classes {
         public List<Destinoreparc> Lista_Destino_Parcelamento(short AnoProcesso,int NumProcesso) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 db.Database.CommandTimeout = 3 * 60;
-                List<Destinoreparc> Lista = (from d in db.Destinoreparc where d.Anoproc == AnoProcesso && d.Numproc==NumProcesso orderby d.Numparcela  select d).Distinct().ToList();
+                //List<Destinoreparc> Lista = (from d in db.Destinoreparc where d.Anoproc == AnoProcesso && d.Numproc==NumProcesso orderby d.Numparcela  select d).ToList();
+                List<Destinoreparc> Lista = db.Database.SqlQuery<Destinoreparc>("SELECT * from destinoreparc where anoproc=@anoproc and numproc=@numproc", new SqlParameter("@anoproc", AnoProcesso), new SqlParameter("@numproc", NumProcesso)).ToList();
+                //List<Destinoreparc> ListaD = new List<Destinoreparc>();
+                //foreach (Destinoreparc item in Lista) {
+
+                //}
                 return Lista;
             }
         }

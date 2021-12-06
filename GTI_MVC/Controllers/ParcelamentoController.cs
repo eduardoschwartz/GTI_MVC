@@ -664,6 +664,7 @@ namespace GTI_MVC.Controllers {
                 Cep = _master.Contribuinte_cep.ToString("00000-000")
             };
 
+            
             //Load Origem
             decimal _SomaP = 0, _SomaM = 0, _SomaJ = 0, _SomaC = 0, _SomaT = 0;
             List<SpParcelamentoOrigem> ListaOrigem = parcelamentoRepository.Lista_Parcelamento_Origem(p);
@@ -955,6 +956,9 @@ namespace GTI_MVC.Controllers {
 
             //Load Master
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
+
+            Plano _plano = parcelamentoRepository.Retorna_Plano_Desconto((short)_master.Plano_Codigo);
+
             ParcelamentoViewModel model = new ParcelamentoViewModel() {
                 Guid = p,
                 Plano_Nome = _master.Plano_Nome,
@@ -1072,7 +1076,7 @@ namespace GTI_MVC.Controllers {
                 }
             }
 
-            int _qtdeMaxParcela = 0;
+            int _qtdeMaxParcela = _plano.Qtde_Parcela;
             if (_issCCivilAVencer) _qtdeMaxParcela = 12;
 
 
@@ -1154,8 +1158,12 @@ namespace GTI_MVC.Controllers {
                 string _userId = builder.UserID;
                 string _pwd = builder.Password;
 
+                int UserId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
+                if(UserId==582)
+                    crConnectionInfo.DatabaseName = "TributacaoTeste";
+                else
+                    crConnectionInfo.DatabaseName = "Tributacao";
                 crConnectionInfo.ServerName = IPAddress;
-                crConnectionInfo.DatabaseName = "Tributacao";
                 crConnectionInfo.UserID = _userId;
                 crConnectionInfo.Password = _pwd;
                 CrTables = rd.Database.Tables;
@@ -1348,8 +1356,12 @@ namespace GTI_MVC.Controllers {
                 string _userId = builder.UserID;
                 string _pwd = builder.Password;
 
+                int UserId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
+                if (UserId == 582)
+                    crConnectionInfo.DatabaseName = "TributacaoTeste";
+                else
+                    crConnectionInfo.DatabaseName = "Tributacao";
                 crConnectionInfo.ServerName = IPAddress;
-                crConnectionInfo.DatabaseName = "Tributacao";
                 crConnectionInfo.UserID = _userId;
                 crConnectionInfo.Password = _pwd;
                 CrTables = rd.Database.Tables;
@@ -1724,8 +1736,12 @@ namespace GTI_MVC.Controllers {
                 string _userId = builder.UserID;
                 string _pwd = builder.Password;
 
+                int UserId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
+                if (UserId == 582)
+                    crConnectionInfo.DatabaseName = "TributacaoTeste";
+                else
+                    crConnectionInfo.DatabaseName = "Tributacao";
                 crConnectionInfo.ServerName = IPAddress;
-                crConnectionInfo.DatabaseName = "Tributacao";
                 crConnectionInfo.UserID = _userId;
                 crConnectionInfo.Password = _pwd;
                 CrTables = rd.Database.Tables;
@@ -1902,8 +1918,12 @@ namespace GTI_MVC.Controllers {
                 string _userId = builder.UserID;
                 string _pwd = builder.Password;
 
+                int UserId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
+                if (UserId == 582)
+                    crConnectionInfo.DatabaseName = "TributacaoTeste";
+                else
+                    crConnectionInfo.DatabaseName = "Tributacao";
                 crConnectionInfo.ServerName = IPAddress;
-                crConnectionInfo.DatabaseName = "Tributacao";
                 crConnectionInfo.UserID = _userId;
                 crConnectionInfo.Password = _pwd;
                 CrTables = rd.Database.Tables;
@@ -2436,8 +2456,12 @@ namespace GTI_MVC.Controllers {
             string _userId = builder.UserID;
             string _pwd = builder.Password;
 
+            int UserId = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
+            if (UserId == 582)
+                crConnectionInfo.DatabaseName = "TributacaoTeste";
+            else
+                crConnectionInfo.DatabaseName = "Tributacao";
             crConnectionInfo.ServerName = IPAddress;
-            crConnectionInfo.DatabaseName = "Tributacao";
             crConnectionInfo.UserID = _userId;
             crConnectionInfo.Password = _pwd;
             CrTables = rd.Database.Tables;
@@ -2485,7 +2509,7 @@ namespace GTI_MVC.Controllers {
 
             //Dados das parcelas do parcelamento do exercício
             List<Destinoreparc> _listaD = parcelamentoRepository.Lista_Destino_Parcelamento(_master.Processo_Ano, _master.Processo_Numero);
-            List<DebitoStructure> ListaDebito = parcelamentoRepository.Lista_Parcelas_Parcelamento_Ano_Web(_codigo, 2021, _listaD[0].Numsequencia);
+            List<DebitoStructure> ListaDebito = parcelamentoRepository.Lista_Parcelas_Parcelamento_Ano_Web(_codigo, 2022, _listaD[0].Numsequencia);
             short _index = 0;
             string _convenio = "2873532";
             List<Boletoguia> ListaBoleto = new List<Boletoguia>();

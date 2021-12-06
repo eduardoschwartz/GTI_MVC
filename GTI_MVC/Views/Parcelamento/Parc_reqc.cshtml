@@ -82,10 +82,13 @@
 
 <div class="center container" style="width:870px">
 
-    @using(Html.BeginForm("Parc_reqc","Parcelamento",FormMethod.Post,new { @id = "MainForm",enctype = "multipart/form-data" })) {
+    @using (Html.BeginForm("Parc_reqc", "Parcelamento", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.Guid)
-
+        @Html.HiddenFor(m => m.Plano_Codigo)
+        @Html.HiddenFor(m => m.Plano_Nome)
+        @Html.HiddenFor(m => m.Plano_Desconto)
+        @Html.HiddenFor(m => m.Plano_Qtde_Parcela)
 
         <div class="card">
             <div class="card-header">Dados do Requerente</div>
@@ -98,7 +101,7 @@
                             <label style="font-weight:normal;padding-top:7px">Nº Cpf/Cnpj:</label>
                         </td>
                         <td>
-                            @Html.TextBoxFor(m => m.Requerente.Cpf_Cnpj,new { @style = "max-width:200px;height:25px",@readonly = true })
+                            @Html.TextBoxFor(m => m.Requerente.Cpf_Cnpj, new { @style = "max-width:200px;height:25px", @readonly = true })
                         </td>
                     </tr>
 
@@ -111,7 +114,7 @@
                             </td>
                             <td>
                                 <label style="font-weight:normal;color:blue">
-                                    @Html.TextBoxFor(m => m.Requerente.Nome,new { style = "width:527px;height:25px",@readonly = true })
+                                    @Html.TextBoxFor(m => m.Requerente.Nome, new { style = "width:527px;height:25px", @readonly = true })
                                 </label>
                             </td>
                         </tr>
@@ -124,9 +127,9 @@
                             <label style="font-weight:normal">Logradouro:</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Logradouro_Nome,new { style = "width:392px;height:25px",@readonly = true })</label>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Logradouro_Nome, new { style = "width:392px;height:25px", @readonly = true })</label>
                             <label style="font-weight:normal;padding-left:10px">Número:&nbsp;&nbsp;</label><label style="font-weight:normal">
-                                @Html.TextBoxFor(m => m.Requerente.Numero,new { style = "width:60px;height:25px",@readonly = true })
+                                @Html.TextBoxFor(m => m.Requerente.Numero, new { style = "width:60px;height:25px", @readonly = true })
                             </label>
                         </td>
                     </tr>
@@ -138,13 +141,13 @@
                             <label style="font-weight:normal;">Complemento:</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal">@Html.TextBoxFor(m => m.Requerente.Complemento,new { style = "width:230px;height:25px",@readonly = true })</label>
+                            <label style="font-weight:normal">@Html.TextBoxFor(m => m.Requerente.Complemento, new { style = "width:230px;height:25px", @readonly = true })</label>
                         </td>
                         <td>
                             <label style="font-weight:normal">&nbsp;&nbsp;Bairro:&nbsp;&nbsp;</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Bairro_Nome,new { style = "width:230px;height:25px",@readonly = true })</label>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Bairro_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
                         </td>
                     </tr>
                     <tr style="height:30px">
@@ -152,14 +155,14 @@
                             <label style="font-weight:normal">Cidade/UF:</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Cidade_Nome,new { style = "width:230px;height:25px",@readonly = true })</label>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Cidade_Nome, new { style = "width:230px;height:25px", @readonly = true })</label>
 
                         </td>
                         <td>
                             <label style="font-weight:normal;padding-left:10px">Cep:&nbsp;&nbsp;</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Cep,new { style = "width:230px;height:25px",@readonly = true })</label>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Requerente.Cep, new { style = "width:230px;height:25px", @readonly = true })</label>
                         </td>
                     </tr>
                     <tr style="height:30px">
@@ -167,14 +170,14 @@
                             <label style="font-weight:normal">Telefone:</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Telefone,new { style = "width:230px;height:25px",@readonly = true })</label>
+                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Telefone, new { style = "width:230px;height:25px", @readonly = true })</label>
 
                         </td>
                         <td>
                             <label style="font-weight:normal;padding-left:10px">Email:</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Email,new { style = "width:230px;height:25px",@readonly = true })</label>
+                            <label style="font-weight:normal;">@Html.TextBoxFor(m => m.Requerente.Email, new { style = "width:230px;height:25px", @readonly = true })</label>
                         </td>
                     </tr>
                 </table>
@@ -189,14 +192,14 @@
                             <label style="font-weight:normal;padding-top:7px">Nº da Inscrição:</label>
                         </td>
                         <td>
-                            @Html.TextBoxFor(m => m.Contribuinte.Codigo,new { @style = "max-width:100px;height:25px",@readonly = true })
+                            @Html.TextBoxFor(m => m.Contribuinte.Codigo, new { @style = "max-width:100px;height:25px", @readonly = true })
                         </td>
                         <td style="width:144px"></td>
                         <td style="width:98px">
                             <label style="font-weight:normal;padding-top:7px;text-align:right">Nº Cpf/Cnpj:</label>
                         </td>
                         <td>
-                            @Html.TextBoxFor(m => m.Contribuinte.Cpf_Cnpj,new { @style = "max-width:200px;height:25px",@readonly = true })
+                            @Html.TextBoxFor(m => m.Contribuinte.Cpf_Cnpj, new { @style = "max-width:200px;height:25px", @readonly = true })
                         </td>
                     </tr>
 
@@ -209,7 +212,7 @@
                             </td>
                             <td>
                                 <label style="font-weight:normal;color:blue">
-                                    @Html.TextBoxFor(m => m.Contribuinte.Nome,new { style = "width:527px;height:25px",@readonly = true })
+                                    @Html.TextBoxFor(m => m.Contribuinte.Nome, new { style = "width:527px;height:25px", @readonly = true })
                                 </label>
                             </td>
                         </tr>
@@ -222,7 +225,7 @@
                             <label style="font-weight:normal">Endereco:</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Contribuinte.Logradouro_Nome,new { style = "width:527px;height:25px",@readonly = true })</label>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Contribuinte.Logradouro_Nome, new { style = "width:527px;height:25px", @readonly = true })</label>
                         </td>
                     </tr>
                 </table>
@@ -233,11 +236,11 @@
                             <label style="font-weight:normal">Bairro/Cidade:</label>
                         </td>
                         <td>
-                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Contribuinte.Bairro_Nome,new { style = "width:385px;height:25px",@readonly = true })</label>
+                            <label style="font-weight:normal;color:blue">@Html.TextBoxFor(m => m.Contribuinte.Bairro_Nome, new { style = "width:385px;height:25px", @readonly = true })</label>
 
                         </td>
                         <td>
-                            <label style="font-weight:normal;color:blue"><span style="color:black">Cep:</span>&nbsp;&nbsp;@Html.TextBoxFor(m => m.Contribuinte.Cep,new { style = "width:80px;height:25px",@readonly = true })</label>
+                            <label style="font-weight:normal;color:blue"><span style="color:black">Cep:</span>&nbsp;&nbsp;@Html.TextBoxFor(m => m.Contribuinte.Cep, new { style = "width:80px;height:25px", @readonly = true })</label>
                         </td>
                     </tr>
                 </table>
@@ -459,8 +462,8 @@
             </div>
 
             <div class="card-footer">
-                @Html.ActionLink("Retornar ao menu de opções","Parc_index","Parcelamento",null,new { @class = "actionlink" })<br />
-                @Html.ActionLink("Retornar ao menu principal","Login_gti","Home",null,new { @class = "actionlink" })
+                @Html.ActionLink("Retornar ao menu de opções", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<br />
+                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
             </div>
         </div>
 
