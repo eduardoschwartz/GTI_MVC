@@ -1,4 +1,4 @@
-﻿
+﻿@model GTI_Mvc.ViewModels.NotificacaoIssViewModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Menu de Opções";
@@ -7,12 +7,13 @@
 <style>
     .center {
         margin: auto;
-/*        width: 500px;
-        border: 1px solid rgba(0,0,0,0.24);
-        padding: 20px;
-        box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;
-*/    }
+        /*        width: 500px;
+            border: 1px solid rgba(0,0,0,0.24);
+            padding: 20px;
+            box-shadow: 0 .1em 0.5em #000;
+            border-radius: 13px;
+    */
+    }
 
     .actionlink:hover {
         color: darkgreen;
@@ -20,8 +21,9 @@
 
     .actionlink {
         color: darkslateblue;
-        font-size:14px;
+        font-size: 14px;
     }
+
     .card-header {
         background-color: mistyrose;
         color: brown;
@@ -54,24 +56,245 @@
         font-size: 13px;
         font-family: Arial, Helvetica, sans-serif;
     }
+
+    .ui-dialog-titlebar-close {
+        visibility: hidden;
+    }
+
+    .modal:nth-of-type(even) {
+        z-index: 1052 !important;
+    }
+
+    .modal-backdrop.show:nth-of-type(even) {
+        z-index: 1051 !important;
+    }
+
+    .modal-header {
+        padding: 9px 15px;
+        border-bottom: 1px solid #eee;
+        background-color: darkslategrey;
+        color: whitesmoke;
+        -webkit-border-top-left-radius: 5px;
+        -webkit-border-top-right-radius: 5px;
+        -moz-border-radius-topleft: 5px;
+        -moz-border-radius-topright: 5px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
 </style>
 <br />
 
-<div class="center">
-    <div class="container" style="width:350px">
-        <div class="card">
-            <div class="card-header">Notificação de ISS Construção Civil</div>
-            <div class="card-body">
-                @*<span style="color:brown;font-weight:bold;font-style:italic">Notificação de ISS contrução civil</span><br /><br />*@
-                @Html.ActionLink("Preencher nova notificação", "Notificacao_iss", "Tributario", null, new { @class = "actionlink" })<br />
-                @Html.ActionLink("Consultar notificações emitidas", "Notificacao_query", "Tributario", null, new { @class = "actionlink" })<br />
+@{
+    var res = @ViewBag.Result;
+}
+
+
+@using (Html.BeginForm("Notificacao_Menu", "Tributario", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
+    @Html.AntiForgeryToken()
+    <div class="center">
+        <div class="container" style="width:350px">
+            <div class="card">
+                <div class="card-header">Notificação de ISS Construção Civil</div>
+                <div class="card-body">
+                    @Html.ActionLink("Preencher nova notificação", "Notificacao_iss", "Tributario", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Consultar notificações emitidas", "Notificacao_query", "Tributario", null, new { @class = "actionlink" })<br />
+                    <a href="javascript:void(0);" onclick="ShowReport();" style="color:darkslateblue">Relatório das Notificações lançadas</a>
+                </div>
+                <div class="card-footer">
+                    @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                </div>
             </div>
-            <div class="card-footer">
-                @Html.ActionLink("Retornar ao menu de opções", "sysMenu", "Home", null, new { @class = "actionlink" })<br />
-                @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+
+
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="ReportModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-ku" role="document">
+            <div class="modal-content" style="font-family: Arial, Helvetica, sans-serif;">
+                <div class="modal-header">
+                    <h5 class="modal-title">Digite o período para o relatório</h5>
+                </div>
+                <div class="modal-body">
+                    <table style="width:400px">
+                        <tr>
+                            <td style="width:200px;font-size:13px">
+                                <label style="font-weight:normal">Data De:&nbsp;</label>
+                                @Html.TextBoxFor(x => x.DataDe, "{0:dd/MM/yyyy}", new { @id = "DataDe", @style = "width:90px;", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)", @data_picker = "date-picker", @Value = DateTime.Now.ToShortDateString() })
+                            </td>
+                            <td style="width:200px;font-size:13px">
+                                <label style="font-weight:normal">Data Até:&nbsp;</label>
+                                @Html.TextBoxFor(x => x.DataAte, "{0:dd/MM/yyyy}", new { @id = "DataAte", @style = "width:90px;", @onKeyPress = "return formata(this, '§§/§§/§§§§', event)", @data_picker = "date-picker", @Value = DateTime.Now.ToShortDateString() })
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" id="btnGuiaOk" onclick="return ValidateForm()"><i class="fas fa-print"></i>&nbsp;Imprimir</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-ban"></i>&nbsp;Cancelar</button>
+                </div>
             </div>
         </div>
- 
-    
     </div>
+
+
+}
+
+<div id="msgBox1" title="Atenção" style='display: none;'>
+    <br />
+    <label id="lblMsg"></label>
 </div>
+
+@section scripts{
+
+    <script type="text/javascript">
+
+            $(document).ready(function () {
+
+
+                $('#msgBox1').dialog({
+                    autoOpen: false,
+                    resizable: false,
+                    draggable: false,
+                    position: { my: 'top', at: 'top+300' },
+                    height: "auto",
+                    width: 340,
+                    modal: true,
+                    dialogClass: "foo",
+                    buttons: {
+                        "OK": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+
+
+                $(".foo .ui-dialog-title").css("font-size", "13px");
+                $(".foo .ui-widget-content").css("font-size", "13px");
+
+                // Jquery draggable
+                $('.modal-dialog').draggable({
+                    handle: ".modal-header"
+                });
+
+                 var _res = '@res';
+                 if (_res != "") {
+                    $('#msgBoxBag').dialog('open');
+                    return false;
+                 } else {
+                    return true;
+                 }
+
+            });
+
+        function ShowReport() {
+            $('#ReportModal').modal({ backdrop: 'static', keyboard: false });
+        }
+
+        function ValidateForm() {
+            var _data1 = document.getElementById('DataDe').value;
+            if (!Valida_Data(_data1)) {
+                alert("Data inicial inválida");
+                return false;
+            }
+            var _data2 = document.getElementById('DataAte').value;
+            if (!Valida_Data(_data2)) {
+                alert("Data final inválida");
+                return false;
+            }
+            if (DataMaior(_data1, _data2)) {
+                alert("Data inicial maior que data final");
+                return false;
+            }
+
+            var a = document.getElementById('AnoDropDown').value;
+            var d = parseInt(a);
+            var d1 = RetornaAno(_data1);
+            var d2 = RetornaAno(_data2);
+            if (d1 != d || d2 != d) {
+                alert("Intervalo de datas fora do ano selecionado");
+                return false;
+            }
+
+            $('#ReportModal').modal('hide');
+            $("#MainForm").submit();
+            return true;
+        }
+
+
+
+        function Valida_Data(data) {
+            if (data == "") {
+                return false;
+            }
+            var patternValidaData = /^(((0[1-9]|[12][0-9]|3[01])([-.\/])(0[13578]|10|12)([-.\/])(\d{4}))|(([0][1-9]|[12][0-9]|30)([-.\/])(0[469]|11)([-.\/])(\d{4}))|((0[1-9]|1[0-9]|2[0-8])([-.\/])(02)([-.\/])(\d{4}))|((29)(\.|-|\/)(02)([-.\/])([02468][048]00))|((29)([-.\/])(02)([-.\/])([13579][26]00))|((29)([-.\/])(02)([-.\/])([0-9][0-9][0][48]))|((29)([-.\/])(02)([-.\/])([0-9][0-9][2468][048]))|((29)([-.\/])(02)([-.\/])([0-9][0-9][13579][26])))$/;
+            if (!patternValidaData.test(data)) {
+                return false;
+            }
+            return true;
+        }
+
+        function DataMaior(date1, date2) {
+            let parts1 = date1.split('/')
+            let parts2 = date2.split('/')
+
+            date1 = new Date(parts1[2], parts1[1] - 1, parts1[0]).getTime()
+            date2 = new Date(parts2[2], parts2[1] - 1, parts2[0]).getTime()
+
+            return date1 > date2 ? true : false
+        }
+
+        function DataMenor(date1, date2) {
+            let parts1 = date1.split('/')
+            let parts2 = date2.split('/')
+
+            date1 = new Date(parts1[2], parts1[1] - 1, parts1[0]).getTime()
+            date2 = new Date(parts2[2], parts2[1] - 1, parts2[0]).getTime()
+
+            return date1 < date2 ? true : false
+        }
+
+        function DataIgual(date1, date2) {
+            let parts1 = date1.split('/')
+            let parts2 = date2.split('/')
+
+            date1 = new Date(parts1[2], parts1[1] - 1, parts1[0]).getTime()
+            date2 = new Date(parts2[2], parts2[1] - 1, parts2[0]).getTime()
+
+            return date1 == date2 ? true : false
+        }
+
+        function DataIntervalo(date, date1, date2) {
+            var retorno = false;
+
+            let parts = date.split('/')
+            let parts1 = date1.split('/')
+            let parts2 = date2.split('/')
+
+            date = new Date(parts[2], parts[1] - 1, parts[0]).getTime()
+            date1 = new Date(parts1[2], parts1[1] - 1, parts1[0]).getTime()
+            date2 = new Date(parts2[2], parts2[1] - 1, parts2[0]).getTime()
+
+            if (date >= date1 && date <= date2) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function RetornaAno(date) {
+            let parts = date.split('/')
+            date = new Date(parts[2], parts[1] - 1, parts[0]).getTime()
+            var d = new Date(date)
+            var n = d.getFullYear()
+            return n
+        }
+
+    </script>
+}

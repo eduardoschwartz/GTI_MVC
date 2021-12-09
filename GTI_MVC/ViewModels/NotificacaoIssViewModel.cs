@@ -23,6 +23,8 @@ namespace GTI_Mvc.ViewModels {
         public DateTime Data_Emissao { get; set; }
         public string AnoNumero { get; set; }
         public int Ano_Selected { get; set; }
+        public string DataDe { get; set; }
+        public string DataAte { get; set; }
     }
 
 }

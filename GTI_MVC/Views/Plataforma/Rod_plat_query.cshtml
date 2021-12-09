@@ -64,6 +64,7 @@
     }
 
 
+
 </style>
 
 @{var res = @ViewBag.Error;}
@@ -306,7 +307,7 @@
                 return false;
             }
             var _data2 = document.getElementById('DataAte').value;
-            if (!Valida_Data(_data1)) {
+            if (!Valida_Data(_data2)) {
                 document.getElementById('errorGuia').innerHTML = "Data final inválida";
                 return false;
             }

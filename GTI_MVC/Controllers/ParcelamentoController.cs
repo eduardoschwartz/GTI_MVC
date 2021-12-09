@@ -519,8 +519,8 @@ namespace GTI_MVC.Controllers {
 
             //Load Master
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
-            char _tipoContribuinte = Functions.RetornaNumero(_master.Contribuinte_cpfcnpj).Length == 11 ? 'F' : 'J';
-
+            //char _tipoContribuinte = Functions.RetornaNumero(_master.Contribuinte_cpfcnpj).Length == 11 ? 'F' : 'J';
+            string _tipoContribuinte = _master.Contribuinte_tipo;
             if (_RefisAtivo) {
                 DateTime _dataNow = _connection == "gtiConnection" ? DateTime.Now : Convert.ToDateTime("20/12/2021");
 
@@ -587,10 +587,11 @@ namespace GTI_MVC.Controllers {
         public ActionResult Parc_reqb(ParcelamentoViewModel model) {
             Parcelamento_bll parcelamentoRepository = new Parcelamento_bll(_connection);
             decimal _plano_valor_minimo = model.Valor_Minimo;
-            char _tipoContribuinte = Functions.RetornaNumero(model.Contribuinte.Cpf_Cnpj).Length == 11 ? 'F' : 'J';
+            //char _tipoContribuinte = Functions.RetornaNumero(model.Contribuinte.Cpf_Cnpj).Length == 11 ? 'F' : 'J';
+            string _tipoContribuinte = model.Contribuinte.Tipo;
             if (model.Plano_Selected == "Refis") {
                 model.Refis_Ativo = true;
-                if (_tipoContribuinte == 'F')
+                if (_tipoContribuinte == "F")
                     _plano_valor_minimo = 100;
                 else
                     _plano_valor_minimo = 250;

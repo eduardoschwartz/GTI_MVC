@@ -2419,6 +2419,49 @@ namespace GTI_Mvc.Controllers {
             return View();
         }
 
+        [Route("Notificacao_menu")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Notificacao_menu(NotificacaoIssViewModel model) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/ISS_Civil_Resumo.rpt"));
+            TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+            TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+            ConnectionInfo crConnectionInfo = new ConnectionInfo();
+            Tables CrTables;
+            string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+            string IPAddress = builder.DataSource;
+            string _userId = builder.UserID;
+            string _pwd = builder.Password;
+
+            crConnectionInfo.ServerName = IPAddress;
+            crConnectionInfo.DatabaseName = "Tributacao";
+            crConnectionInfo.UserID = _userId;
+            crConnectionInfo.Password = _pwd;
+            CrTables = rd.Database.Tables;
+            foreach (Table CrTable in CrTables) {
+                crtableLogoninfo = CrTable.LogOnInfo;
+                crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                CrTable.ApplyLogOnInfo(crtableLogoninfo);
+            }
+
+            try {
+                rd.RecordSelectionFormula = "{notificacao_iss_web.data_gravacao} >= #" +  Convert.ToDateTime( model.DataDe).ToString("MM/dd/yyyy") +  "# and {notificacao_iss_web.data_gravacao}<= #" + Convert.ToDateTime(model.DataAte).ToString("MM/dd/yyyy") + "#";
+                rd.SetParameterValue("DataDe", model.DataDe);
+                rd.SetParameterValue("DataAte", model.DataAte);
+                Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                return File(stream, "application/pdf",  "issccivil.pdf");
+            } catch {
+                throw;
+            }
+
+        }
+
+
         [Route("Notificacao_query")]
         [HttpGet]
         public ViewResult Notificacao_query() {
