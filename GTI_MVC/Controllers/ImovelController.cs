@@ -972,10 +972,36 @@ namespace GTI_Mvc.Controllers {
             List<AreaStruct> areas = imovelRepository.Lista_Area(_codigo);
 
             ImovelStruct _dados = imovelRepository.Dados_Imovel(_codigo);
-            Laseriptu _calc = imovelRepository.Dados_IPTU(_codigo, _ano);
-            Laseriptu_ext _calc2= null;
-            if (_calc==null)
-                 _calc2 = imovelRepository.Dados_IPTU_Ext(_codigo, _ano);
+            Laseriptu _calc = null;
+            Laseriptu_ext _calc2 = imovelRepository.Dados_IPTU_Ext(_codigo, _ano);
+            if (_calc2 == null)
+                _calc = imovelRepository.Dados_IPTU(_codigo, _ano);
+            else {
+                _calc = new Laseriptu() { 
+                    Agrupamento=_calc2.Agrupamento,
+                    Aliquota= _calc2.Aliquota,
+                    Areaconstrucao =_calc2.Areaconstrucao,
+                    Areaterreno= _calc2.Areaterreno,
+                    Codreduzido= _calc2.Codreduzido,
+                    Fatorcat= _calc2.Fatorcat,
+                    Fatordis= _calc2.Fatordis,
+                    Fatorgle= _calc2.Fatorgle,
+                    Fatorped= _calc2.Fatorped,
+                    Fatorpro= _calc2.Fatorpro,
+                    Fatorsit= _calc2.Fatorsit,
+                    Fatortop= _calc2.Fatortop,
+                    Fracaoideal= _calc2.Fracaoideal,
+                    Impostopredial= _calc2.Impostopredial,
+                    Impostoterritorial= _calc2.Impostoterritorial,
+                    Natureza= _calc2.Natureza,
+                    Qtdeparc= _calc2.Qtdeparc,
+                    Testadaprinc= _calc2.Testadaprinc,
+                    Valortotalparc= _calc2.Valortotalparc,
+                    Valortotalunica= _calc2.Valortotalunica,
+                    Valortotalunica2= _calc2.Valortotalunica2,
+                    Valortotalunica3= _calc2.Valortotalunica3
+                };
+            }
 
             List<ProprietarioStruct> _prop = imovelRepository.Lista_Proprietario(_codigo, true);
 
@@ -1199,10 +1225,10 @@ namespace GTI_Mvc.Controllers {
                 viewer.LocalReport.ReportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Carne_IPTU.rdlc"); ;
                 viewer.LocalReport.DataSources.Add(rdsAct); // Add  datasource here       
 
-                Laseriptu RegIPTU = tributario_Class.Carrega_Dados_IPTU(Convert.ToInt32(ListaBoleto[0].Codreduzido), _ano);
-                Laseriptu_ext RegIPTU_Ext = null;
-                if(RegIPTU==null)
-                    RegIPTU_Ext = tributario_Class.Carrega_Dados_IPTU_Ext(Convert.ToInt32(ListaBoleto[0].Codreduzido), _ano);
+                //Laseriptu RegIPTU = tributario_Class.Carrega_Dados_IPTU(Convert.ToInt32(ListaBoleto[0].Codreduzido), _ano);
+                //Laseriptu_ext RegIPTU_Ext = null;
+                //if(RegIPTU==null)
+                //    RegIPTU_Ext = tributario_Class.Carrega_Dados_IPTU_Ext(Convert.ToInt32(ListaBoleto[0].Codreduzido), _ano);
 
 
                 List<ReportParameter> parameters = new List<ReportParameter>();
@@ -1216,16 +1242,16 @@ namespace GTI_Mvc.Controllers {
                 parameters.Add(new ReportParameter("LOTEO", ListaBoleto[0].Lote));
                 parameters.Add(new ReportParameter("CODIGO", ListaBoleto[0].Codreduzido));
                 parameters.Add(new ReportParameter("INSC", ListaBoleto[0].Inscricao_cadastral));
-                parameters.Add(new ReportParameter("FRACAO", Convert.ToDecimal(RegIPTU.Fracaoideal).ToString("#0.00")));
-                parameters.Add(new ReportParameter("NATUREZA", RegIPTU.Natureza));
-                parameters.Add(new ReportParameter("TESTADA", Convert.ToDecimal(RegIPTU.Testadaprinc).ToString("#0.00")));
-                parameters.Add(new ReportParameter("AREAT", Convert.ToDecimal(RegIPTU.Areaterreno).ToString("#0.00")));
-                parameters.Add(new ReportParameter("AREAC", Convert.ToDecimal(RegIPTU.Areaconstrucao).ToString("#0.00")));
-                parameters.Add(new ReportParameter("VVT", Convert.ToDecimal(RegIPTU.Vvt).ToString("#0.00")));
-                parameters.Add(new ReportParameter("VVC", Convert.ToDecimal(RegIPTU.Vvc).ToString("#0.00")));
-                parameters.Add(new ReportParameter("VVI", Convert.ToDecimal(RegIPTU.Vvi).ToString("#0.00")));
-                parameters.Add(new ReportParameter("IPTU", Convert.ToDecimal(RegIPTU.Impostopredial).ToString("#0.00")));
-                parameters.Add(new ReportParameter("ITU", Convert.ToDecimal(RegIPTU.Impostoterritorial).ToString("#0.00")));
+                parameters.Add(new ReportParameter("FRACAO", Convert.ToDecimal(_calc.Fracaoideal).ToString("#0.00")));
+                parameters.Add(new ReportParameter("NATUREZA", _calc.Natureza));
+                parameters.Add(new ReportParameter("TESTADA", Convert.ToDecimal(_calc.Testadaprinc).ToString("#0.00")));
+                parameters.Add(new ReportParameter("AREAT", Convert.ToDecimal(_calc.Areaterreno).ToString("#0.00")));
+                parameters.Add(new ReportParameter("AREAC", Convert.ToDecimal(_calc.Areaconstrucao).ToString("#0.00")));
+                parameters.Add(new ReportParameter("VVT", Convert.ToDecimal(_calc.Vvt).ToString("#0.00")));
+                parameters.Add(new ReportParameter("VVC", Convert.ToDecimal(_calc.Vvc).ToString("#0.00")));
+                parameters.Add(new ReportParameter("VVI", Convert.ToDecimal(_calc.Vvi).ToString("#0.00")));
+                parameters.Add(new ReportParameter("IPTU", Convert.ToDecimal(_calc.Impostopredial).ToString("#0.00")));
+                parameters.Add(new ReportParameter("ITU", Convert.ToDecimal(_calc.Impostoterritorial).ToString("#0.00")));
                 parameters.Add(new ReportParameter("TOTALPARC", Convert.ToDecimal((_calc.Qtdeparc) * ListaBoleto[ListaBoleto.Count-1].Valorguia).ToString("#0.00")));
                 parameters.Add(new ReportParameter("UNICA1", Convert.ToDecimal(ListaBoleto[0].Valorguia).ToString("#0.00")));
                 parameters.Add(new ReportParameter("UNICA2", Convert.ToDecimal(ListaBoleto[1].Valorguia).ToString("#0.00")));
