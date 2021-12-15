@@ -118,7 +118,7 @@ namespace GTI_Mvc.Controllers {
                 EnderecoStruct _endEntrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Entrega);
                 if (_endEntrega.Endereco != null) {
                     _compl = _endEntrega.Complemento == null ? "" : " " + _endEntrega.Complemento;
-                    model.Endereco_Entrega = _endEntrega.Endereco + ", " + _endEntrega.Numero.ToString() + _compl + " - " + _endEntrega.NomeBairro.ToString() + " - " + _endEntrega.NomeCidade + "/" + _endEntrega.UF + " Cep:" + _endEntrega.Cep;
+                    model.Endereco_Entrega = _endEntrega.Endereco + ", " + _endEntrega.Numero.ToString() + _compl + " - " + _endEntrega.NomeBairro??"" + " - " + _endEntrega.NomeCidade + "/" + _endEntrega.UF + " Cep:" + _endEntrega.Cep;
                     } else {
                     if (_imovel.EE_TipoEndereco == 0)
                         model.Endereco_Entrega = model.Endereco_Local;
@@ -394,7 +394,7 @@ namespace GTI_Mvc.Controllers {
                 EnderecoStruct _endEntrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Entrega);
                 if (_endEntrega.Endereco != null) {
                     _compl = _endEntrega.Complemento == null ? "" : " " + _endEntrega.Complemento;
-                    model.Endereco_Entrega = _endEntrega.Endereco + ", " + _endEntrega.Numero.ToString() + _compl + " - " + _endEntrega.NomeBairro.ToString() + " - " + _endEntrega.NomeCidade + "/" + _endEntrega.UF + " Cep:" + _endEntrega.Cep;
+                    model.Endereco_Entrega = _endEntrega.Endereco + ", " + _endEntrega.Numero.ToString() + _compl + " - " + _endEntrega.NomeBairro??"" + " - " + _endEntrega.NomeCidade + "/" + _endEntrega.UF + " Cep:" + _endEntrega.Cep;
                     } else {
                     if (_imovel.EE_TipoEndereco == 0)
                         model.Endereco_Entrega = model.Endereco_Local;
@@ -852,7 +852,7 @@ namespace GTI_Mvc.Controllers {
                 EnderecoStruct _endEntrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Entrega);
                 if (_endEntrega.Endereco != null) {
                     _compl = _endEntrega.Complemento == null ? "" : " " + _endEntrega.Complemento;
-                    model.Endereco_Entrega = _endEntrega.Endereco + ", " + _endEntrega.Numero.ToString() + _compl + " - " + _endEntrega.NomeBairro.ToString() + " - " + _endEntrega.NomeCidade + "/" + _endEntrega.UF + " Cep:" + _endEntrega.Cep;
+                    model.Endereco_Entrega = _endEntrega.Endereco + ", " + _endEntrega.Numero.ToString() + _compl + " - " + _endEntrega.NomeBairro??"" + " - " + _endEntrega.NomeCidade + "/" + _endEntrega.UF + " Cep:" + _endEntrega.Cep;
                     } else {
                     if (_imovel.EE_TipoEndereco == 0)
                         model.Endereco_Entrega = model.Endereco_Local;
