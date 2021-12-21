@@ -1551,7 +1551,7 @@ namespace GTI_Mvc.Controllers {
 
         [Route("SegundaVia_Parcelamento")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult SegundaVia_Parcelamento(DebitoViewModel model, string action) {
 
             if (action == "btnDigito") {

@@ -1273,8 +1273,9 @@ namespace GTI_Mvc.Controllers {
         [Route("Carne_Cip")]
         [HttpGet]
         public ActionResult Carne_Cip() {
-            CertidaoViewModel model = new CertidaoViewModel();
-            return View(model);
+            return null;
+            //CertidaoViewModel model = new CertidaoViewModel();
+            //return View(model);
         }
 
         [Route("Carne_Cip")]
