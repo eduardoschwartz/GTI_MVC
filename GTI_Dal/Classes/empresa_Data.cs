@@ -85,10 +85,11 @@ namespace GTI_Dal.Classes {
             return Lista;
         }
 
-        public List<MobiliariovsStruct> Lista_Empresas_Vigilancia_Sanitaria() {
+        public List<MobiliariovsStruct> Lista_Empresas_Vigilancia_Sanitaria(short Ano) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 List<MobiliariovsStruct> ListaFinal = new List<MobiliariovsStruct>();
-                List<MobiliariovsStruct> ListaGeral = (from m in db.Mobiliariovs join c in db.Cnaecriteriodesc on m.Criterio equals c.Criterio
+                List<MobiliariovsStruct> ListaGeral = (from m in db.Mobiliariovs join c in  db.Cnae_Aliquota on new { p1 = m.Cnae, p2 = (short)m.Criterio } equals new { p1 = c.Cnae, p2 = c.Criterio } into mc from c in mc.DefaultIfEmpty()
+                                                       where c.Ano==Ano
                                                        orderby m.Codigo select new MobiliariovsStruct {Codigo=m.Codigo,Cnae=m.Cnae,Criterio=m.Criterio,Qtde=m.Qtde,Valor=c.Valor }).ToList();
                 List<int> ListaAtivos = Lista_Empresas_Ativas();
                 for (int i = 0; i < ListaGeral.Count; i++) {

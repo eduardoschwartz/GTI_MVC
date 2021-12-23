@@ -227,5 +227,6 @@ namespace GTI_Dal {
         public DbSet<WImovel_Testada> WImovel_Testada { get; set; }
         public DbSet<WImovel_Area> WImovel_Area { get; set; }
         public DbSet<WImovel_Historico> WImovel_Historico { get; set; }
+        public DbSet<Cnae_Aliquota> Cnae_Aliquota { get; set; }
     }
 }

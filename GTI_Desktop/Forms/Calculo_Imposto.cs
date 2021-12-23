@@ -527,7 +527,7 @@ namespace GTI_Desktop.Forms {
             bool _unica = _Prm.Parcelaunica == "S" ? true : false;
 
             Empresa_bll empresa_Class = new Empresa_bll(_connection);
-            List<MobiliariovsStruct> ListaEmpresas = empresa_Class.Lista_Empresas_Vigilancia_Sanitaria();
+            List<MobiliariovsStruct> ListaEmpresas = empresa_Class.Lista_Empresas_Vigilancia_Sanitaria((short)_ano);
             List<MobiliariovsStruct> ListaVS = new List<MobiliariovsStruct>();
             foreach (MobiliariovsStruct item in ListaEmpresas) {
                 //if (item.Codigo != 303947) {
