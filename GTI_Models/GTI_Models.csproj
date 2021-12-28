@@ -103,6 +103,7 @@
     <Compile Include="Models\certidao_impressao.cs" />
     <Compile Include="Models\chaveStruct.cs" />
     <Compile Include="Models\cidadao_socio.cs" />
+    <Compile Include="Models\cnae_aliquota.cs" />
     <Compile Include="Models\dados_imovel_web.cs" />
     <Compile Include="Models\dam_data.cs" />
     <Compile Include="Models\dam_header.cs" />
