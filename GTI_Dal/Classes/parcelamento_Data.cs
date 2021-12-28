@@ -13,7 +13,7 @@ namespace GTI_Dal.Classes {
 
         public Parcelamento_Data(string sConnection) {
             _connection = sConnection;
-            _connection = "GTIconnectionTeste";
+            //_connection = "GTIconnectionTeste";
         }
 
         public List<SpParcelamentoOrigem> Lista_Parcelamento_Origem(int Codigo, char Tipo) {
@@ -49,7 +49,6 @@ namespace GTI_Dal.Classes {
                         }
                     }
 
-
                     SpParcelamentoOrigem _reg = new SpParcelamentoOrigem() {
                         Idx = _pos,
                         Exercicio = _row.Anoexercicio,
@@ -66,7 +65,6 @@ namespace GTI_Dal.Classes {
                         Valor_total = _row.Valortotal,
                         Ajuizado = _row.Dataajuiza != null ? "S" : "N",
                         Protesto = _row.Statuslanc == 38 || _row.Statuslanc==39 ? "S" : "N",
-                        //Qtde_parcelamento = Qtde_Parcelamento_Efetuados(Codigo, _row.Anoexercicio, _row.Codlancamento, _row.Seqlancamento, _row.Numparcela),
                         Qtde_parcelamento=_qtde,
                         Execucao_Fiscal =_row.Processocnj??""
                     };

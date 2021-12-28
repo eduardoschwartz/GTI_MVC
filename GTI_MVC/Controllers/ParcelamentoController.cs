@@ -671,16 +671,16 @@ namespace GTI_MVC.Controllers {
             List<SpParcelamentoOrigem> ListaOrigem = parcelamentoRepository.Lista_Parcelamento_Origem(p);
             List<SelectDebitoParcelamentoEditorViewModel> _listaP = new List<SelectDebitoParcelamentoEditorViewModel>();
             foreach (SpParcelamentoOrigem item in ListaOrigem) {
-                if (_master.Refis) {
-                    if (item.Data_vencimento > Convert.ToDateTime("30/11/2021"))
-                        goto nextparc;
-                    else {
-                        decimal _perc = _master.Perc_Desconto / 100;
-                        item.Valor_juros = item.Valor_juros - (item.Valor_juros * _perc);
-                        item.Valor_multa = item.Valor_multa - (item.Valor_multa * _perc);
-                        item.Valor_total = item.Valor_principal + item.Valor_juros + item.Valor_multa + item.Valor_correcao;
-                    }
-                }
+                //if (_master.Refis) {
+                //    if (item.Data_vencimento > Convert.ToDateTime("30/11/2021"))
+                //        goto nextparc;
+                //    else {
+                //        decimal _perc = _master.Perc_Desconto / 100;
+                //        item.Valor_juros = item.Valor_juros - (item.Valor_juros * _perc);
+                //        item.Valor_multa = item.Valor_multa - (item.Valor_multa * _perc);
+                //        item.Valor_total = item.Valor_principal + item.Valor_juros + item.Valor_multa + item.Valor_correcao;
+                //    }
+                //}
                 SelectDebitoParcelamentoEditorViewModel d = new SelectDebitoParcelamentoEditorViewModel() {
                     Ajuizado = item.Ajuizado,
                     Complemento = item.Complemento,
@@ -808,14 +808,27 @@ namespace GTI_MVC.Controllers {
                 if (item.Ajuizado == "S")
                     reg.Valor_Honorario += item.Valor_total * (decimal)0.1;
 
+
+                if (_master.Refis) {
+                    if (item.Data_vencimento > Convert.ToDateTime("30/11/2021")) {
+
+                    } else {
+                        decimal _perc = _master.Perc_Desconto / 100;
+                        reg.Valor_Juros = item.Valor_juros - (item.Valor_juros * _perc);
+                        reg.Valor_Multa = item.Valor_multa - (item.Valor_multa * _perc);
+                        reg.Valor_Total = item.Valor_principal + reg.Valor_Juros + reg.Valor_Multa + item.Valor_correcao;
+                    }
+                }
+
+
                 _somaP += item.Valor_principal;
-                _somaJ += item.Valor_juros;
-                _somaM += item.Valor_multa;
+                _somaJ += reg.Valor_Juros;
+                _somaM += reg.Valor_Multa;
                 _somaC += item.Valor_correcao;
-                _somaT += item.Valor_total;
+                _somaT += reg.Valor_Total;
                 _somaE += item.Valor_penalidade;
                 if (item.Ajuizado == "S")
-                    _somaH += item.Valor_total;
+                    _somaH += reg.Valor_Total;
 
                 _listaSelect.Add(reg);
 
@@ -865,6 +878,9 @@ namespace GTI_MVC.Controllers {
             foreach (SpParcelamentoOrigem item in _listaSelected) {
                 List<SpExtrato> _listaExtrato = tributarioRepository.Lista_Extrato_Tributo(model.Contribuinte.Codigo, item.Exercicio, item.Exercicio, item.Lancamento, item.Lancamento, item.Sequencia, item.Sequencia, item.Parcela, item.Parcela, item.Complemento, item.Complemento);
                 foreach (SpExtrato _ext in _listaExtrato) {
+
+
+
                     bool _find = false;
                     int _pos = 0;
                     foreach (Parcelamento_Web_Tributo _trib in _listaTributo) {
@@ -1000,6 +1016,7 @@ namespace GTI_MVC.Controllers {
             bool _bAjuizado = ListaOrigem[0].Ajuizado == "S";
             List<SelectDebitoParcelamentoEditorViewModel> _listaP = new List<SelectDebitoParcelamentoEditorViewModel>();
             foreach (SpParcelamentoOrigem item in ListaOrigem) {
+
                 SelectDebitoParcelamentoEditorViewModel d = new SelectDebitoParcelamentoEditorViewModel() {
                     Ajuizado = item.Ajuizado,
                     Complemento = item.Complemento,
@@ -1022,15 +1039,19 @@ namespace GTI_MVC.Controllers {
                     Execucao_Fiscal = item.Execucao_Fiscal,
                     Protesto = item.Protesto
                 };
+
+
+
+
                 _listaP.Add(d);
-                _SomaP += item.Valor_principal;
-                _SomaM += item.Valor_multa;
-                _SomaJ += item.Valor_juros;
-                _SomaC += item.Valor_correcao;
-                _SomaE += item.Valor_penalidade;
-                _SomaT += Math.Round(item.Valor_principal, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa, 2, MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao, 2, MidpointRounding.AwayFromZero);
+                _SomaP += d.Valor_principal;
+                _SomaM += d.Valor_multa;
+                _SomaJ += d.Valor_juros;
+                _SomaC += d.Valor_correcao;
+                _SomaE += d.Valor_penalidade;
+                _SomaT += Math.Round(d.Valor_principal, 2, MidpointRounding.AwayFromZero) + Math.Round(d.Valor_juros, 2, MidpointRounding.AwayFromZero) + Math.Round(d.Valor_multa, 2, MidpointRounding.AwayFromZero) + +Math.Round(d.Valor_correcao, 2, MidpointRounding.AwayFromZero);
                 if (item.Ajuizado == "S")
-                    _SomaH += (Math.Round(item.Valor_principal, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_juros, 2, MidpointRounding.AwayFromZero) + Math.Round(item.Valor_multa, 2, MidpointRounding.AwayFromZero) + +Math.Round(item.Valor_correcao, 2, MidpointRounding.AwayFromZero)) * ((decimal)0.1);
+                    _SomaH += (Math.Round(d.Valor_principal, 2, MidpointRounding.AwayFromZero) + Math.Round(d.Valor_juros, 2, MidpointRounding.AwayFromZero) + Math.Round(d.Valor_multa, 2, MidpointRounding.AwayFromZero) + +Math.Round(d.Valor_correcao, 2, MidpointRounding.AwayFromZero)) * ((decimal)0.1);
             }
             model.Soma_Principal = _SomaP;
             model.Soma_Multa = _SomaM;
@@ -1489,6 +1510,7 @@ namespace GTI_MVC.Controllers {
 
                 //Grava tabela web_destino com as parcelas do simulado
                 model.Lista_Simulado = parcelamentoRepository.Retorna_Parcelamento_Web_Simulado(model.Guid, _master.Qtde_Parcela);
+
                 ex = parcelamentoRepository.Excluir_parcelamento_Web_Destino(model.Guid);
                 List<Parcelamento_Web_Destino> _lista_Parcelamento_Web_Destino = new List<Parcelamento_Web_Destino>();
                 foreach (Parcelamento_Web_Simulado _s in model.Lista_Simulado.Where(m => m.Qtde_Parcela == _qtdeParc)) {
@@ -1507,11 +1529,20 @@ namespace GTI_MVC.Controllers {
                         Valor_Multa = _s.Valor_Multa,
                         Valor_Principal = _s.Valor_Principal,
                         Valor_Total = _s.Valor_Total,
-                        Proporcao = _s.Valor_Liquido * 100 / _master.Sim_Liquido
+                        Proporcao = model.Lista_Simulado[0].Valor_Total * 100 / _master.Sim_Liquido
                     };
                     _lista_Parcelamento_Web_Destino.Add(_d);
                 }
                 ex = parcelamentoRepository.Incluir_Parcelamento_Web_Destino(_lista_Parcelamento_Web_Destino);
+
+                //Gravar os tributos
+                decimal _somaTotal = 0;
+                foreach (Parcelamento_Web_Simulado _s in model.Lista_Simulado.Where(m => m.Qtde_Parcela == _qtdeParc)) {
+                    _somaTotal += _s.Valor_Total;
+                }
+
+                decimal _Perc1 = model.Lista_Simulado[0].Valor_Total * 100 / _somaTotal;
+                decimal _PercN = model.Lista_Simulado[1].Valor_Total * 100 / _somaTotal;
 
                 //Apaga o simulado
                 ex = parcelamentoRepository.Excluir_parcelamento_Web_Simulado(_guid);
@@ -1632,8 +1663,8 @@ namespace GTI_MVC.Controllers {
                     _listaDebitoParcela.Add(dp);
 
                     //Gravar os tributos
-                    decimal _Perc1 = _lista_Parcelamento_Web_Destino[0].Proporcao;
-                    decimal _PercN = _lista_Parcelamento_Web_Destino[1].Proporcao;
+//                    decimal _Perc1 = _lista_Parcelamento_Web_Destino[0].Proporcao;
+ //                   decimal _PercN = _lista_Parcelamento_Web_Destino[1].Proporcao;
 
                     List<Parcelamento_Web_Tributo> _ListaTributo = parcelamentoRepository.Lista_Parcelamento_Tributo(model.Guid);
                     foreach (Parcelamento_Web_Tributo trib in _ListaTributo) {
