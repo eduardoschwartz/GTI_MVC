@@ -57,11 +57,11 @@ namespace GTI_Dal.Classes {
                     };
 
                     //DECRETO ANISITIA MULTA E JUROS PARA PARCELAS 4,5, E 6 DE 2020
-                    if (_row.Anoexercicio == 2020 && (_row.Datavencimento.Month == 4 || _row.Datavencimento.Month == 5 || _row.Datavencimento.Month == 6)) {
-                        _reg.Valor_juros = 0;
-                        _reg.Valor_multa = 0;
-                        _reg.Valor_total = _reg.Valor_principal + _reg.Valor_correcao;
-                    }
+                    //if (_row.Anoexercicio == 2020 && (_row.Datavencimento.Month == 4 || _row.Datavencimento.Month == 5 || _row.Datavencimento.Month == 6)) {
+                    //    _reg.Valor_juros = 0;
+                    //    _reg.Valor_multa = 0;
+                    //    _reg.Valor_total = _reg.Valor_principal + _reg.Valor_correcao;
+                    //}
 
                     if (Tipo == 'F')  //empresa física 5 % por parcelamento
                         _reg.Perc_penalidade = _reg.Qtde_parcelamento * 5;
@@ -193,9 +193,17 @@ namespace GTI_Dal.Classes {
         private short Qtde_Parcelamento_Efetuados(int Codigo, short Ano, short Lancamento, short Sequencia, short Parcela) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 DateTime _data = Convert.ToDateTime("08/08/2017");
-                return (short)(from o in db.Origemreparc
-                               join p in db.Processoreparc on o.Numprocesso equals p.Numprocesso into op from p in op.DefaultIfEmpty()
-                               where o.Codreduzido == Codigo && o.Anoexercicio == Ano && o.Codlancamento == Lancamento && o.Numsequencia == Sequencia && o.Numparcela == Parcela && p.Dataprocesso>_data select o.Numprocesso).Distinct().Count();
+
+                string sql = "SELECT COUNT(DISTINCT origemreparc.numprocesso) AS Contador FROM origemreparc INNER JOIN processoreparc ON origemreparc.numprocesso = processoreparc.numprocesso ";
+                sql = sql + "WHERE origemreparc.codreduzido = " + Codigo  + " AND origemreparc.anoexercicio = " + Ano + " AND origemreparc.codlancamento = " + Lancamento + " AND origemreparc.numsequencia = " + Sequencia + " AND ";
+                sql = sql + "origemreparc.numparcela = " + Parcela + " AND processoreparc.datareparc > '" + _data  + "' AND processoreparc.excluido IS NULL OR processoreparc.excluido = 0 ";
+
+                int nRet = db.Database.SqlQuery<int>(sql).Single();
+
+                //short q = (short)(from o in db.Origemreparc
+                //               join p in db.Processoreparc on o.Numprocesso equals p.Numprocesso into op from p in op.DefaultIfEmpty()
+                //               where o.Codreduzido == Codigo && o.Anoexercicio == Ano && o.Codlancamento == Lancamento && o.Numsequencia == Sequencia && o.Numparcela == Parcela && p.Dataprocesso>_data select o.Numprocesso).Distinct().Count();
+                return (short)nRet;
             }
         }
 
