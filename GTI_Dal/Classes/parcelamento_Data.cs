@@ -13,6 +13,7 @@ namespace GTI_Dal.Classes {
 
         public Parcelamento_Data(string sConnection) {
             _connection = sConnection;
+            _connection = "GTIconnectionTeste";
         }
 
         public List<SpParcelamentoOrigem> Lista_Parcelamento_Origem(int Codigo, char Tipo) {
@@ -26,6 +27,10 @@ namespace GTI_Dal.Classes {
 
                 int _pos = 1;
                 DateTime _dataNow = Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy"));
+
+                List<Parcelamento_Origem_Qtde> _listaQtde = Lista_Parcelamento_QtdeParcelamentos(Codigo);
+
+
                 foreach (SpExtrato_Parcelamento _row in _extrato) {
                     if (_row.Datavencimento >= _dataNow) {
                         if (_row.Codlancamento != 65 && _row.Codlancamento != 62 && _row.Codlancamento != 16 && _row.Codlancamento != 38 && _row.Codlancamento != 76 && _row.Codlancamento != 27 && _row.Codlancamento != 71) {
@@ -35,6 +40,15 @@ namespace GTI_Dal.Classes {
 
                     if (_row.Numparcela == 0)
                         goto NextReg;
+
+                    short _qtde = 0;
+                    foreach (Parcelamento_Origem_Qtde s in _listaQtde) {
+                        if(_row.Anoexercicio==s.Exercicio && _row.Codlancamento==s.Lancamento && _row.Seqlancamento==s.Sequencia && _row.Numparcela==s.Parcela && _row.Codcomplemento == s.Complemento) {
+                            _qtde = (short)s.Qtde_Parcelamento;
+                            break;
+                        }
+                    }
+
 
                     SpParcelamentoOrigem _reg = new SpParcelamentoOrigem() {
                         Idx = _pos,
@@ -52,8 +66,9 @@ namespace GTI_Dal.Classes {
                         Valor_total = _row.Valortotal,
                         Ajuizado = _row.Dataajuiza != null ? "S" : "N",
                         Protesto = _row.Statuslanc == 38 || _row.Statuslanc==39 ? "S" : "N",
-                        Qtde_parcelamento = Qtde_Parcelamento_Efetuados(Codigo, _row.Anoexercicio, _row.Codlancamento, _row.Seqlancamento, _row.Numparcela),
-                        Execucao_Fiscal=_row.Processocnj??""
+                        //Qtde_parcelamento = Qtde_Parcelamento_Efetuados(Codigo, _row.Anoexercicio, _row.Codlancamento, _row.Seqlancamento, _row.Numparcela),
+                        Qtde_parcelamento=_qtde,
+                        Execucao_Fiscal =_row.Processocnj??""
                     };
 
                     //DECRETO ANISITIA MULTA E JUROS PARA PARCELAS 4,5, E 6 DE 2020
@@ -189,6 +204,48 @@ namespace GTI_Dal.Classes {
                 return Lista;
             }
         }
+
+
+        private List<Parcelamento_Origem_Qtde> Lista_Parcelamento_QtdeParcelamentos(int Codigo) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                List<Parcelamento_Origem_Qtde> _lista = new List<Parcelamento_Origem_Qtde>();
+
+                string sql = "SELECT origemreparc.numprocesso,origemreparc.codreduzido as Codigo,origemreparc.anoexercicio as Exercicio,origemreparc.codlancamento as lancamento,origemreparc.numsequencia as Sequencia,origemreparc.numparcela as Parcela,origemreparc.codcomplemento as Complemento ";
+                sql = sql += "FROM dbo.origemreparc INNER JOIN dbo.processoreparc ON origemreparc.numprocesso = processoreparc.numprocesso INNER JOIN dbo.debitoparcela ON ";
+                sql = sql += "debitoparcela.codreduzido = origemreparc.codreduzido AND debitoparcela.anoexercicio = origemreparc.anoexercicio AND debitoparcela.codlancamento = origemreparc.codlancamento AND ";
+                sql = sql += "debitoparcela.seqlancamento = origemreparc.numsequencia AND debitoparcela.numparcela = origemreparc.numparcela AND debitoparcela.codcomplemento = origemreparc.codcomplemento ";
+                sql = sql + "WHERE origemreparc.codreduzido = " + Codigo + " AND processoreparc.datareparc > '08/08/2017' AND(processoreparc.excluido IS NULL OR processoreparc.excluido = 0) AND statuslanc IN(3, 38, 42, 43)";
+                List<Parcelamento_Origem_Qtde> Ret = db.Database.SqlQuery<Parcelamento_Origem_Qtde>(sql).ToList();
+                int y=0;
+                foreach (Parcelamento_Origem_Qtde item in Ret) {
+                    bool _existe = false;
+                    for (int x = 0; x < _lista.Count; x++) {
+                        y = x;
+                        if (item.Exercicio == _lista[x].Exercicio && item.Lancamento == _lista[x].Lancamento && item.Sequencia == _lista[x].Sequencia && item.Parcela == _lista[x].Parcela && item.Complemento == _lista[x].Complemento) {
+                            _existe = true;
+                            break;
+                        }
+                    }
+                    if (!_existe) {
+                        Parcelamento_Origem_Qtde _rec = new Parcelamento_Origem_Qtde() {
+                            Exercicio = item.Exercicio,
+                            Lancamento = item.Lancamento,
+                            Sequencia = item.Sequencia,
+                            Parcela = item.Parcela,
+                            Complemento = item.Complemento,
+                            Qtde_Parcelamento = 1
+                        };
+                        _lista.Add(_rec);
+                    } else {
+                        _lista[y].Qtde_Parcelamento++;
+                    }
+
+                }
+
+                return _lista;
+            }
+        }
+
 
         private short Qtde_Parcelamento_Efetuados(int Codigo, short Ano, short Lancamento, short Sequencia, short Parcela) {
             using (GTI_Context db = new GTI_Context(_connection)) {
