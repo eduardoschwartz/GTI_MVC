@@ -524,17 +524,20 @@ namespace GTI_MVC.Controllers {
             if (_RefisAtivo) {
                 DateTime _dataNow = _connection == "gtiConnection" ? DateTime.Now : Convert.ToDateTime("20/12/2021");
 
-                if (Functions.DateInRange(Convert.ToDateTime(_dataNow.ToString("dd/MM/yyyy")), Convert.ToDateTime("12/12/2021"), Convert.ToDateTime("29/12/2021"))) {
+                if(_dataNow> Convert.ToDateTime("12/12/2021") && _dataNow<= Convert.ToDateTime("29/12/2021")) {
                     _plano_Codigo = 50;
-                } else {
-                    if (Functions.DateInRange(Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy")), Convert.ToDateTime("29/12/2022"), Convert.ToDateTime("14/01/2022"))) {
+                }
+                else {
+                    if (_dataNow > Convert.ToDateTime("29/12/2021") && _dataNow <= Convert.ToDateTime("14/01/2022")) {
                         _plano_Codigo = 51;
                     } else {
-                        if (Functions.DateInRange(Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy")), Convert.ToDateTime("15/01/2022"), Convert.ToDateTime("31/01/2022"))) {
+                        if (_dataNow > Convert.ToDateTime("15/01/2022") && _dataNow <= Convert.ToDateTime("31/01/2022")) {
                             _plano_Codigo = 52;
                         }
                     }
+
                 }
+              
                 Plano _plano = parcelamentoRepository.Retorna_Plano_Desconto((short)_plano_Codigo);
                 _plano_nome = _plano.Nome;
                 _plano_Desconto = _plano.Desconto;
