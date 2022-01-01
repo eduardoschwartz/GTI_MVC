@@ -1046,7 +1046,7 @@ namespace GTI_Mvc.Controllers {
         [ValidateAntiForgeryToken]
         public ActionResult Carne_tl(CertidaoViewModel model) {
             int _codigo = Convert.ToInt32(model.Inscricao);
-            int _ano = 2021;
+            int _ano = 2022;
             bool _bCpf = model.CpfValue.Length == 14 ? true : false;
             string _cpf = Functions.RetornaNumero(model.CpfValue);
             ViewBag.Result = "";
@@ -1434,7 +1434,7 @@ namespace GTI_Mvc.Controllers {
         [ValidateAntiForgeryToken]
         public ActionResult Carne_vs(CertidaoViewModel model) {
             int _codigo = Convert.ToInt32(model.Inscricao);
-            int _ano = 2021;
+            int _ano = 2022;
             bool _bCpf = model.CpfValue.Length == 14 ? true : false;
             string _cpf = Functions.RetornaNumero(model.CpfValue);
 
@@ -1720,7 +1720,7 @@ namespace GTI_Mvc.Controllers {
                 Horario=_dados.Horario_Nome,
                 Num_processo=model.Numero_Processo,
                 Data_Gravada=DateTime.Now,
-                Validade=new DateTime(2021,12,31),
+                Validade=new DateTime(2022,12,31),
                 Redesim=IsVre,
                 Provisorio=IsProvisorio,
                 Ponto=_dados.Ponto_agencia??""

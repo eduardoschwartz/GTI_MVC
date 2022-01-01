@@ -39,7 +39,7 @@
     <div style="width: 100%; overflow: hidden;">
         <div style="width: 400px; float: left;">
             <span class="spantext">Para seu imóvel</span><br />
-             @Html.ActionLink("Emissão do carnê de IPTU (Ex.2022)", "Carne_Iptu", "Imovel", null, new { @class = "actionlink" })<span style="color:red;font-size:13px;font-weight:bold;margin-left:1px">&nbsp;&nbsp;**Novo</span><br />
+             @Html.ActionLink("Emissão do carnê de IPTU", "Carne_Iptu", "Imovel", null, new { @class = "actionlink" })<br />
             @*@Html.ActionLink("Emissão do carnê da CIP", "Carne_Cip", "Imovel", null, new { @class = "actionlink" })<br />*@
             @*<span style="color:red;font-size:13px;font-weight:bold">&nbsp;&nbsp;**Novo</span><br />*@
             @Html.ActionLink("Dados cadastrais de um imóvel", "Dados_Imovel", "Imovel", null, new { @class = "actionlink" })<br />
@@ -58,7 +58,7 @@
             <a href="~/Files/DECA2018.pdf" class="actionlink">Download da declaração cadastral (DECA)</a><br />
             @Html.ActionLink("Renovação de alvará de funcionamento", "Alvara_Funcionamento", "Empresa", null, new { @class = "actionlink" })<br />
             @Html.ActionLink("Certidão de inscrição e situação cadastral", "Certidao_Inscricao", "Empresa", null, new { @class = "actionlink" })<br />
-            @Html.ActionLink("Situação dos débitos ref. a ISS Fixo, Tx.Licença/Vig. Sanitária (Exerc.2021)", "Certidao_Pagamento", "Empresa", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Situação dos débitos ref. a ISS Fixo, Tx.Licença/Vig. Sanitária ", "Certidao_Pagamento", "Empresa", null, new { @class = "actionlink" })<br />
             @if (ViewBag.FiscalMov == "S") {
                 @Html.ActionLink("Requerimentos (Alteração cadastral, baixa de atividade, etc..)", "mobreq_menu", "MobReq", null, new { @class = "actionlink" })<br />
             }
@@ -77,7 +77,7 @@
             @Html.ActionLink("Impressão de comprovante de pagamento", "Comprovante_pagamento", "Tributario", null, new { @class = "actionlink" })<br />
             @Html.ActionLink("Consultar detalhes de um boleto", "Detalhe_Boleto", "Tributario", null, new { @class = "actionlink" })<br />
             @Html.ActionLink("Parcelamento de débitos", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<br />
-            @Html.ActionLink("Emissão de carnê de parcelamento (Ex.2022)", "SegundaVia_Parcelamento", "Tributario", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Emissão de carnê de parcelamento", "SegundaVia_Parcelamento", "Tributario", null, new { @class = "actionlink" })<br />
         </div>
 
         <div style="margin-left: 420px;">
