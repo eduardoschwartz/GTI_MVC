@@ -490,6 +490,40 @@ namespace GTI_Mvc.Controllers {
             return View(model);
             }
 
+        [Route("Notificacao_obra_query")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Notificacao_obra_query(NotificacaoTerQueryViewModel model2) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            List<int> Lista_Ano = new List<int>();
+            for (int i = 2020; i <= DateTime.Now.Year; i++) {
+                Lista_Ano.Add(i);
+            }
+            ViewBag.Lista_Ano = new SelectList(Lista_Ano);
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            List<NotificacaoTerViewModel> ListaNot = new List<NotificacaoTerViewModel>();
+            List<Notificacao_Obra_Struct> _listaNot = imovelRepository.Lista_Notificacao_Obra(model2.Ano_Selected);
+            foreach (Notificacao_Obra_Struct item in _listaNot) {
+                NotificacaoTerViewModel reg = new NotificacaoTerViewModel() {
+                    AnoNumero = item.AnoNumero,
+                    Ano_Notificacao = item.Ano_Notificacao,
+                    Numero_Notificacao = item.Numero_Notificacao,
+                    Codigo_Imovel = item.Codigo_Imovel,
+                    Data_Cadastro = item.Data_Cadastro,
+                    Prazo = item.Prazo,
+                    Nome_Proprietario = Functions.TruncateTo(item.Nome_Proprietario, 45),
+                    Situacao = item.Situacao
+                };
+                ListaNot.Add(reg);
+            }
+
+            NotificacaoTerQueryViewModel model = new NotificacaoTerQueryViewModel();
+            model.ListaNotificacao = ListaNot;
+            model.Ano_Selected = model2.Ano_Selected;
+            return View(model);
+        }
+
         public ActionResult Notificacao_obra_print(int a, int n) {
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             Notificacao_Obra_Struct _not = imovelRepository.Retorna_Notificacao_Obra(a, n);
@@ -686,20 +720,22 @@ namespace GTI_Mvc.Controllers {
             ViewBag.Lista_Ano = new SelectList(Lista_Ano);
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             List<NotificacaoTerViewModel> ListaNot = new List<NotificacaoTerViewModel>();
-            List<Notificacao_Terreno_Struct> _listaNot = imovelRepository.Lista_Notificacao_Terreno(_ano);
-            foreach (Notificacao_Terreno_Struct item in _listaNot) {
+            List<Auto_Infracao_Struct> _listaNot = imovelRepository.Lista_Auto_Infracao(_ano);
+            foreach (Auto_Infracao_Struct item in _listaNot) {
                 NotificacaoTerViewModel reg = new NotificacaoTerViewModel() {
                     AnoNumero = item.AnoNumero,
                     Ano_Notificacao = item.Ano_Notificacao,
                     Numero_Notificacao = item.Numero_Notificacao,
+                    AnoNumeroAuto = item.AnoNumeroAuto,
+                    Numero_Auto=item.Numero_Auto,
                     Codigo_Imovel = item.Codigo_Imovel,
                     Data_Cadastro = item.Data_Cadastro,
-                    Prazo = item.Prazo,
+                    //Prazo = item.Prazo,
                     Nome_Proprietario = Functions.TruncateTo(item.Nome_Proprietario, 45),
                     Situacao = item.Situacao
-                    };
+                };
                 ListaNot.Add(reg);
-                }
+            }
 
             NotificacaoTerQueryViewModel model = new NotificacaoTerQueryViewModel();
             model.ListaNotificacao = ListaNot;
@@ -1143,15 +1179,17 @@ namespace GTI_Mvc.Controllers {
             ViewBag.Lista_Ano = new SelectList(Lista_Ano);
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             List<NotificacaoTerViewModel> ListaNot = new List<NotificacaoTerViewModel>();
-            List<Notificacao_Obra_Struct> _listaNot = imovelRepository.Lista_Notificacao_Obra(_ano);
-            foreach (Notificacao_Obra_Struct item in _listaNot) {
+            List<Auto_Infracao_Obra_Struct> _listaNot = imovelRepository.Lista_Auto_Infracao_Obra(_ano);
+            foreach (Auto_Infracao_Obra_Struct item in _listaNot) {
                 NotificacaoTerViewModel reg = new NotificacaoTerViewModel() {
                     AnoNumero = item.AnoNumero,
                     Ano_Notificacao = item.Ano_Notificacao,
+                    AnoNumeroAuto=item.AnoNumeroAuto,
+                    Numero_Auto=item.Numero_Auto,
                     Numero_Notificacao = item.Numero_Notificacao,
                     Codigo_Imovel = item.Codigo_Imovel,
                     Data_Cadastro = item.Data_Cadastro,
-                    Prazo = item.Prazo,
+                  //  Prazo = item.Prazo,
                     Nome_Proprietario = Functions.TruncateTo(item.Nome_Proprietario, 45),
                     Situacao = item.Situacao
                 };

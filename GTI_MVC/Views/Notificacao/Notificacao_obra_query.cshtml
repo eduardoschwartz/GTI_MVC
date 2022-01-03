@@ -55,11 +55,12 @@
 <div class="center">
 
     @using (Html.BeginForm("Notificacao_obra_query", "Notificacao", FormMethod.Post, new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
         <div class="container" style="width:800px">
             <div class="card">
                 <div class="card-header">
                     Consulta de notificações de obra emitidas
-                   
+
                     <label style="padding-left:20px">
                         Exercício:&nbsp;
                         @Html.DropDownListFor(m => Model.Ano_Selected, ViewBag.Lista_Ano as SelectList, null, new { @id = "AnoDropDown", @style = "font-weight:normal", onchange = "this.form.submit()" })
@@ -83,20 +84,20 @@
                         <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
                             @foreach (var item in Model.ListaNotificacao) {
                                 if (item.Ano_Notificacao == Model.Ano_Selected) {
-                            <tr style="height:20px;">
-                                <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
-                                <td style="width:460px;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome_Proprietario)</td>
-                                <td style="width:80px;font-weight:normal;text-align:center">@Html.DisplayFor(modelItem => item.Data_Cadastro)</td>
-                                <td style="width:105px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Prazo)@Html.Raw("&nbsp;Dias")</td>
-                                <td style="width:50px;text-align:right">
-                                    <a href="@Url.Action("Notificacao_obra_print", "Notificacao", new { a = item.Ano_Notificacao,n=item.Numero_Notificacao })" title="Imprimir a Notificação"> <img src="@Url.Content("~/images/print.png")"></a>
-                                </td>
-                            </tr>
+                                    <tr style="height:20px;">
+                                        <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
+                                        <td style="width:460px;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome_Proprietario)</td>
+                                        <td style="width:80px;font-weight:normal;text-align:center">@Html.DisplayFor(modelItem => item.Data_Cadastro)</td>
+                                        <td style="width:105px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Prazo)@Html.Raw("&nbsp;Dias")</td>
+                                        <td style="width:50px;text-align:right">
+                                            <a href="@Url.Action("Notificacao_obra_print", "Notificacao", new { a = item.Ano_Notificacao,n=item.Numero_Notificacao })" title="Imprimir a Notificação"> <img src="@Url.Content("~/images/print.png")"></a>
+                                        </td>
+                                    </tr>
                                 }
                             }
                         </tbody>
                     </table>
-               
+
                     <div class="form-group row">
                         <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
                     </div>
