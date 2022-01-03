@@ -76,7 +76,8 @@
                         var selectListAno = new SelectList(new List<SelectListItem>
                             {
                         new SelectListItem {Text = "2020", Value = "2020" },
-                        new SelectListItem {Text = "2021", Value = "2021"}
+                        new SelectListItem {Text = "2021", Value = "2021"},
+                        new SelectListItem {Text = "2022", Value = "2022"}
                         }, "Value", "Text");
 
                     }
@@ -84,7 +85,7 @@
                 <label style="padding-left:20px">
                     Exercício:&nbsp;
                     @if (Model.Count > 0) {
-                        @Html.DropDownListFor(m => m[0].Ano_Selected, selectListAno, null, new { @id = "AnoDropDown", @style = "font-weight:normal", onchange = "this.form.submit()", @Value = Model[0].Ano_Selected })
+                        @Html.DropDownListFor(m => m[0].Ano_Selected, selectListAno, null, new { @id = "AnoDropDown", @style = "font-weight:normal", onchange = "this.form.submit()", @value = Model[0].Ano_Selected })
                     } else {
                         @Html.DropDownListFor(m => m[0].Ano_Selected, selectListAno, null, new { @id = "AnoDropDown", @style = "font-weight:normal", onchange = "this.form.submit()" })
                     }

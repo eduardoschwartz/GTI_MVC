@@ -966,6 +966,7 @@ namespace GTI_Mvc.Controllers {
                 };
                 model.Add(item);
             }
+                
             ViewBag.Erro = e;
             return View(model);
         }
