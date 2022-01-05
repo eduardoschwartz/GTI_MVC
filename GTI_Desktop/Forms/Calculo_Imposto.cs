@@ -14,7 +14,7 @@ namespace GTI_Desktop.Forms {
         string _connectionTeste = gtiCore.Connection_Name("TributacaoTeste");
         string _path = @"c:\cadastro\bin\";
         int _ano = 2022;
-        int _documento = 19240910;
+        int _documento = 19815001;
         decimal _ipca = (decimal)10.25;
  
         private enum Tipo_imposto {
@@ -628,7 +628,8 @@ namespace GTI_Desktop.Forms {
 
         private void ExportarButton_Click(object sender, EventArgs e) {
             if (MessageBox.Show("Exportar para o banco de dados?", "Confimação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No) return;
-            string _exportConnection = _connectionTeste;
+            string _exportConnection = _connection;
+            //string _exportConnection = _connectionTeste;
 
             Tributario_bll tributario_Class = new Tributario_bll(_exportConnection);
 
