@@ -238,6 +238,11 @@
             });
         });
 
+        $("#AnoDropDown").change(function () {
+            var text = $("#AnoDropDown option:selected").text();
+            $("#Ano_Notificacao").val(text)
+        });
+
         function ValidateForm() {
             ClearError();
             var _numero = document.getElementById('txtNumero').value;

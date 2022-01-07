@@ -724,6 +724,7 @@ namespace GTI_Mvc.Controllers {
             foreach (Auto_Infracao_Struct item in _listaNot) {
                 NotificacaoTerViewModel reg = new NotificacaoTerViewModel() {
                     AnoNumero = item.AnoNumero,
+                    Ano_Auto=item.Ano_Auto,
                     Ano_Notificacao = item.Ano_Notificacao,
                     Numero_Notificacao = item.Numero_Notificacao,
                     AnoNumeroAuto = item.AnoNumeroAuto,
@@ -740,6 +741,7 @@ namespace GTI_Mvc.Controllers {
             NotificacaoTerQueryViewModel model = new NotificacaoTerQueryViewModel();
             model.ListaNotificacao = ListaNot;
             model.Ano_Selected = _ano;
+            
             return View(model);
             }
 
@@ -1183,6 +1185,7 @@ namespace GTI_Mvc.Controllers {
             foreach (Auto_Infracao_Obra_Struct item in _listaNot) {
                 NotificacaoTerViewModel reg = new NotificacaoTerViewModel() {
                     AnoNumero = item.AnoNumero,
+                    Ano_Auto=item.Ano_Auto,
                     Ano_Notificacao = item.Ano_Notificacao,
                     AnoNumeroAuto=item.AnoNumeroAuto,
                     Numero_Auto=item.Numero_Auto,

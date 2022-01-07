@@ -2574,27 +2574,31 @@ namespace GTI_Dal.Classes {
 
         public List<Auto_Infracao_Struct> Lista_Auto_Infracao(int Ano) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from a in db.Auto_Infracao
-                           join n in db.Notificacao_Terreno on new { p1 = a.Ano_notificacao, p2 = a.Numero_notificacao } equals new { p1 = n.Ano_not, p2 = n.Numero_not } into an from n in an.DefaultIfEmpty()
-                           where a.Ano_notificacao == Ano
-                           orderby a.Numero_notificacao select new {
-                               AnoAuto = a.Ano_auto, NumeroAuto = a.Numero_auto, AnoNot = a.Ano_notificacao, NumeroNot = a.Numero_notificacao, Codigo = n.Codigo, Data_Notificaao = a.Data_notificacao,
-                               Data_Cadastro = a.Data_cadastro, Usuario = a.Userid, Nome = n.Nome
-                               }).ToList();
+                var Sql = "SELECT auto_infracao.ano_auto,auto_infracao.numero_auto,auto_infracao.ano_notificacao,auto_infracao.numero_notificacao,auto_infracao.data_notificacao ,auto_infracao.data_cadastro,";
+                Sql += "auto_infracao.userid,notificacao_terreno.codigo,notificacao_terreno.nome FROM dbo.notificacao_terreno INNER JOIN dbo.auto_infracao ON notificacao_terreno.ano_not = auto_infracao.ano_notificacao ";
+                Sql += "AND notificacao_terreno.numero_not = auto_infracao.numero_notificacao WHERE auto_infracao.ano_auto = @Ano";
+                var Ret = db.Database.SqlQuery<Auto_Infracao_Struct>(Sql, new SqlParameter("@Ano", Ano)).ToList();
+                //var Sql = (from a in db.Auto_Infracao
+                //           join n in db.Notificacao_Terreno on new { p1 = a.Ano_notificacao, p2 = a.Numero_notificacao } equals new { p1 = n.Ano_not, p2 = n.Numero_not } into an from n in an.DefaultIfEmpty()
+                //           where a.Ano_notificacao == Ano
+                //           orderby a.Numero_notificacao select new {
+                //               AnoAuto = a.Ano_auto, NumeroAuto = a.Numero_auto, AnoNot = a.Ano_notificacao, NumeroNot = a.Numero_notificacao, Codigo = n.Codigo, Data_Notificaao = a.Data_notificacao,
+                //               Data_Cadastro = a.Data_cadastro, Usuario = a.Userid, Nome = n.Nome
+                //               }).ToList();
                 List<Auto_Infracao_Struct> Lista = new List<Auto_Infracao_Struct>();
-                foreach (var item in Sql) {
+                foreach (var item in Ret) {
                     Auto_Infracao_Struct reg = new Auto_Infracao_Struct() {
-                        Ano_Auto = item.AnoAuto,
-                        Numero_Auto = item.NumeroAuto,
-                        Ano_Notificacao = item.AnoNot,
-                        Numero_Notificacao = item.NumeroNot,
-                        Codigo_Imovel = item.Codigo,
+                        Ano_Auto = item.Ano_Auto,
+                        Numero_Auto = item.Numero_Auto,
+                        Ano_Notificacao = item.Ano_Notificacao,
+                        Numero_Notificacao = item.Numero_Notificacao,
+                        Codigo_Imovel = item.Codigo_Imovel,
                         Data_Cadastro = item.Data_Cadastro,
-                        Data_Notificacao = item.Data_Notificaao,
-                        Userid = item.Usuario,
-                        AnoNumero = item.NumeroNot.ToString("0000") + "/" + item.AnoNot.ToString(),
-                        AnoNumeroAuto = item.NumeroAuto.ToString("0000") + "/" + item.AnoAuto.ToString(),
-                        Nome_Proprietario = item.Nome
+                        Data_Notificacao = item.Data_Notificacao,
+                        Userid = item.Userid,
+                        AnoNumero = item.Numero_Notificacao.ToString("0000") + "/" + item.Ano_Notificacao.ToString(),
+                        AnoNumeroAuto = item.Numero_Auto.ToString("0000") + "/" + item.Ano_Auto.ToString(),
+                        Nome_Proprietario = item.Nome_Proprietario
                         };
                     Lista.Add(reg);
                     }

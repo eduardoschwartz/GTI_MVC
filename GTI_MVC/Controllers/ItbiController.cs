@@ -3384,7 +3384,6 @@ namespace GTI_Mvc.Controllers {
 
         [Route("Itbi_isencao_e")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Itbi_isencao_e(ItbiViewModel model, string natureza, HttpPostedFileBase file, string action) {
             if (model.Lista_Anexo == null)
                 model.Lista_Anexo = new List<ListAnexoEditorViewModel>();

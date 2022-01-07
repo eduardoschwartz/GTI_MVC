@@ -84,7 +84,7 @@
                         </thead>
                         <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
                             @foreach(var item in Model.ListaNotificacao) {
-                                if(item.Ano_Notificacao == Model.Ano_Selected) {
+                                if(item.Ano_Auto == Model.Ano_Selected) {
                                     <tr style="height:20px;">
                                         <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumeroAuto)</td>
                                         <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
