@@ -320,6 +320,14 @@ namespace GTI_Dal.Classes {
             return ret;
         }
 
+        public List<Periodomei> Lista_Periodo_Empresa_Mei(int nCodigo) {
+            List<Periodomei> lista = new List<Periodomei>();
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                return (from m in db.Periodomei orderby m.Id descending where m.Codigo == nCodigo select m).ToList();
+            }
+        }
+
+
         public bool Empresa_Simples(int Codigo,DateTime Data) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 short nRet = db.Database.SqlQuery<short>("SELECT dbo.RETORNASN(@Codigo,@Data)", new SqlParameter("@Codigo", Codigo), new SqlParameter("@Data", Data)).Single();

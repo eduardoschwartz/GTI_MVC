@@ -340,12 +340,36 @@ namespace GTI_Desktop.Forms {
             decimal _valor_aliquota = 0;
 
             foreach (EmpresaStruct item in ListaEmpresas) {
+
                 bool _possui_taxa = false;
                 bool _vistoria = item.Vistoria == 1 ? true : false;
                 decimal _area = item.Area == null ? 0 : (decimal)item.Area;
                 int Codigo = item.Codigo;
                 if (Codigo == 100006)
                     _possui_taxa = false;
+
+//                if (item.Codigo != 121784) {
+//                    goto PROXIMO;
+//                }
+
+                //Remove os MEIs abertos após 01/01/2015 ou que entraram no MEI após esta data
+
+                bool isMei = empresa_Class.Empresa_Mei(item.Codigo);
+                bool isOld = true;
+                if (isMei) {
+                    EmpresaStruct _empresa = empresa_Class.Retorna_Empresa(item.Codigo);
+                    if (Convert.ToDateTime(_empresa.Data_abertura).Year < 2015) {
+                        List<Periodomei> ListaMei = empresa_Class.Lista_Periodo_Empresa_Mei(item.Codigo);
+                        int nLast = ListaMei.Count - 1;
+                        if (ListaMei[nLast].Datainicio.Year >= 2015) {
+                            isOld = false;
+                        }
+                    }
+                    if (isOld) goto PROXIMO;
+                }
+
+
+
 
                 int _codigo_aliquota = item.Codigo_aliquota == null ? 0 : (int)item.Codigo_aliquota;
                 switch (_codigo_aliquota) {
@@ -474,7 +498,7 @@ namespace GTI_Desktop.Forms {
                 _documento0 + "#0#0#" + _documento1 + "#" + _vencimento1 + "#" + _documento2 + '#' + _vencimento2 + "#" + _documento3 + "#" +
                 _vencimento3  ;
                 fs5.WriteLine(_linha_calc);
-
+            PROXIMO:;
                 _pos++;
             }
 
@@ -530,9 +554,26 @@ namespace GTI_Desktop.Forms {
             List<MobiliariovsStruct> ListaEmpresas = empresa_Class.Lista_Empresas_Vigilancia_Sanitaria((short)_ano);
             List<MobiliariovsStruct> ListaVS = new List<MobiliariovsStruct>();
             foreach (MobiliariovsStruct item in ListaEmpresas) {
-                //if (item.Codigo != 303947) {
+                //if (item.Codigo != 121784) {
                 //    goto PROXIMO;
                 //}
+
+                //Remove os MEIs abertos após 01/01/2015 ou que entraram no MEI após esta data
+                
+                bool isMei = empresa_Class.Empresa_Mei(item.Codigo);
+                bool isOld = true;
+                if (isMei) {
+                    EmpresaStruct _empresa = empresa_Class.Retorna_Empresa(item.Codigo);
+                    if (Convert.ToDateTime(_empresa.Data_abertura).Year < 2015) {
+                        List<Periodomei> ListaMei = empresa_Class.Lista_Periodo_Empresa_Mei(item.Codigo);
+                        int nLast = ListaMei.Count - 1;
+                        if (ListaMei[nLast].Datainicio.Year >= 2015) {
+                            isOld = false;
+                        }
+                    }
+                    if (isOld) goto PROXIMO;
+                }
+                
 
                 bool _find = false;
                 for (int i = 0; i < ListaVS.Count; i++) {
@@ -550,7 +591,7 @@ namespace GTI_Desktop.Forms {
                     reg.Valor = item.Valor * item.Qtde ;
                     ListaVS.Add(reg);
                 }
-//PROXIMO:;
+PROXIMO:;
             }
 
             int _total = ListaVS.Count, _pos = 1;

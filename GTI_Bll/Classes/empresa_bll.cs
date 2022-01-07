@@ -903,6 +903,11 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Empresa_Proprietario_Cnpj(Cnpj);
         }
 
+        public List<Periodomei> Lista_Periodo_Empresa_Mei(int nCodigo) {
+            Empresa_Data obj = new Empresa_Data(_connection);
+            return obj.Lista_Periodo_Empresa_Mei(nCodigo);
+        }
+
     }
 }
 
