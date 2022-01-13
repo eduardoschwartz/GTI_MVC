@@ -34,4 +34,15 @@ namespace GTI_Models.Models {
         public decimal Valor { get; set; }
     }
 
+    public class ListaVSStruct {
+        public int Codigo { get; set; }
+        public string Cnae { get; set; }
+        public int Criterio { get; set; }
+        public int Qtde { get; set; }
+        public string Descricao { get; set; }
+        public string Criterio_Descricao { get; set; }
+        public decimal Valor { get; set; }
+    }
+
+
 }

@@ -879,8 +879,15 @@ namespace GTI_Dal.Classes {
         public List<CnaeStruct> Lista_Cnae_Empresa_VS(int nCodigo) {
             List<CnaeStruct> Lista = new List<CnaeStruct>();
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var rows = (from m in db.Mobiliariovs join c in db.Cnae on m.Cnae equals c.cnae join a in db.Cnaecriteriodesc on m.Criterio equals a.Criterio
-                            where m.Codigo == nCodigo
+                //string sql = "SELECT mobiliariovs.codigo,mobiliariovs.cnae,mobiliariovs.criterio,mobiliariovs.qtde,cnae.descricao  ,cnae_criterio_descricao.descricao as Criterio_Descricao ,";
+                //sql += "cnae_aliquota.valor From dbo.Cnae INNER JOIN dbo.mobiliariovs ON cnae.cnae = mobiliariovs.cnae INNER JOIN dbo.cnae_criterio_descricao ON ";
+                //sql += "cnae_criterio_descricao.codigo = mobiliariovs.criterio INNER JOIN dbo.cnae_aliquota ON mobiliariovs.cnae = cnae_aliquota.cnae AND mobiliariovs.criterio = cnae_aliquota.criterio ";
+                //sql += "Where mobiliariovs.codigo = @Codigo AND cnae_aliquota.ano = @Ano";
+                //List<ListaVSStruct> rows = db.Database.SqlQuery<ListaVSStruct>(sql, new SqlParameter("@Codigo", nCodigo), new SqlParameter("@Ano", (short)DateTime.Now.Year)).ToList();
+
+
+                var rows = (from m in db.Mobiliariovs join c in db.Cnae on m.Cnae equals c.cnae join a in db.Cnae_Aliquota on m.Cnae equals a.Cnae
+                            where m.Codigo == nCodigo && a.Ano==DateTime.Now.Year
                             select new { m.Cnae, c.Descricao, m.Criterio, m.Qtde, a.Valor });
                 foreach (var reg in rows) {
                     CnaeStruct Linha = new CnaeStruct {

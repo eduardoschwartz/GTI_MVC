@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Certidão de situação cadastral";
+    ViewBag.Title = "Extrato débitos 2022";
 }
 
 
@@ -63,7 +63,7 @@
     @using(Html.BeginForm("Certidao_Pagamento","Empresa",FormMethod.Post,new { @id = "MainForm" })) {
         @Html.AntiForgeryToken()
         <div class="card">
-            <div class="card-header">Certidão de Situação Cadastral</div>
+            <div class="card-header">Extrato débitos 2022</div>
             <div class="card-body">
 
                 <table width="500px">

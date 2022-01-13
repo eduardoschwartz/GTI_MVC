@@ -351,17 +351,6 @@ namespace GTI_Mvc.Controllers
         public JsonResult Lista_WImovel_Historico(string guid) {
             W_Imovel_bll wimovelRepository = new W_Imovel_bll(_connection);
             List<WImovel_Historico> Lista = wimovelRepository.Lista_WImovel_Historico(guid);
-            //List<WImovel_Historico> Lista2 = new List<WImovel_Historico>();
-            //foreach (WImovel_Historico item in Lista) {
-            //    WImovel_Historico item2 = new WImovel_Historico() {
-            //        Guid=item.Guid,
-            //        Seq =item.Seq,
-            //        Historico=Functions.TruncateTo(item.Historico,30),
-            //        Data_Alteracao=item.Data_Alteracao,
-            //    };
-            //}
-
-
             return new JsonResult { Data = Lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 

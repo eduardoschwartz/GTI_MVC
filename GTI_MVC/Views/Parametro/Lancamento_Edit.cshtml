@@ -182,23 +182,23 @@
     @Html.HiddenFor(m => m.Lancamento_Nome_Completo, new { @id = "NomeLancC" })
     @Html.HiddenFor(m => m.Lancamento_Nome_Reduzido, new { @id = "NomeLancR" })
 
-    <div class="center shadow" style="width:500px">
+    <div class="center shadow" style="width:460px">
         <div class="card">
             <div class="card-header">Cadastro de Lançamentos</div>
             <div class="card-body">
                     <div id="table-container" style=" height: 296px; overflow: auto;border:solid;border-width:1px">
 
-                        <table id="mainTable"  class="tbl table-bordered table-condensed" style="width:430px">
+                        <table id="mainTable"  class="tbl table-bordered table-condensed" style="width:390px">
                             <thead style="background-color:darkblue;color:white;font-weight:normal;font-size:12px">
                                 <tr style="height:13px">
                                     <th style="width:40px;text-align:center">
                                         Cód
                                     </th>
-                                    <th style="width:195px">
-                                        Descrição resumida
-                                    </th>
-                                    <th style="width:195px">
+                                    <th style="width:350px">
                                         Descrição completa
+                                    </th>
+                                    <th style="display:none">
+                                        Descrição resumida
                                     </th>
                                 </tr>
                             </thead>
@@ -450,8 +450,8 @@
                     var tr;
                     tr = $('<tr id="' + data[i].Codlancamento + '" style="font-weight: normal; font-size: 12px; cursor: pointer"  />');
                     tr.append("<td style='text-align:center;width: 40px'  >" + pad( data[i].Codlancamento,2) + "</td>");
-                    tr.append("<td style='width: 195px' class='ellipsis'><span>" + data[i].Descfull + "</span></td>");
-                    tr.append("<td style='width: 195px' class='ellipsis'><span>" + data[i].Descreduz + "</span></td>");
+                    tr.append("<td style='width: 350px' class='ellipsis'><span>" + data[i].Descfull + "</span></td>");
+                    tr.append("<td style='display:none' class='ellipsis'><span>" + data[i].Descreduz + "</span></td>");
                     $("#mainTable").find('tbody').append(tr);
                     i++;
                 });
