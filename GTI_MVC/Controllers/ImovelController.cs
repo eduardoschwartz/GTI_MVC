@@ -1089,7 +1089,7 @@ namespace GTI_Mvc.Controllers {
                     Anoexercicio = (short)item.Ano_Exercicio,
                     Codlancamento = (short)item.Codigo_Lancamento,
                     Seqlancamento = (short)item.Sequencia_Lancamento,
-                    Numparcela = (byte)item.Numero_Parcela_Old,
+                    Numparcela = (byte)item.Numero_Parcela,
                     Codcomplemento = (byte)item.Complemento,
                     Plano = 0,
                     Numdocumento = _documento
