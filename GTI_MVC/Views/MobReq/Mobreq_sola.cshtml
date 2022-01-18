@@ -111,7 +111,7 @@
                     </tr>
                     <tr style="height:25px">
                         <td style="width:160px;font-size:14px">Data da ocorrência:</td>
-                        <td style="width:480px;font-size:14px;color:brown"> @Html.TextBoxFor(x => x.Data_Evento,"{0:dd/MM/yyyy}",new { @id = "DataTxt",@style = "width:90px;",@class = "maskData" })</td>
+                        <td style="width:480px;font-size:14px;color:brown"> @Html.TextBoxFor(x => x.Data_Evento,"{0:dd/MM/yyyy}",new { @id = "DataTxt",@style = "width:90px;",@class = "maskData",@Value="31/12/2021", @readonly = "readonly" })</td>
                     </tr>
                 </table>
                 @if(Model.Evento_Codigo == 3 || Model.Evento_Codigo == 4) {
