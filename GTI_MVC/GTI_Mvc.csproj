@@ -666,6 +666,7 @@
     <Content Include="Content\giantdropdown.css" />
     <Content Include="Content\gti.css" />
     <Content Include="Content\gtimenu.css" />
+    <Content Include="Content\gtisys.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
