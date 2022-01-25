@@ -1103,53 +1103,59 @@ namespace GTI_Mvc.Controllers {
             bool _temtaxa = Lista_Taxa.Count > 0 ? true : false;
             bool _temiss = Lista_Iss.Count > 0 ? true : false;
 
-            int _novo_documento = 0;
+            if (_temtaxa) {
+                if (Lista_Taxa[0].Soma_Principal == 0)
+                    _temtaxa = false;
+            }
             List<DebitoStructure> Lista_Unificada = new List<DebitoStructure>();
-            foreach (DebitoStructure item in Lista_Taxa) {//carrega a lista unificada com os dados das taxas
-                DebitoStructure reg = new DebitoStructure();
-                reg.Ano_Exercicio = item.Ano_Exercicio;
-                reg.Codigo_Lancamento = item.Codigo_Lancamento;
-                reg.Sequencia_Lancamento = item.Sequencia_Lancamento;
-                reg.Numero_Parcela = item.Numero_Parcela;
-                reg.Complemento = item.Complemento;
-                reg.Codigo_Tributo = item.Codigo_Tributo;
-                reg.Abreviatura_Tributo = item.Abreviatura_Tributo;
-                reg.Data_Vencimento = item.Data_Vencimento;
-                reg.Numero_Parcela = item.Numero_Parcela;
-                reg.Soma_Principal = item.Soma_Principal;
-                reg.Data_Base = item.Data_Base;
+            int _novo_documento = 0;
+            if (_temtaxa) {
+                foreach (DebitoStructure item in Lista_Taxa) {//carrega a lista unificada com os dados das taxas
+                    DebitoStructure reg = new DebitoStructure();
+                    reg.Ano_Exercicio = item.Ano_Exercicio;
+                    reg.Codigo_Lancamento = item.Codigo_Lancamento;
+                    reg.Sequencia_Lancamento = item.Sequencia_Lancamento;
+                    reg.Numero_Parcela = item.Numero_Parcela;
+                    reg.Complemento = item.Complemento;
+                    reg.Codigo_Tributo = item.Codigo_Tributo;
+                    reg.Abreviatura_Tributo = item.Abreviatura_Tributo;
+                    reg.Data_Vencimento = item.Data_Vencimento;
+                    reg.Numero_Parcela = item.Numero_Parcela;
+                    reg.Soma_Principal = item.Soma_Principal;
+                    reg.Data_Base = item.Data_Base;
 
-                //criamos um documento novo para cada parcela da taxa
-                Numdocumento regDoc = new Numdocumento {
-                    Valorguia = item.Soma_Principal,
-                    Emissor = "Gti.Web/2ViaTL",
-                    Datadocumento = DateTime.Now,
-                    Registrado = false,
-                    Percisencao = 0
-                };
-                regDoc.Percisencao = 0;
-                _novo_documento = tributarioRepository.Insert_Documento(regDoc);
-                reg.Numero_Documento = _novo_documento;
-                item.Numero_Documento = _novo_documento;
-                Lista_Unificada.Add(reg);
+                    //criamos um documento novo para cada parcela da taxa
+                    Numdocumento regDoc = new Numdocumento {
+                        Valorguia = item.Soma_Principal,
+                        Emissor = "Gti.Web/2ViaTL",
+                        Datadocumento = DateTime.Now,
+                        Registrado = false,
+                        Percisencao = 0
+                    };
+                    regDoc.Percisencao = 0;
+                    _novo_documento = tributarioRepository.Insert_Documento(regDoc);
+                    reg.Numero_Documento = _novo_documento;
+                    item.Numero_Documento = _novo_documento;
+                    Lista_Unificada.Add(reg);
 
-                //grava o documento na parcela
-                Parceladocumento regParc = new Parceladocumento {
-                    Codreduzido = item.Codigo_Reduzido,
-                    Anoexercicio = Convert.ToInt16(item.Ano_Exercicio),
-                    Codlancamento = Convert.ToInt16(item.Codigo_Lancamento),
-                    Seqlancamento = Convert.ToInt16(item.Sequencia_Lancamento),
-                    Numparcela = Convert.ToByte(item.Numero_Parcela),
-                    Codcomplemento = Convert.ToByte(item.Complemento),
-                    Numdocumento = _novo_documento,
-                    Valorjuros = 0,
-                    Valormulta = 0,
-                    Valorcorrecao = 0,
-                    Plano = 0
-                };
-                Exception ex= tributarioRepository.Insert_Parcela_Documento(regParc);
-                if (item.Data_Vencimento >= Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy")))
-                    _SomaTaxa += item.Soma_Principal;
+                    //grava o documento na parcela
+                    Parceladocumento regParc = new Parceladocumento {
+                        Codreduzido = item.Codigo_Reduzido,
+                        Anoexercicio = Convert.ToInt16(item.Ano_Exercicio),
+                        Codlancamento = Convert.ToInt16(item.Codigo_Lancamento),
+                        Seqlancamento = Convert.ToInt16(item.Sequencia_Lancamento),
+                        Numparcela = Convert.ToByte(item.Numero_Parcela),
+                        Codcomplemento = Convert.ToByte(item.Complemento),
+                        Numdocumento = _novo_documento,
+                        Valorjuros = 0,
+                        Valormulta = 0,
+                        Valorcorrecao = 0,
+                        Plano = 0
+                    };
+                    Exception ex = tributarioRepository.Insert_Parcela_Documento(regParc);
+                    if (item.Data_Vencimento >= Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy")))
+                        _SomaTaxa += item.Soma_Principal;
+                }
             }
 
             if (_temiss) {
@@ -1197,7 +1203,7 @@ namespace GTI_Mvc.Controllers {
                             _SomaISS += item.Soma_Principal;
                         DebitoStructure reg = new DebitoStructure();
                         reg.Ano_Exercicio = item.Ano_Exercicio;
-                        reg.Codigo_Lancamento = item.Codigo_Lancamento;
+                        reg.Codigo_Lancamento =14;
                         reg.Sequencia_Lancamento = item.Sequencia_Lancamento;
                         reg.Numero_Parcela = item.Numero_Parcela;
                         reg.Complemento = item.Complemento;
@@ -1226,7 +1232,7 @@ namespace GTI_Mvc.Controllers {
                         Parceladocumento regParc = new Parceladocumento {
                             Codreduzido = item.Codigo_Reduzido,
                             Anoexercicio = Convert.ToInt16(item.Ano_Exercicio),
-                            Codlancamento = Convert.ToInt16(item.Codigo_Lancamento),
+                            Codlancamento = Convert.ToInt16(14),
                             Seqlancamento = Convert.ToInt16(item.Sequencia_Lancamento),
                             Numparcela = Convert.ToByte(item.Numero_Parcela),
                             Codcomplemento = Convert.ToByte(item.Complemento),
