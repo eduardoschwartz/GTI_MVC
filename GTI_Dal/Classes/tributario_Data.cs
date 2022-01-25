@@ -2263,7 +2263,7 @@ Proximo:;
                         new SqlParameter("@cpf", Reg.Cpf),
                         new SqlParameter("@endereco", Reg.Endereco),
                         new SqlParameter("@bairro", Reg.Bairro),
-                        new SqlParameter("@cep", Reg.Cep),
+                        new SqlParameter("@cep", dalCore.RetornaNumero( Reg.Cep)),
                         new SqlParameter("@cidade", Reg.Cidade),
                         new SqlParameter("@uf", Reg.Uf));
                 } catch (Exception ex) {
