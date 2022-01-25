@@ -2097,8 +2097,11 @@ namespace GTI_Mvc.Controllers {
                         _comprador.Logradouro_Nome = _cidadao.EnderecoC;
                         _comprador.Numero = (int)_cidadao.NumeroC;
                         _comprador.Complemento = _cidadao.ComplementoC;
-                        _comprador.Bairro_Codigo = _bairro.Codbairro;
-                        
+                        if(_bairro==null)
+                            _comprador.Bairro_Codigo =0;
+                        else
+                            _comprador.Bairro_Codigo = _bairro.Codbairro;
+
                         _comprador.Cidade_Codigo = (int)_cidadao.CodigoCidadeC;
                         _comprador.Cidade_Nome = _cidadao.NomeCidadeC;
                         _comprador.UF = _cidadao.UfC;
