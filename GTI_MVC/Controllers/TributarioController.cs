@@ -928,7 +928,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             DateTime _dataVencto = model.Data_Vencimento;
-            List<SpExtrato> ListaTributo = tributarioRepository.Lista_Extrato_Tributo(model.Inscricao, 1980, 2050, 0, 99, 0, 99, 0, 999, 0, 99, 0, 99, _dataVencto, "Web");
+            List<SpExtrato> ListaTributo = tributarioRepository.Lista_Extrato_Tributo(model.Inscricao, 1980, 2050, 0, 99, 0, 999, 0, 999, 0, 99, 0, 99, _dataVencto, "Web");
             List<SpExtrato> ListaParcela = tributarioRepository.Lista_Extrato_Parcela(ListaTributo);
             List<DebitoStructure> Lista_debitos = new List<DebitoStructure>();
 

@@ -522,9 +522,10 @@ namespace GTI_MVC.Controllers {
             //char _tipoContribuinte = Functions.RetornaNumero(_master.Contribuinte_cpfcnpj).Length == 11 ? 'F' : 'J';
             string _tipoContribuinte = _master.Contribuinte_tipo;
             if (_RefisAtivo) {
-                DateTime _dataNow = _connection == "gtiConnection" ? DateTime.Now : Convert.ToDateTime("20/12/2021");
+                DateTime _dataNow = _connection == "gtiConnection" ? DateTime.Now : DateTime.Now;
+                //DateTime _dataNow = _connection == "gtiConnection" ? DateTime.Now : Convert.ToDateTime("20/12/2021");
 
-                if(_dataNow> Convert.ToDateTime("12/12/2021") && _dataNow<= Convert.ToDateTime("29/12/2021")) {
+                if (_dataNow> Convert.ToDateTime("12/12/2021") && _dataNow<= Convert.ToDateTime("29/12/2021")) {
                     _plano_Codigo = 50;
                 }
                 else {
@@ -781,6 +782,7 @@ namespace GTI_MVC.Controllers {
 
             t = 1;
             Exception ex = parcelamentoRepository.Excluir_parcelamento_Web_Selected(model.Guid);
+            ex = parcelamentoRepository.Excluir_parcelamento_Web_Tributo(model.Guid);
             bool _ajuizado = false;
             decimal _somaP = 0, _somaJ = 0, _somaM = 0, _somaC = 0, _somaT = 0, _somaE = 0, _somaH = 0;
             List<Parcelamento_web_selected> _listaSelect = new List<Parcelamento_web_selected>();

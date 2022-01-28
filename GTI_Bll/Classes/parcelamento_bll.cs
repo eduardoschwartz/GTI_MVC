@@ -121,9 +121,9 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_Parcelamento_Web_Simulado(guid, qtde_parcela);
         }
 
-        public List<Parcelamento_Web_Simulado> Lista_Parcelamento_Destino(string Guid, short Plano, DateTime Data_Vencimento, bool Ajuizado, bool Honorario, decimal Principal, decimal Juros, decimal Multa, decimal Correcao, decimal Total, decimal Adicional, decimal Valor_Minimo,decimal Soma_Honorario) {
+        public List<Parcelamento_Web_Simulado> Lista_Parcelamento_Destino(string Guid, short Plano, DateTime Data_Vencimento, bool Ajuizado, bool Honorario, decimal Principal, decimal Juros, decimal Multa, decimal Correcao, decimal Total, decimal Adicional, decimal Valor_Minimo, decimal Soma_Honorario) {
             Parcelamento_Data obj = new Parcelamento_Data(_connection);
-            return obj.Lista_Parcelamento_Destino(Guid, Plano, Data_Vencimento, Ajuizado, Honorario, Principal, Juros, Multa, Correcao, Total, Adicional, Valor_Minimo,Soma_Honorario);
+            return obj.Lista_Parcelamento_Destino(Guid, Plano, Data_Vencimento, Ajuizado, Honorario, Principal, Juros, Multa, Correcao, Total, Adicional, Valor_Minimo, Soma_Honorario);
         }
 
         public Exception Incluir_Parcelamento_Web_Simulado_Resumo(List<Parcelamento_Web_Simulado_Resumo> Lista) {
@@ -245,7 +245,7 @@ namespace GTI_Bll.Classes {
 
         public Exception Atualizar_Status_Origem(int Codigo, List<SpParcelamentoOrigem> Lista) {
             Parcelamento_Data obj = new Parcelamento_Data(_connection);
-            Exception ex = obj.Atualizar_Status_Origem(Codigo,Lista);
+            Exception ex = obj.Atualizar_Status_Origem(Codigo, Lista);
             return ex;
         }
 
@@ -261,7 +261,7 @@ namespace GTI_Bll.Classes {
 
         public List<Destinoreparc> Lista_Destino_Parcelamento(short AnoProcesso, int NumProcesso) {
             Parcelamento_Data obj = new Parcelamento_Data(_connection);
-            return obj.Lista_Destino_Parcelamento(AnoProcesso,NumProcesso);
+            return obj.Lista_Destino_Parcelamento(AnoProcesso, NumProcesso);
         }
 
         public List<Debitotributo> Lista_Debito_Tributo(int Codigo, short Ano, short Lanc, short Seq, short Parcela, short Compl) {
@@ -294,15 +294,19 @@ namespace GTI_Bll.Classes {
 
         public List<Parcelamento_web_master> Lista_Parcelamento_Web_Master(string _dataInicio, string _dataFim) {
             Parcelamento_Data obj = new Parcelamento_Data(_connection);
-            return obj.Lista_Parcelamento_Web_Master(_dataInicio,_dataFim);
+            return obj.Lista_Parcelamento_Web_Master(_dataInicio, _dataFim);
         }
 
-        public List<DebitoStructure> Lista_Parcelas_Parcelamento_Ano_Web(int nCodigo,int nAno,int nSeq) {
+        public List<DebitoStructure> Lista_Parcelas_Parcelamento_Ano_Web(int nCodigo, int nAno, int nSeq) {
             Parcelamento_Data obj = new Parcelamento_Data(_connection);
-            List<DebitoStructure> Lista = obj.Lista_Parcelas_Parcelamento_Ano_Web(nCodigo,nAno,nSeq);
+            List<DebitoStructure> Lista = obj.Lista_Parcelas_Parcelamento_Ano_Web(nCodigo, nAno, nSeq);
             return Lista;
         }
 
-
+        public Exception Excluir_parcelamento_Web_Tributo(string Guid) {
+            Parcelamento_Data obj = new Parcelamento_Data(_connection);
+            Exception ex = obj.Excluir_parcelamento_Web_Tributo(Guid);
+            return ex;
+        }
     }
 }

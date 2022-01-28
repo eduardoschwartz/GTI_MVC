@@ -642,6 +642,24 @@ namespace GTI_Dal.Classes {
 
         }
 
+        public Exception Excluir_parcelamento_Web_Tributo(string Guid) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+
+                object[] Parametros = new object[1];
+                Parametros[0] = new SqlParameter { ParameterName = "@guid", SqlDbType = SqlDbType.VarChar, SqlValue = Guid };
+                try {
+                    db.Database.ExecuteSqlCommand("DELETE FROM parcelamento_web_tributo WHERE guid=@guid", Parametros);
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+
+        }
+
+
+
         public List<Parcelamento_Web_Simulado> Retorna_Parcelamento_Web_Simulado(string guid) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 return (from p in db.Parcelamento_Web_Simulado where p.Guid == guid select p).ToList();
