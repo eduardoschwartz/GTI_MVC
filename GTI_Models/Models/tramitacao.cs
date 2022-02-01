@@ -14,7 +14,7 @@ namespace GTI_Models.Models {
         [Column(Order = 3)]
         public byte Seq { get; set; }
         public short Ccusto { get; set; }
-        public DateTime Datahora { get; set; }
+        public DateTime? Datahora { get; set; }
         public short? Despacho { get; set; }
         public DateTime? Dataenvio { get; set; }
         public string Obs { get; set; }

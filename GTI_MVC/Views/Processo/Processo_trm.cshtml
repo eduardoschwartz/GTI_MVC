@@ -554,10 +554,10 @@
         }
 
         function RemovePlace(Ano, Numero) {
-            var _seq = parseInt(document.getElememachinetById("Seq").value);
+            var _seq = parseInt(document.getElementById("Seq").value);
             var tbl = document.getElementById("mainTable");
             var rows = document.getElementById("mainTable").getElementsByTagName("tr").length;
-            var _texto = tbl.rows[_seq - 1].cells[3].innerHTML.trim();
+            var _texto = tbl.rows[_seq ].cells[3].innerHTML.trim();
             if (rows > 2) {
                 if (elementIsEmpty(_texto) == false) {
                     document.getElementById('lblMsg').innerHTML = "Este local já foi tramitado.";
@@ -592,11 +592,26 @@
             var tbl = document.getElementById("mainTable");
             var rows = document.getElementById("mainTable").getElementsByTagName("tr").length;
             var _texto = $("#mainTable tr:eq(" + _seq + ") td:eq(3)").text().trim();
+            var _texto2 = "";
+            if (_seq > 1) {
+                var _rowAnt = _seq - 1;
+                _texto2 = $("#mainTable tr:eq(" + _rowAnt + ") td:eq(8)").text().trim();
+            }
+        
             if (elementIsEmpty(_texto) == false) {
                 document.getElementById('lblMsg').innerHTML = "Já houve recebimento neste local.";
                 $('#msgBox1').dialog('open');
                 return false;
             }
+
+            if (_seq > 1) {
+                if (elementIsEmpty(_texto2) == true) {
+                    document.getElementById('lblMsg').innerHTML = "O local acima ainda não foi tramitado.";
+                    $('#msgBox1').dialog('open');
+                    return false;
+                }
+            }
+
 
             removeOptions(document.getElementById('DespachoDropDown'));
             $.getJSON('@Url.Action("Lista_Despacho", "Processo")', function (result) {

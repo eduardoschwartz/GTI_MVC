@@ -181,8 +181,6 @@ namespace GTI_Mvc.Controllers {
                         }
 
                     }
-
-
                 }
             }
 
@@ -314,13 +312,9 @@ namespace GTI_Mvc.Controllers {
                             _bcnpj = true;
                         }
                     } else {
-//                        if (Functions.ValidaCNPJ(_cpfCnpj.PadLeft(14, '0'))) {
- //                           _bcnpj = true;
-  //                      } else {
-                            if (Functions.ValidaCpf(_cpfCnpj.PadLeft(11, '0'))) {
-                                _bcpf = true;
-                            }
-   //                     }
+                        if (Functions.ValidaCpf(_cpfCnpj.PadLeft(11, '0'))) {
+                            _bcpf = true;
+                        }
                     }
                     if (_bcnpj) {
                         _cpfCnpj = _cpfCnpj.PadLeft(14, '0');

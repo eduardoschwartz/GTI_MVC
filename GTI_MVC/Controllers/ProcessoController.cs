@@ -14,7 +14,7 @@ using System.Web.UI.WebControls;
 
 namespace GTI_MVC.Controllers {
     public class ProcessoController : Controller    {
-        private readonly string _connection = "GTIconnectionTeste";
+        private readonly string _connection = "GTIconnection";
         [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
         public class ValidateJsonAntiForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter {
             public void OnAuthorization(AuthorizationContext filterContext) {
@@ -591,6 +591,9 @@ namespace GTI_MVC.Controllers {
 
             Processo2ViewModel model = new Processo2ViewModel();
             ProcessoStruct _dados = processoRepository.Dados_Processo(processoNumero.Ano, processoNumero.Numero);
+            if(_dados==null)
+                return RedirectToAction("sysMenu", "Home");
+
             model.Numero_Processo = _processo;
             model.AnoProcesso = _ano;
             model.NumProcesso = _numero;
