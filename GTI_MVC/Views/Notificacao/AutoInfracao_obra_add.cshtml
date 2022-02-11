@@ -253,5 +253,10 @@
         }
 
 
+        $("#AnoDropDown").change(function () {
+            var text = $("#AnoDropDown option:selected").text();
+            $("#Ano_Notificacao").val(text)
+        });
+
     </script>
 }

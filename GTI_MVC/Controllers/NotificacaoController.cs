@@ -1048,7 +1048,7 @@ namespace GTI_Mvc.Controllers {
         [Route("AutoInfracao_obra_add")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AutoInfracao_obra_add(NotificacaoTerViewModel model, string action) {
+        public ActionResult AutoInfracao_obra_add(NotificacaoTerViewModel model, string action ) {
             List<int> Lista_Ano = new List<int>();
             for (int i = 2020; i <= DateTime.Now.Year; i++) {
                 Lista_Ano.Add(i);
