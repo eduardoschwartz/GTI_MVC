@@ -346,3 +346,4 @@ healthchecksdb
 /GTI_MVC/Files/Redesim
 /GTI_MVC/Files/Plataforma/2021
 *.pdf
+/GTI_Desktop_Core/gtiCore.cs
