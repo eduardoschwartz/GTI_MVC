@@ -143,6 +143,25 @@ namespace GTI_MVC.Controllers
             int _userId = Convert.ToInt32(Session["hashid"]);
             decimal _valorGuia = 0;
 
+            if(_qtde1==0 && _qtde2==0 && _qtde3 == 0) {
+                for (int i = 2020; i <= DateTime.Now.Year; i++) {
+                    AnoList _reg = new AnoList() {
+                        Codigo = i,
+                        Descricao = i.ToString()
+                    };
+                    ListaAno.Add(_reg);
+                }
+
+
+                ViewBag.ListaAno = new SelectList(ListaAno, "Codigo", "Descricao", ListaAno[ListaAno.Count - 1].Codigo);
+                if (model.Ano == 0)
+                    model.Ano = DateTime.Now.Year;
+
+                Lista = tributarioRepository.Lista_Rodo_uso_plataforma(_codigo, model.Ano);
+                model.Lista_uso_plataforma = Lista;
+                return View(model);
+            }
+
             decimal _valor1 = tributarioRepository.Retorna_Valor_Tributo(_ano,154);
             decimal _valor2 = tributarioRepository.Retorna_Valor_Tributo(_ano,155);
             decimal _valor3 = tributarioRepository.Retorna_Valor_Tributo(_ano,156);
@@ -273,12 +292,14 @@ namespace GTI_MVC.Controllers
             //Anexo
             string fileName = "";
             foreach(var file in model.Files) {
-                if(file.ContentLength > 0) {
-                    string _guid = Guid.NewGuid().ToString("N");
-                    string _path = "~/Files/Plataforma/" + _ano + "/";
-                    fileName = _guid + ".pdf";
-                    var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path),fileName);
-                    file.SaveAs(path);
+                if (file != null) {
+                    if (file.ContentLength > 0) {
+                        string _guid = Guid.NewGuid().ToString("N");
+                        string _path = "~/Files/Plataforma/" + _ano + "/";
+                        fileName = _guid + ".pdf";
+                        var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path), fileName);
+                        file.SaveAs(path);
+                    }
                 }
             }
 
@@ -349,7 +370,9 @@ namespace GTI_MVC.Controllers
 
            Lista = tributarioRepository.Lista_Rodo_uso_plataforma(_codigo,_ano);
             model.Lista_uso_plataforma = Lista;
-
+            model.Qtde1 = 0;
+            model.Qtde2 = 0;
+            model.Qtde3 = 0;
 
 
             return View(model);
@@ -523,7 +546,7 @@ namespace GTI_MVC.Controllers
             Exception ex = tributarioRepository.Alterar_Status_Lancamento(_codigo,(short)_ano,52,(short)_seqdebito,1,0,5);
             ex = tributarioRepository.Alterar_Uso_Plataforma_Situacao(_codigo,_datade,_dataate,_seq,4);
 
-            return RedirectToAction("Rod_plat_query","Tributario",new { a = Encrypt(p4),c = Encrypt(_ano.ToString()) });
+            return RedirectToAction("Rod_plat_query", "Plataforma",new { a = Encrypt(p4),c = Encrypt(_ano.ToString()) });
 
         }
 
