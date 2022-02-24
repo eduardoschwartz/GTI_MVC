@@ -119,7 +119,7 @@ namespace GTI_Dal.Classes {
                 foreach (var query in reg) {
                     string sDoc;
                     if (!string.IsNullOrEmpty(query.Cpf) && query.Cpf.ToString().Length > 5)
-                        sDoc = query.Cpf;
+                        sDoc = Convert.ToInt64( query.Cpf).ToString("00000000000");
                     else {
                         if (!string.IsNullOrEmpty(query.Cnpj) && query.Cnpj.ToString().Length > 10)
                             sDoc = query.Cnpj;
