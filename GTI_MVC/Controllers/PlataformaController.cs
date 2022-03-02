@@ -1,31 +1,18 @@
-﻿using CrystalDecisions.CrystalReports.Engine;
-using CrystalDecisions.Shared;
-using GTI_Bll.Classes;
+﻿using GTI_Bll.Classes;
 using GTI_Models.Models;
 using GTI_Models.ReportModels;
+using GTI_Mvc;
 using GTI_Mvc.ViewModels;
-using GTI_Mvc.Views.Tributario.EditorTemplates;
 using Microsoft.Reporting.WebForms;
-using QRCoder;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Web.Mvc;
-using static GTI_Models.modelCore;
 using static GTI_Mvc.Functions;
-using System.Net;
-using Newtonsoft.Json.Linq;
-using System.Configuration;
-using System.Data.SqlClient;
-using GTI_Mvc;
-using System.Web;
 
-namespace GTI_MVC.Controllers
-{
+namespace GTI_MVC.Controllers {
     public class PlataformaController : Controller
     {
         private readonly string _connection = "GTIconnection";
@@ -411,7 +398,12 @@ namespace GTI_MVC.Controllers
             string _uf = _r ? _cidadao.UfR : _cidadao.UfC;
             int _cep = _r ? (int)_cidadao.CepR : (int)_cidadao.CepC;
 
-            List<SpExtrato> ListaTributo = tributarioRepository.Lista_Extrato_Tributo(_codigo,(short)_ano,(short)_ano,52,52,_seqdebito,_seqdebito,1,1,0,0,0,99,DateTime.Now,"Web");
+            Numdocumento doc = tributarioRepository.Retorna_Dados_Documento(reg.Numero_Guia);
+            DateTime _dataVencto = (DateTime)doc.Datadocumento;
+
+
+            //List<SpExtrato> ListaTributo = tributarioRepository.Lista_Extrato_Tributo(_codigo,(short)_ano,(short)_ano,52,52,_seqdebito,_seqdebito,1,1,0,0,0,99,DateTime.Now,"Web");
+            List<SpExtrato> ListaTributo = tributarioRepository.Lista_Extrato_Tributo(_codigo, (short)_ano, (short)_ano, 52, 52, _seqdebito, _seqdebito, 1, 1, 0, 0, 0, 99, _dataVencto, "Web");
             decimal _vp1 = 0, _vm1 = 0, _vj1 = 0, _vt1 = 0;
             decimal _vp2 = 0, _vm2 = 0, _vj2 = 0, _vt2 = 0;
             decimal _vp3 = 0, _vm3 = 0, _vj3 = 0, _vt3 = 0;
@@ -442,8 +434,7 @@ namespace GTI_MVC.Controllers
                 }
             }
 
-            Numdocumento doc = tributarioRepository.Retorna_Dados_Documento(reg.Numero_Guia);
-            DateTime _dataVencto = (DateTime)doc.Datadocumento;
+
 
             string _nosso_numero = "287353200" + reg.Numero_Guia.ToString();
             string _convenio = "2873532";

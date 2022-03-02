@@ -3064,6 +3064,7 @@ Proximo:;
                            Numero_Guia=t.Numero_Guia,Valor_Guia=t.Valor_Guia,Situacao=t.Situacao,SituacaoNome=c.Descricao,AnexoNome=t.Anexo}).ToList();
                 List<Rodo_uso_plataforma_Struct> Lista = new List<Rodo_uso_plataforma_Struct>(); 
                 foreach (var item in Sql) {
+                    DateTime? _dataVencto = Retorna_DataVencimento_Documento(item.Numero_Guia);
                     Rodo_uso_plataforma_Struct reg = new Rodo_uso_plataforma_Struct() {
                         Codigo = item.Codigo,
                         Datade=item.DataDe,
@@ -3073,6 +3074,7 @@ Proximo:;
                         Qtde2=item.Qtde2,
                         Qtde3=item.Qtde3,
                         Numero_Guia=item.Numero_Guia,
+                        Data_Vencimento=_dataVencto==null?DateTime.MinValue:Convert.ToDateTime(_dataVencto),
                         Valor_Guia=item.Valor_Guia,
                         Situacao=item.Situacao,
                         Situacao_Nome=item.SituacaoNome,
@@ -3083,6 +3085,27 @@ Proximo:;
                 return Lista;
             }
         }
+
+        public DateTime Retorna_DataVencimento_Documento(int Documento) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from dp in db.Debitoparcela
+                           join pd in db.Parceladocumento on new { p1 = dp.Codreduzido, p2 = dp.Anoexercicio, p3 = dp.Codlancamento, p4 = dp.Seqlancamento, p5 = dp.Numparcela, p6 = dp.Codcomplemento }
+                                                      equals new { p1 = pd.Codreduzido, p2 = pd.Anoexercicio, p3 = pd.Codlancamento, p4 = pd.Seqlancamento, p5 = pd.Numparcela, p6 = pd.Codcomplemento } into dppd from pd in dppd.DefaultIfEmpty()
+                           where pd.Numdocumento == Documento
+                           select dp);
+                DateTime ret = DateTime.MinValue;
+                foreach (Debitoparcela item in reg) {
+                    ret = item.Datavencimento;
+                    break;
+                }
+                return ret;
+            }
+
+        }
+
+
+
+
 
         public Rodo_uso_plataforma_Struct Retorna_Rodo_uso_plataforma(int Codigo, DateTime DataDe,DateTime DataAte,short Seq) {
             using (GTI_Context db = new GTI_Context(_connection)) {
@@ -3424,4 +3447,7 @@ Proximo:;
 
 
     }//end class
+
+    
+
 }

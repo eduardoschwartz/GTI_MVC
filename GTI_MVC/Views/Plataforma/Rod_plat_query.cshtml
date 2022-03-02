@@ -71,7 +71,7 @@
 <div class="center">
     @using(Html.BeginForm("Rod_plat_query","Plataforma",FormMethod.Post,new { @id = "MainForm",enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
-        <div class="container" style="width:700px">
+        <div class="container" style="width:800px">
             <div class="card">
                 <div class="card-header">
 
@@ -96,6 +96,7 @@
                                 <td style="width:45px;font-weight:normal;text-align:right">Qtde3</td>
                                 <td style="width:80px;font-weight:normal;text-align:right">Valor Guia</td>
                                 <td style="width:100px;font-weight:normal;text-align:center">Nº Guia</td>
+                                <td style="width:100px;font-weight:normal;text-align:center">dt.Vencto.</td>
                                 <td style="width:100px;font-weight:normal;text-align:left">Situação</td>
                                 <td style="display:none">Anexo</td>
                                 <td style="width:80px">
@@ -112,14 +113,15 @@
                                 <td style="width:45px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Qtde3)</td>
                                 <td style="width:80px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Valor_Guia)</td>
                                 <td style="width:100px;font-weight:normal;text-align:center">@Html.DisplayFor(modelItem => item.Numero_Guia)</td>
+                                <td style="width:100px;font-weight:normal;text-align:center">@item.Data_Vencimento.ToString("dd/MM/yyyy")</td>
                                 <td style="width:100px;font-weight:normal;text-align:left">@Html.DisplayFor(modelItem => item.Situacao_Nome)</td>
                                 <td style="display:none">@Html.DisplayFor(modelItem => item.Anexo)</td>
                                 <td style="width:80px">
-                                    @if(item.Situacao == 7) {
+                                    @if (item.Situacao == 7) {
                                         <a href="@Url.Action("Rod_uso_plataforma_print", "Plataforma", new { p1 = item.Datade, p2 = item.Dataate, p3 = item.Seq, p4 = item.Codigo })" title="Imprimir a Guia" onclick="return confirm('Boletos liberados até as 16:30h podem ser quitados a partir do dia seguinte de sua liberação, após às 16:30h será necessário mais um dia útil para o registro. Você deseja emitir o boleto?')"> <img src="@Url.Content("~/images/print.png")"></a>
                                         <a href="@Url.Action("Rod_uso_plataforma_cancel", "Plataforma", new { p1 = item.Datade, p2 = item.Dataate, p3 = item.Seq, p4 = item.Codigo ,p5=item.Numero_Guia })" onclick="return confirm('Cancelar esta apuração?')" title="Cancelar Apuração"> <img src="@Url.Content("~/images/cancelar.gif")"></a>
                                     }
-                                    @if(item.Anexo != null) {
+                                    @if (item.Anexo != null) {
                                         <a href="@Url.Action("Rod_uso_plataforma_anexo", "Plataforma", new { p1 = @Convert.ToDateTime(item.Datade).ToString("dd/MM/yyyy"), p2 = item.Anexo  })" title="Download do anexo"> <img src="@Url.Content("~/images/downarrow.gif")"></a>
                                     }
                                 </td>

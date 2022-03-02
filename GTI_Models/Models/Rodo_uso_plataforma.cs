@@ -36,6 +36,7 @@ namespace GTI_Models.Models {
         public int Qtde2 { get; set; }
         public int Qtde3 { get; set; }
         public int Numero_Guia { get; set; }
+        public DateTime Data_Vencimento { get; set; }
         public decimal Valor_Guia { get; set; }
         public int Situacao { get; set; }
         public string Situacao_Nome { get; set; }
