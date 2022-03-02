@@ -71,7 +71,7 @@
 <div class="center">
     @using(Html.BeginForm("Rod_plat_query","Plataforma",FormMethod.Post,new { @id = "MainForm",enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
-        <div class="container" style="width:800px">
+        <div class="container" style="width:700px">
             <div class="card">
                 <div class="card-header">
 
@@ -81,6 +81,7 @@
                         @Html.DropDownListFor(m => m.Ano,ViewBag.ListaAno as SelectList,null,new { @id = "AnoDropDown" })
                     </label>  <br />
                     @Html.HiddenFor(m => m.Codigo,new { id = "Codigo" })
+                    @Html.HiddenFor(m=>m.Nome)
                     <Label>Empresa:&nbsp;@Model.Codigo.ToString()&nbsp;-&nbsp;@Model.Nome</Label>
 
                 </div>
@@ -94,9 +95,9 @@
                                 <td style="width:45px;font-weight:normal;text-align:right">Qtde1</td>
                                 <td style="width:45px;font-weight:normal;text-align:right">Qtde2</td>
                                 <td style="width:45px;font-weight:normal;text-align:right">Qtde3</td>
-                                <td style="width:80px;font-weight:normal;text-align:right">Valor Guia</td>
-                                <td style="width:100px;font-weight:normal;text-align:center">Nº Guia</td>
-                                <td style="width:100px;font-weight:normal;text-align:center">dt.Vencto.</td>
+                                <td style="width:80px;font-weight:normal;text-align:right;display:none">Valor Guia</td>
+                                <td style="width:100px;font-weight:normal;text-align:center;display:none">Nº Guia</td>
+                                <td style="width:100px;font-weight:normal;text-align:center;">dt.Vencto.</td>
                                 <td style="width:100px;font-weight:normal;text-align:left">Situação</td>
                                 <td style="display:none">Anexo</td>
                                 <td style="width:80px">
@@ -111,9 +112,9 @@
                                 <td style="width:45px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Qtde1)</td>
                                 <td style="width:45px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Qtde2)</td>
                                 <td style="width:45px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Qtde3)</td>
-                                <td style="width:80px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Valor_Guia)</td>
-                                <td style="width:100px;font-weight:normal;text-align:center">@Html.DisplayFor(modelItem => item.Numero_Guia)</td>
-                                <td style="width:100px;font-weight:normal;text-align:center">@item.Data_Vencimento.ToString("dd/MM/yyyy")</td>
+                                <td style="width:80px;font-weight:normal;text-align:right;display:none">@Html.DisplayFor(modelItem => item.Valor_Guia)</td>
+                                <td style="width:100px;font-weight:normal;text-align:center;display:none">@Html.DisplayFor(modelItem => item.Numero_Guia)</td>
+                                <td style="width:100px;font-weight:normal;text-align:center;">@item.Data_Vencimento.ToString("dd/MM/yyyy")</td>
                                 <td style="width:100px;font-weight:normal;text-align:left">@Html.DisplayFor(modelItem => item.Situacao_Nome)</td>
                                 <td style="display:none">@Html.DisplayFor(modelItem => item.Anexo)</td>
                                 <td style="width:80px">

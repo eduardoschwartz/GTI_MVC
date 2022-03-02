@@ -3104,9 +3104,6 @@ Proximo:;
         }
 
 
-
-
-
         public Rodo_uso_plataforma_Struct Retorna_Rodo_uso_plataforma(int Codigo, DateTime DataDe,DateTime DataAte,short Seq) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var Sql = (from t in db.Rodo_Uso_Palataforma

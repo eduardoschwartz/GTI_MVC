@@ -1660,6 +1660,11 @@ namespace GTI_Bll.Classes {
             return obj.Retorna_IPCA(Ano);
         }
 
+        public DateTime Retorna_DataVencimento_Documento(int Documento) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Retorna_DataVencimento_Documento(Documento);
+        }
+
     }//end class
 }
 
