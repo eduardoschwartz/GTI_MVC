@@ -96,7 +96,12 @@ namespace GTI_Mvc.Controllers {
             //***Verifica débito
 
             Certidao_debito_detalhe dadosCertidao = tributarioRepository.Certidao_Debito(_codigo);
-            string _tributo = dadosCertidao.Descricao_Lancamentos;
+            string _tributo = "";
+            if (!string.IsNullOrWhiteSpace(dadosCertidao.Descricao_Lancamentos)){
+                _tributo=" com referência a " + dadosCertidao.Descricao_Lancamentos;
+            } else {
+                _tributo= dadosCertidao.Descricao_Lancamentos;
+            }
 
             if (dadosCertidao.Tipo_Retorno == RetornoCertidaoDebito.Negativa) {
                 _tipoCertidao = "NEGATIVA";
