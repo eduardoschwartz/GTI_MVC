@@ -366,7 +366,7 @@ namespace GTI_MVC.Controllers {
             //return Json(new { success = true,responseText = "Dados enviados com sucesso!" },JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Rod_uso_plataforma_print(string p1,string p2,string p3,string p4) {
+        public ActionResult Rod_uso_plataforma_print(string p1,string p2,string p3,string p4,DateTime p5) {
 
             bool b = DateTime.TryParseExact(p1,"MM/dd/yyyy hh:mm:ss",CultureInfo.InvariantCulture,DateTimeStyles.None,out DateTime _datade);
             bool c = DateTime.TryParseExact(p2,"MM/dd/yyyy hh:mm:ss",CultureInfo.InvariantCulture,DateTimeStyles.None,out DateTime _dataate);
@@ -400,13 +400,13 @@ namespace GTI_MVC.Controllers {
 
             //Numdocumento doc = tributarioRepository.Retorna_Dados_Documento(reg.Numero_Guia);
             //DateTime _dataVencto = (DateTime)doc.Datadocumento;
-            DateTime _dataVencto = DateTime.Now.AddDays(10);
+            DateTime _dataVencto = p5.Date;
 
 
             //List<SpExtrato> ListaTributo = tributarioRepository.Lista_Extrato_Tributo(_codigo,(short)_ano,(short)_ano,52,52,_seqdebito,_seqdebito,1,1,0,0,0,99,DateTime.Now,"Web");
             List<SpExtrato> ListaTributo = tributarioRepository.Lista_Extrato_Tributo(_codigo, (short)_ano, (short)_ano, 52, 52, _seqdebito, _seqdebito, 1, 1, 0, 0, 0, 99, _dataVencto, "Web");
             List<SpExtrato> ListaParcela = tributarioRepository.Lista_Extrato_Parcela(ListaTributo);
-
+            
             decimal _valorGuia = 0;
             foreach (SpExtrato item in ListaParcela) {
                 _valorGuia += item.Valortotal;
