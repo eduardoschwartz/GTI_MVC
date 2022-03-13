@@ -1178,6 +1178,8 @@
     <Content Include="Views\Notificacao\Notificacao_hab_add.cshtml" />
     <Content Include="Views\Notificacao\Notificacao_hab_menu.cshtml" />
     <Content Include="Views\Notificacao\Notificacao_hab_query.cshtml" />
+    <Content Include="Views\Notificacao\AutoInfracao_hab_add.cshtml" />
+    <Content Include="Views\Notificacao\AutoInfracao_hab_query.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
