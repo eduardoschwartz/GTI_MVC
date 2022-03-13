@@ -35,10 +35,10 @@ namespace GTI_MVC.Controllers {
             int _user_id = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
             if (_user_id == 582) {
                 _connection = "gtiConnectionTeste";
-                _RefisAtivo = true;
+                _RefisAtivo = false;
             } else {
                 _connection = "gtiConnection";
-                _RefisAtivo = true;
+                _RefisAtivo = false;
             }
 
             bool _func = Session["hashfunc"].ToString() == "S" ? true : false;

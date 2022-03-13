@@ -984,6 +984,51 @@ namespace GTI_Bll.Classes {
             return obj.Dados_Imovel_Full(Codigo);
         }
 
+        public Exception Incluir_Notificacao_Habitese(Notificacao_habitese Reg) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Incluir_Notificacao_Habitese(Reg);
+            return ex;
+        }
+
+        public bool Existe_Notificacao_Habitese(int Ano, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Existe_Notificacao_Habitese(Ano, Numero);
+        }
+
+        public List<Notificacao_Habitese_Struct> Lista_Notificacao_Habitese(int Ano) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Lista_Notificacao_Habitese(Ano);
+        }
+
+        public Notificacao_Habitese_Struct Retorna_Notificacao_Habitese(int Ano, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Notificacao_Habitese(Ano, Numero);
+        }
+
+        public bool Existe_Auto_Infracao_Habitese(int Ano, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Existe_Auto_Infracao_Habitese(Ano, Numero);
+        }
+
+        public Exception Incluir_auto_infracao_Habitese(Auto_infracao_habitese Reg) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Incluir_auto_infracao_Habitese(Reg);
+            return ex;
+        }
+
+        public List<Auto_Infracao_Habitese_Struct> Lista_Auto_Infracao_Habitese(int Ano) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Lista_Auto_Infracao_Habitese(Ano);
+        }
+
+        public Auto_Infracao_Habitese_Struct Retorna_Auto_Infracao_Habitese(int Ano, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Auto_Infracao_Habitese(Ano, Numero);
+        }
+
+
+
+
         #endregion
 
     }//end class

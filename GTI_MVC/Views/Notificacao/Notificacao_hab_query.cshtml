@@ -1,0 +1,113 @@
+﻿@model GTI_Mvc.ViewModels.NotificacaoTerQueryViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Consulta de notificações";
+}
+
+<style>
+
+    .center {
+        margin: auto;
+   }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+    .card-header {
+        background-color: mistyrose;
+        color: brown;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+</style>
+
+<div class="center">
+
+    @using (Html.BeginForm("Notificacao_ter_query", "Notificacao", FormMethod.Post, new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
+        <div class="container" style="width:800px">
+            <div class="card">
+                <div class="card-header">
+                    Consulta de notificações de terreno emitidas
+                   
+                    <label style="padding-left:20px">
+                        Exercício:&nbsp;
+                        @Html.DropDownListFor(m => Model.Ano_Selected, ViewBag.Lista_Ano as SelectList, null, new { @id = "AnoDropDown", @style = "font-weight:normal", onchange = "this.form.submit()" })
+                    </label>  <br />
+
+
+                </div>
+                <div class="card-body">
+                    <table id="tblMain" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
+                        <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal; white-space: nowrap;">
+                            <tr style="height:14px;">
+                                <td style="display:none">Guid</td>
+                                <td style="width:100px;font-weight:normal">Nº Notif.</td>
+                                <td style="width:460px;font-weight:normal">Nome do Contribuinte</td>
+                                <td style="width:80px;font-weight:normal;text-align:center">Data Emissão</td>
+                                <td style="width:105px;font-weight:normal;text-align:right">Prazo</td>
+                                <td style="width:50px;text-align:right">
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody id="tblComprador" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse;padding-left:10px;">
+                            @foreach (var item in Model.ListaNotificacao) {
+                                if (item.Ano_Notificacao == Model.Ano_Selected) {
+                            <tr style="height:20px;">
+                                <td style="width:100px;font-weight:normal">@Html.DisplayFor(modelItem => item.AnoNumero)</td>
+                                <td style="width:460px;font-weight:normal">@Html.DisplayFor(modelItem => item.Nome_Proprietario)</td>
+                                <td style="width:80px;font-weight:normal;text-align:center">@Html.DisplayFor(modelItem => item.Data_Cadastro)</td>
+                                <td style="width:105px;font-weight:normal;text-align:right">@Html.DisplayFor(modelItem => item.Prazo)@Html.Raw("&nbsp;Dias")</td>
+                                <td style="width:50px;text-align:right">
+                                    <a href="@Url.Action("Notificacao_terreno_print", "Notificacao", new { a = item.Ano_Notificacao,n=item.Numero_Notificacao })" title="Imprimir a Notificação"> <img src="@Url.Content("~/images/print.png")"></a>
+                                </td>
+                            </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+               
+                    <div class="form-group row">
+                        <label class="errorlabel" id="errorLabel">@ViewBag.Result</label>
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                    @Html.ActionLink("Preencher outra notificação", "Notificacao_ter_add", "Notificacao", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+                </div>
+            </div>
+        </div>
+    }
+</div>
