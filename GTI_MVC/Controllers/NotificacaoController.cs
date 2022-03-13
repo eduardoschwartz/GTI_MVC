@@ -1377,7 +1377,7 @@ namespace GTI_Mvc.Controllers {
                         return View(model);
                     }
                     Save_Notificacao_Habitese(model);
-                    return RedirectToAction("Notificacao_ter_query");
+                    return RedirectToAction("Notificacao_hab_query");
                 }
             }
 

@@ -1,8 +1,8 @@
-﻿@model GTI_Mvc.ViewModels.NotificacaoTerViewModel
+﻿@model GTI_Mvc.ViewModels.NotificacaoHabViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Notificação de Limpeza de Terreno";
+    ViewBag.Title = "Notificação de Habite-se";
 }
 
 <style>
@@ -70,11 +70,11 @@
 
 <div class="center" style="width:700px">
 
-    @using (Html.BeginForm("Notificacao_ter_add", "Notificacao", FormMethod.Post, new { @id = "MainForm" })) {
+    @using (Html.BeginForm("Notificacao_hab_add", "Notificacao", FormMethod.Post, new { @id = "MainForm" })) {
         @Html.AntiForgeryToken()
         <div class="container" style="width:700px">
             <div class="card">
-                <div class="card-header">Notificação de Limpeza de Terreno</div>
+                <div class="card-header">Notificação de Habite-se</div>
                 <div class="card-body">
 
                     <div style="padding-left:7px">
@@ -108,7 +108,7 @@
                                     } else {
                                         @Html.TextBoxFor(m => m.Codigo_Imovel, new { @id = "codigo", @style = "width:100px;height:25px;color:blue", @readonly = true })
                                         <label>&nbsp;&nbsp;</label>
-                                        <button id="btnCodigoCancel" type="submit" class="btn btn-danger" onclick="return cancelarCodigo()" name="action" value="btnCodigoCancel" data-balloon-length="medium" aria-label="Ao cancelar, todos os dados inseridos neste lançamento de ITBI serão perdidos." data-balloon-pos="right">Cancelar</button>
+                                        <button id="btnCodigoCancel" type="submit" class="btn btn-danger" onclick="return cancelarCodigo()" name="action" value="btnCodigoCancel" data-balloon-length="medium" aria-label="Ao cancelar, todos os dados inseridos neste formulário serão perdidos." data-balloon-pos="right">Cancelar</button>
                                         <span style="padding-left:10px">Inscrição Cadastral:&nbsp;</span><span style="color:brown">@Model.Inscricao</span>
                                     }
                                 </td>
@@ -217,7 +217,7 @@
                 }
 
                 <div class="card-footer">
-                    @Html.ActionLink("Retornar ao menu de opções", "Notificacao_ter_menu", "Notificacao", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Retornar ao menu de opções", "Notificacao_hab_menu", "Notificacao", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
                 </div>
             </div>

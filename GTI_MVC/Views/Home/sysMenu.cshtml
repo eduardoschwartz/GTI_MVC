@@ -48,6 +48,7 @@
                 if (Session["hashfiscalpostura"].ToString() == "S") {
                     @Html.ActionLink("Notificação de Limpeza de Terreno", "Notificacao_ter_menu", "Notificacao", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Notificação de Regularização de Obra", "Notificacao_obra_menu", "Notificacao", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Notificação de Habite-se", "Notificacao_hab_menu", "Notificacao", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Auto de Infração - Queimada", "AutoInfracao_queimada_menu", "Notificacao", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Consulta aos cadastro de imóvel", "CadImovelqryC", "Imovel", null, new { @class = "actionlink" })<br />
                     @Html.ActionLink("Consulta de processos", "ProcessoqryC", "Protocolo", null, new { @class = "actionlink" })<br />
@@ -77,7 +78,7 @@
             @Html.ActionLink("Inclusão de Cep não cadastrado", "Cep_inc", "Shared", null, new { @class = "actionlink" })<br />
             @Html.ActionLink("Imposto sobre Transmissão de Bens Imóveis (ITBI)", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })<br />
             @*@if (Session["hashid"].ToString() == "582" || Session["hashid"].ToString() == "433" || Session["hashid"].ToString() == "1" || Session["hashid"].ToString() == "1114") {*@
-                @Html.ActionLink("Parcelamento de débitos", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Parcelamento de débitos", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<br />
             @*}*@
             @if (Session["hashfunc"].ToString() == "S") {
                 if (Session["hashid"].ToString() == "392" || Session["hashid"].ToString() == "270" || Session["hashid"].ToString() == "118" || Session["hashid"].ToString() == "433" || Session["hashid"].ToString() == "427" || Session["hashid"].ToString() == "359") {
