@@ -1810,6 +1810,181 @@ namespace GTI_Mvc.Controllers {
 
         }
 
+        [Route("Imunidade_issqn")]
+        [HttpGet]
+        public ActionResult Imunidade_issqn() {
+
+            CertidaoViewModel model = new CertidaoViewModel {
+                OptionList = new List<SelectListaItem> {
+                new SelectListaItem { Text = " CPF", Value = "cpfCheck", Selected = true },
+                new SelectListaItem { Text = " CNPJ", Value = "cnpjCheck", Selected = false }
+            },
+                SelectedValue = "cpfCheck"
+            };
+            return View(model);
+        }
+
+        [Route("Imunidade_issqn")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Imunidade_issqn(CertidaoViewModel model) {
+
+            Empresa_bll empresaRepository = new Empresa_bll(_connection);
+            int _codigo = 0;
+            bool _existeCod = false;
+            CertidaoViewModel certidaoViewModel = new CertidaoViewModel();
+            ViewBag.Result = "";
+            if (model.Inscricao != null) {
+                _codigo = Convert.ToInt32(model.Inscricao);
+
+                if (_codigo >= 100000 && _codigo < 210000) //Se estiver fora deste intervalo nem precisa checar se a empresa existe
+                    _existeCod = empresaRepository.Existe_Empresa(_codigo);
+
+            }
+            if (model.CnpjValue != null) {
+                string _cnpj = Functions.RetornaNumero(model.CnpjValue);
+                bool _valida = Functions.ValidaCNPJ(_cnpj); //CNPJ válido?
+                if (_valida) {
+                    int _codigo2 = empresaRepository.ExisteEmpresaCnpj(_cnpj);
+                    if (_codigo2 != _codigo) {
+                        ViewBag.Result = "Cnpj não pertence a esta inscrição.";
+                        return View(certidaoViewModel);
+                    }
+                } else {
+                    ViewBag.Result = "Cnpj inválido.";
+                    return View(certidaoViewModel);
+                }
+            } else {
+                if (model.CpfValue != null) {
+                    string _cpf = Functions.RetornaNumero(model.CpfValue);
+                    bool _valida = Functions.ValidaCpf(_cpf); //CPF válido?
+                    if (_valida) {
+                        int _codigo2 = empresaRepository.ExisteEmpresaCpf(_cpf);
+                        if (_codigo2 != _codigo) {
+                            ViewBag.Result = "Cpf não pertence a esta inscrição.";
+                            return View(certidaoViewModel);
+                        }
+                    } else {
+                        ViewBag.Result = "Cpf inválido.";
+                        return View(certidaoViewModel);
+                    }
+                }
+            }
+
+
+            var response = Request["g-recaptcha-response"];
+            var client = new WebClient();
+            string secretKey = "6LfRjG0aAAAAACH5nVGFkotzXTQW_V8qpKzUTqZV";
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+            string msg = status ? "Sucesso" : "Falha";
+            if (!status) {
+                ViewBag.Result = "Código Recaptcha inválido.";
+                return View(model);
+            }
+
+            if (_existeCod) {
+                //**** log ****************
+                int _userid = 2;
+                bool _prf = Session["hashfunc"] == null ? false : Session["hashfunc"].ToString() == "S" ? true : false;
+                if (Session["hashid"] != null) _userid = Convert.ToInt32(Session["hashid"]);
+                string _obs = "Inscrição: " + _codigo.ToString();
+                Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+                LogWeb regWeb = new LogWeb() { UserId = _userid, Evento = 14, Pref = _prf, Obs = _obs };
+                sistemaRepository.Incluir_LogWeb(regWeb);
+                //*************************
+
+                int _ano_certidao = DateTime.Now.Year;
+                int _numero_certidao = empresaRepository.Retorna_Imunidade_Issqn_Disponivel(_ano_certidao);
+                string controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _codigo.ToString() + "-AF";
+                
+                EmpresaStruct empresa = empresaRepository.Retorna_Empresa(_codigo);
+
+                if (empresaRepository.EmpresaSuspensa(_codigo)) {
+                    ViewBag.Result = "A empresa encontra-se suspensa.";
+                    return View(certidaoViewModel);
+                }
+                if (empresa.Data_Encerramento != null) {
+                    ViewBag.Result = "A empresa encontra-se encerrada.";
+                    return View(certidaoViewModel);
+                }
+
+
+                Imunidade_Issqn certidao = new Imunidade_Issqn();
+                certidao.Ano = (short)_ano_certidao;
+                certidao.Numero = _numero_certidao;
+                certidao.Codigo = _codigo;
+                certidao.Razao_social = empresa.Razao_social;
+                string sDoc = "";
+                if (empresa.Cpf_cnpj.Length == 11)
+                    sDoc = Convert.ToInt64(Functions.RetornaNumero(empresa.Cpf_cnpj)).ToString(@"000\.000\.000\-00");
+                else
+                    sDoc = Convert.ToInt64(Functions.RetornaNumero(empresa.Cpf_cnpj)).ToString(@"00\.000\.000\/0000\-00");
+
+                certidao.Documento = sDoc;
+                certidao.Controle = controle;
+                certidao.Endereco = empresa.Endereco_nome + ", " + empresa.Numero.ToString() + " " + empresa.Complemento;
+                certidao.Data_Gravada = DateTime.Now;
+
+                //##### QRCode ##########################################################
+                string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + certidao.Controle;
+                QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
+                using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+                    using (MemoryStream ms = new MemoryStream()) {
+                        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                        byte[] byteImage = ms.ToArray();
+                        certidao.QRCodeImage = byteImage;
+                    }
+                }
+                //#######################################################################
+
+                Tributario_bll tributarioRepository = new Tributario_bll(_connection);
+                Exception ex = tributarioRepository.Insert_Imunidade_Issqn(certidao);
+                if (ex != null) {
+                    certidaoViewModel.ErrorMessage = ex.InnerException.ToString();
+                    return View(certidaoViewModel);
+                }
+
+                ReportDocument rd = new ReportDocument();
+                rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Imunidade_issqn.rpt"));
+                TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+                TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+                ConnectionInfo crConnectionInfo = new ConnectionInfo();
+                Tables CrTables;
+                string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+                string IPAddress = builder.DataSource;
+                string _userId = builder.UserID;
+                string _pwd = builder.Password;
+
+                crConnectionInfo.ServerName = IPAddress;
+                crConnectionInfo.DatabaseName = "Tributacao";
+                crConnectionInfo.UserID = _userId;
+                crConnectionInfo.Password = _pwd;
+                CrTables = rd.Database.Tables;
+                foreach (Table CrTable in CrTables) {
+                    crtableLogoninfo = CrTable.LogOnInfo;
+                    crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                    CrTable.ApplyLogOnInfo(crtableLogoninfo);
+                }
+
+                try {
+                    rd.RecordSelectionFormula = "{Imunidade_issqn.ano}=" + certidao.Ano + " and {Imunidade_issqn.numero}=" + certidao.Numero;
+                    Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                    return File(stream, "application/pdf", "Certidao.pdf");
+                } catch {
+                    throw;
+                }
+            } else {
+                certidaoViewModel.ErrorMessage = "Empresa não cadastrada.";
+                return View(certidaoViewModel);
+            }
+
+        }
+
+
     }
 }
 

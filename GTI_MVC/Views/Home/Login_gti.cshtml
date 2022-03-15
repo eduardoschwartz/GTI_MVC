@@ -58,6 +58,7 @@
             <a href="~/Files/DECA2018.pdf" class="actionlink">Download da declaração cadastral (DECA)</a><br />
             @Html.ActionLink("Renovação de alvará de funcionamento", "Alvara_Funcionamento", "Empresa", null, new { @class = "actionlink" })<br />
             @Html.ActionLink("Certidão de inscrição e situação cadastral", "Certidao_Inscricao", "Empresa", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Certidão de imunidade de ISSQN", "Imunidade_issqn", "Empresa", null, new { @class = "actionlink" })<br />
             @Html.ActionLink("Extrato ref. a ISS Fixo, Tx.Licença/Vig. Sanitária", "Certidao_Pagamento", "Empresa", null, new { @class = "actionlink" })<span style="color:red;font-size:13px;font-weight:normal">&nbsp;&nbsp;**Exerc.: 2022</span><br />
             @if (ViewBag.FiscalMov == "S") {
                 @Html.ActionLink("Requerimentos (Alteração cadastral, baixa de atividade, etc..)", "mobreq_menu", "MobReq", null, new { @class = "actionlink" })<br />

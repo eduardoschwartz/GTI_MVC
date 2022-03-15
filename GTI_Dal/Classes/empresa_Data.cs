@@ -1652,6 +1652,20 @@ namespace GTI_Dal.Classes {
             return maxCod;
         }
 
+        public int Retorna_Imunidade_Issqn_Disponivel(int Ano) {
+            int maxCod = 0;
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                try {
+                    maxCod = (from c in db.Imunidade_Issqn where c.Ano == Ano select c.Numero).Max();
+                    maxCod = Convert.ToInt32(maxCod + 1);
+                } catch (Exception) {
+                    maxCod = 1;
+                }
+            }
+            return maxCod;
+        }
+
+
         public Horario_funcionamento Retorna_Horario_Funcionamento(int Codigo_Atividade){
             using (GTI_Context db = new GTI_Context(_connection))
             {

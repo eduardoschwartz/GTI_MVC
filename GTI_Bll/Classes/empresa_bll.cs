@@ -908,6 +908,12 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Periodo_Empresa_Mei(nCodigo);
         }
 
+        public int Retorna_Imunidade_Issqn_Disponivel(int Ano) {
+            Empresa_Data obj = new Empresa_Data(_connection);
+            return obj.Retorna_Imunidade_Issqn_Disponivel(Ano);
+        }
+
+
     }
 }
 

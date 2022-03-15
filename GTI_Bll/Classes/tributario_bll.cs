@@ -841,6 +841,13 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
+        public Exception Insert_Imunidade_Issqn(Imunidade_Issqn Reg) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            Exception ex = obj.Insert_Imunidade_Issqn(Reg);
+            return ex;
+        }
+
+
         public Exception Insert_Alvara_Funcionamento_Def(Alvara_funcionamento Reg) {
             Tributario_Data obj = new Tributario_Data(_connection);
             Exception ex = obj.Insert_Alvara_Funcionamento_Def(Reg);

@@ -1573,6 +1573,30 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Insert_Imunidade_Issqn(Imunidade_Issqn Reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                object[] Parametros = new object[9];
+                Parametros[0] = new SqlParameter { ParameterName = "@Ano", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano };
+                Parametros[1] = new SqlParameter { ParameterName = "@Numero", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero };
+                Parametros[2] = new SqlParameter { ParameterName = "@Controle", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Controle };
+                Parametros[3] = new SqlParameter { ParameterName = "@Codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
+                Parametros[4] = new SqlParameter { ParameterName = "@Razao_Social", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Razao_social };
+                Parametros[5] = new SqlParameter { ParameterName = "@Documento", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Documento };
+                Parametros[6] = new SqlParameter { ParameterName = "@Endereco", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco };
+                Parametros[7] = new SqlParameter { ParameterName = "@Data_gravada", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_Gravada };
+                Parametros[8] = new SqlParameter { ParameterName = "@QRCodeImage", SqlDbType = SqlDbType.Image, SqlValue = Reg.QRCodeImage };
+                db.Database.ExecuteSqlCommand("INSERT INTO Imunidade_issqn(ano,numero,controle,codigo,razao_social,documento,endereco,data_gravada,QRCodeImage) VALUES(@ano,@numero," +
+                                              "@controle,@codigo,@razao_social,@documento,@endereco,@data_gravada,@QRCodeImage)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+
         public Exception Insert_Alvara_Funcionamento_Def(Alvara_funcionamento Reg) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 object[] Parametros = new object[20];
