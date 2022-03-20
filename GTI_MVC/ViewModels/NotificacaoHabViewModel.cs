@@ -30,7 +30,7 @@ namespace GTI_Mvc.ViewModels {
         public string Data_Notificacao { get; set; }
         public int Ano_Auto { get; set; }
         public int Numero_Auto { get; set; }
-
+        public string Projeto { get; set; }
     }
 
     public class NotificacaoHabQueryViewModel {

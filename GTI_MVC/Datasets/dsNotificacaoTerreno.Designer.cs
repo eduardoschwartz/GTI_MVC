@@ -323,6 +323,8 @@ namespace GTI_MVC.Datasets {
             
             private global::System.Data.DataColumn columnData_Notificacao;
             
+            private global::System.Data.DataColumn columnProjeto;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public dtNotificacaoDataTable() {
@@ -534,6 +536,14 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn ProjetoColumn {
+                get {
+                    return this.columnProjeto;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -591,7 +601,8 @@ namespace GTI_MVC.Datasets {
                         int Codigo_cidadao, 
                         int Codigo_cidadao2, 
                         string AnoNumeroAuto, 
-                        System.DateTime Data_Notificacao) {
+                        System.DateTime Data_Notificacao, 
+                        string Projeto) {
                 dtNotificacaoRow rowdtNotificacaoRow = ((dtNotificacaoRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         AnoNumero,
@@ -615,7 +626,8 @@ namespace GTI_MVC.Datasets {
                         Codigo_cidadao,
                         Codigo_cidadao2,
                         AnoNumeroAuto,
-                        Data_Notificacao};
+                        Data_Notificacao,
+                        Projeto};
                 rowdtNotificacaoRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowdtNotificacaoRow);
                 return rowdtNotificacaoRow;
@@ -660,6 +672,7 @@ namespace GTI_MVC.Datasets {
                 this.columnCodigo_cidadao2 = base.Columns["Codigo_cidadao2"];
                 this.columnAnoNumeroAuto = base.Columns["AnoNumeroAuto"];
                 this.columnData_Notificacao = base.Columns["Data_Notificacao"];
+                this.columnProjeto = base.Columns["Projeto"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -709,6 +722,8 @@ namespace GTI_MVC.Datasets {
                 base.Columns.Add(this.columnAnoNumeroAuto);
                 this.columnData_Notificacao = new global::System.Data.DataColumn("Data_Notificacao", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnData_Notificacao);
+                this.columnProjeto = new global::System.Data.DataColumn("Projeto", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnProjeto);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1203,6 +1218,22 @@ namespace GTI_MVC.Datasets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public string Projeto {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtNotificacao.ProjetoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Projeto\' in table \'dtNotificacao\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtNotificacao.ProjetoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsAnoNumeroNull() {
                 return this.IsNull(this.tabledtNotificacao.AnoNumeroColumn);
             }
@@ -1463,6 +1494,18 @@ namespace GTI_MVC.Datasets {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetData_NotificacaoNull() {
                 this[this.tabledtNotificacao.Data_NotificacaoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsProjetoNull() {
+                return this.IsNull(this.tabledtNotificacao.ProjetoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetProjetoNull() {
+                this[this.tabledtNotificacao.ProjetoColumn] = global::System.Convert.DBNull;
             }
         }
         

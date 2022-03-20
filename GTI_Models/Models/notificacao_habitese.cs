@@ -29,6 +29,7 @@ namespace GTI_Models.Models {
         public string Rg2 { get; set; }
         public int Codigo_cidadao { get; set; }
         public int Codigo_cidadao2 { get; set; }
+        public string Projeto { get; set; }
     }
 
     public class Notificacao_Habitese_Struct {
@@ -55,6 +56,7 @@ namespace GTI_Models.Models {
         public string Rg2 { get; set; }
         public int Codigo_cidadao { get; set; }
         public int Codigo_cidadao2 { get; set; }
+        public string Projeto { get; set; }
     }
 
 }

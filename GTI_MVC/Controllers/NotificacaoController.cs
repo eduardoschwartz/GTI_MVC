@@ -1338,16 +1338,17 @@ namespace GTI_Mvc.Controllers {
                 model.Endereco_Local = _endLocal.Endereco + ", " + _endLocal.Numero.ToString() + _compl + " - " + _endLocal.NomeBairro.ToString() + " - " + _endLocal.NomeCidade + "/" + _endLocal.UF + " Cep:" + _endLocal.Cep;
 
                 Sistema_bll sistemaRepository = new Sistema_bll(_connection);
-                Contribuinte_Header_Struct _endProp = sistemaRepository.Contribuinte_Header(model.Codigo_cidadao);
-                _compl = _endProp.Complemento == null ? "" : " " + _endProp.Complemento;
-                model.Endereco_Prop = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _compl + " - " + _endProp.Nome_bairro.ToString() + " - " + _endProp.Nome_cidade + "/" + _endProp.Nome_uf + " Cep:" + _endProp.Cep;
-
-                if (model.Codigo_cidadao2 > 0) {
-                    _endProp = sistemaRepository.Contribuinte_Header(model.Codigo_cidadao2);
+                if (model.Codigo_cidadao > 500000) {
+                    Contribuinte_Header_Struct _endProp = sistemaRepository.Contribuinte_Header(model.Codigo_cidadao);
                     _compl = _endProp.Complemento == null ? "" : " " + _endProp.Complemento;
-                    model.Endereco_prop2 = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _compl + " - " + _endProp.Nome_bairro.ToString() + " - " + _endProp.Nome_cidade + "/" + _endProp.Nome_uf + " Cep:" + _endProp.Cep;
-                }
+                    model.Endereco_Prop = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _compl + " - " + _endProp.Nome_bairro.ToString() + " - " + _endProp.Nome_cidade + "/" + _endProp.Nome_uf + " Cep:" + _endProp.Cep;
 
+                    if (model.Codigo_cidadao2 > 0) {
+                        _endProp = sistemaRepository.Contribuinte_Header(model.Codigo_cidadao2);
+                        _compl = _endProp.Complemento == null ? "" : " " + _endProp.Complemento;
+                        model.Endereco_prop2 = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _compl + " - " + _endProp.Nome_bairro.ToString() + " - " + _endProp.Nome_cidade + "/" + _endProp.Nome_uf + " Cep:" + _endProp.Cep;
+                    }
+                }
                 EnderecoStruct _endEntrega = imovelRepository.Dados_Endereco(_codigo, TipoEndereco.Entrega);
                 if (_endEntrega.Endereco != null) {
                     _compl = _endEntrega.Complemento == null ? "" : " " + _endEntrega.Complemento;
@@ -1406,7 +1407,8 @@ namespace GTI_Mvc.Controllers {
                 Cpf = model.Cpf,
                 Cpf2 = model.Cpf2,
                 Rg = model.Rg,
-                Rg2 = model.Rg2
+                Rg2 = model.Rg2,
+                Projeto=model.Projeto
             };
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             Exception ex = imovelRepository.Incluir_Notificacao_Habitese(reg);
@@ -1503,7 +1505,8 @@ namespace GTI_Mvc.Controllers {
                 PrazoText = Functions.Escrever_Valor_Extenso(_not.Prazo),
                 Cpf2 = _not.Cpf2 ?? "",
                 Rg2 = _not.Rg2 ?? "",
-                Data_Cadastro = _not.Data_Cadastro
+                Data_Cadastro = _not.Data_Cadastro,
+                Projeto=_not.Projeto??""
             };
             if (_not.Codigo_cidadao2 > 0) {
                 reg.Nome2 = _not.Codigo_cidadao2.ToString() + "-" + _not.Nome_Proprietario2;
@@ -1723,7 +1726,8 @@ namespace GTI_Mvc.Controllers {
                 Usuario = _not.UsuarioNome,
                 Inscricao = _not.Inscricao,
                 Cpf2 = _not.Cpf2 ?? "",
-                Rg2 = _not.Rg2 ?? ""
+                Rg2 = _not.Rg2 ?? "",
+                Projeto=_not.Projeto??""
             };
             if (_not.Codigo_cidadao2 > 0) {
                 reg.Nome2 = _not.Codigo_cidadao2.ToString() + "-" + _not.Nome_Proprietario2;
@@ -1742,7 +1746,6 @@ namespace GTI_Mvc.Controllers {
                 throw;
             }
         }
-
 
 
     }

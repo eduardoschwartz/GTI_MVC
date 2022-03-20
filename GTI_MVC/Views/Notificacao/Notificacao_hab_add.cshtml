@@ -170,7 +170,7 @@
                                         @Model.Endereco_Entrega
                                     </td>
                                 </tr>
-                               
+
                             </table>
                             <br />
                             <table style="font-size:14px;width:600px">
@@ -200,6 +200,16 @@
                                         } else {
                                             @Html.TextBoxFor(m => m.Prazo, new { @id = "txtPrazo", @onKeyPress = "return formata(this, '§§§', event)", style = "width:70px;", @Value = "" })
                                         }
+                                    </td>
+                                </tr>
+                            </table>
+                            <table style="font-size:14px;width:600px">
+                                <tr style="height:30px">
+                                    <td style="width:150px">
+                                        <label style="font-weight:normal;padding-top:7px">Nº do projeto Arquitetônico:</label>
+                                    </td>
+                                    <td style="width:100px">
+                                        @Html.TextBoxFor(m => m.Projeto, new { @id = "txtProjeto",  style = "width:300px;" })
                                     </td>
                                 </tr>
                             </table>

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GTI_Models.ReportModels {
     public class DtNotificacao {
@@ -28,6 +24,6 @@ namespace GTI_Models.ReportModels {
         public string Rg2 { get; set; }
         public int Codigo_cidadao { get; set; }
         public int Codigo_cidadao2 { get; set; }
-
+        public string Projeto { get; set; }
     }
 }

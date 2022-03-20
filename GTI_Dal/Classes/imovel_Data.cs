@@ -3238,7 +3238,7 @@ namespace GTI_Dal.Classes {
         public Exception Incluir_Notificacao_Habitese(Notificacao_habitese Reg) {
             using (var db = new GTI_Context(_connection)) {
                 db.Database.CommandTimeout = 180;
-                object[] Parametros = new object[21];
+                object[] Parametros = new object[22];
                 Parametros[0] = new SqlParameter { ParameterName = "@ano_not", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano_not };
                 Parametros[1] = new SqlParameter { ParameterName = "@numero_not", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_not };
                 Parametros[2] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
@@ -3260,11 +3260,12 @@ namespace GTI_Dal.Classes {
                 Parametros[18] = new SqlParameter { ParameterName = "@rg2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Rg2 ?? "" };
                 Parametros[19] = new SqlParameter { ParameterName = "@endereco_prop2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_prop2 ?? "" };
                 Parametros[20] = new SqlParameter { ParameterName = "@endereco_entrega2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_entrega2 ?? "" };
+                Parametros[21] = new SqlParameter { ParameterName = "@projeto", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Projeto ?? "" };
 
                 db.Database.ExecuteSqlCommand("INSERT INTO notificacao_habitese(ano_not,numero_not,codigo,situacao,endereco_infracao,endereco_prop,endereco_entrega,nome,inscricao,prazo,data_cadastro," +
-                                              "userid,nome2,codigo_cidadao,codigo_cidadao2,cpf,rg,cpf2,rg2,endereco_prop2,endereco_entrega2) " +
+                                              "userid,nome2,codigo_cidadao,codigo_cidadao2,cpf,rg,cpf2,rg2,endereco_prop2,endereco_entrega2,projeto) " +
                                               " VALUES(@ano_not,@numero_not,@codigo,@situacao,@endereco_infracao,@endereco_prop,@endereco_entrega,@nome,@inscricao,@prazo,@data_cadastro,@userid," +
-                                              "@nome2,@codigo_cidadao,@codigo_cidadao2,@cpf,@rg,@cpf2,@rg2,@endereco_prop2,@endereco_entrega2)", Parametros);
+                                              "@nome2,@codigo_cidadao,@codigo_cidadao2,@cpf,@rg,@cpf2,@rg2,@endereco_prop2,@endereco_entrega2,@projeto)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -3316,7 +3317,7 @@ namespace GTI_Dal.Classes {
                 var Sql = (from t in db.Notificacao_Habitese
                            join u in db.Usuario on t.Userid equals u.Id into tu from u in tu
                            where t.Ano_not == Ano && t.Numero_not == Numero select new {
-                               Ano = t.Ano_not, Numero = t.Numero_not, Codigo = t.Codigo, Data_Cadastro = t.Data_cadastro, Usuario = t.Userid, Situacao = t.Situacao, Nome = t.Nome, Prazo = t.Prazo,
+                               Ano = t.Ano_not, Numero = t.Numero_not, Codigo = t.Codigo, Data_Cadastro = t.Data_cadastro, Usuario = t.Userid, Situacao = t.Situacao, Nome = t.Nome, Prazo = t.Prazo,t.Projeto,
                                Endereco_entrega = t.Endereco_entrega, Endereco_prop = t.Endereco_prop, Endereco_Infracao = t.Endereco_infracao, Usuario_Nome = u.Nomecompleto, Inscricao = t.Inscricao,
                                t.Nome2, t.Codigo_cidadao, t.Codigo_cidadao2, t.Cpf, t.Rg, t.Cpf2, t.Rg2, t.Endereco_entrega2, t.Endereco_prop2
                            }).FirstOrDefault();
@@ -3344,7 +3345,8 @@ namespace GTI_Dal.Classes {
                         Cpf = Sql.Cpf,
                         Cpf2 = Sql.Cpf2,
                         Rg = Sql.Rg,
-                        Rg2 = Sql.Rg2
+                        Rg2 = Sql.Rg2,
+                        Projeto=Sql.Projeto
                     };
                 }
                 return reg;
@@ -3421,7 +3423,7 @@ namespace GTI_Dal.Classes {
                            join n in db.Notificacao_Habitese on new { p1 = a.Ano_notificacao, p2 = a.Numero_notificacao } equals new { p1 = n.Ano_not, p2 = n.Numero_not } into an from n in an.DefaultIfEmpty()
                            join u in db.Usuario on a.Userid equals u.Id into tu from u in tu
                            where a.Ano_auto == Ano && a.Numero_auto == Numero select new {
-                               AnoAuto = a.Ano_auto, NumeroAuto = a.Numero_auto, AnoNot = a.Ano_notificacao, NumeroNot = a.Numero_notificacao, Codigo = n.Codigo, Data_Notificaao = a.Data_notificacao,
+                               AnoAuto = a.Ano_auto, NumeroAuto = a.Numero_auto, AnoNot = a.Ano_notificacao, NumeroNot = a.Numero_notificacao, Codigo = n.Codigo, Data_Notificaao = a.Data_notificacao,n.Projeto,
                                Data_Cadastro = a.Data_cadastro, Usuario = a.Userid, Nome = n.Nome, Endereco_entrega = n.Endereco_entrega, Endereco_prop = n.Endereco_prop, Endereco_Infracao = n.Endereco_infracao,
                                Usuario_Nome = u.Nomecompleto, Inscricao = n.Inscricao, n.Nome2, n.Codigo_cidadao, n.Codigo_cidadao2, n.Cpf, n.Rg, n.Cpf2, n.Rg2, n.Endereco_entrega2, n.Endereco_prop2
 
@@ -3453,7 +3455,7 @@ namespace GTI_Dal.Classes {
                         Cpf = Sql.Cpf,
                         Cpf2 = Sql.Cpf2,
                         Rg = Sql.Rg,
-                        Rg2 = Sql.Rg2
+                        Projeto=Sql.Projeto
                     };
                 }
                 return reg;

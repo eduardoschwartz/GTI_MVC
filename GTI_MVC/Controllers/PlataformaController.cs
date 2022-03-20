@@ -398,12 +398,9 @@ namespace GTI_MVC.Controllers {
             string _uf = _r ? _cidadao.UfR : _cidadao.UfC;
             int _cep = _r ? (int)_cidadao.CepR : (int)_cidadao.CepC;
 
-            //Numdocumento doc = tributarioRepository.Retorna_Dados_Documento(reg.Numero_Guia);
-            //DateTime _dataVencto = (DateTime)doc.Datadocumento;
+            Numdocumento doc = tributarioRepository.Retorna_Dados_Documento(reg.Numero_Guia);
             DateTime _dataVencto = p5.Date;
 
-
-            //List<SpExtrato> ListaTributo = tributarioRepository.Lista_Extrato_Tributo(_codigo,(short)_ano,(short)_ano,52,52,_seqdebito,_seqdebito,1,1,0,0,0,99,DateTime.Now,"Web");
             List<SpExtrato> ListaTributo = tributarioRepository.Lista_Extrato_Tributo(_codigo, (short)_ano, (short)_ano, 52, 52, _seqdebito, _seqdebito, 1, 1, 0, 0, 0, 99, _dataVencto, "Web");
             List<SpExtrato> ListaParcela = tributarioRepository.Lista_Extrato_Parcela(ListaTributo);
             
@@ -411,51 +408,6 @@ namespace GTI_MVC.Controllers {
             foreach (SpExtrato item in ListaParcela) {
                 _valorGuia += item.Valortotal;
             }
-
-            //grava o documento
-            Numdocumento regDoc = new Numdocumento {
-                Valorguia = _valorGuia,
-                Emissor = "Gti.Web/UsoPlataforma",
-                Datadocumento = _dataVencto,
-                Registrado = true,
-                Percisencao = 0
-            };
-            regDoc.Percisencao = 0;
-            int _novo_documento = tributarioRepository.Insert_Documento(regDoc);
-            reg.Numero_Guia = _novo_documento;
-
-            //grava o documento na parcela
-            Parceladocumento regParc = new Parceladocumento {
-                Codreduzido = _codigo,
-                Anoexercicio =(short) _ano,
-                Codlancamento = 52,
-                Seqlancamento = _seq,
-                Numparcela = 1,
-                Codcomplemento = 0,
-                Numdocumento = _novo_documento,
-                Valorjuros = 0,
-                Valormulta = 0,
-                Valorcorrecao = 0,
-                Plano = 0
-            };
-            tributarioRepository.Insert_Parcela_Documento(regParc);
-
-            //Enviar para registrar 
-            Ficha_compensacao_documento ficha = new Ficha_compensacao_documento {
-                Nome = _nome,
-                Endereco = _endereco.Length > 40 ? _endereco.Substring(0, 40) : _endereco,
-                Bairro = _bairro.Length > 15 ? _bairro.Substring(0, 15) : _bairro,
-                Cidade = _cidade.Length > 30 ? _cidade.Substring(0, 30) : _cidade,
-                Cep = Functions.RetornaNumero(_cep.ToString()) ?? "14870000",
-                Cpf = Functions.RetornaNumero(_cpf_cnpj),
-                Numero_documento = _novo_documento,
-                Data_vencimento = _dataVencto,
-                Valor_documento = Convert.ToDecimal(_valorGuia),
-                Uf = _uf
-            };
-            Exception ex2 = tributarioRepository.Insert_Ficha_Compensacao_Documento(ficha);
-            ex2 = tributarioRepository.Marcar_Documento_Registrado(_novo_documento);
-
 
             decimal _vp1 = 0, _vm1 = 0, _vj1 = 0, _vt1 = 0;
             decimal _vp2 = 0, _vm2 = 0, _vj2 = 0, _vt2 = 0;
