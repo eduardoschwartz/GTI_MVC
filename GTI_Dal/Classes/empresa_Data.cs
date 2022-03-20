@@ -241,7 +241,6 @@ namespace GTI_Dal.Classes {
         }
 
 
-
         public bool Empresa_tem_VS(int nCodigo) {
             bool bRet = false;
             using (GTI_Context db = new GTI_Context(_connection)) {
@@ -262,6 +261,18 @@ namespace GTI_Dal.Classes {
             }
             return ret;
         }
+
+        public bool Empresa_tem_Imunidade_ISSQN(int nCodigo) {
+            bool? isento = false;
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                isento = (from m in db.Mobiliario where m.Codigomob == nCodigo select m.Imune_issqn).FirstOrDefault();
+            }
+            if (isento == null)
+                isento = false;
+                
+            return Convert.ToBoolean(isento);
+        }
+
 
         public bool Empresa_tem_Alvara(int nCodigo) {
             bool ret;

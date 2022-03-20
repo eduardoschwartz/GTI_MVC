@@ -79,6 +79,7 @@ namespace GTI_Models.Models {
         public string Ponto_agencia { get; set; }
         public bool? Cadastro_vre { get; set; }
         public bool? Liberado_vre { get; set; }
+        public bool? Imune_issqn { get; set; }
     }
 
     public class EmpresaStruct {
@@ -178,6 +179,7 @@ namespace GTI_Models.Models {
         public short Unidade { get; set; }
         public short Subunidade { get; set; }
         public List<MobiliarioproprietarioStruct> Socios { get; set; }
+        public bool? Imune_issqn { get; set; }
     }
 
     //public class CnaeStruct {

@@ -95,6 +95,26 @@ namespace GTI_MVC.Controllers {
                             break;
                         }
                     //#################################################################################
+                    case "CQ": {
+                            Imunidade_Issqn certidaoImune = tributarioRepository.Retorna_Certidao_Imunidade_Issqn(_chave);
+                            Certidao regIm = new Certidao() {
+                                Codigo = _codigo,
+                                Nome_Requerente = certidaoImune.Razao_social,
+                                Ano = _ano,
+                                Numero = _numero,
+                                Numero_Ano = certidaoImune.Numero.ToString("00000") + "/" + certidaoImune.Ano.ToString(),
+                                Controle = _chave,
+                                Cpf_Cnpj = certidaoImune.Documento,
+                                Data_Geracao = certidaoImune.Data_Gravada,
+
+                            };
+                            certidao.Add(regIm);
+                            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Imunidade_issqn_valida.rpt"));
+                            rd.SetDataSource(certidao);
+                            _pdfFileName = "Certidao_Debito.pdf";
+                            break;
+                        }
+                    //#################################################################################
                     case "AF": case "AN": {
                             //#########################Alvará de Funcionamento#############################
                             _codigo = _chaveStruct.Codigo;

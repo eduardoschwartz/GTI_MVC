@@ -1897,7 +1897,7 @@ namespace GTI_Mvc.Controllers {
 
                 int _ano_certidao = DateTime.Now.Year;
                 int _numero_certidao = empresaRepository.Retorna_Imunidade_Issqn_Disponivel(_ano_certidao);
-                string controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _codigo.ToString() + "-AF";
+                string controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _codigo.ToString() + "-CQ";
                 
                 EmpresaStruct empresa = empresaRepository.Retorna_Empresa(_codigo);
 
@@ -1908,6 +1908,13 @@ namespace GTI_Mvc.Controllers {
                 if (empresa.Data_Encerramento != null) {
                     ViewBag.Result = "A empresa encontra-se encerrada.";
                     return View(certidaoViewModel);
+                }
+
+                bool _imune = empresaRepository.Empresa_tem_Imunidade_ISSQN(_codigo);
+                if (!_imune) {
+                        ViewBag.Result = "A empresa não possui imunidade de ISSQN.";
+                        return View(certidaoViewModel);
+
                 }
 
 

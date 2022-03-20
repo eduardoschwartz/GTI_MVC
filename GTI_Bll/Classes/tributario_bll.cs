@@ -1427,9 +1427,9 @@ namespace GTI_Bll.Classes {
                                         Valido = true
                                     };
                                     return reg;
-                                } 
+                                }
                             } else {
-                                if (sTipo == "IN" || sTipo == "IP" || sTipo == "IS"||sTipo == "CN" || sTipo == "CP" || sTipo == "PN") {
+                                if (sTipo == "IN" || sTipo == "IP" || sTipo == "IS" || sTipo == "CN" || sTipo == "CP" || sTipo == "PN") {
                                     Certidao_debito_doc dadosCDB = Retorna_Certidao_Debito_Doc(Chave);
                                     if (dadosCDB != null) {
                                         chaveStruct reg = new chaveStruct {
@@ -1441,22 +1441,38 @@ namespace GTI_Bll.Classes {
                                         };
                                         return reg;
                                     }
-                                } else
-                                    if (sTipo == "AF" || sTipo=="AN") {
-                                    Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
-                                    Alvara_funcionamento dados = empresaRepository.Alvara_Funcionamento_gravado(Chave);
-                                    if (dados != null) {
-                                        chaveStruct reg = new chaveStruct {
-                                            Codigo = nCodigo,
-                                            Ano = nAno,
-                                            Numero = nNumero,
-                                            Tipo = sTipo,
-                                            Valido = true
-                                        };
-                                        return reg;
+                                } else {
+                                    if (sTipo == "AF" || sTipo == "AN") {
+                                        Empresa_bll empresaRepository = new Empresa_bll("GTIconnection");
+                                        Alvara_funcionamento dados = empresaRepository.Alvara_Funcionamento_gravado(Chave);
+                                        if (dados != null) {
+                                            chaveStruct reg = new chaveStruct {
+                                                Codigo = nCodigo,
+                                                Ano = nAno,
+                                                Numero = nNumero,
+                                                Tipo = sTipo,
+                                                Valido = true
+                                            };
+                                            return reg;
+                                        }
+                                    } else {
+                                        if (sTipo == "CQ") {
+                                            Tributario_bll tributarioRepository = new Tributario_bll("GTIconnection");
+                                            Imunidade_Issqn dadoscq = tributarioRepository.Retorna_Certidao_Imunidade_Issqn(Chave);
+                                            if (dadoscq != null) {
+                                                chaveStruct reg = new chaveStruct {
+                                                    Codigo = nCodigo,
+                                                    Ano = nAno,
+                                                    Numero = nNumero,
+                                                    Tipo = sTipo,
+                                                    Valido = true
+                                                };
+                                                return reg;
+                                            }
+                                        }
                                     }
-                                } else
-                                    goto fim;
+                                }
+                                goto fim;
                             }
                         }
                     }
@@ -1670,6 +1686,11 @@ namespace GTI_Bll.Classes {
         public DateTime Retorna_DataVencimento_Documento(int Documento) {
             Tributario_Data obj = new Tributario_Data(_connection);
             return obj.Retorna_DataVencimento_Documento(Documento);
+        }
+
+        public Imunidade_Issqn Retorna_Certidao_Imunidade_Issqn(string Validacao) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Retorna_Certidao_Imunidade_Issqn(Validacao);
         }
 
     }//end class

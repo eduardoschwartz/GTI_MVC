@@ -100,6 +100,12 @@ namespace GTI_Bll.Classes {
             return obj.Empresa_tem_TL(nCodigo);
         }
 
+        public bool Empresa_tem_Imunidade_ISSQN(int nCodigo) {
+            Empresa_Data obj = new Empresa_Data(_connection);
+            return obj.Empresa_tem_Imunidade_ISSQN(nCodigo);
+        }
+
+
         /// <summary>
         /// Verifica se a empresa pode tirar alvará na Internet
         /// </summary>

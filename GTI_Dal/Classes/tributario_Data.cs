@@ -1720,6 +1720,14 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Imunidade_Issqn Retorna_Certidao_Imunidade_Issqn(string Validacao) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from p in db.Imunidade_Issqn where p.Controle == Validacao select p).FirstOrDefault();
+                return Sql;
+            }
+        }
+
+
         public Certidao_inscricao Retorna_Certidao_Inscricao(int Ano, int Numero, int Codigo) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var Sql = (from p in db.Certidao_inscricao where p.Ano == Ano && p.Numero == Numero && p.Cadastro == Codigo select p).FirstOrDefault();
