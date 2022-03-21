@@ -96,22 +96,23 @@ namespace GTI_MVC.Controllers {
                         }
                     //#################################################################################
                     case "CQ": {
+                            List<Imunidade_Issqn> certidaoIM = new List<Imunidade_Issqn>();
                             Imunidade_Issqn certidaoImune = tributarioRepository.Retorna_Certidao_Imunidade_Issqn(_chave);
-                            Certidao regIm = new Certidao() {
+                            Imunidade_Issqn regIm = new Imunidade_Issqn() {
                                 Codigo = _codigo,
-                                Nome_Requerente = certidaoImune.Razao_social,
+                                Razao_social = certidaoImune.Razao_social,
                                 Ano = _ano,
                                 Numero = _numero,
-                                Numero_Ano = certidaoImune.Numero.ToString("00000") + "/" + certidaoImune.Ano.ToString(),
                                 Controle = _chave,
-                                Cpf_Cnpj = certidaoImune.Documento,
-                                Data_Geracao = certidaoImune.Data_Gravada,
+                                Endereco=certidaoImune.Endereco,
+                                Documento = certidaoImune.Documento,
+                                Data_Gravada = certidaoImune.Data_Gravada,
 
                             };
-                            certidao.Add(regIm);
+                            certidaoIM.Add(regIm);
                             rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Imunidade_issqn_valida.rpt"));
-                            rd.SetDataSource(certidao);
-                            _pdfFileName = "Certidao_Debito.pdf";
+                            rd.SetDataSource(certidaoIM);
+                            _pdfFileName = "Certidao_Imunidade_Valida.pdf";
                             break;
                         }
                     //#################################################################################

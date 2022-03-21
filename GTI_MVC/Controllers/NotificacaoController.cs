@@ -755,6 +755,7 @@ namespace GTI_Mvc.Controllers {
                 AnoNumeroAuto = _not.AnoNumeroAuto,
                 AnoNumero = _not.AnoNumero,
                 Data_Notificacao = _not.Data_Notificacao,
+                Data_Cadastro=_not.Data_Cadastro,
                 Codigo = _not.Codigo_Imovel.ToString("00000"),
                 Nome = _not.Codigo_cidadao.ToString() + "-" + _not.Nome_Proprietario,
                 Cpf = _not.Cpf ?? "",
