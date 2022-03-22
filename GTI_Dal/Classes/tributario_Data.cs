@@ -1234,7 +1234,7 @@ namespace GTI_Dal.Classes {
 
             foreach (DebitoStructure reg in lstDebito) {
                 SomaPrincipal += Convert.ToDecimal(reg.Soma_Principal);
-                SomaTotal += Convert.ToDecimal(reg.Soma_Total);
+                SomaTotal += Convert.ToDecimal(reg.Soma_Principal+reg.Soma_Juros+reg.Soma_Multa+reg.Soma_Correcao);
             }
 
             StringBuilder sFullLanc = new StringBuilder();
@@ -1248,6 +1248,11 @@ namespace GTI_Dal.Classes {
             sFullLanc.Remove(sFullLanc.Length - 1, 1);
 
             decimal nValorguia = Math.Truncate(Convert.ToDecimal(SomaTotal * 100));
+            Numdocumento _doc = Retorna_Dados_Documento(nNumDoc);
+            if (_doc.Valorguia > 0)
+                SomaTotal = (decimal)_doc.Valorguia;
+            
+
             string NumBarra = dalCore.Gera2of5Cod((nValorguia).ToString(), Convert.ToDateTime(DataBoleto), Convert.ToInt32(nNumDoc), Convert.ToInt32(nCodigo));
             string numbarra2a = NumBarra.Substring(0, 13);
             string numbarra2b = NumBarra.Substring(13, 13);
@@ -1292,7 +1297,7 @@ namespace GTI_Dal.Classes {
                         Juros = Convert.ToDecimal(reg.Soma_Juros),
                         Multa = Convert.ToDecimal(reg.Soma_Multa),
                         Correcao = Convert.ToDecimal(reg.Soma_Correcao),
-                        Total = Convert.ToDecimal(reg.Soma_Total),
+                        Total = Convert.ToDecimal(reg.Soma_Principal+reg.Soma_Juros+reg.Soma_Multa+reg.Soma_Correcao),
                         Numdoc2 = sNumDoc2,
                         Digitavel = "",
                         Codbarra = sBarra,

@@ -2035,13 +2035,10 @@ namespace GTI_Mvc.Controllers {
             List<DebitoStructure> ListaParcelas = tributario_Class.Lista_Tabela_Parcela_Documento(nNumDoc);
 
             short _plano = tributario_Class.Retorna_Plano_Desconto(nNumDoc);
-            foreach (DebitoStructure Linha in ListaParcelas) {
-                if (_plano > 0) {
-                    decimal _perc = tributario_Class.Retorna_Plano_Desconto_Perc(_plano);
-                    ListaParcelas[i].Soma_Juros = Convert.ToDecimal(ListaParcelas[i].Soma_Juros) - (Convert.ToDecimal(ListaParcelas[i].Soma_Juros) * _perc / 100);
-                    ListaParcelas[i].Soma_Multa = Convert.ToDecimal(ListaParcelas[i].Soma_Multa) - (Convert.ToDecimal(ListaParcelas[i].Soma_Multa) * _perc / 100);
-                    ListaParcelas[i].Soma_Total = ListaParcelas[i].Soma_Principal + ListaParcelas[i].Soma_Correcao;
-                }
+            for (int e = 0; e < ListaParcelas.Count; e++) {
+                DebitoStructure Linha = ListaParcelas[e];      
+//            }
+  //          foreach (DebitoStructure Linha in ListaParcelas) {
 
 
                 List<SpExtrato> ListaTributo = tributario_Class.Lista_Extrato_Tributo(Linha.Codigo_Reduzido, (short)Linha.Ano_Exercicio, (short)Linha.Ano_Exercicio, (short)Linha.Codigo_Lancamento, (short)Linha.Codigo_Lancamento,
@@ -2061,6 +2058,13 @@ namespace GTI_Mvc.Controllers {
                 ListaParcelas[i].Descricao_Lancamento = ListaParcela[0].Desclancamento;
                 string DescTributo = "";
 
+                if (_plano > 0) {
+                    decimal _perc = tributario_Class.Retorna_Plano_Desconto_Perc(_plano);
+                    ListaParcelas[i].Soma_Juros = Convert.ToDecimal(ListaParcelas[i].Soma_Juros) - (Convert.ToDecimal(ListaParcelas[i].Soma_Juros) * _perc / 100);
+                    ListaParcelas[i].Soma_Multa = Convert.ToDecimal(ListaParcelas[i].Soma_Multa) - (Convert.ToDecimal(ListaParcelas[i].Soma_Multa) * _perc / 100);
+                    
+                }
+                ListaParcelas[i].Soma_Total = ListaParcelas[i].Soma_Principal + +ListaParcelas[i].Soma_Juros + +ListaParcelas[i].Soma_Multa + ListaParcelas[i].Soma_Correcao;
 
                 List<int> aTributos = new List<int>();
                 foreach (SpExtrato Trib in ListaTributo) {

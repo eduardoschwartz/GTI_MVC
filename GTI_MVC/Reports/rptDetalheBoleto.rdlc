@@ -1574,6 +1574,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1585,7 +1586,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!total.Value)</Value>
+                              <Value>=Format(Fields!valordam.Value,"0.00")</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2508,7 +2509,6 @@ LjoXNyP21clhknheKLR3FgQCbfQU+Hdqkfq4sbn5/wB4NfT3eqD9HFRPr/cBQIYO1+Sy39ycZGS3hvJj
 xXaLkSMmUgIJ9svP0Fm/lY/4h40GceXapeQhV8SdNK94WPlcihbAUGFQd+ZKdmOtv89vUfgt/pTmXH7cxX34XF/kqBvafIvIFCkEsoyGJOnlXqbOypVkmOOCcfd7KOVASQ2G8qN19oIsALUFdcn/AKhBjcRAMjkpIfdzZsgDd7YGibVb0XJ9KfU0vyc7Pyt+LkFSi2mf2kCsgjKsVjY3I3M38a9ycNnwSRFJ1hMkm2WS5cykgS7mZimh6V9PHzmVnknJmlf9dWhsbAmMKAX8PKgoxbcuPFWV1EKq8kzjUiNiw2m/Q/x+lSz8iqovH4gVIAASSLA/53+Fug/sqKXj5vVFFlLZgrD9MbdsYIFyGGliatcH25PyjS4/vLCyeqaZGJaTUqwN19Nj4aUEnauMmZmSZarMqRho8YLuYP4ySb2HVjp6bU0jzO8ZBbEwvZDkht91C62W5dr3tqacriw8ZiFYY3ijQKxTGYsb2a5VXv5Ul4vgeG5lWkxuSzPOaCR19wEnXd6T18xQM+I4rnkz0yuS5ISqoP8A8sYFrnzNhpWgpRx/afDcflrmQo7ZCfbJJIzW0t0vam9AUmh4aTM5VuU5MX9klcHHJuEAP/I1tCx6jy/g5ooM53FxfCY+K8s6yNkTXCNvLMW8zvuLCsHHIFkZIz6gd0djruHlXVp+Nwsif38iMTMAFUP6lAGuinSvEvCcNN/yYUDEdD7S3HyNrig5Tk95Fcg+wl2RyWlNlBLEFhd93puL9KifvRrgFARZdIm0un2nWMC+tdEy/wCnvbWU24xPGevpa/8AvDGoh/TntqFS5x3ymUehHcAa/wCkLQZLh+Sz+ZWQ48JMUQLSMQgA3EjruXzpwr8omOv6QKhzIrjcBuClPHw9Q8abR9q5qy/otBiYq29vGVS6qR/MwGzc3zq48GLx6e9ymV+U8YuFICRgXuLrc+Nup+lBmpJsqSP3pIJCdrHbYFPsVA3VTbSvCcjEJNshMbhk3bjc
 hb+rp5gLpTtU5PuAL7E/t8btKyTEW9w3IbYg6/U2poO2uEmxTHkYiTGUDfJILyGw0O/qv0oMj+VE+KVjDTsF2x2T1D0bGsxP2k+Fev8AsnARzjE2O7dfRwunhc/ZoRTY9u52FOZ+KlUx4pCjFkvoo9QZHHjr0IqCXEg5HfPgz/incGmgkX3Iw1w32aMlyL3Fx8KBRl5s2LxYz8nbJhhvbj1D63L2Oo+RBpPL3dFMf042LWsu0rcLpZfVIT4VqeU7WzsqA48uGHhclisEoI8wy79h3L4Umxf6TflguMqXFKEgx5EAufiGVwD+ygVr3IBJ/wDVGYVlGw+5GVUqT6huVmteq+NnchyPLSZAa2Og9uMKbAgWAJt1vbrWsxf6QYa2/Mz3lAOiom0W+rGtBgdidv4QASNnIFrs1v8AaBQVuC4t5oBlYXIPHNoJk26B7dGUsQR9KYZ3b35GTByWM64nJwlTJKgOyUfzK66HUVZw+ExsHL/IxGZFZSskRN1PiDr5UwoCiiigKKKKAooooCiiigKT4/bsMmXLmZyq4kYNHi9Y129Gf/G3z0/jTiig8xRLFGEXoP7flXqiigLC5PietLeT4HHzIR7Lfi5Ef/FMnhrfawuNy38KZUUEOF+T+LGMtVWdRtk2G6kjTcvwPWpqKKAooooCiiigKKKKD//Z</ImageData>
     </EmbeddedImage>
-    
   </EmbeddedImages>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>61208e93-b422-47b1-b256-d83093c26911</rd:ReportID>
