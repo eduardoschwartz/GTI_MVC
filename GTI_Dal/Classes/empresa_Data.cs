@@ -440,7 +440,7 @@ namespace GTI_Dal.Classes {
                 row.Situacao = sSituacao;
                 row.Email_contato = reg.Email_contato ?? "";
                 row.Fone_contato = reg.Fone_contato ?? "";
-                row.Area = reg.Area == 0 ? 0 : Convert.ToSingle(reg.Area);
+                row.Area = reg.Area == 0 ? 0 : Convert.ToDecimal(reg.Area);
 
                 row.Qtde_profissionais = reg.Qtde_profissionais;
                 row.Codigo_aliquota = reg.Codigo_aliquota;

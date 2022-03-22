@@ -30,12 +30,12 @@ namespace GTI_Models.Models {
         public short? Isencao { get; set; }
         public int? Codatividade { get; set; }
         public string Ativextenso { get; set; }
-        public float? Areatl { get; set; }
+        public decimal? Areatl { get; set; }
         public byte? Codigoaliq { get; set; }
         public DateTime? Datainicialdesc { get; set; }
         public DateTime? Datafinaldesc { get; set; }
-        public float? Percdesconto { get; set; }
-        public float? Capitalsocial { get; set; }
+        public decimal? Percdesconto { get; set; }
+        public decimal? Capitalsocial { get; set; }
         public string Nomeorgao { get; set; }
         public int? Codprofresp { get; set; }
         public string Numregistroresp { get; set; }
@@ -115,15 +115,15 @@ namespace GTI_Models.Models {
         public int? Atividade_codigo { get; set; }
         public string Atividade_nome { get; set; }
         public string Atividade_extenso { get; set; }
-        public float? Area { get; set; }
+        public decimal? Area { get; set; }
         public byte? Codigo_aliquota { get; set; }
         public float? Valor_aliquota1 { get; set; }
         public float? Valor_aliquota2 { get; set; }
         public float? Valor_aliquota3 { get; set; }
         public DateTime? Data_inicial_desconto { get; set; }
         public DateTime? Data_final_desconto { get; set; }
-        public float? Percentual_desconto { get; set; }
-        public float? Capital_social { get; set; }
+        public decimal? Percentual_desconto { get; set; }
+        public decimal? Capital_social { get; set; }
         public string Nome_orgao { get; set; }
         public int? prof_responsavel_codigo { get; set; }
         public string prof_responsavel_nome { get; set; }
