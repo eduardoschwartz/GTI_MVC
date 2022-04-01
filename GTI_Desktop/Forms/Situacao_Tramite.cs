@@ -59,7 +59,8 @@ namespace GTI_Desktop.Forms {
             ArquivadoText.Text = lt.Arquivado ? "Sim" : "Não";
             SuspensoText.Text = lt.Suspenso ? "Sim" : "Não";
             if(lt.Arquivado)
-                LocalNomeText.Text = "PROCESSO ARQUIVADO";
+                LocalNomeText.Text = lt.Local_Nome;
+//            LocalNomeText.Text = "PROCESSO ARQUIVADO";
             else {
                 if (lt.Suspenso) {
                     LocalNomeText.Text = "PROCESSO SUSPENSO/CANCELADO";

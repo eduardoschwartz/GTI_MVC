@@ -535,6 +535,20 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public Exception Arquivar_Processo(int Ano, int Numero, DateTime Data_Arquivamento) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                Processogti p = db.Processogti.First(i => i.Ano == Ano && i.Numero == Numero);
+                p.Dataarquiva = Data_Arquivamento;
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+
         public Exception Excluir_Anexo(Anexo reg, string usuario) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 try {
@@ -705,7 +719,7 @@ namespace GTI_Dal.Classes {
                                 join d in db.Despacho on t.Despacho equals d.Codigo into td from d in td.DefaultIfEmpty()
                                 join u in db.Usuario on t.Userid equals u.Id into tu from u in tu.DefaultIfEmpty()
                                 where t.Ano == Ano && t.Numero == Numero && t.Seq == Seq
-                                select new { t.Seq, t.Ccusto, t.Datahora, t.Dataenvio, t.Despacho,d.Descricao, t.Userid, t.Userid2, Usuario1 = u.Nomelogin, t.Obs,t.Obsinterna });
+                                select new { t.Seq, t.Ccusto, t.Datahora, t.Dataenvio, t.Despacho, d.Descricao, t.Userid, t.Userid2, Usuario1 = u.Nomelogin, t.Obs, t.Obsinterna });
 
                     foreach (var query in reg4) {
                         Lista[i].DataEntrada = query.Datahora.ToString() == "" ? "" : DateTime.Parse(query.Datahora.ToString()).ToString("dd/MM/yyyy");
@@ -713,7 +727,7 @@ namespace GTI_Dal.Classes {
                         sFullName = string.IsNullOrEmpty(query.Usuario1) ? "" : clsSistema.Retorna_User_FullName(query.Usuario1);
                         Lista[i].Userid1 = query.Userid;
                         Lista[i].Usuario1 = sFullName;
-                        Lista[i].DespachoCodigo =query.Despacho==null?(short)0:  (short)query.Despacho;
+                        Lista[i].DespachoCodigo = query.Despacho == null ? (short)0 : (short)query.Despacho;
                         Lista[i].DespachoNome = string.IsNullOrEmpty(query.Descricao) ? "" : query.Descricao;
                         Lista[i].DataEnvio = query.Dataenvio == null ? "" : DateTime.Parse(query.Dataenvio.ToString()).ToString("dd/MM/yyyy");
                         Lista[i].Userid2 = query.Userid2;
@@ -764,7 +778,7 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public Exception Alterar_Observacao_Tramite(int Ano, int Numero, int Seq, string Observacao_Geral,string Observacao_Interna) {
+        public Exception Alterar_Observacao_Tramite(int Ano, int Numero, int Seq, string Observacao_Geral, string Observacao_Interna) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 try {
                     Tramitacao t = db.Tramitacao.First(i => i.Ano == Ano && i.Numero == Numero && i.Seq == Seq);
@@ -863,6 +877,22 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public List<ProcessoStruct> Lista_Processos_Abertos() {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+                var Sql = (from p in db.Processogti where  p.Ano>=2022 && p.Dataarquiva == null select p).ToList();
+                List<ProcessoStruct> Lista = new List<ProcessoStruct>();
+                foreach (Processogti item in Sql) {
+                    ProcessoStruct reg = new ProcessoStruct() {
+                        Numero = item.Numero,
+                        Ano = item.Ano
+                    };
+                    Lista.Add(reg);
+                }
+                return Lista;
+            }
+        }
+
         public List<ProcessoStruct> Lista_Processos(ProcessoFilter Filter) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 db.Database.CommandTimeout = 180;
@@ -917,18 +947,18 @@ namespace GTI_Dal.Classes {
                            join e in db.Processoend on new { P1 = p.Ano, P2 = p.Numero } equals new { P1 = e.Ano, P2 = e.Numprocesso } into ep from e in ep.DefaultIfEmpty()
                            join l in db.Logradouro on e.Codlogr equals l.Codlogradouro into le from l in le.DefaultIfEmpty()
                            join u in db.Centrocusto on p.Centrocusto equals u.Codigo into pu from u in pu.DefaultIfEmpty()
-                           orderby  p.Ano, p.Numero 
+                           orderby p.Ano, p.Numero
                            select new ProcessoStruct {
                                Ano = p.Ano, Numero = p.Numero, NomeCidadao = c.Nomecidadao, Assunto = a.Nome, DataEntrada = p.Dataentrada, DataCancelado = p.Datacancel,
                                DataReativacao = p.Datareativa, DataArquivado = p.Dataarquiva, DataSuspensao = p.Datasuspenso, Interno = p.Interno, Fisico = p.Fisico, LogradouroNome = l.Endereco,
                                LogradouroNumero = e.Numero, Complemento = p.Complemento, CentroCustoNome = u.Descricao, Inscricao = p.Insc, CodigoCidadao = p.Codcidadao, CodigoAssunto = p.Codassunto,
-                               CentroCusto = p.Centrocusto,LogradouroCodigo=e.Codlogr
+                               CentroCusto = p.Centrocusto, LogradouroCodigo = e.Codlogr
                            });
                 if (Filter.Ano > 0)
                     Sql = Sql.Where(c => c.Ano == Filter.Ano);
                 if (Filter.Numero > 0)
                     Sql = Sql.Where(c => c.Numero == Filter.Numero);
-                if (dalCore.IsDate( Filter.DataEntrada))
+                if (dalCore.IsDate(Filter.DataEntrada))
                     Sql = Sql.Where(c => c.DataEntrada == Filter.DataEntrada);
                 if (Filter.AssuntoCodigo > 0)
                     Sql = Sql.Where(c => c.CodigoAssunto == Filter.AssuntoCodigo);
@@ -937,7 +967,7 @@ namespace GTI_Dal.Classes {
                 if (Filter.NumEnd > 0)
                     Sql = Sql.Where(c => c.LogradouroNumero == Filter.NumEnd.ToString());
                 if (Filter.Requerente > 0) {
-                    if (Filter.Requerente<500000) {
+                    if (Filter.Requerente < 500000) {
                         Sql = Sql.Where(c => c.CentroCusto == Filter.Requerente);
                     } else {
                         Sql = Sql.Where(c => c.CodigoCidadao == Filter.Requerente);
@@ -1219,10 +1249,10 @@ namespace GTI_Dal.Classes {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 Sistema_Data clsSistema = new Sistema_Data(_connection);
                 var sql = (from t in db.Tramitacao
-                            join d in db.Despacho on t.Despacho equals d.Codigo into td from d in td.DefaultIfEmpty()
-                            join u in db.Usuario on t.Userid equals u.Id into tu from u in tu.DefaultIfEmpty()
-                            where t.Ano == Ano && t.Numero == Numero && t.Seq == Seq
-                            select new { t.Seq, t.Ccusto, t.Datahora, t.Dataenvio, t.Despacho, d.Descricao, t.Userid, t.Userid2, Usuario1 = u.Nomelogin, t.Obs, t.Obsinterna });
+                           join d in db.Despacho on t.Despacho equals d.Codigo into td from d in td.DefaultIfEmpty()
+                           join u in db.Usuario on t.Userid equals u.Id into tu from u in tu.DefaultIfEmpty()
+                           where t.Ano == Ano && t.Numero == Numero && t.Seq == Seq
+                           select new { t.Seq, t.Ccusto, t.Datahora, t.Dataenvio, t.Despacho, d.Descricao, t.Userid, t.Userid2, Usuario1 = u.Nomelogin, t.Obs, t.Obsinterna });
 
                 TramiteStruct reg = new TramiteStruct();
                 foreach (var query in sql) {
@@ -1230,7 +1260,7 @@ namespace GTI_Dal.Classes {
                     reg.HoraEntrada = query.Datahora.ToString() == "" ? "" : DateTime.Parse(query.Datahora.ToString()).ToString("hh:mm");
                     reg.Usuario1 = String.IsNullOrEmpty(query.Usuario1) ? "" : clsSistema.Retorna_User_FullName(query.Usuario1);
                     reg.Userid1 = query.Userid;
-                    reg.DespachoCodigo = query.Despacho==null?(short)0:(short)query.Despacho;
+                    reg.DespachoCodigo = query.Despacho == null ? (short)0 : (short)query.Despacho;
                     reg.DespachoNome = String.IsNullOrEmpty(query.Descricao) ? "" : query.Descricao;
                     reg.DataEnvio = query.Dataenvio == null ? "" : DateTime.Parse(query.Dataenvio.ToString()).ToString("dd/MM/yyyy");
                     reg.Userid2 = query.Userid2;
@@ -1257,7 +1287,7 @@ namespace GTI_Dal.Classes {
 
         public int Retorna_Processo_Assunto(short Ano, int Numero) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                int Sql = (from t in db.Processogti where t.Ano == Ano && t.Numero == Numero  select t.Codassunto).FirstOrDefault();
+                int Sql = (from t in db.Processogti where t.Ano == Ano && t.Numero == Numero select t.Codassunto).FirstOrDefault();
                 return Sql;
             }
         }
@@ -1279,7 +1309,7 @@ namespace GTI_Dal.Classes {
                 }
                 if (_reg.Dataentrada == null) {
                     _reg.Datacancel = DateTime.Now;
-                }                
+                }
                 return _reg;
             }
         }
@@ -1437,7 +1467,7 @@ namespace GTI_Dal.Classes {
                     }
                 }
 
-                db.Database.ExecuteSqlCommand("DELETE FROM TRAMITACAOCC WHERE ANO=@Ano AND NUMERO=@Numero", new SqlParameter("@Ano", Ano), new SqlParameter("@Numero", Numero)); 
+                db.Database.ExecuteSqlCommand("DELETE FROM TRAMITACAOCC WHERE ANO=@Ano AND NUMERO=@Numero", new SqlParameter("@Ano", Ano), new SqlParameter("@Numero", Numero));
                 int _pos = 1;
 
                 try {
@@ -1510,7 +1540,7 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public List<ProcessoStruct> Lista_Processos(int Ano, int Numero, string PartialName,string PartialEndereco,int EnderecoNumero) {
+        public List<ProcessoStruct> Lista_Processos(int Ano, int Numero, string PartialName, string PartialEndereco, int EnderecoNumero) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 db.Database.CommandTimeout = 180;
                 var Sql = (from p in db.Processogti
@@ -1528,12 +1558,12 @@ namespace GTI_Dal.Classes {
                            });
                 if (Ano > 0)
                     Sql = Sql.Where(a => a.Ano == Ano & a.Numero == Numero);
-                if(!string.IsNullOrEmpty(PartialName))
+                if (!string.IsNullOrEmpty(PartialName))
                     Sql = Sql.Where(c => c.NomeCidadao.Contains(PartialName));
                 if (!string.IsNullOrEmpty(PartialEndereco))
                     Sql = Sql.Where(c => c.LogradouroNome.Contains(PartialEndereco));
-                if (EnderecoNumero>0)
-                    Sql = Sql.Where(c => c.LogradouroNumero==EnderecoNumero.ToString());
+                if (EnderecoNumero > 0)
+                    Sql = Sql.Where(c => c.LogradouroNumero == EnderecoNumero.ToString());
 
 
                 Sql = Sql.OrderBy(m => m.Ano).ThenBy(n => n.Numero);
@@ -1583,7 +1613,9 @@ namespace GTI_Dal.Classes {
                     CentroCusto_Codigo = Reg.CentroCustoCodigo,
                     CentroCusto_Nome = Reg.CentroCustoNome,
                     Usuario1 = Reg.Usuario1,
-                    Usuario2 = Reg.Usuario2
+                    Usuario2 = Reg.Usuario2,
+                    Despacho_Codigo=Reg.DespachoCodigo,
+                    Despacho_Nome=Reg.DespachoNome
                 };
                 if (!string.IsNullOrEmpty(Reg.DataEntrada)) {
                     _reg.Data_Entrada = Convert.ToDateTime(Reg.DataEntrada);
@@ -1623,8 +1655,8 @@ namespace GTI_Dal.Classes {
                     return lt;
                 }
 
-                if(_data2 == "" && _data1 != "") {
-                    if(_row == _rows - 1) {
+                if (_data2 == "" && _data1 != "") {
+                    if (_row == _rows - 1) {
                         //3º caso, o processo foi recebido mas não enviado e esta na última linha, neste caso o processo estará na 1ª linha
                         lt.Local_Codigo = _listaTramitacao[_row].CentroCusto_Codigo;
                         lt.Local_Nome = _listaTramitacao[_row].CentroCusto_Nome;
@@ -1636,7 +1668,7 @@ namespace GTI_Dal.Classes {
                         //4º caso, o processo foi recebido mas não enviado e não esta na última linha
                         string _data3 = _listaTramitacao[_row + 1].Data_Entrada == null ? "" : _listaTramitacao[_row + 1].Data_Entrada.ToString();
                         //Verificamos se houve entrada na proxima linha
-                        if(_data3 == "") {
+                        if (_data3 == "") {
                             //Se não houve entrada na próxima linha, então o processo estará nesta linha
                             lt.Local_Codigo = _listaTramitacao[_row].CentroCusto_Codigo;
                             lt.Local_Nome = _listaTramitacao[_row].CentroCusto_Nome;
@@ -1646,9 +1678,9 @@ namespace GTI_Dal.Classes {
                             return lt;
                         } else {
                             //Iremos verificar as outras linhas até aonde não houver mais recebimento
-                            for(int t = _row;t < _rows;t++) {
+                            for (int t = _row; t < _rows; t++) {
                                 _data3 = _listaTramitacao[t].Data_Entrada == null ? "" : _listaTramitacao[t].Data_Entrada.ToString();
-                                if(_row + 1 == _rows) {
+                                if (_row + 1 == _rows) {
                                     //Se a última linha estiver recebida, então o processo estará nesta linha
                                     lt.Local_Codigo = _listaTramitacao[t].CentroCusto_Codigo;
                                     lt.Local_Nome = _listaTramitacao[t].CentroCusto_Nome;
@@ -1657,7 +1689,7 @@ namespace GTI_Dal.Classes {
                                     lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[t].Data_Entrada);
                                     return lt;
                                 } else {
-                                    if(t == _rows - 1) {
+                                    if (t == _rows - 1) {
                                         lt.Local_Codigo = _listaTramitacao[t].CentroCusto_Codigo;
                                         lt.Local_Nome = _listaTramitacao[t].CentroCusto_Nome;
                                         lt.Arquivado = false;
@@ -1666,7 +1698,7 @@ namespace GTI_Dal.Classes {
                                         return lt;
                                     } else {
                                         string _data4 = _listaTramitacao[t + 1].Data_Entrada == null ? "" : _listaTramitacao[t + 1].Data_Entrada.ToString();
-                                        if(_data4 == "") {
+                                        if (_data4 == "") {
                                             //Se a linha seguinte não estiver recebida, então o processo estará nesta linha
                                             lt.Local_Codigo = _listaTramitacao[t + 1].CentroCusto_Codigo;
                                             lt.Local_Nome = _listaTramitacao[t + 1].CentroCusto_Nome;
@@ -1681,7 +1713,7 @@ namespace GTI_Dal.Classes {
                         }
                     }
                 } else {
-                    if(_data1 == "" && _data2 == "") {
+                    if (_data1 == "" && _data2 == "") {
                         lt.Local_Codigo = _listaTramitacao[_row - 1].CentroCusto_Codigo;
                         lt.Local_Nome = _listaTramitacao[_row - 1].CentroCusto_Nome;
                         lt.Arquivado = false;
@@ -1689,8 +1721,8 @@ namespace GTI_Dal.Classes {
                         lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[_row - 1].Data_Entrada);
                         return lt;
                     } else {
-                        if(_data1 != "" && _data2 != "") {
-                            if(_row == _rows - 1) {
+                        if (_data1 != "" && _data2 != "") {
+                            if (_row == _rows - 1) {
                                 lt.Local_Codigo = _listaTramitacao[_row].CentroCusto_Codigo;
                                 lt.Local_Nome = _listaTramitacao[_row].CentroCusto_Nome;
                                 lt.Arquivado = false;
@@ -1698,15 +1730,30 @@ namespace GTI_Dal.Classes {
                                 lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[_row].Data_Entrada);
                                 return lt;
                             } else {
-                                lt.Local_Codigo = _listaTramitacao[_row + 1].CentroCusto_Codigo;
-                                lt.Local_Nome = _listaTramitacao[_row + 1].CentroCusto_Nome;
-                                lt.Arquivado = false;
-                                lt.Suspenso = false;
-                                lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[_row + 1].Data_Entrada);
-                                return lt;
+                                for (int t = _rows-1; t >-1; t--) {
+                                    if (_listaTramitacao[t].Data_Envio != null) {
+                                        lt.Local_Codigo = _listaTramitacao[t].CentroCusto_Codigo;
+                                        lt.Local_Nome = _listaTramitacao[t ].CentroCusto_Nome;
+                                        lt.Arquivado = false;
+                                        lt.Suspenso = false;
+                                        lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[t ].Data_Entrada);
+                                        return lt;
+                                    } else {
+                                        if (_listaTramitacao[t].Despacho_Codigo >0) {
+                                            if (_listaTramitacao[t].Despacho_Nome.Contains("ARQUIVADO")){
+                                                lt.Local_Codigo = _listaTramitacao[t].CentroCusto_Codigo;
+                                                lt.Local_Nome = _listaTramitacao[t].CentroCusto_Nome;
+                                                lt.Arquivado = true;
+                                                lt.Suspenso = false;
+                                                lt.Data_Evento = Convert.ToDateTime(_listaTramitacao[t].Data_Entrada);
+                                                return lt;
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
-                    } 
+                    }
                 }
 
             }
@@ -1720,8 +1767,8 @@ namespace GTI_Dal.Classes {
                 db.Database.CommandTimeout = 180;
 
                 var Sql = (from p in db.Processogti
-                           join t in db.Tramitacao on new { p1 = p.Ano, p2 = p.Numero } equals new {p1=t.Ano,p2=t.Numero } into tp from t in tp.DefaultIfEmpty()
-                           where p.Dataarquiva==null && p.Datacancel==null && t.Ccusto==Local  orderby new { p.Ano ,p.Numero} select p).ToList();
+                           join t in db.Tramitacao on new { p1 = p.Ano, p2 = p.Numero } equals new { p1 = t.Ano, p2 = t.Numero } into tp from t in tp.DefaultIfEmpty()
+                           where p.Dataarquiva == null && p.Datacancel == null && t.Ccusto == Local orderby new { p.Ano, p.Numero } select p).ToList();
                 return Sql;
             }
         }
@@ -1754,7 +1801,7 @@ namespace GTI_Dal.Classes {
         public Processo_web Retorna_Processo_Web(string guid) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 db.Database.CommandTimeout = 180;
-                var Sql = (from p in db.Processo_Web where p.Guid == guid select p).FirstOrDefault(); 
+                var Sql = (from p in db.Processo_Web where p.Guid == guid select p).FirstOrDefault();
                 return Sql;
             }
         }
@@ -1766,22 +1813,22 @@ namespace GTI_Dal.Classes {
             }
         }
 
-        public List<ProcessoDocStruct> Lista_Processo_Documento(int ano,int numero) {
+        public List<ProcessoDocStruct> Lista_Processo_Documento(int ano, int numero) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var Sql = from p in db.Processodoc
-                          join d in db.Documento  on p.Coddoc equals d.Codigo into pd from d in pd.DefaultIfEmpty()
-                          where p.Ano==ano && p.Numero==numero
-                          orderby d.Nome select new {Codigo=p.Coddoc,Nome=d.Nome,Data=p.Data };
+                          join d in db.Documento on p.Coddoc equals d.Codigo into pd from d in pd.DefaultIfEmpty()
+                          where p.Ano == ano && p.Numero == numero
+                          orderby d.Nome select new { Codigo = p.Coddoc, Nome = d.Nome, Data = p.Data };
 
                 List<ProcessoDocStruct> Lista = new List<ProcessoDocStruct>();
 
                 foreach (var item in Sql) {
                     ProcessoDocStruct reg = new ProcessoDocStruct() {
-                        CodigoDocumento=item.Codigo,
-                        NomeDocumento=item.Nome
+                        CodigoDocumento = item.Codigo,
+                        NomeDocumento = item.Nome
                     };
                     if (item.Data != null)
-                        reg.DataEntrega =item.Data;
+                        reg.DataEntrega = item.Data;
                     Lista.Add(reg);
                 }
 
@@ -1802,7 +1849,7 @@ namespace GTI_Dal.Classes {
                     ProcessoEndStruct reg = new ProcessoEndStruct() {
                         CodigoLogradouro = item.Codigo,
                         NomeLogradouro = item.Nome,
-                        Numero=item.Numero
+                        Numero = item.Numero
                     };
                     Lista.Add(reg);
                 }

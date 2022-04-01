@@ -100,7 +100,7 @@ namespace GTI_Mvc.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginViewModel model) {
-            string sLogin = model.Usuario, sNewPwd = model.Senha, sOldPwd, sOldPwd2, sName;
+            string sLogin = model.Usuario.Trim(), sNewPwd = model.Senha, sOldPwd, sOldPwd2, sName;
             LoginViewModel loginViewModel = new LoginViewModel();
 
             Sistema_bll sistemaRepository = new Sistema_bll(_connection);

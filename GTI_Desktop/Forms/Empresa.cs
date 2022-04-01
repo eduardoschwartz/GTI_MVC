@@ -235,8 +235,8 @@ namespace GTI_Desktop.Forms {
             //******************************
             //TODO Verificar número de processo de abertura/encerramento
 
-            Single? _area = Area.Text == "" ? (Single?)null : Convert.ToSingle(Area.Text);
-            Single? _capital_social = CapitalSocial.Text == "" ? (Single?)null : Convert.ToSingle(CapitalSocial.Text);
+            decimal? _area = Area.Text == "" ? (decimal?)null : Convert.ToDecimal(Area.Text);
+            decimal? _capital_social = CapitalSocial.Text == "" ? (decimal?)null : Convert.ToDecimal(CapitalSocial.Text);
             int? _codigo_atividade = Atividade_Principal.Tag.ToString() == "" ? (int?)null : Convert.ToInt32(Atividade_Principal.Tag.ToString());
             short? _codigo_bairro = Bairro.Tag.ToString() == "" ? (short?)null : Convert.ToInt16(Bairro.Tag.ToString());
             short? _codigo_cidade = Cidade.Tag.ToString() == "" ? (short?)null : Convert.ToInt16(Cidade.Tag.ToString());

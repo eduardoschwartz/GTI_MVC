@@ -200,6 +200,8 @@ namespace GTI_Models.Models {
         public string Usuario1 { get; set; }
         public DateTime? Data_Envio { get; set; }
         public string Usuario2 { get; set; }
+        public string Despacho_Nome { get; set; }
+        public int Despacho_Codigo { get; set; }
     }
 
 

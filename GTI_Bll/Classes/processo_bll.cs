@@ -633,6 +633,12 @@ namespace GTI_Bll.Classes {
             return obj.Verificar_Processo(Ano, Numero);
         }
 
+        public Exception Arquivar_Processo(int Ano, int Numero, DateTime Data_Arquivamento) {
+            Processo_Data obj = new Processo_Data(_connection);
+            Exception ex = obj.Arquivar_Processo(Ano,Numero,Data_Arquivamento);
+            return ex;
+        }
+
         public List<Processogti> Lista_Processos_CCusto(int Local) {
             Processo_Data obj = new Processo_Data(_connection);
             return obj.Lista_Processos_CCusto(Local);
@@ -672,6 +678,11 @@ namespace GTI_Bll.Classes {
         public Exception Alterar_Processo_Web(Processogti reg) {
             Processo_Data obj = new Processo_Data(_connection);
             return obj.Alterar_Processo_Web(reg);
+        }
+
+        public List<ProcessoStruct> Lista_Processos_Abertos() {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Lista_Processos_Abertos();
         }
 
     }

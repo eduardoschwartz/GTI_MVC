@@ -109,7 +109,7 @@ namespace GTI_Mvc.Controllers {
                 _compl = _endProp.Complemento == null ? "" : " " + _endProp.Complemento;
                 model.Endereco_Prop = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _compl + " - " + _endProp.Nome_bairro.ToString() + " - " + _endProp.Nome_cidade + "/" + _endProp.Nome_uf + " Cep:" + _endProp.Cep;
 
-                if (model.Codigo_cidadao2 > 0) {
+                if (model.Codigo_cidadao2 > 500000) {
                     _endProp = sistemaRepository.Contribuinte_Header(model.Codigo_cidadao2);
                     _compl = _endProp.Complemento == null ? "" : " " + _endProp.Complemento;
                     model.Endereco_prop2 = _endProp.Endereco + ", " + _endProp.Numero.ToString() + _compl + " - " + _endProp.Nome_bairro.ToString() + " - " + _endProp.Nome_cidade + "/" + _endProp.Nome_uf + " Cep:" + _endProp.Cep;
