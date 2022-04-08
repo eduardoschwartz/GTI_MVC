@@ -245,6 +245,7 @@
     <Compile Include="Models\rodo_empresa.cs" />
     <Compile Include="Models\Rodo_uso_plataforma.cs" />
     <Compile Include="Models\rodo_uso_plataforma_user.cs" />
+    <Compile Include="Models\Secretaria.cs" />
     <Compile Include="Models\security_event.cs" />
     <Compile Include="Models\segunda_via_web.cs" />
     <Compile Include="Models\serasa.cs" />

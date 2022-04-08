@@ -81,6 +81,7 @@
             this.CadastroTributosMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.DividaAtivaMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.CartaCobrancaMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.listaDeDevedoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BancosMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.RegistroBancarioMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.ProtocoloMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -136,7 +137,7 @@
             this.Dv2Option = new System.Windows.Forms.RadioButton();
             this.Dv1Option = new System.Windows.Forms.RadioButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.listaDeDevedoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ProcessosEmailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BarStatus.SuspendLayout();
             this.MenuBarStrip.SuspendLayout();
             this.TopBarToolStrip.SuspendLayout();
@@ -546,7 +547,7 @@
             this.CadastroLancamentoMenu,
             this.CadastroTributosMenu});
             this.TributarioTabelasMenu.Name = "TributarioTabelasMenu";
-            this.TributarioTabelasMenu.Size = new System.Drawing.Size(180, 22);
+            this.TributarioTabelasMenu.Size = new System.Drawing.Size(137, 22);
             this.TributarioTabelasMenu.Text = "Tabelas";
             // 
             // CadastroLancamentoMenu
@@ -569,22 +570,29 @@
             this.CartaCobrancaMenu,
             this.listaDeDevedoresToolStripMenuItem});
             this.DividaAtivaMenu.Name = "DividaAtivaMenu";
-            this.DividaAtivaMenu.Size = new System.Drawing.Size(180, 22);
+            this.DividaAtivaMenu.Size = new System.Drawing.Size(137, 22);
             this.DividaAtivaMenu.Text = "Divida Ativa";
             // 
             // CartaCobrancaMenu
             // 
             this.CartaCobrancaMenu.Name = "CartaCobrancaMenu";
-            this.CartaCobrancaMenu.Size = new System.Drawing.Size(180, 22);
+            this.CartaCobrancaMenu.Size = new System.Drawing.Size(172, 22);
             this.CartaCobrancaMenu.Text = "Carta de cobrança";
             this.CartaCobrancaMenu.Click += new System.EventHandler(this.CartaCobrancaMenu_Click);
+            // 
+            // listaDeDevedoresToolStripMenuItem
+            // 
+            this.listaDeDevedoresToolStripMenuItem.Name = "listaDeDevedoresToolStripMenuItem";
+            this.listaDeDevedoresToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.listaDeDevedoresToolStripMenuItem.Text = "Lista de Devedores";
+            this.listaDeDevedoresToolStripMenuItem.Click += new System.EventHandler(this.listaDeDevedoresToolStripMenuItem_Click);
             // 
             // BancosMenu
             // 
             this.BancosMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.RegistroBancarioMenu});
             this.BancosMenu.Name = "BancosMenu";
-            this.BancosMenu.Size = new System.Drawing.Size(180, 22);
+            this.BancosMenu.Size = new System.Drawing.Size(137, 22);
             this.BancosMenu.Text = "Bancos";
             // 
             // RegistroBancarioMenu
@@ -599,7 +607,8 @@
             this.ProtocoloMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TabelaProtocoloMenu,
             this.ControleProcessoMenu,
-            this.RelatorioProtocoloMenu});
+            this.RelatorioProtocoloMenu,
+            this.ProcessosEmailToolStripMenuItem});
             this.ProtocoloMenu.Name = "ProtocoloMenu";
             this.ProtocoloMenu.Size = new System.Drawing.Size(71, 20);
             this.ProtocoloMenu.Text = "Protocolo";
@@ -1088,12 +1097,12 @@
             this.Dv1Option.UseVisualStyleBackColor = false;
             this.Dv1Option.CheckedChanged += new System.EventHandler(this.OptDv1_CheckedChanged);
             // 
-            // listaDeDevedoresToolStripMenuItem
+            // ProcessosEmailToolStripMenuItem
             // 
-            this.listaDeDevedoresToolStripMenuItem.Name = "listaDeDevedoresToolStripMenuItem";
-            this.listaDeDevedoresToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.listaDeDevedoresToolStripMenuItem.Text = "Lista de Devedores";
-            this.listaDeDevedoresToolStripMenuItem.Click += new System.EventHandler(this.listaDeDevedoresToolStripMenuItem_Click);
+            this.ProcessosEmailToolStripMenuItem.Name = "ProcessosEmailToolStripMenuItem";
+            this.ProcessosEmailToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.ProcessosEmailToolStripMenuItem.Text = "Processos por email";
+            this.ProcessosEmailToolStripMenuItem.Click += new System.EventHandler(this.ProcessosEmailToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -1235,6 +1244,7 @@
         private System.Windows.Forms.ToolStripMenuItem localEmQueUmProcessoSeEncontraToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem processosQueEstãoUmCentroDeCustosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem listaDeDevedoresToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ProcessosEmailToolStripMenuItem;
     }
 }
 

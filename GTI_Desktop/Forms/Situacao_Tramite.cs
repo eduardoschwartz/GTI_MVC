@@ -50,8 +50,8 @@ namespace GTI_Desktop.Forms {
             Local_Tramite lt= processoRepository.Verificar_Processo(Ano,Numero);
             DateTime _data = lt.Data_Evento;
             if(_data == DateTime.MinValue) {
-                Processogti _proc = processoRepository.Retorna_ProcessoGti(Ano, Numero);
-                _data = _proc.Dataentrada;
+                ProcessoStruct _proc = processoRepository.Retorna_ProcessoGti(Ano, Numero);
+                _data = Convert.ToDateTime(_proc.DataEntrada);
             }
 
             LocalCodigoText.Text = lt.Local_Codigo.ToString();

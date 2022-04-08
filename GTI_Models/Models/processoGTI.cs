@@ -208,11 +208,21 @@ namespace GTI_Models.Models {
     public class Local_Tramite {
         public short Ano { get; set; }
         public int Numero { get; set; }
+        public int Secretaria_Codigo { get; set; }
+        public string Secretaria_Nome { get; set; }
         public int Local_Codigo { get; set; }
         public string Local_Nome { get; set; }
         public bool Arquivado { get; set; }
         public bool Suspenso { get; set; }
         public DateTime Data_Evento { get; set; }
+        public DateTime Data_Entrada { get; set; }
+        public int Dias { get; set; }
+        public string Assunto_Nome { get; set; }
+    }
+
+    public class ProcessoAnoNumero {
+        public short Ano { get; set; }
+        public int Numero { get; set; }
     }
 
 

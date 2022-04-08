@@ -231,5 +231,6 @@ namespace GTI_Dal {
         public DbSet<Notificacao_habitese> Notificacao_Habitese { get; set; }
         public DbSet<Auto_infracao_habitese> Auto_Infracao_Habitese { get; set; }
         public DbSet<Imunidade_Issqn> Imunidade_Issqn { get; set; }
+        public DbSet<Secretaria> Secretaria { get; set; }
     }
 }

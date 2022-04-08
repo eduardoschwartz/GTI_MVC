@@ -623,7 +623,7 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Processos( Ano,Numero,  PartialName,PartialEndereco,EnderecoNumero);
         }
 
-        public Processogti Retorna_ProcessoGti(short Ano, int Numero) {
+        public ProcessoStruct Retorna_ProcessoGti(short Ano, int Numero) {
             Processo_Data obj = new Processo_Data(_connection);
             return obj.Retorna_ProcessoGti(Ano, Numero);
         }
@@ -683,6 +683,26 @@ namespace GTI_Bll.Classes {
         public List<ProcessoStruct> Lista_Processos_Abertos() {
             Processo_Data obj = new Processo_Data(_connection);
             return obj.Lista_Processos_Abertos();
+        }
+
+        public  Secretaria Retorna_Secretaria(int CodigoCC) {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Retorna_Secretaria(CodigoCC);
+        }
+
+        public List<Secretaria> Lista_Secretaria() {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Lista_Secretaria();
+        }
+
+        public Tuple<short, string> Retorna_Vinculo_Top_CentroCusto(short centro_custo) {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Retorna_Vinculo_Top_CentroCusto(centro_custo);
+        }
+
+        public List<ProcessoAnoNumero> Lista_Processos_Atraso(DateTime Data_Inicio, DateTime Data_Final) { 
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Lista_Processos_Atraso(Data_Inicio,Data_Final);
         }
 
     }

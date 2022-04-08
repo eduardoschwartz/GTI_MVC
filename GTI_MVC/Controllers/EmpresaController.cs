@@ -883,13 +883,13 @@ namespace GTI_Mvc.Controllers {
                     if (_qtde > 0) {
                         ViewBag.Result = "A taxa de licença não esta paga, favor dirigir-se à Prefeitura para regularizar.";
                         return View(certidaoViewModel);
+
+                    } else {
+                        if (empresa.Endereco_codigo == 123 && empresa.Numero == 146) {
+                            certidaoViewModel.ErrorMessage = "O endereço desta empresa não permite a emissão de alvará automático.";
+                            return View(certidaoViewModel);
+                        }
                     }
-                    //} else {
-                    //    if (empresa.Endereco_codigo == 123 && empresa.Numero == 146) {
-                    //        certidaoViewModel.ErrorMessage = "O endereço desta empresa não permite a emissão de alvará automático.";
-                    //        return View(certidaoViewModel);
-                    //    }
-                    //}
                 }
 
 
