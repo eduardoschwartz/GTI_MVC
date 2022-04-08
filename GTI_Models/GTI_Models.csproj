@@ -245,7 +245,7 @@
     <Compile Include="Models\rodo_empresa.cs" />
     <Compile Include="Models\Rodo_uso_plataforma.cs" />
     <Compile Include="Models\rodo_uso_plataforma_user.cs" />
-    <Compile Include="Models\Secretaria.cs" />
+    <Compile Include="Models\secretaria.cs" />
     <Compile Include="Models\security_event.cs" />
     <Compile Include="Models\segunda_via_web.cs" />
     <Compile Include="Models\serasa.cs" />
@@ -317,6 +317,7 @@
     <Compile Include="ReportModels\Imovel_Detalhe.cs" />
     <Compile Include="ReportModels\NotificacaoIssReport.cs" />
     <Compile Include="ReportModels\UsoPlataformaReport.cs" />
+    <Compile Include="Models\secretaria_processo_remessa.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
