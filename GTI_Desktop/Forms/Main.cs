@@ -1014,17 +1014,18 @@ namespace GTI_Desktop.Forms
 
         private void ProcessosEmailToolStripMenuItem_Click(object sender, EventArgs e) {
             gtiCore.Ocupado(this);
-            var formToShow = Application.OpenForms.Cast<Form>().FirstOrDefault(c => c is Forms.Processo_Email);
+            var formToShow = Application.OpenForms.Cast<Form>().FirstOrDefault(c => c is Processos_Email);
             if (formToShow != null) {
                 formToShow.Show();
             } else {
-                Processo_Email f1 = new Processo_Email {
+                Processos_Email f1 = new Processos_Email {
                     Tag = "Menu",
                     MdiParent = this
                 };
                 f1.Show();
             }
             gtiCore.Liberado(this);
+
         }
 
         //private void FillBackgroundImage(bool bTeste) {

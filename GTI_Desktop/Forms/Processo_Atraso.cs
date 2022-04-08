@@ -19,8 +19,6 @@ namespace GTI_Desktop.Forms {
         }
 
         private void GerarButton_Click(object sender, EventArgs e) {
-            LoadNew();
-            return;
             Processo_bll processo_Class = new Processo_bll(_connection);
             int _ano = 0, _numero = 0, _pos = 1;
             string _numero_processo,_assunto,_requerente,_data_entrada;
@@ -30,8 +28,8 @@ namespace GTI_Desktop.Forms {
             gtiCore.Ocupado(this);
 
             ProcessoFilter Reg = new ProcessoFilter();
-            Reg.AnoIni = 2010;
-            Reg.AnoFim = 2022;
+            Reg.AnoIni = 2017;
+            Reg.AnoFim = 2017;
             Reg.Arquivado = false;
             List<ProcessoStruct>ListaProcesso= processo_Class.Lista_Processos(Reg);
             int _total = ListaProcesso.Count;
@@ -179,43 +177,6 @@ namespace GTI_Desktop.Forms {
                 }
             }
         }
-
-        private void LoadNew() {
-            Processo_bll processoRepository = new Processo_bll(_connection);
-            gtiCore.Ocupado(this);
-
-            if (aDatResult == null) aDatResult = new List<ArrayList>();
-            aDatResult.Clear();
-            List<ProcessoStruct> Lista = processoRepository.Lista_Processos_Abertos();
-
-            foreach (ProcessoStruct item in Lista) {
-                Local_Tramite lt = processoRepository.Verificar_Processo((short)item.Ano, item.Numero);
-                if (!lt.Arquivado) {
-                    ArrayList itemlv = new ArrayList();
-                    itemlv.Add(item.Ano.ToString());
-                    itemlv.Add(item.Numero);
-                    itemlv.Add("");
-                    itemlv.Add("");
-                    itemlv.Add("");
-                    itemlv.Add("");
-                    itemlv.Add("");
-                    itemlv.Add("");
-                    itemlv.Add("");
-                    aDatResult.Add(itemlv);
-                } else {
-                    if (lt.Data_Evento != null) {
-                        Exception ex = processoRepository.Arquivar_Processo(item.Ano, item.Numero, lt.Data_Evento);
-                    }
-                }
-            }
-
-            MainListView.BeginUpdate();
-            MainListView.VirtualListSize = aDatResult.Count;
-            MainListView.EndUpdate();
-            gtiCore.Liberado(this);
-
-        }
-
 
 
     }

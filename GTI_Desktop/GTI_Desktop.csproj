@@ -65,17 +65,33 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine" />
+    <Reference Include="CrystalDecisions.CrystalReports.Engine">
+      <HintPath>..\..\..\program files (x86)\sap businessobjects\crystal reports for .net framework 4.0\common\sap businessobjects enterprise xi 4.0\win32_x86\dotnet\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+    </Reference>
     <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\program files (x86)\sap businessobjects\crystal reports for .net framework 4.0\common\sap businessobjects enterprise xi 4.0\win32_x86\dotnet\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource" />
+    <Reference Include="CrystalDecisions.ReportSource">
+      <HintPath>..\..\..\program files (x86)\sap businessobjects\crystal reports for .net framework 4.0\common\sap businessobjects enterprise xi 4.0\win32_x86\dotnet\CrystalDecisions.ReportSource.dll</HintPath>
     </Reference>
     <Reference Include="CrystalDecisions.ReportSource, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\program files (x86)\sap businessobjects\crystal reports for .net framework 4.0\common\sap businessobjects enterprise xi 4.0\win32_x86\dotnet\CrystalDecisions.ReportSource.dll</HintPath>
     </Reference>
+    <Reference Include="CrystalDecisions.Shared" />
+    <Reference Include="CrystalDecisions.Shared">
+      <HintPath>..\..\..\program files (x86)\sap businessobjects\crystal reports for .net framework 4.0\common\sap businessobjects enterprise xi 4.0\win32_x86\dotnet\CrystalDecisions.Shared.dll</HintPath>
+    </Reference>
     <Reference Include="CrystalDecisions.Shared, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\program files (x86)\sap businessobjects\crystal reports for .net framework 4.0\common\sap businessobjects enterprise xi 4.0\win32_x86\dotnet\CrystalDecisions.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Windows.Forms" />
+    <Reference Include="CrystalDecisions.Windows.Forms">
+      <HintPath>..\..\..\program files (x86)\sap businessobjects\crystal reports for .net framework 4.0\common\sap businessobjects enterprise xi 4.0\win32_x86\dotnet\CrystalDecisions.Windows.Forms.dll</HintPath>
     </Reference>
     <Reference Include="CrystalDecisions.Windows.Forms, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -434,6 +450,12 @@
     <Compile Include="Forms\ProcessoEmCCusto.Designer.cs">
       <DependentUpon>ProcessoEmCCusto.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Processos_Email.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Processos_Email.Designer.cs">
+      <DependentUpon>Processos_Email.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Processo_Assunto.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -457,12 +479,6 @@
     </Compile>
     <Compile Include="Forms\Processo_Documento.designer.cs">
       <DependentUpon>Processo_Documento.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Processo_Email.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Processo_Email.Designer.cs">
-      <DependentUpon>Processo_Email.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Processo_Lista.cs">
       <SubType>Form</SubType>
@@ -565,6 +581,12 @@
     </Compile>
     <Compile Include="Forms\ZoomBox.designer.cs">
       <DependentUpon>ZoomBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Processo_Email.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Processo_Email.designer.cs">
+      <DependentUpon>Processo_Email.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -784,6 +806,9 @@
     <EmbeddedResource Include="Forms\ProcessoEmCCusto.resx">
       <DependentUpon>ProcessoEmCCusto.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Processos_Email.resx">
+      <DependentUpon>Processos_Email.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Processo_Assunto.resx">
       <DependentUpon>Processo_Assunto.cs</DependentUpon>
     </EmbeddedResource>
@@ -795,9 +820,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Processo_Documento.resx">
       <DependentUpon>Processo_Documento.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Processo_Email.resx">
-      <DependentUpon>Processo_Email.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Processo_Lista.resx">
       <DependentUpon>Processo_Lista.cs</DependentUpon>
@@ -849,6 +871,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ZoomBox.resx">
       <DependentUpon>ZoomBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Processo_Email.resx">
+      <DependentUpon>Processo_Email.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

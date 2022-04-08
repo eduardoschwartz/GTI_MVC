@@ -51,7 +51,7 @@ namespace GTI_Desktop.Forms {
             DateTime _data = lt.Data_Evento;
             if(_data == DateTime.MinValue) {
                 ProcessoStruct _proc = processoRepository.Retorna_ProcessoGti(Ano, Numero);
-                _data = Convert.ToDateTime(_proc.DataEntrada);
+                _data =Convert.ToDateTime( _proc.DataEntrada);
             }
 
             LocalCodigoText.Text = lt.Local_Codigo.ToString();
@@ -59,8 +59,7 @@ namespace GTI_Desktop.Forms {
             ArquivadoText.Text = lt.Arquivado ? "Sim" : "Não";
             SuspensoText.Text = lt.Suspenso ? "Sim" : "Não";
             if(lt.Arquivado)
-                LocalNomeText.Text = lt.Local_Nome;
-//            LocalNomeText.Text = "PROCESSO ARQUIVADO";
+                LocalNomeText.Text = "PROCESSO ARQUIVADO";
             else {
                 if (lt.Suspenso) {
                     LocalNomeText.Text = "PROCESSO SUSPENSO/CANCELADO";
