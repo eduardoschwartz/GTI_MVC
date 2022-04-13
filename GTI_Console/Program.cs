@@ -20,8 +20,8 @@ namespace GTI_Console {
         static void Main(string[] args) {
             string _connection = gtiCore.Connection_Name();
             string _path = "C:\\WORK\\GTI\\PROCESSO_EMAIL\\" + DateTime.Now.Year.ToString();
-            DateTime Data1 = Convert.ToDateTime("01/10/2021");
-            DateTime Data2 = Convert.ToDateTime("03/10/2021");
+            DateTime Data1 = Convert.ToDateTime("01/01/2020");
+            DateTime Data2 = Convert.ToDateTime(DateTime.Now.Date);
             Processo_bll processoRepository = new Processo_bll(_connection);
 
             Print("Buscando Processos: ");
@@ -95,11 +95,13 @@ Proximo:;
             BreakLine();
             Print("Secretarias encontradas: " + listaSecretariaRel.Count.ToString());
             BreakLine();
+            Console.WriteLine("ENVIANDO E-MAILS PARA AS SECRETARIAS");
+            Console.WriteLine("------------------------------------");
 
-            
+
             for (int z = 0; z < listaSecretariaRel.Count; z++) {
                 Secretaria _secretaria = processoRepository.Retorna_Secretaria(listaSecretariaRel[z]);
-                Console.WriteLine("SECRETARIA: " + _secretaria.Nome);
+                Console.WriteLine( _secretaria.Nome);
                 int _qtde = 0;
                 short _seq = processoRepository.Retorna_Seq_Processo_Secretaria_Remessa(listaSecretariaRel[z]);
                 string _filename =  "REL" + listaSecretariaRel[z].ToString("000") + _seq.ToString("00") + ".TXT";
@@ -107,8 +109,6 @@ Proximo:;
                 StreamWriter sw = new StreamWriter(_fullpath);
                 sw.WriteLine("RELATÓRIO DE PROCESSOS QUE SE ENCONTRAM A MAIS DE 5 DIAS NA SECRETARIA");
                 sw.WriteLine("");
-                sw.WriteLine("Enviando E-mail para as secretarias");
-                sw.WriteLine("-----------------------------------");
                 sw.WriteLine( _secretaria.Nome);
                 sw.WriteLine("");
                 
