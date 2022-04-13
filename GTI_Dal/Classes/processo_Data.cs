@@ -2221,5 +2221,29 @@ namespace GTI_Dal.Classes {
             return lt;
         }
 
+        public short Retorna_Seq_Processo_Secretaria_Remessa(short Codigo) {
+            DateTime _data = DateTime.Now.Date;
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                short maxSeq = 1;
+                var ret = (from c in db.Secretaria_Processo_Remessa where c.Codigo==Codigo && c.Data == _data orderby c.Seq descending select c).FirstOrDefault();
+                if (ret != null) {
+                     maxSeq = Convert.ToInt16(ret.Seq + 1);
+                }
+                return maxSeq;
+            }
+        }
+
+        public Exception Incluir_Secretaria_Processo_Remessa(Secretaria_processo_remessa reg) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                db.Secretaria_Processo_Remessa.Add(reg);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
     }
 }

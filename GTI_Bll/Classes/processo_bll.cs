@@ -705,5 +705,16 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Processos_Atraso(Data_Inicio,Data_Final);
         }
 
+        public short Retorna_Seq_Processo_Secretaria_Remessa(short Codigo) {
+            Processo_Data obj = new Processo_Data(_connection);
+            return obj.Retorna_Seq_Processo_Secretaria_Remessa(Codigo);
+        }
+
+        public Exception Incluir_Secretaria_Processo_Remessa(Secretaria_processo_remessa reg) {
+            Processo_Data obj = new Processo_Data(_connection);
+            Exception ex = obj.Incluir_Secretaria_Processo_Remessa(reg);
+            return ex;
+        }
+
     }
 }

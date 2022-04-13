@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 
 namespace GTI_Console {
     class Program {
@@ -30,7 +32,7 @@ namespace GTI_Console {
             Print("Localizados " + _total.ToString() + " Processos.");
             BreakLine();
 
-            List<int> listaSecretariaRel = new List<int>();
+            List<short> listaSecretariaRel = new List<short>();
             int _pos = 0;
             List<Local_Tramite> _listaProcessos = new List<Local_Tramite>();
             
@@ -54,7 +56,7 @@ namespace GTI_Console {
                     string _assunto = lt.Assunto_Nome;
                     int NumDias = lt.Dias;
 
-                    if (NumDias < 5) goto Proximo;
+                    if (NumDias < 6) goto Proximo;
 
                     if (!Arquivado && !Suspenso) {
                         Tuple<short, string> Secretaria = processoRepository.Retorna_Vinculo_Top_CentroCusto((short)Local_Codigo);
@@ -82,7 +84,7 @@ namespace GTI_Console {
                             }
                         }
                         if (!_find)
-                            listaSecretariaRel.Add(secretaria_codigo);
+                            listaSecretariaRel.Add((short)secretaria_codigo);
 
                     }
 Proximo:;
@@ -94,18 +96,73 @@ Proximo:;
             Print("Secretarias encontradas: " + listaSecretariaRel.Count.ToString());
             BreakLine();
 
-            short _seq = 1;
+            
             for (int z = 0; z < listaSecretariaRel.Count; z++) {
+                Secretaria _secretaria = processoRepository.Retorna_Secretaria(listaSecretariaRel[z]);
+                Console.WriteLine("SECRETARIA: " + _secretaria.Nome);
+                int _qtde = 0;
+                short _seq = processoRepository.Retorna_Seq_Processo_Secretaria_Remessa(listaSecretariaRel[z]);
                 string _filename =  "REL" + listaSecretariaRel[z].ToString("000") + _seq.ToString("00") + ".TXT";
                 string _fullpath = Path.Combine(_path, _filename);
                 StreamWriter sw = new StreamWriter(_fullpath);
-                sw.WriteLine("Hello World!!" + listaSecretariaRel[z].ToString());
+                sw.WriteLine("RELATÓRIO DE PROCESSOS QUE SE ENCONTRAM A MAIS DE 5 DIAS NA SECRETARIA");
+                sw.WriteLine("");
+                sw.WriteLine("Enviando E-mail para as secretarias");
+                sw.WriteLine("-----------------------------------");
+                sw.WriteLine( _secretaria.Nome);
+                sw.WriteLine("");
+                
+                sw.WriteLine("Nº PROCESSO  LOCAL ONDE O PROCESSO DE ENCONTRA        ASSUNTO DO PROCESSO                      DIAS");
+                sw.WriteLine("===================================================================================================");
+                sw.WriteLine("");
+                foreach (Local_Tramite item in _listaProcessos.Where(p=>p.Secretaria_Codigo==listaSecretariaRel[z]).OrderBy(h=>h.Local_Nome).ThenByDescending(m=>m.Dias)) {
+                    string _processo = item.Numero.ToString("00000") + "-" + processoRepository.DvProcesso(item.Numero) + "/" + item.Ano.ToString();
+                    sw.WriteLine(_processo + " " +  gtiCore.TruncateTo( item.Local_Nome.PadRight(40),40) + " " + gtiCore.TruncateTo(item.Assunto_Nome.PadRight(40), 40) + "  " + item.Dias.ToString("000") );
+                    _qtde++;
+                }
+
+                sw.WriteLine("");
+                sw.WriteLine("===============================");
+                sw.WriteLine("QTDE DE PROCESSOS ==> " + _qtde.ToString());
+                sw.WriteLine("RELATÓRIO GERADO EM " + DateTime.Now);
+                sw.WriteLine("GESTÃO DE TIBUTAÇÃO MUNICIPAL INTEGRADA (G.T.I.)");
+
                 sw.Close();
+
+                //Enviar Email
+                MailAddress from = new MailAddress("gti@jaboticabal.sp.gov.br", "Sistema GTI");
+                MailAddress to = new MailAddress("eduardo.schwartz@gmail.com", "Eduardo");
+                using (MailMessage emailMessage = new MailMessage()) {
+                    string Body = File.ReadAllText("C:\\WORK\\GTI\\PROCESSO_EMAIL\\AccessTemplate.htm");
+                    Body = Body.Replace("#$$$#", _secretaria.Nome);
+                    emailMessage.From = from;
+                    emailMessage.To.Add(to);
+                    emailMessage.Attachments.Add(new Attachment(_fullpath));
+                    emailMessage.Subject = "Relatório dos processos quem encontram-se na secretaria a mais de 5 dias";
+                    emailMessage.Body = Body;
+                    emailMessage.IsBodyHtml = true;
+
+                    using (SmtpClient MailClient = new SmtpClient("smtp.gmail.com", 587)) {
+                        MailClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        MailClient.EnableSsl = true;
+                        MailClient.Credentials = new NetworkCredential("gti.jaboticabal@gmail.com", "esnssgzxxjcdjrpk");
+                        MailClient.Send(emailMessage);
+                    }
+                }
+
+
+                //Gravar remessa na tabela
+                Secretaria_processo_remessa reg = new Secretaria_processo_remessa() {
+                    Codigo= listaSecretariaRel[z],
+                    Data=DateTime.Now.Date,
+                    Seq=_seq,
+                    Qtde=_qtde
+                };
+                Exception ex = processoRepository.Incluir_Secretaria_Processo_Remessa(reg);
             }
 
-
-
-
+            Console.WriteLine("");
+            Console.WriteLine("Processo finalizado, aperte uma tecla para finalizar");
             Console.ReadLine();
         }
 
