@@ -20,8 +20,11 @@ namespace GTI_Console {
         static void Main(string[] args) {
             string _connection = gtiCore.Connection_Name();
             string _path = "C:\\WORK\\GTI\\PROCESSO_EMAIL\\" + DateTime.Now.Year.ToString();
-            DateTime Data1 = Convert.ToDateTime("01/01/2020");
+            //DateTime Data1 = Convert.ToDateTime("01/10/2021");
+            //DateTime Data2 = Convert.ToDateTime("04/10/2021");
+            DateTime Data1 = Convert.ToDateTime("01/01/2021");
             DateTime Data2 = Convert.ToDateTime(DateTime.Now.Date);
+
             Processo_bll processoRepository = new Processo_bll(_connection);
 
             Print("Buscando Processos: ");
