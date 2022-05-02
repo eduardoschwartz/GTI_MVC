@@ -1735,7 +1735,11 @@ namespace GTI_Mvc.Controllers {
             List<string> ListaPlaca = empresaRepository.Lista_Placas(_codigo);
             string _placa = "";
             if (ListaPlaca.Count > 0) {
-                _placa = ListaPlaca[0];
+                foreach (string itemp in ListaPlaca) {
+                    _placa += itemp + ", ";
+                }
+                _placa = _placa.Substring(0, _placa.Length - 2);
+                //_placa = ListaPlaca[0];
             }
             _alvara.Placa = _placa;
             if (IsProvisorio)

@@ -1743,7 +1743,7 @@ namespace GTI_Dal.Classes {
         public Certidao_debito_detalhe Certidao_Debito(int Codigo) {
             TipoCadastro _tipo_Cadastro = Codigo < 100000 ? TipoCadastro.Imovel : Codigo >= 500000 ? TipoCadastro.Cidadao : TipoCadastro.Empresa;
             Certidao_debito_detalhe Certidao = new Certidao_debito_detalhe();
-            List<SpExtrato> ListaTributo = Lista_Extrato_Tributo(Codigo, 1980, 2050, 0, 99, 0, 99, 1, 999, 0, 99, 0, 99, DateTime.ParseExact(DateTime.Now.ToShortDateString(), "dd/MM/yyyy", null), "Web");
+            List<SpExtrato> ListaTributo = Lista_Extrato_Tributo(Codigo, 1980, 2050, 0, 99, 0, 999, 1, 999, 0, 99, 0, 99, DateTime.ParseExact(DateTime.Now.ToShortDateString(), "dd/MM/yyyy", null), "Web");
        
             ArrayList alArrayNaoPagoVencido = new ArrayList();
             ArrayList alArrayParceladoAVencer = new ArrayList();
