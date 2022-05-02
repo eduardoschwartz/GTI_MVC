@@ -2575,7 +2575,7 @@ namespace GTI_Dal.Classes {
         public List<Auto_Infracao_Struct> Lista_Auto_Infracao(int Ano) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 var Sql = "SELECT auto_infracao.ano_auto,auto_infracao.numero_auto,auto_infracao.ano_notificacao,auto_infracao.numero_notificacao,auto_infracao.data_notificacao ,auto_infracao.data_cadastro,";
-                Sql += "auto_infracao.userid,notificacao_terreno.codigo,notificacao_terreno.nome FROM dbo.notificacao_terreno INNER JOIN dbo.auto_infracao ON notificacao_terreno.ano_not = auto_infracao.ano_notificacao ";
+                Sql += "auto_infracao.userid,notificacao_terreno.codigo,notificacao_terreno.nome as Nome_Proprietario FROM dbo.notificacao_terreno INNER JOIN dbo.auto_infracao ON notificacao_terreno.ano_not = auto_infracao.ano_notificacao ";
                 Sql += "AND notificacao_terreno.numero_not = auto_infracao.numero_notificacao WHERE auto_infracao.ano_auto = @Ano";
                 var Ret = db.Database.SqlQuery<Auto_Infracao_Struct>(Sql, new SqlParameter("@Ano", Ano)).ToList();
                 //var Sql = (from a in db.Auto_Infracao
