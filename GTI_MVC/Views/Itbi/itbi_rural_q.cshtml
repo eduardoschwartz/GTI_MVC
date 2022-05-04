@@ -647,10 +647,10 @@
                 <div style="text-align:center">
                     <br />
                     <button type="submit" class="btn btn-success" data-balloon-length="medium" aria-label="Imprimir os dados do formulário." data-balloon-pos="up" name="button" value="print">Imprimir</button>
-                    @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo == 1) {
+                    @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo == 1 && ViewBag.ReadOnly != "S") {
                         <span style="padding-left:5px"><button type="submit" class="btn btn-primary" data-balloon-length="medium" aria-label="Liberar a guia para pagamento." data-balloon-pos="up" , name="button" value="guia">Liberar Guia</button></span>
                     }
-                    @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo == 2) {
+                    @if (ViewBag.Fiscal == "S" && Model.Situacao_Itbi_codigo == 2 && ViewBag.ReadOnly != "S") {
                         <span style="padding-left:5px"><button type="submit" onclick="return cancelarCodigo()" class="btn btn-danger" data-balloon-length="medium" aria-label="Excluir a guia e reenviar o processo para análise." data-balloon-pos="up" , name="button" value="excluir_guia">Excluir a Guia</button></span>
                     }
 

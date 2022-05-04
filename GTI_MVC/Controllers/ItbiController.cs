@@ -938,6 +938,10 @@ namespace GTI_Mvc.Controllers {
                 return RedirectToAction("Login", "Home");
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             int _userId = Convert.ToInt32(Session["hashid"]);
+            if (_userId == 262)
+                ViewBag.ReadOnly = "S";
+            else
+                ViewBag.ReadOnly = "N";
             bool _fiscal = Session["hashfiscalitbi"] != null && Session["hashfiscalitbi"].ToString() == "S" ? true : false;
             List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Query(_userId, _fiscal, 0, DateTime.Now.Year);
             List<ItbiViewModel> model = new List<ItbiViewModel>();
@@ -1763,6 +1767,12 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Itbi_urbano_q(string p = "") {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
+            int _userId = Convert.ToInt32(Session["hashid"]);
+            if (_userId == 262)
+                ViewBag.ReadOnly = "S";
+            else
+                ViewBag.ReadOnly = "N";
+
             ViewBag.Fiscal = Session["hashfiscalitbi"] == null ? "N" : Session["hashfiscalitbi"].ToString();
             //ViewBag.Fiscal = Functions.pFiscalItbi ? "S" : "N";
             ItbiViewModel model = Retorna_Itbi_Gravado(p);
@@ -1775,6 +1785,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Itbi_urbano_q(ItbiViewModel model, string button) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
+
             ViewBag.Fiscal = Session["hashfiscalitbi"].ToString();
             //ViewBag.Fiscal = Functions.pFiscalItbi ? "S" : "N";
             if (button == null || button == "print")
@@ -1822,6 +1833,13 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Itbi_rural_q(ItbiViewModel model, string button) {
             if (Session["hashid"] == null)
                 return RedirectToAction("Login", "Home");
+            int _userId = Convert.ToInt32(Session["hashid"]);
+            if (_userId == 262)
+                ViewBag.ReadOnly = "S";
+            else
+                ViewBag.ReadOnly = "N";
+
+
             ViewBag.Fiscal = Session["hashfiscalitbi"].ToString();
             //ViewBag.Fiscal = Functions.pFiscalItbi ? "S" : "N";
             if (button == null || button == "print")
