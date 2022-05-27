@@ -165,7 +165,6 @@ namespace GTI_Dal.Classes {
             }
         }
 
-
         public bool Existe_Lancamento(Lancamento reg,bool novo=true) {
             bool bValido = false;
             using (GTI_Context db = new GTI_Context(_connection)) {

@@ -1027,6 +1027,48 @@ namespace GTI_Bll.Classes {
         }
 
 
+        public Exception Incluir_Notificacao_Passeio(Notificacao_Passeio Reg) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Incluir_Notificacao_Passeio(Reg);
+            return ex;
+        }
+
+        public bool Existe_Notificacao_Passeio(int Ano, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Existe_Notificacao_Passeio(Ano, Numero);
+        }
+
+        public List<Notificacao_Passeio_Struct> Lista_Notificacao_Passeio(int Ano) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Lista_Notificacao_Passeio(Ano);
+        }
+
+        public Notificacao_Passeio_Struct Retorna_Notificacao_Passeio(int Ano, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Notificacao_Passeio(Ano, Numero);
+        }
+
+        public bool Existe_Auto_Infracao_Passeio(int Ano, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Existe_Auto_Infracao_Passeio(Ano, Numero);
+        }
+
+        public Exception Incluir_auto_infracao_Passeio(Auto_infracao_passeio Reg) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            Exception ex = obj.Incluir_auto_infracao_Passeio(Reg);
+            return ex;
+        }
+
+        public List<Auto_Infracao_Passeio_Struct> Lista_Auto_Infracao_Passeio(int Ano) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Lista_Auto_Infracao_Passeio(Ano);
+        }
+
+        public Auto_Infracao_Passeio_Struct Retorna_Auto_Infracao_Passeio(int Ano, int Numero) {
+            Imovel_Data obj = new Imovel_Data(_connection);
+            return obj.Retorna_Auto_Infracao_Passeio(Ano, Numero);
+        }
+
 
 
         #endregion

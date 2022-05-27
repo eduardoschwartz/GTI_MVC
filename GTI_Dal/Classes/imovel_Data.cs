@@ -3462,7 +3462,231 @@ namespace GTI_Dal.Classes {
             }
         }
 
+        public bool Existe_Notificacao_Passeio(int Ano, int Numero) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from i in db.Notificacao_Passeio
+                           where i.Ano_not == Ano && i.Numero_not == Numero select i.Inscricao).FirstOrDefault();
+                if (string.IsNullOrEmpty(reg))
+                    return false;
+                else
+                    return true;
+            }
+        }
 
+        public List<Notificacao_Passeio_Struct> Lista_Notificacao_Passeio(int Ano) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Notificacao_Passeio
+                           where t.Ano_not == Ano
+                           orderby t.Numero_not select new {
+                               Ano = t.Ano_not, Numero = t.Numero_not, Codigo = t.Codigo, Data_Cadastro = t.Data_cadastro, Usuario = t.Userid, Situacao = t.Situacao, Nome = t.Nome, Prazo = t.Prazo
+                           }).ToList();
+                List<Notificacao_Passeio_Struct> Lista = new List<Notificacao_Passeio_Struct>();
+                foreach (var item in Sql) {
+                    Notificacao_Passeio_Struct reg = new Notificacao_Passeio_Struct() {
+                        Ano_Notificacao = item.Ano,
+                        Numero_Notificacao = item.Numero,
+                        Codigo_Imovel = item.Codigo,
+                        Data_Cadastro = item.Data_Cadastro,
+                        Userid = item.Usuario,
+                        Situacao = item.Situacao,
+                        Prazo = item.Prazo,
+                        AnoNumero = item.Numero.ToString("0000") + "/" + item.Ano.ToString(),
+                        Nome_Proprietario = item.Nome
+                    };
+                    Lista.Add(reg);
+                }
+                return Lista;
+            }
+        }
+
+        public Notificacao_Passeio_Struct Retorna_Notificacao_Passeio(int Ano, int Numero) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from t in db.Notificacao_Terreno
+                           join u in db.Usuario on t.Userid equals u.Id into tu from u in tu
+                           where t.Ano_not == Ano && t.Numero_not == Numero select new {
+                               Ano = t.Ano_not, Numero = t.Numero_not, Codigo = t.Codigo, Data_Cadastro = t.Data_cadastro, Usuario = t.Userid, Situacao = t.Situacao, Nome = t.Nome, Prazo = t.Prazo,
+                               Endereco_entrega = t.Endereco_entrega, Endereco_prop = t.Endereco_prop, Endereco_Infracao = t.Endereco_infracao, Usuario_Nome = u.Nomecompleto, Inscricao = t.Inscricao,
+                               t.Nome2, t.Codigo_cidadao, t.Codigo_cidadao2, t.Cpf, t.Rg, t.Cpf2, t.Rg2, t.Endereco_entrega2, t.Endereco_prop2
+                           }).FirstOrDefault();
+                Notificacao_Passeio_Struct reg = null;
+                if (Sql != null) {
+                    reg = new Notificacao_Passeio_Struct() {
+                        Ano_Notificacao = Sql.Ano,
+                        Numero_Notificacao = Sql.Numero,
+                        AnoNumero = Sql.Numero.ToString("0000") + "/" + Sql.Ano.ToString(),
+                        Codigo_Imovel = Sql.Codigo,
+                        Data_Cadastro = Sql.Data_Cadastro,
+                        Userid = Sql.Usuario,
+                        Nome_Proprietario = Sql.Nome,
+                        Prazo = Sql.Prazo,
+                        Endereco_Entrega = Sql.Endereco_entrega,
+                        Endereco_entrega2 = Sql.Endereco_entrega2,
+                        Endereco_Local = Sql.Endereco_Infracao,
+                        Endereco_Prop = Sql.Endereco_prop,
+                        Endereco_prop2 = Sql.Endereco_prop2,
+                        UsuarioNome = Sql.Usuario_Nome,
+                        Inscricao = Sql.Inscricao,
+                        Nome_Proprietario2 = Sql.Nome2,
+                        Codigo_cidadao = Sql.Codigo_cidadao,
+                        Codigo_cidadao2 = Sql.Codigo_cidadao2,
+                        Cpf = Sql.Cpf,
+                        Cpf2 = Sql.Cpf2,
+                        Rg = Sql.Rg,
+                        Rg2 = Sql.Rg2
+                    };
+                }
+                return reg;
+            }
+        }
+
+        public Exception Incluir_Notificacao_Passeio(Notificacao_Passeio Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+                object[] Parametros = new object[22];
+                Parametros[0] = new SqlParameter { ParameterName = "@ano_not", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano_not };
+                Parametros[1] = new SqlParameter { ParameterName = "@numero_not", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_not };
+                Parametros[2] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
+                Parametros[3] = new SqlParameter { ParameterName = "@situacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Situacao };
+                Parametros[4] = new SqlParameter { ParameterName = "@endereco_infracao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_infracao };
+                Parametros[5] = new SqlParameter { ParameterName = "@endereco_prop", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_prop };
+                Parametros[6] = new SqlParameter { ParameterName = "@endereco_entrega", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_entrega };
+                Parametros[7] = new SqlParameter { ParameterName = "@nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nome };
+                Parametros[8] = new SqlParameter { ParameterName = "@inscricao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Inscricao };
+                Parametros[9] = new SqlParameter { ParameterName = "@prazo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Prazo };
+                Parametros[10] = new SqlParameter { ParameterName = "@data_cadastro", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_cadastro };
+                Parametros[11] = new SqlParameter { ParameterName = "@userid", SqlDbType = SqlDbType.Int, SqlValue = Reg.Userid };
+                Parametros[12] = new SqlParameter { ParameterName = "@nome2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nome2 ?? "" };
+                Parametros[13] = new SqlParameter { ParameterName = "@codigo_cidadao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo_cidadao };
+                Parametros[14] = new SqlParameter { ParameterName = "@codigo_cidadao2", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo_cidadao2 };
+                Parametros[15] = new SqlParameter { ParameterName = "@cpf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cpf };
+                Parametros[16] = new SqlParameter { ParameterName = "@rg", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Rg ?? "" };
+                Parametros[17] = new SqlParameter { ParameterName = "@cpf2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cpf2 ?? "" };
+                Parametros[18] = new SqlParameter { ParameterName = "@rg2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Rg2 ?? "" };
+                Parametros[19] = new SqlParameter { ParameterName = "@endereco_prop2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_prop2 ?? "" };
+                Parametros[20] = new SqlParameter { ParameterName = "@endereco_entrega2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_entrega2 ?? "" };
+                Parametros[21] = new SqlParameter { ParameterName = "@projeto", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Projeto ?? "" };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO notificacao_passeio(ano_not,numero_not,codigo,situacao,endereco_infracao,endereco_prop,endereco_entrega,nome,inscricao,prazo,data_cadastro," +
+                                              "userid,nome2,codigo_cidadao,codigo_cidadao2,cpf,rg,cpf2,rg2,endereco_prop2,endereco_entrega2,projeto) " +
+                                              " VALUES(@ano_not,@numero_not,@codigo,@situacao,@endereco_infracao,@endereco_prop,@endereco_entrega,@nome,@inscricao,@prazo,@data_cadastro,@userid," +
+                                              "@nome2,@codigo_cidadao,@codigo_cidadao2,@cpf,@rg,@cpf2,@rg2,@endereco_prop2,@endereco_entrega2,@projeto)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public Exception Incluir_auto_infracao_Passeio(Auto_infracao_passeio Reg) {
+            using (var db = new GTI_Context(_connection)) {
+                db.Database.CommandTimeout = 180;
+                object[] Parametros = new object[7];
+                Parametros[0] = new SqlParameter { ParameterName = "@ano_auto", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano_auto };
+                Parametros[1] = new SqlParameter { ParameterName = "@numero_auto", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_auto };
+                Parametros[2] = new SqlParameter { ParameterName = "@ano_notificacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano_notificacao };
+                Parametros[3] = new SqlParameter { ParameterName = "@numero_notificacao", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_notificacao };
+                Parametros[4] = new SqlParameter { ParameterName = "@data_notificacao", SqlDbType = SqlDbType.SmallDateTime, SqlValue = Reg.Data_notificacao };
+                Parametros[5] = new SqlParameter { ParameterName = "@data_cadastro", SqlDbType = SqlDbType.SmallDateTime, SqlValue = DateTime.Now };
+                Parametros[6] = new SqlParameter { ParameterName = "@userid", SqlDbType = SqlDbType.Int, SqlValue = Reg.Userid };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO auto_infracao_passeio(ano_auto,numero_auto,ano_notificacao,numero_notificacao,data_notificacao,data_cadastro,userid) " +
+                                              "VALUES(@ano_auto,@numero_auto,@ano_notificacao,@numero_notificacao,@data_notificacao,@data_cadastro,@userid)", Parametros);
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    return ex;
+                }
+                return null;
+            }
+        }
+
+        public List<Auto_Infracao_Passeio_Struct> Lista_Auto_Infracao_Passeio(int Ano) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from a in db.Auto_Infracao_Passeio
+                           join n in db.Notificacao_Passeio on new { p1 = a.Ano_notificacao, p2 = a.Numero_notificacao } equals new { p1 = n.Ano_not, p2 = n.Numero_not } into an from n in an.DefaultIfEmpty()
+                           where a.Ano_auto == Ano
+                           orderby a.Numero_notificacao select new {
+                               AnoAuto = a.Ano_auto, NumeroAuto = a.Numero_auto, AnoNot = a.Ano_notificacao, NumeroNot = a.Numero_notificacao, Codigo = n.Codigo, Data_Notificaao = a.Data_notificacao,
+                               Data_Cadastro = a.Data_cadastro, Usuario = a.Userid, Nome = n.Nome
+                           }).ToList();
+                List<Auto_Infracao_Passeio_Struct> Lista = new List<Auto_Infracao_Passeio_Struct>();
+                foreach (var item in Sql) {
+                    Auto_Infracao_Passeio_Struct reg = new Auto_Infracao_Passeio_Struct() {
+                        Ano_Auto = item.AnoAuto,
+                        Numero_Auto = item.NumeroAuto,
+                        Ano_Notificacao = item.AnoNot,
+                        Numero_Notificacao = item.NumeroNot,
+                        Codigo_Imovel = item.Codigo,
+                        Data_Cadastro = item.Data_Cadastro,
+                        Data_Notificacao = item.Data_Notificaao,
+                        Userid = item.Usuario,
+                        AnoNumero = item.NumeroNot.ToString("0000") + "/" + item.AnoNot.ToString(),
+                        AnoNumeroAuto = item.NumeroAuto.ToString("0000") + "/" + item.AnoAuto.ToString(),
+                        Nome_Proprietario = item.Nome
+                    };
+                    Lista.Add(reg);
+                }
+                return Lista;
+            }
+        }
+
+        public Auto_Infracao_Passeio_Struct Retorna_Auto_Infracao_Passeio(int Ano, int Numero) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var Sql = (from a in db.Auto_Infracao_Passeio
+                           join n in db.Notificacao_Passeio on new { p1 = a.Ano_notificacao, p2 = a.Numero_notificacao } equals new { p1 = n.Ano_not, p2 = n.Numero_not } into an from n in an.DefaultIfEmpty()
+                           join u in db.Usuario on a.Userid equals u.Id into tu from u in tu
+                           where a.Ano_auto == Ano && a.Numero_auto == Numero select new {
+                               AnoAuto = a.Ano_auto, NumeroAuto = a.Numero_auto, AnoNot = a.Ano_notificacao, NumeroNot = a.Numero_notificacao, Codigo = n.Codigo, Data_Notificaao = a.Data_notificacao, n.Projeto,
+                               Data_Cadastro = a.Data_cadastro, Usuario = a.Userid, Nome = n.Nome, Endereco_entrega = n.Endereco_entrega, Endereco_prop = n.Endereco_prop, Endereco_Infracao = n.Endereco_infracao,
+                               Usuario_Nome = u.Nomecompleto, Inscricao = n.Inscricao, n.Nome2, n.Codigo_cidadao, n.Codigo_cidadao2, n.Cpf, n.Rg, n.Cpf2, n.Rg2, n.Endereco_entrega2, n.Endereco_prop2
+
+                           }).FirstOrDefault();
+                Auto_Infracao_Passeio_Struct reg = null;
+                if (Sql != null) {
+                    reg = new Auto_Infracao_Passeio_Struct() {
+                        Ano_Auto = Sql.AnoAuto,
+                        Numero_Auto = Sql.NumeroAuto,
+                        Ano_Notificacao = Sql.AnoNot,
+                        Numero_Notificacao = Sql.NumeroNot,
+                        AnoNumero = Sql.NumeroNot.ToString("0000") + "/" + Sql.AnoNot.ToString(),
+                        AnoNumeroAuto = Sql.NumeroAuto.ToString("0000") + "/" + Sql.AnoAuto.ToString(),
+                        Codigo_Imovel = Sql.Codigo,
+                        Data_Cadastro = Sql.Data_Cadastro,
+                        Data_Notificacao = Sql.Data_Notificaao,
+                        Userid = Sql.Usuario,
+                        Nome_Proprietario = Sql.Nome,
+                        Endereco_Entrega = Sql.Endereco_entrega,
+                        Endereco_entrega2 = Sql.Endereco_entrega2,
+                        Endereco_Local = Sql.Endereco_Infracao,
+                        Endereco_Prop = Sql.Endereco_prop,
+                        Endereco_prop2 = Sql.Endereco_prop2,
+                        UsuarioNome = Sql.Usuario_Nome,
+                        Inscricao = Sql.Inscricao,
+                        Nome_Proprietario2 = Sql.Nome2,
+                        Codigo_cidadao = Sql.Codigo_cidadao,
+                        Codigo_cidadao2 = Sql.Codigo_cidadao2,
+                        Cpf = Sql.Cpf,
+                        Cpf2 = Sql.Cpf2,
+                        Rg = Sql.Rg,
+                        Projeto = Sql.Projeto
+                    };
+                }
+                return reg;
+            }
+        }
+
+        public bool Existe_Auto_Infracao_Passeio(int Ano, int Numero) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                var reg = (from i in db.Auto_Infracao_Passeio
+                           where i.Ano_auto == Ano && i.Numero_auto == Numero select i.Numero_notificacao).FirstOrDefault();
+                if (reg == 0)
+                    return false;
+                else
+                    return true;
+            }
+        }
 
     }//end class
 }

@@ -324,8 +324,15 @@ namespace GTI_Dal.Classes {
                     ret = false;
                 } else {
                     DateTime? datafim = (from m in db.Periodomei orderby m.Datainicio descending where m.Codigo == nCodigo select m.Datafim).FirstOrDefault();
-                    if (dalCore.IsDate(datafim))
-                        return false;
+                    if (dalCore.IsDate(datafim)) {
+                        if (Convert.ToDateTime(datafim) > DateTime.Now)
+                            return true;
+                        else
+                            return false;
+                    } else {
+                        if (Convert.ToDateTime(datafim) > DateTime.Now)
+                            return true;
+                    }
                 }
             }
             return ret;

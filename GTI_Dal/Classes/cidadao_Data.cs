@@ -877,9 +877,6 @@ namespace GTI_Dal.Classes {
         }
 
 
-
-
-
         //        var reg = (from p in db.Proprietario
         //                   join c in db.Cidadao on p.Codcidadao equals c.Codcidadao into pc from c in pc.DefaultIfEmpty()
 
