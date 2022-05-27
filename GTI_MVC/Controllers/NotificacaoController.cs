@@ -1879,7 +1879,7 @@ namespace GTI_Mvc.Controllers {
                         return View(model);
                     }
                     Save_Notificacao_Habitese(model);
-                    return RedirectToAction("Notificacao_hab_query");
+                    return RedirectToAction("Notificacao_pass_query");
                 }
             }
 
@@ -1908,8 +1908,7 @@ namespace GTI_Mvc.Controllers {
                 Cpf = model.Cpf,
                 Cpf2 = model.Cpf2,
                 Rg = model.Rg,
-                Rg2 = model.Rg2,
-                Projeto = model.Projeto
+                Rg2 = model.Rg2
             };
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             Exception ex = imovelRepository.Incluir_Notificacao_Passeio(reg);
@@ -2006,8 +2005,7 @@ namespace GTI_Mvc.Controllers {
                 PrazoText = Functions.Escrever_Valor_Extenso(_not.Prazo),
                 Cpf2 = _not.Cpf2 ?? "",
                 Rg2 = _not.Rg2 ?? "",
-                Data_Cadastro = _not.Data_Cadastro,
-                Projeto = _not.Projeto ?? ""
+                Data_Cadastro = _not.Data_Cadastro
             };
             if (_not.Codigo_cidadao2 > 0) {
                 reg.Nome2 = _not.Codigo_cidadao2.ToString() + "-" + _not.Nome_Proprietario2;
@@ -2111,7 +2109,7 @@ namespace GTI_Mvc.Controllers {
                         return View(model);
                     }
                     Save_Auto_Infracao_Passeio(model);
-                    return RedirectToAction("AutoInfracao_hab_query");
+                    return RedirectToAction("AutoInfracao_pass_query");
                 }
             }
 
@@ -2120,7 +2118,7 @@ namespace GTI_Mvc.Controllers {
 
         private ActionResult Save_Auto_Infracao_Passeio(NotificacaoPassViewModel model) {
             int _userid = Convert.ToInt32(Session["hashid"]);
-            Auto_infracao_habitese reg = new Auto_infracao_habitese() {
+            Auto_infracao_passeio reg = new Auto_infracao_passeio() {
                 Ano_auto = model.Ano_Auto,
                 Numero_auto = model.Numero_Auto,
                 Ano_notificacao = model.Ano_Notificacao,
@@ -2129,7 +2127,7 @@ namespace GTI_Mvc.Controllers {
                 Userid = _userid
             };
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
-            Exception ex = imovelRepository.Incluir_auto_infracao_Habitese(reg);
+            Exception ex = imovelRepository.Incluir_auto_infracao_Passeio(reg);
             return null;
         }
 
@@ -2227,8 +2225,7 @@ namespace GTI_Mvc.Controllers {
                 Usuario = _not.UsuarioNome,
                 Inscricao = _not.Inscricao,
                 Cpf2 = _not.Cpf2 ?? "",
-                Rg2 = _not.Rg2 ?? "",
-                Projeto = _not.Projeto ?? ""
+                Rg2 = _not.Rg2 ?? ""
             };
             if (_not.Codigo_cidadao2 > 0) {
                 reg.Nome2 = _not.Codigo_cidadao2.ToString() + "-" + _not.Nome_Proprietario2;

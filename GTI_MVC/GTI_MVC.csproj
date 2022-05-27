@@ -309,6 +309,12 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\Auto_Infracao_Passeio.cs">
+      <DependentUpon>Auto_Infracao_Passeio.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Reports\CrystalReport1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -382,6 +388,12 @@
     </Compile>
     <Compile Include="Reports\Notificacao_Habitese.cs">
       <DependentUpon>Notificacao_Habitese.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Notificacao_Passeio.cs">
+      <DependentUpon>Notificacao_Passeio.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
@@ -1200,6 +1212,11 @@
     <Content Include="Views\Notificacao\AutoInfracao_hab_add.cshtml" />
     <Content Include="Views\Notificacao\AutoInfracao_hab_query.cshtml" />
     <Content Include="Views\Empresa\Imunidade_Issqn.cshtml" />
+    <Content Include="Views\Notificacao\Notificacao_pass_menu.cshtml" />
+    <Content Include="Views\Notificacao\Notificacao_pass_add.cshtml" />
+    <Content Include="Views\Notificacao\Notificacao_pass_query.cshtml" />
+    <Content Include="Views\Notificacao\AutoInfracao_pass_add.cshtml" />
+    <Content Include="Views\Notificacao\AutoInfracao_pass_query.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1211,6 +1228,10 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reports\Auto_Infracao_Passeio.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Auto_Infracao_Passeio.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\CrystalReport1.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>CrystalReport1.cs</LastGenOutput>
@@ -1263,6 +1284,10 @@
     <EmbeddedResource Include="Reports\Notificacao_Habitese.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Notificacao_Habitese.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Notificacao_Passeio.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Notificacao_Passeio.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\ParcelamentoWeb.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

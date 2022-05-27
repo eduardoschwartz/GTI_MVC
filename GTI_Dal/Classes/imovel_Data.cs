@@ -3542,7 +3542,7 @@ namespace GTI_Dal.Classes {
         public Exception Incluir_Notificacao_Passeio(Notificacao_Passeio Reg) {
             using (var db = new GTI_Context(_connection)) {
                 db.Database.CommandTimeout = 180;
-                object[] Parametros = new object[22];
+                object[] Parametros = new object[21];
                 Parametros[0] = new SqlParameter { ParameterName = "@ano_not", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano_not };
                 Parametros[1] = new SqlParameter { ParameterName = "@numero_not", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero_not };
                 Parametros[2] = new SqlParameter { ParameterName = "@codigo", SqlDbType = SqlDbType.Int, SqlValue = Reg.Codigo };
@@ -3564,12 +3564,11 @@ namespace GTI_Dal.Classes {
                 Parametros[18] = new SqlParameter { ParameterName = "@rg2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Rg2 ?? "" };
                 Parametros[19] = new SqlParameter { ParameterName = "@endereco_prop2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_prop2 ?? "" };
                 Parametros[20] = new SqlParameter { ParameterName = "@endereco_entrega2", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_entrega2 ?? "" };
-                Parametros[21] = new SqlParameter { ParameterName = "@projeto", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Projeto ?? "" };
 
                 db.Database.ExecuteSqlCommand("INSERT INTO notificacao_passeio(ano_not,numero_not,codigo,situacao,endereco_infracao,endereco_prop,endereco_entrega,nome,inscricao,prazo,data_cadastro," +
-                                              "userid,nome2,codigo_cidadao,codigo_cidadao2,cpf,rg,cpf2,rg2,endereco_prop2,endereco_entrega2,projeto) " +
+                                              "userid,nome2,codigo_cidadao,codigo_cidadao2,cpf,rg,cpf2,rg2,endereco_prop2,endereco_entrega2) " +
                                               " VALUES(@ano_not,@numero_not,@codigo,@situacao,@endereco_infracao,@endereco_prop,@endereco_entrega,@nome,@inscricao,@prazo,@data_cadastro,@userid," +
-                                              "@nome2,@codigo_cidadao,@codigo_cidadao2,@cpf,@rg,@cpf2,@rg2,@endereco_prop2,@endereco_entrega2,@projeto)", Parametros);
+                                              "@nome2,@codigo_cidadao,@codigo_cidadao2,@cpf,@rg,@cpf2,@rg2,@endereco_prop2,@endereco_entrega2)", Parametros);
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
@@ -3638,7 +3637,7 @@ namespace GTI_Dal.Classes {
                            join n in db.Notificacao_Passeio on new { p1 = a.Ano_notificacao, p2 = a.Numero_notificacao } equals new { p1 = n.Ano_not, p2 = n.Numero_not } into an from n in an.DefaultIfEmpty()
                            join u in db.Usuario on a.Userid equals u.Id into tu from u in tu
                            where a.Ano_auto == Ano && a.Numero_auto == Numero select new {
-                               AnoAuto = a.Ano_auto, NumeroAuto = a.Numero_auto, AnoNot = a.Ano_notificacao, NumeroNot = a.Numero_notificacao, Codigo = n.Codigo, Data_Notificaao = a.Data_notificacao, n.Projeto,
+                               AnoAuto = a.Ano_auto, NumeroAuto = a.Numero_auto, AnoNot = a.Ano_notificacao, NumeroNot = a.Numero_notificacao, Codigo = n.Codigo, Data_Notificaao = a.Data_notificacao, 
                                Data_Cadastro = a.Data_cadastro, Usuario = a.Userid, Nome = n.Nome, Endereco_entrega = n.Endereco_entrega, Endereco_prop = n.Endereco_prop, Endereco_Infracao = n.Endereco_infracao,
                                Usuario_Nome = u.Nomecompleto, Inscricao = n.Inscricao, n.Nome2, n.Codigo_cidadao, n.Codigo_cidadao2, n.Cpf, n.Rg, n.Cpf2, n.Rg2, n.Endereco_entrega2, n.Endereco_prop2
 
@@ -3669,8 +3668,7 @@ namespace GTI_Dal.Classes {
                         Codigo_cidadao2 = Sql.Codigo_cidadao2,
                         Cpf = Sql.Cpf,
                         Cpf2 = Sql.Cpf2,
-                        Rg = Sql.Rg,
-                        Projeto = Sql.Projeto
+                        Rg = Sql.Rg
                     };
                 }
                 return reg;
