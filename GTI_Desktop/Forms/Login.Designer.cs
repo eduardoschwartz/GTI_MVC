@@ -26,14 +26,14 @@
             this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tBar = new System.Windows.Forms.ToolStrip();
-            this.btGravar = new System.Windows.Forms.ToolStripButton();
-            this.btCancelar = new System.Windows.Forms.ToolStripButton();
-            this.txtPwd2 = new System.Windows.Forms.TextBox();
+            this.GravarButton = new System.Windows.Forms.ToolStripButton();
+            this.CancelarButton = new System.Windows.Forms.ToolStripButton();
+            this.Pwd2Text = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.txtPwd1 = new System.Windows.Forms.TextBox();
+            this.Pwd1Text = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.txtLogin = new System.Windows.Forms.TextBox();
-            this.txtPwd = new System.Windows.Forms.TextBox();
+            this.LoginText = new System.Windows.Forms.TextBox();
+            this.PwdText = new System.Windows.Forms.TextBox();
             this.Label1 = new System.Windows.Forms.Label();
             this.Label2 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -42,7 +42,7 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.txtServer = new System.Windows.Forms.TextBox();
+            this.ServerText = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.LoginToolStrip = new System.Windows.Forms.ToolStrip();
             this.SairButton = new System.Windows.Forms.ToolStripButton();
@@ -62,9 +62,9 @@
             this.panel1.BackColor = System.Drawing.Color.Linen;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.tBar);
-            this.panel1.Controls.Add(this.txtPwd2);
+            this.panel1.Controls.Add(this.Pwd2Text);
             this.panel1.Controls.Add(this.label4);
-            this.panel1.Controls.Add(this.txtPwd1);
+            this.panel1.Controls.Add(this.Pwd1Text);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Location = new System.Drawing.Point(7, 226);
             this.panel1.Name = "panel1";
@@ -78,8 +78,8 @@
             this.tBar.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tBar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.tBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btGravar,
-            this.btCancelar});
+            this.GravarButton,
+            this.CancelarButton});
             this.tBar.Location = new System.Drawing.Point(0, 63);
             this.tBar.Name = "tBar";
             this.tBar.Padding = new System.Windows.Forms.Padding(6, 0, 1, 0);
@@ -87,38 +87,38 @@
             this.tBar.TabIndex = 17;
             this.tBar.Text = "7";
             // 
-            // btGravar
+            // GravarButton
             // 
-            this.btGravar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btGravar.Image = global::GTI_Desktop.Properties.Resources.gravar;
-            this.btGravar.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btGravar.Name = "btGravar";
-            this.btGravar.Size = new System.Drawing.Size(23, 22);
-            this.btGravar.Text = "btGravar";
-            this.btGravar.ToolTipText = "Gravar os dados";
-            this.btGravar.Click += new System.EventHandler(this.BtGravar_Click);
+            this.GravarButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.GravarButton.Image = global::GTI_Desktop.Properties.Resources.gravar;
+            this.GravarButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.GravarButton.Name = "GravarButton";
+            this.GravarButton.Size = new System.Drawing.Size(23, 22);
+            this.GravarButton.Text = "btGravar";
+            this.GravarButton.ToolTipText = "Gravar os dados";
+            this.GravarButton.Click += new System.EventHandler(this.GravarButton_Click);
             // 
-            // btCancelar
+            // CancelarButton
             // 
-            this.btCancelar.AccessibleDescription = "Cancelar operação";
-            this.btCancelar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btCancelar.Image = global::GTI_Desktop.Properties.Resources.cancel2;
-            this.btCancelar.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btCancelar.Name = "btCancelar";
-            this.btCancelar.Size = new System.Drawing.Size(23, 22);
-            this.btCancelar.Text = "btCancelar";
-            this.btCancelar.ToolTipText = "Cancelar";
-            this.btCancelar.Click += new System.EventHandler(this.BtCancelar_Click);
+            this.CancelarButton.AccessibleDescription = "Cancelar operação";
+            this.CancelarButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.CancelarButton.Image = global::GTI_Desktop.Properties.Resources.cancel2;
+            this.CancelarButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.CancelarButton.Name = "CancelarButton";
+            this.CancelarButton.Size = new System.Drawing.Size(23, 22);
+            this.CancelarButton.Text = "btCancelar";
+            this.CancelarButton.ToolTipText = "Cancelar";
+            this.CancelarButton.Click += new System.EventHandler(this.BtCancelar_Click);
             // 
-            // txtPwd2
+            // Pwd2Text
             // 
-            this.txtPwd2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtPwd2.Location = new System.Drawing.Point(100, 34);
-            this.txtPwd2.MaxLength = 20;
-            this.txtPwd2.Name = "txtPwd2";
-            this.txtPwd2.PasswordChar = '*';
-            this.txtPwd2.Size = new System.Drawing.Size(118, 20);
-            this.txtPwd2.TabIndex = 6;
+            this.Pwd2Text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Pwd2Text.Location = new System.Drawing.Point(100, 34);
+            this.Pwd2Text.MaxLength = 20;
+            this.Pwd2Text.Name = "Pwd2Text";
+            this.Pwd2Text.PasswordChar = '*';
+            this.Pwd2Text.Size = new System.Drawing.Size(118, 20);
+            this.Pwd2Text.TabIndex = 6;
             // 
             // label4
             // 
@@ -129,15 +129,15 @@
             this.label4.TabIndex = 2;
             this.label4.Text = "Confirmar Senha:";
             // 
-            // txtPwd1
+            // Pwd1Text
             // 
-            this.txtPwd1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtPwd1.Location = new System.Drawing.Point(100, 8);
-            this.txtPwd1.MaxLength = 20;
-            this.txtPwd1.Name = "txtPwd1";
-            this.txtPwd1.PasswordChar = '*';
-            this.txtPwd1.Size = new System.Drawing.Size(118, 20);
-            this.txtPwd1.TabIndex = 5;
+            this.Pwd1Text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Pwd1Text.Location = new System.Drawing.Point(100, 8);
+            this.Pwd1Text.MaxLength = 20;
+            this.Pwd1Text.Name = "Pwd1Text";
+            this.Pwd1Text.PasswordChar = '*';
+            this.Pwd1Text.Size = new System.Drawing.Size(118, 20);
+            this.Pwd1Text.TabIndex = 5;
             // 
             // label3
             // 
@@ -148,25 +148,25 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Nova Senha......:";
             // 
-            // txtLogin
+            // LoginText
             // 
-            this.txtLogin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtLogin.Location = new System.Drawing.Point(81, 32);
-            this.txtLogin.MaxLength = 20;
-            this.txtLogin.Name = "txtLogin";
-            this.txtLogin.Size = new System.Drawing.Size(148, 20);
-            this.txtLogin.TabIndex = 1;
+            this.LoginText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.LoginText.Location = new System.Drawing.Point(81, 32);
+            this.LoginText.MaxLength = 20;
+            this.LoginText.Name = "LoginText";
+            this.LoginText.Size = new System.Drawing.Size(148, 20);
+            this.LoginText.TabIndex = 1;
             // 
-            // txtPwd
+            // PwdText
             // 
-            this.txtPwd.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtPwd.Location = new System.Drawing.Point(81, 58);
-            this.txtPwd.MaxLength = 20;
-            this.txtPwd.Name = "txtPwd";
-            this.txtPwd.PasswordChar = '*';
-            this.txtPwd.Size = new System.Drawing.Size(148, 20);
-            this.txtPwd.TabIndex = 2;
-            this.txtPwd.Text = "scout";
+            this.PwdText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PwdText.Location = new System.Drawing.Point(81, 58);
+            this.PwdText.MaxLength = 20;
+            this.PwdText.Name = "PwdText";
+            this.PwdText.PasswordChar = '*';
+            this.PwdText.Size = new System.Drawing.Size(148, 20);
+            this.PwdText.TabIndex = 2;
+            this.PwdText.Text = "scout";
             // 
             // Label1
             // 
@@ -243,14 +243,14 @@
             this.pictureBox1.TabIndex = 69;
             this.pictureBox1.TabStop = false;
             // 
-            // txtServer
+            // ServerText
             // 
-            this.txtServer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtServer.Location = new System.Drawing.Point(81, 6);
-            this.txtServer.MaxLength = 20;
-            this.txtServer.Name = "txtServer";
-            this.txtServer.Size = new System.Drawing.Size(148, 20);
-            this.txtServer.TabIndex = 0;
+            this.ServerText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ServerText.Location = new System.Drawing.Point(81, 6);
+            this.ServerText.MaxLength = 20;
+            this.ServerText.Name = "ServerText";
+            this.ServerText.Size = new System.Drawing.Size(148, 20);
+            this.ServerText.TabIndex = 0;
             // 
             // label8
             // 
@@ -325,11 +325,11 @@
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.txtServer);
+            this.panel2.Controls.Add(this.ServerText);
             this.panel2.Controls.Add(this.LoginToolStrip);
             this.panel2.Controls.Add(this.label8);
-            this.panel2.Controls.Add(this.txtLogin);
-            this.panel2.Controls.Add(this.txtPwd);
+            this.panel2.Controls.Add(this.LoginText);
+            this.panel2.Controls.Add(this.PwdText);
             this.panel2.Controls.Add(this.Label1);
             this.panel2.Controls.Add(this.Label2);
             this.panel2.Location = new System.Drawing.Point(194, 75);
@@ -378,15 +378,15 @@
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolStrip tBar;
-        private System.Windows.Forms.ToolStripButton btGravar;
-        private System.Windows.Forms.ToolStripButton btCancelar;
-        internal System.Windows.Forms.TextBox txtPwd2;
+        private System.Windows.Forms.ToolStripButton GravarButton;
+        private System.Windows.Forms.ToolStripButton CancelarButton;
+        internal System.Windows.Forms.TextBox Pwd2Text;
         private System.Windows.Forms.Label label4;
-        internal System.Windows.Forms.TextBox txtPwd1;
+        internal System.Windows.Forms.TextBox Pwd1Text;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.PictureBox pictureBox1;
-        internal System.Windows.Forms.TextBox txtLogin;
-        internal System.Windows.Forms.TextBox txtPwd;
+        internal System.Windows.Forms.TextBox LoginText;
+        internal System.Windows.Forms.TextBox PwdText;
         internal System.Windows.Forms.Label Label1;
         internal System.Windows.Forms.Label Label2;
         private System.Windows.Forms.Label label5;
@@ -394,7 +394,7 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ToolTip toolTip1;
-        internal System.Windows.Forms.TextBox txtServer;
+        internal System.Windows.Forms.TextBox ServerText;
         internal System.Windows.Forms.Label label8;
         private System.Windows.Forms.ToolStrip LoginToolStrip;
         private System.Windows.Forms.ToolStripButton LoginButton;

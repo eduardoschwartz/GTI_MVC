@@ -1512,6 +1512,13 @@ namespace GTI_Dal.Classes {
                 }
             }
 
+        public List<Itbi_status> Lista_Itbi_Status() {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                List<Itbi_status> Sql = (from t in db.Itbi_Status orderby t.Codigo select t).ToList();
+                return Sql;
+            }
+        }
+
         public List<Itbi_financiamento> Lista_Itbi_Financiamento() {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 List<Itbi_financiamento> Sql = (from t in db.itbi_Financiamento where t.Codigo > 0 orderby t.Codigo select t).ToList();
@@ -3501,7 +3508,7 @@ namespace GTI_Dal.Classes {
 
         public Notificacao_Passeio_Struct Retorna_Notificacao_Passeio(int Ano, int Numero) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from t in db.Notificacao_Terreno
+                var Sql = (from t in db.Notificacao_Passeio
                            join u in db.Usuario on t.Userid equals u.Id into tu from u in tu
                            where t.Ano_not == Ano && t.Numero_not == Numero select new {
                                Ano = t.Ano_not, Numero = t.Numero_not, Codigo = t.Codigo, Data_Cadastro = t.Data_cadastro, Usuario = t.Userid, Situacao = t.Situacao, Nome = t.Nome, Prazo = t.Prazo,

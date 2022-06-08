@@ -9,44 +9,43 @@ using GTI_Models.Models;
 
 namespace GTI_Desktop.Forms {
     public partial class Login : Form {
-        
+
         #region Shadow
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn
     (
-        int nLeftRect, // x-coordinate of upper-left corner
-        int nTopRect, // y-coordinate of upper-left corner
-        int nRightRect, // x-coordinate of lower-right corner
-        int nBottomRect, // y-coordinate of lower-right corner
-        int nWidthEllipse, // height of ellipse
-        int nHeightEllipse // width of ellipse
+        Int32 nLeftRect, // x-coordinate of upper-left corner
+        Int32 nTopRect, // y-coordinate of upper-left corner
+        Int32 nRightRect, // x-coordinate of lower-right corner
+        Int32 nBottomRect, // y-coordinate of lower-right corner
+        Int32 nWidthEllipse, // height of ellipse
+        Int32 nHeightEllipse // width of ellipse
      );
 
         [DllImport("dwmapi.dll")]
-        public static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref MARGINS pMarInset);
+        public static extern Int32 DwmExtendFrameIntoClientArea(IntPtr hWnd, ref MARGINS pMarInset);
 
         [DllImport("dwmapi.dll")]
-        public static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
+        public static extern Int32 DwmSetWindowAttribute(IntPtr hwnd, Int32 attr, ref Int32 attrValue, Int32 attrSize);
 
         [DllImport("dwmapi.dll")]
-        public static extern int DwmIsCompositionEnabled(ref int pfEnabled);
+        public static extern Int32 DwmIsCompositionEnabled(ref Int32 pfEnabled);
 
         private bool m_aeroEnabled;                     // variables for box shadow
-        private const int CS_DROPSHADOW = 0x00020000;
-        private const int WM_NCPAINT = 0x0085;
-        private const int WM_ACTIVATEAPP = 0x001C;
+        private const Int32 CS_DROPSHADOW = 0x00020000;
+        private const Int32 WM_NCPAINT = 0x0085;
 
         public struct MARGINS                           // struct for box shadow
         {
-            public int leftWidth;
-            public int rightWidth;
-            public int topHeight;
-            public int bottomHeight;
+            public Int32 leftWidth;
+            public Int32 rightWidth;
+            public Int32 topHeight;
+            public Int32 bottomHeight;
         }
 
-        private const int WM_NCHITTEST = 0x84;          // variables for dragging the form
-        private const int HTCLIENT = 0x1;
-        private const int HTCAPTION = 0x2;
+        private const Int32 WM_NCHITTEST = 0x84;          // variables for dragging the form
+        private const Int32 HTCLIENT = 0x1;
+        private const Int32 HTCAPTION = 0x2;
 
         protected override CreateParams CreateParams {
             get {
@@ -62,9 +61,9 @@ namespace GTI_Desktop.Forms {
 
         private bool CheckAeroEnabled() {
             if (Environment.OSVersion.Version.Major >= 6) {
-                int enabled = 0;
+                Int32 enabled = 0;
                 DwmIsCompositionEnabled(ref enabled);
-                return (enabled == 1) ? true : false;
+                return (enabled == 1);
             }
             return false;
         }
@@ -74,7 +73,7 @@ namespace GTI_Desktop.Forms {
                 case WM_NCPAINT:                        // box shadow
                     if (m_aeroEnabled) {
                         var v = 2;
-                        DwmSetWindowAttribute(this.Handle,  2, ref v, 4);
+                        DwmSetWindowAttribute(this.Handle, 2, ref v, 4);
                         MARGINS margins = new MARGINS() {
                             bottomHeight = 2,
                             leftWidth = 2,
@@ -96,53 +95,52 @@ namespace GTI_Desktop.Forms {
         }
 
         #endregion
-                
+
         public Int32 OriginSize;
-        
+
         public Login() {
             m_aeroEnabled = false;
-            this.Refresh();
+            Refresh();
             InitializeComponent();
             Size = new Size(Size.Width, 190);
             OriginSize = this.Size.Height;
             LoginToolStrip.Renderer = new MySR();
-            txtServer.Text = GTI_Desktop.Properties.Settings.Default.ServerName;
-            txtLogin.Text = gtiCore.Retorna_Last_User();
-            txtPwd.Focus();
+            ServerText.Text = Properties.Settings.Default.ServerName;
+            LoginText.Text = gtiCore.Retorna_Last_User();
+            PwdText.Focus();
         }
 
         private void Login_Load(object sender, EventArgs e) {
-            String Caminho = Application.StartupPath;
-            txtLogin.Text = gtiCore.Retorna_Last_User();
-            txtPwd.Text = ConfigurationManager.AppSettings["MeuValor"];
+            LoginText.Text = gtiCore.Retorna_Last_User();
+            PwdText.Text = ConfigurationManager.AppSettings["MeuValor"];
         }
 
-        
+
         private void Login_Activated(object sender, EventArgs e) {
-            txtPwd.Focus();
+            PwdText.Focus();
         }
-           
 
-        private void BtGravar_Click(object sender, EventArgs e) {
-            if (String.IsNullOrEmpty(txtPwd1.Text) || String.IsNullOrEmpty(txtPwd2.Text)) {
+
+        private void GravarButton_Click(object sender, EventArgs e) {
+            if (String.IsNullOrEmpty(Pwd1Text.Text) || String.IsNullOrEmpty(Pwd2Text.Text)) {
                 MessageBox.Show("Digite a nova senha e confirme a senha.", "Erro de gravação", MessageBoxButtons.OK, MessageBoxIcon.Error);
             } else {
-                if (string.Compare(txtPwd1.Text, txtPwd2.Text) != 0)
+                if (string.Compare(Pwd1Text.Text, Pwd2Text.Text) != 0)
                     MessageBox.Show("Confirmação da senha diferente da senha digitada.", "Erro de gravação", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else {
-                    if (txtPwd1.Text.Length < 6)
+                    if (Pwd1Text.Text.Length < 6)
                         MessageBox.Show("Senha deve ter no mínimo 6 caracteres.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     else {
                         string _connection = gtiCore.Connection_Name();
                         Sistema_bll sistemaRepository = new Sistema_bll(_connection);
-                        string sPwd =  sistemaRepository.Retorna_User_Password(txtLogin.Text);
+                        string sPwd = sistemaRepository.Retorna_User_Password(LoginText.Text);
                         TAcessoFunction _tAcesso = new TAcessoFunction();
-                        if (!string.IsNullOrEmpty(sPwd) && _tAcesso.DecryptGTI( sPwd) != txtPwd.Text) {
+                        if (!string.IsNullOrEmpty(sPwd) && _tAcesso.DecryptGTI(sPwd) != PwdText.Text) {
                             MessageBox.Show("Senha atual inválida!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         } else {
                             GTI_Models.Models.Usuario reg = new GTI_Models.Models.Usuario {
-                                Nomelogin = txtLogin.Text.ToUpper(),
-                                Senha = _tAcesso.Encrypt128(txtPwd1.Text)
+                                Nomelogin = LoginText.Text.ToUpper(),
+                                Senha = _tAcesso.Encrypt128(Pwd1Text.Text)
                             };
                             Exception ex = sistemaRepository.Alterar_Senha(reg);
                             if (ex != null) {
@@ -150,11 +148,11 @@ namespace GTI_Desktop.Forms {
                                 eBox.ShowDialog();
                             } else {
                                 MessageBox.Show("Senha alterada.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                txtLogin.Enabled = true;
+                                LoginText.Enabled = true;
                                 SenhaButton.Enabled = true;
                                 LoginButton.Enabled = true;
                                 SairButton.Enabled = true;
-                                txtPwd.Text = txtPwd1.Text;
+                                PwdText.Text = Pwd1Text.Text;
                                 this.Size = new Size(this.Size.Width, OriginSize);
                             }
                         }
@@ -169,15 +167,15 @@ namespace GTI_Desktop.Forms {
 
         private void SenhaButton_Click(object sender, EventArgs e) {
             if (this.Size.Height < 300) {
-                txtPwd1.Text = "";
-                txtPwd2.Text = "";
-                txtLogin.Enabled = false;
+                Pwd1Text.Text = "";
+                Pwd2Text.Text = "";
+                LoginText.Enabled = false;
                 SenhaButton.Enabled = false;
                 LoginButton.Enabled = false;
                 SairButton.Enabled = false;
                 this.Size = new Size(this.Size.Width, 321);
             } else {
-                txtLogin.Enabled = true;
+                LoginText.Enabled = true;
                 SenhaButton.Enabled = true;
                 LoginButton.Enabled = true;
                 SairButton.Enabled = true;
@@ -187,29 +185,29 @@ namespace GTI_Desktop.Forms {
         }
 
         private void LoginButton_Click(object sender, EventArgs e) {
-            if (txtLogin.Text.Equals(string.Empty)) {
+            if (LoginText.Text.Equals(string.Empty)) {
                 MessageBox.Show("Digite o nome de login.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (txtPwd.Text.Equals(string.Empty)) {
+            if (PwdText.Text.Equals(string.Empty)) {
                 MessageBox.Show("Digite a senha.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             gtiCore.Ocupado(this);
-            Properties.Settings.Default.ServerName = txtServer.Text;
+            Properties.Settings.Default.ServerName = ServerText.Text;
             Properties.Settings.Default.Save();
 
             string _connection = gtiCore.Connection_Name();
             Sistema_bll sistema_Class = new Sistema_bll(_connection);
             try {
-                string sUser = sistema_Class.Retorna_User_FullName( txtLogin.Text);
+                string sUser = sistema_Class.Retorna_User_FullName(LoginText.Text);
                 gtiCore.Liberado(this);
                 if (string.IsNullOrEmpty(sUser)) {
                     gtiCore.Liberado(this);
                     MessageBox.Show("Usuário não cadastrado!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                string sPwd = sistema_Class.Retorna_User_Password(txtLogin.Text);
+                string sPwd = sistema_Class.Retorna_User_Password(LoginText.Text);
                 if (string.IsNullOrEmpty(sPwd)) {
                     gtiCore.Liberado(this);
                     MessageBox.Show("Por favor cadastre uma senha!", "Senha não cadastrada", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -217,10 +215,10 @@ namespace GTI_Desktop.Forms {
                     return;
                 } else {
                     TAcessoFunction _tAcesso = new TAcessoFunction();
-                    if (string.Compare(txtPwd.Text, _tAcesso.DecryptGTI(sPwd)) != 0) {
+                    if (string.Compare(PwdText.Text, _tAcesso.DecryptGTI(sPwd)) != 0) {
                         gtiCore.Liberado(this);
                         MessageBox.Show("Senha inválida.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        txtPwd.Text = "";
+                        PwdText.Text = "";
                         return;
                     }
                 }
@@ -229,17 +227,18 @@ namespace GTI_Desktop.Forms {
                 MessageBox.Show(ex.InnerException.Message, "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            Properties.Settings.Default.ServerName = txtServer.Text.ToUpper();
-            Properties.Settings.Default.LastUser = txtLogin.Text.ToUpper();
-            Properties.Settings.Default.UserId = sistema_Class.Retorna_User_LoginId(txtLogin.Text);
+            Properties.Settings.Default.ServerName = ServerText.Text.ToUpper();
+            Properties.Settings.Default.LastUser = LoginText.Text.ToUpper();
+            Properties.Settings.Default.UserId = sistema_Class.Retorna_User_LoginId(LoginText.Text);
             Properties.Settings.Default.Save();
 
-            int nId = Properties.Settings.Default.UserId;
+            Int32 nId = Properties.Settings.Default.UserId;
             usuarioStruct cUser = sistema_Class.Retorna_Usuario(nId);
             int? nSetor = cUser.Setor_atual;
             if (nSetor == null || nSetor == 0) {
-                Usuario_Setor form = new Usuario_Setor();
-                form.nId = nId;
+                Usuario_Setor form = new Usuario_Setor {
+                    nId = nId
+                };
                 var result = form.ShowDialog(this);
                 if (result != DialogResult.OK)
                     return;
@@ -247,14 +246,14 @@ namespace GTI_Desktop.Forms {
             gtiCore.UpdateUserBinary();
             //Update user Binary
             //string sTmp = sistema_Class.GetUserBinary(nId);
-            //int nSize = sistema_Class.GetSizeofBinary();
+            //Int32 nSize = sistema_Class.GetSizeofBinary();
             //GtiTypes.UserBinary = gtiCore.Decrypt(sTmp);
             //if (nSize > GtiTypes.UserBinary.Length) {
-            //    int nDif = nSize - GtiTypes.UserBinary.Length;
+            //    Int32 nDif = nSize - GtiTypes.UserBinary.Length;
             //    sTmp = new string('0', nDif);
             //    GtiTypes.UserBinary += sTmp;
             //}
-       //     string h = GtiTypes.UserBinary;
+            //     string h = GtiTypes.UserBinary;
             Close();
             Main f1 = (Main)Application.OpenForms["Main"];
             f1.UserToolStripStatus.Text = gtiCore.Retorna_Last_User();

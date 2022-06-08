@@ -130,6 +130,14 @@ namespace GTI_Mvc.ViewModels {
         public string Action { get; set; }
     }
 
+
+    public class Itbi_Relatorio {
+        public string Data_Inicio { get; set; }
+        public string Data_Final { get; set; }
+        public int Situacao_Id { get; set; }
+        public string Situacao_Nome { get; set; }
+    }
+
     public class Imovel_Isencao {
         public int Seq { get; set; }
         public string Tipo { get; set; }

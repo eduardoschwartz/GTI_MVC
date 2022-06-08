@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace GTI_Desktop.Forms {
     public partial class Processos_Email : Form {
-        string _connection = gtiCore.Connection_Name();
+        readonly string _connection = gtiCore.Connection_Name();
         public Processos_Email() {
             InitializeComponent();
         }

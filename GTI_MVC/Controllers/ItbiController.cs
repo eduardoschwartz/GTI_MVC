@@ -18,6 +18,7 @@ using static GTI_Models.modelCore;
 using System.Configuration;
 using System.Data.SqlClient;
 using MMLib.Extensions;
+using System.Linq;
 
 namespace GTI_Mvc.Controllers {
     public class ItbiController : Controller {
@@ -69,6 +70,57 @@ namespace GTI_Mvc.Controllers {
                     throw ex;
             }
         }
+
+        [Route("Itbi_resumo_filter")]
+        [HttpGet]
+        public ActionResult Itbi_resumo_filter() {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            Imovel_bll _imovel = new Imovel_bll(_connection);
+            List<Itbi_status> lista = _imovel.Lista_Itbi_Status();
+            ViewBag.ListaStatus = new SelectList(lista.Where(c=>c.Codigo<5), "codigo", "descricao");
+
+            return View();
+        }
+
+        [Route("Itbi_resumo_filter")]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult Itbi_resumo_filter(Itbi_Relatorio model) {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            ReportDocument rd = new ReportDocument();
+            rd.Load(System.Web.HttpContext.Current.Server.MapPath("~/Reports/Resumo_Pagto_Itbi.rpt"));
+            TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
+            TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
+            ConnectionInfo crConnectionInfo = new ConnectionInfo();
+            Tables CrTables;
+            string myConn = ConfigurationManager.ConnectionStrings[_connection].ToString();
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(myConn);
+            string IPAddress = builder.DataSource;
+            string _userId = builder.UserID;
+            string _pwd = builder.Password;
+
+            crConnectionInfo.ServerName = IPAddress;
+            crConnectionInfo.DatabaseName = "Tributacao";
+            crConnectionInfo.UserID = _userId;
+            crConnectionInfo.Password = _pwd;
+            CrTables = rd.Database.Tables;
+            foreach (Table CrTable in CrTables) {
+                crtableLogoninfo = CrTable.LogOnInfo;
+                crtableLogoninfo.ConnectionInfo = crConnectionInfo;
+                CrTable.ApplyLogOnInfo(crtableLogoninfo);
+            }
+            try {
+                rd.RecordSelectionFormula = "{itbi_main.data_cadastro}>=#" + Convert.ToDateTime(model.Data_Inicio).ToString("MM/dd/yyyy") + "# and { itbi_main.data_cadastro}<= #" + Convert.ToDateTime(model.Data_Final).ToString("MM/dd/yyyy") + "# and { itbi_main.Situacao_itbi}=" + model.Situacao_Id + " and { itbi_main.Itbi_Numero}>0";
+                Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
+                return File(stream, "application/pdf", "Resumo_Pagto_Itbi.pdf");
+            } catch (Exception ex) {
+                throw ex;
+            }
+
+        }
+
 
         [Route("Itbi_urbano")]
         [HttpGet]

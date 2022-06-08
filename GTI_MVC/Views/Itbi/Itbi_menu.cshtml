@@ -69,7 +69,7 @@
                 @Html.ActionLink("Consultar certidões enviadas", "Itbi_query_isencao", "Itbi", null, new { @class = "actionlink" })<br />
                 <a href="~/Files/ITBI Manual do Usuario.pdf" class="actionlink">Download do manual do usuário</a><br />
                 @if (ViewBag.Fiscal == "S") {
-                    @Html.ActionLink("Relatório dos ITBI´s emitidos", "Itbi_resumo", "Itbi", null, new { @class = "actionlink" })<br />
+                    @Html.ActionLink("Relatório dos ITBI´s emitidos", "Itbi_resumo_filter", "Itbi", null, new { @class = "actionlink" })<br />
                 }
             </div>
             <div class="card-footer">
