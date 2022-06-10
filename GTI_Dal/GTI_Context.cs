@@ -175,8 +175,10 @@ namespace GTI_Dal {
         public DbSet<Notificacao_terreno> Notificacao_Terreno { get; set; }
         public DbSet<Notificacao_Obra> Notificacao_Obra { get; set; }
         public DbSet<Notificacao_Passeio> Notificacao_Passeio { get; set; }
+        public DbSet<Notificacao_Passeio_Reparo> Notificacao_Passeio_Reparo { get; set; }
         public DbSet<Auto_infracao> Auto_Infracao { get; set; }
         public DbSet<Auto_infracao_passeio> Auto_Infracao_Passeio { get; set; }
+        public DbSet<Auto_infracao_passeio_reparo> Auto_Infracao_Passeio_Reparo { get; set; }
         public DbSet<Redesim_arquivo> Redesim_Arquivo { get; set; }
         public DbSet<Redesim_Registro> Redesim_Registro { get; set; }
         public DbSet<Redesim_Viabilidade> Redesim_Viabilidade { get; set; }

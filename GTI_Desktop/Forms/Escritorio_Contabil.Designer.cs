@@ -454,11 +454,12 @@
             // 
             // EnderecoButton
             // 
+            this.EnderecoButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.EnderecoButton.ForeColor = System.Drawing.Color.Navy;
             this.EnderecoButton.Image = global::GTI_Desktop.Properties.Resources.Alterar;
             this.EnderecoButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.EnderecoButton.Name = "EnderecoButton";
-            this.EnderecoButton.Size = new System.Drawing.Size(124, 22);
+            this.EnderecoButton.Size = new System.Drawing.Size(114, 22);
             this.EnderecoButton.Text = "Alterar o endereço";
             this.EnderecoButton.Click += new System.EventHandler(this.EnderecoButton_Click);
             // 

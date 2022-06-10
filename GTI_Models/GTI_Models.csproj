@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="modelCore.cs" />
+    <Compile Include="Models\auto_infracao_passeio_reparo.cs" />
     <Compile Include="Models\auto_infracao_passeio.cs" />
     <Compile Include="Models\imunidade_issqn.cs" />
     <Compile Include="Models\alvara_funcionamento.cs" />
@@ -199,6 +200,7 @@
     <Compile Include="Models\notificacao_obra.cs" />
     <Compile Include="Models\auto_infracao_queimada.cs" />
     <Compile Include="Models\notificacao_habitese.cs" />
+    <Compile Include="Models\notificacao_passeio_reparo.cs" />
     <Compile Include="Models\notificacao_passeio.cs" />
     <Compile Include="Models\notificacao_terreno.cs" />
     <Compile Include="Models\numdocumento.cs" />

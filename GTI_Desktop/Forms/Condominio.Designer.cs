@@ -1597,8 +1597,8 @@
             this.Controls.Add(this.PanelLocal);
             this.Controls.Add(this.PanelHeader);
             this.Controls.Add(this.tBar);
-            this.Controls.Add(this.AreaEditPanel);
             this.Controls.Add(this.AreaPanel);
+            this.Controls.Add(this.AreaEditPanel);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
