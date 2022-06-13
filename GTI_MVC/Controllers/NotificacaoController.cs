@@ -2377,7 +2377,7 @@ namespace GTI_Mvc.Controllers {
                         return View(model);
                     }
                     Save_Notificacao_Passeio_Reparo(model);
-                    return RedirectToAction("Notificacao_pass_query");
+                    return RedirectToAction("Notificacao_pass_reparo_query");
                 }
             }
 
@@ -2607,7 +2607,7 @@ namespace GTI_Mvc.Controllers {
                         return View(model);
                     }
                     Save_Auto_Infracao_Passeio_Reparo(model);
-                    return RedirectToAction("AutoInfracao_pass_query");
+                    return RedirectToAction("AutoInfracao_pass_reparo_query");
                 }
             }
 
@@ -2616,7 +2616,7 @@ namespace GTI_Mvc.Controllers {
 
         private ActionResult Save_Auto_Infracao_Passeio_Reparo(NotificacaoPassViewModel model) {
             int _userid = Convert.ToInt32(Session["hashid"]);
-            Auto_infracao_passeio reg = new Auto_infracao_passeio() {
+            Auto_infracao_passeio_reparo reg = new Auto_infracao_passeio_reparo() {
                 Ano_auto = model.Ano_Auto,
                 Numero_auto = model.Numero_Auto,
                 Ano_notificacao = model.Ano_Notificacao,

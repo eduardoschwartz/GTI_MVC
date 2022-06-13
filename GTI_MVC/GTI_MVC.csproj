@@ -1225,6 +1225,16 @@
     <Content Include="Views\Notificacao\AutoInfracao_hab_query.cshtml" />
     <Content Include="Views\Empresa\Imunidade_Issqn.cshtml" />
     <Content Include="Views\Itbi\Itbi_resumo_filter.cshtml" />
+    <Content Include="Views\Notificacao\AutoInfracao_pass_add.cshtml" />
+    <Content Include="Views\Notificacao\AutoInfracao_pass_query.cshtml" />
+    <Content Include="Views\Notificacao\Notificacao_pass_add.cshtml" />
+    <Content Include="Views\Notificacao\Notificacao_pass_menu.cshtml" />
+    <Content Include="Views\Notificacao\Notificacao_pass_query.cshtml" />
+    <Content Include="Views\Notificacao\Notificacao_pass_reparo_menu.cshtml" />
+    <Content Include="Views\Notificacao\Notificacao_pass_reparo_query.cshtml" />
+    <Content Include="Views\Notificacao\Notificacao_pass_reparo_add.cshtml" />
+    <Content Include="Views\Notificacao\AutoInfracao_pass_reparo_add.cshtml" />
+    <Content Include="Views\Notificacao\AutoInfracao_pass_reparo_query.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

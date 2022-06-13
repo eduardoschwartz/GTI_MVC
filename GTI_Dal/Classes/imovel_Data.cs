@@ -3779,8 +3779,8 @@ namespace GTI_Dal.Classes {
 
         public List<Auto_Infracao_Passeio_Reparo_Struct> Lista_Auto_Infracao_Passeio_Reparo(int Ano) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from a in db.Auto_Infracao_Passeio
-                           join n in db.Notificacao_Passeio on new { p1 = a.Ano_notificacao, p2 = a.Numero_notificacao } equals new { p1 = n.Ano_not, p2 = n.Numero_not } into an from n in an.DefaultIfEmpty()
+                var Sql = (from a in db.Auto_Infracao_Passeio_Reparo
+                           join n in db.Notificacao_Passeio_Reparo on new { p1 = a.Ano_notificacao, p2 = a.Numero_notificacao } equals new { p1 = n.Ano_not, p2 = n.Numero_not } into an from n in an.DefaultIfEmpty()
                            where a.Ano_auto == Ano
                            orderby a.Numero_notificacao select new {
                                AnoAuto = a.Ano_auto, NumeroAuto = a.Numero_auto, AnoNot = a.Ano_notificacao, NumeroNot = a.Numero_notificacao, Codigo = n.Codigo, Data_Notificaao = a.Data_notificacao,
