@@ -157,7 +157,7 @@ namespace GTI_Mvc.Controllers {
                 reg.Numero = _numero;
                 reg.Quadra_Original = _dados.QuadraOriginal ?? "";
                 reg.Lote_Original = _dados.LoteOriginal ?? "";
-                reg.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _codigo.ToString() + "-" + _sufixo;
+                reg.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _codigo.ToString() +  _sufixo;
                 reg.Tipo_Certidao = _tipoCertidao;
                 reg.Nao = _nao;
                 reg.Tributo = _tributo;
@@ -201,7 +201,7 @@ namespace GTI_Mvc.Controllers {
                 reg.Nome_Requerente = _dados.Razao_social;
                 reg.Ano = DateTime.Now.Year;
                 reg.Numero = _numero;
-                reg.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _codigo.ToString() + "-" + _sufixo;
+                reg.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _codigo.ToString() +  _sufixo;
                 reg.Tipo_Certidao = _tipoCertidao;
                 reg.Nao = _nao;
                 reg.Tributo = _tributo;
@@ -499,13 +499,13 @@ namespace GTI_Mvc.Controllers {
                 Tributo = _tributo
             };
             if (_tipo_Certidao == RetornoCertidaoDebito.Negativa) {
-                cert.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "-IN";
+                cert.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "IN";
                 //                cert.Tributo = "Não consta débito apurado contra o(a) mesmo(a).";
                 _tipo_certidao = "Negativa";
                 cert.Nao = "NÃO";
             } else {
                 if (_tipo_Certidao == RetornoCertidaoDebito.Positiva) {
-                    cert.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "-IP";
+                    cert.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "IP";
                     //                    cert.Tributo = "Consta débito apurado contra o(a) mesmo(a) com referência a: " + _tributo;
                     cert.Tributo = _tributo;
                     cert.Nao = "";
@@ -513,7 +513,7 @@ namespace GTI_Mvc.Controllers {
                     _reportName = "CertidaoDebitoDocumentoP.rpt";
                 } else {
                     if (_tipo_Certidao == RetornoCertidaoDebito.NegativaPositiva) {
-                        cert.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "-IS";
+                        cert.Controle = _numero_certidao.ToString("00000") + _ano_certidao.ToString("0000") + "/" + _lista_certidao[0]._Codigo.ToString() + "IS";
                         cert.Tributo = _tributo;
                         //                        cert.Tributo = "Consta débito apurado contra o(a) mesmo(a) com referência a: " + _tributo + " que se encontram em sua exigibilidade suspensa, em razão de parcelamento dos débitos";
                         _reportName = "CertidaoDebitoDocumentoPN.rpt";
@@ -552,6 +552,7 @@ namespace GTI_Mvc.Controllers {
 
             //##### QRCode ##########################################################
             string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + cert.Controle;
+        //    Code.Replace("%2", "");
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
             using (Bitmap bitmap = qrCode.GetGraphic(20)) {
@@ -715,7 +716,7 @@ namespace GTI_Mvc.Controllers {
                 Numero_Documento = _documento,
                 Valor_Pago = (decimal)regPag.Valor_Pago_Real
             };
-            reg.Controle = reg.Numero.ToString("00000") + reg.Ano.ToString("0000") + "/" + _codigo.ToString() + "-PG";
+            reg.Controle = reg.Numero.ToString("00000") + reg.Ano.ToString("0000") + "/" + _codigo.ToString() + "PG";
 
 
             certidao.Add(reg);

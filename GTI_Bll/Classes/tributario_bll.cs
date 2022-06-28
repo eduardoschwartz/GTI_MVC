@@ -1363,15 +1363,15 @@ namespace GTI_Bll.Classes {
             if (Chave.Trim().Length < 8)
                 goto fim;
             else {
-                int nPos = Chave.IndexOf("-");
-                if (nPos < 6)
-                    goto fim;
-                else {
+                //int nPos = Chave.IndexOf("-");
+                //if (nPos < 6)
+                //    goto fim;
+                //else {
                     int nPos2 = Chave.IndexOf("/");
-                    if (nPos2 < 5 || nPos - nPos2 < 2)
+                    if (nPos2 < 5 )
                         goto fim;
                     else {
-                        int nCodigo = Convert.ToInt32(Chave.Substring(nPos2 + 1, nPos - nPos2 - 1));
+                        int nCodigo = Convert.ToInt32(Chave.Substring(nPos2 + 1,Chave.Length-nPos2-3));
                         int nAno = Convert.ToInt32(Chave.Substring(nPos2 - 4, 4));
                         int nNumero = Convert.ToInt32(Chave.Substring(0, 5));
                         if (nAno < 2010 || nAno > DateTime.Now.Year + 1)
@@ -1476,7 +1476,7 @@ namespace GTI_Bll.Classes {
                             }
                         }
                     }
-                }
+                //}
             }
         fim:;
             chaveStruct _reg = new chaveStruct {

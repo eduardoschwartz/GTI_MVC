@@ -34,17 +34,17 @@
             this.label13 = new System.Windows.Forms.Label();
             this.QtdeLamina = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.Valor_ci_Total = new System.Windows.Forms.Label();
+            this.Valor_ci_TotalP = new System.Windows.Forms.Label();
             this.Valor_ci_IsentoProcesso = new System.Windows.Forms.Label();
             this.Valor_ci_IsentoArea = new System.Windows.Forms.Label();
             this.Valor_ci_Imune = new System.Windows.Forms.Label();
             this.Valor_ci_Normal = new System.Windows.Forms.Label();
-            this.Valor_si_Total = new System.Windows.Forms.Label();
+            this.Valor_si_TotalP = new System.Windows.Forms.Label();
             this.Valor_si_IsentoProcesso = new System.Windows.Forms.Label();
             this.Valor_si_IsentoArea = new System.Windows.Forms.Label();
             this.Valor_si_Imune = new System.Windows.Forms.Label();
             this.Valor_si_Normal = new System.Windows.Forms.Label();
-            this.QtdeTotal = new System.Windows.Forms.Label();
+            this.QtdeTotalP = new System.Windows.Forms.Label();
             this.QtdeIsentoProcesso = new System.Windows.Forms.Label();
             this.QtdeIsentoArea = new System.Windows.Forms.Label();
             this.QtdeImune = new System.Windows.Forms.Label();
@@ -58,6 +58,14 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.Valor_ci_TotalT = new System.Windows.Forms.Label();
+            this.Valor_si_TotalT = new System.Windows.Forms.Label();
+            this.QtdeTotalT = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.Valor_ci_Total = new System.Windows.Forms.Label();
+            this.Valor_si_Total = new System.Windows.Forms.Label();
+            this.QtdeTotal = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -111,7 +119,7 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MsgToolStrip});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 253);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 291);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(473, 22);
             this.statusStrip1.TabIndex = 4;
@@ -138,20 +146,28 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.Valor_ci_Total);
+            this.groupBox1.Controls.Add(this.Valor_si_Total);
+            this.groupBox1.Controls.Add(this.QtdeTotal);
+            this.groupBox1.Controls.Add(this.label20);
+            this.groupBox1.Controls.Add(this.Valor_ci_TotalT);
+            this.groupBox1.Controls.Add(this.Valor_si_TotalT);
+            this.groupBox1.Controls.Add(this.QtdeTotalT);
+            this.groupBox1.Controls.Add(this.label16);
             this.groupBox1.Controls.Add(this.label13);
             this.groupBox1.Controls.Add(this.QtdeLamina);
             this.groupBox1.Controls.Add(this.label11);
-            this.groupBox1.Controls.Add(this.Valor_ci_Total);
+            this.groupBox1.Controls.Add(this.Valor_ci_TotalP);
             this.groupBox1.Controls.Add(this.Valor_ci_IsentoProcesso);
             this.groupBox1.Controls.Add(this.Valor_ci_IsentoArea);
             this.groupBox1.Controls.Add(this.Valor_ci_Imune);
             this.groupBox1.Controls.Add(this.Valor_ci_Normal);
-            this.groupBox1.Controls.Add(this.Valor_si_Total);
+            this.groupBox1.Controls.Add(this.Valor_si_TotalP);
             this.groupBox1.Controls.Add(this.Valor_si_IsentoProcesso);
             this.groupBox1.Controls.Add(this.Valor_si_IsentoArea);
             this.groupBox1.Controls.Add(this.Valor_si_Imune);
             this.groupBox1.Controls.Add(this.Valor_si_Normal);
-            this.groupBox1.Controls.Add(this.QtdeTotal);
+            this.groupBox1.Controls.Add(this.QtdeTotalP);
             this.groupBox1.Controls.Add(this.QtdeIsentoProcesso);
             this.groupBox1.Controls.Add(this.QtdeIsentoArea);
             this.groupBox1.Controls.Add(this.QtdeImune);
@@ -167,7 +183,7 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Location = new System.Drawing.Point(12, 79);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(449, 163);
+            this.groupBox1.Size = new System.Drawing.Size(449, 204);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             // 
@@ -186,7 +202,7 @@
             this.QtdeLamina.AutoSize = true;
             this.QtdeLamina.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.QtdeLamina.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
-            this.QtdeLamina.Location = new System.Drawing.Point(147, 141);
+            this.QtdeLamina.Location = new System.Drawing.Point(147, 184);
             this.QtdeLamina.Name = "QtdeLamina";
             this.QtdeLamina.Size = new System.Drawing.Size(49, 14);
             this.QtdeLamina.TabIndex = 25;
@@ -196,22 +212,22 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(6, 141);
+            this.label11.Location = new System.Drawing.Point(6, 184);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(140, 14);
             this.label11.TabIndex = 24;
             this.label11.Text = "Total de lâminas..:";
             // 
-            // Valor_ci_Total
+            // Valor_ci_TotalP
             // 
-            this.Valor_ci_Total.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Valor_ci_Total.ForeColor = System.Drawing.Color.Purple;
-            this.Valor_ci_Total.Location = new System.Drawing.Point(330, 121);
-            this.Valor_ci_Total.Name = "Valor_ci_Total";
-            this.Valor_ci_Total.Size = new System.Drawing.Size(112, 14);
-            this.Valor_ci_Total.TabIndex = 23;
-            this.Valor_ci_Total.Text = "R$ 0,00";
-            this.Valor_ci_Total.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.Valor_ci_TotalP.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Valor_ci_TotalP.ForeColor = System.Drawing.Color.Purple;
+            this.Valor_ci_TotalP.Location = new System.Drawing.Point(330, 121);
+            this.Valor_ci_TotalP.Name = "Valor_ci_TotalP";
+            this.Valor_ci_TotalP.Size = new System.Drawing.Size(112, 14);
+            this.Valor_ci_TotalP.TabIndex = 23;
+            this.Valor_ci_TotalP.Text = "R$ 0,00";
+            this.Valor_ci_TotalP.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // Valor_ci_IsentoProcesso
             // 
@@ -257,16 +273,16 @@
             this.Valor_ci_Normal.Text = "R$ 0,00";
             this.Valor_ci_Normal.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // Valor_si_Total
+            // Valor_si_TotalP
             // 
-            this.Valor_si_Total.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Valor_si_Total.ForeColor = System.Drawing.Color.Navy;
-            this.Valor_si_Total.Location = new System.Drawing.Point(212, 121);
-            this.Valor_si_Total.Name = "Valor_si_Total";
-            this.Valor_si_Total.Size = new System.Drawing.Size(112, 14);
-            this.Valor_si_Total.TabIndex = 18;
-            this.Valor_si_Total.Text = "R$ 0,00";
-            this.Valor_si_Total.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.Valor_si_TotalP.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Valor_si_TotalP.ForeColor = System.Drawing.Color.Navy;
+            this.Valor_si_TotalP.Location = new System.Drawing.Point(212, 121);
+            this.Valor_si_TotalP.Name = "Valor_si_TotalP";
+            this.Valor_si_TotalP.Size = new System.Drawing.Size(112, 14);
+            this.Valor_si_TotalP.TabIndex = 18;
+            this.Valor_si_TotalP.Text = "R$ 0,00";
+            this.Valor_si_TotalP.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // Valor_si_IsentoProcesso
             // 
@@ -312,16 +328,16 @@
             this.Valor_si_Normal.Text = "R$ 0,00";
             this.Valor_si_Normal.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // QtdeTotal
+            // QtdeTotalP
             // 
-            this.QtdeTotal.AutoSize = true;
-            this.QtdeTotal.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.QtdeTotal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
-            this.QtdeTotal.Location = new System.Drawing.Point(154, 121);
-            this.QtdeTotal.Name = "QtdeTotal";
-            this.QtdeTotal.Size = new System.Drawing.Size(42, 14);
-            this.QtdeTotal.TabIndex = 13;
-            this.QtdeTotal.Text = "00000";
+            this.QtdeTotalP.AutoSize = true;
+            this.QtdeTotalP.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.QtdeTotalP.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.QtdeTotalP.Location = new System.Drawing.Point(154, 121);
+            this.QtdeTotalP.Name = "QtdeTotalP";
+            this.QtdeTotalP.Size = new System.Drawing.Size(42, 14);
+            this.QtdeTotalP.TabIndex = 13;
+            this.QtdeTotalP.Text = "00000";
             // 
             // QtdeIsentoProcesso
             // 
@@ -383,7 +399,7 @@
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(140, 14);
             this.label9.TabIndex = 7;
-            this.label9.Text = "Total de imóveis..:";
+            this.label9.Text = "Total Predial.....:";
             // 
             // label8
             // 
@@ -458,11 +474,97 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Imóveis normais...:";
             // 
+            // Valor_ci_TotalT
+            // 
+            this.Valor_ci_TotalT.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Valor_ci_TotalT.ForeColor = System.Drawing.Color.Purple;
+            this.Valor_ci_TotalT.Location = new System.Drawing.Point(331, 142);
+            this.Valor_ci_TotalT.Name = "Valor_ci_TotalT";
+            this.Valor_ci_TotalT.Size = new System.Drawing.Size(112, 14);
+            this.Valor_ci_TotalT.TabIndex = 30;
+            this.Valor_ci_TotalT.Text = "R$ 0,00";
+            this.Valor_ci_TotalT.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // Valor_si_TotalT
+            // 
+            this.Valor_si_TotalT.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Valor_si_TotalT.ForeColor = System.Drawing.Color.Navy;
+            this.Valor_si_TotalT.Location = new System.Drawing.Point(213, 142);
+            this.Valor_si_TotalT.Name = "Valor_si_TotalT";
+            this.Valor_si_TotalT.Size = new System.Drawing.Size(112, 14);
+            this.Valor_si_TotalT.TabIndex = 29;
+            this.Valor_si_TotalT.Text = "R$ 0,00";
+            this.Valor_si_TotalT.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // QtdeTotalT
+            // 
+            this.QtdeTotalT.AutoSize = true;
+            this.QtdeTotalT.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.QtdeTotalT.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.QtdeTotalT.Location = new System.Drawing.Point(155, 142);
+            this.QtdeTotalT.Name = "QtdeTotalT";
+            this.QtdeTotalT.Size = new System.Drawing.Size(42, 14);
+            this.QtdeTotalT.TabIndex = 28;
+            this.QtdeTotalT.Text = "00000";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Location = new System.Drawing.Point(6, 142);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(147, 14);
+            this.label16.TabIndex = 27;
+            this.label16.Text = "Total Territorial..:";
+            // 
+            // Valor_ci_Total
+            // 
+            this.Valor_ci_Total.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Valor_ci_Total.ForeColor = System.Drawing.Color.Purple;
+            this.Valor_ci_Total.Location = new System.Drawing.Point(331, 163);
+            this.Valor_ci_Total.Name = "Valor_ci_Total";
+            this.Valor_ci_Total.Size = new System.Drawing.Size(112, 14);
+            this.Valor_ci_Total.TabIndex = 34;
+            this.Valor_ci_Total.Text = "R$ 0,00";
+            this.Valor_ci_Total.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // Valor_si_Total
+            // 
+            this.Valor_si_Total.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Valor_si_Total.ForeColor = System.Drawing.Color.Navy;
+            this.Valor_si_Total.Location = new System.Drawing.Point(213, 163);
+            this.Valor_si_Total.Name = "Valor_si_Total";
+            this.Valor_si_Total.Size = new System.Drawing.Size(112, 14);
+            this.Valor_si_Total.TabIndex = 33;
+            this.Valor_si_Total.Text = "R$ 0,00";
+            this.Valor_si_Total.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // QtdeTotal
+            // 
+            this.QtdeTotal.AutoSize = true;
+            this.QtdeTotal.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.QtdeTotal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.QtdeTotal.Location = new System.Drawing.Point(155, 163);
+            this.QtdeTotal.Name = "QtdeTotal";
+            this.QtdeTotal.Size = new System.Drawing.Size(42, 14);
+            this.QtdeTotal.TabIndex = 32;
+            this.QtdeTotal.Text = "00000";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.Location = new System.Drawing.Point(7, 163);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(140, 14);
+            this.label20.TabIndex = 31;
+            this.label20.Text = "Total de imóveis..:";
+            // 
             // Calculo_Imposto
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(473, 275);
+            this.ClientSize = new System.Drawing.Size(473, 313);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.ExportarButton);
             this.Controls.Add(this.statusStrip1);
@@ -504,17 +606,17 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label QtdeTotal;
+        private System.Windows.Forms.Label QtdeTotalP;
         private System.Windows.Forms.Label QtdeIsentoProcesso;
         private System.Windows.Forms.Label QtdeIsentoArea;
         private System.Windows.Forms.Label QtdeImune;
         private System.Windows.Forms.Label QtdeNormal;
-        private System.Windows.Forms.Label Valor_ci_Total;
+        private System.Windows.Forms.Label Valor_ci_TotalP;
         private System.Windows.Forms.Label Valor_ci_IsentoProcesso;
         private System.Windows.Forms.Label Valor_ci_IsentoArea;
         private System.Windows.Forms.Label Valor_ci_Imune;
         private System.Windows.Forms.Label Valor_ci_Normal;
-        private System.Windows.Forms.Label Valor_si_Total;
+        private System.Windows.Forms.Label Valor_si_TotalP;
         private System.Windows.Forms.Label Valor_si_IsentoProcesso;
         private System.Windows.Forms.Label Valor_si_IsentoArea;
         private System.Windows.Forms.Label Valor_si_Imune;
@@ -522,5 +624,13 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label QtdeLamina;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label Valor_ci_Total;
+        private System.Windows.Forms.Label Valor_si_Total;
+        private System.Windows.Forms.Label QtdeTotal;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label Valor_ci_TotalT;
+        private System.Windows.Forms.Label Valor_si_TotalT;
+        private System.Windows.Forms.Label QtdeTotalT;
+        private System.Windows.Forms.Label label16;
     }
 }

@@ -105,9 +105,15 @@ namespace GTI_Desktop.Forms {
             //ListaAtivos.Add(25839);
 
             int _total = ListaAtivos.Count, _pos = 1;
-            int _qtde_normal = 0,_qtde_imune=0,_qtde_isento_area=0,_qtde_isento_processo=0,_qtde_total=0,_qtde_laminas=0;
+            int _qtde_normal = 0,_qtde_imune=0,_qtde_isento_area=0,_qtde_isento_processo=0,_qtde_total=0, _qtde_laminas=0;
+            int _qtde_normalP = 0, _qtde_imuneP = 0, _qtde_isento_areaP = 0, _qtde_isento_processoP = 0, _qtde_totalP = 0, _qtde_laminasP = 0;
+            int _qtde_normalT = 0, _qtde_imuneT = 0, _qtde_isento_areaT = 0, _qtde_isento_processoT = 0, _qtde_totalT = 0, _qtde_laminasT = 0;
             decimal _valor_si_normal = 0, _valor_si_imune = 0, _valor_si_isento_area = 0, _valor_si_isento_processo = 0, _valor_si_total = 0;
+            decimal _valor_si_normalP = 0, _valor_si_imuneP = 0, _valor_si_isento_areaP = 0, _valor_si_isento_processoP = 0, _valor_si_totalP = 0;
+            decimal _valor_si_normalT = 0, _valor_si_imuneT = 0, _valor_si_isento_areaT = 0, _valor_si_isento_processoT = 0, _valor_si_totalT = 0;
             decimal _valor_ci_normal = 0, _valor_ci_imune = 0, _valor_ci_isento_area = 0, _valor_ci_isento_processo = 0, _valor_ci_total = 0;
+            decimal _valor_ci_normalP = 0, _valor_ci_imuneP = 0, _valor_ci_isento_areaP = 0, _valor_ci_isento_processoP = 0, _valor_ci_totalP = 0;
+            decimal _valor_ci_normalT = 0, _valor_ci_imuneT = 0, _valor_ci_isento_areaT = 0, _valor_ci_isento_processoT = 0, _valor_ci_totalT = 0;
 
             string[] aDocumento = new string[15];
             string  _valor0 = "",_valor91="",_valor92="", _valor1 = "";
@@ -115,7 +121,7 @@ namespace GTI_Desktop.Forms {
             foreach (int Codigo in ListaAtivos) {
 
 //                if (Codigo > 50) break;
-                if (_pos % 50 == 0) {
+             //   if (_pos % 50 == 0) {
                     PBar.Value = _pos * 100 / _total;
                     PBar.Update();
                     Refresh();
@@ -124,6 +130,8 @@ namespace GTI_Desktop.Forms {
                     QtdeIsentoArea.Text = _qtde_isento_area.ToString("00000");
                     QtdeIsentoProcesso.Text = _qtde_isento_processo.ToString("00000");
                     QtdeLamina.Text = _qtde_laminas.ToString("000000");
+                    QtdeTotalP.Text = _qtde_totalP.ToString("00000");
+                    QtdeTotalT.Text = _qtde_totalT.ToString("00000");
                     QtdeTotal.Text = _qtde_total.ToString("00000");
                     Valor_ci_Normal.Text = _valor_ci_normal.ToString("#0.00");
                     Valor_si_Normal.Text = _valor_si_normal.ToString("#0.00");
@@ -132,9 +140,13 @@ namespace GTI_Desktop.Forms {
                     Valor_si_Imune.Text = _valor_si_imune.ToString("#0.00");
                     Valor_si_Total.Text = _valor_si_total.ToString("#0.00");
                     Valor_ci_Total.Text = _valor_ci_total.ToString("#0.00");
+                    Valor_si_TotalP.Text = _valor_si_totalP.ToString("#0.00");
+                    Valor_ci_TotalP.Text = _valor_ci_totalP.ToString("#0.00");
+                    Valor_si_TotalT.Text = _valor_si_totalT.ToString("#0.00");
+                    Valor_ci_TotalT.Text = _valor_ci_totalT.ToString("#0.00");
 
                     Application.DoEvents();
-                }
+            //    }
 
                 SpCalculo _calc = tributario_Class.Calculo_IPTU(Codigo, _ano);
                 int _tipo_isencao = _calc.Tipoisencao;
@@ -162,18 +174,49 @@ namespace GTI_Desktop.Forms {
                         _qtde_normal += 1;
                         _valor_ci_normal += _calc.Valorfinal;
                         _valor_si_normal += _calc.Valorfinalfull;
+                        if (_tributo == 2) {
+                            _qtde_normalT += 1;
+                            _valor_ci_normalT += _calc.Valorfinal;
+                            _valor_si_normalT += _calc.Valorfinalfull;
+                        } else {
+                            _qtde_normalP += 1;
+                            _valor_ci_normalP += _calc.Valorfinal;
+                            _valor_si_normalP += _calc.Valorfinalfull;
+                        }
                         break;
                     case 1:
                         _qtde_imune += 1;
                         _valor_si_imune += _calc.Valorfinalfull;
+                        if (_tributo == 2) {
+                            //_qtde_imuneT += 1;
+                            _qtde_imuneT += 1;
+                            _valor_si_imuneT += _calc.Valorfinalfull;
+                        } else {
+                            _qtde_imuneP += 1;
+                            _valor_si_imuneP += _calc.Valorfinalfull;
+                        }
                         break;
                     case 2:
                         _qtde_isento_area += 1;
                         _valor_si_isento_area += _calc.Valorfinalfull;
+                        if (_tributo == 2) {
+                            _qtde_isento_areaT += 1;
+                            _valor_si_isento_areaT += _calc.Valorfinalfull;
+                        } else {
+                            _qtde_isento_areaP += 1;
+                            _valor_si_isento_areaP += _calc.Valorfinalfull;
+                        }
                         break;
                     case 3:
                         _qtde_isento_processo += 1;
                         _valor_si_isento_processo += _calc.Valorfinalfull;
+                        if (_tributo == 2) {
+                            _qtde_isento_processoT += 1;
+                            _valor_si_isento_processoT += _calc.Valorfinalfull;
+                        } else {
+                            _qtde_isento_processoP += 1;
+                            _valor_si_isento_processoP += _calc.Valorfinalfull;
+                        }
                         break;
                     default:
                         break;
@@ -181,6 +224,15 @@ namespace GTI_Desktop.Forms {
                 _qtde_total = _qtde_normal + _qtde_imune + _qtde_isento_area + _qtde_isento_processo;
                 _valor_ci_total = _valor_ci_normal + _valor_ci_imune + _valor_ci_isento_area + _valor_ci_isento_processo;
                 _valor_si_total = _valor_si_normal + _valor_si_imune + _valor_si_isento_area + _valor_si_isento_processo;
+                if (_tributo == 2) {
+                    _qtde_totalT = _qtde_normalT + _qtde_imuneT + _qtde_isento_areaT + _qtde_isento_processoT;
+                    _valor_ci_totalT = _valor_ci_normalT + _valor_ci_imuneT + _valor_ci_isento_areaT + _valor_ci_isento_processoT;
+                    _valor_si_totalT = _valor_si_normalT + _valor_si_imuneT + _valor_si_isento_areaT + _valor_si_isento_processoT;
+                } else {
+                    _qtde_totalP = _qtde_normalP + _qtde_imuneP + _qtde_isento_areaP + _qtde_isento_processoP;
+                    _valor_ci_totalP = _valor_ci_normalP + _valor_ci_imuneP + _valor_ci_isento_areaP + _valor_ci_isento_processoP;
+                    _valor_si_totalP = _valor_si_normalP + _valor_si_imuneP + _valor_si_isento_areaP + _valor_si_isento_processoP;
+                }
 
                 if (_tipo_isencao == 0 || (_tipo_isencao == 3 && _perc_Isencao < 100)) {
 
@@ -273,14 +325,14 @@ namespace GTI_Desktop.Forms {
             QtdeIsentoArea.Text = _qtde_isento_area.ToString("00000");
             QtdeIsentoProcesso.Text = _qtde_isento_processo.ToString("00000");
             QtdeLamina.Text = _qtde_laminas.ToString("000000");
-            QtdeTotal.Text = _qtde_total.ToString("00000");
+            QtdeTotalP.Text = _qtde_total.ToString("00000");
             Valor_ci_Normal.Text = _valor_ci_normal.ToString("#0.00");
             Valor_si_Normal.Text = _valor_si_normal.ToString("#0.00");
             Valor_si_IsentoArea.Text = _valor_si_isento_area.ToString("#0.00");
             Valor_si_IsentoProcesso.Text = _valor_si_isento_processo.ToString("#0.00");
             Valor_si_Imune.Text = _valor_si_imune.ToString("#0.00");
-            Valor_si_Total.Text = _valor_si_total.ToString("#0.00");
-            Valor_ci_Total.Text = _valor_ci_total.ToString("#0.00");
+            Valor_si_TotalP.Text = _valor_si_total.ToString("#0.00");
+            Valor_ci_TotalP.Text = _valor_ci_total.ToString("#0.00");
 
             Refresh();
             MessageBox.Show("Cálculo finalizado.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -669,8 +721,8 @@ PROXIMO:;
 
         private void ExportarButton_Click(object sender, EventArgs e) {
             if (MessageBox.Show("Exportar para o banco de dados?", "Confimação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No) return;
-            string _exportConnection = _connection;
-            //string _exportConnection = _connectionTeste;
+            //string _exportConnection = _connection;
+            string _exportConnection = _connectionTeste;
 
             Tributario_bll tributario_Class = new Tributario_bll(_exportConnection);
 
@@ -1090,11 +1142,11 @@ PROXIMO:;
                     //parcelas normais
                     for (int _parcela = 1; _parcela <= 3; _parcela++) {
                         string _vencto = aVencimento[_parcela - 1].ToString("dd/MM/yyyy");
-                        string _linha = Codigo + "#" + _ano + "#79#0#" + _parcela + "#0#18#" + _vencto + "#" + _dataBase;
+                        string _linha = Codigo + "#" + _ano + "#79#1#" + _parcela + "#0#18#" + _vencto + "#" + _dataBase;
                         fs1.WriteLine(_linha);
-                        _linha = Codigo + "#" + _ano + "#79#0#" + _parcela + "#0#669#" + _valor_parcela.ToString("#0.00");
+                        _linha = Codigo + "#" + _ano + "#79#1#" + _parcela + "#0#669#" + _valor_parcela.ToString("#0.00");
                         fs2.WriteLine(_linha);
-                        _linha = Codigo + "#" + _ano + "#79#0#" + _parcela + "#0#" + _documento;
+                        _linha = Codigo + "#" + _ano + "#79#1#" + _parcela + "#0#" + _documento;
                         fs3.WriteLine(_linha);
                         _linha = _documento + "#" + DateTime.Now.ToString("dd/MM/yyyy");
                         fs4.WriteLine(_linha);
@@ -1117,7 +1169,7 @@ PROXIMO:;
             MsgToolStrip.Text = "Selecione uma opção de cálculo";
             QtdeNormal.Text = _qtde_normal.ToString("00000");
             QtdeLamina.Text = _qtde_laminas.ToString("000000");
-            QtdeTotal.Text = _qtde_total.ToString("00000");
+            QtdeTotalP.Text = _qtde_total.ToString("00000");
 
             Refresh();
             MessageBox.Show("Cálculo finalizado.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
