@@ -550,9 +550,10 @@ namespace GTI_Mvc.Controllers {
                 Nao = cert.Nao.ToUpper()
             };
 
+            cert.Controle.Replace(" ", "0");
             //##### QRCode ##########################################################
             string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + cert.Controle;
-        //    Code.Replace("%2", "");
+      //    Code.Replace("%2", "");
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
             using (Bitmap bitmap = qrCode.GetGraphic(20)) {

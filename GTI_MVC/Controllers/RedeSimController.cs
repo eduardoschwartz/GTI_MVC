@@ -48,7 +48,7 @@ namespace GTI_MVC.Controllers {
                 }
                 fileName = Path.GetFileName(file.FileName);
                 if (file.ContentLength > 0) {
-                    if (file.ContentType == "application/vnd.ms-excel") {
+                    if (file.ContentType == "application/vnd.ms-excel" || file.ContentType == "text/csv") {
 
                         _guid = Guid.NewGuid().ToString("N");
                         string _path = "~/Files/Redesim/";
