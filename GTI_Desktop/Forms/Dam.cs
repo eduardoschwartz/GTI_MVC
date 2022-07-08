@@ -55,10 +55,7 @@ namespace GTI_Desktop.Forms {
             Carrega_Lista();
         }
 
-        private void DataVenctoDateTimePicker_ValueChanged(object sender, EventArgs e) {
-            MainListView.Items.Clear();
-            Atualiza_Lista_Debitos();
-        }
+      
 
         private void DataVencimentoRefreshButton_Click(object sender, EventArgs e) {
             if (gtiCore.IsDate(DataVencimentoText.Text)) {

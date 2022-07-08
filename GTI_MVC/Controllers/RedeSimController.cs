@@ -59,8 +59,10 @@ namespace GTI_MVC.Controllers {
                         bool _bRegistro = false, _bViabilidade = false, _bLicenciamento = false;
                         StreamReader reader = new StreamReader(@path, Encoding.Default);
                         string line = reader.ReadLine();
+                        char _delimeter = line.Contains(";")?';':',';
+
                         if (!string.IsNullOrWhiteSpace(line)) {
-                            string[] values = line.Split(';');
+                            string[] values = line.Split(_delimeter);
                             if (values[0].ToString().ToUpper() == "PROTOCOLO" && values[1].ToString().ToUpper() == "CNPJ") {
                                 _tipo = "Registro";
                                 _bRegistro = true;
@@ -185,9 +187,11 @@ namespace GTI_MVC.Controllers {
             StreamReader reader = new StreamReader(@_path, Encoding.Default);
             while (!reader.EndOfStream) {
                 string line = reader.ReadLine();
+                char _delimeter = line.Contains(";") ? ';' : ',';
+
                 if (!string.IsNullOrWhiteSpace(line)) {
                     if (_linha > 1) {
-                        string[] values = line.Split(';');
+                        string[] values = line.Split(_delimeter);
                         Redesim_RegistroStruct _linhaReg;
                         if (values[14] == "Sim" || values[14] == "Não") {
                             _linhaReg = new Redesim_RegistroStruct() {
@@ -362,9 +366,10 @@ namespace GTI_MVC.Controllers {
             StreamReader reader = new StreamReader(@_path, Encoding.Default);
             while (!reader.EndOfStream) {
                 string line = reader.ReadLine();
+                char _delimeter = line.Contains(";") ? ';' : ',';
                 if (!string.IsNullOrWhiteSpace(line)) {
                     if (_linha > 1) {
-                        string[] values = line.Split(';');
+                        string[] values = line.Split(_delimeter);
                         Redesim_ViabilidadeStuct _linhaReg;
                         _linhaReg = new Redesim_ViabilidadeStuct() {
                             Protocolo = values[0],
@@ -426,9 +431,10 @@ namespace GTI_MVC.Controllers {
             StreamReader reader = new StreamReader(@_path, Encoding.Default);
             while (!reader.EndOfStream) {
                 string line = reader.ReadLine();
+                char _delimeter = line.Contains(";") ? ';' : ',';
                 if (!string.IsNullOrWhiteSpace(line)) {
                     if (_linha > 1) {
-                        string[] values = line.Split(';');
+                        string[] values = line.Split(_delimeter);
                         Redesim_licenciamentoStruct _linhaReg;
                         _linhaReg = new Redesim_licenciamentoStruct() {
                             Protocolo = values[0],
@@ -604,7 +610,7 @@ namespace GTI_MVC.Controllers {
                         Mei = item.PorteEmpresaMei == "Não" ? false : true,
                         Cnpj = item.Cnpj.Contains("E") ? "" : item.Cnpj,
                         Razao_Social = item.RazaoSocial.ToUpper(),
-                        Cep = Convert.ToInt32(item.Cep),
+                        Cep = item.Cep==""?0 : Convert.ToInt32(item.Cep),
                         Complemento = Functions.TrimEx(item.Complemento),
                         Cnae_Principal = _cnae_principal
                     };
@@ -631,7 +637,8 @@ namespace GTI_MVC.Controllers {
                         _master.Numero = 0;
                     else
                         _master.Numero = Convert.ToInt32(_num);
-                    
+
+                    item.Cep = item.Cep == "" ? "0" : item.Cep;
                     LogradouroStruct _log = enderecoRepository.Retorna_Logradouro_Cep(Convert.ToInt32(item.Cep));
                     int _logradouro = 0;
                     if (_log!=null && _log.CodLogradouro!=null)

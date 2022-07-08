@@ -1141,12 +1141,12 @@ namespace GTI_Mvc.Controllers {
             };
             decimal _somaP = 0, _somaJ = 0, _somaM = 0, _somaC = 0, _somaT = 0, _somaH = 0;
 
-            bool IsRefis = false, DebitoAnoAtual = false, DebitoNoRefis = false;
+            bool IsRefis = true, DebitoAnoAtual = false, DebitoNoRefis = false;
             int nPlano = 0;
             decimal nPerc = 0;
 
             foreach (SelectDebitoEditorViewModel _debitos in model.Debito.Where(m => m.Selected == true)) {
-                if (Convert.ToDateTime(_debitos.Data_Vencimento) >= Convert.ToDateTime("30/11/2021")) {
+                if (Convert.ToDateTime(_debitos.Data_Vencimento) >= Convert.ToDateTime("30/12/2022")) {
                     if (_debitos.Lancamento != 78 && _debitos.Lancamento != 41) {
                         DebitoAnoAtual = true;
                     }
@@ -1154,13 +1154,13 @@ namespace GTI_Mvc.Controllers {
             }
 
             foreach (SelectDebitoEditorViewModel _debitos in model.Debito.Where(m => m.Selected == true)) {
-                if (Convert.ToDateTime(_debitos.Data_Vencimento) < Convert.ToDateTime("30/11/2021")) {
+                if (Convert.ToDateTime(_debitos.Data_Vencimento) < Convert.ToDateTime("30/12/2022")) {
                     DebitoNoRefis = true;
                 }
             }
 
             if (IsRefis && DebitoNoRefis && DebitoAnoAtual) {
-                ViewBag.Result = "Não é permitido emitir guia com débitos anteriores à 30/11/2021 junto com débitos posteriores, durante o período do Refis. Por favor emitir em guias separadas.";
+                ViewBag.Result = "Não é permitido emitir guia com débitos anteriores à 30/12/2022 junto com débitos posteriores, durante o período do Refis. Por favor emitir em guias separadas.";
                 return View("Damc", model);
             }
 
@@ -1187,16 +1187,16 @@ namespace GTI_Mvc.Controllers {
                 };
 
                 if (IsRefis && !DebitoAnoAtual) {
-                    if (Convert.ToDateTime(model.Data_Vencimento) <= Convert.ToDateTime("30/11/2021")) {
-                        nPerc = 0.7M;
-                        nPlano = 49;
+                    if (Convert.ToDateTime(model.Data_Vencimento) <= Convert.ToDateTime("30/09/2022")) {
+                        nPerc = 1M;
+                        nPlano = 53;
 
-                    } else if (Convert.ToDateTime(model.Data_Vencimento) > Convert.ToDateTime("01/09/2021") && Convert.ToDateTime(model.Data_Vencimento) <= Convert.ToDateTime("30/09/2021")) {
+                    } else if (Convert.ToDateTime(model.Data_Vencimento) > Convert.ToDateTime("01/10/2022") && Convert.ToDateTime(model.Data_Vencimento) <= Convert.ToDateTime("30/11/2022")) {
                         nPerc = 0.8M;
-                        nPlano = 48;
-                    } else if (Convert.ToDateTime(model.Data_Vencimento) > Convert.ToDateTime("01/10/2021") && Convert.ToDateTime(model.Data_Vencimento) <= Convert.ToDateTime("28/12/2021")) {
+                        nPlano = 54;
+                    } else if (Convert.ToDateTime(model.Data_Vencimento) > Convert.ToDateTime("01/12/2022") && Convert.ToDateTime(model.Data_Vencimento) <= Convert.ToDateTime("22/12/2022")) {
                         nPerc = 0.7M;
-                        nPlano = 49;
+                        nPlano = 55;
                     } 
                     if (nPlano > 0) {
                         editorViewModel.Soma_Juros = Convert.ToDecimal(editorViewModel.Soma_Juros) - (Convert.ToDecimal(editorViewModel.Soma_Juros) * nPerc);

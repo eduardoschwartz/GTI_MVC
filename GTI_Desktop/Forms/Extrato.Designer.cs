@@ -187,7 +187,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(105, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(104, 17);
             this.toolStripStatusLabel1.Text = "Não Pago (Total)..:";
             // 
             // lblTotalNPago
@@ -231,7 +231,7 @@
             // toolStripStatusLabel5
             // 
             this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
-            this.toolStripStatusLabel5.Size = new System.Drawing.Size(109, 17);
+            this.toolStripStatusLabel5.Size = new System.Drawing.Size(108, 17);
             this.toolStripStatusLabel5.Text = "Total Selecionado..:";
             // 
             // lblTotalSel
@@ -418,7 +418,7 @@
             this.OutrosMenu});
             this.MainMenu.Location = new System.Drawing.Point(4, 32);
             this.MainMenu.Name = "MainMenu";
-            this.MainMenu.Size = new System.Drawing.Size(856, 24);
+            this.MainMenu.Size = new System.Drawing.Size(738, 24);
             this.MainMenu.TabIndex = 45;
             this.MainMenu.Text = "menuStrip1";
             // 
@@ -474,7 +474,7 @@
             this.ExtratoMenu.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ExtratoMenu.ForeColor = System.Drawing.Color.Black;
             this.ExtratoMenu.Name = "ExtratoMenu";
-            this.ExtratoMenu.Size = new System.Drawing.Size(55, 20);
+            this.ExtratoMenu.Size = new System.Drawing.Size(56, 20);
             this.ExtratoMenu.Text = "Extrato";
             this.ExtratoMenu.Click += new System.EventHandler(this.ExtratoMenu_Click);
             // 
@@ -482,14 +482,14 @@
             // 
             this.filtradoToolStripMenuItem.BackColor = System.Drawing.Color.Linen;
             this.filtradoToolStripMenuItem.Name = "filtradoToolStripMenuItem";
-            this.filtradoToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.filtradoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.filtradoToolStripMenuItem.Text = "Filtrado";
             // 
             // completoToolStripMenuItem
             // 
             this.completoToolStripMenuItem.BackColor = System.Drawing.Color.Linen;
             this.completoToolStripMenuItem.Name = "completoToolStripMenuItem";
-            this.completoToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.completoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.completoToolStripMenuItem.Text = "Completo";
             // 
             // DocumentoMenu
@@ -524,7 +524,7 @@
             this.ExecFiscalMenu.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ExecFiscalMenu.ForeColor = System.Drawing.Color.Black;
             this.ExecFiscalMenu.Name = "ExecFiscalMenu";
-            this.ExecFiscalMenu.Size = new System.Drawing.Size(98, 20);
+            this.ExecFiscalMenu.Size = new System.Drawing.Size(99, 20);
             this.ExecFiscalMenu.Text = "Execução fiscal";
             this.ExecFiscalMenu.Click += new System.EventHandler(this.ExecFiscalMenu_Click);
             // 
@@ -1007,6 +1007,7 @@
             this.ValorGuia});
             this.DocumentoListView.FullRowSelect = true;
             this.DocumentoListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.DocumentoListView.HideSelection = false;
             this.DocumentoListView.Location = new System.Drawing.Point(5, 23);
             this.DocumentoListView.Name = "DocumentoListView";
             this.DocumentoListView.Size = new System.Drawing.Size(235, 153);
@@ -1187,6 +1188,7 @@
             this.User,
             this.Obs});
             this.ObservacaoListView.FullRowSelect = true;
+            this.ObservacaoListView.HideSelection = false;
             this.ObservacaoListView.Location = new System.Drawing.Point(6, 23);
             this.ObservacaoListView.Name = "ObservacaoListView";
             this.ObservacaoListView.Size = new System.Drawing.Size(578, 164);
@@ -1275,10 +1277,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Linen;
             this.ClientSize = new System.Drawing.Size(964, 593);
+            this.Controls.Add(this.FiltroPanel);
             this.Controls.Add(this.GridPanel);
             this.Controls.Add(this.sBar);
             this.Controls.Add(this.a1Panel2);
-            this.Controls.Add(this.FiltroPanel);
             this.DoubleBuffered = true;
             this.MainMenuStrip = this.MainMenu;
             this.MaximizeBox = false;

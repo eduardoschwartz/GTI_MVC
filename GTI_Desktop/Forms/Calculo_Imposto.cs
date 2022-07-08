@@ -13,7 +13,7 @@ namespace GTI_Desktop.Forms {
         string _connection = gtiCore.Connection_Name();
         string _connectionTeste = gtiCore.Connection_Name("TributacaoTeste");
         string _path = @"c:\cadastro\bin\";
-        int _ano = 2022;
+        int _ano = 2023;
         int _documento = 19815001;
         decimal _ipca = (decimal)10.25;
  
@@ -40,12 +40,15 @@ namespace GTI_Desktop.Forms {
                     Calculo_Iptu();
                     break;
                 case 1:
+                    _ano = 2023;// remover apos teste
                     Calculo_IssTLL();
                     break; 
                 case 2:
+                    _ano = 2023; //remover apos teste
                     Calculo_Vigilancia();
                     break;
                 case 3:
+                    _ano = 2022; // remover apos teste
                     Calculo_Cip();
                     break;
                 default:
@@ -998,7 +1001,7 @@ PROXIMO:;
             if (ImpostoList.SelectedIndex == 0) {
                 MsgToolStrip.Text = "Inserindo LaserIPTU";
                 Refresh();
-
+                
                 dt = new DataTable();
                 dt.Columns.Add("ano", typeof(short));
                 dt.Columns.Add("codreduzido", typeof(int));
