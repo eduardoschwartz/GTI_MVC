@@ -35,10 +35,10 @@ namespace GTI_MVC.Controllers {
             int _user_id = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
             if (_user_id == 582) {
                 _connection = "gtiConnectionTeste";
-                _RefisAtivo = false;
+                _RefisAtivo = true;
             } else {
                 _connection = "gtiConnection";
-                _RefisAtivo = false;
+                _RefisAtivo = true;
             }
 
             bool _func = Session["hashfunc"].ToString() == "S" ? true : false;
@@ -525,15 +525,15 @@ namespace GTI_MVC.Controllers {
                 DateTime _dataNow = _connection == "gtiConnection" ? DateTime.Now : DateTime.Now;
                 //DateTime _dataNow = _connection == "gtiConnection" ? DateTime.Now : Convert.ToDateTime("20/12/2021");
 
-                if (_dataNow> Convert.ToDateTime("12/12/2021") && _dataNow<= Convert.ToDateTime("29/12/2021")) {
-                    _plano_Codigo = 50;
+                if (_dataNow> Convert.ToDateTime("07/07/2022") && _dataNow<= Convert.ToDateTime("30/09/2022")) {
+                    _plano_Codigo = 56;
                 }
                 else {
-                    if (_dataNow > Convert.ToDateTime("29/12/2021") && _dataNow <= Convert.ToDateTime("14/01/2022")) {
-                        _plano_Codigo = 51;
+                    if (_dataNow > Convert.ToDateTime("01/10/2022") && _dataNow <= Convert.ToDateTime("30/11/2022")) {
+                        _plano_Codigo = 57;
                     } else {
-                        if (_dataNow > Convert.ToDateTime("15/01/2022") && _dataNow <= Convert.ToDateTime("10/03/2022")) {
-                            _plano_Codigo = 52;
+                        if (_dataNow > Convert.ToDateTime("01/12/2022") && _dataNow <= Convert.ToDateTime("22/12/2022")) {
+                            _plano_Codigo = 58;
                         }
                     }
 
