@@ -13,7 +13,8 @@ namespace GTI_Desktop.Forms {
         private string _connection = gtiCore.Connection_Name();
         private bool _stop = false;
         //short _remessa = 3; //29/04/2019
-        short _remessa = 4; //29/07/2019
+        //short _remessa = 4; //29/07/2019
+        short _remessa = 5; //20/07/2022
 
         public Carta_Cobranca() {
             InitializeComponent();
@@ -65,7 +66,7 @@ namespace GTI_Desktop.Forms {
 
         private void Gera_Matriz(int _codigo_ini, int _codigo_fim, DateTime _data_vencto) {
             int _total = 0, _pos = 1, _numero_documento = 17246998; //17.236.150 até 17.256.149
-            DateTime _data_vencimento = Convert.ToDateTime("18/10/2019");
+            DateTime _data_vencimento = Convert.ToDateTime("30/09/2022");
             decimal _valor_honorario = 0;
 
             Exception ex = null;
