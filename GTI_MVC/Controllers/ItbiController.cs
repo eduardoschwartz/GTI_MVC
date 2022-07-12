@@ -1386,7 +1386,7 @@ namespace GTI_Mvc.Controllers {
             }
 
             if (action == "btnAnexoAdd") {
-                if (file != null) {
+                if (file != null && model.Guid!=null) {
                     if (string.IsNullOrWhiteSpace(model.Anexo_Desc_tmp)) {
                         ViewBag.Error = "* Digite uma descrição para o anexo (é necessário selecionar novamente o anexo).";
                         return View(model);
@@ -1399,6 +1399,18 @@ namespace GTI_Mvc.Controllers {
                             string _path = "~/Files/Itbi/" + _ano + "/";
                             var fileName = Path.GetFileName(file.FileName);
                             fileName = fileName.RemoveDiacritics();
+                            bool _existe = false;
+                            foreach (ListAnexoEditorViewModel item in model.Lista_Anexo) {
+                                if (fileName.ToUpper() == item.Arquivo.ToUpper()) {
+                                    _existe = true;
+                                    break;
+                                }
+                            }
+                            if (_existe) {
+                                ViewBag.Error = "* Já foi incluído um arquivo com o mesmo nome (" + fileName + ").";
+                                return View(model);
+                            }
+
                             Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath(_path) + model.Guid);
                             var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path + model.Guid), fileName);
                             file.SaveAs(path);
@@ -1761,7 +1773,23 @@ namespace GTI_Mvc.Controllers {
                             string _path = "~/Files/Itbi/" + _ano + "/";
                             var fileName = Path.GetFileName(file.FileName);
                             fileName = fileName.RemoveDiacritics();
+
+                            bool _existe = false;
+                            foreach (ListAnexoEditorViewModel item in model.Lista_Anexo) {
+                                if (fileName.ToUpper() == item.Arquivo.ToUpper()) {
+                                    _existe = true;
+                                    break;
+                                }
+                            }
+                            if (_existe) {
+                                ViewBag.Error = "* Já foi incluído um arquivo com o mesmo nome (" + fileName + ").";
+                                return View(model);
+                            }
+
                             Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath(_path) + model.Guid);
+
+
+
                             var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path + model.Guid), fileName);
                             file.SaveAs(path);
 
