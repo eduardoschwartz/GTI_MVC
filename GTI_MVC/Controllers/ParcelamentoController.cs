@@ -181,10 +181,18 @@ namespace GTI_MVC.Controllers {
 
             //Lista de empresas
             List<int> _listaEmpresa;
-            if (_bCpf)
+            int _codEmp;
+            if (_bCpf) {
                 _listaEmpresa = empresaRepository.Lista_Empresa_Proprietario_Cpf(Functions.RetornaNumero(_req.Cpf_Cnpj));
-            else
+                _codEmp = empresaRepository.ExisteEmpresaCpf(Functions.RetornaNumero(_req.Cpf_Cnpj));
+            } else {
                 _listaEmpresa = empresaRepository.Lista_Empresa_Proprietario_Cnpj(Functions.RetornaNumero(_req.Cpf_Cnpj));
+                _codEmp = empresaRepository.ExisteEmpresaCnpj(Functions.RetornaNumero(_req.Cpf_Cnpj));
+            }
+            if (_codEmp > 0)
+                _listaEmpresa.Add(_codEmp);
+
+
 
             foreach (int cod in _listaEmpresa) {
                 Contribuinte_Header_Struct _header = sistemaRepository.Contribuinte_Header(cod);
