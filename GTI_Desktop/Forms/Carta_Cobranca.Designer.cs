@@ -110,7 +110,7 @@
             this.DataVencto.Name = "DataVencto";
             this.DataVencto.Size = new System.Drawing.Size(74, 20);
             this.DataVencto.TabIndex = 2;
-            this.DataVencto.Text = "30062022";
+            this.DataVencto.Text = "18072022";
             // 
             // PrintButton
             // 

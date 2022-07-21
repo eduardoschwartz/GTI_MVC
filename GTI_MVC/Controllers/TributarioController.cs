@@ -966,7 +966,8 @@ namespace GTI_Mvc.Controllers {
                         reg.Soma_Honorario = item.Valortotal * (decimal)0.1;
                     else
                         reg.Soma_Honorario = 0;
-                    Lista_debitos.Add(reg);
+                    if(reg.Codigo_Lancamento!=41)
+                        Lista_debitos.Add(reg);
                 }
             }
 

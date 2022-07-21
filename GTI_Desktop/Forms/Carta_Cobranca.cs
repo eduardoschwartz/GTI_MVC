@@ -45,6 +45,7 @@ namespace GTI_Desktop.Forms {
                         else {
                             _stop = false;
                             gtiCore.Ocupado(this);
+                            
                             Gera_Matriz(_codigo_ini, _codigo_fim, Convert.ToDateTime(DataVencto.Text));
                             gtiCore.Liberado(this);
                             PrintReport();
@@ -65,7 +66,7 @@ namespace GTI_Desktop.Forms {
         }
 
         private void Gera_Matriz(int _codigo_ini, int _codigo_fim, DateTime _data_vencto) {
-            int _total = 0, _pos = 1, _numero_documento = 17246998; //17.236.150 até 17.256.149
+            int _total = 0, _pos = 1, _numero_documento = 20018535; //20.003.042 até 20.030.000
             DateTime _data_vencimento = Convert.ToDateTime("30/09/2022");
             decimal _valor_honorario = 0;
 
@@ -84,11 +85,11 @@ namespace GTI_Desktop.Forms {
             List<int> _lista_codigos = tributario_Class.Lista_Codigo_Carta(_codigo_ini, _codigo_fim, _data_vencto);
 
             PBar.Value = 0;
-        //    ex = tributario_Class.Excluir_Carta_Cobranca(_remessa);
-        //    if (ex != null) {
-        //        ErrorBox eBox = new ErrorBox("Atenção", ex.Message, ex);
-        //        eBox.ShowDialog();
-        //    }
+            //ex = tributario_Class.Excluir_Carta_Cobranca(_remessa);
+            //if (ex != null) {
+            //    ErrorBox eBox = new ErrorBox("Atenção", ex.Message, ex);
+            //    eBox.ShowDialog();
+            //}
             _total = _lista_codigos.Count;
             _lista_codigos.Sort();
             foreach (int _codigo_atual in _lista_codigos) {
@@ -192,37 +193,37 @@ namespace GTI_Desktop.Forms {
 
                 //AR
                 _valor_AR = 0;
-                foreach (SpExtrato_carta item in Lista_Extrato_Parcela) {
-                    if (item.Anoexercicio == 2019 && item.Codlancamento == 78) {
-                        _valor_AR += item.Valortributo;
-                        Parceladocumento RegParcAR = new Parceladocumento {
-                            Codreduzido = _codigo_atual,
-                            Anoexercicio = item.Anoexercicio,
-                            Codlancamento = 78,
-                            Seqlancamento = item.Seqlancamento,
-                            Numparcela = (byte)item.Numparcela,
-                            Codcomplemento = item.Codcomplemento,
-                            Numdocumento = _numero_documento,
-                            Plano = 39
-                        };
-                        ex = tributario_Class.Insert_Parcela_Documento(RegParcAR);
-                    }
-                }
+                //foreach (SpExtrato_carta item in Lista_Extrato_Parcela) {
+                //    if (item.Anoexercicio == 2019 && item.Codlancamento == 78) {
+                //        _valor_AR += item.Valortributo;
+                //        Parceladocumento RegParcAR = new Parceladocumento {
+                //            Codreduzido = _codigo_atual,
+                //            Anoexercicio = item.Anoexercicio,
+                //            Codlancamento = 78,
+                //            Seqlancamento = item.Seqlancamento,
+                //            Numparcela = (byte)item.Numparcela,
+                //            Codcomplemento = item.Codcomplemento,
+                //            Numdocumento = _numero_documento,
+                //            Plano = 39
+                //        };
+                //        ex = tributario_Class.Insert_Parcela_Documento(RegParcAR);
+                //    }
+                //}
 
-                Carta_cobranca_detalhe RegDetAR = new Carta_cobranca_detalhe {
-                    Codigo = _codigo_atual,
-                    Remessa = _remessa,
-                    Ano = 2,
-                    Parcela = 1,
-                    Principal = _valor_AR,
-                    Juros = 0,
-                    Multa = 0,
-                    Correcao = 0,
-                    Total = _valor_AR,
-                    Ordem = 3
-                };
-                if (_valor_AR > 0)
-                    ex = tributario_Class.Insert_Carta_Cobranca_Detalhe(RegDetAR);
+                //Carta_cobranca_detalhe RegDetAR = new Carta_cobranca_detalhe {
+                //    Codigo = _codigo_atual,
+                //    Remessa = _remessa,
+                //    Ano = 2,
+                //    Parcela = 1,
+                //    Principal = _valor_AR,
+                //    Juros = 0,
+                //    Multa = 0,
+                //    Correcao = 0,
+                //    Total = _valor_AR,
+                //    Ordem = 3
+                //};
+                //if (_valor_AR > 0)
+                //    ex = tributario_Class.Insert_Carta_Cobranca_Detalhe(RegDetAR);
 
                 _valor_boleto = Convert.ToDecimal( Math.Round( _valor_boleto,2) + Math.Round(_valor_honorario,2,mode:MidpointRounding.AwayFromZero) + _valor_AR);
 
