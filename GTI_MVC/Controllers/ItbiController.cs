@@ -1386,6 +1386,11 @@ namespace GTI_Mvc.Controllers {
             }
 
             if (action == "btnAnexoAdd") {
+                if (model.Guid == null){
+                    ViewBag.Error = "* Selecione o comprador antes de anexar os documentos).";
+                    return View(model);
+                }
+
                 if (file != null && model.Guid!=null) {
                     if (string.IsNullOrWhiteSpace(model.Anexo_Desc_tmp)) {
                         ViewBag.Error = "* Digite uma descrição para o anexo (é necessário selecionar novamente o anexo).";
