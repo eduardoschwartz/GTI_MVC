@@ -28,6 +28,8 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Threading;
+using System.Web.UI;
+using System.Runtime.ConstrainedExecution;
 
 namespace GTI_Mvc.Controllers {
     [Route("Tributario")]
@@ -257,16 +259,17 @@ namespace GTI_Mvc.Controllers {
 
             //##### QRCode ##########################################################
             string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + reg.Controle;
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
-            using (Bitmap bitmap = qrCode.GetGraphic(20)) {
-                using (MemoryStream ms = new MemoryStream()) {
-                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                    byte[] byteImage = ms.ToArray();
-                    cimp.QRCodeImage = byteImage;
-                }
-            }
+            //QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            //QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
+            //using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+            //    using (MemoryStream ms = new MemoryStream()) {
+            //        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            //        byte[] byteImage = ms.ToArray();
+            //        cimp.QRCodeImage = byteImage;
+            //    }
+            //}
             //#######################################################################
+            cimp.QRCodeImage = Functions.Generate_QRCode(Code);
             ex = tributarioRepository.Insert_Certidao_Impressao(cimp);
 
             Certidao_debito_doc RegSave = new Certidao_debito_doc() {
@@ -553,17 +556,19 @@ namespace GTI_Mvc.Controllers {
             cert.Controle.Replace(" ", "0");
             //##### QRCode ##########################################################
             string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + cert.Controle;
-      //    Code.Replace("%2", "");
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
-            using (Bitmap bitmap = qrCode.GetGraphic(20)) {
-                using (MemoryStream ms = new MemoryStream()) {
-                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                    byte[] byteImage = ms.ToArray();
-                    cimp.QRCodeImage = byteImage;
-                }
-            }
+            //    Code.Replace("%2", "");
+            //QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            //QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
+            //using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+            //    using (MemoryStream ms = new MemoryStream()) {
+            //        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            //        byte[] byteImage = ms.ToArray();
+            //        cimp.QRCodeImage = byteImage;
+            //    }
+            //}
             //#######################################################################
+
+            cimp.QRCodeImage = Functions.Generate_QRCode(Code);
             ex = tributarioRepository.Insert_Certidao_Impressao(cimp);
 
             if (ex != null) {
@@ -2855,27 +2860,27 @@ namespace GTI_Mvc.Controllers {
 
             //Extrai o QrCode 
             string base64string, base64stringBC;
-            //##### QRCode && BarCode################################################
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(_dh.Emv, QRCodeGenerator.ECCLevel.Q);
-            using (Bitmap bitmap = qrCode.GetGraphic(20)) {
-                using (MemoryStream ms = new MemoryStream()) {
-                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                    byte[] byteImage = ms.ToArray();
-                    base64string = Convert.ToBase64String(byteImage);
-                    _dh.Qrcodeimage = byteImage;
-                }
-            }
-
-           //Image img=  Int2of5.GenerateBarCode(cob.Codigo_Barra, 1000, 100, 2);
-           // using (Image bitmap = img) {
-           //     using (MemoryStream ms = new MemoryStream()) {
-           //         bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-           //         byte[] byteImage = ms.ToArray();
-           //         base64stringBC = Convert.ToBase64String(byteImage);
-           //         _dh.Codebar = byteImage;
-           //     }
-           // }
+            ////##### QRCode && BarCode################################################
+            //QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            //QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(_dh.Emv, QRCodeGenerator.ECCLevel.Q);
+            //using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+            //    using (MemoryStream ms = new MemoryStream()) {
+            //        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            //        byte[] byteImage = ms.ToArray();
+            //        base64string = Convert.ToBase64String(byteImage);
+            //        _dh.Qrcodeimage = byteImage;
+            //    }
+            //}
+            _dh.Qrcodeimage = Functions.Generate_QRCode(_dh.Emv);
+            //Image img=  Int2of5.GenerateBarCode(cob.Codigo_Barra, 1000, 100, 2);
+            // using (Image bitmap = img) {
+            //     using (MemoryStream ms = new MemoryStream()) {
+            //         bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            //         byte[] byteImage = ms.ToArray();
+            //         base64stringBC = Convert.ToBase64String(byteImage);
+            //         _dh.Codebar = byteImage;
+            //     }
+            // }
             //#######################################################################
             ex = tributarioRepository.Insert_Dam_Header(_dh);
 

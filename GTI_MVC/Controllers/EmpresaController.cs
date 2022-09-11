@@ -915,16 +915,17 @@ namespace GTI_Mvc.Controllers {
 
                 //##### QRCode ##########################################################
                 string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + alvara.Controle;
-                QRCodeGenerator qrGenerator = new QRCodeGenerator();
-                QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
-                using (Bitmap bitmap = qrCode.GetGraphic(20)) {
-                    using (MemoryStream ms = new MemoryStream()) {
-                        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                        byte[] byteImage = ms.ToArray();
-                        alvara.QRCodeImage = byteImage;
-                    }
-                }
+                //QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                //QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
+                //using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+                //    using (MemoryStream ms = new MemoryStream()) {
+                //        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                //        byte[] byteImage = ms.ToArray();
+                //        alvara.QRCodeImage = byteImage;
+                //    }
+                //}
                 //#######################################################################
+                alvara.QRCodeImage = Functions.Generate_QRCode(Code);
 
                 Tributario_bll tributarioRepository = new Tributario_bll(_connection);
                 Exception ex = tributarioRepository.Insert_Alvara_Funcionamento(alvara);
@@ -1759,17 +1760,19 @@ namespace GTI_Mvc.Controllers {
             string controle = _numero.ToString("00000") + _ano.ToString("0000") + "/" + _codigo.ToString() + "-AF";
             //##### QRCode ##########################################################
             string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + controle;
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
-            using (Bitmap bitmap = qrCode.GetGraphic(20)) {
-                using (MemoryStream ms = new MemoryStream()) {
-                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                    byte[] byteImage = ms.ToArray();
-                    _alvara.QRCodeImage = byteImage;
-                    _alvara.Controle = controle;
-                }
-            }
+            //QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            //QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
+            //using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+            //    using (MemoryStream ms = new MemoryStream()) {
+            //        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            //        byte[] byteImage = ms.ToArray();
+            //        _alvara.QRCodeImage = byteImage;
+            //        _alvara.Controle = controle;
+            //    }
+            //}
             //#######################################################################
+            _alvara.QRCodeImage = Functions.Generate_QRCode(Code);
+            _alvara.Controle = controle;
 
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
              ex = tributarioRepository.Insert_Alvara_Funcionamento_Def(_alvara);
@@ -1941,16 +1944,17 @@ namespace GTI_Mvc.Controllers {
 
                 //##### QRCode ##########################################################
                 string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + certidao.Controle;
-                QRCodeGenerator qrGenerator = new QRCodeGenerator();
-                QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
-                using (Bitmap bitmap = qrCode.GetGraphic(20)) {
-                    using (MemoryStream ms = new MemoryStream()) {
-                        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                        byte[] byteImage = ms.ToArray();
-                        certidao.QRCodeImage = byteImage;
-                    }
-                }
+                //QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                //QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
+                //using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+                //    using (MemoryStream ms = new MemoryStream()) {
+                //        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                //        byte[] byteImage = ms.ToArray();
+                //        certidao.QRCodeImage = byteImage;
+                //    }
+                //}
                 //#######################################################################
+                certidao.QRCodeImage = Functions.Generate_QRCode(Code);
 
                 Tributario_bll tributarioRepository = new Tributario_bll(_connection);
                 Exception ex = tributarioRepository.Insert_Imunidade_Issqn(certidao);

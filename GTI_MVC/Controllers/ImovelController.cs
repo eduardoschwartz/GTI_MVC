@@ -153,17 +153,18 @@ namespace GTI_Mvc.Controllers {
             };
             //##### QRCode ##########################################################
             string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + reg.Controle;
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
-            using (Bitmap bitmap = qrCode.GetGraphic(20)) {
-                using (MemoryStream ms = new MemoryStream()) {
-                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                    byte[] byteImage = ms.ToArray();
-                    regCert.QRCodeImage = byteImage;
-                }
-            }
+            //QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            //QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
+            //using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+            //    using (MemoryStream ms = new MemoryStream()) {
+            //        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            //        byte[] byteImage = ms.ToArray();
+            //        regCert.QRCodeImage = byteImage;
+            //    }
+            //}
             //#######################################################################
 
+            regCert.QRCodeImage = Functions.Generate_QRCode(Code);
             if (ex != null) {
                 ViewBag.Result = "Ocorreu um erro no processamento das informações.";
                 return View(certidaoViewModel);
@@ -393,16 +394,19 @@ namespace GTI_Mvc.Controllers {
             };
             //##### QRCode ##########################################################
             string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + reg.Controle;
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
-            using (Bitmap bitmap = qrCode.GetGraphic(20)) {
-                using (MemoryStream ms = new MemoryStream()) {
-                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                    byte[] byteImage = ms.ToArray();
-                    cimp.QRCodeImage = byteImage;
-                }
-            }
+            //QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            //QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
+            //using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+            //    using (MemoryStream ms = new MemoryStream()) {
+            //        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            //        byte[] byteImage = ms.ToArray();
+            //        cimp.QRCodeImage = byteImage;
+            //    }
+            //}
             //#######################################################################
+
+            cimp.QRCodeImage = Functions.Generate_QRCode(Code);
+
             ex = tributarioRepository.Insert_Certidao_Impressao(cimp);
 
             if (ex != null) {

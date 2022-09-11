@@ -626,7 +626,7 @@ namespace GTI_Mvc.Controllers {
             Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             Usuario_web reg = sistemaRepository.Retorna_Usuario_Web(model.Email);
             int Id = reg.Id;
-            Exception ex = sistemaRepository.Alterar_Usuario_Web_Senha(Id, model.Senha);
+            Exception ex = sistemaRepository.Alterar_Usuario_Web_Senha(Id, model.Senha2);
 
             ViewBag.Message = "A senha foi alterar com sucesso.";
 

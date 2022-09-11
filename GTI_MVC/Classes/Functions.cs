@@ -1,9 +1,12 @@
 ﻿using GTI_Models;
 using GTI_Models.Models;
+using QRCoder;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Drawing;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -646,6 +649,18 @@ namespace GTI_Mvc {
             return dateToCheck >= startDate && dateToCheck < endDate;
         }
 
+        public static byte[] Generate_QRCode(string Code) {
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
+            using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+                Bitmap resized = new Bitmap(bitmap, new Size(bitmap.Width / 4, bitmap.Height / 4));
+                using (MemoryStream ms = new MemoryStream()) {
+                    resized.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    byte[] byteImage = ms.ToArray();
+                    return byteImage;
+                }
+            }
+        }
 
     }
 
