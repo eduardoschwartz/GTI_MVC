@@ -598,9 +598,15 @@ namespace GTI_MVC.Controllers {
                             }
                             _indexCnae++;
                         }
-                        redesimRepository.Incluir_Cnae(item.Protocolo, _listaCnae);
+                        if (_listaCnae != null) {
+                            if (_listaCnae[0]!=null)
+                                redesimRepository.Incluir_Cnae(item.Protocolo, _listaCnae);
+                        }
                     }
 
+                    bool _num = Functions.IsNumeric(item.Cep);
+                    if (!_num)
+                        item.Cep = "0";
                     Redesim_licenciamento reg = new Redesim_licenciamento() {
                         Arquivo = _guid,
                         Protocolo = item.Protocolo,
@@ -610,10 +616,15 @@ namespace GTI_MVC.Controllers {
                         Mei = item.PorteEmpresaMei == "Não" ? false : true,
                         Cnpj = item.Cnpj.Contains("E") ? "" : item.Cnpj,
                         Razao_Social = item.RazaoSocial.ToUpper(),
-                        Cep = item.Cep==""?0 : Convert.ToInt32(item.Cep),
                         Complemento = Functions.TrimEx(item.Complemento),
                         Cnae_Principal = _cnae_principal
                     };
+                    try {
+                        reg.Cep = !Functions.IsNumeric(item.Cep) ? 0 : Convert.ToInt32(item.Cep);
+                    } catch  {
+                        item.Cep = "0";
+                    }
+                    
                     Exception ex = redesimRepository.Incluir_Licenciamento(reg);
                 }
                 _listaLicenciamento[_pos].Duplicado = _existe;
@@ -667,7 +678,7 @@ namespace GTI_MVC.Controllers {
                     Redesim_Viabilidade _via = redesimRepository.Retorna_Viabilidade(item.Protocolo);
                     Exception ex = redesimRepository.Atualizar_Master_Viabilidade(_via);
                 }
-
+Proximo:;
                 _pos++;
             }
             return _listaLicenciamento;

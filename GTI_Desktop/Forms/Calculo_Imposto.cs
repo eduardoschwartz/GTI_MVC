@@ -13,8 +13,8 @@ namespace GTI_Desktop.Forms {
         string _connection = gtiCore.Connection_Name();
         string _connectionTeste = gtiCore.Connection_Name("TributacaoTeste");
         string _path = @"c:\cadastro\bin\";
-        int _ano = 2023;
-        int _documento = 19815001;
+        int _ano = 2022;
+        int _documento = 20057652;
         decimal _ipca = (decimal)10.25;
  
         private enum Tipo_imposto {
@@ -724,8 +724,8 @@ PROXIMO:;
 
         private void ExportarButton_Click(object sender, EventArgs e) {
             if (MessageBox.Show("Exportar para o banco de dados?", "Confimação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No) return;
-            //string _exportConnection = _connection;
-            string _exportConnection = _connectionTeste;
+            string _exportConnection = _connection;
+            //string _exportConnection = _connectionTeste;
 
             Tributario_bll tributario_Class = new Tributario_bll(_exportConnection);
 
@@ -1134,7 +1134,7 @@ PROXIMO:;
 
                     Application.DoEvents();
                 }
-
+                _qtde_normal += 1;
                 _qtde_laminas += 3;
 
                     ////parcela única (não existe)

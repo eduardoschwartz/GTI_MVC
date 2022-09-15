@@ -320,7 +320,7 @@ namespace GTI_Mvc.Controllers {
                     Usuario reg = new Usuario {
                         Nomelogin = Session["hashlname"].ToString(),
                         Senha = tacesso_Class.Encrypt128(model.Senha2)
-                    };
+                    }; 
                     Exception ex = sistema_Class.Alterar_Senha(reg);
                     if (ex != null) {
                         ViewBag.Result = "Erro, senha não alterada";
@@ -626,7 +626,7 @@ namespace GTI_Mvc.Controllers {
             Sistema_bll sistemaRepository = new Sistema_bll(_connection);
             Usuario_web reg = sistemaRepository.Retorna_Usuario_Web(model.Email);
             int Id = reg.Id;
-            Exception ex = sistemaRepository.Alterar_Usuario_Web_Senha(Id, model.Senha2);
+            Exception ex = sistemaRepository.Alterar_Usuario_Web_Senha(Id, Functions.Encrypt( model.Senha2));
 
             ViewBag.Message = "A senha foi alterar com sucesso.";
 

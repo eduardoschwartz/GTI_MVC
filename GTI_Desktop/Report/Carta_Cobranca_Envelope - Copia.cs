@@ -16,14 +16,14 @@ namespace GTI_Desktop.Report {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class Carta_Cobranca_Envelope : ReportClass {
+    public class Carta_Cobranca_Envelope___Copia : ReportClass {
         
-        public Carta_Cobranca_Envelope() {
+        public Carta_Cobranca_Envelope___Copia() {
         }
         
         public override string ResourceName {
             get {
-                return "Carta_Cobranca_Envelope.rpt";
+                return "Carta_Cobranca_Envelope - Copia.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace GTI_Desktop.Report {
         
         public override string FullResourceName {
             get {
-                return "GTI_Desktop.Report.Carta_Cobranca_Envelope.rpt";
+                return "GTI_Desktop.Report.Carta_Cobranca_Envelope - Copia.rpt";
             }
             set {
                 // Do nothing
@@ -138,9 +138,9 @@ namespace GTI_Desktop.Report {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedCarta_Cobranca_Envelope : Component, ICachedReport {
+    public class CachedCarta_Cobranca_Envelope___Copia : Component, ICachedReport {
         
-        public CachedCarta_Cobranca_Envelope() {
+        public CachedCarta_Cobranca_Envelope___Copia() {
         }
         
         [Browsable(false)]
@@ -177,7 +177,7 @@ namespace GTI_Desktop.Report {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            Carta_Cobranca_Envelope rpt = new Carta_Cobranca_Envelope();
+            Carta_Cobranca_Envelope___Copia rpt = new Carta_Cobranca_Envelope___Copia();
             rpt.Site = this.Site;
             return rpt;
         }

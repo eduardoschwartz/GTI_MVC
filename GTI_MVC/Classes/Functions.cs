@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -660,6 +661,11 @@ namespace GTI_Mvc {
                     return byteImage;
                 }
             }
+        }
+
+        public static bool IsNumeric(this string text) {
+             double test;
+             return double.TryParse(text, out test);
         }
 
     }
