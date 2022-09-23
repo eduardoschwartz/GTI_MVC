@@ -1277,9 +1277,9 @@ namespace GTI_Mvc.Controllers {
         [Route("Carne_Cip")]
         [HttpGet]
         public ActionResult Carne_Cip() {
-            return null;
-            //CertidaoViewModel model = new CertidaoViewModel();
-            //return View(model);
+            //return null;
+            CertidaoViewModel model = new CertidaoViewModel();
+            return View(model);
         }
 
         [Route("Carne_Cip")]
@@ -1300,7 +1300,7 @@ namespace GTI_Mvc.Controllers {
             var status = (bool)obj.SelectToken("success");
             string msg = status ? "Sucesso" : "Falha";
             if (!status) {
-                imovelDetailsViewModel.ErrorMessage = "Código Recaptcha inválido.";
+                model.ErrorMessage = "Código Recaptcha inválido.";
                 return View(model);
             }
 
@@ -1342,8 +1342,8 @@ namespace GTI_Mvc.Controllers {
 
             List<DebitoStructure> Extrato_Lista = tributario_Class.Lista_Parcelas_CIP(_codigo, DateTime.Now.Year);
             if (Extrato_Lista.Count == 0) {
-                imovelDetailsViewModel.ErrorMessage = "Não é possível emitir 2ª via da CIP para este contribuinte.";
-                return View(imovelDetailsViewModel);
+                model.ErrorMessage = "Não é possível emitir 2ª via da CIP para este contribuinte.";
+                return View(model);
             }
 
             //**** log ****************
