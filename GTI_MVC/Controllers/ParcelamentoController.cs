@@ -524,7 +524,7 @@ namespace GTI_MVC.Controllers {
             decimal _plano_Desconto = 0;
             // decimal _plano_valor_minimo = 0;
             string _plano_nome = "Sem Plano de desconto";
-
+            _RefisAtivo = true;
             //Load Master
             Parcelamento_web_master _master = parcelamentoRepository.Retorna_Parcelamento_Web_Master(p);
             //char _tipoContribuinte = Functions.RetornaNumero(_master.Contribuinte_cpfcnpj).Length == 11 ? 'F' : 'J';
@@ -546,11 +546,14 @@ namespace GTI_MVC.Controllers {
                     }
 
                 }
-              
-                Plano _plano = parcelamentoRepository.Retorna_Plano_Desconto((short)_plano_Codigo);
-                _plano_nome = _plano.Nome;
-                _plano_Desconto = _plano.Desconto;
-                _plano_parcelas = _plano.Qtde_Parcela;
+
+                if (_plano_Codigo > 0) {
+                    Plano _plano = parcelamentoRepository.Retorna_Plano_Desconto((short)_plano_Codigo);
+                    _plano_nome = _plano.Nome;
+
+                    _plano_Desconto = _plano.Desconto;
+                    _plano_parcelas = _plano.Qtde_Parcela;
+                } 
 
             }
 
