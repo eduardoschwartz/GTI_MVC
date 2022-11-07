@@ -13,9 +13,9 @@ namespace GTI_Desktop.Forms {
         string _connection = gtiCore.Connection_Name();
         string _connectionTeste = gtiCore.Connection_Name("TributacaoTeste");
         string _path = @"c:\cadastro\bin\";
-        int _ano = 2022;
-        int _documento = 20057652;
-        decimal _ipca = (decimal)10.25;
+        int _ano = 2023;
+        int _documento = 20102170;
+        decimal _ipca = (decimal)7.17;
  
         private enum Tipo_imposto {
             Iptu = 1,
