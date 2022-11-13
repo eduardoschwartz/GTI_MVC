@@ -240,11 +240,14 @@ namespace GTI_Desktop.Forms {
                 if (_tipo_isencao == 0 || (_tipo_isencao == 3 && _perc_Isencao < 100)) {
 
                     //parcelas únicas
-                    string _linha = Codigo + "#" + _ano + "#1#0#0#0#18#" + aVencimento[0].ToString("dd/MM/yyyy") + "#01/01/" + _ano;
+                    //string _linha = Codigo + "#" + _ano + "#1#0#0#0#18#" + aVencimento[0].ToString("dd/MM/yyyy") + "#01/01/" + _ano;
+                    string _linha = Codigo + "#" + _ano + "#1#1#0#0#18#" + aVencimento[0].ToString("dd/MM/yyyy") + "#01/01/" + _ano;
                     fs1.WriteLine(_linha);
-                    _linha = Codigo + "#" + _ano + "#1#0#0#0#" + _tributo.ToString() + "#" + _valor_unica.ToString("#0.00");
+                    //_linha = Codigo + "#" + _ano + "#1#0#0#0#" + _tributo.ToString() + "#" + _valor_unica.ToString("#0.00");
+                    _linha = Codigo + "#" + _ano + "#1#1#0#0#" + _tributo.ToString() + "#" + _valor_unica.ToString("#0.00");
                     fs2.WriteLine(_linha);
-                    _linha = Codigo + "#" + _ano + "#1#0#0#0#" + _documento;
+                    //_linha = Codigo + "#" + _ano + "#1#0#0#0#" + _documento;
+                    _linha = Codigo + "#" + _ano + "#1#1#0#0#" + _documento;
                     fs3.WriteLine(_linha);
                     _linha = _documento + "#" + DateTime.Now.ToString("dd/MM/yyyy");
                     fs4.WriteLine(_linha);
@@ -253,11 +256,14 @@ namespace GTI_Desktop.Forms {
                     _documento++;
 
                     if (_Prm.Descontounica2 != null) {
-                        _linha = Codigo + "#" + _ano + "#1#0#0#91#18#" + aVencimento[1].ToString("dd/MM/yyyy") + "#01/01/" + _ano;
+                       // _linha = Codigo + "#" + _ano + "#1#0#0#91#18#" + aVencimento[1].ToString("dd/MM/yyyy") + "#01/01/" + _ano;
+                        _linha = Codigo + "#" + _ano + "#1#1#0#91#18#" + aVencimento[1].ToString("dd/MM/yyyy") + "#01/01/" + _ano;
                         fs1.WriteLine(_linha);
-                        _linha = Codigo + "#" + _ano + "#1#0#0#91#" + _tributo.ToString() + "#" + _valor_unica2.ToString("#0.00");
+                        //_linha = Codigo + "#" + _ano + "#1#0#0#91#" + _tributo.ToString() + "#" + _valor_unica2.ToString("#0.00");
+                        _linha = Codigo + "#" + _ano + "#1#1#0#91#" + _tributo.ToString() + "#" + _valor_unica2.ToString("#0.00");
                         fs2.WriteLine(_linha);
-                        _linha = Codigo + "#" + _ano + "#1#0#0#91#" + _documento;
+                        //_linha = Codigo + "#" + _ano + "#1#0#0#91#" + _documento;
+                        _linha = Codigo + "#" + _ano + "#1#1#0#91#" + _documento;
                         fs3.WriteLine(_linha);
                         _linha = _documento + "#" + DateTime.Now.ToString("dd/MM/yyyy");
                         fs4.WriteLine(_linha);
@@ -267,11 +273,14 @@ namespace GTI_Desktop.Forms {
                     }
 
                     if (_Prm.Descontounica3 != null) {
-                        _linha = Codigo + "#" + _ano + "#1#0#0#92#18#" + aVencimento[2].ToString("dd/MM/yyyy") + "#01/01/" + _ano;
+                        //_linha = Codigo + "#" + _ano + "#1#0#0#92#18#" + aVencimento[2].ToString("dd/MM/yyyy") + "#01/01/" + _ano;
+                        _linha = Codigo + "#" + _ano + "#1#1#0#92#18#" + aVencimento[2].ToString("dd/MM/yyyy") + "#01/01/" + _ano;
                         fs1.WriteLine(_linha);
-                        _linha = Codigo + "#" + _ano + "#1#0#0#92#" + _tributo.ToString() + "#" + _valor_unica3.ToString("#0.00");
+                        //_linha = Codigo + "#" + _ano + "#1#0#0#92#" + _tributo.ToString() + "#" + _valor_unica3.ToString("#0.00");
+                        _linha = Codigo + "#" + _ano + "#1#1#0#92#" + _tributo.ToString() + "#" + _valor_unica3.ToString("#0.00");
                         fs2.WriteLine(_linha);
-                        _linha = Codigo + "#" + _ano + "#1#0#0#92#" + _documento;
+                        //_linha = Codigo + "#" + _ano + "#1#0#0#92#" + _documento;
+                        _linha = Codigo + "#" + _ano + "#1#1#0#92#" + _documento;
                         fs3.WriteLine(_linha);
                         _linha = _documento + "#" + DateTime.Now.ToString("dd/MM/yyyy");
                         fs4.WriteLine(_linha);
@@ -283,11 +292,14 @@ namespace GTI_Desktop.Forms {
                     //parcelas normais
                     for (int _parcela = 1; _parcela <= _qtde_parcela; _parcela++) {
                         string _vencto = aVencimento[_parcela - 1].ToString("dd/MM/yyyy");
-                        _linha = Codigo + "#" + _ano + "#1#0#" + _parcela + "#0#18#" + _vencto + "#01/01/" + _ano;
+                        //_linha = Codigo + "#" + _ano + "#1#0#" + _parcela + "#0#18#" + _vencto + "#01/01/" + _ano;
+                        _linha = Codigo + "#" + _ano + "#1#1#" + _parcela + "#0#18#" + _vencto + "#01/01/" + _ano;
                         fs1.WriteLine(_linha);
-                        _linha = Codigo + "#" + _ano + "#1#0#" + _parcela + "#0#" + _tributo.ToString() + "#" + _valor_parcela.ToString("#0.00");
+                        //_linha = Codigo + "#" + _ano + "#1#0#" + _parcela + "#0#" + _tributo.ToString() + "#" + _valor_parcela.ToString("#0.00");
+                        _linha = Codigo + "#" + _ano + "#1#1#" + _parcela + "#0#" + _tributo.ToString() + "#" + _valor_parcela.ToString("#0.00");
                         fs2.WriteLine(_linha);
-                        _linha = Codigo + "#" + _ano + "#1#0#" + _parcela + "#0#" + _documento;
+                        //_linha = Codigo + "#" + _ano + "#1#0#" + _parcela + "#0#" + _documento;
+                        _linha = Codigo + "#" + _ano + "#1#1#" + _parcela + "#0#" + _documento;
                         fs3.WriteLine(_linha);
                         _linha = _documento + "#" + DateTime.Now.ToString("dd/MM/yyyy");
                         fs4.WriteLine(_linha);
@@ -299,7 +311,8 @@ namespace GTI_Desktop.Forms {
                     }
 
                     //grava cálculo
-                    string _linha_calc = _ano.ToString() + "#" + Codigo + "#1#" + _qtde_parcela.ToString() + "#" +  _valor0 + "#" + _valor1 + "#" + _valor91 + "#" + _valor92 + "#";
+                    //string _linha_calc = _ano.ToString() + "#" + Codigo + "#1#" + "#0#" + _qtde_parcela.ToString() + "#" + _valor0 + "#" + _valor1 + "#" + _valor91 + "#" + _valor92 + "#";
+                    string _linha_calc = _ano.ToString() + "#" + Codigo + "#1#" + "#1#" + _qtde_parcela.ToString() + "#" +  _valor0 + "#" + _valor1 + "#" + _valor91 + "#" + _valor92 + "#";
                     _linha_calc += aDocumento[0] + "#" + aDocumento[13] + "#" + aDocumento[14] + "#" ;
                     for (int i = 1; i <= _qtde_parcela; i++) {
                         _linha_calc += aDocumento[i] + "#" + aVencimento[i - 1].ToString("dd/MM/yyyy") + "#";
@@ -308,7 +321,8 @@ namespace GTI_Desktop.Forms {
                     fs5.WriteLine(_linha_calc);
 
                     //grava laseriptu
-                    _linha_calc = _ano.ToString() + "#" + Codigo + "#" + _vvt.ToString("#0.00") + "#" + _vvp.ToString("#0.00") + "#" + _vvi.ToString("#0.00") + "#" + _valor_IPTU.ToString("#0.00") + "#" + _valor_ITU.ToString("#0.00") + "#";
+                    //_linha_calc = _ano.ToString() + "#" + Codigo + "#" + "0" + "#" + _vvt.ToString("#0.00") + "#" + _vvp.ToString("#0.00") + "#" + _vvi.ToString("#0.00") + "#" + _valor_IPTU.ToString("#0.00") + "#" + _valor_ITU.ToString("#0.00") + "#";
+                    _linha_calc = _ano.ToString() + "#" + Codigo + "#" + "1" + "#" + _vvt.ToString("#0.00") + "#" + _vvp.ToString("#0.00") + "#" + _vvi.ToString("#0.00") + "#" + _valor_IPTU.ToString("#0.00") + "#" + _valor_ITU.ToString("#0.00") + "#";
                     _linha_calc += _natureza + "#" + _area_predial + "#" + _testada + "#" +  _valor1 + "#" +_valor0 + "#" + _valor91 + "#" + _valor92 + "#" + _qtde_parcela + "#0#0#" + _area_terreno.ToString("#0.00") + "#";
                     _linha_calc += _fcat.ToString("#0.00") + "#" + _fped.ToString("#0.00") + "#" + _fsit.ToString("#0.00") + "#" + _fpro.ToString("#0.00") + "#" + _ftop.ToString("#0.00") + "#" + _fdis.ToString("#0.00") + "#";
                     _linha_calc += _fgle.ToString("#0.00") + "#" + _agrupamento.ToString("#0.00") + "#" + _fracao.ToString("#0.00") + "#" + _aliquota.ToString("#0.00") ;
@@ -887,6 +901,7 @@ PROXIMO:;
             dt.Columns.Add("ano", typeof(short));
             dt.Columns.Add("codigo", typeof(int));
             dt.Columns.Add("lancamento", typeof(short));
+            dt.Columns.Add("sequencia", typeof(short));
             dt.Columns.Add("qtde_parcela", typeof(byte));
             dt.Columns.Add("valor0", typeof(decimal));
             dt.Columns.Add("valor1", typeof(decimal));
@@ -930,59 +945,60 @@ PROXIMO:;
                 _row["ano"] = Convert.ToInt16( _fields[0]);
                 _row["codigo"] = Convert.ToInt32(_fields[1]);
                 _row["lancamento"] = Convert.ToInt16(_fields[2]);
-                _row["qtde_parcela"] = Convert.ToByte(_fields[3]);
-                _row["valor0"] = Convert.ToDecimal(_fields[4]);
-                _row["valor1"] = Convert.ToDecimal(_fields[5]);
-                _row["valor91"] = Convert.ToDecimal(_fields[6]==""?"0": _fields[6]);
-                _row["valor92"] = Convert.ToDecimal(_fields[7] == "" ? "0" : _fields[7]);
-                _row["documento0"] = Convert.ToInt32(_fields[8] == "" ? "0" : _fields[8]);
-                _row["documento91"] = Convert.ToInt32(_fields[9] == "" ? "0" : _fields[9]);
-                _row["documento92"] = Convert.ToInt32(_fields[10] == "" ? "0" : _fields[10]);
-                _row["documento1"] = Convert.ToInt32(_fields[11] == "" ? "0" : _fields[11]);
-                _row["vencimento1"] = Convert.ToDateTime(_fields[12] == "" ? "0" : _fields[12]);
+                _row["sequencia"] = Convert.ToInt16(_fields[3]);
+                _row["qtde_parcela"] = Convert.ToByte(_fields[4]);
+                _row["valor0"] = Convert.ToDecimal(_fields[5]);
+                _row["valor1"] = Convert.ToDecimal(_fields[6]);
+                _row["valor91"] = Convert.ToDecimal(_fields[7]==""?"0": _fields[7]);
+                _row["valor92"] = Convert.ToDecimal(_fields[8] == "" ? "0" : _fields[8]);
+                _row["documento0"] = Convert.ToInt32(_fields[9] == "" ? "0" : _fields[9]);
+                _row["documento91"] = Convert.ToInt32(_fields[10] == "" ? "0" : _fields[10]);
+                _row["documento92"] = Convert.ToInt32(_fields[11] == "" ? "0" : _fields[11]);
+                _row["documento1"] = Convert.ToInt32(_fields[12] == "" ? "0" : _fields[12]);
+                _row["vencimento1"] = Convert.ToDateTime(_fields[13] == "" ? "0" : _fields[13]);
                 if (_fields.Length > 13) {
-                    _row["documento2"] = Convert.ToInt32(_fields[13]);
-                    _row["vencimento2"] = Convert.ToDateTime(_fields[14]);
+                    _row["documento2"] = Convert.ToInt32(_fields[14]);
+                    _row["vencimento2"] = Convert.ToDateTime(_fields[15]);
                 }
                 if (_fields.Length>15) {
-                    _row["documento3"] = Convert.ToInt32(_fields[15]);
-                    _row["vencimento3"] = Convert.ToDateTime(_fields[16]);
+                    _row["documento3"] = Convert.ToInt32(_fields[16]);
+                    _row["vencimento3"] = Convert.ToDateTime(_fields[17]);
                 }
                 if (_fields.Length>17) {
-                    _row["documento4"] = Convert.ToInt32(_fields[17]);
-                    _row["vencimento4"] = Convert.ToDateTime(_fields[18]);
+                    _row["documento4"] = Convert.ToInt32(_fields[18]);
+                    _row["vencimento4"] = Convert.ToDateTime(_fields[19]);
                 }
                 if (_fields.Length>19) {
-                    _row["documento5"] = Convert.ToInt32(_fields[19]);
-                    _row["vencimento5"] = Convert.ToDateTime(_fields[20]);
+                    _row["documento5"] = Convert.ToInt32(_fields[20]);
+                    _row["vencimento5"] = Convert.ToDateTime(_fields[21]);
                 }
                 if (_fields.Length>21) {
-                    _row["documento6"] = Convert.ToInt32(_fields[21]);
-                    _row["vencimento6"] = Convert.ToDateTime(_fields[22]);
+                    _row["documento6"] = Convert.ToInt32(_fields[22]);
+                    _row["vencimento6"] = Convert.ToDateTime(_fields[23]);
                 }
                 if (_fields.Length>23) {
-                    _row["documento7"] = Convert.ToInt32(_fields[23]);
-                    _row["vencimento7"] = Convert.ToDateTime(_fields[24]);
+                    _row["documento7"] = Convert.ToInt32(_fields[24]);
+                    _row["vencimento7"] = Convert.ToDateTime(_fields[25]);
                 }
                 if (_fields.Length>25) {
-                    _row["documento8"] = Convert.ToInt32(_fields[25]);
-                    _row["vencimento8"] = Convert.ToDateTime(_fields[26]);
+                    _row["documento8"] = Convert.ToInt32(_fields[26]);
+                    _row["vencimento8"] = Convert.ToDateTime(_fields[27]);
                 }
                 if (_fields.Length>27) {
-                    _row["documento9"] = Convert.ToInt32(_fields[27]);
-                    _row["vencimento9"] = Convert.ToDateTime(_fields[28]);
+                    _row["documento9"] = Convert.ToInt32(_fields[28]);
+                    _row["vencimento9"] = Convert.ToDateTime(_fields[29]);
                 }
                 if (_fields.Length>29) {
-                    _row["documento10"] = Convert.ToInt32(_fields[29]);
-                    _row["vencimento10"] = Convert.ToDateTime(_fields[30]);
+                    _row["documento10"] = Convert.ToInt32(_fields[30]);
+                    _row["vencimento10"] = Convert.ToDateTime(_fields[31]);
                 }
                 if (_fields.Length>31) {
-                    _row["documento11"] = Convert.ToInt32(_fields[31]);
-                    _row["vencimento11"] = Convert.ToDateTime(_fields[32]);
+                    _row["documento11"] = Convert.ToInt32(_fields[32]);
+                    _row["vencimento11"] = Convert.ToDateTime(_fields[33]);
                 }
                 if (_fields.Length>33) {
-                    _row["documento12"] = Convert.ToInt32(_fields[33]);
-                    _row["vencimento12"] = Convert.ToDateTime(_fields[34]);
+                    _row["documento12"] = Convert.ToInt32(_fields[34]);
+                    _row["vencimento12"] = Convert.ToDateTime(_fields[35]);
                 }
 
                 dt.Rows.Add(_row);
@@ -1005,6 +1021,7 @@ PROXIMO:;
                 dt = new DataTable();
                 dt.Columns.Add("ano", typeof(short));
                 dt.Columns.Add("codreduzido", typeof(int));
+                dt.Columns.Add("seq", typeof(short));
                 dt.Columns.Add("vvt", typeof(decimal));
                 dt.Columns.Add("vvc", typeof(decimal));
                 dt.Columns.Add("vvi", typeof(decimal));
@@ -1040,32 +1057,33 @@ PROXIMO:;
                     DataRow _row = dt.NewRow();
                     _row["ano"] = Convert.ToInt16(_fields[0]);
                     _row["codreduzido"] = Convert.ToInt32(_fields[1]);
-                    _row["vvt"] = Convert.ToDecimal(_fields[2] == "" ? "0" : _fields[2]);
-                    _row["vvc"] = Convert.ToDecimal(_fields[3] == "" ? "0" : _fields[3]);
-                    _row["vvi"] = Convert.ToDecimal(_fields[4]);
-                    _row["impostopredial"] = Convert.ToDecimal(_fields[5]);
-                    _row["impostoterritorial"] = Convert.ToDecimal(_fields[6]);
-                    _row["natureza"] = _fields[7];
-                    _row["areaconstrucao"] = Convert.ToDecimal(_fields[8]);
-                    _row["testadaprinc"] = Convert.ToDecimal(_fields[9]);
-                    _row["valortotalparc"] = Convert.ToDecimal(_fields[10]);
-                    _row["valortotalunica"] = Convert.ToDecimal(_fields[11]);
-                    _row["valortotalunica2"] = Convert.ToDecimal(_fields[12] == "" ? "0" : _fields[12]);
-                    _row["valortotalunica3"] = Convert.ToDecimal(_fields[13] == "" ? "0" : _fields[13]);
-                    _row["qtdeparc"] = Convert.ToInt16(_fields[14]);
-                    _row["txexpparc"] = Convert.ToDecimal(_fields[15]);
-                    _row["txexpunica"] = Convert.ToDecimal(_fields[16]);
-                    _row["areaterreno"] = Convert.ToDecimal(_fields[17]);
-                    _row["fatorcat"] = Convert.ToDecimal(_fields[18]);
-                    _row["fatorped"] = Convert.ToDecimal(_fields[19]);
-                    _row["fatorsit"] = Convert.ToDecimal(_fields[20]);
-                    _row["fatorpro"] = Convert.ToDecimal(_fields[21]);
-                    _row["fatortop"] = Convert.ToDecimal(_fields[22]);
-                    _row["fatordis"] = Convert.ToDecimal(_fields[23]);
-                    _row["fatorgle"] = Convert.ToDecimal(_fields[24]);
-                    _row["agrupamento"] = Convert.ToDecimal(_fields[25] == "" ? "0" : _fields[25]);
-                    _row["fracaoideal"] = Convert.ToDecimal(_fields[26] == "" ? "0" : _fields[26]);
-                    _row["aliquota"] = Convert.ToDecimal(_fields[27] == "" ? "0" : _fields[27]);
+                    _row["seq"] = Convert.ToInt32(_fields[2]);
+                    _row["vvt"] = Convert.ToDecimal(_fields[3] == "" ? "0" : _fields[3]);
+                    _row["vvc"] = Convert.ToDecimal(_fields[4] == "" ? "0" : _fields[4]);
+                    _row["vvi"] = Convert.ToDecimal(_fields[5]);
+                    _row["impostopredial"] = Convert.ToDecimal(_fields[6]);
+                    _row["impostoterritorial"] = Convert.ToDecimal(_fields[7]);
+                    _row["natureza"] = _fields[8];
+                    _row["areaconstrucao"] = Convert.ToDecimal(_fields[9]);
+                    _row["testadaprinc"] = Convert.ToDecimal(_fields[10]);
+                    _row["valortotalparc"] = Convert.ToDecimal(_fields[11]);
+                    _row["valortotalunica"] = Convert.ToDecimal(_fields[12]);
+                    _row["valortotalunica2"] = Convert.ToDecimal(_fields[13] == "" ? "0" : _fields[13]);
+                    _row["valortotalunica3"] = Convert.ToDecimal(_fields[14] == "" ? "0" : _fields[14]);
+                    _row["qtdeparc"] = Convert.ToInt16(_fields[15]);
+                    _row["txexpparc"] = Convert.ToDecimal(_fields[16]);
+                    _row["txexpunica"] = Convert.ToDecimal(_fields[17]);
+                    _row["areaterreno"] = Convert.ToDecimal(_fields[18]);
+                    _row["fatorcat"] = Convert.ToDecimal(_fields[19]);
+                    _row["fatorped"] = Convert.ToDecimal(_fields[20]);
+                    _row["fatorsit"] = Convert.ToDecimal(_fields[21]);
+                    _row["fatorpro"] = Convert.ToDecimal(_fields[22]);
+                    _row["fatortop"] = Convert.ToDecimal(_fields[23]);
+                    _row["fatordis"] = Convert.ToDecimal(_fields[24]);
+                    _row["fatorgle"] = Convert.ToDecimal(_fields[25]);
+                    _row["agrupamento"] = Convert.ToDecimal(_fields[26] == "" ? "0" : _fields[26]);
+                    _row["fracaoideal"] = Convert.ToDecimal(_fields[27] == "" ? "0" : _fields[27]);
+                    _row["aliquota"] = Convert.ToDecimal(_fields[28] == "" ? "0" : _fields[28]);
 
                     dt.Rows.Add(_row);
                 }
