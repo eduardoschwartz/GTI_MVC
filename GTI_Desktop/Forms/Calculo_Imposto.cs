@@ -13,8 +13,9 @@ namespace GTI_Desktop.Forms {
         string _connection = gtiCore.Connection_Name();
         string _connectionTeste = gtiCore.Connection_Name("TributacaoTeste");
         string _path = @"c:\cadastro\bin\";
+        int _seq = 1;
         int _ano = 2023;
-        int _documento = 20102170;
+        int _documento = 20604500;
         decimal _ipca = (decimal)7.17;
  
         private enum Tipo_imposto {
@@ -241,13 +242,13 @@ namespace GTI_Desktop.Forms {
 
                     //parcelas únicas
                     //string _linha = Codigo + "#" + _ano + "#1#0#0#0#18#" + aVencimento[0].ToString("dd/MM/yyyy") + "#01/01/" + _ano;
-                    string _linha = Codigo + "#" + _ano + "#1#1#0#0#18#" + aVencimento[0].ToString("dd/MM/yyyy") + "#01/01/" + _ano;
+                    string _linha = Codigo + "#" + _ano + "#1#" + _seq.ToString() +  "#0#0#18#" + aVencimento[0].ToString("dd/MM/yyyy") + "#01/01/" + _ano;
                     fs1.WriteLine(_linha);
                     //_linha = Codigo + "#" + _ano + "#1#0#0#0#" + _tributo.ToString() + "#" + _valor_unica.ToString("#0.00");
-                    _linha = Codigo + "#" + _ano + "#1#1#0#0#" + _tributo.ToString() + "#" + _valor_unica.ToString("#0.00");
+                    _linha = Codigo + "#" + _ano + "#1#" + _seq.ToString() +  "#0#0#" + _tributo.ToString() + "#" + _valor_unica.ToString("#0.00");
                     fs2.WriteLine(_linha);
                     //_linha = Codigo + "#" + _ano + "#1#0#0#0#" + _documento;
-                    _linha = Codigo + "#" + _ano + "#1#1#0#0#" + _documento;
+                    _linha = Codigo + "#" + _ano + "#1#" + _seq.ToString() +  "#0#0#" + _documento;
                     fs3.WriteLine(_linha);
                     _linha = _documento + "#" + DateTime.Now.ToString("dd/MM/yyyy");
                     fs4.WriteLine(_linha);
@@ -257,13 +258,13 @@ namespace GTI_Desktop.Forms {
 
                     if (_Prm.Descontounica2 != null) {
                        // _linha = Codigo + "#" + _ano + "#1#0#0#91#18#" + aVencimento[1].ToString("dd/MM/yyyy") + "#01/01/" + _ano;
-                        _linha = Codigo + "#" + _ano + "#1#1#0#91#18#" + aVencimento[1].ToString("dd/MM/yyyy") + "#01/01/" + _ano;
+                        _linha = Codigo + "#" + _ano + "#1#" + _seq.ToString() +  "#0#91#18#" + aVencimento[1].ToString("dd/MM/yyyy") + "#01/01/" + _ano;
                         fs1.WriteLine(_linha);
                         //_linha = Codigo + "#" + _ano + "#1#0#0#91#" + _tributo.ToString() + "#" + _valor_unica2.ToString("#0.00");
-                        _linha = Codigo + "#" + _ano + "#1#1#0#91#" + _tributo.ToString() + "#" + _valor_unica2.ToString("#0.00");
+                        _linha = Codigo + "#" + _ano + "#1#" + _seq.ToString() +  "#0#91#" + _tributo.ToString() + "#" + _valor_unica2.ToString("#0.00");
                         fs2.WriteLine(_linha);
                         //_linha = Codigo + "#" + _ano + "#1#0#0#91#" + _documento;
-                        _linha = Codigo + "#" + _ano + "#1#1#0#91#" + _documento;
+                        _linha = Codigo + "#" + _ano + "#1#" + _seq.ToString() +  "#0#91#" + _documento;
                         fs3.WriteLine(_linha);
                         _linha = _documento + "#" + DateTime.Now.ToString("dd/MM/yyyy");
                         fs4.WriteLine(_linha);
@@ -274,13 +275,13 @@ namespace GTI_Desktop.Forms {
 
                     if (_Prm.Descontounica3 != null) {
                         //_linha = Codigo + "#" + _ano + "#1#0#0#92#18#" + aVencimento[2].ToString("dd/MM/yyyy") + "#01/01/" + _ano;
-                        _linha = Codigo + "#" + _ano + "#1#1#0#92#18#" + aVencimento[2].ToString("dd/MM/yyyy") + "#01/01/" + _ano;
+                        _linha = Codigo + "#" + _ano + "#1#" + _seq.ToString() +  "#0#92#18#" + aVencimento[2].ToString("dd/MM/yyyy") + "#01/01/" + _ano;
                         fs1.WriteLine(_linha);
                         //_linha = Codigo + "#" + _ano + "#1#0#0#92#" + _tributo.ToString() + "#" + _valor_unica3.ToString("#0.00");
-                        _linha = Codigo + "#" + _ano + "#1#1#0#92#" + _tributo.ToString() + "#" + _valor_unica3.ToString("#0.00");
+                        _linha = Codigo + "#" + _ano + "#1#" + _seq.ToString() +  "#0#92#" + _tributo.ToString() + "#" + _valor_unica3.ToString("#0.00");
                         fs2.WriteLine(_linha);
                         //_linha = Codigo + "#" + _ano + "#1#0#0#92#" + _documento;
-                        _linha = Codigo + "#" + _ano + "#1#1#0#92#" + _documento;
+                        _linha = Codigo + "#" + _ano + "#1#" + _seq.ToString() +  "#0#92#" + _documento;
                         fs3.WriteLine(_linha);
                         _linha = _documento + "#" + DateTime.Now.ToString("dd/MM/yyyy");
                         fs4.WriteLine(_linha);
@@ -293,13 +294,13 @@ namespace GTI_Desktop.Forms {
                     for (int _parcela = 1; _parcela <= _qtde_parcela; _parcela++) {
                         string _vencto = aVencimento[_parcela - 1].ToString("dd/MM/yyyy");
                         //_linha = Codigo + "#" + _ano + "#1#0#" + _parcela + "#0#18#" + _vencto + "#01/01/" + _ano;
-                        _linha = Codigo + "#" + _ano + "#1#1#" + _parcela + "#0#18#" + _vencto + "#01/01/" + _ano;
+                        _linha = Codigo + "#" + _ano + "#1#" + _seq.ToString() +  "#" + _parcela + "#0#18#" + _vencto + "#01/01/" + _ano;
                         fs1.WriteLine(_linha);
                         //_linha = Codigo + "#" + _ano + "#1#0#" + _parcela + "#0#" + _tributo.ToString() + "#" + _valor_parcela.ToString("#0.00");
-                        _linha = Codigo + "#" + _ano + "#1#1#" + _parcela + "#0#" + _tributo.ToString() + "#" + _valor_parcela.ToString("#0.00");
+                        _linha = Codigo + "#" + _ano + "#1#" + _seq.ToString() +  "#" + _parcela + "#0#" + _tributo.ToString() + "#" + _valor_parcela.ToString("#0.00");
                         fs2.WriteLine(_linha);
                         //_linha = Codigo + "#" + _ano + "#1#0#" + _parcela + "#0#" + _documento;
-                        _linha = Codigo + "#" + _ano + "#1#1#" + _parcela + "#0#" + _documento;
+                        _linha = Codigo + "#" + _ano + "#1#" + _seq.ToString() +  "#" + _parcela + "#0#" + _documento;
                         fs3.WriteLine(_linha);
                         _linha = _documento + "#" + DateTime.Now.ToString("dd/MM/yyyy");
                         fs4.WriteLine(_linha);
@@ -312,7 +313,7 @@ namespace GTI_Desktop.Forms {
 
                     //grava cálculo
                     //string _linha_calc = _ano.ToString() + "#" + Codigo + "#1#" + "#0#" + _qtde_parcela.ToString() + "#" + _valor0 + "#" + _valor1 + "#" + _valor91 + "#" + _valor92 + "#";
-                    string _linha_calc = _ano.ToString() + "#" + Codigo + "#1#" + "#1#" + _qtde_parcela.ToString() + "#" +  _valor0 + "#" + _valor1 + "#" + _valor91 + "#" + _valor92 + "#";
+                    string _linha_calc = _ano.ToString() + "#" + Codigo + "#1#" + "#" + _seq.ToString() +  "#" + _qtde_parcela.ToString() + "#" +  _valor0 + "#" + _valor1 + "#" + _valor91 + "#" + _valor92 + "#";
                     _linha_calc += aDocumento[0] + "#" + aDocumento[13] + "#" + aDocumento[14] + "#" ;
                     for (int i = 1; i <= _qtde_parcela; i++) {
                         _linha_calc += aDocumento[i] + "#" + aVencimento[i - 1].ToString("dd/MM/yyyy") + "#";
@@ -322,7 +323,7 @@ namespace GTI_Desktop.Forms {
 
                     //grava laseriptu
                     //_linha_calc = _ano.ToString() + "#" + Codigo + "#" + "0" + "#" + _vvt.ToString("#0.00") + "#" + _vvp.ToString("#0.00") + "#" + _vvi.ToString("#0.00") + "#" + _valor_IPTU.ToString("#0.00") + "#" + _valor_ITU.ToString("#0.00") + "#";
-                    _linha_calc = _ano.ToString() + "#" + Codigo + "#" + "1" + "#" + _vvt.ToString("#0.00") + "#" + _vvp.ToString("#0.00") + "#" + _vvi.ToString("#0.00") + "#" + _valor_IPTU.ToString("#0.00") + "#" + _valor_ITU.ToString("#0.00") + "#";
+                    _linha_calc = _ano.ToString() + "#" + Codigo + "#" + _seq.ToString() +  "#" + _vvt.ToString("#0.00") + "#" + _vvp.ToString("#0.00") + "#" + _vvi.ToString("#0.00") + "#" + _valor_IPTU.ToString("#0.00") + "#" + _valor_ITU.ToString("#0.00") + "#";
                     _linha_calc += _natureza + "#" + _area_predial + "#" + _testada + "#" +  _valor1 + "#" +_valor0 + "#" + _valor91 + "#" + _valor92 + "#" + _qtde_parcela + "#0#0#" + _area_terreno.ToString("#0.00") + "#";
                     _linha_calc += _fcat.ToString("#0.00") + "#" + _fped.ToString("#0.00") + "#" + _fsit.ToString("#0.00") + "#" + _fpro.ToString("#0.00") + "#" + _ftop.ToString("#0.00") + "#" + _fdis.ToString("#0.00") + "#";
                     _linha_calc += _fgle.ToString("#0.00") + "#" + _agrupamento.ToString("#0.00") + "#" + _fracao.ToString("#0.00") + "#" + _aliquota.ToString("#0.00") ;
