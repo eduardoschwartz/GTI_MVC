@@ -313,7 +313,7 @@ namespace GTI_Desktop.Forms {
 
                     //grava cálculo
                     //string _linha_calc = _ano.ToString() + "#" + Codigo + "#1#" + "#0#" + _qtde_parcela.ToString() + "#" + _valor0 + "#" + _valor1 + "#" + _valor91 + "#" + _valor92 + "#";
-                    string _linha_calc = _ano.ToString() + "#" + Codigo + "#1#" + "#" + _seq.ToString() +  "#" + _qtde_parcela.ToString() + "#" +  _valor0 + "#" + _valor1 + "#" + _valor91 + "#" + _valor92 + "#";
+                    string _linha_calc = _ano.ToString() + "#" + Codigo + "#1#"  + _seq.ToString() +  "#" + _qtde_parcela.ToString() + "#" +  _valor0 + "#" + _valor1 + "#" + _valor91 + "#" + _valor92 + "#";
                     _linha_calc += aDocumento[0] + "#" + aDocumento[13] + "#" + aDocumento[14] + "#" ;
                     for (int i = 1; i <= _qtde_parcela; i++) {
                         _linha_calc += aDocumento[i] + "#" + aVencimento[i - 1].ToString("dd/MM/yyyy") + "#";
@@ -743,7 +743,6 @@ PROXIMO:;
             //string _exportConnection = _connectionTeste;
 
             Tributario_bll tributario_Class = new Tributario_bll(_exportConnection);
-
             #region DEBITOPARCELA
             MsgToolStrip.Text = "Inserindo parcelas";
             Refresh();
@@ -892,9 +891,10 @@ PROXIMO:;
             sbc.Close();
             dt.Dispose(); sr.Close(); fs.Close();
 
-            #endregion
+#endregion
 
-            #region CALCULO_RESUMO
+#region CALCULO_RESUMO
+
             MsgToolStrip.Text = "Gravando cálculo";
             Refresh();
 
@@ -946,7 +946,7 @@ PROXIMO:;
                 _row["ano"] = Convert.ToInt16( _fields[0]);
                 _row["codigo"] = Convert.ToInt32(_fields[1]);
                 _row["lancamento"] = Convert.ToInt16(_fields[2]);
-                _row["sequencia"] = Convert.ToInt16(_fields[3]);
+                _row["sequencia"] = 1;
                 _row["qtde_parcela"] = Convert.ToByte(_fields[4]);
                 _row["valor0"] = Convert.ToDecimal(_fields[5]);
                 _row["valor1"] = Convert.ToDecimal(_fields[6]);
@@ -957,47 +957,47 @@ PROXIMO:;
                 _row["documento92"] = Convert.ToInt32(_fields[11] == "" ? "0" : _fields[11]);
                 _row["documento1"] = Convert.ToInt32(_fields[12] == "" ? "0" : _fields[12]);
                 _row["vencimento1"] = Convert.ToDateTime(_fields[13] == "" ? "0" : _fields[13]);
-                if (_fields.Length > 13) {
+                if (_fields.Length > 14) {
                     _row["documento2"] = Convert.ToInt32(_fields[14]);
                     _row["vencimento2"] = Convert.ToDateTime(_fields[15]);
                 }
-                if (_fields.Length>15) {
+                if (_fields.Length>16) {
                     _row["documento3"] = Convert.ToInt32(_fields[16]);
                     _row["vencimento3"] = Convert.ToDateTime(_fields[17]);
                 }
-                if (_fields.Length>17) {
+                if (_fields.Length>18) {
                     _row["documento4"] = Convert.ToInt32(_fields[18]);
                     _row["vencimento4"] = Convert.ToDateTime(_fields[19]);
                 }
-                if (_fields.Length>19) {
+                if (_fields.Length>20) {
                     _row["documento5"] = Convert.ToInt32(_fields[20]);
                     _row["vencimento5"] = Convert.ToDateTime(_fields[21]);
                 }
-                if (_fields.Length>21) {
+                if (_fields.Length>22) {
                     _row["documento6"] = Convert.ToInt32(_fields[22]);
                     _row["vencimento6"] = Convert.ToDateTime(_fields[23]);
                 }
-                if (_fields.Length>23) {
+                if (_fields.Length>24) {
                     _row["documento7"] = Convert.ToInt32(_fields[24]);
                     _row["vencimento7"] = Convert.ToDateTime(_fields[25]);
                 }
-                if (_fields.Length>25) {
+                if (_fields.Length>27) {
                     _row["documento8"] = Convert.ToInt32(_fields[26]);
                     _row["vencimento8"] = Convert.ToDateTime(_fields[27]);
                 }
-                if (_fields.Length>27) {
+                if (_fields.Length>28) {
                     _row["documento9"] = Convert.ToInt32(_fields[28]);
                     _row["vencimento9"] = Convert.ToDateTime(_fields[29]);
                 }
-                if (_fields.Length>29) {
+                if (_fields.Length>30) {
                     _row["documento10"] = Convert.ToInt32(_fields[30]);
                     _row["vencimento10"] = Convert.ToDateTime(_fields[31]);
                 }
-                if (_fields.Length>31) {
+                if (_fields.Length>32) {
                     _row["documento11"] = Convert.ToInt32(_fields[32]);
                     _row["vencimento11"] = Convert.ToDateTime(_fields[33]);
                 }
-                if (_fields.Length>33) {
+                if (_fields.Length>34) {
                     _row["documento12"] = Convert.ToInt32(_fields[34]);
                     _row["vencimento12"] = Convert.ToDateTime(_fields[35]);
                 }
@@ -1012,8 +1012,8 @@ PROXIMO:;
             sbc.Close();
             dt.Dispose(); sr.Close(); fs.Close();
 
-            #endregion
-
+#endregion
+         
             #region LASERIPTU
             if (ImpostoList.SelectedIndex == 0) {
                 MsgToolStrip.Text = "Inserindo LaserIPTU";
