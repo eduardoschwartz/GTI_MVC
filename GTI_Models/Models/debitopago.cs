@@ -24,7 +24,7 @@ namespace GTI_Models.Models {
         public byte Codcomplemento { get; set; }
         [Key]
         [Column(Order = 7)]
-        public byte Seqpag { get; set; }
+        public short Seqpag { get; set; }
         public DateTime Datapagamento { get; set; }
         public DateTime Datarecebimento { get; set; }
         public decimal Valorpago { get; set; }
@@ -63,7 +63,7 @@ namespace GTI_Models.Models {
         public byte Complemento { get; set; }
         [Key]
         [Column(Order = 7)]
-        public byte Sequencia_Pagamento { get; set; }
+        public short Sequencia_Pagamento { get; set; }
         public DateTime Data_Pagamento { get; set; }
         public DateTime? Data_Pagamento_Calc { get; set; }
         public DateTime Data_Recebimento { get; set; }
