@@ -858,8 +858,11 @@ namespace GTI_Dal.Classes {
 
         public Laseriptu Dados_IPTU(int Codigo, int Ano) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from i in db.Laser_iptu where i.Ano == Ano && i.Codreduzido == Codigo select i).FirstOrDefault();
-                return Sql;
+                short _seq=0;
+                if (Ano == 2023) 
+                    _seq = 1;
+                
+                return  (from i in db.Laser_iptu where i.Ano == Ano && i.Codreduzido == Codigo && i.Seq==_seq select i).FirstOrDefault();
                 }
             }
 
@@ -872,7 +875,7 @@ namespace GTI_Dal.Classes {
 
         public Laseriptu_ext Dados_IPTU_Ext(int Codigo, int Ano) {
             using (GTI_Context db = new GTI_Context(_connection)) {
-                var Sql = (from i in db.Laser_iptu_ext where i.Ano == Ano && i.Codreduzido == Codigo select i).FirstOrDefault();
+                var Sql = (from i in db.Laser_iptu_ext where i.Ano == Ano && i.Codreduzido == Codigo   select i).FirstOrDefault();
                 return Sql;
                 }
             }

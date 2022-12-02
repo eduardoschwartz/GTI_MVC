@@ -9,6 +9,9 @@ namespace GTI_Models.Models {
         [Key]
         [Column(Order = 2)]
         public int Codreduzido { get; set; }
+        [Key]
+        [Column(Order = 3)]
+        public short Seq { get; set; }
         public decimal? Vvt { get; set; }
         public decimal? Vvc { get; set; }
         public decimal? Vvi { get; set; }

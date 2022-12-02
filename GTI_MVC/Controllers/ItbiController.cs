@@ -2,23 +2,21 @@
 using CrystalDecisions.Shared;
 using GTI_Bll.Classes;
 using GTI_Models.Models;
-using GTI_Models.ReportModels;
 using GTI_Mvc.ViewModels;
 using GTI_Mvc.Views.Imovel.EditorTemplates;
 using Microsoft.Reporting.WebForms;
+using MMLib.Extensions;
 using QRCoder;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using static GTI_Models.modelCore;
-using System.Configuration;
-using System.Data.SqlClient;
-using MMLib.Extensions;
-using System.Linq;
 
 namespace GTI_Mvc.Controllers {
     public class ItbiController : Controller {
@@ -118,9 +116,7 @@ namespace GTI_Mvc.Controllers {
             } catch (Exception ex) {
                 throw ex;
             }
-
         }
-
 
         [Route("Itbi_urbano")]
         [HttpGet]
@@ -1792,8 +1788,6 @@ namespace GTI_Mvc.Controllers {
                             }
 
                             Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath(_path) + model.Guid);
-
-
 
                             var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(_path + model.Guid), fileName);
                             file.SaveAs(path);

@@ -918,7 +918,7 @@ namespace GTI_Mvc.Controllers {
         public ActionResult Carne_Iptu(CertidaoViewModel model) {
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             int _codigo = 0;
-            int _ano = 2022;
+            int _ano = 2023;
             bool _existeCod = false;
             ImovelDetailsViewModel imovelDetailsViewModel = new ImovelDetailsViewModel();
 
