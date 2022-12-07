@@ -383,6 +383,11 @@ namespace GTI_Bll.Classes {
             return obj.Lista_Parcela_Documentos(reg);
         }
 
+        public bool Existe_LancamentoIPTU(int Codigo, int Ano) {
+            Tributario_Data obj = new Tributario_Data(_connection);
+            return obj.Existe_LancamentoIPTU(Codigo,Ano);
+        }
+
         /// <summary>
         /// Lista tabela parceladocumento
         /// </summary>

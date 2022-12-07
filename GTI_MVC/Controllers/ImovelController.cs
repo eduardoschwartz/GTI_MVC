@@ -628,6 +628,11 @@ namespace GTI_Mvc.Controllers {
                 }
             }
 
+            if (tributarioRepository.Existe_LancamentoIPTU(_codigo, DateTime.Now.Year)) {
+                ViewBag.Result = "Este imóvel não esta isento da cobrança de IPTU no ano atual.";
+                return View(certidaoViewModel);
+            }
+
             if (!bImune) {
                 List<AreaStruct> ListaArea = imovelRepository.Lista_Area(_codigo);
                 foreach (AreaStruct item in ListaArea) {

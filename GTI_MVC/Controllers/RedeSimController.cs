@@ -133,7 +133,7 @@ namespace GTI_MVC.Controllers {
                             _tipoSigla = "L";
                         } else if (_tipo == "R"){
                             _listaRegistro = Read_Registro(Path.Combine(_path, _guid));
-                            //                            _listaRegistro = Insert_Registro(_listaRegistro, _guid);
+                            //  _listaRegistro = Insert_Registro(_listaRegistro, _guid);
                             _ok = true;
                             _tipoSigla = "R";
                         } else  {

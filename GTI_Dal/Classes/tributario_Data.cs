@@ -181,6 +181,14 @@ namespace GTI_Dal.Classes {
             return bValido;
         }
 
+
+        public bool Existe_LancamentoIPTU(int Codigo,int Ano) {
+            using (GTI_Context db = new GTI_Context(_connection)) {
+                    return db.Debitoparcela.Any(a => a.Codreduzido == Codigo && a.Anoexercicio==Ano && a.Statuslanc!=5);
+            }
+        }
+
+
         public bool Existe_Tributo(Tributo reg, bool novo = true) {
             bool bValido = false;
             using (GTI_Context db = new GTI_Context(_connection)) {

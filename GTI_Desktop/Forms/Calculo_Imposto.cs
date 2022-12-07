@@ -359,7 +359,7 @@ namespace GTI_Desktop.Forms {
 
         private void Calculo_IssTLL() {
 
-            _ipca = (decimal)3.9928;
+            _ipca = (decimal)4.279;
             FileStream fsDP = new FileStream(_path + "DEBITOPARCELA.TXT", FileMode.Create, FileAccess.Write);
             StreamWriter fs1 = new StreamWriter(fsDP, System.Text.Encoding.Default);
             FileStream fsDT = new FileStream(_path + "DEBITOTRIBUTO.TXT", FileMode.Create, FileAccess.Write);
@@ -739,8 +739,8 @@ PROXIMO:;
 
         private void ExportarButton_Click(object sender, EventArgs e) {
             if (MessageBox.Show("Exportar para o banco de dados?", "Confimação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No) return;
-            string _exportConnection = _connection;
-            //string _exportConnection = _connectionTeste;
+            //string _exportConnection = _connection;
+            string _exportConnection = _connectionTeste;
 
             Tributario_bll tributario_Class = new Tributario_bll(_exportConnection);
             #region DEBITOPARCELA
