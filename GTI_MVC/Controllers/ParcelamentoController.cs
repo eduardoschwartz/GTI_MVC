@@ -34,7 +34,7 @@ namespace GTI_MVC.Controllers {
 
             int _user_id = Convert.ToInt32(Functions.Decrypt(Request.Cookies["2uC*"].Value));
             if (_user_id == 582) {
-                _connection = "gtiConnectionTeste";
+                _connection = "GTIconnectionLocal";
                 _RefisAtivo = true;
             } else {
                 _connection = "gtiConnection";

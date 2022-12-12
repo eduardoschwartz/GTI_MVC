@@ -715,6 +715,7 @@ namespace GTI_Mvc.Controllers {
                 Nome_Requerente = _nome,
                 Ano = DateTime.Now.Year,
                 Numero = _numero_certidao,
+                Numero_Ano = _numero_certidao.ToString() + "/" + DateTime.Now.Year.ToString(),
                 Banco_Nome = regPag.Banco_Nome + " Agência: " + regPag.Codigo_Agencia ?? "",
                 Cpf_Cnpj = _cpfcnpj,
                 Data_Geracao = DateTime.Now,
