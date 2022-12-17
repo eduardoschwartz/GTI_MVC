@@ -1702,7 +1702,7 @@ namespace GTI_Mvc.Controllers {
                     _totParcela = (short)pr.Qtdeparcela;
 
                     int _seq = Lista[0].Numsequencia;
-                    List<DebitoStructure> ListaDebito = tributario_class.Lista_Parcelas_Parcelamento_Ano(_codigo, 2022, _seq);
+                    List<DebitoStructure> ListaDebito = tributario_class.Lista_Parcelas_Parcelamento_Ano(_codigo, 2023, _seq);
                     if (ListaDebito.Count == 0) {
                         ViewBag.Result = "Não existem parcelas a serem impressas.";
                         return View(model);
