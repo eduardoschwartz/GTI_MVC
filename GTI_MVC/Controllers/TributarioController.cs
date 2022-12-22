@@ -2117,7 +2117,7 @@ namespace GTI_Mvc.Controllers {
             List<Categconstr> Lista_Cat = new List<Categconstr>();
 
             List<int> Lista_Ano = new List<int>();
-            for (int i = 2000; i <= DateTime.Now.Year; i++) {
+            for (int i = 2000; i <= DateTime.Now.Year+1; i++) {
                 Lista_Ano.Add(i);
             }
             ViewBag.Lista_Ano = new SelectList(Lista_Ano);
@@ -2140,7 +2140,7 @@ namespace GTI_Mvc.Controllers {
             ViewBag.Lista_Uso = new SelectList(Lista_Uso, "Codusoconstr", "Descusoconstr");
 
             List<int> Lista_Ano = new List<int>();
-            for (int i = 2000; i <= DateTime.Now.Year; i++) {
+            for (int i = 2000; i <= DateTime.Now.Year+1; i++) {
                 Lista_Ano.Add(i);
             }
             ViewBag.Lista_Ano = new SelectList(Lista_Ano);
@@ -2485,7 +2485,7 @@ namespace GTI_Mvc.Controllers {
         [HttpGet]
         public ViewResult Notificacao_query() {
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
-            int _ano = DateTime.Now.Year;
+            int _ano = DateTime.Now.Year+1;
         StartQueryNotificacao:
             List<Notificacao_iss_web_Struct> Lista = tributarioRepository.Retorna_Notificacao_Iss_Web(_ano);
             List<NotificacaoIssViewModel> model = new List<NotificacaoIssViewModel>();
@@ -2517,7 +2517,7 @@ namespace GTI_Mvc.Controllers {
         public ViewResult Notificacao_query(List<NotificacaoIssViewModel> model) {
             int _ano = model[0].Ano_Selected;
             if (model[0].Ano_Selected == 0)
-                _ano = DateTime.Now.Year;
+                _ano = DateTime.Now.Year+1;
 
             Tributario_bll tributarioRepository = new Tributario_bll(_connection);
             List<Notificacao_iss_web_Struct> Lista = tributarioRepository.Retorna_Notificacao_Iss_Web(Convert.ToInt32(_ano));
@@ -2532,7 +2532,7 @@ namespace GTI_Mvc.Controllers {
                     Data_Emissao = item.Data_gravacao,
                     SituacaoNome = item.Situacao_nome,
                     AnoNumero = item.Numero_notificacao.ToString("0000") + "/" + item.Ano_notificacao.ToString(),
-                    Ano_Selected = DateTime.Now.Year
+                    Ano_Selected = DateTime.Now.Year+1
                 };
                 model.Add(reg);
             }

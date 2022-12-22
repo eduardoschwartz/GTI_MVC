@@ -540,7 +540,7 @@ namespace GTI_MVC.Controllers {
                     if (_dataNow > Convert.ToDateTime("01/10/2022") && _dataNow <= Convert.ToDateTime("30/11/2022 22:00:00")) {
                         _plano_Codigo = 57;
                     } else {
-                        if (_dataNow > Convert.ToDateTime("01/12/2022") && _dataNow <= Convert.ToDateTime("22/12/2022")) {
+                        if (_dataNow > Convert.ToDateTime("01/12/2022") && _dataNow <= Convert.ToDateTime("23/12/2022")) {
                             _plano_Codigo = 58;
                         }
                     }
