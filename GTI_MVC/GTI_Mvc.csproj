@@ -766,6 +766,7 @@
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="Files\UserDocTemplate.htm" />
     <Content Include="Images\cancel2.png" />
+    <Content Include="Images\capamanutencao.png" />
     <Content Include="Images\help.png" />
     <Content Include="Images\OK.gif" />
     <Content Include="Images\ok.png" />
@@ -1235,6 +1236,7 @@
     <Content Include="Views\Notificacao\Notificacao_pass_reparo_add.cshtml" />
     <Content Include="Views\Notificacao\AutoInfracao_pass_reparo_add.cshtml" />
     <Content Include="Views\Notificacao\AutoInfracao_pass_reparo_query.cshtml" />
+    <Content Include="Views\Home\Login_gti - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
