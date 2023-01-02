@@ -766,6 +766,7 @@
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="Files\UserDocTemplate.htm" />
     <Content Include="Images\cancel2.png" />
+    <Content Include="Images\capamanutencao.png" />
     <Content Include="Images\help.png" />
     <Content Include="Images\OK.gif" />
     <Content Include="Images\ok.png" />
@@ -1141,7 +1142,7 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Shared\Cep_inc.cshtml" />
-    <Content Include="Views\Home\Login_gti.cshtml" />
+    <Content Include="Views\Home\Login_gti_man.cshtml" />
     <Content Include="Views\Notificacao\Notificacao_ter_menu.cshtml" />
     <Content Include="Views\Notificacao\Notificacao_ter_add.cshtml" />
     <Content Include="Views\Notificacao\Notificacao_ter_query.cshtml" />
@@ -1235,6 +1236,7 @@
     <Content Include="Views\Notificacao\Notificacao_pass_reparo_add.cshtml" />
     <Content Include="Views\Notificacao\AutoInfracao_pass_reparo_add.cshtml" />
     <Content Include="Views\Notificacao\AutoInfracao_pass_reparo_query.cshtml" />
+    <Content Include="Views\Home\Login_gti.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
