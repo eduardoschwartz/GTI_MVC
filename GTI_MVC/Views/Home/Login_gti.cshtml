@@ -35,13 +35,75 @@
 
 
 
+<div class="center">
+    <div style="width: 100%; overflow: hidden;">
+        <div style="width: 400px; float: left;">
+            <span class="spantext">Para seu imóvel</span><br />
+            @Html.ActionLink("Emissão do carnê de IPTU", "Carne_Iptu", "Imovel", null, new { @class = "actionlink" }) <br />
+            @*<span style="color:red;font-size:13px;font-weight:bold">&nbsp;&nbsp;**novo</span><br />*@
+            @*@Html.ActionLink("Emissão do carnê da CIP 2022", "Carne_Cip", "Imovel", null, new { @class = "actionlink" })<br />*@
+            @Html.ActionLink("Dados cadastrais de um imóvel", "Dados_Imovel", "Imovel", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Certidão de endereço atualizado", "Certidao_Endereco", "Imovel", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Certidão de valor venal", "Certidao_Valor_Venal", "Imovel", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Certidão de isenção de IPTU", "Certidao_Isencao", "Imovel", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Certidão de não incidência de ITBI", "Itbi_isencao", "Itbi", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Imposto sobre Transmissão de Bens Imóveis (ITBI)", "Itbi_menu", "Itbi", null, new { @class = "actionlink" })<br />
+        </div>
 
-    <div style="width: 100%; overflow: hidden;text-align:center;height:300px">
-        <img src="~/Images/capamanutencao.png" style="height:287px"/>
+        <div style="margin-left: 420px;">
+            <span class="spantext">Para sua empresa</span><br />
+            @*@Html.ActionLink("Emissão do carnê de Iss Fixo/Taxa de Licença", "Carne_tl", "Empresa", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Emissão do carnê de Vigilância Sanitária", "Carne_vs", "Empresa", null, new { @class = "actionlink" })<br />*@
+            @Html.ActionLink("Dados cadastrais de uma empresa", "Details", "Empresa", null, new { @class = "actionlink" })<br />
+            <a href="~/Files/DECA2018.pdf" class="actionlink">Download da declaração cadastral (DECA)</a><br />
+            @Html.ActionLink("Renovação de alvará de funcionamento", "Alvara_Funcionamento", "Empresa", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Certidão de inscrição e situação cadastral", "Certidao_Inscricao", "Empresa", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Certidão de imunidade de ISSQN", "Imunidade_issqn", "Empresa", null, new { @class = "actionlink" })<br />
+            @*@Html.ActionLink("Extrato ref. a ISS Fixo, Tx.Licença/Vig. Sanitária", "Certidao_Pagamento", "Empresa", null, new { @class = "actionlink" })<span style="color:red;font-size:13px;font-weight:normal">&nbsp;&nbsp;**Exerc.: 2022</span><br />*@
+            @Html.ActionLink("Extrato ref. a ISS Fixo, Tx.Licença/Vig. Sanitária", "Certidao_Pagamento", "Empresa", null, new { @class = "actionlink" })<br />
+            @if (ViewBag.FiscalMov == "S") {
+                @Html.ActionLink("Requerimentos (Alteração cadastral, baixa de atividade, etc..)", "mobreq_menu", "MobReq", null, new { @class = "actionlink" })<br />
+            }
+        </div>
+    </div>
+
+
+
+    <br />
+    <div style="width: 100%; overflow: hidden;">
+        <div style="width: 400px; float: left;">
+            <span class="spantext">Operações financeiras</span><br />
+            @Html.ActionLink("Consulta e atualização de boletos para pagamento", "Dama", "Tributario", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Certidão de débito (Código do imóvel ou inscrição municipal)", "Certidao_Debito_Codigo", "Tributario", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Certidão de débito (CPF/CNPJ)", "Certidao_Debito_Doc", "Tributario", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Impressão de comprovante de pagamento", "Comprovante_pagamento", "Tributario", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Consultar detalhes de um boleto", "Detalhe_Boleto", "Tributario", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Parcelamento de débitos", "Parc_index", "Parcelamento", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Emissão de carnê de parcelamento", "SegundaVia_Parcelamento", "Tributario", null, new { @class = "actionlink" })
+        </div>
+
+        <div style="margin-left: 420px;">
+            <span class="spantext">Outras opções</span><br />
+
+            @*@Html.ActionLink("Feriados municipais, estaduais e federais", "Calevent", "Misc", null, new { @class = "actionlink" })<br />*@
+            @Html.ActionLink("Consulta de Processos", "Consulta_Processo", "Protocolo", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Acesso ao Sistema", "Login", "Home", null, new { @class = "actionlink" })
+
+
+
+
+            @*@Html.ActionLink("Cadastro de imóvel", "CadImovel", "Imovel",new { Codigo=1},null)<br />*@
+            @*@Html.ActionLink("Emissão de Guia", "Guia", "Tributario", null, new { @class = "actionlink" })<br />*@
+            @*@Html.ActionLink("Validar Documento", "Checkgticd", "Shared", new { c= "026052020/20835-IP" }, null)<br />*@
+        </div>
     </div>
     
-    
+    @*<div style="color:brown;text-align:center;font-size:13px">Utilize um browser moderno compatível com HTML5. Não utilizar o Internet Explorer.</div>*@
+    @*<div  style=" color:red;background-color:moccasin;text-align:center;font-size:16px;font-weight:bold;text-align:justify"><article>ATENÇÃO: A Prefeitura de Jaboticabal informa que o REFIS estará em vigor até o dia 31/01/2022. Aproveite para regularizar seus débitos! Para maiores informações, entre em contato nos telefones: 3209-3312 ou 3209-3369</article>*@
+                                                   @*<span style="color:brown;font-size:12px ">Caso não possua usuário e senha, clique na opção (Acesso ao Sistema) acima para criar</span>*@
 
-
+        @*</div>*@
+</div>
+<br />
 
 
