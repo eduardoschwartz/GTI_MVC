@@ -2835,7 +2835,7 @@ namespace GTI_Mvc.Controllers {
                 }
             } else {
                 ViewBag.Result = _token.access_token;
-                return View(model);
+              //  return View(model);
             }
 
 
@@ -2843,45 +2843,45 @@ namespace GTI_Mvc.Controllers {
 
 
 
-            //            Cobranca_Retorno cob= Sistema_Cobranca.Registrar_Cobranca(_dh); //<------Efetua o Registro
-            //            await Task.Run(() 
-            //if (cob.Codigo_Barra != null) {
-            //    _dh.Linha_digitavel = cob.Linha_Digitavel;
-            //    _dh.Codigo_barra = Functions.Gera2of5Str(cob.Codigo_Barra); ;
-            //    _dh.Url = cob.Url;
-            //    _dh.Txid = cob.txId;
-            //    _dh.Emv = cob.Emv;
-            //} else {
-            //    //Se houver erro e não for registrado retorna o erro e sai
-            //    if (cob.Erro != "") {
-            //        ViewBag.Result = "Não foi possível registrar p boleto, tente novamente em alguns instantes...";
-            //        return View(model);
-            //    }
-            //}
+            Cobranca_Retorno cob = Sistema_Cobranca.Registrar_Cobranca(_dh); //<------Efetua o Registro
+           // await Task.Run(());
+            if (cob.Codigo_Barra != null) {
+                _dh.Linha_digitavel = cob.Linha_Digitavel;
+                _dh.Codigo_barra = Functions.Gera2of5Str(cob.Codigo_Barra); ;
+                _dh.Url = cob.Url;
+                _dh.Txid = cob.txId;
+                _dh.Emv = cob.Emv;
+            } else {
+                //Se houver erro e não for registrado retorna o erro e sai
+                if (cob.Erro != "") {
+                    ViewBag.Result = "Não foi possível registrar p boleto, tente novamente em alguns instantes...";
+                    return View(model);
+                }
+            }
 
             //Extrai o QrCode 
             string base64string, base64stringBC;
-            ////##### QRCode && BarCode################################################
-            //QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            //QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(_dh.Emv, QRCodeGenerator.ECCLevel.Q);
-            //using (Bitmap bitmap = qrCode.GetGraphic(20)) {
-            //    using (MemoryStream ms = new MemoryStream()) {
-            //        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-            //        byte[] byteImage = ms.ToArray();
-            //        base64string = Convert.ToBase64String(byteImage);
-            //        _dh.Qrcodeimage = byteImage;
-            //    }
-            //}
+            //##### QRCode && BarCode################################################
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(_dh.Emv, QRCodeGenerator.ECCLevel.Q);
+            using (Bitmap bitmap = qrCode.GetGraphic(20)) {
+                using (MemoryStream ms = new MemoryStream()) {
+                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    byte[] byteImage = ms.ToArray();
+                    base64string = Convert.ToBase64String(byteImage);
+                    _dh.Qrcodeimage = byteImage;
+                }
+            }
             _dh.Qrcodeimage = Functions.Generate_QRCode(_dh.Emv);
-            //Image img=  Int2of5.GenerateBarCode(cob.Codigo_Barra, 1000, 100, 2);
-            // using (Image bitmap = img) {
-            //     using (MemoryStream ms = new MemoryStream()) {
-            //         bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-            //         byte[] byteImage = ms.ToArray();
-            //         base64stringBC = Convert.ToBase64String(byteImage);
-            //         _dh.Codebar = byteImage;
-            //     }
-            // }
+            Image img = Int2of5.GenerateBarCode(cob.Codigo_Barra, 1000, 100, 2);
+            using (Image bitmap = img) {
+                using (MemoryStream ms = new MemoryStream()) {
+                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    byte[] byteImage = ms.ToArray();
+                    base64stringBC = Convert.ToBase64String(byteImage);
+                    _dh.Codebar = byteImage;
+                }
+            }
             //#######################################################################
             ex = tributarioRepository.Insert_Dam_Header(_dh);
 

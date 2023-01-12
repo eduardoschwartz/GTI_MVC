@@ -95,7 +95,7 @@
 </style>
 
 <div class="center">
-
+    @ViewBag.Erro
     @using (Html.BeginForm("CadImovelqryC", "Imovel", FormMethod.Post, new { @id = "MainForm", enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
         <div class="container" style="width:800px">

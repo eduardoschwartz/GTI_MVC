@@ -20,6 +20,8 @@ using Newtonsoft.Json.Linq;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace GTI_Mvc.Controllers {
 
@@ -633,7 +635,7 @@ namespace GTI_Mvc.Controllers {
                 return View(certidaoViewModel);
             }
 
-            if (!bImune) {
+            if (!bImune && !bIsentoProcesso) {
                 List<AreaStruct> ListaArea = imovelRepository.Lista_Area(_codigo);
                 foreach (AreaStruct item in ListaArea) {
                     if (item.Tipo_Codigo == 2) {
@@ -1507,14 +1509,66 @@ namespace GTI_Mvc.Controllers {
         [Route("CadImovelqryC")]
         [HttpGet]
         public ActionResult CadImovelqryC(string id) {
-            if (Session["hashid"] == null)
-                return RedirectToAction("Login", "Home");
+
+            //using (var client = new HttpClient()) {
+            //    //ServicePointManager.Expect100Continue = true;
+            //    //ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls;
+            //    //client.BaseAddress = new Uri("https://apigti.jaboticabal.sp.gov.br/api");
+            //    client.BaseAddress = new Uri("http://apigti.jaboticabal.sp.gov.br/api/Imovel/6");
+            //    //client.BaseAddress = new Uri("https://localhost:7267/api/");
+            //    //HTTP GET
+            //    var responseTask = client.GetAsync("WeatherForecast");
+            //    responseTask.Wait();
+
+            //    var result = responseTask.Result;
+            //    if (result.IsSuccessStatusCode) {
+
+            //        var readTask = result.Content.ReadAsAsync<WeatherForecast[]>();
+            //        readTask.Wait();
+
+            //        var weaters = readTask.Result;
+            //        string t="";
+            //        foreach (var weater in weaters) {
+            //             t+= (weater.Summary) + " - ";
+            //        }
+            //        ViewBag.Erro = t;        
+            //    }
+            //}
+
+
+            //using (var client = new HttpClient()) {
+
+            //    //  client.BaseAddress = new Uri("https://localhost:7267/api/Book/4");
+            //    //client.BaseAddress = new Uri("https://bible-api.com/romans+12:1-2");
+            //    client.BaseAddress = new Uri("http://apigti.jaboticabal.sp.gov.br/Reports/Itbi_Resumo?datade=01%2F01%2F2022&dataate=05%2F05%2F2022&tipo=3");
+            //    //client.DefaultRequestHeaders.Clear();
+
+            //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            //    //var responseTask = client.GetAsync("Imovel/6");
+            //    var responseTask = client.GetAsync(client.BaseAddress);
+            //    responseTask.Wait();
+            //    var result = responseTask.Result;
+            //    if (result.IsSuccessStatusCode) {
+                    
+            //        var readTask = result.Content.ReadAsAsync<string>();
+            //        ViewBag.Erro = readTask.Result;
+            //        readTask.Wait();
+            //    } else
+            //        ViewBag.Erro = "Erro";
+
+              
+            //}
+
+
+            ViewBag.Erro= System.Environment.UserName;
+            //if (Session["hashid"] == null)
+            //    return RedirectToAction("Login", "Home");
             ImovelDetailsViewModel model = new ImovelDetailsViewModel();
-            if (string.IsNullOrEmpty(id))
+            //if (string.IsNullOrEmpty(id))
                 model.Lista_Imovel = new List<ImovelLista>();
-            else {
-                return RedirectToAction("CadImovel", new { c = id.Replace('-', '/') });
-            }
+            //else {
+            //    return RedirectToAction("CadImovel", new { c = id.Replace('-', '/') });
+            //}
             return View(model);
         }
 

@@ -418,9 +418,9 @@ namespace GTI_Desktop.Forms {
                 if (Codigo == 100006)
                     _possui_taxa = false;
 
-//                if (item.Codigo != 121784) {
-//                    goto PROXIMO;
-//                }
+                //if (item.Codigo != 101643) {
+                //    goto PROXIMO;
+                //}
 
                 //Remove os MEIs abertos após 01/01/2015 ou que entraram no MEI após esta data
 
@@ -468,16 +468,17 @@ namespace GTI_Desktop.Forms {
                 }
 
                 //Limitante de área
-                if (_area > 27000 && _valor_aliquota == (decimal)0.29)
-                    _area = 27000;
-                else {
-                    if (_area > 9000 && (_valor_aliquota == (decimal)0.58 || _valor_aliquota == (decimal)0.36))
-                        _area = 9000;
-                    else {
-                        if (_area > 6000 && (_valor_aliquota == (decimal)0.72 || _valor_aliquota == (decimal)0.86))
-                            _area = 6000;
-                    }
-                }
+                if (_area > 27000) _area = 27000;
+                //if (_area > 27000 && _valor_aliquota == (decimal)0.29)
+                //    _area = 27000;
+                //else {
+                //    if (_area > 9000 && (_valor_aliquota == (decimal)0.58 || _valor_aliquota == (decimal)0.36))
+                //        _area = 9000;
+                //    else {
+                //        if (_area > 6000 && (_valor_aliquota == (decimal)0.72 || _valor_aliquota == (decimal)0.86))
+                //            _area = 6000;
+                //    }
+                //}
 
                 _valor_aliquota *= _ipca;
                 if (_valor_aliquota < 14)
