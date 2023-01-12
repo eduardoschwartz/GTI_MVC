@@ -6328,8 +6328,8 @@
         <PageWidth>21cm</PageWidth>
         <LeftMargin>0cm</LeftMargin>
         <RightMargin>0cm</RightMargin>
-        <TopMargin>0.1cm</TopMargin>
-        <BottomMargin>0.1cm</BottomMargin>
+        <TopMargin>0.3cm</TopMargin>
+        <BottomMargin>0cm</BottomMargin>
         <ColumnSpacing>0.13cm</ColumnSpacing>
         <Style />
       </Page>

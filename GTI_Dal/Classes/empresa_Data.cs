@@ -116,7 +116,7 @@ namespace GTI_Dal.Classes {
                                   where m.Codigomob>0
                                   orderby m.Codigomob
                                   select new EmpresaStruct { Codigo=m.Codigomob,Area=m.Areatl,Codigo_aliquota=m.Codigoaliq,Valor_aliquota1=(float)a.Valoraliq1,
-                                  Valor_aliquota2= (float)a.Valoraliq2,Valor_aliquota3= (float)a.Valoraliq3,Isento_taxa=m.Isentotaxa,Vistoria=m.Vistoria});
+                                  Valor_aliquota2= (float)a.Valoraliq2,Valor_aliquota3= (float)a.Valoraliq3,Isento_taxa=m.Isentotaxa,Vistoria=m.Vistoria, Atividade_codigo=m.Codatividade});
 
                 List<int> ListaAtivos = Lista_Empresas_Ativas();
 
@@ -132,7 +132,8 @@ namespace GTI_Dal.Classes {
                                         Valor_aliquota1 = item.Valor_aliquota1,
                                         Valor_aliquota2 = item.Valor_aliquota2,
                                         Valor_aliquota3 = item.Valor_aliquota3,
-                                        Vistoria = item.Vistoria
+                                        Vistoria = item.Vistoria,
+                                        Atividade_codigo = item.Atividade_codigo
                                     };
                                     ListaFinal.Add(reg);
                                 }

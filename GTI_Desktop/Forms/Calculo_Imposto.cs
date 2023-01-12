@@ -15,7 +15,7 @@ namespace GTI_Desktop.Forms {
         string _path = @"c:\cadastro\bin\";
         int _seq = 1;
         int _ano = 2023;
-        int _documento = 20604500;
+        int _documento = 21199730;
         decimal _ipca = (decimal)7.17;
  
         private enum Tipo_imposto {
@@ -418,9 +418,13 @@ namespace GTI_Desktop.Forms {
                 if (Codigo == 100006)
                     _possui_taxa = false;
 
-                //if (item.Codigo != 101643) {
-                //    goto PROXIMO;
-                //}
+                if (item.Atividade_codigo == null ) {
+                    goto PROXIMO;
+                }
+
+                if (item.Codigo != 130015) {
+                  //  goto PROXIMO;
+                }
 
                 //Remove os MEIs abertos após 01/01/2015 ou que entraram no MEI após esta data
 
@@ -457,6 +461,8 @@ namespace GTI_Desktop.Forms {
                     default:
                         break;
                 }
+
+
 
                 int _qtdeISS = 0;
                 decimal _valor_aliquota_ISS = 0;
@@ -740,8 +746,8 @@ PROXIMO:;
 
         private void ExportarButton_Click(object sender, EventArgs e) {
             if (MessageBox.Show("Exportar para o banco de dados?", "Confimação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No) return;
-            //string _exportConnection = _connection;
-            string _exportConnection = _connectionTeste;
+            string _exportConnection = _connection;
+            //string _exportConnection = _connectionTeste;
 
             Tributario_bll tributario_Class = new Tributario_bll(_exportConnection);
             #region DEBITOPARCELA
