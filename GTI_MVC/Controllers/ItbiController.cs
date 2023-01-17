@@ -3385,7 +3385,7 @@ namespace GTI_Mvc.Controllers {
 
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             //##### QRCode ##########################################################
-            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkguid?c=" + p;
+            string Code = HttpUtility.UrlEncode(Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkguid?c=" + p);
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
             using (Bitmap bitmap = qrCode.GetGraphic(20)) {
