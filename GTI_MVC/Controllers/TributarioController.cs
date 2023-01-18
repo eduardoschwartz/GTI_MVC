@@ -30,6 +30,7 @@ using Newtonsoft.Json;
 using System.Threading;
 using System.Web.UI;
 using System.Runtime.ConstrainedExecution;
+using System.Web;
 
 namespace GTI_Mvc.Controllers {
     [Route("Tributario")]
@@ -258,7 +259,7 @@ namespace GTI_Mvc.Controllers {
             };
 
             //##### QRCode ##########################################################
-            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + reg.Controle;
+            string Code = HttpUtility.UrlEncode( Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + reg.Controle);
             //QRCodeGenerator qrGenerator = new QRCodeGenerator();
             //QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
             //using (Bitmap bitmap = qrCode.GetGraphic(20)) {

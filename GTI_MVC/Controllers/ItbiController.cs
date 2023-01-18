@@ -15,6 +15,7 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -3385,7 +3386,11 @@ namespace GTI_Mvc.Controllers {
 
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             //##### QRCode ##########################################################
-            string Code = HttpUtility.UrlEncode(Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkguid?c=" + p);
+
+   
+   //         string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkguid?c=" + asciiString;
+            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared//Checkguid?c=" + p;
+            ViewBag.Code = Code;
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
             using (Bitmap bitmap = qrCode.GetGraphic(20)) {
