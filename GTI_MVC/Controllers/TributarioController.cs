@@ -454,7 +454,7 @@ namespace GTI_Mvc.Controllers {
             } else {
                 _find = false;
                 foreach (Certidao_debito_documento reg in _lista_certidao) {
-                    if (reg._Ret == 4) {
+                    if (reg._Ret == 4 ) {
                         _find = true;
                         break;
                     }
@@ -483,11 +483,11 @@ namespace GTI_Mvc.Controllers {
 
             string _tributo = "";
             foreach (Certidao_debito_documento item in _lista_certidao) {
-                if (nRet == item._Ret) {
+     //           if (nRet == item._Ret) {
 
                     if (item._Tributo != "")
                         _tributo += item._Tributo + " (IM:" + item._Codigo + ")" + ",";
-                }
+          //      }
             }
             if (_tributo.Length > 0)
                 _tributo = _tributo.Substring(0, _tributo.Length - 1);

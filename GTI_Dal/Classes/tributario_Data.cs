@@ -1530,9 +1530,15 @@ namespace GTI_Dal.Classes {
                 object[] Parametros = new object[24];
                 Parametros[0] = new SqlParameter { ParameterName = "@Ano", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano };
                 Parametros[1] = new SqlParameter { ParameterName = "@Numero", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero };
-                Parametros[2] = new SqlParameter { ParameterName = "@Codigo", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Codigo };
+                if(string.IsNullOrEmpty(Reg.Codigo))
+                    Parametros[2] = new SqlParameter { ParameterName = "@Codigo",  SqlValue = DBNull.Value };
+                else
+                    Parametros[2] = new SqlParameter { ParameterName = "@Codigo", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Codigo };
                 Parametros[3] = new SqlParameter { ParameterName = "@Numero_Ano", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Numero_Ano };
-                Parametros[4] = new SqlParameter { ParameterName = "@Inscricao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Inscricao };
+                if(string.IsNullOrEmpty(Reg.Inscricao))
+                    Parametros[4] = new SqlParameter { ParameterName = "@Inscricao",  SqlValue = DBNull.Value};
+                else
+                    Parametros[4] = new SqlParameter { ParameterName = "@Inscricao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Inscricao };
                 Parametros[5] = new SqlParameter { ParameterName = "@Nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nome };
                 if(string.IsNullOrEmpty(Reg.Endereco))
                     Parametros[6] = new SqlParameter { ParameterName = "@Endereco",  SqlValue = DBNull.Value };
@@ -1560,9 +1566,18 @@ namespace GTI_Dal.Classes {
                 Parametros[14] = new SqlParameter { ParameterName = "@Tributo", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Tributo };
                 Parametros[15] = new SqlParameter { ParameterName = "@QRCodeImage", SqlDbType = SqlDbType.Image, SqlValue = Reg.QRCodeImage };
                 Parametros[16] = new SqlParameter { ParameterName = "@Cpf_Cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cpf_Cnpj };
-                Parametros[17] = new SqlParameter { ParameterName = "@Atividade", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Atividade };
-                Parametros[18] = new SqlParameter { ParameterName = "@Cidade", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cidade };
-                Parametros[19] = new SqlParameter { ParameterName = "@Uf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Uf };
+                if(string.IsNullOrEmpty(Reg.Atividade))
+                    Parametros[17] = new SqlParameter { ParameterName = "@Atividade",  SqlValue = DBNull.Value };
+                else
+                    Parametros[17] = new SqlParameter { ParameterName = "@Atividade", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Atividade };
+                if(string.IsNullOrEmpty(Reg.Cidade))
+                    Parametros[18] = new SqlParameter { ParameterName = "@Cidade",  SqlValue =DBNull.Value };
+                else
+                    Parametros[18] = new SqlParameter { ParameterName = "@Cidade", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cidade };
+                if(string.IsNullOrEmpty(Reg.Uf))
+                    Parametros[19] = new SqlParameter { ParameterName = "@Uf",  SqlValue = DBNull.Value };
+                else
+                    Parametros[19] = new SqlParameter { ParameterName = "@Uf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Uf };
                 if (string.IsNullOrEmpty(Reg.Horario))
                     Parametros[20] = new SqlParameter { ParameterName = "@Horario", SqlValue = DBNull.Value };
                 else
