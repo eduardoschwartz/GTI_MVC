@@ -1565,8 +1565,11 @@ namespace GTI_Dal.Classes {
                 Parametros[13] = new SqlParameter { ParameterName = "@Nao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nao };
                 Parametros[14] = new SqlParameter { ParameterName = "@Tributo", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Tributo };
                 Parametros[15] = new SqlParameter { ParameterName = "@QRCodeImage", SqlDbType = SqlDbType.Image, SqlValue = Reg.QRCodeImage };
-                Parametros[16] = new SqlParameter { ParameterName = "@Cpf_Cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cpf_Cnpj };
-                if(string.IsNullOrEmpty(Reg.Atividade))
+                if(string.IsNullOrEmpty(Reg.Cpf_Cnpj))
+                    Parametros[16] = new SqlParameter { ParameterName = "@Cpf_Cnpj",  SqlValue = DBNull.Value };
+                else
+                    Parametros[16] = new SqlParameter { ParameterName = "@Cpf_Cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cpf_Cnpj };
+                if (string.IsNullOrEmpty(Reg.Atividade))
                     Parametros[17] = new SqlParameter { ParameterName = "@Atividade",  SqlValue = DBNull.Value };
                 else
                     Parametros[17] = new SqlParameter { ParameterName = "@Atividade", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Atividade };
