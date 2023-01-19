@@ -3389,7 +3389,7 @@ namespace GTI_Mvc.Controllers {
 
    
    //         string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkguid?c=" + asciiString;
-            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared//Checkguid?c=" + p;
+            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared//Checkguid?c=" + HttpUtility.UrlEncode(p);
             ViewBag.Code = Code;
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);

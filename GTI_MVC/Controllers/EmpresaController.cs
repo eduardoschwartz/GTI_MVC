@@ -20,7 +20,7 @@ using System.Net;
 using Newtonsoft.Json.Linq;
 using System.Configuration;
 using System.Data.SqlClient;
-
+using System.Web;
 
 namespace GTI_Mvc.Controllers {
 
@@ -914,7 +914,7 @@ namespace GTI_Mvc.Controllers {
                 alvara.Data_Gravada = DateTime.Now;
 
                 //##### QRCode ##########################################################
-                string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + alvara.Controle;
+                string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared//Checkgticd?c=" + HttpUtility.UrlEncode(alvara.Controle);
                 //QRCodeGenerator qrGenerator = new QRCodeGenerator();
                 //QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
                 //using (Bitmap bitmap = qrCode.GetGraphic(20)) {
@@ -1759,7 +1759,7 @@ namespace GTI_Mvc.Controllers {
 
             string controle = _numero.ToString("00000") + _ano.ToString("0000") + "/" + _codigo.ToString() + "-AF";
             //##### QRCode ##########################################################
-            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + controle;
+            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared//Checkgticd?c=" + HttpUtility.UrlEncode(controle);
             //QRCodeGenerator qrGenerator = new QRCodeGenerator();
             //QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
             //using (Bitmap bitmap = qrCode.GetGraphic(20)) {
@@ -1943,7 +1943,7 @@ namespace GTI_Mvc.Controllers {
                 certidao.Data_Gravada = DateTime.Now;
 
                 //##### QRCode ##########################################################
-                string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + certidao.Controle;
+                string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared//Checkgticd?c=" + HttpUtility.UrlEncode(certidao.Controle);
                 //QRCodeGenerator qrGenerator = new QRCodeGenerator();
                 //QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
                 //using (Bitmap bitmap = qrCode.GetGraphic(20)) {

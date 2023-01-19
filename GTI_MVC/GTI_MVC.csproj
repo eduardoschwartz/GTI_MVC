@@ -321,11 +321,6 @@
       <DependentUpon>Auto_Infracao_Passeio.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Reports\CrystalReport1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CrystalReport1.rpt</DependentUpon>
-    </Compile>
     <Compile Include="Reports\Imunidade_issqn_valida.cs">
       <DependentUpon>Imunidade_issqn_valida.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1247,261 +1242,257 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Reports\Auto_Infracao_Passeio_Reparo.rpt">
+    <Content Include="Reports\Auto_Infracao_Passeio_Reparo.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Auto_Infracao_Passeio_Reparo.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Auto_Infracao_Passeio.rpt">
+    </Content>
+    <Content Include="Reports\Auto_Infracao_Passeio.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Auto_Infracao_Passeio.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\CrystalReport1.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>CrystalReport1.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Imunidade_issqn_valida.rpt">
+    </Content>
+    <Content Include="Reports\Imunidade_issqn_valida.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Imunidade_issqn_valida.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Imunidade_issqn.rpt">
+    </Content>
+    <Content Include="Reports\Imunidade_issqn.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Imunidade_issqn.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Auto_Infracao_Habitese.rpt">
+    </Content>
+    <Content Include="Reports\Auto_Infracao_Habitese.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Auto_Infracao_Habitese.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Auto_Infracao_Obra.rpt">
+    </Content>
+    <Content Include="Reports\Auto_Infracao_Obra.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Auto_Infracao_Obra.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\dam_v6.rpt">
+    </Content>
+    <Content Include="Reports\dam_v6.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>dam_v6.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Dam_with_Pix.rdlc" />
-    <EmbeddedResource Include="Reports\ISS_Civil_Resumo.rpt">
+    </Content>
+    <Content Include="Reports\Dam_with_Pix.rdlc" />
+    <Content Include="Reports\ISS_Civil_Resumo.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ISS_Civil_Resumo.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\MobReq_Baixa.rpt">
+    </Content>
+    <Content Include="Reports\MobReq_Baixa.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>MobReq_Baixa.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\MobReq_Alteracao.rpt">
+    </Content>
+    <Content Include="Reports\MobReq_Alteracao.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>MobReq_Alteracao.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\MobReq_Reativa.rpt">
+    </Content>
+    <Content Include="Reports\MobReq_Reativa.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>MobReq_Reativa.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\MobReq_Inscricao.rpt">
+    </Content>
+    <Content Include="Reports\MobReq_Inscricao.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>MobReq_Inscricao.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\AutoInfracao_Queimada.rpt">
+    </Content>
+    <Content Include="Reports\AutoInfracao_Queimada.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>AutoInfracao_Queimada.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Notificacao_Habitese.rpt">
+    </Content>
+    <Content Include="Reports\Notificacao_Habitese.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Notificacao_Habitese.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Notificacao_Passeio_Reparo.rpt">
+    </Content>
+    <Content Include="Reports\Notificacao_Passeio_Reparo.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Notificacao_Passeio_Reparo.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Notificacao_Passeio.rpt">
+    </Content>
+    <Content Include="Reports\Notificacao_Passeio.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Notificacao_Passeio.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\ParcelamentoWeb.rpt">
+    </Content>
+    <Content Include="Reports\ParcelamentoWeb.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ParcelamentoWeb.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Resumo_Parcelamento.rpt">
+    </Content>
+    <Content Include="Reports\Resumo_Parcelamento.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Resumo_Parcelamento.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Resumo_Parcelamento_Previa.rpt">
+    </Content>
+    <Content Include="Reports\Resumo_Parcelamento_Previa.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Resumo_Parcelamento_Previa.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Simulado_Parcelamento_teste.rpt">
+    </Content>
+    <Content Include="Reports\Simulado_Parcelamento_teste.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Simulado_Parcelamento_teste.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Simulado_Parcelamento.rpt">
+    </Content>
+    <Content Include="Reports\Simulado_Parcelamento.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Simulado_Parcelamento.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Alvara_Funcionamento_Prov.rpt">
+    </Content>
+    <Content Include="Reports\Alvara_Funcionamento_Prov.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Alvara_Funcionamento_Prov.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Alvara_Funcionamento_Def.rpt">
+    </Content>
+    <Content Include="Reports\Alvara_Funcionamento_Def.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Alvara_Funcionamento_Def.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Alvara_Funcionamento.rpt">
+    </Content>
+    <Content Include="Reports\Alvara_Funcionamento.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Alvara_Funcionamento.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Alvara_Funcionamento_Valida.rpt">
+    </Content>
+    <Content Include="Reports\Alvara_Funcionamento_Valida.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Alvara_Funcionamento_Valida.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Boleto_Uso_Plataforma.rdlc" />
-    <EmbeddedResource Include="Reports\Boleto_NotificacaoISS_m001.rdlc" />
-    <EmbeddedResource Include="Reports\Boleto_ITBI_R.rdlc" />
-    <EmbeddedResource Include="Reports\Boleto_ITBI.rdlc" />
-    <EmbeddedResource Include="Reports\Carne_CIP.rdlc" />
-    <EmbeddedResource Include="Reports\Carne_IPTU.rdlc" />
-    <EmbeddedResource Include="Reports\Carne_ISS_TLL.rdlc" />
-    <EmbeddedResource Include="Reports\Carne_Parcelamento.rdlc" />
-    <EmbeddedResource Include="Reports\Carne_VS.rdlc" />
-    <EmbeddedResource Include="Reports\CertidaoDebitoDocumentoN.rpt">
+    </Content>
+    <Content Include="Reports\Boleto_Uso_Plataforma.rdlc" />
+    <Content Include="Reports\Boleto_NotificacaoISS_m001.rdlc" />
+    <Content Include="Reports\Boleto_ITBI_R.rdlc" />
+    <Content Include="Reports\Boleto_ITBI.rdlc" />
+    <Content Include="Reports\Carne_CIP.rdlc" />
+    <Content Include="Reports\Carne_IPTU.rdlc" />
+    <Content Include="Reports\Carne_ISS_TLL.rdlc" />
+    <Content Include="Reports\Carne_Parcelamento.rdlc" />
+    <Content Include="Reports\Carne_VS.rdlc" />
+    <Content Include="Reports\CertidaoDebitoDocumentoN.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>CertidaoDebitoDocumentoN.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\CertidaoDebitoDocumentoP.rpt">
+    </Content>
+    <Content Include="Reports\CertidaoDebitoDocumentoP.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>CertidaoDebitoDocumentoP.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\CertidaoDebitoDocumentoPN.rpt">
+    </Content>
+    <Content Include="Reports\CertidaoDebitoDocumentoPN.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>CertidaoDebitoDocumentoPN.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\CertidaoDebitoDocValida.rpt">
+    </Content>
+    <Content Include="Reports\CertidaoDebitoDocValida.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>CertidaoDebitoDocValida.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\CertidaoInscricaoExtratoAtiva.rpt">
+    </Content>
+    <Content Include="Reports\CertidaoInscricaoExtratoAtiva.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>CertidaoInscricaoExtratoAtiva.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\CertidaoInscricaoExtratoEncerrada.rpt">
+    </Content>
+    <Content Include="Reports\CertidaoInscricaoExtratoEncerrada.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>CertidaoInscricaoExtratoEncerrada.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\CertidaoInscricaoExtratoValida.rpt">
+    </Content>
+    <Content Include="Reports\CertidaoInscricaoExtratoValida.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>CertidaoInscricaoExtratoValida.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Certidao_Debito_Empresa.rpt">
+    </Content>
+    <Content Include="Reports\Certidao_Debito_Empresa.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Debito_Empresa.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Certidao_Debito_Empresa_PN.rpt">
+    </Content>
+    <Content Include="Reports\Certidao_Debito_Empresa_PN.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Debito_Empresa_PN.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Notificacao_Obra.rpt">
+    </Content>
+    <Content Include="Reports\Notificacao_Obra.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Notificacao_Obra.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Termo_ConfDivida.rpt">
+    </Content>
+    <Content Include="Reports\Termo_ConfDivida.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Termo_ConfDivida.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Termo_Anuencia.rpt">
+    </Content>
+    <Content Include="Reports\Termo_Anuencia.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Termo_Anuencia.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Certidao_Debito_Imovel.rpt">
+    </Content>
+    <Content Include="Reports\Certidao_Debito_Imovel.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Debito_Imovel.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Certidao_Debito_Imovel_PN.rpt">
+    </Content>
+    <Content Include="Reports\Certidao_Debito_Imovel_PN.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Debito_Imovel_PN.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Certidao_Endereco.rpt">
+    </Content>
+    <Content Include="Reports\Certidao_Endereco.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Endereco.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Certidao_Endereco_Valida.rpt">
+    </Content>
+    <Content Include="Reports\Certidao_Endereco_Valida.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Endereco_Valida.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Certidao_Imunidade.rpt">
+    </Content>
+    <Content Include="Reports\Certidao_Imunidade.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Imunidade.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Certidao_Isencao_65metros.rpt">
+    </Content>
+    <Content Include="Reports\Certidao_Isencao_65metros.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Isencao_65metros.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Certidao_Isencao_Itbi_valida.rpt">
+    </Content>
+    <Content Include="Reports\Certidao_Isencao_Itbi_valida.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Isencao_Itbi_valida.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Certidao_Isencao_Processo.rpt">
+    </Content>
+    <Content Include="Reports\Certidao_Isencao_Processo.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Isencao_Processo.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Certidao_Isencao_Valida.rpt">
+    </Content>
+    <Content Include="Reports\Certidao_Isencao_Valida.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Isencao_Valida.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Auto_Infracao.rpt">
+    </Content>
+    <Content Include="Reports\Auto_Infracao.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Auto_Infracao.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Itbi_Main.rpt">
+    </Content>
+    <Content Include="Reports\Itbi_Main.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Itbi_Main.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Notificacao_Terreno.rpt">
+    </Content>
+    <Content Include="Reports\Notificacao_Terreno.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Notificacao_Terreno.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Certidao_Valor_Venal.rpt">
+    </Content>
+    <Content Include="Reports\Certidao_Valor_Venal.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Valor_Venal.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Certidao_Valor_Venal_Valida.rpt">
+    </Content>
+    <Content Include="Reports\Certidao_Valor_Venal_Valida.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Valor_Venal_Valida.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Certidao_Isencao_Itbi.rpt">
+    </Content>
+    <Content Include="Reports\Certidao_Isencao_Itbi.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Certidao_Isencao_Itbi.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Comprovante_Inscricao.rpt">
+    </Content>
+    <Content Include="Reports\Comprovante_Inscricao.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Comprovante_Inscricao.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Comprovante_Inscricao_Valida.rpt">
+    </Content>
+    <Content Include="Reports\Comprovante_Inscricao_Valida.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Comprovante_Inscricao_Valida.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Comprovante_Pagamento.rpt">
+    </Content>
+    <Content Include="Reports\Comprovante_Pagamento.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Comprovante_Pagamento.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Imovel_Detalhe.rpt">
+    </Content>
+    <Content Include="Reports\Imovel_Detalhe.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Imovel_Detalhe.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Empresa_Detalhe.rpt">
+    </Content>
+    <Content Include="Reports\Empresa_Detalhe.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Empresa_Detalhe.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Itbi_Rural.rpt">
+    </Content>
+    <Content Include="Reports\Itbi_Rural.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Itbi_Rural.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Resumo_Pagto_Itbi.rpt">
+    </Content>
+    <Content Include="Reports\Resumo_Pagto_Itbi.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Resumo_Pagto_Itbi.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptDetalheBoleto.rdlc" />
-    <EmbeddedResource Include="Reports\Situacao_Pagamento.rpt">
+    </Content>
+    <Content Include="Reports\rptDetalheBoleto.rdlc" />
+    <Content Include="Reports\Situacao_Pagamento.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Situacao_Pagamento.cs</LastGenOutput>
-    </EmbeddedResource>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

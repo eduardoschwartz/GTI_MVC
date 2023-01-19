@@ -209,7 +209,7 @@ namespace GTI_Mvc.Controllers {
                 reg.Nao = _nao;
                 reg.Tributo = _tributo;
             }
-            reg.Numero_Ano = _numero_certidao.ToString("00000") + "/" + _ano_certidao.ToString("0000");
+            reg.Numero_Ano = _numero.ToString("00000") + "/" + _ano_certidao.ToString("0000");
             certidao.Add(reg);
 
             Certidao_debito cert = new Certidao_debito {
@@ -259,7 +259,7 @@ namespace GTI_Mvc.Controllers {
             };
 
             //##### QRCode ##########################################################
-            string Code = HttpUtility.UrlEncode( Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + reg.Controle);
+            string Code =  Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared//Checkgticd?c=" + HttpUtility.UrlEncode(reg.Controle);
             //QRCodeGenerator qrGenerator = new QRCodeGenerator();
             //QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
             //using (Bitmap bitmap = qrCode.GetGraphic(20)) {
@@ -556,7 +556,7 @@ namespace GTI_Mvc.Controllers {
 
             cert.Controle.Replace(" ", "0");
             //##### QRCode ##########################################################
-            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + cert.Controle;
+            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared//Checkgticd?c=" + HttpUtility.UrlEncode(cert.Controle);
             //    Code.Replace("%2", "");
             //QRCodeGenerator qrGenerator = new QRCodeGenerator();
             //QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);

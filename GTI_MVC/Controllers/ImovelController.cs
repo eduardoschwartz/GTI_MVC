@@ -154,7 +154,7 @@ namespace GTI_Mvc.Controllers {
                 Cpf_Cnpj = listaProp[0].CPF
             };
             //##### QRCode ##########################################################
-            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + reg.Controle;
+            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared//Checkgticd?c=" + HttpUtility.UrlEncode(reg.Controle);
             //QRCodeGenerator qrGenerator = new QRCodeGenerator();
             //QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
             //using (Bitmap bitmap = qrCode.GetGraphic(20)) {
@@ -395,7 +395,7 @@ namespace GTI_Mvc.Controllers {
                 Vvi = reg.VVI
             };
             //##### QRCode ##########################################################
-            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared/Checkgticd?c=" + reg.Controle;
+            string Code = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath + "/Shared//Checkgticd?c=" + HttpUtility.UrlEncode(reg.Controle);
             //QRCodeGenerator qrGenerator = new QRCodeGenerator();
             //QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(Code, QRCodeGenerator.ECCLevel.Q);
             //using (Bitmap bitmap = qrCode.GetGraphic(20)) {

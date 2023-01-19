@@ -1527,9 +1527,55 @@ namespace GTI_Dal.Classes {
                     return ex;
                 }
 
+                object[] Parametros = new object[24];
+                Parametros[0] = new SqlParameter { ParameterName = "@Ano", SqlDbType = SqlDbType.Int, SqlValue = Reg.Ano };
+                Parametros[1] = new SqlParameter { ParameterName = "@Numero", SqlDbType = SqlDbType.Int, SqlValue = Reg.Numero };
+                Parametros[2] = new SqlParameter { ParameterName = "@Codigo", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Codigo };
+                Parametros[3] = new SqlParameter { ParameterName = "@Numero_Ano", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Numero_Ano };
+                Parametros[4] = new SqlParameter { ParameterName = "@Inscricao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Inscricao };
+                Parametros[5] = new SqlParameter { ParameterName = "@Nome", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nome };
+                if(string.IsNullOrEmpty(Reg.Endereco))
+                    Parametros[6] = new SqlParameter { ParameterName = "@Endereco",  SqlValue = DBNull.Value };
+                else
+                    Parametros[6] = new SqlParameter { ParameterName = "@Endereco", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco };
+                Parametros[7] = new SqlParameter { ParameterName = "@Endereco_Numero", SqlDbType = SqlDbType.Int, SqlValue = Reg.Endereco_Numero };
+                if(string.IsNullOrEmpty(Reg.Endereco_Complemento))
+                    Parametros[8] = new SqlParameter { ParameterName = "@Endereco_Complemento",  SqlValue =DBNull.Value };
+                else
+                    Parametros[8] = new SqlParameter { ParameterName = "@Endereco_Complemento", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Endereco_Complemento };
+                if(string.IsNullOrEmpty(Reg.Bairro))
+                    Parametros[9] = new SqlParameter { ParameterName = "@Bairro",  SqlValue = DBNull.Value };
+                else
+                    Parametros[9] = new SqlParameter { ParameterName = "@Bairro", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Bairro };
+                if(string.IsNullOrEmpty(Reg.Quadra_Original))
+                    Parametros[10] = new SqlParameter { ParameterName = "@Quadra_Original",  SqlValue = DBNull.Value };
+                else
+                    Parametros[10] = new SqlParameter { ParameterName = "@Quadra_Original", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Quadra_Original };
+                if(string.IsNullOrEmpty(Reg.Lote_Original))
+                    Parametros[11] = new SqlParameter { ParameterName = "@Lote_Original",  SqlValue = DBNull.Value };
+                else
+                    Parametros[11] = new SqlParameter { ParameterName = "@Lote_Original", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Lote_Original };
+                Parametros[12] = new SqlParameter { ParameterName = "@Tipo_Certidao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Tipo_Certidao };
+                Parametros[13] = new SqlParameter { ParameterName = "@Nao", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Nao };
+                Parametros[14] = new SqlParameter { ParameterName = "@Tributo", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Tributo };
+                Parametros[15] = new SqlParameter { ParameterName = "@QRCodeImage", SqlDbType = SqlDbType.Image, SqlValue = Reg.QRCodeImage };
+                Parametros[16] = new SqlParameter { ParameterName = "@Cpf_Cnpj", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cpf_Cnpj };
+                Parametros[17] = new SqlParameter { ParameterName = "@Atividade", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Atividade };
+                Parametros[18] = new SqlParameter { ParameterName = "@Cidade", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Cidade };
+                Parametros[19] = new SqlParameter { ParameterName = "@Uf", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Uf };
+                if (string.IsNullOrEmpty(Reg.Horario))
+                    Parametros[20] = new SqlParameter { ParameterName = "@Horario", SqlValue = DBNull.Value };
+                else
+                    Parametros[20] = new SqlParameter { ParameterName = "@Horario", SqlDbType = SqlDbType.VarChar, SqlValue = Reg.Horario };
+                Parametros[21] = new SqlParameter { ParameterName = "@Vvt", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Vvt };
+                Parametros[22] = new SqlParameter { ParameterName = "@Vvp", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Vvp };
+                Parametros[23] = new SqlParameter { ParameterName = "@Vvi", SqlDbType = SqlDbType.Decimal, SqlValue = Reg.Vvi };
+
+                db.Database.ExecuteSqlCommand("INSERT INTO certidao_impressao(Ano,Numero,Codigo,Numero_Ano,Inscricao,Nome,Endereco,Endereco_Numero,Endereco_Complemento,Bairro,Quadra_Original," +
+                 "Lote_Original,Tipo_Certidao,Nao,Tributo,QRCodeImage,Cpf_Cnpj,Atividade,Cidade,Uf,Horario,Vvt,Vvp,Vvi) VALUES(@Ano,@Numero,@Codigo,@Numero_Ano,@Inscricao,@Nome,@Endereco," +
+                 "@Endereco_Numero,@Endereco_Complemento,@Bairro,@Quadra_Original,@Lote_Original,@Tipo_Certidao,@Nao,@Tributo,@QRCodeImage,@Cpf_Cnpj,@Atividade,@Cidade,@Uf,@Horario,@Vvt,@Vvp,@Vvi)", Parametros);
 
                 try {
-                    db.Certidao_impressao.Add(Reg);
                     db.SaveChanges();
                 } catch (Exception ex) {
                     return ex;
