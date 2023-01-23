@@ -1363,7 +1363,8 @@ namespace GTI_Mvc.Controllers {
                     _linha_digitavel += _digitavel.Substring(21, 5) + "." + _digitavel.Substring(26, 6) + " " + _digitavel.Substring(32, 1) + " " + Functions.StringRight(_digitavel, 14);
                     string _codigo_barra = Functions.Gera2of5Str(_barra);
                     //**************************************************
-                    reg.Totparcela = (short)_qtde_parcela;
+                    //reg.Totparcela = (short)_qtde_parcela;
+                    reg.Totparcela = 3;
                     if (item.Numero_Parcela == 0) {
                         reg.Parcela = "Única";
                     } else
