@@ -15,7 +15,7 @@ namespace GTI_Mvc {
         }
 
         public string DecryptGTI(string value) {
-            string sData = "", champl = "everest";
+            string sData = "", champl = "himalaia";
             int si = 0, i = 0, lchampl = 7, d = 0, c = 0, fois = 0, e = 0;
             byte[] asciiBytes;
 

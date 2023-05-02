@@ -221,11 +221,11 @@ namespace GTI_Dal.Classes {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 if (Tipo == TipoEndereco.Local) {
                     var reg = (from i in db.Cadimob
-                               join b in db.Bairro on i.Li_codbairro equals b.Codbairro into ib from b in ib.DefaultIfEmpty()
+                               join b in db.Bairro on new { b1 = (short)i.Li_codbairro,b2=i.Li_uf,b3=(short)i.Li_codcidade } equals new {b1 = b.Codbairro,b2=b.Siglauf,b3=b.Codcidade} into ib from b in ib.DefaultIfEmpty() 
                                join fq in db.Facequadra on new { p1 = i.Distrito, p2 = i.Setor, p3 = i.Quadra, p4 = i.Seq } equals new { p1 = fq.Coddistrito, p2 = fq.Codsetor, p3 = fq.Codquadra, p4 = fq.Codface } into ifq from fq in ifq.DefaultIfEmpty()
                                join l in db.Logradouro on fq.Codlogr equals l.Codlogradouro into lfq from l in lfq.DefaultIfEmpty()
-                               where i.Codreduzido == Codigo && b.Siglauf == "SP" && b.Codcidade == 413
-                               select new {
+                               where i.Codreduzido == Codigo
+                               select new {i.Li_uf,i.Li_codcidade,
                                    i.Li_num, i.Li_codbairro, b.Descbairro, fq.Codlogr, l.Endereco, i.Li_compl, l.Endereco_resumido
                                    }).FirstOrDefault();
                     if (reg == null)
