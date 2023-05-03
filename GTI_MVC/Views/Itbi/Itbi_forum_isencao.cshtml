@@ -1,0 +1,152 @@
+﻿@model List<GTI_Mvc.ViewModels.Itbi_Forum>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Análise de Isenções de ITBI's";
+}
+
+<style>
+
+    .center {
+        margin: auto;
+    }
+
+    .actionlink:hover {
+        color: darkgreen;
+    }
+
+    .actionlink {
+        color: darkslateblue;
+    }
+    .card-header {
+        background-color: rgb(223,240,216);
+        color: darkgreen;
+        font-size: 14px
+    }
+
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .card-footer {
+        background-color: whitesmoke;
+        font-size: 14px
+    }
+
+    .btn-primary {
+        background-color: steelblue;
+    }
+
+    .btn {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .errorlabel {
+        font-weight: normal;
+        color: red;
+        padding-left: 13px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+</style>
+
+<div class="center">
+
+    <br />
+    <div class="card" style="width:700px">
+        <div class="card-header">
+            Isenção de ITBI nº:&nbsp;<span style="font-weight:bold">@Model[0].Ano_Numero</span> <br />
+            Solicitado em:&nbsp;<span style="font-weight:bold">@Model[0].Data_Itbi</span> &nbsp;&nbsp;Solicitado por:&nbsp;<span style="font-weight:bold">@Model[0].User_Name_Decalara</span><br />
+            Email:&nbsp; <span style="font-weight:bold">@Model[0].User_Email_Declara</span> &nbsp;&nbsp;Telefone:&nbsp; <span style="font-weight:bold">@Model[0].User_Fone_Declara</span><br />
+        </div>
+        <div class="card-body"></div>
+        @using (Html.BeginForm("Itbi_forum_isencao", "Itbi", FormMethod.Post, new { @id = "MainForm" })) {
+            @Html.AntiForgeryToken()
+            if (Model.Count > 0 && Model[0].Mensagem != null) {
+                foreach (var item in Model) {
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Mensagem enviada em: @item.Datahora por @item.User_Name </div>
+                        <div class="panel-body">
+                            <table style="width:650px">
+                                <tr>
+                                    <td style="font-size:13px;color:dodgerblue">
+                                        @item.Mensagem
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                }
+            }
+            @Html.HiddenFor(m => m[0].Mensagem, new { @id = "mensagem_tmp" })
+            @Html.HiddenFor(m => m[0].Action, new { @id = "action_tmp" })
+            @Html.HiddenFor(m => m[0].Guid)
+
+        }
+        <div style="text-align:center">
+            <button type="button" class="btn btn-primary" onclick="EditarMsg()">Escrever nova mensagem</button>&nbsp;&nbsp;
+        </div>
+        <br />
+        <div class="card-footer">
+            @Html.ActionLink("Voltar a consulta de ITBI", "Itbi_query", "Itbi", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Preencher outro ITBI", "Itbi_Menu", "Itbi", null, new { @class = "actionlink" })<br />
+            @Html.ActionLink("Retornar ao menu principal", "Login_gti", "Home", null, new { @class = "actionlink" })
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal fade" id="MsgModal" tabindex="-1" role="dialog" aria-hidden="true" >
+    <div class="modal-dialog" role="document" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Digite o texto da mensagem</h4>
+            </div>
+            <div class="modal-body">
+
+                <table style="width:0px;text-align:center">
+                    <tr style="height:30px">
+                        <td>
+                            <textarea id="MsgTxt" name="MsgTxt" cols="68" rows="5" maxlength="5000" style="width:470px"></textarea>
+                        </td>
+                    </tr>
+                </table>
+                <br />
+
+                <label class="errorlabel" id="errorMsg">@ViewBag.Error</label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnMsgOk" >Gravar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        function EditarMsg() {
+            $('#MsgModal').modal();
+        }
+
+         $(document).ready(function () {
+           
+            $('#btnMsgOk').click(function () {
+                var Msgback = $("#MsgModal #MsgTxt").val();
+                if (Msgback.trim() == "" || Msgback == null) {
+                    document.getElementById('errorMsg').innerHTML = "Digite a mensagem";
+                } else {
+                    $("#MsgModal #MsgTxt").val("");
+                    document.getElementById('mensagem_tmp').value = Msgback;
+                    document.getElementById('action_tmp').value = "btnOkMsg";
+                    $("#MainForm").submit();
+                }
+            });
+        });
+
+    </script>
+}

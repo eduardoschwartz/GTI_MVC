@@ -161,6 +161,7 @@ namespace GTI_Dal {
         public DbSet<Itbi_anexo> Itbi_Anexo { get; set; }
         public DbSet<Itbi_status> Itbi_Status { get; set; }
         public DbSet<Itbi_forum> Itbi_Forum { get; set; }
+        public DbSet<Itbi_forum_isencao> Itbi_Forum_Isencao { get; set; }
         public DbSet<Itbi_Guia> Itbi_Guia { get; set; }
         public DbSet <Itbi_isencao_main>Itbi_Isencao_Main { get; set; }
         public DbSet<Itbi_isencao_imovel> Itbi_Isencao_Imovel { get; set; }

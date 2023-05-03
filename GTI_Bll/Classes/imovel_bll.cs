@@ -800,9 +800,9 @@ namespace GTI_Bll.Classes {
             return ex;
         }
 
-        public List<Itbi_Lista> Retorna_Itbi_Isencao_Query(int user, bool f, int status) {
+        public List<Itbi_Lista> Retorna_Itbi_Isencao_Query(int user, bool f, int status,int ano) {
             Imovel_Data obj = new Imovel_Data(_connection);
-            return obj.Retorna_Itbi_Isencao_Query(user,f,status);
+            return obj.Retorna_Itbi_Isencao_Query(user,f,status,ano);
         }
 
         public int Retorna_Itbi_Isencao_Disponivel() {

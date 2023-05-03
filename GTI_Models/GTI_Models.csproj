@@ -113,6 +113,7 @@
     <Compile Include="Models\dam_header.cs" />
     <Compile Include="Models\employees.cs" />
     <Compile Include="Models\encargo_cvd.cs" />
+    <Compile Include="Models\itbi_forum_isencao.cs" />
     <Compile Include="Models\itbi_guia.cs" />
     <Compile Include="Models\Integrativa\cadastro.cs" />
     <Compile Include="Models\cadimob.cs" />

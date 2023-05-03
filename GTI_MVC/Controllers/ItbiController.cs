@@ -2110,6 +2110,74 @@ namespace GTI_Mvc.Controllers {
             return RedirectToAction("Itbi_forum", new { p = model[0].Guid });
         }
 
+        [Route("Itbi_forum_isencao")]
+        [HttpGet]
+        public ActionResult Itbi_forum_isencao(string p = "") {
+            if (Session["hashid"] == null)
+                return RedirectToAction("Login", "Home");
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            Sistema_bll sistemaRepository = new Sistema_bll(_connection);
+            ItbiViewModel gravado = Retorna_Itbi_Isencao_Gravado(p);
+            List<Itbi_forum> lista = imovelRepository.Retorna_Itbi_Forum(p);
+            List<Itbi_Forum> model = new List<Itbi_Forum>();
+
+            if (lista.Count == 0) {
+                Itbi_Forum item = new Itbi_Forum() {
+                    Guid = gravado.Guid,
+                    User_id = gravado.UserId,
+                    User_id_Declara = gravado.UserId,
+                    Data_Itbi = gravado.Data_cadastro,
+                    Comprador_Nome = gravado.Comprador_Nome_tmp,
+                    Ano_Numero = gravado.Itbi_NumeroAno
+                };
+                if (gravado.Funcionario)
+                    item.User_Name = sistemaRepository.Retorna_User_FullName(gravado.UserId);
+                else {
+
+                    Usuario_web uw = sistemaRepository.Retorna_Usuario_Web(gravado.UserId);
+                    item.User_Name = uw.Nome;
+                    item.User_Email = uw.Email;
+                    item.User_Fone = uw.Telefone;
+                    item.User_Name_Decalara = uw.Nome;
+                    item.User_Email_Declara = uw.Email;
+                    item.User_Fone_Declara = uw.Telefone;
+                }
+                model.Add(item);
+            } else {
+                foreach (Itbi_forum reg in lista) {
+                    Itbi_Forum item = new Itbi_Forum() {
+                        Guid = reg.Guid,
+                        Seq = reg.Seq,
+                        Datahora = reg.Datahora,
+                        User_id = reg.Userid,
+                        User_id_Declara = reg.Userid,
+                        Mensagem = reg.Mensagem,
+                        Tipo_Itbi = gravado.Tipo_Imovel,
+                        Data_Itbi = gravado.Data_cadastro,
+                        Comprador_Nome = gravado.Comprador.Nome,
+                        Ano_Numero = gravado.Itbi_Numero.ToString("000000/") + gravado.Itbi_Ano.ToString()
+                    };
+                    if (reg.Funcionario)
+                        item.User_Name = sistemaRepository.Retorna_User_FullName(reg.Userid);
+                    else {
+                        Usuario_web uw = sistemaRepository.Retorna_Usuario_Web(reg.Userid);
+                        item.User_Name = uw.Nome;
+                        item.User_Email = uw.Email;
+                        item.User_Fone = uw.Telefone;
+                    }
+                    Usuario_web uwd = sistemaRepository.Retorna_Usuario_Web(gravado.UserId);
+                    item.User_Name_Decalara = uwd.Nome;
+                    item.User_Email_Declara = uwd.Email;
+                    item.User_Fone_Declara = uwd.Telefone;
+                    model.Add(item);
+                }
+            }
+
+            return View(model);
+        }
+
+
+
         public ItbiViewModel Itbi_Urbano_Load(ItbiViewModel model, bool _bcpf, bool _bcnpj) {
             int Codigo = Convert.ToInt32(model.Codigo);
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
@@ -3237,7 +3305,9 @@ namespace GTI_Mvc.Controllers {
                 Itbi_NumeroAno = regMain.Isencao_numero.ToString("00000") + "/" + regMain.Isencao_ano.ToString(),
                 Natureza_Nome = regMain.Natureza_Nome,
                 Situacao_Itbi_codigo = regMain.Situacao,
-                Situacao_Itbi_Nome = regMain.Situacao_Nome
+                Situacao_Itbi_Nome = regMain.Situacao_Nome,
+                Comprador_Nome_tmp = regMain.Usuario_nome,
+                UserId=regMain.Usuario_id
             };
 
             List<Itbi_isencao_imovel> ListaImovel = imovelRepository.Retorna_Itbi_Isencao_Imovel(guid);
@@ -3312,7 +3382,7 @@ namespace GTI_Mvc.Controllers {
             Imovel_bll imovelRepository = new Imovel_bll(_connection);
             int _userId = Convert.ToInt32(Session["hashid"]);
             bool _fiscal = Session["hashfiscalitbi"] != null && Session["hashfiscalitbi"].ToString() == "S" ? true : false;
-            List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Isencao_Query(_userId, _fiscal, 0);
+            List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Isencao_Query(_userId, _fiscal, 0,2020);
             List<ItbiViewModel> model = new List<ItbiViewModel>();
             foreach (Itbi_Lista reg in Lista) {
                 ItbiViewModel item = new ItbiViewModel() {
@@ -3331,6 +3401,36 @@ namespace GTI_Mvc.Controllers {
             ViewBag.Erro = e;
             return View(model);
         }
+
+        [Route("Itbi_query_isencao")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ViewResult Itbi_query_isencao(List<ItbiViewModel> model) {
+            string _ano = model[0].Ano_Selected ?? "";
+            if (_ano == "")
+                _ano = DateTime.Now.Year.ToString();
+            Imovel_bll imovelRepository = new Imovel_bll(_connection);
+            int _userId = Convert.ToInt32(Session["hashid"]);
+            bool _fiscal = Session["hashfiscalitbi"] != null && Session["hashfiscalitbi"].ToString() == "S" ? true : false;
+            List<Itbi_Lista> Lista = imovelRepository.Retorna_Itbi_Isencao_Query(_userId, _fiscal, Convert.ToInt32(model[0].Status_Query), Convert.ToInt32(_ano));
+            model.Clear();
+            foreach (Itbi_Lista reg in Lista) {
+                ItbiViewModel item = new ItbiViewModel() {
+                    Guid = reg.Guid,
+                    Data_cadastro = Convert.ToDateTime(reg.Data.ToString("dd/MM/yyyy")),
+                    Itbi_NumeroAno = reg.Numero_Ano,
+                    Tipo_Imovel = reg.Tipo,
+                    Comprador_Nome_tmp = Functions.TruncateTo(reg.Nome_Requerente, 24),
+                    Situacao_Itbi_Nome = reg.Situacao,
+                    Situacao_Itbi_codigo = reg.Situacao_Codigo
+            };
+                if (!string.IsNullOrEmpty(reg.Validade))
+                    item.Data_Validade = Convert.ToDateTime(reg.Validade).ToString("dd/MM/yyyy");
+                model.Add(item);
+            }
+            return View(model);
+        }
+
 
         [Route("Itbi_isencao_q")]
         [HttpGet]

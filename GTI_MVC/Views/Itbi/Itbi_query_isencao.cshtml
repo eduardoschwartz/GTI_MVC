@@ -9,11 +9,6 @@
 
     .center {
         margin: auto;
-        /*        width: 780px;
-        border: 1px solid rgba(0,0,0,0.24);
-        padding: 20px;
-        box-shadow: 0 .1em 0.5em #000;
-        border-radius: 13px;*/
     }
 
     .actionlink:hover {
@@ -59,17 +54,38 @@
 
 <div class="center">
 
-    @using (Html.BeginForm("Itbi_query", "Itbi", FormMethod.Post, new { @id = "MainForm" })) {
-
-        @*<br />
-            <label style="color: brown;font-size: 16px;font-style: italic">Consulta de certidões de isenção de ITBI</label>
-
-            <br />
-            <br />*@
-
+    @using (Html.BeginForm("Itbi_query_isencao", "Itbi", FormMethod.Post, new { @id = "MainForm" })) {
+        @Html.AntiForgeryToken()
         <div class="container" style="width:750px">
             <div class="card">
-                <div class="card-header">Consulta de certidões de isenção de ITBI</div>
+                <div class="card-header">
+                    Consulta de certidões de isenção de ITBI
+                    @{
+                        var selectList = new SelectList(new List<SelectListItem>
+                            {
+                        new SelectListItem {Text = "Enviado para análise", Value = "1" },
+                        new SelectListItem {Text = "Liberado", Value = "5"}
+                        }, "Value", "Text");
+
+                        var selectListAno = new SelectList(new List<SelectListItem>
+                            {
+                        new SelectListItem {Text = "2020", Value = "2020" },
+                        new SelectListItem {Text = "2021", Value = "2021"},
+                        new SelectListItem {Text = "2022", Value = "2022"},
+                        new SelectListItem {Text = "2023", Value = "2023"}
+                        }, "Value", "Text");
+
+                    }
+                    <Label style="padding-left:10px">Exibir:&nbsp;</Label>@Html.DropDownListFor(m => m[0].Status_Query, selectList, "(Exibir todos os ITBI's)", new { onchange = "this.form.submit()" })
+                    <label style="padding-left:20px">
+                        Exercício:&nbsp;
+                        @if (Model.Count > 0) {
+                            @Html.DropDownListFor(m => m[0].Ano_Selected, selectListAno, null, new { @id = "AnoDropDown", @style = "font-weight:normal", onchange = "this.form.submit()", @value = Model[0].Ano_Selected })
+                        } else {
+                            @Html.DropDownListFor(m => m[0].Ano_Selected, selectListAno, null, new { @id = "AnoDropDown", @style = "font-weight:normal", onchange = "this.form.submit()" })
+                        }
+                    </label>  <br />
+                </div>
                 <div class="card-body">
                     <table id="tblMain" class="tableContainer" style="font-size:14px;font-weight:normal;border-width:1px;border-style:None;border-collapse:collapse">
                         <thead style="background-color:brown;color:white;font-size:14px;font-weight:normal; white-space: nowrap;">
@@ -101,6 +117,7 @@
                                         @if (item.Situacao_Itbi_codigo == 5) {
                                             <a href="@Url.Action("Itbi_isencao_print", "Itbi", new { p = item.Guid, u = item.Tipo_Imovel == "Urbano" })" title="Imprimir a certidão"> <img src="@Url.Content("~/images/print.png")"></a>
                                         }
+                                        <a href="@Url.Action("Itbi_forum_isencao", "Itbi", new { p = item.Guid })" title="Processo de análise da isenção de ITBI"> <img src="@Url.Content("~/images/observacao.png")"></a>
                                     </td>
                                 </tr>
                             }

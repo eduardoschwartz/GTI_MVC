@@ -2274,7 +2274,7 @@ namespace GTI_Dal.Classes {
                 var Sql = (from t in db.Itbi_Isencao_Main
                            join c in db.Itbi_Status on t.Situacao equals c.Codigo into tc from c in tc.DefaultIfEmpty()
                            join n in db.Itbi_Natureza_Isencao on t.Natureza equals n.Codigo into tn from n in tn.DefaultIfEmpty()
-                           where t.Guid == Guid select new { guid = t.Guid, data_cadastro = t.Data_cadastro, natureza_codigo = t.Natureza, usuario_nome = t.Usuario_nome, usuario_doc = t.Usuario_doc, validade = t.Data_validade,
+                           where t.Guid == Guid select new { guid = t.Guid, data_cadastro = t.Data_cadastro,t.Usuario_id , natureza_codigo = t.Natureza, usuario_nome = t.Usuario_nome, usuario_doc = t.Usuario_doc, validade = t.Data_validade,
                                fiscal_id = t.Fiscal_id, isencao_ano = t.Isencao_ano, isencao_numero = t.Isencao_numero, natureza_nome = n.Descricao, situacao_nome = c.Descricao, situacao_codigo = t.Situacao }).First();
                 Itbi_isencao_main_Struct itbi = new Itbi_isencao_main_Struct() {
                     Guid = Sql.guid,
@@ -2282,6 +2282,7 @@ namespace GTI_Dal.Classes {
                     Natureza = Sql.natureza_codigo,
                     Usuario_nome = Sql.usuario_nome,
                     Usuario_doc = Sql.usuario_doc,
+                    Usuario_id=Sql.Usuario_id,
                     Fiscal_id = Sql.fiscal_id,
                     Isencao_ano = Sql.isencao_ano,
                     Isencao_numero = Sql.isencao_numero,
@@ -2356,7 +2357,7 @@ namespace GTI_Dal.Classes {
                 }
             }
 
-        public List<Itbi_Lista> Retorna_Itbi_Isencao_Query(int user, bool f, int status) {
+        public List<Itbi_Lista> Retorna_Itbi_Isencao_Query(int user, bool f, int status,int ano) {
             using (GTI_Context db = new GTI_Context(_connection)) {
                 List<Itbi_Lista> Lista = new List<Itbi_Lista>();
 
@@ -2372,6 +2373,8 @@ namespace GTI_Dal.Classes {
                     Sql = Sql.Where(m => m.UserId == user);
                 else
                     Sql = Sql.Where(m => m.SituacaoCodigo == 1 || m.SituacaoCodigo == 5);
+
+                Sql = Sql.Where(m => m.Ano == ano);
 
                 foreach (var reg in Sql) {
                     Itbi_Lista item = new Itbi_Lista() {
