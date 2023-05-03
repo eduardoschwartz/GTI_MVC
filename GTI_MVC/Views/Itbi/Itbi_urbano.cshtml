@@ -948,7 +948,7 @@
             $(".maskCep").inputmask("99999-999");
 
             $("#FinanciamentoDropDown").change(function () {
-                if (this.value != '') {
+                if (this.value == 1) {
                     $("input[name='Recursos_proprios_valor']").css({ "color": "black" });
                     $("input[name='Recursos_proprios_valor']").prop('readonly', false);
                     $("input[name='Recursos_conta_valor']").css({ "color": "black" });
