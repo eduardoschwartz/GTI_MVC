@@ -1230,6 +1230,7 @@
     <Content Include="Views\Notificacao\AutoInfracao_pass_reparo_add.cshtml" />
     <Content Include="Views\Notificacao\AutoInfracao_pass_reparo_query.cshtml" />
     <Content Include="Views\Home\Login_gti.cshtml" />
+    <Content Include="Views\Itbi\Itbi_forum_isencao.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
